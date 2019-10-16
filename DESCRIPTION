@@ -2,7 +2,9 @@ Package: t3
 Type: Package
 Title: Tropical Tunas Treatment
 Version: 0.1.0
-Authors@R: person("Ob7", "Observatory of Exploited Tropical Pelagic Ecosystems", email = "ob7@ird.fr", role = c("aut", "cre"))
+Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosystems", email = "ob7@ird.fr", role = c("cre")),
+    person("name_Bob1", "surname_bob1", email = "bob1@ird.fr", role = c("aut")),
+    person("name_Bob2", "surname_bob2", email = "bob2@ird.fr", role = c("cph")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3

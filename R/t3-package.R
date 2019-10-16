@@ -1,8 +1,15 @@
 #'@title t3 package
+#'@section Class declaration:
+#'\itemize{
+#' \item{\code{\link{}}}
+#' }
 #'@section Objets creation:
 #'\itemize{
-#' \item{\code{\link{obj_trip}}}
+#' \item{\code{\link{}}}
 #' }
-#' @docType package
-#' @name t3-package
+#'@section Functions:
+#'\itemize{
+#' \item{\code{\link{}}}
+#' }
+#' @keywords internal
 "_PACKAGE"

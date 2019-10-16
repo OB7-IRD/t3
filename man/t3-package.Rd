@@ -9,10 +9,24 @@
 More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 }
+\section{Class declaration}{
+
+\itemize{
+\item{\code{\link{}}}
+}
+}
+
 \section{Objets creation}{
 
 \itemize{
-\item{\code{\link{obj_trip}}}
+\item{\code{\link{}}}
+}
+}
+
+\section{Functions}{
+
+\itemize{
+\item{\code{\link{}}}
 }
 }
 
@@ -25,6 +39,17 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ob7 Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr}
+\strong{Maintainer}: Ob7 - Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr}
+
+Authors:
+\itemize{
+  \item name_Bob1 surname_bob1 \email{bob1@ird.fr}
+}
+
+Other contributors:
+\itemize{
+  \item name_Bob2 surname_bob2 \email{bob2@ird.fr} [copyright holder]
+}
 
 }
+\keyword{internal}
