@@ -2,7 +2,6 @@
 #' @title R6 class full_trips creation
 #' @description Create R6 reference object class full_trips
 #' @importFrom R6 R6Class
-# full_trips ----
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = t3:::list_t3,
                           public = list(
