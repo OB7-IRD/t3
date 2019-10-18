@@ -3,7 +3,7 @@
 #' @description Create R6 reference object class elementarycatches
 #' @importFrom R6 R6Class
 elementarycatches <- R6::R6Class(classname = "elementarycatches",
-                                 inherit = t3:::list_t3,
+                                 inherit = t3:::tools_t3,
                                  public = list(
                                    initialize = function(...) {
                                      arguments <- list(...)
@@ -26,7 +26,7 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                        }
                                      }
                                    },
-                                   # add new elementary_catch
+                                   # add new elementary_catch ----
                                    add = function(new_item) {
                                      if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                        for (i in length(new_item)) {

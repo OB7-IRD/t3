@@ -3,12 +3,12 @@
 #' @description Create R6 reference object class full_trips
 #' @importFrom R6 R6Class
 full_trips <- R6::R6Class(classname = "full_trips",
-                          inherit = t3:::list_t3,
+                          inherit = t3:::tools_t3,
                           public = list(
                             initialize = function(...) {
                               private$data <- list()
                             },
-                            # full trips creation
+                            # full trips creation ----
                             create = function(object_trips) {
                               if (! any(class(object_trips) == "R6") | ! any(class(object_trips) == "trips")) {
                                 stop("invalid \"object_trips\" argument\nClass R6 and trips expected")
@@ -56,7 +56,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               names(full_trips) <- 1:length(full_trips)
                               private$data <- full_trips
                             },
-                            # full trips filter
+                            # full trips filter ----
                             filter = function(year_reference) {
                               if (length(class(year_reference)) == 1 && class(year_reference) != "numeric") {
                                 stop("invalid \"year_reference\" argument\nclass numeric expected")
@@ -92,10 +92,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           base::setdiff(private$id_not_full_trip,
                                                         full_trips_removed),
                                           call. = FALSE)
+                                  private$id_not_full_trip_retained <- base::setdiff(private$id_not_full_trip,
+                                                                                     full_trips_removed)
                                 }
                               }
+                            },
+                            # Raising Factor level 1 ----
+                            rf1 = function() {
+                              print("cover")
                             }),
                           private = list(
                             id_not_full_trip = NULL,
+                            id_not_full_trip_retained = NULL,
                             data_removed = NULL
                           ))
