@@ -7,6 +7,6 @@
 #' @export
 object_full_trips <- function(object_trips) {
   object_full_trips <- t3:::full_trips$new()
-  object_full_trips$create(object_trips)
+  object_full_trips$create_full_trips(object_trips)
   return(object_full_trips)
 }

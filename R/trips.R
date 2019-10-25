@@ -3,7 +3,7 @@
 #' @description Create R6 reference object class trips
 #' @importFrom R6 R6Class
 trips <- R6::R6Class(classname = "trips",
-                     inherit = t3:::tools_t3,
+                     inherit = t3:::list_t3,
                      public = list(
                        initialize = function(...) {
                          arguments <- list(...)
