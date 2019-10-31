@@ -629,18 +629,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                   # second stage: conversion of category unknow (category 9) if possible
-                                  browser()
                                   current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
                                   if (! is.null(current_elementarycatches)) {
                                     category_9 <- FALSE
                                     other_category <- FALSE
                                     for (l in 1:length(current_elementarycatches)) {
-                                      if (current_elementarycatches[[l]]$.__enclos_env__$private$logbook_category == 9) {
+                                      if (current_elementarycatches[[l]]$.__enclos_env__$private$logbook_category == 9 & current_elementarycatches[[l]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB", "SKJ")) {
                                         category_9=append(category_9, TRUE)
                                       } else {
                                         other_category=append(other_category, TRUE)
                                       }
                                     }
+                                    browser()
                                     if (any(category_9 == TRUE)) {
                                       if (any(other_category == TRUE)) {
                                         dd
