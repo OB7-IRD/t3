@@ -6,8 +6,16 @@
 #' @return A R6 reference object
 #' @export
 object_r6 <- function(class_name, ...) {
+  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+      " - Start creation object of class \"",
+      class_name,
+      "\"\n",
+      sep = "")
   if (length(class(class_name)) != 1 || class(class_name) != "character") {
-    stop("invalid \"class_name\" argument\nclass character expected")
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalid \"class_name\" argument\nclass character expected\n",
+        sep = "")
+    stop()
   } else {
     arguments <- list(...)
     if (length(arguments) == 0) {
@@ -33,5 +41,10 @@ object_r6 <- function(class_name, ...) {
       }
     }
   }
+  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+      " - End creation object of class \"",
+      class_name,
+      "\"\n",
+      sep = "")
   return(object_r6)
 }

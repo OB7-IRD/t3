@@ -15,27 +15,29 @@ trip <- R6::R6Class(classname = "trip",
                                             vessel_id,
                                             landing_harbour_id,
                                             departure_harbour_id) {
-                        # attribut "fishing_time" verification
-                        if (fishing_time < 0) {
-                          stop("Attribut \"fishing_time\" have at least one negative value")
-                        } else {
-                          private$fishing_time <- fishing_time
-                        }
-                        # attribut "time_at_sea" verification
-                        if (time_at_sea < 0) {
-                          stop("Attribut \"time_at_sea\" have at least one negative value")
-                        } else {
-                          private$time_at_sea <- time_at_sea
-                        }
+                        # attribut "trip_id" verification
+                        t3:::check_trip_id(trip_id)
                         # attribut "landing_date" verification
-                        if (is.na(lubridate::ymd(landing_date, quiet = TRUE))) {
-                          stop("invalide \"landing_date\" argument\nAt least one item failed to parse with format ymd")
-                        } else if (lubridate::ymd(landing_date, quiet = TRUE) > Sys.Date()) {
-                          stop("At least one item \"landing_date\" is superior to the actual date")
-                        } else {
-                          private$landing_date <- lubridate::ymd(landing_date, quiet = TRUE)
-                        }
+                        t3:::check_landing_date(landing_date)
+                        # attribut "fishing_time" verification
+                        t3:::check_fishing_time(fishing_time)
+                        # attribut "time_at_sea" verification
+                        t3:::check_time_at_sea(time_at_sea)
+                        # attribut "logbook_availability" verification
+                        t3:::check_logbook_availability(logbook_availability)
+                        # attribut "fish_hold_empty" verification
+                        t3:::check_fish_hold_empty(fish_hold_empty)
+                        # attribut "vessel_id" verification
+                        t3:::check_vessel_id(vessel_id)
+                        # attribut "landing_harbour_id" verification
+                        t3:::check_landing_harbour_id(landing_harbour_id)
+                        # attribut "departure_harbour_id" verification
+                        t3:::check_departure_harbour_id(departure_harbour_id)
+                        # attributions
                         private$trip_id <- trip_id
+                        private$landing_date <- lubridate::ymd(landing_date, quiet = TRUE)
+                        private$fishing_time <- fishing_time
+                        private$time_at_sea <- time_at_sea
                         private$logbook_availability <- logbook_availability
                         private$fish_hold_empty <- fish_hold_empty
                         private$vessel_id <- vessel_id
@@ -52,6 +54,8 @@ trip <- R6::R6Class(classname = "trip",
                       landing_harbour_id = NULL,
                       departure_harbour_id = NULL,
                       rf1 = NULL,
+                      statut_rf1 = NULL,
                       rf2 = NULL,
+                      statut_rf2 = NULL,
                       elementarycatches = NULL,
                       elementarylandings = NULL))
