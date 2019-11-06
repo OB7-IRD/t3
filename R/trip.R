@@ -58,4 +58,5 @@ trip <- R6::R6Class(classname = "trip",
                       rf2 = NULL,
                       statut_rf2 = NULL,
                       elementarycatches = NULL,
-                      elementarylandings = NULL))
+                      elementarylandings = NULL,
+                      activities = NULL))

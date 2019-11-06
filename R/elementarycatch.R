@@ -9,6 +9,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        landing_date,
                                                        activity_date,
                                                        activity_number,
+                                                       set_count,
                                                        school_type,
                                                        logbook_category,
                                                        logbook_category_name,
@@ -26,6 +27,8 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                             landing_date = landing_date)
                                    # attribut "activity_number" verification
                                    t3:::check_activity_number(activity_number)
+                                   # attribut "set_count" verification
+                                   t3:::check_set_count(set_count)
                                    # attribut "school_type" verification
                                    t3:::check_school_type(school_type)
                                    # attribut "logbook_category" verification
@@ -44,6 +47,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    private$landing_date <- lubridate::ymd(landing_date, quiet = TRUE)
                                    private$activity_date <- lubridate::ymd(activity_date, quiet = TRUE)
                                    private$activity_number <- activity_number
+                                   private$set_count <- set_count
                                    private$school_type <- school_type
                                    private$logbook_category <- logbook_category
                                    private$logbook_category_name <- logbook_category_name
@@ -57,6 +61,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  landing_date = NULL,
                                  activity_date = NULL,
                                  activity_number = NULL,
+                                 set_count = NULL,
                                  school_type = NULL,
                                  logbook_category = NULL,
                                  logbook_category_name = NULL,

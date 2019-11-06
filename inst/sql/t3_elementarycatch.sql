@@ -4,6 +4,7 @@ SELECT
 	,t.landingdate::date AS landing_date
 	,r.date::date AS activity_date
 	,a.number::integer AS activity_number
+	,a.setcount::integer AS set_count
 	,st.code::integer AS school_type
 	,wcl.code::integer AS logbook_category
 	,wcl.label1::text AS logbook_category_name 
@@ -30,6 +31,7 @@ GROUP BY
 	,landing_date
 	,activity_date
 	,activity_number
+	,set_count
 	,school_type
 	,logbook_category
 	,logbook_category_name

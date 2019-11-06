@@ -5,8 +5,8 @@
 \title{R6 object object_elementarycatch creation}
 \usage{
 object_elementarycatch(ocean, trip_id, landing_date, activity_date,
-  activity_number, school_type, logbook_category, logbook_category_name,
-  vessel_id, specie_code3l, catch_weight)
+  activity_number, set_count, school_type, logbook_category,
+  logbook_category_name, vessel_id, specie_code3l, catch_weight)
 }
 \value{
 A R6 reference object with data related to one elementary catch

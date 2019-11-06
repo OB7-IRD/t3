@@ -308,3 +308,22 @@ check_landing_weight = function(landing_weight) {
     stop()
   }
 }
+
+#' @name set_count
+#' @title Attribut "set_count" verification
+#' @param set_count (integer) Number of set associated to the activity
+#' @description Check if the item "set_count" have one unique class identified as integer and if value are >= 0
+# check set_count ----
+check_set_count = function(set_count) {
+  if (length(class(set_count)) != 1 || class(set_count) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"set_count\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (set_count < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"set_count\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}

@@ -462,7 +462,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # logbook weigth categories conversion
+                            # logbook weigth categories conversion ----
                             conversion_weigth_category = function () {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start of logbook weight categories conversion\n",
@@ -629,26 +629,110 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                   # second stage: conversion of category unknow (category 9) if possible
-                                  current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
-                                  if (! is.null(current_elementarycatches)) {
-                                    category_9 <- FALSE
-                                    other_category <- FALSE
-                                    for (l in 1:length(current_elementarycatches)) {
-                                      if (current_elementarycatches[[l]]$.__enclos_env__$private$logbook_category == 9 & current_elementarycatches[[l]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB", "SKJ")) {
-                                        category_9=append(category_9, TRUE)
-                                      } else {
-                                        other_category=append(other_category, TRUE)
+                                  for (l in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[l]]
+                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
+                                    if (! is.null(current_elementarycatches)) {
+                                      category_9 <- FALSE
+                                      names(category_9) <- 0
+                                      other_category <- FALSE
+                                      names(other_category) <- 0
+                                      for (n in 1:length(current_elementarycatches)) {
+                                        if (current_elementarycatches[[n]]$.__enclos_env__$private$logbook_category == 9 & current_elementarycatches[[n]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB", "SKJ")) {
+                                          category_9 = append(category_9, TRUE)
+                                          names(category_9)[length(category_9)] <- n
+                                        } else {
+                                          other_category = append(other_category, TRUE)
+                                          names(other_category)[length(other_category)] <- n
+                                        }
                                       }
-                                    }
-                                    browser()
-                                    if (any(category_9 == TRUE)) {
-                                      if (any(other_category == TRUE)) {
-                                        dd
-                                      } else {
-                                        for (m in 1:length(current_elementarycatches)) {
-                                          current_elementarycatch <- current_elementarycatches[[m]]
-                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                      if (any(category_9 == TRUE)) {
+                                        if (any(other_category == TRUE)) {
+                                          category_9 <- category_9[-1]
+                                          strate_category_9 <- vector(mode = "character")
+                                          for (m in as.numeric(names(category_9))) {
+                                            strate_category_9 <- append(strate_category_9,
+                                                                        paste(current_elementarycatches[[m]]$.__enclos_env__$private$school_type,
+                                                                              current_elementarycatches[[m]]$.__enclos_env__$private$ocean,
+                                                                              current_elementarycatches[[m]]$.__enclos_env__$private$specie_code3l, sep = "_"))
+                                          }
+                                          other_category <- other_category[-1]
+                                          for (p in unique(strate_category_9)) {
+                                            school_type <- unlist(strsplit(x = p, split = "_"))[1]
+                                            ocean <- unlist(strsplit(x = p, split = "_"))[2]
+                                            specie <- unlist(strsplit(x = p, split = "_"))[3]
+                                            current_other_category <- vector(mode = "list")
+                                            for (q in as.numeric(names(other_category))) {
+                                              if (current_elementarycatches[[q]]$.__enclos_env__$private$school_type == school_type &
+                                                  current_elementarycatches[[q]]$.__enclos_env__$private$ocean == ocean &
+                                                  current_elementarycatches[[q]]$.__enclos_env__$private$specie_code3l == specie) {
+                                                current_other_category <- append(current_other_category,
+                                                                                 current_elementarycatches[[q]])
+                                              }
+                                            }
+                                            if (length(current_other_category) != 0) {
+                                              current_category_9 <- vector(mode = "list")
+                                              for (r in as.numeric(names(category_9))) {
+                                                if (current_elementarycatches[[r]]$.__enclos_env__$private$school_type == school_type &
+                                                    current_elementarycatches[[r]]$.__enclos_env__$private$ocean == ocean &
+                                                    current_elementarycatches[[r]]$.__enclos_env__$private$specie_code3l == specie) {
+                                                  current_category_9 <- append(current_category_9,
+                                                                               current_elementarycatches[[r]])
+                                                }
+                                              }
+                                              total_catch_weight_category_corrected <- sum(sapply(1:length(current_other_category),
+                                                                                                  function(i) {
+                                                                                                    current_other_category[[i]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                                  }))
+                                              other_category_names <- unique(sapply(X = 1:length(current_other_category),
+                                                                                    FUN = function(i) {
+                                                                                      current_other_category[[i]]$.__enclos_env__$private$corrected_logbook_category
+                                                                                    }))
+                                              proportion <- vector(mode = "numeric")
+                                              for (s in other_category_names) {
+                                                weight_category_corrected <- sum(sapply(X = 1:length(current_other_category),
+                                                                                        FUN = function(i) {
+                                                                                          if (current_other_category[[i]]$.__enclos_env__$private$corrected_logbook_category == s) {
+                                                                                            current_other_category[[i]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                          } else {
+                                                                                            0
+                                                                                          }
+                                                                                        }))
+                                                proportion <- append(proportion,
+                                                                     weight_category_corrected / total_catch_weight_category_corrected)
+                                                names(proportion)[length(proportion)] <- s
+                                              }
+                                              for (t in 1:length(current_category_9)) {
+                                                for (u in 1:length(proportion)) {
+                                                  if (u == length(proportion)) {
+                                                    current_category_9[[t]]$.__enclos_env__$private$corrected_logbook_category = names(proportion)[u]
+                                                    current_category_9[[t]]$.__enclos_env__$private$catch_weight_category_corrected = current_category_9[[t]]$.__enclos_env__$private$catch_weight_rf2 * as.numeric(proportion[u])
+                                                  } else {
+                                                    current_category_9_tmp <- current_category_9[[t]]$clone()
+                                                    current_category_9_tmp$.__enclos_env__$private$corrected_logbook_category = names(proportion)[u]
+                                                    current_category_9_tmp$.__enclos_env__$private$catch_weight_category_corrected = current_category_9_tmp$.__enclos_env__$private$catch_weight_rf2 * as.numeric(proportion[u])
+                                                    private$data_selected[[i]][[l]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[l]]$.__enclos_env__$private$elementarycatches[[1]],
+                                                                                                                                             current_category_9_tmp)
+                                                  }
+                                                }
+                                              }
+                                            } else {
+                                              for (v in as.numeric(names(category_9))) {
+                                                if (current_elementarycatches[[v]]$.__enclos_env__$private$school_type == school_type &
+                                                    current_elementarycatches[[v]]$.__enclos_env__$private$ocean == ocean &
+                                                    current_elementarycatches[[v]]$.__enclos_env__$private$specie_code3l == specie) {
+                                                  current_elementarycatches[[v]]$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                  current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_rf2
+                                                }
+                                              }
+                                            }
+                                          }
+                                        } else {
+                                          for (m in 1:length(current_elementarycatches)) {
+                                            current_elementarycatch <- current_elementarycatches[[m]]
+                                            current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                          }
                                         }
                                       }
                                     }
@@ -658,6 +742,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End of logbook weight categories conversion\n",
                                   sep = "")
+                            },
+                            # set_count ----
+                            set_count = function () {
+                              browser()
+                              for (i in 1:length(private$data_selected)) {
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
+                                    if (! is.null(current_elementarycatches)) {
+                                      current_activities <- data.frame()
+                                      for (k in 1:length(current_elementarycatches)) {
+                                        current_elementarycatch <- current_elementarycatches[[k]]
+                                        current_activities[dim(current_activities)[1] + 1, 1] <- current_elementarycatch$.__enclos_env__$private$vessel_id
+                                        current_activities[dim(current_activities)[1], 2] <- current_trip$.__enclos_env__$private$landing_date
+                                        current_activities[dim(current_activities)[1], 3] <- current_elementarycatch$.__enclos_env__$private$activity_date
+                                        current_activities[dim(current_activities)[1], 4] <- current_elementarycatch$.__enclos_env__$private$activity_number
+                                        current_activities[dim(current_activities)[1], 5] <- current_elementarycatch$.__enclos_env__$private$set_count
+                                      }
+                                      current_activities <- unique(current_activities)
+                                      names(current_activities) <- c("vessel_id", "landing_date", "activity_date", "activity_number", "set_count")
+                                      current_activities <- unclass(current_activities)
+                                      list_activities <- lapply(1:length(current_activities[[1]]),
+                                                                function(l) {
+                                                                  t3::object_activity(vessel_id = current_activities[[1]][l],
+                                                                                      landing_date = current_activities[[2]][l],
+                                                                                      activity_date = current_activities[[3]][l],
+                                                                                      activity_number = current_activities[[4]][l],
+                                                                                      set_count = current_activities[[5]][l])
+                                                                })
+                                      current_trip$.__enclos_env__$private$activities <- list_activities
+                                    }
+                                  }
+                                }
+                              }
                             }),
                           private = list(
                             id_not_full_trip = NULL,
