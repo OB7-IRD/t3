@@ -52,24 +52,4 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                            sep = "")
                                        stop()
                                      }
-                                   },
-                                   # Filter elementarycatches by trips selected
-                                   filter_by_trips = function(trips_selected) {
-                                     if (length(class(trips_selected)) != 1 || class(trips_selected) != "character") {
-                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"trips_selected\" argument\n",
-                                           sep = "")
-                                       stop()
-                                     } else {
-                                       data_selected <- list()
-                                       for (trip in trips_selected) {
-                                         tmp1 <- list(super$filter(attribut_l1 = "data",
-                                                                   filter = paste0("arg$trip_id == \"",
-                                                                                   trip,
-                                                                                   "\"")))
-                                         names(tmp1) <- trip
-                                         data_selected <- append(data_selected, tmp1)
-                                       }
-                                       private$data_selected <- data_selected
-                                     }
                                    }))

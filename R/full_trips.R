@@ -108,6 +108,39 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
+                            # add activities ----
+                            add_activities = function(object_activities) {
+                              if (length(private$data_selected) == 0) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: argument \"data_selected\" empty\nlaunch selection data before\n",
+                                    sep = "")
+                                stop()
+                              } else if (! any(class(object_activities) == "activities")) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"object_activities\" argument\nclass activities expected\n",
+                                    sep = "")
+                                stop()
+                              } else {
+                                for (i in 1:length(private$data_selected)) {
+                                  if (i == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Start of add activity\n",
+                                        sep = "")
+                                  }
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
+                                    activities_tmp <- object_activities$filter(attribut_l1 = "data",
+                                                                               filter = paste0("arg$trip_id == \"",
+                                                                                               trip_id,
+                                                                                               "\""))
+                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities <- activities_tmp
+                                  }
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - End of add activity\n",
+                                    sep = "")
+                              }
+                            },
                             # add elementary catches ----
                             add_elementarycatches = function(object_elementarycatches) {
                               if (length(private$data_selected) == 0) {
@@ -122,18 +155,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop()
                               } else {
                                 for (i in 1:length(private$data_selected)) {
+                                  print(i)
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add elementary catches\n",
                                         sep = "")
                                   }
                                   for (j in 1:length(private$data_selected[[i]])) {
-                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    elementarycatches_tmp <- list(object_elementarycatches$filter(attribut_l1 = "data",
-                                                                                                  filter = paste0("arg$trip_id == \"",
-                                                                                                                  trip_id,
-                                                                                                                  "\"")))
-                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches <- elementarycatches_tmp
+                                    if (length(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities) != 0) {
+                                      for (k in 1:length(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities)) {
+                                        activity_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_id
+                                        elementarycatches_tmp <- object_elementarycatches$filter(attribut_l1 = "data",
+                                                                                                 filter = paste0("arg$activity_id == \"",
+                                                                                                                 activity_id,
+                                                                                                                 "\""))
+                                        private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$elementarycatches <- elementarycatches_tmp
+                                      }
+                                    }
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -141,7 +179,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # add landing catches ----
+                            # add elementary landings ----
                             add_elementarylandings = function(object_elementarylandings) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -162,10 +200,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    elementarylandings_tmp <- list(object_elementarylandings$filter(attribut_l1 = "data",
-                                                                                                    filter = paste0("arg$trip_id == \"",
-                                                                                                                    trip_id,
-                                                                                                                    "\"")))
+                                    elementarylandings_tmp <- object_elementarylandings$filter(attribut_l1 = "data",
+                                                                                               filter = paste0("arg$trip_id == \"",
+                                                                                                               trip_id,
+                                                                                                               "\""))
                                     private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarylandings <- elementarylandings_tmp
                                   }
                                 }
@@ -192,19 +230,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     # case 1: at least on trip is missing in the full trip item
                                     # check if functions for selection of elementary catches and elementary landings ran before
                                     warning("missing trip(s) in full trip ", i)
-                                    for (j in 1:length(private$data_selected[[i]])) {
-                                      if (is.null(private$data_selected[[i]][[j]][[".__enclos_env__"]][["private"]][["elementarycatches"]])) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: invalid \"elementarycatches\" in  trip object\nclass not \"NULL\" expected\n",
-                                            sep = "")
-                                        stop()
-                                      } else if (is.null(private$data_selected[[i]][[j]][[".__enclos_env__"]][["private"]][["elementarylandings"]])) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: invalid \"elementarylandings\" in  trip object\nclass not \"NULL\" expected\n",
-                                            sep = "")
-                                        stop()
-                                      }
-                                    }
                                     stop <- 0
                                     for (k in 1:length(private$data_selected[[i]])) {
                                       # case 1.1: at least one logbook is missing in not complet full trip item
@@ -234,8 +259,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_elementarycatches <- NULL
                                         }
                                         current_trip <- private$data_selected[[i]][[m]]
-                                        current_elementarycatches <- append(current_elementarycatches,
-                                                                            unlist(current_trip$.__enclos_env__$private$elementarycatches))
+                                        if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                          for (w in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                            current_elementarycatches <- append(current_elementarycatches,
+                                                                                current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches)
+                                          }
+                                        }
                                       }
                                       if (is.null(current_elementarycatches)) {
                                         # case 1.2: trips with no catches (for example route or support) in not complet full trip item
@@ -278,9 +307,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_trip <- private$data_selected[[i]][[s]]
                                               current_trip$.__enclos_env__$private$rf1 <- 1
                                               current_trip$.__enclos_env__$private$statut_rf1 <- 1.4
-                                              current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
-                                              for (t in 1:length(current_elementarycatches)) {
-                                                current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight
+                                              if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                                current_elementarycatches <- NULL
+                                                for (z in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                                  current_elementarycatches <- append(current_elementarycatches,
+                                                                                      current_trip$.__enclos_env__$private$activities[[z]]$.__enclos_env__$private$elementarycatches)
+                                                }
+                                              }
+                                              if (! is.null(current_elementarycatches)) {
+                                                for (t in 1:length(current_elementarycatches)) {
+                                                  current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight
+                                                }
                                               }
                                             }
                                           }
@@ -290,19 +327,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   } else {
                                     # case 2: full trip is complet
                                     # check if functions for selection of elementary catches and elementary landings ran before
-                                    for (j in 1:length(private$data_selected[[i]])) {
-                                      if (is.null(private$data_selected[[i]][[j]][[".__enclos_env__"]][["private"]][["elementarycatches"]])) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: invalid \"elementarycatches\" in  trip object\nclass not \"NULL\" expected\n",
-                                            sep = "")
-                                        stop()
-                                      } else if (is.null(private$data_selected[[i]][[j]][[".__enclos_env__"]][["private"]][["elementarylandings"]])) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: invalid \"elementarylandings\" in  trip object\nclass not \"NULL\" expected\n",
-                                            sep = "")
-                                        stop()
-                                      }
-                                    }
                                     stop <- 0
                                     # case 2.1: at least one logbook is missing in complet full trip item
                                     for (k in 1:length(private$data_selected[[i]])) {
@@ -332,8 +356,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_elementarycatches <- NULL
                                         }
                                         current_trip <- private$data_selected[[i]][[m]]
-                                        current_elementarycatches <- append(current_elementarycatches,
-                                                                            unlist(current_trip$.__enclos_env__$private$elementarycatches))
+                                        if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                          for (w in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                            current_elementarycatches <- append(current_elementarycatches,
+                                                                                current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches)
+                                          }
+                                        }
                                       }
                                       if (is.null(current_elementarycatches)) {
                                         # case 2.2: trips with no catches (for example route or support) in complet full trip item
@@ -405,7 +433,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (u in 1:length(private$data_selected[[i]])) {
                                       current_trip <- private$data_selected[[i]][[u]]
                                       current_rf1 <- current_trip$.__enclos_env__$private$rf1
-                                      current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
+                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        current_elementarycatches <- NULL
+                                        for (x in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                          current_elementarycatches <- append(current_elementarycatches,
+                                                                              current_trip$.__enclos_env__$private$activities[[x]]$.__enclos_env__$private$elementarycatches)
+                                        }
+                                      }
                                       if (! is.null(current_elementarycatches)) {
                                         for (v in 1:length(current_elementarycatches)) {
                                           current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight * current_rf1
@@ -444,7 +478,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     current_rf2 <- 1
                                     current_trip$.__enclos_env__$private$rf2 <- current_rf2
                                     current_trip$.__enclos_env__$private$statut_rf2 <- 2
-                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      current_elementarycatches <- NULL
+                                      for (m in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_elementarycatches <- append(current_elementarycatches,
+                                                                            current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
+                                      }
+                                    }
                                     if (! is.null(current_elementarycatches)) {
                                       for (k in 1:length(current_elementarycatches)) {
                                         current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1 * current_rf2
@@ -480,150 +520,157 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   # first stage: conversion of all categories except for unknown (category 9)
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
-                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
-                                    if (! is.null(current_elementarycatches)) {
-                                      for (k in 1:length(current_elementarycatches)) {
-                                        current_elementarycatch <- current_elementarycatches[[k]]
-                                        if (current_elementarycatch$.__enclos_env__$private$ocean == 1) {
-                                          # for atlantic ocean
-                                          if (current_elementarycatch$.__enclos_env__$private$school_type %in% c(2, 3)) {
-                                            # for free school and undetermined school
-                                            if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                              # for YFT, BET and ALB
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_2
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 6) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.5
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_3
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.5
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(5, 7, 8, 13)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_3
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 11) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.1
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_3
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.9
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      for (w in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches
+                                        if (length(current_elementarycatches) != 0) {
+                                          ocean_activity <- current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$ocean
+                                          school_type_activity <- current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$school_type
+                                          for (k in 1:length(current_elementarycatches)) {
+                                            current_elementarycatch <- current_elementarycatches[[k]]
+                                            if (ocean_activity == 1) {
+                                              # for atlantic ocean
+                                              if (school_type_activity %in% c(2, 3)) {
+                                                # for free school and undetermined school
+                                                if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                  # for YFT, BET and ALB
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_2
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 6) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.5
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_3
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.5
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(5, 7, 8, 13)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_3
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 11) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_2
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.1
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_3
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.9
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  }
+                                                } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else {
+                                                  current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                  current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                }
+                                              } else {
+                                                # for floating object school
+                                                if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else {
+                                                  current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                  current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                }
                                               }
-                                            } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                            } else if (ocean_activity == 2) {
+                                              # for indian ocean
+                                              if (school_type_activity %in% c(2, 3)) {
+                                                # for free school and undetermined school
+                                                if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else {
+                                                  current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                  current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                }
+                                              } else {
+                                                # for floating object school
+                                                if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                  if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(1, 2, 10)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == 4) {
+                                                    current_elementarycatch_tmp <- current_elementarycatch$clone()
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                current_elementarycatch_tmp)
+                                                  } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
+                                                  if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
+                                                    current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                  }
+                                                } else {
+                                                  current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                  current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                }
                                               }
                                             } else {
-                                              current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                              current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                            }
-                                          } else {
-                                            # for floating object school
-                                            if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else {
-                                              current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                              current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: algorithm not calculated for the ocean number ",
+                                                  ocean_activity,
+                                                  "\n",
+                                                  sep = "")
+                                              stop()
                                             }
                                           }
-                                        } else if (current_elementarycatch$.__enclos_env__$private$ocean == 2) {
-                                          # for indian ocean
-                                          if (current_elementarycatch$.__enclos_env__$private$school_type %in% c(2, 3)) {
-                                            # for free school and undetermined school
-                                            if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
-                                              } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else {
-                                              current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                              current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                            }
-                                          } else {
-                                            # for floating object school
-                                            if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                              if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(1, 2, 10)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == 4) {
-                                                current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                         current_elementarycatch_tmp)
-                                              } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
-                                              if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                              }
-                                            } else {
-                                              current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                              current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                            }
-                                          }
-                                        } else {
-                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: algorithm not calculated for the ocean number ",
-                                              current_elementarycatch$.__enclos_env__$private$ocean,
-                                              "\n",
-                                              sep = "")
                                         }
                                       }
                                     }
@@ -631,7 +678,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   # second stage: conversion of category unknow (category 9) if possible
                                   for (l in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[l]]
-                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
+                                    current_elementarycatches <- NULL
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      for (x in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_elementarycatches <- append(current_elementarycatches,
+                                                                            current_trip$.__enclos_env__$private$activities[[x]]$.__enclos_env__$private$elementarycatches)
+                                      }
+                                    }
                                     if (! is.null(current_elementarycatches)) {
                                       category_9 <- FALSE
                                       names(category_9) <- 0
@@ -711,8 +764,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     current_category_9_tmp <- current_category_9[[t]]$clone()
                                                     current_category_9_tmp$.__enclos_env__$private$corrected_logbook_category = names(proportion)[u]
                                                     current_category_9_tmp$.__enclos_env__$private$catch_weight_category_corrected = current_category_9_tmp$.__enclos_env__$private$catch_weight_rf2 * as.numeric(proportion[u])
-                                                    private$data_selected[[i]][[l]]$.__enclos_env__$private$elementarycatches[[1]] <- append(private$data_selected[[i]][[l]]$.__enclos_env__$private$elementarycatches[[1]],
-                                                                                                                                             current_category_9_tmp)
+                                                    for (y in 1:length(private$data_selected[[i]][[l]]$.__enclos_env__$private$activities)) {
+                                                      if (private$data_selected[[i]][[l]]$.__enclos_env__$private$activities[[y]]$.__enclos_env__$private$activity_id == current_category_9_tmp$.__enclos_env__$private$activity_id) {
+                                                        private$data_selected[[i]][[l]]$.__enclos_env__$private$activities[[y]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[l]]$.__enclos_env__$private$activities[[y]]$.__enclos_env__$private$elementarycatches,
+                                                                                                                                                                                    current_category_9_tmp)
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -745,6 +802,46 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # set_count ----
                             set_count = function () {
+                              for (i in 1:length(private$data_selected)) {
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_activity <- current_trip$.__enclos_env__$private$activities[[k]]
+                                        current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
+                                        if (length(current_elementarycatches) != 0) {
+                                          catch_weight_category_corrected <- sum(sapply(X = 1:length(current_elementarycatches),
+                                                                                        FUN = function(l) {
+                                                                                          if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
+                                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                                                                " - Error: run function for logbook weigth categories conversion before that one",
+                                                                                                "\n",
+                                                                                                sep = "")
+                                                                                            stop()
+                                                                                          } else {
+                                                                                            current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                          }
+                                                                                        }))
+                                          if (catch_weight_category_corrected == 0) {
+                                            current_activity$.__enclos_env__$private$positive_set_count <- 0
+                                          } else {
+                                            current_activity$.__enclos_env__$private$positive_set_count <- current_activity$.__enclos_env__$private$set_count
+                                          }
+                                        } else {
+                                          current_activity$.__enclos_env__$private$positive_set_count <- 0
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            # set_duration ----
+                            set_duration = function(set_duration_ref) {
                               browser()
                               for (i in 1:length(private$data_selected)) {
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -753,29 +850,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
-                                    current_elementarycatches <- unlist(current_trip$.__enclos_env__$private$elementarycatches)
-                                    if (! is.null(current_elementarycatches)) {
-                                      current_activities <- data.frame()
-                                      for (k in 1:length(current_elementarycatches)) {
-                                        current_elementarycatch <- current_elementarycatches[[k]]
-                                        current_activities[dim(current_activities)[1] + 1, 1] <- current_elementarycatch$.__enclos_env__$private$vessel_id
-                                        current_activities[dim(current_activities)[1], 2] <- current_trip$.__enclos_env__$private$landing_date
-                                        current_activities[dim(current_activities)[1], 3] <- current_elementarycatch$.__enclos_env__$private$activity_date
-                                        current_activities[dim(current_activities)[1], 4] <- current_elementarycatch$.__enclos_env__$private$activity_number
-                                        current_activities[dim(current_activities)[1], 5] <- current_elementarycatch$.__enclos_env__$private$set_count
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_activity <- current_trip$.__enclos_env__$private$activities[[k]]
+                                        if (current_activity$.__enclos_env__$private$activity_code == 0) {
+                                          # for a set declared as null set
+                                          current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
+                                          if (length(current_elementarycatches) != 0) {
+                                            catch_weight_category_corrected <- sum(sapply(X = 1:length(current_elementarycatches),
+                                                                                          FUN = function(l) {
+                                                                                            if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
+                                                                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                                                                  " - Error: run function for logbook weigth categories conversion before that one",
+                                                                                                  "\n",
+                                                                                                  sep = "")
+                                                                                              stop()
+                                                                                            } else {
+                                                                                              current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                            }
+                                                                                          }))
+                                          }
+                                        }
                                       }
-                                      current_activities <- unique(current_activities)
-                                      names(current_activities) <- c("vessel_id", "landing_date", "activity_date", "activity_number", "set_count")
-                                      current_activities <- unclass(current_activities)
-                                      list_activities <- lapply(1:length(current_activities[[1]]),
-                                                                function(l) {
-                                                                  t3::object_activity(vessel_id = current_activities[[1]][l],
-                                                                                      landing_date = current_activities[[2]][l],
-                                                                                      activity_date = current_activities[[3]][l],
-                                                                                      activity_number = current_activities[[4]][l],
-                                                                                      set_count = current_activities[[5]][l])
-                                                                })
-                                      current_trip$.__enclos_env__$private$activities <- list_activities
                                     }
                                   }
                                 }

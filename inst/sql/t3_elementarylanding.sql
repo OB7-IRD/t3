@@ -1,8 +1,7 @@
 SELECT
 	t.topiaid::text AS trip_id
-	,t.landingdate::date AS landing_date
-	,v.code::integer AS vessel_id
-	,wcla.sovlibelle::text AS landing_category
+	,wcla.code::integer AS landing_category
+	,wcla.sovlibelle::text AS landing_category_name
 	,s.code3l::text AS specie_code3l
 	,sum(el.weight)::numeric AS landing_weight
 FROM
@@ -17,11 +16,7 @@ WHERE
 	AND c.codeiso3 IN ('FRA')
 GROUP BY
 	trip_id
-	,landing_date
-	,vessel_id
 	,landing_category
+	,landing_category_name
 	,specie_code3l
-ORDER BY
-	vessel_id
-	,landing_date
 ;

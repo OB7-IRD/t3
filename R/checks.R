@@ -12,6 +12,48 @@ check_trip_id = function(trip_id) {
   }
 }
 
+#' @name check_activity_id
+#' @title Attribut "activity_id" verification
+#' @param activity_id (character) Activity identification
+#' @description Check if the item "activity_id" have one unique class identified as character
+# check activity_id ----
+check_activity_id = function(activity_id) {
+  if (length(class(activity_id)) != 1 || class(activity_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"activity_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name landing_category
+#' @title Attribut "landing_category" verification
+#' @param landing_category (integer) Landing category identification
+#' @description Check if the item "landing_category" have one unique class identified as integer
+# check landing_category ----
+check_landing_category = function(landing_category) {
+  if (length(class(landing_category)) != 1 || class(landing_category) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"landing_category\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_landing_category_name
+#' @title Attribut "landing_category_name" verification
+#' @param landing_category (landing_category_name) Landing category name identification
+#' @description Check if the item "landing_category_name" have one unique class identified as character
+# check landing_category_name ----
+check_landing_category_name = function(landing_category_name) {
+  if (length(class(landing_category_name)) != 1 || class(landing_category_name) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"landing_category_name\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_landing_date
 #' @title Attribut "landing_date" verification
 #' @param landing_date (date) Landing date in format ymd
@@ -276,6 +318,34 @@ check_specie_code3l = function(specie_code3l) {
   } else if (nchar(specie_code3l) != 3) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"specie_code3l\" argument\n3 character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_activity_name
+#' @title Attribut "activity_name" verification
+#' @param activity_name (character) Activity identification
+#' @description Check if the item "check_activity_name" have one unique class identified as character
+# check check_activity_name ----
+check_activity_name = function(check_activity_name) {
+  if (length(class(check_activity_name)) != 1 || class(check_activity_name) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"check_activity_name\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name activity_code
+#' @title Attribut "activity_code" verification
+#' @param activity_code (integer) Activity code identification
+#' @description Check if the item "activity_code" have one unique class identified as integer
+# check activity_code ----
+check_activity_code = function(activity_code) {
+  if (length(class(activity_code)) != 1 || class(activity_code) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"activity_code\" argument\nclass integer expected\n",
         sep = "")
     stop()
   }

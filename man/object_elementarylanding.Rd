@@ -4,8 +4,8 @@
 \alias{object_elementarylanding}
 \title{R6 object object_elementarylanding creation}
 \usage{
-object_elementarylanding(trip_id, landing_date, vessel_id,
-  landing_category, specie_code3l, landing_weight)
+object_elementarylanding(trip_id, landing_category, landing_category_name,
+  specie_code3l, landing_weight)
 }
 \value{
 A R6 reference object with data related to one elementary landing

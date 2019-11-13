@@ -5,15 +5,13 @@
 #' @seealso \code{\link{elementarylanding}}
 #' @export
 object_elementarylanding <- function(trip_id,
-                                     landing_date,
-                                     vessel_id,
                                      landing_category,
+                                     landing_category_name,
                                      specie_code3l,
                                      landing_weight) {
   t3:::elementarylanding$new(trip_id = trip_id,
-                             landing_date = landing_date,
-                             vessel_id = vessel_id,
                              landing_category = landing_category,
+                             landing_category_name = landing_category_name,
                              specie_code3l = specie_code3l,
                              landing_weight = landing_weight)
 }
