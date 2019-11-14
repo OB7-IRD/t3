@@ -5,7 +5,8 @@
 \title{R6 object object_activity creation}
 \usage{
 object_activity(trip_id, activity_id, ocean, activity_date,
-  activity_number, set_count, school_type, activity_code, activity_name)
+  activity_number, set_count, school_type, activity_code, activity_name,
+  time_at_sea)
 }
 \value{
 A R6 reference object with data related to one activity

@@ -368,3 +368,22 @@ check_set_count = function(set_count) {
     stop()
   }
 }
+
+#' @name time_at_sea
+#' @title Attribut "time_at_sea" verification
+#' @param time_at_sea (integer) Time at sea in hours
+#' @description Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero
+# check time_at_sea ----
+check_time_at_sea = function(time_at_sea) {
+  if (length(class(time_at_sea)) != 1 || class(time_at_sea) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"time_at_sea\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (time_at_sea < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"time_at_sea\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}

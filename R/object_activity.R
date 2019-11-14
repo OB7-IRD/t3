@@ -12,7 +12,8 @@ object_activity <- function(trip_id,
                             set_count,
                             school_type,
                             activity_code,
-                            activity_name) {
+                            activity_name,
+                            time_at_sea) {
   t3:::activity$new(trip_id = trip_id,
                     activity_id = activity_id,
                     ocean = ocean,
@@ -21,5 +22,6 @@ object_activity <- function(trip_id,
                     set_count = set_count,
                     school_type = school_type,
                     activity_code = activity_code,
-                    activity_name = activity_name)
+                    activity_name = activity_name,
+                    time_at_sea = time_at_sea)
 }

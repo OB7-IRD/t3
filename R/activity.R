@@ -14,7 +14,8 @@ activity <- R6::R6Class(classname = "activity",
                                                 set_count,
                                                 school_type,
                                                 activity_code,
-                                                activity_name) {
+                                                activity_name,
+                                                time_at_sea) {
                             # attribut "trip_id" verification
                             t3:::check_trip_id(trip_id)
                             # attribut "activity_id" verification
@@ -33,6 +34,8 @@ activity <- R6::R6Class(classname = "activity",
                             t3:::check_activity_code(activity_code)
                             # attribut "school_type" verification
                             t3:::check_activity_name(activity_name)
+                            # attribut "time_at_sea" verification
+                            t3:::check_time_at_sea(time_at_sea)
                             # attributions
                             private$trip_id <- trip_id
                             private$activity_id <- activity_id
@@ -42,7 +45,8 @@ activity <- R6::R6Class(classname = "activity",
                             private$set_count <- set_count
                             private$school_type <- school_type
                             private$activity_code <- activity_code
-                            private$activity_name <- activity_name}),
+                            private$activity_name <- activity_name
+                            private$time_at_sea <- time_at_sea}),
                         private = list(
                           trip_id = NULL,
                           activity_id = NULL,
@@ -53,6 +57,7 @@ activity <- R6::R6Class(classname = "activity",
                           school_type = NULL,
                           activity_code = NULL,
                           activity_name = NULL,
+                          time_at_sea = NULL,
                           positive_set_count = NULL,
                           set_duration = NULL,
                           elementarycatches = NULL))

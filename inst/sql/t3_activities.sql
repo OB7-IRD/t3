@@ -8,6 +8,7 @@ SELECT
 	,st.code::integer AS school_type
 	,va.code::integer AS activity_code
 	,va.label1::text AS activity_name
+	,a.timeatsea::integer AS time_at_sea
 FROM 
 	public.activity a
 	JOIN public.route r ON (a.route = r.topiaid)

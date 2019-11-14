@@ -918,7 +918,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                               & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
                                               parameter_b <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                               & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
-                                              current_activity$.__enclos_env__$private$set_duration <- parameter_a + parameter_b * catch_weight_category_corrected
+                                              current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                             } else {
                                               current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                                                         & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "null_set_value"]
@@ -960,7 +960,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                               & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
                                               parameter_b <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                               & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
-                                              current_activity$.__enclos_env__$private$set_duration <- parameter_a + parameter_b * catch_weight_category_corrected
+                                              current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                             } else {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Error: set declared as positive but without elementary catch",
@@ -991,6 +991,45 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # time at sea ----
                             time_at_sea = function() {
                               browser()
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start of time at sea calculation\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    departure_date <- current_trip$.__enclos_env__$private$departure_date
+                                    landing_date <- current_trip$.__enclos_env__$private$landing_date
+                                    time_departure_date <- lubridate::hms(format(departure_date, format = "%H:%M:%S"))
+                                    time_landing_date <- lubridate::hms(format(landing_date, format = "%H:%M:%S"))
+                                    if (time_departure_date > lubridate::dseconds(x = 0) & time_landing_date > lubridate::dseconds(x = 0)) {
+                                      # we have time for departure_date and landing_date
+                                      time_at_sea <- int_length(lubridate::interval(start = departure_date, end = landing_date)) / 3600
+                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
+                                    } else {
+                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        current_activities_departure_date <- vector(mode = "list")
+                                        current_activities_landing_date <- vector(mode = "list")
+                                        for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                          if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date == departure_date) {
+                                            current_activities_departure_date <- append(current_activities_departure_date,
+                                                                                        current_trip$.__enclos_env__$private$activities[[k]])
+                                          } else if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date == landing_date) {
+                                            current_activities_landing_date <- append(current_activities_landing_date,
+                                                                                      current_trip$.__enclos_env__$private$activities[[k]])
+                                          }
+                                        }
+                                      }
+                                    }
+
+                                  }
+                                }
+                              }
                             },
                             # searching time ----
                             searching_time = function() {

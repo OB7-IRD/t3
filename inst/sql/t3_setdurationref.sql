@@ -5,7 +5,7 @@ SELECT
 	,st.code::integer AS school_type
 	,sd.parametera::numeric AS parameter_a
 	,sd.parameterb::numeric AS parameter_b
-	,sd.nullsetvalue::NUMERIC AS null_set_value
+	,sd.nullsetvalue::numeric AS null_set_value
 FROM 
 	public.setduration sd
 	JOIN public.country c ON (sd.country = c.topiaid)
