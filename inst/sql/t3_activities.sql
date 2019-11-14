@@ -20,5 +20,5 @@ FROM
 WHERE
 	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
 	AND c.codeiso3 IN ('FRA')
-	AND va.code IN (0, 1, 2, 12 ,13 ,14)
+	--AND va.code IN (0, 1, 2, 12 ,13 ,14)
 ;

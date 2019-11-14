@@ -4,28 +4,21 @@
 \alias{object_trip}
 \title{R6 object trip creation}
 \usage{
-object_trip(trip_id, landing_date, fishing_time, time_at_sea,
-  logbook_availability, fish_hold_empty, vessel_id, landing_harbour_id,
-  departure_harbour_id)
+object_trip(trip_id, departure_date, landing_date, logbook_availability,
+  fish_hold_empty, vessel_id)
 }
 \arguments{
 \item{trip_id}{trip_id}
 
+\item{departure_date}{departure_date}
+
 \item{landing_date}{landing_date}
-
-\item{fishing_time}{fishing_time}
-
-\item{time_at_sea}{time_at_sea}
 
 \item{logbook_availability}{logbook_availability}
 
 \item{fish_hold_empty}{fish_hold_empty}
 
 \item{vessel_id}{vessel_id}
-
-\item{landing_harbour_id}{landing_harbour_id}
-
-\item{departure_harbour_id}{departure_harbour_id}
 }
 \value{
 A R6 reference object with data related to one trip

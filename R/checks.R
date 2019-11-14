@@ -56,17 +56,17 @@ check_landing_category_name = function(landing_category_name) {
 
 #' @name check_landing_date
 #' @title Attribut "landing_date" verification
-#' @param landing_date (date) Landing date in format ymd
-#' @description Check if the item "landing_date" is in date format ymd and check if the value is inferior to the actual date
+#' @param landing_date (date and hours) Landing date in format ymd_hms UTC
+#' @description Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date
 #' @importFrom lubridate ymd
 # check landing_date ----
 check_landing_date = function(landing_date) {
-  if (is.na(lubridate::ymd(landing_date, quiet = TRUE))) {
+  if (is.na(lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC"))) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd\n",
+        " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd_hms\n",
         sep = "")
     stop()
-  } else if (lubridate::ymd(landing_date, quiet = TRUE) > Sys.Date()) {
+  } else if (lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC") > as.POSIXct(Sys.time(), tz = "UTC")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: at least one \"landing_date\" is superior to the actual date\n",
         sep = "")
@@ -92,12 +92,12 @@ check_activity_date = function(activity_date, landing_date = NULL) {
         sep = "")
     stop()
   } else if (! is.null(landing_date)) {
-    if (is.na(lubridate::ymd(landing_date, quiet = TRUE))) {
+    if (is.na(lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC"))) {
       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd\n",
+          " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd_hms\n",
           sep = "")
       stop()
-    } else if (lubridate::ymd(activity_date, quiet = TRUE) > lubridate::ymd(landing_date, quiet = TRUE)) {
+    } else if (lubridate::ymd(activity_date, quiet = TRUE) > lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC")) {
       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: At least one \"activity_date\" is superior to \"landing_date\"\n",
           sep = "")
@@ -106,36 +106,35 @@ check_activity_date = function(activity_date, landing_date = NULL) {
   }
 }
 
-#' @name check_fishing_time
-#' @title Attribut "fishing_time" verification
-#' @param fishing_time (numeric or integer) Fishing time value
-#' @description Check if the item "fishing_time" is class integer or numeric and if all values are postives
-# check fishing_time ----
-check_fishing_time = function(fishing_time) {
-  if (length(class(fishing_time)) != 1 || ! class(fishing_time) %in% c("integer", "numeric")) {
+#' @name check_departure_date
+#' @title Attribut "departure_date" verification
+#' @param departure_date (date and hours) Departure date in format ymd_hms
+#' @description Check if the item "departure_date" is in date format ymd_hms, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)
+#' @importFrom lubridate ymd
+# check departure_date ----
+check_departure_date = function(departure_date, landing_date = NULL) {
+  if (is.na(lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC"))) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"fishing_time\" argument\nclass numeric or integer expected\n",
+        " - Error: invalide \"departure_date\" argument\nAt least one item failed to parse with format ymd_hms\n",
         sep = "")
     stop()
-  } else if (fishing_time < 0) {
+  } else if (lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC") > as.POSIXct(Sys.time(), tz = "UTC")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: attribut \"fishing_time\" have at least one negative value\n",
+        " - Error: at least one item \"departure_date\" is superior to the actual date\n",
         sep = "")
     stop()
-  }
-}
-
-#' @name check_time_at_sea
-#' @title Attribut "time_at_sea" verification
-#' @param time_at_sea (numeric or integer) Time at sea value
-#' @description Check if the item "time_at_sea" is class integer or numeric and if all values are postives
-# check time_at_sea ----
-check_time_at_sea = function(time_at_sea) {
-  if (time_at_sea < 0) {
-    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: attribut \"time_at_sea\" have at least one negative value\n",
-        sep = "")
-    stop()
+  } else if (! is.null(landing_date)) {
+    if (is.na(lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC"))) {
+      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd_hms\n",
+          sep = "")
+      stop()
+    } else if (lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC") > lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC")) {
+      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: At least one \"departure_date\" is superior to \"landing_date\"\n",
+          sep = "")
+      stop()
+    }
   }
 }
 
@@ -200,34 +199,6 @@ check_activity_number = function(activity_number) {
   if (length(class(activity_number)) != 1 || class(activity_number) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_number\" argument\nclass integer expected\n",
-        sep = "")
-    stop()
-  }
-}
-
-#' @name check_landing_harbour_id
-#' @title Attribut "landing_harbour_id" verification
-#' @param landing_harbour_id (character) Landing harbour identification
-#' @description Check if the item "landing_harbour_id" have one unique class identified as character
-# check landing_harbour_id ----
-check_landing_harbour_id = function(landing_harbour_id) {
-  if (length(class(landing_harbour_id)) != 1 || class(landing_harbour_id) != "character") {
-    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"landing_harbour_id\" argument\nclass character expected\n",
-        sep = "")
-    stop()
-  }
-}
-
-#' @name check_departure_harbour_id
-#' @title Attribut "departure_harbour_id" verification
-#' @param departure_harbour_id (character) Departure harbour identification
-#' @description Check if the item "departure_harbour_id" have one unique class identified as character
-# check departure_harbour_id ----
-check_departure_harbour_id = function(departure_harbour_id) {
-  if (length(class(departure_harbour_id)) != 1 || class(departure_harbour_id) != "character") {
-    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"departure_harbour_id\" argument\nclass character expected\n",
         sep = "")
     stop()
   }
