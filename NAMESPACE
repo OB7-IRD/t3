@@ -3,6 +3,7 @@
 export(object_activity)
 export(object_elementarycatch)
 export(object_elementarylanding)
+export(object_elementarysample)
 export(object_full_trips)
 export(object_r6)
 export(object_trip)

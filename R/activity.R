@@ -11,6 +11,8 @@ activity <- R6::R6Class(classname = "activity",
                                                 ocean,
                                                 activity_date,
                                                 activity_number,
+                                                activity_latitude,
+                                                activity_longitude,
                                                 set_count,
                                                 school_type,
                                                 activity_code,
@@ -26,6 +28,10 @@ activity <- R6::R6Class(classname = "activity",
                             t3:::check_activity_date(activity_date = activity_date)
                             # attribut "check_activity_number" verification
                             t3:::check_activity_number(activity_number)
+                            # attribut "check_activity_latitude" verification
+                            t3:::check_activity_latitude(activity_latitude)
+                            # attribut "check_activity_longitude" verification
+                            t3:::check_activity_longitude(activity_longitude)
                             # attribut "set_count" verification
                             t3:::check_set_count(set_count)
                             # attribut "school_type" verification
@@ -40,8 +46,10 @@ activity <- R6::R6Class(classname = "activity",
                             private$trip_id <- trip_id
                             private$activity_id <- activity_id
                             private$ocean <- ocean
-                            private$activity_date <- lubridate::ymd(activity_date, quiet = TRUE, tz = "UTC")
+                            private$activity_date <- lubridate::ymd(activity_date, quiet = TRUE)
                             private$activity_number <- activity_number
+                            private$activity_longitude <- activity_longitude
+                            private$activity_latitude <- activity_latitude
                             private$set_count <- set_count
                             private$school_type <- school_type
                             private$activity_code <- activity_code
@@ -53,6 +61,8 @@ activity <- R6::R6Class(classname = "activity",
                           ocean = NULL,
                           activity_date = NULL,
                           activity_number = NULL,
+                          activity_latitude = NULL,
+                          activity_longitude = NULL,
                           set_count = NULL,
                           school_type = NULL,
                           activity_code = NULL,

@@ -4,8 +4,14 @@
 \alias{object_trip}
 \title{R6 object trip creation}
 \usage{
-object_trip(trip_id, departure_date, landing_date, logbook_availability,
-  fish_hold_empty, vessel_id)
+object_trip(
+  trip_id,
+  departure_date,
+  landing_date,
+  logbook_availability,
+  fish_hold_empty,
+  vessel_id
+)
 }
 \arguments{
 \item{trip_id}{trip_id}

@@ -214,6 +214,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
+                            # add samples ----
+                            add_samples = function(object_samples) {
+                              if (length(private$data_selected) == 0) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: argument \"data_selecetd\" empty\nlaunch selection data before\n",
+                                    sep = "")
+                                stop()
+                              } else if (! any(class(object_samples) == "samples")) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"object_samples\" argument\nclass samples expected\n",
+                                    sep = "")
+                                stop()
+                              } else {
+                                for (i in 1:length(private$data_selected)) {
+                                  if (i == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Start of add samples\n",
+                                        sep = "")
+                                  }
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
+                                    trip_samples <- object_samples$filter_by_trip(trip_id = trip_id)
+                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$samples <- trip_samples
+                                  }
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - End of add samples\n",
+                                    sep = "")
+                              }
+                            },
                             # raising factor level 1 ----
                             rf1 = function(species_rf1) {
                               if (length(class(species_rf1)) != 1 || class(species_rf1) != "character") {
@@ -990,7 +1020,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # time at sea ----
                             time_at_sea = function() {
-                              browser()
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1009,8 +1038,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     time_landing_date <- lubridate::hms(format(landing_date, format = "%H:%M:%S"))
                                     if (time_departure_date > lubridate::dseconds(x = 0) & time_landing_date > lubridate::dseconds(x = 0)) {
                                       # we have time for departure_date and landing_date
-                                      time_at_sea <- int_length(lubridate::interval(start = departure_date, end = landing_date)) / 3600
-                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
+                                      time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date, end = landing_date)) / 3600
                                     } else {
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                         current_activities_departure_date <- vector(mode = "list")
@@ -1024,19 +1052,317 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       current_trip$.__enclos_env__$private$activities[[k]])
                                           }
                                         }
+                                        current_activities_departure_date_time_at_sea <- 0
+                                        current_activities_landing_date_time_at_sea <- 0
+                                        if (length(current_activities_departure_date) != 0) {
+                                          for (l in 1:length(current_activities_departure_date)) {
+                                            current_activities_departure_date_time_at_sea <- current_activities_departure_date_time_at_sea + current_activities_departure_date[[l]]$.__enclos_env__$private$time_at_sea
+                                          }
+                                        }
+                                        if (length(current_activities_landing_date) != 0) {
+                                          for (m in 1:length(current_activities_landing_date)) {
+                                            current_activities_landing_date_time_at_sea <- current_activities_landing_date_time_at_sea + current_activities_landing_date[[m]]$.__enclos_env__$private$time_at_sea
+                                          }
+                                        }
+                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                 end = landing_date - lubridate::days(x = 1))
+                                                                             ) / 3600
+                                        time_at_sea <- time_at_sea + current_activities_departure_date_time_at_sea + current_activities_landing_date_time_at_sea
+                                      } else {
+                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                 end = landing_date - lubridate::days(x = 1))
+                                        ) / 3600
                                       }
                                     }
-
+                                    current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
                                   }
+                                }
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End of time at sea calculation\n",
+                                      sep = "")
                                 }
                               }
                             },
-                            # searching time ----
-                            searching_time = function() {
-                              browser()
-                            },
-                            # fishing time ----
+                            # fishing_time ----
                             fishing_time = function() {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start of fishing time calculation\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    fishing_time <- 0
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      activities_dates <- vector(mode = "list")
+                                      for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                        current_activity_date <- current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date
+                                        activities_dates <- append(activities_dates,
+                                                                   current_activity_date)
+                                      }
+                                      activities_dates <- sort(x = unique(lubridate::date(activities_dates)))
+                                      for (l in activities_dates) {
+                                        fishing_time_tmp <- 0
+                                        current_activities_code <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                                 FUN = function(m) {
+                                                                                   if (current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_date == l) {
+                                                                                     current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_code
+                                                                                   } else {
+                                                                                     NA
+                                                                                   }
+                                                                                 }))
+                                        current_activities_code <- current_activities_code[!is.na(current_activities_code)]
+                                        if (any(! current_activities_code %in% c(4, 7, 10, 15, 100))) {
+                                          current_activities_location <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                                   FUN = function(n) {
+                                                                                     if (current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_date == l) {
+                                                                                       paste(current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_latitude,
+                                                                                             current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_longitude,
+                                                                                             sep = "_")
+                                                                                     } else {
+                                                                                       NA
+                                                                                     }
+                                                                                   }))
+                                          current_activities_location <- current_activities_location[!is.na(current_activities_location)]
+                                          latitude_mean <- mean(sapply(X = 1:length(current_activities_location),
+                                                                       FUN = function(o) {
+                                                                         as.numeric(unlist(strsplit(current_activities_location[o],
+                                                                                                    '_'))[1])
+                                                                       }))
+                                          longitude_mean <- mean(sapply(X = 1:length(current_activities_location),
+                                                                        FUN = function(o) {
+                                                                          as.numeric(unlist(strsplit(current_activities_location[o],
+                                                                                                     '_'))[2])
+                                                                        }))
+                                          # sunrise (top edge of the sun appears on the horizon)
+                                          current_sunrise <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                                                                       lat = latitude_mean,
+                                                                                       lon = longitude_mean)$sunrise
+                                          # sunset (sun disappears below the horizon, evening civil twilight starts)
+                                          current_sunset <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                                                                      lat = latitude_mean,
+                                                                                      lon = longitude_mean)$sunset
+                                          fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
+                                                                                                        end = current_sunset)) / 3600
+                                          fishing_time <- fishing_time + fishing_time_tmp
+                                        }
+                                      }
+                                    }
+                                    current_trip$.__enclos_env__$private$fishing_time <- fishing_time
+                                  }
+                                }
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End of fishing time calculation\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # searching_time ----
+                            searching_time = function() {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start of searching time calculation\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                      activities_set_duration <- sum(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                            FUN = function(k) {
+                                                                              if (! is.null(current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration)) {
+                                                                                current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration
+                                                                              } else {
+                                                                                0
+                                                                              }
+                                                                            })) / 60
+                                      if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
+                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                            " - Error: run fishing time calculation before searching time calculation\n",
+                                            sep = "")
+                                        stop()
+                                      } else {
+                                        searching_time <- current_trip$.__enclos_env__$private$fishing_time - activities_set_duration
+                                      }
+                                    } else {
+                                      searching_time <- 0
+                                    }
+                                    current_trip$.__enclos_env__$private$searching_time <- searching_time
+                                  }
+                                }
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End of searching time calculation\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # sample_number_measured_extrapolation ----
+                            sample_number_measured_extrapolation = function() {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start sample number measured extrapolation\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_samples <- current_trip$.__enclos_env__$private$samples
+                                    if (length(current_samples) != 0) {
+                                      for (k in 1:length(current_samples)) {
+                                        current_sample <- current_samples[[k]]
+                                        sample_specie <- vector(mode = "character")
+                                        for (l in 1:length(current_sample)) {
+                                          sample_specie <- append(sample_specie,
+                                                                  current_sample[[l]]$.__enclos_env__$private$specie_code3l)
+                                        }
+                                        sample_specie <- unique(sample_specie)
+                                        for (m in sample_specie) {
+                                          sum_sample_number_measured <- 0
+                                          sample_total_count_tmp <- vector(mode = "character")
+                                          current_sample_tmp <- vector(mode = "list")
+                                          for (n in 1:length(current_sample)) {
+                                            if (current_sample[[n]]$.__enclos_env__$private$specie_code3l == m) {
+                                              sum_sample_number_measured <- sum_sample_number_measured + current_sample[[n]]$.__enclos_env__$private$sample_number_measured
+                                              sample_total_count_tmp <- append(sample_total_count_tmp,
+                                                                               paste(current_sample[[n]]$.__enclos_env__$private$sub_sample_id,
+                                                                                     current_sample[[n]]$.__enclos_env__$private$length_type,
+                                                                                     current_sample[[n]]$.__enclos_env__$private$sample_total_count,
+                                                                                     sep = "_"))
+                                              current_sample_tmp <- append(current_sample_tmp,
+                                                                           current_sample[[n]])
+                                            }
+                                          }
+                                          sample_total_count_tmp <- unique(sample_total_count_tmp)
+                                          sum_sample_total_count <- sum(sapply(X = 1:length(sample_total_count_tmp),
+                                                                               FUN = function(o) {
+                                                                                 as.numeric(unlist(strsplit(sample_total_count_tmp[o],
+                                                                                                            '_'))[3])
+                                                                               }))
+                                          rf4 <- sum_sample_number_measured / sum_sample_total_count
+                                          for (p in 1:length(current_sample_tmp)) {
+                                            current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated <- current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured * rf4
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End sample number measured extrapolation\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # sample_length_class_ld1_to_lf ----
+                            sample_length_class_ld1_to_lf =  function(length_step) {
+                              length_step_count <- length_step %>%
+                                dplyr::group_by(ocean, specie_code3l, ld1_class) %>%
+                                dplyr::summarise(nb = n())
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start sample length class conversion ld1 to lf\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_samples <- current_trip$.__enclos_env__$private$samples
+                                    if (length(current_samples) != 0) {
+                                      for (k in 1:length(current_samples)) {
+                                        #2 - 50
+                                        current_sample <- current_samples[[k]]
+                                        for (l in 1:length(current_sample)) {
+                                          current_elementary_sample <- current_sample[[l]]
+                                          if (current_elementary_sample$.__enclos_env__$private$length_type == 2) {
+                                            current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_elementary_sample$.__enclos_env__$private$sample_length_class
+                                            current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated
+                                          } else {
+                                            current_activities <- current_trip$.__enclos_env__$private$activities
+                                            if (length(current_activities) != 0) {
+                                              ocean_activities <- vector(mode = "integer")
+                                              for (m in 1:length(current_activities)) {
+                                                ocean_activities <- append(ocean_activities,
+                                                                           current_activities[[m]]$.__enclos_env__$private$ocean)
+                                              }
+                                              ocean_activities <- unique(ocean_activities)
+                                              if (length(ocean_activities) != 1) {
+                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                    " - Error: activites associated to sample in more than one ocean\n",
+                                                    sep = "")
+                                                stop()
+                                              }
+                                            } else {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: sample detected without any activity associated\n",
+                                                  sep = "")
+                                              stop()
+                                            }
+                                            current_length_step_count <- as.numeric(length_step_count[length_step_count$ocean == ocean_activities
+                                                                                                      & length_step_count$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
+                                                                                                      & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"])
+                                            if (is.na(current_length_step_count)) {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: no correspondance between sample length class and ld1-lf reference table\n",
+                                                  sep = "")
+                                              stop()
+                                            }
+                                            current_length_step <- length_step[length_step$ocean == ocean_activities
+                                                                               & length_step$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
+                                                                               & length_step$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, ]
+                                            current_elementary_sample_tmp <- vector(mode = "list")
+                                            for (n in 1:current_length_step_count) {
+                                              if (n == current_length_step_count) {
+                                                current_elementary_sample$.__enclos_env__$private$length_type <- 2
+                                                current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
+                                                current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
+                                              } else {
+                                                current_elementary_sample_tmpbis <- current_elementary_sample$clone()
+                                                current_elementary_sample_tmpbis$.__enclos_env__$private$length_type <- 2
+                                                current_elementary_sample_tmpbis$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
+                                                current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
+                                                current_elementary_sample_tmp <- append(current_elementary_sample_tmp, current_elementary_sample_tmpbis)
+                                                if (n == current_length_step_count - 1) {
+                                                  private$data_selected[[i]][[j]]$.__enclos_env__$private$samples[[k]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$samples[[k]],
+                                                                                                                                 current_elementary_sample_tmp)
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End sample length class conversion ld1 to lf\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # sample_length_class_step_standardisation ----
+                            sample_length_class_step_standardisation = function() {
                               browser()
                             }),
                           private = list(

@@ -12,6 +12,20 @@ check_trip_id = function(trip_id) {
   }
 }
 
+#' @name check_sample_id
+#' @title Attribut "sample_id" verification
+#' @param sample_id (character) Sample identification
+#' @description Check if the item "sample_id" have one unique class identified as character
+# check sample_id ----
+check_sample_id = function(sample_id) {
+  if (length(class(sample_id)) != 1 || class(sample_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_activity_id
 #' @title Attribut "activity_id" verification
 #' @param activity_id (character) Activity identification
@@ -21,6 +35,20 @@ check_activity_id = function(activity_id) {
   if (length(class(activity_id)) != 1 || class(activity_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name sub_sample_id
+#' @title Attribut "sub_sample_id" verification
+#' @param sub_sample_id (integer) Sub sample identification
+#' @description Check if the item "sub_sample_id" have one unique class identified as integer
+# check sub_sample_id ----
+check_sub_sample_id = function(sub_sample_id) {
+  if (length(class(sub_sample_id)) != 1 || class(sub_sample_id) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sub_sample_id\" argument\nclass integer expected\n",
         sep = "")
     stop()
   }
@@ -223,6 +251,25 @@ check_ocean = function(ocean) {
   }
 }
 
+#' @name check_length_type
+#' @title Attribut "length_type" verification
+#' @param length_type (integer) Length type identification, 1 for LD1 and 2 for LF
+#' @description Check if the item "length_type" is class integer and if all values are 1 or 2
+# check length_type ----
+check_length_type = function(length_type) {
+  if (length(class(length_type)) != 1 || class(length_type) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"length_type\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (! length_type %in% c(1, 2)) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"length_type\" argument\nvalue 1 or 2 expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_school_type
 #' @title Attribut "school_type" verification
 #' @param school_type (integer) School type identification
@@ -245,7 +292,7 @@ check_school_type = function(school_type) {
 #' @name logbook_category
 #' @title Attribut "logbook_category" verification
 #' @param logbook_category (integer) Logbook weight category
-#' @description Check if the item "logbook_category" have one unique class identified as integer
+#' @description Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13
 # check logbook_category ----
 check_logbook_category = function(logbook_category) {
   if (length(class(logbook_category)) != 1 || class(logbook_category) != "integer") {
@@ -383,6 +430,91 @@ check_time_at_sea = function(time_at_sea) {
   } else if (time_at_sea < 0) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"time_at_sea\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name sample_total_count
+#' @title Attribut "sample_total_count" verification
+#' @param sample_total_count (integer) Sample number of total individus counted
+#' @description Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero
+# check sample_total_count ----
+check_sample_total_count = function(sample_total_count) {
+  if (length(class(sample_total_count)) != 1 || class(sample_total_count) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_total_count\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (sample_total_count <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_total_count\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name sample_number_measured
+#' @title Attribut "sample_number_measured" verification
+#' @param sample_number_measured (integer) Sample number of measured individus
+#' @description Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero
+# check sample_number_measured ----
+check_sample_number_measured = function(sample_number_measured) {
+  if (length(class(sample_number_measured)) != 1 || class(sample_number_measured) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_measured\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (sample_number_measured <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_measured\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name sample_length_class
+#' @title Attribut "sample_length_class" verification
+#' @param sample_length_class (integer) Sample length class of measured individus
+#' @description Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero
+# check sample_length_class ----
+check_sample_length_class = function(sample_length_class) {
+  if (length(class(sample_length_class)) != 1 || class(sample_length_class) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_length_class\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (sample_length_class <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_length_class\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name activity_longitude
+#' @title Attribut "activity_longitude" verification
+#' @param activity_longitude (numeric) Longitude, in decimal degree, of the activity
+#' @description Check if the item "activity_longitude" have one unique class identified as numeric
+# check activity_longitude ----
+check_activity_longitude = function(activity_longitude) {
+  if (length(class(activity_longitude)) != 1 || class(activity_longitude) != "numeric") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"activity_longitude\" argument\nclass numeric expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name activity_latitude
+#' @title Attribut "activity_latitude" verification
+#' @param activity_latitude (numeric) Latitude, in decimal degree, of the activity
+#' @description Check if the item "activity_latitude" have one unique class identified as numeric
+# check activity_latitude ----
+check_activity_latitude = function(activity_latitude) {
+  if (length(class(activity_latitude)) != 1 || class(activity_latitude) != "numeric") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"activity_latitude\" argument\nclass numeric expected\n",
         sep = "")
     stop()
   }
