@@ -1364,6 +1364,56 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # sample_length_class_step_standardisation ----
                             sample_length_class_step_standardisation = function() {
                               browser()
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start sample length class conversion ld1 to lf\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  # full trip is not complet (missing at least one trip)
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_samples <- current_trip$.__enclos_env__$private$samples
+                                    if (length(current_samples) != 0) {
+                                      for (k in 1:length(current_samples)) {
+                                        current_sample <- current_samples[[k]]
+                                        sample_species <- unique(sapply(X = 1:length(current_sample),
+                                                                                     FUN = function(l) {
+                                                                                       current_sample[[l]]$.__enclos_env__$private$specie_code3l
+                                                                                     }))
+                                        current_sample_by_species <- vector(mode = "list", length = length(sample_species))
+                                        for (m in 1:length(current_sample)) {
+                                          for (n in 1:length(current_sample_by_species)) {
+                                            if (current_sample[[m]]$.__enclos_env__$private$specie_code3l == sample_species[n]) {
+                                              current_sample_by_species[[n]] <- append(current_sample_by_species[[n]],
+                                                                                       current_sample[[m]])
+                                            }
+                                          }
+                                        }
+                                        current_sample_standardised <- vector(mode = "list")
+                                        for (o in 1:length(current_sample_by_species)) {
+                                          current_sample_specie <- current_sample_by_species[[o]]
+                                          sample_length_class_lf <- sort(unique(sapply(X = 1:length(current_sample_specie),
+                                                                                       FUN = function(p) {
+                                                                                         current_sample_specie[[p]]$.__enclos_env__$private$sample_length_class_lf
+                                                                                       })))
+                                          if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("SKJ", "LTA", "FRI")) {
+                                            # step 1 cm
+                                          } else if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                            # step 2 cm
+                                          } else {
+                                            current_sample_standardised <- append(current_sample_standardised,
+                                                                                  current_sample_specie)
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             }),
                           private = list(
                             id_not_full_trip = NULL,
