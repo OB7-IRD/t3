@@ -40,7 +40,7 @@ check_activity_id = function(activity_id) {
   }
 }
 
-#' @name sub_sample_id
+#' @name check_sub_sample_id
 #' @title Attribut "sub_sample_id" verification
 #' @param sub_sample_id (integer) Sub sample identification
 #' @description Check if the item "sub_sample_id" have one unique class identified as integer
@@ -54,7 +54,7 @@ check_sub_sample_id = function(sub_sample_id) {
   }
 }
 
-#' @name landing_category
+#' @name check_landing_category
 #' @title Attribut "landing_category" verification
 #' @param landing_category (integer) Landing category identification
 #' @description Check if the item "landing_category" have one unique class identified as integer
@@ -204,7 +204,7 @@ check_fish_hold_empty = function(fish_hold_empty) {
   }
 }
 
-#' @name vessel_id
+#' @name check_vessel_id
 #' @title Attribut "vessel_id" verification
 #' @param vessel_id (integer) Vessel identification
 #' @description Check if the item "vessel_id" have one unique class identified as integer
@@ -218,7 +218,7 @@ check_vessel_id = function(vessel_id) {
   }
 }
 
-#' @name activity_number
+#' @name check_activity_number
 #' @title Attribut "activity_number" verification
 #' @param activity_number (integer) Activity number
 #' @description Check if the item "activity_number" have one unique class identified as integer
@@ -289,7 +289,7 @@ check_school_type = function(school_type) {
   }
 }
 
-#' @name logbook_category
+#' @name check_logbook_category
 #' @title Attribut "logbook_category" verification
 #' @param logbook_category (integer) Logbook weight category
 #' @description Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13
@@ -355,7 +355,7 @@ check_activity_name = function(check_activity_name) {
   }
 }
 
-#' @name activity_code
+#' @name check_activity_code
 #' @title Attribut "activity_code" verification
 #' @param activity_code (integer) Activity code identification
 #' @description Check if the item "activity_code" have one unique class identified as integer
@@ -369,7 +369,7 @@ check_activity_code = function(activity_code) {
   }
 }
 
-#' @name catch_weight
+#' @name check_catch_weight
 #' @title Attribut "catch_weight" verification
 #' @param catch_weight (integer) Catch weight in tonne
 #' @description Check if the item "catch_weight" have one unique class identified as integer
@@ -383,7 +383,7 @@ check_catch_weight = function(catch_weight) {
   }
 }
 
-#' @name landing_weight
+#' @name check_landing_weight
 #' @title Attribut "landing_weight" verification
 #' @param landing_weight (numeric) Landing weight in tonne
 #' @description Check if the item "landing_weight" have one unique class identified as numeric
@@ -397,7 +397,7 @@ check_landing_weight = function(landing_weight) {
   }
 }
 
-#' @name set_count
+#' @name check_set_count
 #' @title Attribut "set_count" verification
 #' @param set_count (integer) Number of set associated to the activity
 #' @description Check if the item "set_count" have one unique class identified as integer and if value are >= 0
@@ -416,7 +416,7 @@ check_set_count = function(set_count) {
   }
 }
 
-#' @name time_at_sea
+#' @name check_time_at_sea
 #' @title Attribut "time_at_sea" verification
 #' @param time_at_sea (integer) Time at sea in hours
 #' @description Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero
@@ -435,7 +435,7 @@ check_time_at_sea = function(time_at_sea) {
   }
 }
 
-#' @name sample_total_count
+#' @name check_sample_total_count
 #' @title Attribut "sample_total_count" verification
 #' @param sample_total_count (integer) Sample number of total individus counted
 #' @description Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero
@@ -454,7 +454,7 @@ check_sample_total_count = function(sample_total_count) {
   }
 }
 
-#' @name sample_number_measured
+#' @name check_sample_number_measured
 #' @title Attribut "sample_number_measured" verification
 #' @param sample_number_measured (integer) Sample number of measured individus
 #' @description Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero
@@ -473,7 +473,26 @@ check_sample_number_measured = function(sample_number_measured) {
   }
 }
 
-#' @name sample_length_class
+#' @name check_sample_number_measured_extrapolated_lf
+#' @title Attribut "sample_number_measured_extrapolated_lf" verification
+#' @param sample_number_measured_extrapolated_lf (numeric) Sample number of measured individus extrapolated to all counted individus
+#' @description Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero
+# check sample_number_measured_extrapolated_lf ----
+check_sample_number_measured_extrapolated_lf = function(sample_number_measured_extrapolated_lf) {
+  if (length(class(sample_number_measured_extrapolated_lf)) != 1 || class(sample_number_measured_extrapolated_lf) != "numeric") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_measured_extrapolated_lf\" argument\nclass numeric expected\n",
+        sep = "")
+    stop()
+  } else if (sample_number_measured_extrapolated_lf <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_measured_extrapolated_lf\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_sample_length_class
 #' @title Attribut "sample_length_class" verification
 #' @param sample_length_class (integer) Sample length class of measured individus
 #' @description Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero
@@ -492,7 +511,26 @@ check_sample_length_class = function(sample_length_class) {
   }
 }
 
-#' @name activity_longitude
+#' @name check_sample_standardised_length_class_lf
+#' @title Attribut "sample_standardised_length_class_lf" verification
+#' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus
+#' @description Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero
+# check sample_length_class ----
+check_sample_standardised_length_class_lf = function(sample_standardised_length_class_lf) {
+  if (length(class(sample_standardised_length_class_lf)) != 1 || class(sample_standardised_length_class_lf) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_standardised_length_class_lf\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (sample_standardised_length_class_lf < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_standardised_length_class_lf\" argument\npostive value expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_activity_longitude
 #' @title Attribut "activity_longitude" verification
 #' @param activity_longitude (numeric) Longitude, in decimal degree, of the activity
 #' @description Check if the item "activity_longitude" have one unique class identified as numeric
@@ -506,7 +544,7 @@ check_activity_longitude = function(activity_longitude) {
   }
 }
 
-#' @name activity_latitude
+#' @name check_activity_latitude
 #' @title Attribut "activity_latitude" verification
 #' @param activity_latitude (numeric) Latitude, in decimal degree, of the activity
 #' @description Check if the item "activity_latitude" have one unique class identified as numeric
