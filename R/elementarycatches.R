@@ -52,4 +52,16 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                            sep = "")
                                        stop()
                                      }
+                                   },
+                                   # filter_by_activity ----
+                                   filter_by_activity = function(activity_id) {
+                                     current_elementarycatches <- vector(mode = "list")
+                                     for (i in 1:length(private[["data"]])) {
+                                       current_activity_id <- private[["data"]][[i]]$.__enclos_env__$private$activity_id
+                                       if (activity_id == current_activity_id) {
+                                         current_elementarycatches <- append(current_elementarycatches,
+                                                                             list(private[["data"]][[i]]))
+                                       }
+                                     }
+                                     return(current_elementarycatches)
                                    }))

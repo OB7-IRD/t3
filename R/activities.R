@@ -52,4 +52,16 @@ activities <- R6::R6Class(classname = "activities",
                                            sep = "")
                                        stop()
                                      }
+                                   },
+                                   # filter_by_trip ----
+                                   filter_by_trip = function(trip_id) {
+                                     current_activities <- vector(mode = "list")
+                                     for (i in 1:length(private[["data"]])) {
+                                       current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
+                                       if (trip_id == current_trip_id) {
+                                         current_activities <- append(current_activities,
+                                                                      list(private[["data"]][[i]]))
+                                       }
+                                     }
+                                     return(current_activities)
                                    }))

@@ -14,6 +14,7 @@ Create R6 reference object class elementarylandings
 \itemize{
 \item \href{#method-new}{\code{elementarylandings$new()}}
 \item \href{#method-add}{\code{elementarylandings$add()}}
+\item \href{#method-filter_by_trip}{\code{elementarylandings$filter_by_trip()}}
 \item \href{#method-clone}{\code{elementarylandings$clone()}}
 }
 }
@@ -42,6 +43,14 @@ Create R6 reference object class elementarylandings
 \subsection{Method \code{add()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarylandings$add(new_item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-filter_by_trip"></a>}}
+\subsection{Method \code{filter_by_trip()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{elementarylandings$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
 }
 
 }

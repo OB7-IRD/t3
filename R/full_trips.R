@@ -129,10 +129,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    activities_tmp <- object_activities$filter(attribut_l1 = "data",
-                                                                               filter = paste0("arg$trip_id == \"",
-                                                                                               trip_id,
-                                                                                               "\""))
+                                    activities_tmp <- object_activities$filter_by_trip(trip_id = trip_id)
                                     private$data_selected[[i]][[j]]$.__enclos_env__$private$activities <- activities_tmp
                                   }
                                 }
@@ -155,7 +152,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop()
                               } else {
                                 for (i in 1:length(private$data_selected)) {
-                                  print(i)
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add elementary catches\n",
@@ -166,10 +162,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       for (k in 1:length(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities)) {
                                         if (private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
                                           activity_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_id
-                                          elementarycatches_tmp <- object_elementarycatches$filter(attribut_l1 = "data",
-                                                                                                   filter = paste0("arg$activity_id == \"",
-                                                                                                                   activity_id,
-                                                                                                                   "\""))
+                                          elementarycatches_tmp <- object_elementarycatches$filter_by_activity(activity_id = activity_id)
                                           private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$elementarycatches <- elementarycatches_tmp
                                         }
                                       }
@@ -202,10 +195,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    elementarylandings_tmp <- object_elementarylandings$filter(attribut_l1 = "data",
-                                                                                               filter = paste0("arg$trip_id == \"",
-                                                                                                               trip_id,
-                                                                                                               "\""))
+                                    elementarylandings_tmp <- object_elementarylandings$filter_by_trip(trip_id = trip_id)
                                     private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarylandings <- elementarylandings_tmp
                                   }
                                 }
@@ -1471,10 +1461,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End sample length class conversion ld1 to lf\n",
+                                      sep = "")
+                                }
                               }
                             },
                             # sample_weigth_categories ----
                             sample_weigth_categories = function() {
+                            },
+                            # browser
+                            open_your_heart = function() {
                               browser()
                             }),
                           private = list(

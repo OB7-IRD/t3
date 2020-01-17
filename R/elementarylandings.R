@@ -52,4 +52,16 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                             sep = "")
                                         stop()
                                       }
+                                    },
+                                    # filter_by_trip ----
+                                    filter_by_trip = function(trip_id) {
+                                      current_elementarylandings <- vector(mode = "list")
+                                      for (i in 1:length(private[["data"]])) {
+                                        current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
+                                        if (trip_id == current_trip_id) {
+                                          current_elementarylandings <- append(current_elementarylandings,
+                                                                               list(private[["data"]][[i]]))
+                                        }
+                                      }
+                                      return(current_elementarylandings)
                                     }))

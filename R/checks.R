@@ -26,6 +26,20 @@ check_sample_id = function(sample_id) {
   }
 }
 
+#' @name check_well_id
+#' @title Attribut "well_id" verification
+#' @param well_id (character) Well identification
+#' @description Check if the item "well_id" have one unique class identified as character
+# check well_id ----
+check_well_id = function(well_id) {
+  if (length(class(well_id)) != 1 || class(well_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_activity_id
 #' @title Attribut "activity_id" verification
 #' @param activity_id (character) Activity identification
@@ -378,6 +392,63 @@ check_catch_weight = function(catch_weight) {
   if (length(class(catch_weight)) != 1 || class(catch_weight) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"catch_weight\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_well_minus10_weigth
+#' @title Attribut "well_minus10_weigth" verification
+#' @param well_minus10_weigth (integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated)
+#' @description Check if the item "well_minus10_weigth" have one unique class identified as integer and if value are >= 0
+# check well_minus10_weigth ----
+check_well_minus10_weigth = function(well_minus10_weigth) {
+  if (length(class(well_minus10_weigth)) != 1 || class(well_minus10_weigth) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_minus10_weigth\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (well_minus10_weigth < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_minus10_weigth\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_well_plus10_weigth
+#' @title Attribut "well_plus10_weigth" verification
+#' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated)
+#' @description Check if the item "well_plus10_weigth" have one unique class identified as integer and if value are >= 0
+# check well_plus10_weigth ----
+check_well_plus10_weigth = function(well_plus10_weigth) {
+  if (length(class(well_plus10_weigth)) != 1 || class(well_plus10_weigth) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_plus10_weigth\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (well_plus10_weigth < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_plus10_weigth\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_well_global_weigth
+#' @title Attribut "well_global_weigth" verification
+#' @param well_global_weigth (integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated)
+#' @description Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0
+# check well_global_weigth ----
+check_well_global_weigth = function(well_global_weigth) {
+  if (length(class(well_global_weigth)) != 1 || class(well_global_weigth) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_global_weigth\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (well_global_weigth < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"well_global_weigth\" argument\n0 or postive value expected\n",
         sep = "")
     stop()
   }

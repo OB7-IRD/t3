@@ -14,6 +14,7 @@ Create R6 reference object class activities
 \itemize{
 \item \href{#method-new}{\code{activities$new()}}
 \item \href{#method-add}{\code{activities$add()}}
+\item \href{#method-filter_by_trip}{\code{activities$filter_by_trip()}}
 \item \href{#method-clone}{\code{activities$clone()}}
 }
 }
@@ -42,6 +43,14 @@ Create R6 reference object class activities
 \subsection{Method \code{add()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{activities$add(new_item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-filter_by_trip"></a>}}
+\subsection{Method \code{filter_by_trip()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{activities$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
 }
 
 }

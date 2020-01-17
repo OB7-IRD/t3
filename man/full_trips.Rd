@@ -30,6 +30,7 @@ Create R6 reference object class full_trips
 \item \href{#method-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
 \item \href{#method-sample_weigth_categories}{\code{full_trips$sample_weigth_categories()}}
+\item \href{#method-open_your_heart}{\code{full_trips$open_your_heart()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
 }
@@ -188,6 +189,14 @@ Create R6 reference object class full_trips
 \subsection{Method \code{sample_weigth_categories()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_weigth_categories()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-open_your_heart"></a>}}
+\subsection{Method \code{open_your_heart()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$open_your_heart()}\if{html}{\out{</div>}}
 }
 
 }

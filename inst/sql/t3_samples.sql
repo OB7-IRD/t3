@@ -1,5 +1,9 @@
 SELECT
 	s.trip::text AS trip_id
+	,s.well::text AS well_id
+	,s.minus10weight::integer AS well_minus10_weigth
+	,s.plus10weight::integer AS well_plus10_weigth
+	,s.globalweight::integer AS well_global_weigth
 	,s.topiaid::text AS sample_id
 	,ss.subsamplenumber::integer AS sub_sample_id
 	,sp.code3l::text AS specie_code3l
@@ -21,6 +25,7 @@ WHERE
 ORDER BY
 	trip_id
 	,sample_id
+	,well_id
 	,sub_sample_id
 	,specie_code3l
 	,length_type

@@ -47,5 +47,4 @@ trip <- R6::R6Class(classname = "trip",
                       statut_rf2 = NULL,
                       activities = NULL,
                       elementarylandings = NULL,
-                      samples = NULL,
-                      samples_standardised = NULL))
+                      wells = NULL))

@@ -14,6 +14,7 @@ Create R6 reference object class elementarycatches
 \itemize{
 \item \href{#method-new}{\code{elementarycatches$new()}}
 \item \href{#method-add}{\code{elementarycatches$add()}}
+\item \href{#method-filter_by_activity}{\code{elementarycatches$filter_by_activity()}}
 \item \href{#method-clone}{\code{elementarycatches$clone()}}
 }
 }
@@ -42,6 +43,14 @@ Create R6 reference object class elementarycatches
 \subsection{Method \code{add()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarycatches$add(new_item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-filter_by_activity"></a>}}
+\subsection{Method \code{filter_by_activity()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{elementarycatches$filter_by_activity(activity_id)}\if{html}{\out{</div>}}
 }
 
 }
