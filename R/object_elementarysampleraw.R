@@ -5,6 +5,7 @@
 #' @seealso \code{\link{elementarysampleraw}}
 #' @export
 object_elementarysampleraw <- function(trip_id,
+                                       well_id,
                                        sample_id,
                                        sub_sample_id,
                                        specie_code3l,
@@ -13,6 +14,7 @@ object_elementarysampleraw <- function(trip_id,
                                        sample_number_measured,
                                        sample_length_class) {
   t3:::elementarysampleraw$new(trip_id = trip_id,
+                               well_id = well_id,
                                sample_id = sample_id,
                                sub_sample_id = sub_sample_id,
                                specie_code3l = specie_code3l,

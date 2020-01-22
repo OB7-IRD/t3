@@ -17,7 +17,13 @@ Create R6 reference object class well
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{well$new(well_id, well_minus10_weigth, well_plus10_weigth, well_global_weigth)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{well$new(
+  trip_id,
+  well_id,
+  well_minus10_weigth,
+  well_plus10_weigth,
+  well_global_weigth
+)}\if{html}{\out{</div>}}
 }
 
 }

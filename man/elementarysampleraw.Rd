@@ -19,6 +19,7 @@ Create R6 reference object class elementarysampleraw
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarysampleraw$new(
   trip_id,
+  well_id,
   sample_id,
   sub_sample_id,
   specie_code3l,

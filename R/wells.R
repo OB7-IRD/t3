@@ -57,7 +57,7 @@ wells <- R6::R6Class(classname = "wells",
                                    filter_by_trip = function(trip_id) {
                                      current_wells <- vector(mode = "list")
                                      for (i in 1:length(private[["data"]])) {
-                                       current_trip_id <- private[["data"]][[i]][[1]]$.__enclos_env__$private$trip_id
+                                       current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
                                        if (trip_id == current_trip_id) {
                                          current_wells <- append(current_wells,
                                                                  list(private[["data"]][[i]]))

@@ -204,33 +204,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # add samples ----
-                            add_samples = function(object_samples) {
+                            # add wells and samples associated ----
+                            add_wells_samples = function(object_wells) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: argument \"data_selecetd\" empty\nlaunch selection data before\n",
                                     sep = "")
                                 stop()
-                              } else if (! any(class(object_samples) == "samples")) {
+                              } else if (! any(class(object_wells) == "wells")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_samples\" argument\nclass samples expected\n",
+                                    " - Error: invalid \"object_wells\" argument\nclass wells expected\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in 1:length(private$data_selected)) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add samples\n",
+                                        " - Start of add well(s) - sample(s)\n",
                                         sep = "")
                                   }
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    trip_samples <- object_samples$filter_by_trip(trip_id = trip_id)
-                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$samples <- trip_samples
+                                    trip_wells <- object_wells$filter_by_trip(trip_id = trip_id)
+                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$wells <- trip_wells
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add samples\n",
+                                    " - End of add well(s) - sample(s)\n",
                                     sep = "")
                               }
                             },
@@ -1212,42 +1212,47 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
-                                    current_samples <- current_trip$.__enclos_env__$private$samples
-                                    if (length(current_samples) != 0) {
-                                      for (k in 1:length(current_samples)) {
-                                        current_sample <- current_samples[[k]]
-                                        sample_specie <- vector(mode = "character")
-                                        for (l in 1:length(current_sample)) {
-                                          sample_specie <- append(sample_specie,
-                                                                  current_sample[[l]]$.__enclos_env__$private$specie_code3l)
-                                        }
-                                        sample_specie <- unique(sample_specie)
-                                        for (m in sample_specie) {
-                                          sum_sample_number_measured <- 0
-                                          sample_total_count_tmp <- vector(mode = "character")
-                                          current_sample_tmp <- vector(mode = "list")
-                                          for (n in 1:length(current_sample)) {
-                                            if (current_sample[[n]]$.__enclos_env__$private$specie_code3l == m) {
-                                              sum_sample_number_measured <- sum_sample_number_measured + current_sample[[n]]$.__enclos_env__$private$sample_number_measured
-                                              sample_total_count_tmp <- append(sample_total_count_tmp,
-                                                                               paste(current_sample[[n]]$.__enclos_env__$private$sub_sample_id,
-                                                                                     current_sample[[n]]$.__enclos_env__$private$length_type,
-                                                                                     current_sample[[n]]$.__enclos_env__$private$sample_total_count,
-                                                                                     sep = "_"))
-                                              current_sample_tmp <- append(current_sample_tmp,
-                                                                           current_sample[[n]])
+                                    current_well <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_well) != 0) {
+                                      for (q in 1:length(current_well)) {
+                                        current_samples <- current_well[[q]]$.__enclos_env__$private$elementarysampleraw
+                                        if (length(current_samples) != 0) {
+                                          for (k in 1:length(current_samples)) {
+                                            current_sample <- current_samples[[k]]
+                                            sample_specie <- vector(mode = "character")
+                                            for (l in 1:length(current_sample)) {
+                                              sample_specie <- append(sample_specie,
+                                                                      current_sample[[l]]$.__enclos_env__$private$specie_code3l)
                                             }
-                                          }
-                                          sample_total_count_tmp <- unique(sample_total_count_tmp)
-                                          sum_sample_total_count <- sum(sapply(X = 1:length(sample_total_count_tmp),
-                                                                               FUN = function(o) {
-                                                                                 as.numeric(unlist(strsplit(sample_total_count_tmp[o],
-                                                                                                            '_'))[3])
-                                                                               }))
-                                          rf4 <- sum_sample_number_measured / sum_sample_total_count
-                                          for (p in 1:length(current_sample_tmp)) {
-                                            current_sample_tmp[[p]]$.__enclos_env__$private$rf4 <- rf4
-                                            current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated <- current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured * rf4
+                                            sample_specie <- unique(sample_specie)
+                                            for (m in sample_specie) {
+                                              sum_sample_number_measured <- 0
+                                              sample_total_count_tmp <- vector(mode = "character")
+                                              current_sample_tmp <- vector(mode = "list")
+                                              for (n in 1:length(current_sample)) {
+                                                if (current_sample[[n]]$.__enclos_env__$private$specie_code3l == m) {
+                                                  sum_sample_number_measured <- sum_sample_number_measured + current_sample[[n]]$.__enclos_env__$private$sample_number_measured
+                                                  sample_total_count_tmp <- append(sample_total_count_tmp,
+                                                                                   paste(current_sample[[n]]$.__enclos_env__$private$sub_sample_id,
+                                                                                         current_sample[[n]]$.__enclos_env__$private$length_type,
+                                                                                         current_sample[[n]]$.__enclos_env__$private$sample_total_count,
+                                                                                         sep = "_"))
+                                                  current_sample_tmp <- append(current_sample_tmp,
+                                                                               current_sample[[n]])
+                                                }
+                                              }
+                                              sample_total_count_tmp <- unique(sample_total_count_tmp)
+                                              sum_sample_total_count <- sum(sapply(X = 1:length(sample_total_count_tmp),
+                                                                                   FUN = function(o) {
+                                                                                     as.numeric(unlist(strsplit(sample_total_count_tmp[o],
+                                                                                                                '_'))[3])
+                                                                                   }))
+                                              rf4 <- sum_sample_number_measured / sum_sample_total_count
+                                              for (p in 1:length(current_sample_tmp)) {
+                                                current_sample_tmp[[p]]$.__enclos_env__$private$rf4 <- rf4
+                                                current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated <- current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured * rf4
+                                              }
+                                            }
                                           }
                                         }
                                       }
@@ -1278,64 +1283,96 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
-                                    current_samples <- current_trip$.__enclos_env__$private$samples
-                                    if (length(current_samples) != 0) {
-                                      for (k in 1:length(current_samples)) {
-                                        #2 - 50
-                                        current_sample <- current_samples[[k]]
-                                        for (l in 1:length(current_sample)) {
-                                          current_elementary_sample <- current_sample[[l]]
-                                          if (current_elementary_sample$.__enclos_env__$private$length_type == 2) {
-                                            current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_elementary_sample$.__enclos_env__$private$sample_length_class
-                                            current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated
-                                          } else {
-                                            current_activities <- current_trip$.__enclos_env__$private$activities
-                                            if (length(current_activities) != 0) {
-                                              ocean_activities <- vector(mode = "integer")
-                                              for (m in 1:length(current_activities)) {
-                                                ocean_activities <- append(ocean_activities,
-                                                                           current_activities[[m]]$.__enclos_env__$private$ocean)
-                                              }
-                                              ocean_activities <- unique(ocean_activities)
-                                              if (length(ocean_activities) != 1) {
+                                    current_wells <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_wells) != 0) {
+                                      current_well_samples <- lapply(X = 1:length(current_wells),
+                                                                FUN = function(o) {
+                                                                  if (length(current_wells[[o]]$.__enclos_env__$private$elementarysampleraw) != 0) {
+                                                                    current_wells[[o]]$.__enclos_env__$private$elementarysampleraw
+                                                                  } else {
+                                                                    next()
+                                                                  }
+                                                                })
+                                      for (k in 1:length(current_well_samples)) {
+                                        current_samples <- current_well_samples[[k]]
+                                        for (p in 1:length(current_samples)) {
+                                          current_sample <- unlist(current_samples[[p]])
+                                          for (l in 1:length(current_sample)) {
+                                            current_elementary_sample <- current_sample[[l]]
+                                            if (current_elementary_sample$.__enclos_env__$private$length_type == 2) {
+                                              current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_elementary_sample$.__enclos_env__$private$sample_length_class
+                                              current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated
+                                            } else {
+                                              current_activities <- current_trip$.__enclos_env__$private$activities
+                                              if (length(current_activities) != 0) {
+                                                ocean_activities <- vector(mode = "integer")
+                                                for (m in 1:length(current_activities)) {
+                                                  ocean_activities <- append(ocean_activities,
+                                                                             current_activities[[m]]$.__enclos_env__$private$ocean)
+                                                }
+                                                ocean_activities <- unique(ocean_activities)
+                                                if (length(ocean_activities) != 1) {
+                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                      " - Error: activites associated to sample in more than one ocean\n",
+                                                      "[trip_id: ",
+                                                      current_elementary_sample$.__enclos_env__$private$trip_id,
+                                                      "\nwell_id: ",
+                                                      current_elementary_sample$.__enclos_env__$private$well_id,
+                                                      "\nsample_id: ",
+                                                      current_elementary_sample$.__enclos_env__$private$sample_id,
+                                                      "]",
+                                                      sep = "")
+                                                  stop()
+                                                }
+                                              } else {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: activites associated to sample in more than one ocean\n",
+                                                    " - Error: sample detected without any activity associated\n",
+                                                    "[trip_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$trip_id,
+                                                    "\nwell_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$well_id,
+                                                    "\nsample_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$sample_id,
+                                                    "]",
+                                                    sep = "")
+
+                                                stop()
+                                              }
+                                              current_length_step_count <- as.numeric(length_step_count[length_step_count$ocean == ocean_activities
+                                                                                                        & length_step_count$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
+                                                                                                        & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"])
+                                              if (is.na(current_length_step_count)) {
+                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                    " - Error: no correspondance between sample length class and ld1-lf reference table\n",
+                                                    "[trip_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$trip_id,
+                                                    "\nwell_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$well_id,
+                                                    "\nsample_id: ",
+                                                    current_elementary_sample$.__enclos_env__$private$sample_id,
+                                                    "]",
                                                     sep = "")
                                                 stop()
                                               }
-                                            } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: sample detected without any activity associated\n",
-                                                  sep = "")
-                                              stop()
-                                            }
-                                            current_length_step_count <- as.numeric(length_step_count[length_step_count$ocean == ocean_activities
-                                                                                                      & length_step_count$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
-                                                                                                      & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"])
-                                            if (is.na(current_length_step_count)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: no correspondance between sample length class and ld1-lf reference table\n",
-                                                  sep = "")
-                                              stop()
-                                            }
-                                            current_length_step <- length_step[length_step$ocean == ocean_activities
-                                                                               & length_step$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
-                                                                               & length_step$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, ]
-                                            current_elementary_sample_tmp <- vector(mode = "list")
-                                            for (n in 1:current_length_step_count) {
-                                              if (n == current_length_step_count) {
-                                                current_elementary_sample$.__enclos_env__$private$length_type <- 2
-                                                current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
-                                                current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
-                                              } else {
-                                                current_elementary_sample_tmpbis <- current_elementary_sample$clone()
-                                                current_elementary_sample_tmpbis$.__enclos_env__$private$length_type <- 2
-                                                current_elementary_sample_tmpbis$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
-                                                current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
-                                                current_elementary_sample_tmp <- append(current_elementary_sample_tmp, current_elementary_sample_tmpbis)
-                                                if (n == current_length_step_count - 1) {
-                                                  private$data_selected[[i]][[j]]$.__enclos_env__$private$samples[[k]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$samples[[k]],
-                                                                                                                                 current_elementary_sample_tmp)
+                                              current_length_step <- length_step[length_step$ocean == ocean_activities
+                                                                                 & length_step$specie_code3l == current_elementary_sample$.__enclos_env__$private$specie_code3l
+                                                                                 & length_step$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, ]
+                                              current_elementary_sample_tmp <- vector(mode = "list")
+                                              for (n in 1:current_length_step_count) {
+                                                if (n == current_length_step_count) {
+                                                  current_elementary_sample$.__enclos_env__$private$length_type <- 2
+                                                  current_elementary_sample$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
+                                                  current_elementary_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
+                                                } else {
+                                                  current_elementary_sample_tmpbis <- current_elementary_sample$clone()
+                                                  current_elementary_sample_tmpbis$.__enclos_env__$private$length_type <- 2
+                                                  current_elementary_sample_tmpbis$.__enclos_env__$private$sample_length_class_lf <- current_length_step[n, "lf_class"]
+                                                  current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_length_step[n, "ratio"] * 10^-2 * current_elementary_sample_tmpbis$.__enclos_env__$private$sample_number_measured_extrapolated
+                                                  current_elementary_sample_tmp <- append(current_elementary_sample_tmp, current_elementary_sample_tmpbis)
+                                                  if (n == current_length_step_count - 1) {
+                                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$wells[[k]]$.__enclos_env__$private$elementarysampleraw[[p]] <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$wells[[k]]$.__enclos_env__$private$elementarysampleraw[[p]],
+                                                                                                                                                                                  current_elementary_sample_tmp)
+                                                  }
                                                 }
                                               }
                                             }
@@ -1357,103 +1394,124 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start sample length class conversion ld1 to lf\n",
+                                      " - Start sample length class step standardisation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                   # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[Trip: \"",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "\"]\n",
+                                      sep = "")
                                   next()
                                 } else {
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
-                                    current_samples <- current_trip$.__enclos_env__$private$samples
-                                    if (length(current_samples) != 0) {
-                                      for (k in 1:length(current_samples)) {
-                                        current_sample <- current_samples[[k]]
-                                        sample_species <- unique(sapply(X = 1:length(current_sample),
-                                                                                     FUN = function(l) {
-                                                                                       current_sample[[l]]$.__enclos_env__$private$specie_code3l
-                                                                                     }))
-                                        current_sample_by_species <- vector(mode = "list", length = length(sample_species))
-                                        for (m in 1:length(current_sample)) {
-                                          for (n in 1:length(current_sample_by_species)) {
-                                            if (current_sample[[m]]$.__enclos_env__$private$specie_code3l == sample_species[n]) {
-                                              current_sample_by_species[[n]] <- append(current_sample_by_species[[n]],
-                                                                                       current_sample[[m]])
-                                            }
-                                          }
-                                        }
-                                        current_sample_standardised <- vector(mode = "list")
-                                        for (o in 1:length(current_sample_by_species)) {
-                                          current_sample_specie <- current_sample_by_species[[o]]
-                                          sample_length_class_lf <- sort(unique(sapply(X = 1:length(current_sample_specie),
-                                                                                       FUN = function(p) {
-                                                                                         current_sample_specie[[p]]$.__enclos_env__$private$sample_length_class_lf
-                                                                                       })))
-                                          max_lf_class <- 500
-                                          if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("SKJ", "LTA", "FRI")) {
-                                            # for step of 1
-                                            step <- 1
-                                          } else if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                            # for step of 2
-                                            step <- 2
-                                          } else {
-                                            step <- NA
-                                          }
-                                          if (is.na(step)) {
-                                            for (w in 1:length(current_sample_specie)) {
-                                              object_standardisedsample <- standardisedsample$new(trip_id = current_sample_specie[[w]]$.__enclos_env__$private$trip_id,
-                                                                                                  sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sample_id,
-                                                                                                  sub_sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sub_sample_id,
-                                                                                                  specie_code3l = current_sample_specie[[w]]$.__enclos_env__$private$specie_code3l,
-                                                                                                  sample_standardised_length_class_lf = current_sample_specie[[w]]$.__enclos_env__$private$sample_length_class_lf,
-                                                                                                  sample_number_measured_extrapolated_lf = as.numeric(current_sample_specie[[w]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf),
-                                                                                                  sample_total_count = as.integer(current_sample_specie[[w]]$.__enclos_env__$private$sample_total_count),
-                                                                                                  elementarysample = current_sample_specie[[w]])
-                                              current_trip$.__enclos_env__$private$samples_standardised <- append(current_trip$.__enclos_env__$private$samples_standardised,
-                                                                                                                  object_standardisedsample)
-                                            }
-                                          } else {
-                                            lower_border_reference <- seq(from = 0, to = max_lf_class - 1, by = step)
-                                            upper_border_reference <- seq(from = step, to = max_lf_class, by = step)
-                                            q <- 1
-                                            while(q <= length(sample_length_class_lf)) {
-                                              lower_border <- data.table::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[q]))])
-                                              upper_border <- data.table::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[q]))])
-                                              sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
-                                                                                                               & sample_length_class_lf < upper_border)]
-                                              current_sample_specie_by_step <- unlist(lapply(X = 1:length(current_sample_specie),
-                                                                                             FUN = function(r) {
-                                                                                               if (current_sample_specie[[r]]$.__enclos_env__$private$sample_length_class_lf %in% sample_length_class_lf_for_merge) {
-                                                                                                 current_sample_specie[[r]]
-                                                                                               }
-                                                                                             }))
-                                              current_sample_specie_by_step_subid <- unique(sapply(X = 1:length(current_sample_specie_by_step),
-                                                                                                   FUN = function(s) {
-                                                                                                     current_sample_specie_by_step[[s]]$.__enclos_env__$private$sub_sample_id
-                                                                                                   }))
-                                              for (t in current_sample_specie_by_step_subid) {
-                                                current_sample_specie_by_step_by_subid <- unlist(lapply(X = 1:length(current_sample_specie_by_step),
-                                                                                                        FUN = function(u) {
-                                                                                                          if (current_sample_specie_by_step[[u]]$.__enclos_env__$private$sub_sample_id == t) {
-                                                                                                            current_sample_specie_by_step[[u]]
-                                                                                                          }
-                                                                                                        }))
-                                                object_standardisedsample <- standardisedsample$new(trip_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$trip_id,
-                                                                                                         sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_id,
-                                                                                                         sub_sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sub_sample_id,
-                                                                                                         specie_code3l = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$specie_code3l,
-                                                                                                         sample_standardised_length_class_lf = as.integer(lower_border),
-                                                                                                         sample_number_measured_extrapolated_lf = sum(sapply(X = 1:length(current_sample_specie_by_step_by_subid),
-                                                                                                                                                             FUN = function(v) {
-                                                                                                                                                               current_sample_specie_by_step_by_subid[[v]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf
-                                                                                                                                                             })),
-                                                                                                         sample_total_count = as.integer(current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_total_count),
-                                                                                                         elementarysample = current_sample_specie_by_step_by_subid)
-                                                current_trip$.__enclos_env__$private$samples_standardised <- append(current_trip$.__enclos_env__$private$samples_standardised,
-                                                                                                                    object_standardisedsample)
+                                    current_wells <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_wells) != 0) {
+                                      current_wells_samples <- lapply(X = 1:length(current_wells),
+                                                                      FUN = function(y) {
+                                                                        if (length(current_wells[[y]]$.__enclos_env__$private$elementarysampleraw) != 0) {
+                                                                          current_wells[[y]]$.__enclos_env__$private$elementarysampleraw
+                                                                        } else {
+                                                                          next()
+                                                                        }
+                                                                      })
+                                      for (x in 1:length(current_wells_samples)) {
+                                        current_well <- current_wells_samples[[x]]
+                                        current_wells[[x]]$.__enclos_env__$private$elementarysample <- vector(mode = "list",
+                                                                                                              length = length(current_well))
+                                        for (k in 1:length(current_well)) {
+                                          current_sample <- unlist(current_well[[k]])
+                                          sample_species <- unique(sapply(X = 1:length(current_sample),
+                                                                          FUN = function(l) {
+                                                                            current_sample[[l]]$.__enclos_env__$private$specie_code3l
+                                                                          }))
+                                          current_sample_by_species <- vector(mode = "list", length = length(sample_species))
+                                          for (m in 1:length(current_sample)) {
+                                            for (n in 1:length(current_sample_by_species)) {
+                                              if (current_sample[[m]]$.__enclos_env__$private$specie_code3l == sample_species[n]) {
+                                                current_sample_by_species[[n]] <- append(current_sample_by_species[[n]],
+                                                                                         current_sample[[m]])
                                               }
-                                              q <- q + length(sample_length_class_lf_for_merge)
+                                            }
+                                          }
+                                          current_sample_standardised <- vector(mode = "list")
+                                          for (o in 1:length(current_sample_by_species)) {
+                                            current_sample_specie <- current_sample_by_species[[o]]
+                                            sample_length_class_lf <- sort(unique(sapply(X = 1:length(current_sample_specie),
+                                                                                         FUN = function(p) {
+                                                                                           current_sample_specie[[p]]$.__enclos_env__$private$sample_length_class_lf
+                                                                                         })))
+                                            max_lf_class <- 500
+                                            if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("SKJ", "LTA", "FRI")) {
+                                              # for step of 1
+                                              step <- 1
+                                            } else if (current_sample_specie[[1]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                              # for step of 2
+                                              step <- 2
+                                            } else {
+                                              step <- NA
+                                            }
+                                            if (is.na(step)) {
+                                              for (w in 1:length(current_sample_specie)) {
+                                                object_elementarysample <- elementarysample$new(trip_id = current_sample_specie[[w]]$.__enclos_env__$private$trip_id,
+                                                                                                well_id = current_sample_specie[[w]]$.__enclos_env__$private$well_id,
+                                                                                                sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sample_id,
+                                                                                                sub_sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                specie_code3l = current_sample_specie[[w]]$.__enclos_env__$private$specie_code3l,
+                                                                                                sample_standardised_length_class_lf = current_sample_specie[[w]]$.__enclos_env__$private$sample_length_class_lf,
+                                                                                                sample_number_measured_extrapolated_lf = as.numeric(current_sample_specie[[w]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf),
+                                                                                                sample_total_count = as.integer(current_sample_specie[[w]]$.__enclos_env__$private$sample_total_count),
+                                                                                                elementarysampleraw = current_sample_specie[[w]])
+                                                current_wells[[x]]$.__enclos_env__$private$elementarysample[[k]] <- append(current_wells[[x]]$.__enclos_env__$private$elementarysample[[k]],
+                                                                                                                           list(object_elementarysample))
+                                              }
+                                            } else {
+                                              lower_border_reference <- seq(from = 0, to = max_lf_class - 1, by = step)
+                                              upper_border_reference <- seq(from = step, to = max_lf_class, by = step)
+                                              q <- 1
+                                              while(q <= length(sample_length_class_lf)) {
+                                                lower_border <- data.table::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[q]))])
+                                                upper_border <- data.table::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[q]))])
+                                                sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
+                                                                                                                 & sample_length_class_lf < upper_border)]
+                                                current_sample_specie_by_step <- unlist(lapply(X = 1:length(current_sample_specie),
+                                                                                               FUN = function(r) {
+                                                                                                 if (current_sample_specie[[r]]$.__enclos_env__$private$sample_length_class_lf %in% sample_length_class_lf_for_merge) {
+                                                                                                   current_sample_specie[[r]]
+                                                                                                 }
+                                                                                               }))
+                                                current_sample_specie_by_step_subid <- unique(sapply(X = 1:length(current_sample_specie_by_step),
+                                                                                                     FUN = function(s) {
+                                                                                                       current_sample_specie_by_step[[s]]$.__enclos_env__$private$sub_sample_id
+                                                                                                     }))
+                                                for (t in current_sample_specie_by_step_subid) {
+                                                  current_sample_specie_by_step_by_subid <- unlist(lapply(X = 1:length(current_sample_specie_by_step),
+                                                                                                          FUN = function(u) {
+                                                                                                            if (current_sample_specie_by_step[[u]]$.__enclos_env__$private$sub_sample_id == t) {
+                                                                                                              current_sample_specie_by_step[[u]]
+                                                                                                            }
+                                                                                                          }))
+                                                  object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$trip_id,
+                                                                                                  well_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$well_id,
+                                                                                                  sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_id,
+                                                                                                  sub_sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                  specie_code3l = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$specie_code3l,
+                                                                                                  sample_standardised_length_class_lf = as.integer(lower_border),
+                                                                                                  sample_number_measured_extrapolated_lf = sum(sapply(X = 1:length(current_sample_specie_by_step_by_subid),
+                                                                                                                                                      FUN = function(v) {
+                                                                                                                                                        current_sample_specie_by_step_by_subid[[v]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf
+                                                                                                                                                      })),
+                                                                                                  sample_total_count = as.integer(current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_total_count),
+                                                                                                  elementarysampleraw = current_sample_specie_by_step_by_subid)
+                                                  current_wells[[x]]$.__enclos_env__$private$elementarysample[[k]] <- append(current_wells[[x]]$.__enclos_env__$private$elementarysample[[k]],
+                                                                                                                             list(object_elementarysample))
+                                                }
+                                                q <- q + length(sample_length_class_lf_for_merge)
+                                              }
                                             }
                                           }
                                         }
@@ -1461,18 +1519,57 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Treatment successfull on item ",
+                                    i,
+                                    "\n[Trip: \"",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "\"]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End sample length class conversion ld1 to lf\n",
+                                      " - End sample length class step standardisation\n",
                                       sep = "")
                                 }
                               }
                             },
                             # sample_weigth_categories ----
                             sample_weigth_categories = function() {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start sample weight categories definition\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[Trip: \"",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "\"]\n",
+                                      sep = "")
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                  }
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Treatment successfull on item ",
+                                    i,
+                                    "\n[Trip: \"",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "\"]\n",
+                                    sep = "")
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End sample weight categories definition\n",
+                                      sep = "")
+                                }
+                              }
                             },
                             # browser
-                            open_your_heart = function() {
+                            show_me_what_you_got = function() {
                               browser()
                             }),
                           private = list(

@@ -6,6 +6,7 @@
 \usage{
 object_elementarysampleraw(
   trip_id,
+  well_id,
   sample_id,
   sub_sample_id,
   specie_code3l,

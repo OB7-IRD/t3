@@ -17,7 +17,7 @@ Create R6 reference object class full_trips
 \item \href{#method-add_activities}{\code{full_trips$add_activities()}}
 \item \href{#method-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
-\item \href{#method-add_samples}{\code{full_trips$add_samples()}}
+\item \href{#method-add_wells_samples}{\code{full_trips$add_wells_samples()}}
 \item \href{#method-rf1}{\code{full_trips$rf1()}}
 \item \href{#method-rf2}{\code{full_trips$rf2()}}
 \item \href{#method-conversion_weigth_category}{\code{full_trips$conversion_weigth_category()}}
@@ -30,7 +30,7 @@ Create R6 reference object class full_trips
 \item \href{#method-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
 \item \href{#method-sample_weigth_categories}{\code{full_trips$sample_weigth_categories()}}
-\item \href{#method-open_your_heart}{\code{full_trips$open_your_heart()}}
+\item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
 }
@@ -89,10 +89,10 @@ Create R6 reference object class full_trips
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_samples"></a>}}
-\subsection{Method \code{add_samples()}}{
+\if{html}{\out{<a id="method-add_wells_samples"></a>}}
+\subsection{Method \code{add_wells_samples()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_samples(object_samples)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_wells_samples(object_wells)}\if{html}{\out{</div>}}
 }
 
 }
@@ -193,10 +193,10 @@ Create R6 reference object class full_trips
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-open_your_heart"></a>}}
-\subsection{Method \code{open_your_heart()}}{
+\if{html}{\out{<a id="method-show_me_what_you_got"></a>}}
+\subsection{Method \code{show_me_what_you_got()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$open_your_heart()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$show_me_what_you_got()}\if{html}{\out{</div>}}
 }
 
 }

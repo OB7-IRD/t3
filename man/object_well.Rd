@@ -5,6 +5,7 @@
 \title{R6 object object_well creation}
 \usage{
 object_well(
+  trip_id,
   well_id,
   well_minus10_weigth,
   well_plus10_weigth,

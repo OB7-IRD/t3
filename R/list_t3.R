@@ -23,7 +23,10 @@ list_t3 <- R6Class(classname = "list_t3",
                      # add new element ----
                      add = function(new_item, attribut = "data") {
                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                           " - Start add new item(s) of class ", class(new_item), "\n",
+                           " - Start add new item(s) of class ",
+                           paste(class(new_item),
+                                 collapse = " - "),
+                           "\n",
                            sep = "")
                        if (! attribut %in% names(private)) {
                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -33,7 +36,10 @@ list_t3 <- R6Class(classname = "list_t3",
                        }
                        private[[attribut]] <- append(private[[attribut]], new_item)
                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                           " - End added new item(s) of class ", class(new_item), "\n",
+                           " - End added new item(s) of class ",
+                           paste(class(new_item),
+                                 collapse = " - "),
+                           "\n",
                            sep = "")
                        invisible(self)
                      },

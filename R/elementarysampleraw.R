@@ -6,6 +6,7 @@
 elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                    public = list(
                                      initialize = function(trip_id,
+                                                           well_id,
                                                            sample_id,
                                                            sub_sample_id,
                                                            specie_code3l,
@@ -15,6 +16,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                            sample_length_class) {
                                        # attribut "trip_id" verification
                                        t3:::check_trip_id(trip_id)
+                                       # attribut "well_id" verification
+                                       t3:::check_well_id(well_id)
                                        # attribut "sample_id" verification
                                        t3:::check_sample_id(sample_id)
                                        # attribut "sub_sample_id" verification
@@ -31,6 +34,7 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        t3:::check_sample_length_class(sample_length_class)
                                        # attributions
                                        private$trip_id <- trip_id
+                                       private$well_id <- well_id
                                        private$sample_id <- sample_id
                                        private$sub_sample_id <- sub_sample_id
                                        private$specie_code3l <- specie_code3l
@@ -41,6 +45,7 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      }),
                                    private = list(
                                      trip_id = NULL,
+                                     well_id = NULL,
                                      sample_id = NULL,
                                      sub_sample_id = NULL,
                                      specie_code3l = NULL,
