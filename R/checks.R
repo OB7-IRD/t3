@@ -416,6 +416,25 @@ check_well_minus10_weigth = function(well_minus10_weigth) {
   }
 }
 
+#' @name check_weighted_weight
+#' @title Attribut "weighted_weight" verification
+#' @param weighted_weight (integer) Set weight weighted by all set in the well(s)
+#' @description Check if the item "weighted_weight" have one unique class identified as integer and if value are >= 0
+# check weighted_weight ----
+check_weighted_weight = function(weighted_weight) {
+  if (length(class(weighted_weight)) != 1 || class(weighted_weight) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"weighted_weight\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (weighted_weight < 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"weighted_weight\" argument\n0 or postive value expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_well_plus10_weigth
 #' @title Attribut "well_plus10_weigth" verification
 #' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated)

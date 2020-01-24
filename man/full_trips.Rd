@@ -29,7 +29,8 @@ Create R6 reference object class full_trips
 \item \href{#method-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-sample_weigth_categories}{\code{full_trips$sample_weigth_categories()}}
+\item \href{#method-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
+\item \href{#method-sample_number_standardisation}{\code{full_trips$sample_number_standardisation()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -185,10 +186,18 @@ Create R6 reference object class full_trips
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sample_weigth_categories"></a>}}
-\subsection{Method \code{sample_weigth_categories()}}{
+\if{html}{\out{<a id="method-well_set_weigth_categories"></a>}}
+\subsection{Method \code{well_set_weigth_categories()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_weigth_categories()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(sample_set)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sample_number_standardisation"></a>}}
+\subsection{Method \code{sample_number_standardisation()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_standardisation()}\if{html}{\out{</div>}}
 }
 
 }

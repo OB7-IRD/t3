@@ -1401,9 +1401,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   # full trip is not complet (missing at least one trip)
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Warning: trip avoided because not associated to a full trip\n",
-                                      "[Trip: \"",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                      "\"]\n",
+                                      "]\n",
                                       sep = "")
                                   next()
                                 } else {
@@ -1522,9 +1522,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Treatment successfull on item ",
                                     i,
-                                    "\n[Trip: \"",
+                                    "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                    "\"]\n",
+                                    "]\n",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1533,40 +1533,106 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # sample_weigth_categories ----
-                            sample_weigth_categories = function() {
+                            # well_set_weigth_categories ----
+                            well_set_weigth_categories = function(sample_set) {
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start sample weight categories definition\n",
+                                      " - Start well-set weight categories definition\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Warning: trip avoided because not associated to a full trip\n",
-                                      "[Trip: \"",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                      "\"]\n",
+                                      "]\n",
                                       sep = "")
                                   next()
                                 } else {
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
+                                    current_wells <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_wells) != 0) {
+                                      for (k in 1:length(current_wells)) {
+                                        current_well <- current_wells[[k]]
+                                        if (current_well$.__enclos_env__$private$well_minus10_weigth != 0 || current_well$.__enclos_env__$private$well_plus10_weigth != 0) {
+                                          # case 1: we use proportion of -10/+10 in the well
+                                          proportion_verification <- 1
+                                        } else if (current_well$.__enclos_env__$private$well_global_weigth != 0) {
+                                          # case 2: we don't know the proportion of -10/+10 in the well, we use global weight
+                                          proportion_verification <- 2
+                                        } else {
+                                          # case 3: we know nothing... sample(s) in the well are not usable
+                                          proportion_verification <- 3
+                                        }
+                                        current_well$.__enclos_env__$private$proportion_verification <- proportion_verification
+                                        if (proportion_verification %in% c(1, 2)) {
+                                          if (proportion_verification == 1) {
+                                            current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                            current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                          } else {
+                                            current_well$.__enclos_env__$private$well_prop_minus10_weigth <- NA
+                                            current_well$.__enclos_env__$private$well_prop_plus10_weigth <- NA
+                                          }
+                                          if (is.na(current_well$.__enclos_env__$private$well_id)) {
+                                            # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
+                                            sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                             sample_id == current_well$.__enclos_env__$private$elementarysample[[1]][[1]]$.__enclos_env__$private$sample_id)
+                                          } else {
+                                            sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                             well_id == current_well$.__enclos_env__$private$well_id)
+                                          }
+                                          if (length(unique(sample_set_well$sample_id)) != 1) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: ",
+                                                length(unique(sample_set_well$sample_id)),
+                                                " samples detected in a single well.",
+                                                " Only the first sample well set weighted weight will be considerated\n",
+                                                "[trip: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                ", samples: ",
+                                                paste0(unique(sample_set_well$sample_id),
+                                                      collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                            sample_set_well <- dplyr::filter(.data = sample_set_well,
+                                                                             sample_id == unique(sample_set_well$sample_id)[[1]])
+                                          }
+                                          current_well$.__enclos_env__$private$wells_sets <- lapply(X = 1:nrow(x = sample_set_well),
+                                                                                                    FUN = function(l) {
+                                                                                                      t3:::wellset$new(trip_id = sample_set_well[l, 1],
+                                                                                                                       activity_id = sample_set_well[l, 2],
+                                                                                                                       well_id = sample_set_well[l, 3],
+                                                                                                                       sample_id = sample_set_well[l, 4],
+                                                                                                                       weighted_weight = sample_set_well[l, 5],
+                                                                                                                       weighted_weight_minus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                       weighted_weight_plus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)
+                                                                                                    })
+                                        }
+                                      }
+                                    }
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Treatment successfull on item ",
                                     i,
-                                    "\n[Trip: \"",
+                                    "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                    "\"]\n",
+                                    "]\n",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End sample weight categories definition\n",
+                                      " - End well-set weight categories definition\n",
                                       sep = "")
                                 }
                               }
+                            },
+                            # sample_number_standardisation ----
+                            sample_number_standardisation = function() {
+
                             },
                             # browser
                             show_me_what_you_got = function() {
