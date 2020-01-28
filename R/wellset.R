@@ -37,5 +37,6 @@ wellset <- R6::R6Class(classname = "wellset",
                          well_id = NULL,
                          sample_id = NULL,
                          weighted_weight = NULL,
+                         prop_weighted_weight = NULL,
                          weighted_weight_minus10 = NULL,
                          weighted_weight_plus10 = NULL))

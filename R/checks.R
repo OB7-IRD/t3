@@ -582,6 +582,25 @@ check_sample_number_measured_extrapolated_lf = function(sample_number_measured_e
   }
 }
 
+#' @name check_sample_number_weighted
+#' @title Attribut "sample_number_weighted" verification
+#' @param sample_number_weighted (numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight
+#' @description Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero
+# check sample_number_weighted ----
+check_sample_number_weighted = function(sample_number_weighted) {
+  if (length(class(sample_number_weighted)) != 1 || class(sample_number_weighted) != "numeric") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_weighted\" argument\nclass numeric expected\n",
+        sep = "")
+    stop()
+  } else if (sample_number_weighted <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_number_weighted\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_sample_length_class
 #' @title Attribut "sample_length_class" verification
 #' @param sample_length_class (integer) Sample length class of measured individus

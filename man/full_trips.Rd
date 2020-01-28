@@ -30,7 +30,8 @@ Create R6 reference object class full_trips
 \item \href{#method-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
 \item \href{#method-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
-\item \href{#method-sample_number_standardisation}{\code{full_trips$sample_number_standardisation()}}
+\item \href{#method-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
+\item \href{#method-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -194,10 +195,18 @@ Create R6 reference object class full_trips
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sample_number_standardisation"></a>}}
-\subsection{Method \code{sample_number_standardisation()}}{
+\if{html}{\out{<a id="method-standardised_sample_creation"></a>}}
+\subsection{Method \code{standardised_sample_creation()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_standardisation()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-standardised_sample_set_creation"></a>}}
+\subsection{Method \code{standardised_sample_set_creation()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(length_weight_relationship_data)}\if{html}{\out{</div>}}
 }
 
 }
