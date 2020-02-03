@@ -1602,14 +1602,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              sample_id == unique(sample_set_well$sample_id)[[1]])
                                           }
                                           current_well$.__enclos_env__$private$wellsets <- lapply(X = 1:nrow(x = sample_set_well),
-                                                                                                     FUN = function(l) {
-                                                                                                       t3:::wellset$new(trip_id = sample_set_well[l, 1],
-                                                                                                                           activity_id = sample_set_well[l, 2],
-                                                                                                                           well_id = sample_set_well[l, 3],
-                                                                                                                           sample_id = sample_set_well[l, 4],
-                                                                                                                           weighted_weight = sample_set_well[l, 5],
-                                                                                                                           weighted_weight_minus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                           weighted_weight_plus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)
+                                                                                                  FUN = function(l) {
+                                                                                                    t3:::wellset$new(trip_id = sample_set_well[l, 1],
+                                                                                                                     activity_id = sample_set_well[l, 2],
+                                                                                                                     well_id = sample_set_well[l, 3],
+                                                                                                                     sample_id = sample_set_well[l, 4],
+                                                                                                                     weighted_weight = sample_set_well[l, 5],
+                                                                                                                     weighted_weight_minus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                     weighted_weight_plus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)
                                                                                                      })
                                           sum_weighted_weight <- sum(sapply(X = 1:length(current_well$.__enclos_env__$private$wellsets),
                                                                             FUN = function(m) {
@@ -1780,7 +1780,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         if (nrow(current_length_weight_relationship) == 1) {
                                                                                           coef_a <- current_length_weight_relationship[1, 1]
                                                                                           coef_b <- current_length_weight_relationship[1, 2]
-                                                                                          lwr <- coef_a * (current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf ^ coef_b)
+                                                                                          if (current_standardised_samples[[m]]$.__enclos_env__$private$specie_code3l %in% c("SKJ", "LTA", "FRI")) {
+                                                                                            # step of 1 cm
+                                                                                            length_class_lf <- current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf + 0.5
+                                                                                          } else if (current_standardised_samples[[m]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                                                            # step of 2 cm
+                                                                                            length_class_lf <- current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf + 1
+                                                                                          } else {
+                                                                                            length_class_lf <- current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf
+                                                                                          }
+                                                                                          lwr <- coef_a * (length_class_lf ^ coef_b)
                                                                                         } else {
                                                                                           lwr <- NA
                                                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1803,6 +1812,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                        sample_standardised_length_class_lf = current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                        sample_number_weighted = current_standardised_samples[[m]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_sets$.__enclos_env__$private$prop_weighted_weight,
                                                                                                                        sample_weigth = (current_standardised_samples[[m]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_sets$.__enclos_env__$private$prop_weighted_weight) * lwr,
+                                                                                                                       sample_weight_unit = lwr,
                                                                                                                        standardisedsample = current_standardised_samples[[m]])
                                                                                       })
                                           standardised_samples_sets[[l]] <- current_standardised_samples_sets
@@ -1822,6 +1832,250 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - End standardised sample set creation\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # raised_factors_determination ----
+                            raised_factors_determination = function(threshold_rf_minus10,
+                                                                    threshold_rf_plus10,
+                                                                    threshold_frequency_rf_minus10,
+                                                                    threshold_frequency_rf_plus10,
+                                                                    threshold_rf_total) {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start raised factors determination\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_wells <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_wells) != 0) {
+                                      for (k in 1:length(current_wells)) {
+                                        current_well <- current_wells[[k]]
+                                        current_wells_sets <- current_well$.__enclos_env__$private$wellsets
+                                        for (l in 1:length(current_wells_sets)) {
+                                          current_well_sets <- current_wells_sets[[l]]
+                                          current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
+                                          current_well_sets$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(lapply(X = 1:length(current_well_standardisedsampleset),
+                                                                                                                                  FUN = function(m) {
+                                                                                                                                    if (current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit <= 10) {
+                                                                                                                                      current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth
+                                                                                                                                    }
+                                                                                                                                  }))) / 1000
+                                          current_well_sets$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(lapply(X = 1:length(current_well_standardisedsampleset),
+                                                                                                                                  FUN = function(n) {
+                                                                                                                                    if (current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit > 10) {
+                                                                                                                                      current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth
+                                                                                                                                    }
+                                                                                                                                  }))) / 1000
+                                          current_well_sets$.__enclos_env__$private$weighted_samples_total <- sum(unlist(lapply(X = 1:length(current_well_standardisedsampleset),
+                                                                                                                                FUN = function(o) {
+                                                                                                                                  current_well_standardisedsampleset[[o]]$.__enclos_env__$private$sample_weigth
+                                                                                                                                }))) / 1000
+                                          if (current_well_sets$.__enclos_env__$private$weighted_samples_total <= 0) {
+                                            # scenario 1
+                                            current_well_sets$.__enclos_env__$private$rf_validation <- 1
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: well-set avoided because weighted samples total value egal to zero\n",
+                                                "[trip: ,",
+                                                current_well_sets$.__enclos_env__$private$trip_id,
+                                                ", activity: ",
+                                                current_well_sets$.__enclos_env__$private$activity_id,
+                                                ", well: ",
+                                                current_well_sets$.__enclos_env__$private$well_id,
+                                                ", sample(s): ",
+                                                paste0(current_well_sets$.__enclos_env__$private$sample_id,
+                                                       collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                          } else if (is.null(current_well_sets$.__enclos_env__$private$weighted_weight)
+                                                     || is.na(current_well_sets$.__enclos_env__$private$weighted_weight)
+                                                     || current_well_sets$.__enclos_env__$private$weighted_weight <= 0) {
+                                            # scenario 2
+                                            current_well_sets$.__enclos_env__$private$rf_validation <- 2
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: well-set avoided because invalid weighted weigth\n",
+                                                "[trip: ,",
+                                                current_well_sets$.__enclos_env__$private$trip_id,
+                                                ", activity: ",
+                                                current_well_sets$.__enclos_env__$private$activity_id,
+                                                ", well: ",
+                                                current_well_sets$.__enclos_env__$private$well_id,
+                                                ", sample(s): ",
+                                                paste0(current_well_sets$.__enclos_env__$private$sample_id,
+                                                       collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                          } else {
+                                            if (current_well_sets$.__enclos_env__$private$weighted_samples_minus10 == 0
+                                                || current_well_sets$.__enclos_env__$private$weighted_samples_plus10 == 0
+                                                || is.na(current_well_sets$.__enclos_env__$private$weighted_weight_minus10)
+                                                || is.na(current_well_sets$.__enclos_env__$private$weighted_weight_plus10)) {
+                                              # scenario 3
+                                              current_well_sets$.__enclos_env__$private$rf_validation <- 3
+                                              current_well_sets$.__enclos_env__$private$rf_total <- current_well_sets$.__enclos_env__$private$weighted_weight / current_well_sets$.__enclos_env__$private$weighted_samples_total
+                                            } else {
+                                              current_well_sets$.__enclos_env__$private$rf_minus10 <- current_well_sets$.__enclos_env__$private$weighted_weight_minus10 / current_well_sets$.__enclos_env__$private$weighted_samples_minus10
+                                              current_well_sets$.__enclos_env__$private$rf_plus10 <- current_well_sets$.__enclos_env__$private$weighted_weight_plus10 / current_well_sets$.__enclos_env__$private$weighted_samples_plus10
+                                              if (current_well_sets$.__enclos_env__$private$rf_minus10 > threshold_rf_minus10
+                                                  || current_well_sets$.__enclos_env__$private$rf_plus10 > threshold_rf_plus10
+                                                  || sum(unlist(sapply(X = 1:length(current_well_standardisedsampleset),
+                                                                       FUN = function(p) {
+                                                                         if (current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_weight_unit <= 10) {
+                                                                           current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_number_weighted
+                                                                         }
+                                                                       }))) > threshold_frequency_rf_minus10
+                                                  || sum(unlist(sapply(X = 1:length(current_well_standardisedsampleset),
+                                                                       FUN = function(p) {
+                                                                         if (current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_weight_unit > 10) {
+                                                                           current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_number_weighted
+                                                                         }
+                                                                       }))) > threshold_frequency_rf_plus10) {
+                                                # scenario 4
+                                                current_well_sets$.__enclos_env__$private$rf_validation <- 4
+                                                current_well_sets$.__enclos_env__$private$rf_total <- current_well_sets$.__enclos_env__$private$weighted_weight / current_well_sets$.__enclos_env__$private$weighted_samples_total
+                                              } else {
+                                                # scenario 5
+                                                current_well_sets$.__enclos_env__$private$rf_validation <- 5
+                                              }
+                                            }
+                                          }
+                                          if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(4, 3)
+                                              && current_well_sets$.__enclos_env__$private$rf_total > threshold_rf_total) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: well-set \"rf_total\" argument superior to ",
+                                                threshold_rf_total,
+                                                "\n[trip: ,",
+                                                current_well_sets$.__enclos_env__$private$trip_id,
+                                                ", activity: ",
+                                                current_well_sets$.__enclos_env__$private$activity_id,
+                                                ", well: ",
+                                                current_well_sets$.__enclos_env__$private$well_id,
+                                                ", sample(s): ",
+                                                paste0(current_well_sets$.__enclos_env__$private$sample_id,
+                                                       collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Treatment successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End raised factors determination\n",
+                                      sep = "")
+                                }
+                              }
+                            },
+                            # raised standardised sample set ----
+                            raised_standardised_sample_set = function() {
+                              for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start raised standardised sample set\n",
+                                      sep = "")
+                                }
+                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
+                                  next()
+                                } else {
+                                  for (j in 1:length(private$data_selected[[i]])) {
+                                    current_trip <- private$data_selected[[i]][[j]]
+                                    current_wells <- current_trip$.__enclos_env__$private$wells
+                                    if (length(current_wells) != 0) {
+                                      for (k in 1:length(current_wells)) {
+                                        current_well <- current_wells[[k]]
+                                        current_wells_sets <- current_well$.__enclos_env__$private$wellsets
+                                        for (l in 1:length(current_wells_sets)) {
+                                          current_well_sets <- current_wells_sets[[l]]
+                                          current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
+                                          if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(1, 2)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: raised factors not available for this well-set\n",
+                                                "[trip: ,",
+                                                current_well_sets$.__enclos_env__$private$trip_id,
+                                                ", activity: ",
+                                                current_well_sets$.__enclos_env__$private$activity_id,
+                                                ", well: ",
+                                                current_well_sets$.__enclos_env__$private$well_id,
+                                                ", sample(s): ",
+                                                paste0(current_well_sets$.__enclos_env__$private$sample_id,
+                                                       collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                          } else if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(3, 4)) {
+                                            current_rf_total <- current_well_sets$.__enclos_env__$private$rf_total
+                                            for (m in 1:length(current_well_standardisedsampleset)) {
+                                              current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted * current_rf_total
+                                              current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set
+                                            }
+                                          } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
+                                            current_rf_minus10 <- current_well_sets$.__enclos_env__$private$rf_minus10
+                                            current_rf_plus10 <- current_well_sets$.__enclos_env__$private$rf_plus10
+                                            for (n in 1:length(current_well_standardisedsampleset)) {
+                                              if (current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit <= 10) {
+                                                current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_minus10
+                                              } else {
+                                                current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_plus10
+                                              }
+                                              current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set
+                                            }
+                                          } else {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: raised factors verifications is not valide\n",
+                                                "[trip: ,",
+                                                current_well_sets$.__enclos_env__$private$trip_id,
+                                                ", activity: ",
+                                                current_well_sets$.__enclos_env__$private$activity_id,
+                                                ", well: ",
+                                                current_well_sets$.__enclos_env__$private$well_id,
+                                                ", sample(s): ",
+                                                paste0(current_well_sets$.__enclos_env__$private$sample_id,
+                                                       collapse = " - "),
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Treatment successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End raised standardised sample set\n",
                                       sep = "")
                                 }
                               }

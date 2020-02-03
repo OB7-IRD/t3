@@ -13,6 +13,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                           sample_standardised_length_class_lf,
                                                           sample_number_weighted,
                                                           sample_weigth,
+                                                          sample_weight_unit,
                                                           standardisedsample) {
                                       # attribut "trip_id" verification
                                       t3:::check_trip_id(trip_id)
@@ -37,6 +38,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                       private$sample_standardised_length_class_lf <- sample_standardised_length_class_lf
                                       private$sample_number_weighted <- sample_number_weighted
                                       private$sample_weigth <- sample_weigth
+                                      private$sample_weight_unit <- sample_weight_unit
                                       private$standardisedsample <- standardisedsample
                                     }),
                                   private = list(
@@ -48,4 +50,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     sample_standardised_length_class_lf = NULL,
                                     sample_number_weighted = NULL,
                                     sample_weigth = NULL,
+                                    sample_number_weighted_set = NULL,
+                                    sample_weigth_set = NULL,
+                                    sample_weight_unit = NULL,
                                     standardisedsample = NULL))

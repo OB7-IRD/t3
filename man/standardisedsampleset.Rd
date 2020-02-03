@@ -26,6 +26,7 @@ Create R6 reference object class standardisedsampleset
   sample_standardised_length_class_lf,
   sample_number_weighted,
   sample_weigth,
+  sample_weight_unit,
   standardisedsample
 )}\if{html}{\out{</div>}}
 }

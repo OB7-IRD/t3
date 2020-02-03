@@ -32,6 +32,8 @@ Create R6 reference object class full_trips
 \item \href{#method-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
 \item \href{#method-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
 \item \href{#method-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
+\item \href{#method-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
+\item \href{#method-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -207,6 +209,28 @@ Create R6 reference object class full_trips
 \subsection{Method \code{standardised_sample_set_creation()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(length_weight_relationship_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-raised_factors_determination"></a>}}
+\subsection{Method \code{raised_factors_determination()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_factors_determination(
+  threshold_rf_minus10,
+  threshold_rf_plus10,
+  threshold_frequency_rf_minus10,
+  threshold_frequency_rf_plus10,
+  threshold_rf_total
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-raised_standardised_sample_set"></a>}}
+\subsection{Method \code{raised_standardised_sample_set()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set()}\if{html}{\out{</div>}}
 }
 
 }
