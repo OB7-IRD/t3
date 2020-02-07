@@ -9,6 +9,8 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                                           well_id,
                                                           sample_id,
                                                           sub_sample_id,
+                                                          sample_quality,
+                                                          sample_type,
                                                           specie_code3l,
                                                           sample_standardised_length_class_lf,
                                                           sample_number_measured_extrapolated_lf,
@@ -22,6 +24,10 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                       t3:::check_sample_id(sample_id)
                                       # attribut "sub_sample_id" verification
                                       t3:::check_sub_sample_id(sub_sample_id)
+                                      # attribut "sample_quality" verification
+                                      t3:::check_sample_quality(sample_quality)
+                                      # attribut "sample_type" verification
+                                      t3:::check_sample_type(sample_type)
                                       # attribut "specie_code3l" verification
                                       t3:::check_specie_code3l(specie_code3l)
                                       # attribut "sample_standardised_length_class_lf" verification
@@ -35,6 +41,8 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                       private$well_id <- well_id
                                       private$sample_id <- sample_id
                                       private$sub_sample_id <- sub_sample_id
+                                      private$sample_quality <- sample_quality
+                                      private$sample_type <- sample_type
                                       private$specie_code3l <- specie_code3l
                                       private$sample_standardised_length_class_lf <- sample_standardised_length_class_lf
                                       private$sample_number_measured_extrapolated_lf <- sample_number_measured_extrapolated_lf
@@ -46,6 +54,8 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                     well_id = NULL,
                                     sample_id = NULL,
                                     sub_sample_id = NULL,
+                                    sample_quality = NULL,
+                                    sample_type = NULL,
                                     specie_code3l = NULL,
                                     sample_standardised_length_class_lf = NULL,
                                     sample_number_measured_extrapolated_lf = NULL,

@@ -7,6 +7,7 @@
 trip <- R6::R6Class(classname = "trip",
                     public = list(
                       initialize = function(trip_id,
+                                            fleet,
                                             landing_date,
                                             departure_date,
                                             logbook_availability,
@@ -14,6 +15,8 @@ trip <- R6::R6Class(classname = "trip",
                                             vessel_id) {
                         # attribut "trip_id" verification
                         t3:::check_trip_id(trip_id)
+                        # attribut "fleet" verification
+                        t3:::check_fleet(fleet)
                         # attribut "landing_date" verification
                         t3:::check_landing_date(landing_date)
                         # attribut "departure_date" verification
@@ -26,6 +29,7 @@ trip <- R6::R6Class(classname = "trip",
                         t3:::check_vessel_id(vessel_id)
                         # attributions
                         private$trip_id <- trip_id
+                        private$fleet <- fleet
                         private$landing_date <- lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC")
                         private$departure_date <- lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC")
                         private$logbook_availability <- logbook_availability
@@ -33,6 +37,7 @@ trip <- R6::R6Class(classname = "trip",
                         private$vessel_id <- vessel_id}),
                     private = list(
                       trip_id = NULL,
+                      fleet = NULL,
                       departure_date = NULL,
                       landing_date = NULL,
                       fishing_time = NULL,

@@ -9,6 +9,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                            well_id,
                                                            sample_id,
                                                            sub_sample_id,
+                                                           sample_quality,
+                                                           sample_type,
                                                            specie_code3l,
                                                            length_type,
                                                            sample_total_count,
@@ -22,6 +24,10 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        t3:::check_sample_id(sample_id)
                                        # attribut "sub_sample_id" verification
                                        t3:::check_sub_sample_id(sub_sample_id)
+                                       # attribut "sample_quality" verification
+                                       t3:::check_sample_quality(sample_quality)
+                                       # attribut "sample_type" verification
+                                       t3:::check_sample_type(sample_type)
                                        # attribut "specie_code3l" verification
                                        t3:::check_specie_code3l(specie_code3l)
                                        # attribut "length_type" verification
@@ -37,6 +43,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        private$well_id <- well_id
                                        private$sample_id <- sample_id
                                        private$sub_sample_id <- sub_sample_id
+                                       private$sample_quality <- sample_quality
+                                       private$sample_type <- sample_type
                                        private$specie_code3l <- specie_code3l
                                        private$length_type <- length_type
                                        private$sample_total_count <- sample_total_count
@@ -48,6 +56,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      well_id = NULL,
                                      sample_id = NULL,
                                      sub_sample_id = NULL,
+                                     sample_quality = NULL,
+                                     sample_type = NULL,
                                      specie_code3l = NULL,
                                      length_type = NULL,
                                      sample_total_count = NULL,

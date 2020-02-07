@@ -19,6 +19,7 @@ Create R6 reference object class trip
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trip$new(
   trip_id,
+  fleet,
   landing_date,
   departure_date,
   logbook_availability,

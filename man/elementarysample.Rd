@@ -22,6 +22,8 @@ Create R6 reference object class elementarysample
   well_id,
   sample_id,
   sub_sample_id,
+  sample_quality,
+  sample_type,
   specie_code3l,
   sample_standardised_length_class_lf,
   sample_number_measured_extrapolated_lf,

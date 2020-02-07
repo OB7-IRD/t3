@@ -1,5 +1,6 @@
 SELECT
 	t.topiaid::text AS trip_id
+	,c.codeiso3::text AS fleet
 	,t.departuredate::text AS departure_date
 	,t.landingdate::text AS landing_date
 	,t.logbookavailability::integer AS logbook_availability

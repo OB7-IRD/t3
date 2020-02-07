@@ -9,6 +9,8 @@ object_elementarysampleraw(
   well_id,
   sample_id,
   sub_sample_id,
+  sample_quality,
+  sample_type,
   specie_code3l,
   length_type,
   sample_total_count,

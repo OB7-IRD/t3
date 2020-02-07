@@ -39,4 +39,5 @@ well <- R6::R6Class(classname = "well",
                       wellsets = NULL,
                       proportion_verification = NULL,
                       well_prop_minus10_weigth = NULL,
-                      well_prop_plus10_weigth = NULL))
+                      well_prop_plus10_weigth = NULL,
+                      wellplan = NULL))

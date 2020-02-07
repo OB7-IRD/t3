@@ -6,6 +6,7 @@
 \usage{
 object_trip(
   trip_id,
+  fleet,
   departure_date,
   landing_date,
   logbook_availability,
@@ -15,6 +16,8 @@ object_trip(
 }
 \arguments{
 \item{trip_id}{trip_id}
+
+\item{fleet}{fleet}
 
 \item{departure_date}{departure_date}
 

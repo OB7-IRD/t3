@@ -359,11 +359,39 @@ check_specie_code3l = function(specie_code3l) {
 #' @title Attribut "activity_name" verification
 #' @param activity_name (character) Activity identification
 #' @description Check if the item "check_activity_name" have one unique class identified as character
-# check check_activity_name ----
+# check activity_name ----
 check_activity_name = function(check_activity_name) {
   if (length(class(check_activity_name)) != 1 || class(check_activity_name) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"check_activity_name\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_fleet
+#' @title Attribut "fleet" verification
+#' @param fleet (character) Fleet identification
+#' @description Check if the item "fleet" have one unique class identified as character
+# check fleet ----
+check_fleet = function(fleet) {
+  if (length(class(fleet)) != 1 || class(fleet) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"fleet\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_wellplan_weigth_category_label
+#' @title Attribut "wellplan_weigth_category_label" verification
+#' @param wellplan_weigth_category_label (character) Well plan weight category identification
+#' @description Check if the item "wellplan_weigth_category_label" have one unique class identified as character
+# check wellplan_weigth_category_label ----
+check_wellplan_weigth_category_label = function(wellplan_weigth_category_label) {
+  if (length(class(wellplan_weigth_category_label)) != 1 || class(wellplan_weigth_category_label) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_weigth_category_label\" argument\nclass character expected\n",
         sep = "")
     stop()
   }
@@ -378,6 +406,20 @@ check_activity_code = function(activity_code) {
   if (length(class(activity_code)) != 1 || class(activity_code) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_code\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_wellplan_number
+#' @title Attribut "wellplan_number" verification
+#' @param wellplan_number (integer) Well plan number of individus
+#' @description Check if the item "wellplan_number" have one unique class identified as integer
+# check wellplan_number ----
+check_wellplan_number = function(wellplan_number) {
+  if (length(class(wellplan_number)) != 1 || class(wellplan_number) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_number\" argument\nclass integer expected\n",
         sep = "")
     stop()
   }
@@ -601,6 +643,25 @@ check_sample_number_weighted = function(sample_number_weighted) {
   }
 }
 
+#' @name check_wellplan_weight
+#' @title Attribut "wellplan_weight" verification
+#' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan
+#' @description Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero
+# check wellplan_weight ----
+check_wellplan_weight = function(wellplan_weight) {
+  if (length(class(wellplan_weight)) != 1 || class(wellplan_weight) != "numeric") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_weight\" argument\nclass numeric expected\n",
+        sep = "")
+    stop()
+  } else if (wellplan_weight <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_weight\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_sample_length_class
 #' @title Attribut "sample_length_class" verification
 #' @param sample_length_class (integer) Sample length class of measured individus
@@ -615,6 +676,63 @@ check_sample_length_class = function(sample_length_class) {
   } else if (sample_length_class <= 0) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_length_class\" argument\npostive value (without zero) expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_sample_quality
+#' @title Attribut "sample_quality" verification
+#' @param sample_quality (integer) Sample quality identification
+#' @description Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9
+# check sample_quality ----
+check_sample_quality = function(sample_quality) {
+  if (length(class(sample_quality)) != 1 || class(sample_quality) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_quality\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (! sample_quality %in% c(1, 2, 3, 4, 9)) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_quality\" argument\nvalue 1, 2, 3, 4 or 9 expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_sample_type
+#' @title Attribut "sample_type" verification
+#' @param sample_type (integer) Sample type identification
+#' @description Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11
+# check sample_type ----
+check_sample_type = function(sample_type) {
+  if (length(class(sample_type)) != 1 || class(sample_type) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_type\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (! sample_type %in% c(1, 2, 3, 4, 9, 11)) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sample_type\" argument\nvalue 1, 2, 3, 4, 9 or 11 expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_wellplan_weigth_category_code
+#' @title Attribut "wellplan_weigth_category_code" verification
+#' @param wellplan_weigth_category_code (integer) Well plan category code identification
+#' @description Check if the item "wellplan_weigth_category_code" have one unique class identified as integer and if all values are 1, 2, 8 or 9
+# check wellplan_weigth_category_code ----
+check_wellplan_weigth_category_code = function(wellplan_weigth_category_code) {
+  if (length(class(wellplan_weigth_category_code)) != 1 || class(wellplan_weigth_category_code) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_weigth_category_code\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (! wellplan_weigth_category_code %in% c(1, 2, 8, 9)) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_weigth_category_code\" argument\nvalue 1, 2, 8 or 9 expected\n",
         sep = "")
     stop()
   }

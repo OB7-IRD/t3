@@ -6,6 +6,8 @@ SELECT
 	,s.globalweight::integer AS well_global_weigth
 	,s.topiaid::text AS sample_id
 	,ss.subsamplenumber::integer AS sub_sample_id
+	,sq.code::integer AS sample_quality
+	,st.code::integer AS sample_type
 	,sp.code3l::text AS specie_code3l
 	,ss.ldlfflag::integer AS length_type
 	,ss.totalcount::integer AS sample_total_count
@@ -19,6 +21,8 @@ FROM
 	JOIN public.samplespecies ss ON (ss.sample = s.topiaid)
 	JOIN public.species sp ON (sp.topiaid = ss.species)
 	JOIN public.samplespeciesfrequency ssf ON (ssf.samplespecies = ss.topiaid)
+	JOIN public.samplequality sq ON (s.samplequality = sq.topiaid)
+	JOIN public.sampletype st ON (s.sampletype = st.topiaid)
 WHERE
 	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
 	AND c.codeiso3 IN ('FRA')
