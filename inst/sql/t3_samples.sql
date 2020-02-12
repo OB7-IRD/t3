@@ -26,6 +26,7 @@ FROM
 WHERE
 	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
 	AND c.codeiso3 IN ('FRA')
+	AND st.code IN (1)
 ORDER BY
 	trip_id
 	,sample_id

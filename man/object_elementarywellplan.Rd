@@ -8,6 +8,7 @@ object_elementarywellplan(
   wellplan_id,
   well_id,
   activity_id,
+  sample_id,
   specie_code3l,
   wellplan_weight,
   wellplan_number,

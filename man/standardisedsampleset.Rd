@@ -22,11 +22,14 @@ Create R6 reference object class standardisedsampleset
   activity_id,
   well_id,
   sample_id,
+  sample_quality,
+  sample_type,
   specie_code3l,
   sample_standardised_length_class_lf,
   sample_number_weighted,
   sample_weigth,
   sample_weight_unit,
+  sample_category,
   standardisedsample
 )}\if{html}{\out{</div>}}
 }

@@ -204,7 +204,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # add wells and samples associated ----
+                            # add wells and samples ----
                             add_wells_samples = function(object_wells) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -245,7 +245,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for (i in 1:length(private$data_selected)) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of raising factor level 1\n",
+                                        " - Start of raising factor process 1\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -471,7 +471,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of raising factor level 1\n",
+                                    " - \n",
                                     sep = "")
                               }
                             },
@@ -480,11 +480,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start raising factor level 2\n",
+                                      " - Start raising factor process 2\n",
                                       sep = "")
                                 } else if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of raising factor level 2\n",
+                                      " - End of raising factor process 2\n",
                                       sep = "")
                                 }
                                 if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
@@ -526,19 +526,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # logbook weigth categories conversion ----
                             conversion_weigth_category = function () {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - Start of logbook weight categories conversion\n",
-                                  sep = "")
                               category_1 <- "<10kg"
                               category_2 <- "10-30kg"
                               category_3 <- ">30kg"
                               category_4 <- ">10kg"
                               category_5 <- "unknown"
                               for (i in 1:length(private$data_selected)) {
+                                if (i == 1) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Start process 1.3: logbook weight categories conversion\n",
+                                      sep = "")
+                                }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.3 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   # first stage: conversion of all categories except for unknown (category 9)
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
@@ -819,23 +833,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.3 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
+                                if (i == length(private$data_selected)) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End process 1.3: logbook weight categories conversion\n",
+                                      sep = "")
+                                }
                               }
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End of logbook weight categories conversion\n",
-                                  sep = "")
                             },
                             # set_count ----
                             set_count = function () {
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of set count\n",
+                                      " - Start process 1.4: set count\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.4 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -869,9 +904,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.4 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of set count\n",
+                                      " - End process 1.4: set count\n",
                                       sep = "")
                                 }
                               }
@@ -888,13 +930,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of set duration calculation\n",
+                                      " - Start process 1.5: set duration calculation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.5 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -1001,9 +1055,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.5 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of set duration calculation\n",
+                                      " - End process 1.5: set duration calculation\n",
                                       sep = "")
                                 }
                               }
@@ -1013,13 +1074,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of time at sea calculation\n",
+                                      " - Start process 1.6: time at sea calculation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.6 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     departure_date <- current_trip$.__enclos_env__$private$departure_date
@@ -1067,9 +1140,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.6 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of time at sea calculation\n",
+                                      " - End process 1.6: time at sea calculation\n",
                                       sep = "")
                                 }
                               }
@@ -1079,13 +1159,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of fishing time calculation\n",
+                                      " - Start process 1.7: fishing time calculation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.7 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     fishing_time <- 0
@@ -1147,9 +1239,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     current_trip$.__enclos_env__$private$fishing_time <- fishing_time
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.7 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of fishing time calculation\n",
+                                      " - End process 1.7: fishing time calculation\n",
                                       sep = "")
                                 }
                               }
@@ -1159,13 +1258,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of searching time calculation\n",
+                                      " - Start process 1.8: searching time calculation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 1.8 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -1191,9 +1302,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     current_trip$.__enclos_env__$private$searching_time <- searching_time
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 1.8 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of searching time calculation\n",
+                                      " - End process 1.8: searching time calculation\n",
                                       sep = "")
                                 }
                               }
@@ -1203,13 +1321,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start sample number measured extrapolation\n",
+                                      " - Start process 2.1: sample number measured extrapolation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.1 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_well <- current_trip$.__enclos_env__$private$wells
@@ -1259,9 +1389,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 2.1 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End sample number measured extrapolation\n",
+                                      " - End process 2.1: sample number measured extrapolation\n",
                                       sep = "")
                                 }
                               }
@@ -1274,13 +1411,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start sample length class conversion ld1 to lf\n",
+                                      " - Start process 2.2: sample length class conversion ld1 to lf\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  # full trip is not complet (missing at least one trip)
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: trip avoided because not associated to a full trip\n",
+                                      "[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.2 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1382,9 +1531,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Process 2.2 successfull on item ",
+                                    i,
+                                    "\n[trip: ",
+                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                    "]\n",
+                                    sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End sample length class conversion ld1 to lf\n",
+                                      " - End process 2.2 sample length class conversion ld1 to lf\n",
                                       sep = "")
                                 }
                               }
@@ -1394,7 +1550,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start sample length class step standardisation\n",
+                                      " - Start process 2.3: sample length class step standardisation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -1407,6 +1563,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.3 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1461,6 +1624,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 well_id = current_sample_specie[[w]]$.__enclos_env__$private$well_id,
                                                                                                 sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sample_id,
                                                                                                 sub_sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                sample_quality = current_sample_specie[[w]]$.__enclos_env__$private$sample_quality,
+                                                                                                sample_type = current_sample_specie[[w]]$.__enclos_env__$private$sample_type,
                                                                                                 specie_code3l = current_sample_specie[[w]]$.__enclos_env__$private$specie_code3l,
                                                                                                 sample_standardised_length_class_lf = current_sample_specie[[w]]$.__enclos_env__$private$sample_length_class_lf,
                                                                                                 sample_number_measured_extrapolated_lf = as.numeric(current_sample_specie[[w]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf),
@@ -1499,6 +1664,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   well_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$well_id,
                                                                                                   sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_id,
                                                                                                   sub_sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                  sample_quality = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_quality,
+                                                                                                  sample_type = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_type,
                                                                                                   specie_code3l = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$specie_code3l,
                                                                                                   sample_standardised_length_class_lf = as.integer(lower_border),
                                                                                                   sample_number_measured_extrapolated_lf = sum(sapply(X = 1:length(current_sample_specie_by_step_by_subid),
@@ -1520,7 +1687,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.3 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -1528,7 +1695,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End sample length class step standardisation\n",
+                                      " - End process 2.3: sample length class step standardisation\n",
                                       sep = "")
                                 }
                               }
@@ -1538,7 +1705,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start well-set weight categories definition\n",
+                                      " - Start process 2.4: well-set weight categories definition\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -1550,6 +1717,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.4 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1624,7 +1798,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.4 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -1632,7 +1806,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End well-set weight categories definition\n",
+                                      " - End process 2.4 well-set weight categories definition\n",
                                       sep = "")
                                 }
                               }
@@ -1642,7 +1816,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start standardised sample creation\n",
+                                      " - Start process 2.5: standardised sample creation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -1654,6 +1828,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.5 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1686,25 +1867,53 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                           current_elementarysamples_specie[[q]]
                                                                                                         }
                                                                                                       }))
-                                              standardisedsample <- t3:::standardisedsample$new(trip_id = current_well$.__enclos_env__$private$trip_id,
-                                                                                                well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                sample_id = unique(sapply(X = 1:length(current_elementarysamples_specie_class),
-                                                                                                                          FUN = function(r) {
-                                                                                                                            current_elementarysamples_specie_class[[r]]$.__enclos_env__$private$sample_id
-                                                                                                                          })),
-                                                                                                specie_code3l = m,
-                                                                                                sample_standardised_length_class_lf = as.integer(p),
-                                                                                                sample_number_measured_extrapolated_lf = sum(sapply(X = 1:length(current_elementarysamples_specie_class),
-                                                                                                                                                    FUN = function(s) {
-                                                                                                                                                      current_elementarysamples_specie_class[[s]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf
-                                                                                                                                                    })),
-                                                                                                sample_total_count = sum(sapply(X = 1:length(current_elementarysamples_specie_class),
-                                                                                                                                FUN = function(t) {
-                                                                                                                                  current_elementarysamples_specie_class[[t]]$.__enclos_env__$private$sample_total_count
-                                                                                                                                })),
-                                                                                                elementarysample = current_elementarysamples_specie_class)
-                                              current_well$.__enclos_env__$private$standardisedsample <- append(current_well$.__enclos_env__$private$standardisedsample,
-                                                                                                                standardisedsample)
+                                              current_elementarysamples_sample_types <- unique(sapply(X = 1:length(current_elementarysamples_specie_class),
+                                                                                                      FUN = function(u) {
+                                                                                                        current_elementarysamples_specie_class[[u]]$.__enclos_env__$private$sample_type
+                                                                                                      }))
+                                              for (v in current_elementarysamples_sample_types) {
+                                                current_elementarysamples_sample_type <- Filter(Negate(is.null),
+                                                                                                lapply(X = 1:length(current_elementarysamples_specie_class),
+                                                                                                       FUN = function(w) {
+                                                                                                         if (current_elementarysamples_specie_class[[w]]$.__enclos_env__$private$sample_type == v) {
+                                                                                                           current_elementarysamples_specie_class[[w]]
+                                                                                                         }
+                                                                                                       }))
+                                                current_elementarysamples_sample_qualities <- unique(sapply(X = 1:length(current_elementarysamples_sample_type),
+                                                                                                          FUN = function(x) {
+                                                                                                            current_elementarysamples_sample_type[[x]]$.__enclos_env__$private$sample_quality
+                                                                                                          }))
+                                                for (y in current_elementarysamples_sample_qualities) {
+                                                  current_elementarysamples_sample_quality <- Filter(Negate(is.null),
+                                                                                                  lapply(X = 1:length(current_elementarysamples_sample_type),
+                                                                                                         FUN = function(z) {
+                                                                                                           if (current_elementarysamples_sample_type[[z]]$.__enclos_env__$private$sample_quality == y) {
+                                                                                                             current_elementarysamples_sample_type[[z]]
+                                                                                                           }
+                                                                                                         }))
+                                                  standardisedsample <- t3:::standardisedsample$new(trip_id = current_well$.__enclos_env__$private$trip_id,
+                                                                                                    well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                    sample_id = unique(sapply(X = 1:length(current_elementarysamples_sample_quality),
+                                                                                                                              FUN = function(r) {
+                                                                                                                                current_elementarysamples_sample_quality[[r]]$.__enclos_env__$private$sample_id
+                                                                                                                              })),
+                                                                                                    sample_quality = v,
+                                                                                                    sample_type = y,
+                                                                                                    specie_code3l = m,
+                                                                                                    sample_standardised_length_class_lf = as.integer(p),
+                                                                                                    sample_number_measured_extrapolated_lf = sum(sapply(X = 1:length(current_elementarysamples_sample_quality),
+                                                                                                                                                        FUN = function(s) {
+                                                                                                                                                          current_elementarysamples_sample_quality[[s]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf
+                                                                                                                                                        })),
+                                                                                                    sample_total_count = sum(sapply(X = 1:length(current_elementarysamples_sample_quality),
+                                                                                                                                    FUN = function(t) {
+                                                                                                                                      current_elementarysamples_sample_quality[[t]]$.__enclos_env__$private$sample_total_count
+                                                                                                                                    })),
+                                                                                                    elementarysample = current_elementarysamples_sample_quality)
+                                                  current_well$.__enclos_env__$private$standardisedsample <- append(current_well$.__enclos_env__$private$standardisedsample,
+                                                                                                                    standardisedsample)
+                                                }
+                                              }
                                             }
                                           }
                                         }
@@ -1713,7 +1922,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.5 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -1721,7 +1930,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End standardised sample creation\n",
+                                      " - End process 2.5 standardised sample creation\n",
                                       sep = "")
                                 }
                               }
@@ -1731,7 +1940,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start standardised sample set creation\n",
+                                      " - Start process 2.6: standardised sample set creation\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -1743,6 +1952,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.6 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1808,11 +2024,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                        activity_id = current_well_sets$.__enclos_env__$private$activity_id,
                                                                                                                        well_id = current_well_sets$.__enclos_env__$private$well_id,
                                                                                                                        sample_id = current_standardised_samples[[m]]$.__enclos_env__$private$sample_id,
+                                                                                                                       sample_quality = current_standardised_samples[[m]]$.__enclos_env__$private$sample_quality,
+                                                                                                                       sample_type = current_standardised_samples[[m]]$.__enclos_env__$private$sample_type,
                                                                                                                        specie_code3l = current_standardised_samples[[m]]$.__enclos_env__$private$specie_code3l,
                                                                                                                        sample_standardised_length_class_lf = current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                        sample_number_weighted = current_standardised_samples[[m]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_sets$.__enclos_env__$private$prop_weighted_weight,
                                                                                                                        sample_weigth = (current_standardised_samples[[m]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_sets$.__enclos_env__$private$prop_weighted_weight) * lwr,
                                                                                                                        sample_weight_unit = lwr,
+                                                                                                                       sample_category = ifelse(lwr <= 10,
+                                                                                                                                                "- 10kg",
+                                                                                                                                                "+ 10kg"),
                                                                                                                        standardisedsample = current_standardised_samples[[m]])
                                                                                       })
                                           standardised_samples_sets[[l]] <- current_standardised_samples_sets
@@ -1823,7 +2044,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.6 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -1831,7 +2052,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End standardised sample set creation\n",
+                                      " - End process 2.6: standardised sample set creation\n",
                                       sep = "")
                                 }
                               }
@@ -1845,7 +2066,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start raised factors determination\n",
+                                      " - Start process 2.7: raised factors determination\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -1857,6 +2078,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.7 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -1974,7 +2202,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.7 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -1982,7 +2210,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End raised factors determination\n",
+                                      " - End process 2.7: raised factors determination\n",
                                       sep = "")
                                 }
                               }
@@ -1992,7 +2220,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start raised standardised sample set\n",
+                                      " - Start process 2.8: raised standardised sample set\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -2004,6 +2232,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   next()
                                 } else {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.8 on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   for (j in 1:length(private$data_selected[[i]])) {
                                     current_trip <- private$data_selected[[i]][[j]]
                                     current_wells <- current_trip$.__enclos_env__$private$wells
@@ -2067,7 +2302,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Treatment successfull on item ",
+                                    " - Process 2.8 successfull on item ",
                                     i,
                                     "\n[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
@@ -2075,10 +2310,111 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End raised standardised sample set\n",
+                                      " - End 2.8 process: raised standardised sample set\n",
                                       sep = "")
                                 }
                               }
+                            },
+                            # path to level 3
+                            path_to_level3 = function() {
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start path creation for level 3\n",
+                                  sep = "")
+                              inputs_level3 <- vector(mode = "list",
+                                                      length = 5)
+                              names(inputs_level3) <- c("act", "act3", "samw", "sset", "wp")
+                              act <- data.frame(stringsAsFactors = FALSE)
+                              act3 <- data.frame(stringsAsFactors = FALSE)
+                              samw <- data.frame(stringsAsFactors = FALSE)
+                              sset <- data.frame(stringsAsFactors = FALSE)
+                              wp <- data.frame(stringsAsFactors = FALSE)
+                              for (i in 1:length(private$data_selected)) {
+                                for (j in 1:length(private$data_selected[[i]])) {
+                                  current_trip <- private$data_selected[[i]][[j]]
+                                  current_activities <- current_trip$.__enclos_env__$private$activities
+                                  current_wells <- current_trip$.__enclos_env__$private$wells
+                                  if (length(current_activities) != 0) {
+                                    for (k in 1:length(current_activities)) {
+                                      current_activity <- current_activities[[k]]
+                                      tmp_activity <- data.frame("id_act" = current_activity$.__enclos_env__$private$activity_id,
+                                                                 "lat" = current_activity$.__enclos_env__$private$activity_latitude,
+                                                                 "lon" = current_activity$.__enclos_env__$private$activity_longitude,
+                                                                 "fmod" = current_activity$.__enclos_env__$private$school_type,
+                                                                 "date_act" = current_activity$.__enclos_env__$private$activity_date,
+                                                                 "vessel" = current_trip$.__enclos_env__$private$vessel_id,
+                                                                 "id_trip" = current_activity$.__enclos_env__$private$trip_id,
+                                                                 "landingdate" = current_trip$.__enclos_env__$private$landing_date,
+                                                                 "ocean" = current_activity$.__enclos_env__$private$ocean,
+                                                                 "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
+                                                                 stringsAsFactors = FALSE)
+                                      act <- rbind(act, tmp_activity)
+                                      current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
+                                      if (! is.null(current_elementarycatches) && length(current_elementarycatches) != 0) {
+                                        for (l in 1:length(current_elementarycatches)) {
+                                          current_elementarycatch <- current_elementarycatches[[l]]
+                                          tmp_elementarycatch <- data.frame("id_act" = current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                                            "w_lb_t3" = current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected,
+                                                                            "date_act" = current_activity$.__enclos_env__$private$activity_date,
+                                                                            "sp" = current_elementarycatch$.__enclos_env__$private$specie_code3l,
+                                                                            "wcat" = current_elementarycatch$.__enclos_env__$private$corrected_logbook_category,
+                                                                            "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
+                                                                            stringsAsFactors = FALSE)
+                                          act3 <- rbind(act3, tmp_elementarycatch)
+                                        }
+                                      }
+                                    }
+                                  }
+                                  if (length(current_wells) != 0) {
+                                    for (m in 1:length(current_wells)) {
+                                      current_well <- current_wells[[m]]
+                                      current_standardisedsamplesets <- unlist(current_well$.__enclos_env__$private$standardisedsampleset)
+                                      current_wellplan <- current_well$.__enclos_env__$private$wellplan
+                                      if (! is.null(current_standardisedsamplesets)) {
+                                        for (n in 1:length(current_standardisedsamplesets)) {
+                                          current_standardisedsampleset <- current_standardisedsamplesets[[n]]
+                                          tmp_standardisedsampleset <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
+                                                                                  "sp" = current_standardisedsampleset$.__enclos_env__$private$specie_code3l,
+                                                                                  "wcat" = current_standardisedsampleset$.__enclos_env__$private$sample_category,
+                                                                                  "w_fit_t3" = current_standardisedsampleset$.__enclos_env__$private$sample_weigth_set,
+                                                                                  stringsAsFactors = FALSE)
+                                          samw <- rbind(samw, tmp_standardisedsampleset)
+                                          tmp_standardisedsampleset_qt <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
+                                                                                     "id_sample" = current_standardisedsampleset$.__enclos_env__$private$sample_id,
+                                                                                     "quality" = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
+                                                                                     "type" = current_standardisedsampleset$.__enclos_env__$private$sample_type,
+                                                                                     stringsAsFactors = FALSE)
+                                          sset <- rbind(sset, tmp_standardisedsampleset_qt)
+                                        }
+                                      }
+                                      if (! is.null(current_wellplan)) {
+                                        for (o in 1:length(current_wellplan)) {
+                                          current_elementarywellplan <- current_wellplan[[o]]
+                                          tmp_elementarywellplan <- data.frame("id_well" = current_elementarywellplan$.__enclos_env__$private$well_id,
+                                                                               "id_act" = current_elementarywellplan$.__enclos_env__$private$activity_id,
+                                                                               "id_sample" = current_elementarywellplan$.__enclos_env__$private$sample_id,
+                                                                               "code3l" = current_elementarywellplan$.__enclos_env__$private$specie_code3l,
+                                                                               "weight" = current_elementarywellplan$.__enclos_env__$private$wellplan_weight,
+                                                                               "wcat_well" = current_elementarywellplan$.__enclos_env__$private$wellplan_weigth_category_label,
+                                                                               stringsAsFactors = FALSE)
+                                          wp <- rbind(wp, tmp_elementarywellplan)
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                              inputs_level3[[1]] <- act
+                              inputs_level3[[2]] <- act3
+                              inputs_level3[[3]] <- data.frame(dplyr::group_by(.data = samw,
+                                                                               id_act, sp, wcat) %>%
+                                                                 dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
+                                                                 dplyr::ungroup())
+                              inputs_level3[[4]] <- unique(sset)
+                              inputs_level3[[5]] <- wp
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End path creation for level 3\n",
+                                  sep = "")
+                              inputs_level3 <<- inputs_level3
                             },
                             # browser
                             show_me_what_you_got = function() {

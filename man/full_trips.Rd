@@ -34,6 +34,7 @@ Create R6 reference object class full_trips
 \item \href{#method-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
 \item \href{#method-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
+\item \href{#method-path_to_level3}{\code{full_trips$path_to_level3()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -231,6 +232,14 @@ Create R6 reference object class full_trips
 \subsection{Method \code{raised_standardised_sample_set()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-path_to_level3"></a>}}
+\subsection{Method \code{path_to_level3()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
 }
 
 }

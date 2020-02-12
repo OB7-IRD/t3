@@ -8,6 +8,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     initialize = function(wellplan_id,
                                                           well_id,
                                                           activity_id,
+                                                          sample_id,
                                                           specie_code3l,
                                                           wellplan_weight,
                                                           wellplan_number,
@@ -19,6 +20,8 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       t3:::check_well_id(well_id)
                                       # attribut "activity_id" verification
                                       t3:::check_activity_id(activity_id)
+                                      # attribut "sample_id" verification
+                                      t3:::check_sample_id(sample_id)
                                       # attribut "specie_code3l" verification
                                       t3:::check_specie_code3l(specie_code3l)
                                       # attribut "wellplan_weight" verification
@@ -33,6 +36,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       private$wellplan_id <- wellplan_id
                                       private$well_id <- well_id
                                       private$activity_id <- activity_id
+                                      private$sample_id <- sample_id
                                       private$specie_code3l <- specie_code3l
                                       private$wellplan_weight <- wellplan_weight
                                       private$wellplan_number <- wellplan_number
@@ -42,6 +46,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     wellplan_id = NULL,
                                     well_id = NULL,
                                     activity_id = NULL,
+                                    sample_id = NULL,
                                     specie_code3l = NULL,
                                     wellplan_weight = NULL,
                                     wellplan_number = NULL,
