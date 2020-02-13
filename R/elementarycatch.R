@@ -5,6 +5,7 @@
 elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                public = list(
                                  initialize = function(activity_id,
+                                                       elementarycatch_id,
                                                        ocean,
                                                        school_type,
                                                        logbook_category,
@@ -13,6 +14,8 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        catch_weight) {
                                    # attribut "activity_id" verification
                                    t3:::check_activity_id(activity_id)
+                                   # attribut "elementarycatch_id" verification
+                                   t3:::check_elementarycatch_id(elementarycatch_id)
                                    # attribut "ocean" verification
                                    t3:::check_ocean(ocean)
                                    # attribut "school_type" verification
@@ -27,6 +30,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    t3:::check_catch_weight(catch_weight)
                                    # attributions
                                    private$activity_id <- activity_id
+                                   private$elementarycatch_id <- elementarycatch_id
                                    private$ocean <- ocean
                                    private$school_type <- school_type
                                    private$logbook_category <- logbook_category
@@ -36,6 +40,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  }),
                                private = list(
                                  activity_id = NULL,
+                                 elementarycatch_id = NULL,
                                  ocean = NULL,
                                  school_type = NULL,
                                  logbook_category = NULL,

@@ -66,6 +66,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # filter full trips by periode_reference ----
                             filter_by_periode = function(periode_reference) {
+                              browser()
                               if (length(class(periode_reference)) == 1 && class(periode_reference) != "numeric") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"periode_reference\" argument\nclass numeric expected\n",
@@ -2267,7 +2268,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_rf_total <- current_well_sets$.__enclos_env__$private$rf_total
                                             for (m in 1:length(current_well_standardisedsampleset)) {
                                               current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted * current_rf_total
-                                              current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set
+                                              current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set / 1000
                                             }
                                           } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
                                             current_rf_minus10 <- current_well_sets$.__enclos_env__$private$rf_minus10
@@ -2278,7 +2279,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               } else {
                                                 current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_plus10
                                               }
-                                              current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set
+                                              current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set / 1000
                                             }
                                           } else {
                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

@@ -42,7 +42,7 @@ object_r6 <- function(class_name, ...) {
     }
   }
   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-      " - End creation object of class \"",
+      " - Successful creation object of class \"",
       class_name,
       "\"\n",
       sep = "")

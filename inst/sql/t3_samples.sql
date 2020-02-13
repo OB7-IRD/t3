@@ -24,9 +24,9 @@ FROM
 	JOIN public.samplequality sq ON (s.samplequality = sq.topiaid)
 	JOIN public.sampletype st ON (s.sampletype = st.topiaid)
 WHERE
-	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
-	AND c.codeiso3 IN ('FRA')
-	AND st.code IN (1)
+	t.landingdate BETWEEN ?begin_period AND ?end_period
+	AND c.codeiso3 IN (?countries)
+	AND st.code IN (?sample_type)
 ORDER BY
 	trip_id
 	,sample_id

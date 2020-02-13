@@ -21,7 +21,7 @@ FROM
 	JOIN public.schooltype st ON (a.schooltype = st.topiaid)
 	JOIN public.vesselactivity va ON (a.vesselactivity = va.topiaid)
 WHERE
-	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
-	AND c.codeiso3 IN ('FRA')
+	t.landingdate BETWEEN ?begin_period AND ?end_period
+	AND c.codeiso3 IN (?countries)
 	--AND va.code IN (0, 1, 2, 12 ,13 ,14)
 ;

@@ -54,6 +54,34 @@ check_activity_id = function(activity_id) {
   }
 }
 
+#' @name check_elementarylanding_id
+#' @title Attribut "elementarylanding_id" verification
+#' @param elementarylanding_id (character) Elementary landing identification
+#' @description Check if the item "elementarylanding_id" have one unique class identified as character
+# check elementarylanding_id ----
+check_elementarylanding_id = function(elementarylanding_id) {
+  if (length(class(elementarylanding_id)) != 1 || class(elementarylanding_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"elementarylanding_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_elementarycatch_id
+#' @title Attribut "elementarycatch_id" verification
+#' @param elementarycatch_id (character) Elementary catch identification
+#' @description Check if the item "elementarycatch_id" have one unique class identified as character
+# check elementarycatch_id ----
+check_elementarycatch_id = function(elementarycatch_id) {
+  if (length(class(elementarycatch_id)) != 1 || class(elementarycatch_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"elementarycatch_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_sub_sample_id
 #' @title Attribut "sub_sample_id" verification
 #' @param sub_sample_id (integer) Sub sample identification

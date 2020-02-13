@@ -19,6 +19,7 @@ Create R6 reference object class elementarycatch
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarycatch$new(
   activity_id,
+  elementarycatch_id,
   ocean,
   school_type,
   logbook_category,

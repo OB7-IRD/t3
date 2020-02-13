@@ -1,5 +1,6 @@
 SELECT
-	a.topiaid::TEXT AS activity_id
+	a.topiaid::text AS activity_id
+	,ec.topiaid::TEXT AS elementarycatch_id
 	,o.code::integer AS ocean
 	,st.code::integer AS school_type
 	,wcl.code::integer AS logbook_category
@@ -18,10 +19,11 @@ FROM
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
 	JOIN public.country c ON (v.fleetcountry = c.topiaid)
 WHERE
-	t.landingdate BETWEEN '2016-10-01' AND '2018-03-01'
-	AND c.codeiso3 IN ('FRA')
+	t.landingdate BETWEEN ?begin_period AND ?end_period
+	AND c.codeiso3 IN (?countries)
 GROUP BY
 	activity_id
+	,elementarycatch_id
 	,o.code
 	,school_type
 	,logbook_category

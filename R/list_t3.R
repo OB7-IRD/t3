@@ -36,7 +36,7 @@ list_t3 <- R6Class(classname = "list_t3",
                        }
                        private[[attribut]] <- append(private[[attribut]], new_item)
                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                           " - End added new item(s) of class ",
+                           " - Successful added new item(s) of class ",
                            paste(class(new_item),
                                  collapse = " - "),
                            "\n",

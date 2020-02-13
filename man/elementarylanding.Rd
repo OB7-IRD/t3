@@ -19,6 +19,7 @@ Create R6 reference object class elementarylanding
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarylanding$new(
   trip_id,
+  elementarylanding_id,
   landing_category,
   landing_category_name,
   specie_code3l,
