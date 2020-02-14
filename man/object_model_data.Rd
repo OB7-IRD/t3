@@ -6,6 +6,124 @@
 \description{
 Create R6 reference object class object_model_data
 }
+\examples{
+
+## ------------------------------------------------
+## Method `object_model_data$trips_object_creation`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$trips_object_creation(periode_reference = c(2016, 2017),
+                          countries = ("FRA"),
+                          t3_con = t3_connection)
+# call trips object
+object_model_data$.__enclos_env__$private$trips
+# call the first trip
+object_model_data$.__enclos_env__$private$trips$.__enclos_env__$private$data[[1]]
+
+## ------------------------------------------------
+## Method `object_model_data$activities_object_creation`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$activities_object_creation(periode_reference = c(2016, 2017),
+                               countries = ("FRA"),
+                               t3_con = t3_connection)
+# call activities object
+object_model_data$.__enclos_env__$private$activities
+# call the first activity
+object_model_data$.__enclos_env__$private$activities$.__enclos_env__$private$data[[1]]
+
+## ------------------------------------------------
+## Method `object_model_data$elementarycatches_object_creation`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$elementarycatches_object_creation(periode_reference = c(2016, 2017),
+                                      countries = ("FRA"),
+                                      t3_con = t3_connection)
+# call elementarycatches object
+object_model_data$.__enclos_env__$private$elementarycatches
+# call the first elementarycatch
+object_model_data$.__enclos_env__$private$elementarycatches$.__enclos_env__$private$data[[1]]
+
+## ------------------------------------------------
+## Method `object_model_data$elementarylandings_object_creation`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$elementarylandings_object_creation(periode_reference = c(2016, 2017),
+                                       countries = ("FRA"),
+                                       t3_con = t3_connection)
+# call elementarylandings object
+object_model_data$.__enclos_env__$private$elementarylandings
+# call the first elementarylanding
+object_model_data$.__enclos_env__$private$elementarylandings$.__enclos_env__$private$data[[1]]
+
+## ------------------------------------------------
+## Method `object_model_data$wells_object_creation`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$wells_object_creation(periode_reference = c(2016, 2017),
+                          countries = ("FRA"),
+                          t3_con = t3_connection)
+# call wells object
+object_model_data$.__enclos_env__$private$wells
+# call the first well
+object_model_data$.__enclos_env__$private$wells$.__enclos_env__$private$data[[1]]
+
+## ------------------------------------------------
+## Method `object_model_data$setduration_data`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$setduration_data(periode_reference = c(2016, 2017),
+                     countries = ("FRA"),
+                     t3_con = t3_connection)
+# call setduration object
+object_model_data$.__enclos_env__$private$setduration
+
+## ------------------------------------------------
+## Method `object_model_data$lengthstep_data`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$lengthstep_data()
+# call lengthstep object
+object_model_data$.__enclos_env__$private$lengthstep
+
+## ------------------------------------------------
+## Method `object_model_data$sampleset_data`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$sampleset_data(periode_reference = c(2016, 2017),
+                   countries = ("FRA"),
+                   t3_con = t3_connection)
+# call sampleset object
+object_model_data$.__enclos_env__$private$sampleset
+
+## ------------------------------------------------
+## Method `object_model_data$lengthweightrelationship_data`
+## ------------------------------------------------
+
+tmp <- t3:::object_model_data$new()
+tmp$lengthweightrelationship_data()
+# call lengthweightrelationship object
+object_model_data$.__enclos_env__$private$lengthweightrelationship
+}
+\seealso{
+\code{\link{trip}} \code{\link{trips}}
+
+\code{\link{activity}} \code{\link{activities}}
+
+\code{\link{elementarycatches}} \code{\link{elementarycatch}}
+
+\code{\link{elementarylandings}} \code{\link{elementarylanding}}
+
+\code{\link{wells}} \code{\link{well}} \code{\link{wellset}} \code{\link{samples}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -24,14 +142,42 @@ Create R6 reference object class object_model_data
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trips_object_creation"></a>}}
 \subsection{Method \code{trips_object_creation()}}{
+Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$trips_object_creation(periode_reference = c(2016, 2017),
+                          countries = ("FRA"),
+                          t3_con = t3_connection)
+# call trips object
+object_model_data$.__enclos_env__$private$trips
+# call the first trip
+object_model_data$.__enclos_env__$private$trips$.__enclos_env__$private$data[[1]]
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activities_object_creation"></a>}}
 \subsection{Method \code{activities_object_creation()}}{
+Creation of a R6 reference object class activities which contain one or more R6 reference object class activity
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   periode_reference,
@@ -40,10 +186,37 @@ Create R6 reference object class object_model_data
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$activities_object_creation(periode_reference = c(2016, 2017),
+                               countries = ("FRA"),
+                               t3_con = t3_connection)
+# call activities object
+object_model_data$.__enclos_env__$private$activities
+# call the first activity
+object_model_data$.__enclos_env__$private$activities$.__enclos_env__$private$data[[1]]
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarycatches_object_creation"></a>}}
 \subsection{Method \code{elementarycatches_object_creation()}}{
+Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_object_creation(
   periode_reference,
@@ -52,10 +225,37 @@ Create R6 reference object class object_model_data
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$elementarycatches_object_creation(periode_reference = c(2016, 2017),
+                                      countries = ("FRA"),
+                                      t3_con = t3_connection)
+# call elementarycatches object
+object_model_data$.__enclos_env__$private$elementarycatches
+# call the first elementarycatch
+object_model_data$.__enclos_env__$private$elementarycatches$.__enclos_env__$private$data[[1]]
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarylandings_object_creation"></a>}}
 \subsection{Method \code{elementarylandings_object_creation()}}{
+Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarylandings_object_creation(
   periode_reference,
@@ -64,44 +264,171 @@ Create R6 reference object class object_model_data
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$elementarylandings_object_creation(periode_reference = c(2016, 2017),
+                                       countries = ("FRA"),
+                                       t3_con = t3_connection)
+# call elementarylandings object
+object_model_data$.__enclos_env__$private$elementarylandings
+# call the first elementarylanding
+object_model_data$.__enclos_env__$private$elementarylandings$.__enclos_env__$private$data[[1]]
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wells_object_creation"></a>}}
 \subsection{Method \code{wells_object_creation()}}{
+Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$wells_object_creation(periode_reference = c(2016, 2017),
+                          countries = ("FRA"),
+                          t3_con = t3_connection)
+# call wells object
+object_model_data$.__enclos_env__$private$wells
+# call the first well
+object_model_data$.__enclos_env__$private$wells$.__enclos_env__$private$data[[1]]
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setduration_data"></a>}}
 \subsection{Method \code{setduration_data()}}{
+Creation of a data frame object with parameters of set duration algorithms
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$setduration_data(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$setduration_data(periode_reference = c(2016, 2017),
+                     countries = ("FRA"),
+                     t3_con = t3_connection)
+# call setduration object
+object_model_data$.__enclos_env__$private$setduration
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthstep_data"></a>}}
 \subsection{Method \code{lengthstep_data()}}{
+Creation of a data frame object with length ratio between ld1 and lf class
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$lengthstep_data()
+# call lengthstep object
+object_model_data$.__enclos_env__$private$lengthstep
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sampleset_data"></a>}}
 \subsection{Method \code{sampleset_data()}}{
+Creation of a data frame object with weighted weigth of each set sampled
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$sampleset_data(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits.}
+
+\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$sampleset_data(periode_reference = c(2016, 2017),
+                   countries = ("FRA"),
+                   t3_con = t3_connection)
+# call sampleset object
+object_model_data$.__enclos_env__$private$sampleset
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthweightrelationship_data"></a>}}
 \subsection{Method \code{lengthweightrelationship_data()}}{
+Creation of a data frame object with parameters for length weight relationship
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{tmp <- t3:::object_model_data$new()
+tmp$lengthweightrelationship_data()
+# call lengthweightrelationship object
+object_model_data$.__enclos_env__$private$lengthweightrelationship
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

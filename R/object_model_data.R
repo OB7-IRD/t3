@@ -1,10 +1,25 @@
-#' @name object_model_data
 #' @title R6 class object_model_data creation
+#' @name object_model_data
 #' @description Create R6 reference object class object_model_data
 #' @importFrom R6 R6Class
+#' @importFrom DBI sqlInterpolate SQL dbGetQuery
+#' @importFrom dplyr first last filter
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
-                                   # trips object
+                                   #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
+                                   #' @seealso \code{\link{trip}} \code{\link{trips}}
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$trips_object_creation(periode_reference = c(2016, 2017),
+                                   #'                           countries = ("FRA"),
+                                   #'                           t3_con = t3_connection)
+                                   #' # call trips object
+                                   #' object_model_data$.__enclos_env__$private$trips
+                                   #' # call the first trip
+                                   #' object_model_data$.__enclos_env__$private$trips$.__enclos_env__$private$data[[1]]
                                    trips_object_creation = function(periode_reference,
                                                                     countries,
                                                                     t3_con) {
@@ -58,7 +73,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                              }))
                                      private$trips <- object_trips
                                    },
-                                   # activities object
+                                   #' @title Creation of object activities
+                                   #' @name activities_object_creation
+                                   #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity
+                                   #' @seealso \code{\link{activity}} \code{\link{activities}}
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$activities_object_creation(periode_reference = c(2016, 2017),
+                                   #'                                countries = ("FRA"),
+                                   #'                                t3_con = t3_connection)
+                                   #' # call activities object
+                                   #' object_model_data$.__enclos_env__$private$activities
+                                   #' # call the first activity
+                                   #' object_model_data$.__enclos_env__$private$activities$.__enclos_env__$private$data[[1]]
                                    activities_object_creation = function(periode_reference,
                                                                          countries,
                                                                          t3_con) {
@@ -117,7 +147,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                   }))
                                      private$activities <- object_activities
                                    },
-                                   # elementarycatches object
+                                   #' @title Creation of object elementarycatches
+                                   #' @name elementarycatches_object_creation
+                                   #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
+                                   #' @seealso \code{\link{elementarycatches}} \code{\link{elementarycatch}}
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$elementarycatches_object_creation(periode_reference = c(2016, 2017),
+                                   #'                                       countries = ("FRA"),
+                                   #'                                       t3_con = t3_connection)
+                                   #' # call elementarycatches object
+                                   #' object_model_data$.__enclos_env__$private$elementarycatches
+                                   #' # call the first elementarycatch
+                                   #' object_model_data$.__enclos_env__$private$elementarycatches$.__enclos_env__$private$data[[1]]
                                    elementarycatches_object_creation = function(periode_reference,
                                                                                 countries,
                                                                                 t3_con) {
@@ -172,7 +217,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          }))
                                      private$elementarycatches <- object_elementarycatches
                                    },
-                                   # elementarylandings object
+                                   #' @title Creation of object elementarylandings
+                                   #' @name elementarylandings_object_creation
+                                   #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
+                                   #' @seealso \code{\link{elementarylandings}} \code{\link{elementarylanding}}
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$elementarylandings_object_creation(periode_reference = c(2016, 2017),
+                                   #'                                        countries = ("FRA"),
+                                   #'                                        t3_con = t3_connection)
+                                   #' # call elementarylandings object
+                                   #' object_model_data$.__enclos_env__$private$elementarylandings
+                                   #' # call the first elementarylanding
+                                   #' object_model_data$.__enclos_env__$private$elementarylandings$.__enclos_env__$private$data[[1]]
                                    elementarylandings_object_creation = function(periode_reference,
                                                                                  countries,
                                                                                  t3_con) {
@@ -225,7 +285,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                           }))
                                      private$elementarylandings <- object_elementarylandings
                                    },
-                                   # wells object
+                                   #' @title Creation of object wells
+                                   #' @name wells_object_creation
+                                   #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
+                                   #' @seealso \code{\link{wells}} \code{\link{well}} \code{\link{wellset}} \code{\link{samples}}
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$wells_object_creation(periode_reference = c(2016, 2017),
+                                   #'                           countries = ("FRA"),
+                                   #'                           t3_con = t3_connection)
+                                   #' # call wells object
+                                   #' object_model_data$.__enclos_env__$private$wells
+                                   #' # call the first well
+                                   #' object_model_data$.__enclos_env__$private$wells$.__enclos_env__$private$data[[1]]
                                    wells_object_creation = function(periode_reference,
                                                                     countries,
                                                                     t3_con) {
@@ -421,7 +496,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      private$wells <- object_wells
                                    },
-                                   # set duration data
+                                   #' @title Creation of object set duration
+                                   #' @name setduration_data
+                                   #' @description Creation of a data frame object with parameters of set duration algorithms
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$setduration_data(periode_reference = c(2016, 2017),
+                                   #'                      countries = ("FRA"),
+                                   #'                      t3_con = t3_connection)
+                                   #' # call setduration object
+                                   #' object_model_data$.__enclos_env__$private$setduration
                                    setduration_data = function(periode_reference,
                                                                countries,
                                                                t3_con) {
@@ -446,7 +533,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful set duration data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   # length step data
+                                   #' @title Creation of object length step
+                                   #' @name lengthstep_data
+                                   #' @description Creation of a data frame object with length ratio between ld1 and lf class
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$lengthstep_data()
+                                   #' # call lengthstep object
+                                   #' object_model_data$.__enclos_env__$private$lengthstep
                                    lengthstep_data = function() {
                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                          " - Start length steps data importation from T3 database\n",
@@ -461,7 +555,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful length steps data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   # sample set data
+                                   #' @title Creation of object sample set
+                                   #' @name sampleset_data
+                                   #' @description Creation of a data frame object with weighted weigth of each set sampled
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries.
+                                   #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$sampleset_data(periode_reference = c(2016, 2017),
+                                   #'                    countries = ("FRA"),
+                                   #'                    t3_con = t3_connection)
+                                   #' # call sampleset object
+                                   #' object_model_data$.__enclos_env__$private$sampleset
                                    sampleset_data = function(periode_reference,
                                                              countries,
                                                              t3_con) {
@@ -490,7 +596,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful sample sets data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   # length weight relationship data
+                                   #' @title Creation of object length weight relationship
+                                   #' @name lengthweightrelationship_data
+                                   #' @description Creation of a data frame object with parameters for length weight relationship
+                                   #' @examples
+                                   #' tmp <- t3:::object_model_data$new()
+                                   #' tmp$lengthweightrelationship_data()
+                                   #' # call lengthweightrelationship object
+                                   #' object_model_data$.__enclos_env__$private$lengthweightrelationship
                                    lengthweightrelationship_data = function() {
                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                          " - Start length weight relationship data importation from T3 database\n",

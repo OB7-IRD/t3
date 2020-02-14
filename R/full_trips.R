@@ -66,13 +66,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # filter full trips by periode_reference ----
                             filter_by_periode = function(periode_reference) {
-                              browser()
-                              if (length(class(periode_reference)) == 1 && class(periode_reference) != "numeric") {
+                              if (any(class(periode_reference) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument\nclass numeric expected\n",
+                                    " - Error: invalid \"periode_reference\" argument\nclass integer expected\n",
                                     sep = "")
                                 stop()
-                              } else if (nchar(periode_reference) != 4) {
+                              } else if (any(nchar(periode_reference) != 4)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"periode_reference\" argument\nyear format on 4 digits expected\n",
                                     sep = "")
@@ -81,28 +80,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for (i in 1:length(private$data)) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of full trips filtering (by periode reference)\n",
+                                        " - Start of full trips filtering by reference periode\n",
                                         sep = "")
                                   }
                                   full_trips_tmp <- private$data[[i]]
-                                  year_full_trips <- vector(mode = "numeric")
+                                  year_full_trips <- vector(mode = "integer")
                                   for (j in 1:length(full_trips_tmp)) {
                                     full_trips_tmp_bis <- full_trips_tmp[[j]]
                                     year_full_trips <- append(year_full_trips,
-                                                              lubridate::year(x = full_trips_tmp_bis$.__enclos_env__$private$landing_date))
+                                                              as.integer(
+                                                                lubridate::year(
+                                                                  x = full_trips_tmp_bis$.__enclos_env__$private$landing_date)
+                                                                )
+                                                              )
                                   }
-                                  if (any(year_full_trips == periode_reference)) {
-                                    private$data_selected <- append(private$data_selected, list(full_trips_tmp))
+                                  if (any(year_full_trips %in% periode_reference)) {
+                                    private$data_selected <- append(private$data_selected,
+                                                                    list(full_trips_tmp))
                                     names(private$data_selected)[length(private$data_selected)] <- names(private$data[i])
                                   }
                                 }
                                 if (any(private$id_not_full_trip %in% names(private$data_selected))) {
                                   warning("missing trip(s) in at least one full trip item\ncheck id(s): ",
-                                          base::intersect(private$id_not_full_trip,
-                                                          private$data_selected),
+                                          intersect(private$id_not_full_trip,
+                                                    private$data_selected),
                                           call. = FALSE)
-                                  private$id_not_full_trip_retained <- base::intersect(private$id_not_full_trip,
-                                                                                       private$data_selected)
+                                  private$id_not_full_trip_retained <- intersect(
+                                    private$id_not_full_trip,
+                                    private$data_selected
+                                  )
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of full trips filtering\n",
@@ -246,7 +252,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for (i in 1:length(private$data_selected)) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of raising factor process 1\n",
+                                        " - Start process 1.1: raising factor level 1\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -407,47 +413,38 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             stop_bis <- 0
                                           }
                                           current_trip <- private$data_selected[[i]][[p]]
-                                          if (p == length(private$data_selected[[i]])) {
-                                            if (! is.null(unlist(current_trip$.__enclos_env__$private$elementarylandings))) {
-                                              current_elementarylandings <- append(current_elementarylandings,
-                                                                                   unlist(current_trip$.__enclos_env__$private$elementarylandings))
-                                            } else {
-                                              stop_bis <- 1
-                                            }
-                                          } else {
-                                            current_elementarylandings <- append(current_elementarylandings,
-                                                                                 unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                          current_elementarylandings <- append(current_elementarylandings,
+                                                                               unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                        }
+                                        if (is.null(current_elementarylandings)) {
+                                          # case 2.3: no elementary landing in complet full trip item
+                                          warning("missing elementary landing",
+                                                  "\nitem ", i,
+                                                  call. = FALSE)
+                                          for (q in 1:length(private$data_selected[[i]])) {
+                                            current_trip <- private$data_selected[[i]][[q]]
+                                            current_trip$.__enclos_env__$private$rf1 <- 1
+                                            current_trip$.__enclos_env__$private$statut_rf1 <- 2.3
                                           }
-                                          if (stop_bis == 1) {
-                                            # case 2.3: at least one elementary landing is missing in complet full trip item
-                                            warning("missing elementary landing",
+                                        } else {
+                                          # case 2.4: everything rocks dude !
+                                          current_elementarylandings_weight <- vector(mode = "numeric")
+                                          for (r in 1:length(current_elementarylandings)) {
+                                            if (current_elementarylandings[[r]]$.__enclos_env__$private$specie_code3l %in% species_rf1) {
+                                              current_elementarylandings_weight <- append(current_elementarylandings_weight,
+                                                                                          current_elementarylandings[[r]]$.__enclos_env__$private$landing_weight)
+                                            }
+                                          }
+                                          current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
+                                          if (current_rf1 < 0.8 | current_rf1 > 1.2) {
+                                            warning("Be carefull ! RF1 value out of theorical boundaries: ", round(current_rf1, 3),
                                                     "\nitem ", i,
                                                     call. = FALSE)
-                                            for (q in 1:length(private$data_selected[[i]])) {
-                                              current_trip <- private$data_selected[[i]][[q]]
-                                              current_trip$.__enclos_env__$private$rf1 <- 1
-                                              current_trip$.__enclos_env__$private$statut_rf1 <- 2.3
-                                            }
-                                          } else {
-                                            # case 2.4: everything rocks dude !
-                                            current_elementarylandings_weight <- vector(mode = "numeric")
-                                            for (r in 1:length(current_elementarylandings)) {
-                                              if (current_elementarylandings[[r]]$.__enclos_env__$private$specie_code3l %in% species_rf1) {
-                                                current_elementarylandings_weight <- append(current_elementarylandings_weight,
-                                                                                            current_elementarylandings[[r]]$.__enclos_env__$private$landing_weight)
-                                              }
-                                            }
-                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
-                                            if (current_rf1 < 0.8 | current_rf1 > 1.2) {
-                                              warning("Be carefull ! RF1 value out of theorical boundaries: ", round(current_rf1, 3),
-                                                      "\nitem ", i,
-                                                      call. = FALSE)
-                                            }
-                                            for (s in 1:length(private$data_selected[[i]])) {
-                                              current_trip <- private$data_selected[[i]][[s]]
-                                              current_trip$.__enclos_env__$private$rf1 <- current_rf1
-                                              current_trip$.__enclos_env__$private$statut_rf1 <- 2.4
-                                            }
+                                          }
+                                          for (s in 1:length(private$data_selected[[i]])) {
+                                            current_trip <- private$data_selected[[i]][[s]]
+                                            current_trip$.__enclos_env__$private$rf1 <- current_rf1
+                                            current_trip$.__enclos_env__$private$statut_rf1 <- 2.4
                                           }
                                         }
                                       }
@@ -472,7 +469,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - \n",
+                                    " - Successful process 1.1: raising factor level 1\n",
                                     sep = "")
                               }
                             },
