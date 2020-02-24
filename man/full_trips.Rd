@@ -104,14 +104,27 @@ Create R6 reference object class full_trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rf1"></a>}}
 \subsection{Method \code{rf1()}}{
+Process of Raising Factor level 1 (rf1).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(species_rf1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(species_rf1, rf1_lowest_limit = 0.8, rf1_highest_limit = 1.2)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{species_rf1}}{(character) ISO code on 3 letters related to one or more species.}
+
+\item{\code{rf1_lowest_limit}}{(numeric) Verification value for the lowest limit of the rf1.}
+
+\item{\code{rf1_highest_limit}}{(numeric) Verification value for the highest limit of the rf1.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rf2"></a>}}
 \subsection{Method \code{rf2()}}{
+Process of Raising Factor level 2 (rf2).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2()}\if{html}{\out{</div>}}
 }
@@ -120,6 +133,7 @@ Create R6 reference object class full_trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-conversion_weigth_category"></a>}}
 \subsection{Method \code{conversion_weigth_category()}}{
+Process of logbook weigth categories conversion.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category()}\if{html}{\out{</div>}}
 }
@@ -128,6 +142,7 @@ Create R6 reference object class full_trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_count"></a>}}
 \subsection{Method \code{set_count()}}{
+Process for postive sets count.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count()}\if{html}{\out{</div>}}
 }
@@ -136,14 +151,23 @@ Create R6 reference object class full_trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_duration"></a>}}
 \subsection{Method \code{set_duration()}}{
+Process for set duration calculation (in hours).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(set_duration_ref)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set_duration_ref}}{(data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-time_at_sea"></a>}}
 \subsection{Method \code{time_at_sea()}}{
+Process for time at sea calculation (in hours).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea()}\if{html}{\out{</div>}}
 }
