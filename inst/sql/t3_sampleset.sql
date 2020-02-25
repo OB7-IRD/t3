@@ -3,7 +3,7 @@ SELECT
 	,sset.activity::text AS activity_id
 	,s.well::text AS well_id
 	,s.topiaid::text AS sample_id
-	,sset.weightedweight::integer AS well_set_weighted_weight
+	,sset.weightedweight::numeric AS well_set_weighted_weight
 FROM
 	public.sampleset sset
 	JOIN public.sample s ON (sset.sample = s.topiaid)

@@ -455,13 +455,18 @@ check_wellplan_number = function(wellplan_number) {
 
 #' @name check_catch_weight
 #' @title Attribut "catch_weight" verification
-#' @param catch_weight (integer) Catch weight in tonne
-#' @description Check if the item "catch_weight" have one unique class identified as integer
+#' @param catch_weight (numeric) Catch weight in tonne
+#' @description Check if the item "catch_weight" have one unique class identified as numeric
 # check catch_weight ----
 check_catch_weight = function(catch_weight) {
-  if (length(class(catch_weight)) != 1 || class(catch_weight) != "integer") {
+  if (length(class(catch_weight)) != 1 || class(catch_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"catch_weight\" argument\nclass integer expected\n",
+        " - Error: invalide \"catch_weight\" argument\nclass numeric expected\n",
+        sep = "")
+    stop()
+  } else if (catch_weight <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"catch_weight\" argument\npositive value expected\n",
         sep = "")
     stop()
   }
@@ -488,18 +493,18 @@ check_well_minus10_weigth = function(well_minus10_weigth) {
 
 #' @name check_weighted_weight
 #' @title Attribut "weighted_weight" verification
-#' @param weighted_weight (integer) Set weight weighted by all set in the well(s)
-#' @description Check if the item "weighted_weight" have one unique class identified as integer and if value are >= 0
+#' @param weighted_weight (numeric) Set weight weighted by all set in the well(s)
+#' @description Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0
 # check weighted_weight ----
 check_weighted_weight = function(weighted_weight) {
-  if (length(class(weighted_weight)) != 1 || class(weighted_weight) != "integer") {
+  if (length(class(weighted_weight)) != 1 || class(weighted_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"weighted_weight\" argument\nclass integer expected\n",
+        " - Error: invalide \"weighted_weight\" argument\nclass numeric expected\n",
         sep = "")
     stop()
-  } else if (weighted_weight < 0) {
+  } else if (weighted_weight <= 0) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"weighted_weight\" argument\n0 or postive value expected\n",
+        " - Error: invalide \"weighted_weight\" argument\npostive value expected\n",
         sep = "")
     stop()
   }

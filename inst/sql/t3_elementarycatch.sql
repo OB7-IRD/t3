@@ -6,7 +6,7 @@ SELECT
 	,wcl.code::integer AS logbook_category
 	,wcl.label1::text AS logbook_category_name 
 	,s.code3l::text AS specie_code3l
-	,sum(ec.catchweight)::integer AS catch_weight
+	,sum(ec.catchweight)::numeric AS catch_weight
 FROM
 	public.elementarycatch ec
 	JOIN public.weightcategorylogbook wcl ON (ec.weightcategorylogbook = wcl.topiaid)

@@ -633,7 +633,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           i,
                                           "check if the process 1.2 (raising factor level 2) was successfully applied.\n",
                                           "Switch to next element.\n",
-                                          "\n[trip: ",
+                                          "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
                                           sep = "")
@@ -689,10 +689,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.9
                                                           private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                       current_elementarycatch_tmp)
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 9) {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                              " - Error: logbook category ",
+                                                              current_elementarycatch$.__enclos_env__$private$logbook_category,
+                                                              " not set in the algorithm\n",
+                                                              "[trip: ",
+                                                              current_trip$.__enclos_env__$private$trip_id,
+                                                              ", activity: ",
+                                                              current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                              ", elementarycatch: ",
+                                                              current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                              "]\n",
+                                                              sep = "")
+                                                          stop()
                                                         }
                                                       } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
                                                         if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                         }
                                                       } else {
@@ -716,10 +736,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 9) {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                              " - Error: logbook category ",
+                                                              current_elementarycatch$.__enclos_env__$private$logbook_category,
+                                                              " not set in the algorithm\n",
+                                                              "[trip: ",
+                                                              current_trip$.__enclos_env__$private$trip_id,
+                                                              ", activity: ",
+                                                              current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                              ", elementarycatch: ",
+                                                              current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                              "]\n",
+                                                              sep = "")
+                                                          stop()
                                                         }
                                                       } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
                                                         if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                         }
                                                       } else {
@@ -746,10 +786,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 9) {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                              " - Error: logbook category ",
+                                                              current_elementarycatch$.__enclos_env__$private$logbook_category,
+                                                              " not set in the algorithm\n",
+                                                              "[trip: ",
+                                                              current_trip$.__enclos_env__$private$trip_id,
+                                                              ", activity: ",
+                                                              current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                              ", elementarycatch: ",
+                                                              current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                              "]\n",
+                                                              sep = "")
+                                                          stop()
                                                         }
                                                       } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
                                                         if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                         }
                                                       } else {
@@ -773,10 +833,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 9) {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                              " - Error: logbook category ",
+                                                              current_elementarycatch$.__enclos_env__$private$logbook_category,
+                                                              " not set in the algorithm\n",
+                                                              "[trip: ",
+                                                              current_trip$.__enclos_env__$private$trip_id,
+                                                              ", activity: ",
+                                                              current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                              ", elementarycatch: ",
+                                                              current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                              "]\n",
+                                                              sep = "")
+                                                          stop()
                                                         }
                                                       } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == "SKJ") {
                                                         if (current_elementarycatch$.__enclos_env__$private$logbook_category != 9) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
+                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                        } else {
+                                                          current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                         }
                                                       } else {
@@ -788,7 +868,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Error: algorithm not calculated for the ocean number ",
                                                         ocean_activity,
-                                                        "\n",
+                                                        "\n[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", activity: ",
+                                                        current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$activity_id,
+                                                        "]\n",
                                                         sep = "")
                                                     stop()
                                                   }
@@ -896,22 +980,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       }
                                                     }
                                                   }
-                                                } else {
-                                                  for (v in as.numeric(names(category_9))) {
-                                                    if (current_elementarycatches[[v]]$.__enclos_env__$private$school_type == school_type &
-                                                        current_elementarycatches[[v]]$.__enclos_env__$private$ocean == ocean &
-                                                        current_elementarycatches[[v]]$.__enclos_env__$private$specie_code3l == specie) {
-                                                      current_elementarycatches[[v]]$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                                      current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_rf2
-                                                    }
-                                                  }
                                                 }
-                                              }
-                                            } else {
-                                              for (m in 1:length(current_elementarycatches)) {
-                                                current_elementarycatch <- current_elementarycatches[[m]]
-                                                current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_5
-                                                current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                               }
                                             }
                                           }
@@ -1066,7 +1135,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if (current_activity$.__enclos_env__$private$activity_code %in% c(0, 2, 14)) {
                                               # for a set declared as null set (0), unknown set (2) or pocket capsizing (14)
                                               current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                              if (dim(set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                              if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                       & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                        & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -1111,7 +1181,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             } else if (current_activity$.__enclos_env__$private$activity_code == 1) {
                                               # for a set declared as positive (1)
                                               current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                              if (dim(set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                              if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                       & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                        & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -1184,6 +1255,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # time at sea ----
                             #' @description Process for time at sea calculation (in hours).
                             time_at_sea = function() {
+                              if (is.null(private$data_selected)) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Empty data selected in the R6 object\n",
+                                    " - Process 1.6 (set duration calculation) cancelled\n",
+                                    sep = "")
+                              }
                               for (i in 1:length(private$data_selected)) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

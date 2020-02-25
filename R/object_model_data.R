@@ -521,7 +521,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                  collapse = "\n")
                                      setdurationref_sql_final <- DBI::sqlInterpolate(conn = t3_con,
                                                                               sql = setdurationref_sql,
-                                                                              period = DBI::SQL(paste0(periode_reference,
+                                                                              period = DBI::SQL(paste0(c((dplyr::first(periode_reference,
+                                                                                                                       order_by = periode_reference) - 1)
+                                                                                                         : (dplyr::last(periode_reference,
+                                                                                                                        order_by = periode_reference) + 1)),
                                                                                                        collapse = ", ")),
                                                                               countries = DBI::SQL(paste0("'",
                                                                                                           paste0(countries,
