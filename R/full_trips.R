@@ -2,6 +2,9 @@
 #' @title R6 class full_trips creation
 #' @description Create R6 reference object class full_trips
 #' @importFrom R6 R6Class
+#' @importFrom lubridate year hms dseconds int_length interval days as_date
+#' @importFrom suncalc getSunlightTimes
+#' @importFrom dplyr group_by summarise last first filter ungroup
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = t3:::list_t3,
                           public = list(
@@ -541,7 +544,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Argument \"statut_rf1\" is null for the trip element ",
                                         i,
-                                        ".\nProcess 1.2 inapplicable, switch to next element.\n",
+                                        "\nProcess 1.2 inapplicable, switch to next element\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -631,8 +634,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Warning: rf2 is null for the item ",
                                           i,
-                                          "check if the process 1.2 (raising factor level 2) was successfully applied.\n",
-                                          "Switch to next element.\n",
+                                          "check if the process 1.2 (raising factor level 2) was successfully applied\n",
+                                          "Switch to next element\n",
                                           "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
@@ -866,7 +869,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     }
                                                   } else {
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                        " - Error: algorithm not calculated for the ocean number ",
+                                                        " - Error: algorithm not developed yet for the ocean number ",
                                                         ocean_activity,
                                                         "\n[trip: ",
                                                         current_trip$.__enclos_env__$private$trip_id,
@@ -1046,8 +1049,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                             FUN = function(l) {
                                                                                               if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                    " - Error: argument \"catch_weight_category_corrected\" is null.\n",
-                                                                                                    "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                                                                    " - Error: argument \"catch_weight_category_corrected\" is null\n",
+                                                                                                    "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
                                                                                                     "\n[trip: ",
                                                                                                     current_activity$.__enclos_env__$private$trip_id,
                                                                                                     ", activity: ",
@@ -1154,8 +1157,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               FUN = function(l) {
                                                                                                 if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                      " - Error: argument \"catch_weight_category_corrected\" is null.\n",
-                                                                                                      "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                                                                      " - Error: argument \"catch_weight_category_corrected\" is null\n",
+                                                                                                      "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
                                                                                                       "\n[trip: ",
                                                                                                       current_activity$.__enclos_env__$private$trip_id,
                                                                                                       ", activity: ",
@@ -1169,13 +1172,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
                                                                                                 }
                                                                                               }))
-                                                parameter_a <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                 & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
-                                                parameter_b <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                 & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
-                                                current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                                                          & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                                                           & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "null_set_value"]
                                               }
                                             } else if (current_activity$.__enclos_env__$private$activity_code == 1) {
@@ -1185,7 +1191,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                        & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
+                                                    " - Error: invalid \"set_duration_ref\" argument\n",
                                                     "No correspondance with activity parameters (ocean and/or school type)\n",
                                                     "[trip: ",
                                                     current_trip$.__enclos_env__$private$trip_id,
@@ -1194,43 +1200,57 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     "]\n",
                                                     sep = "")
                                                 stop()
-                                              }
-                                              if (length(current_elementarycatches) != 0) {
-                                                catch_weight_category_corrected <- sum(sapply(X = 1:length(current_elementarycatches),
-                                                                                              FUN = function(l) {
-                                                                                                if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
-                                                                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                      " - Error: argument \"catch_weight_category_corrected\" is null.\n",
-                                                                                                      "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
-                                                                                                      "\n[trip: ",
-                                                                                                      current_activity$.__enclos_env__$private$trip_id,
-                                                                                                      ", activity: ",
-                                                                                                      current_activity$.__enclos_env__$private$activity_id,
-                                                                                                      ", elementarycatch: ",
-                                                                                                      current_elementarycatches[[l]]$.__enclos_env__$private$elementarycatch_id,
-                                                                                                      "]\n",
-                                                                                                      sep = "")
-                                                                                                  stop()
-                                                                                                } else {
-                                                                                                  current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
-                                                                                                }
-                                                                                              }))
-                                                parameter_a <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
-                                                parameter_b <- set_duration_ref[set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
-                                                current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
-                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: set declared as positive but without elementary catch",
-                                                    "\n[trip: ",
-                                                    current_trip$.__enclos_env__$private$trip_id,
-                                                    ", activity: ",
-                                                    current_activity$.__enclos_env__$private$activity_id,
-                                                    "]\n",
-                                                    sep = "")
-                                                stop()
+                                                if (length(current_elementarycatches) != 0) {
+                                                  catch_weight_category_corrected <- sum(sapply(X = 1:length(current_elementarycatches),
+                                                                                                FUN = function(l) {
+                                                                                                  if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
+                                                                                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                                                                        " - Error: argument \"catch_weight_category_corrected\" is null\n",
+                                                                                                        "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
+                                                                                                        "\n[trip: ",
+                                                                                                        current_activity$.__enclos_env__$private$trip_id,
+                                                                                                        ", activity: ",
+                                                                                                        current_activity$.__enclos_env__$private$activity_id,
+                                                                                                        ", elementarycatch: ",
+                                                                                                        current_elementarycatches[[l]]$.__enclos_env__$private$elementarycatch_id,
+                                                                                                        "]\n",
+                                                                                                        sep = "")
+                                                                                                    stop()
+                                                                                                  } else {
+                                                                                                    current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                                  }
+                                                                                                }))
+                                                  parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                  & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
+                                                  parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                  & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
+                                                  current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
+                                                } else {
+                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                      " - Error: set declared as positive but without elementary catch",
+                                                      "\n[trip: ",
+                                                      current_trip$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_activity$.__enclos_env__$private$activity_id,
+                                                      "]\n",
+                                                      sep = "")
+                                                  stop()
+                                                }
                                               }
+                                            } else {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: algorithms not developed yet for the activity code ",
+                                                  current_activity$.__enclos_env__$private$activity_code,
+                                                  "\n[trip: ",
+                                                  current_trip$.__enclos_env__$private$trip_id,
+                                                  ", activity: ",
+                                                  current_activity$.__enclos_env__$private$activity_id,
+                                                  "]\n",
+                                                  sep = "")
+                                              stop()
                                             }
                                           }
                                         }
@@ -1345,164 +1365,200 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # fishing_time ----
-                            fishing_time = function() {
-                              for (i in 1:length(private$data_selected)) {
-                                if (i == 1) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start process 1.7: fishing time calculation\n",
-                                      sep = "")
-                                }
-                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: trip avoided because not associated to a full trip\n",
-                                      "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  next()
-                                } else {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process 1.7 on item ",
-                                      i,
-                                      "\n[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  for (j in 1:length(private$data_selected[[i]])) {
-                                    current_trip <- private$data_selected[[i]][[j]]
-                                    fishing_time <- 0
-                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                      activities_dates <- vector(mode = "list")
-                                      for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
-                                        current_activity_date <- current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date
-                                        activities_dates <- append(activities_dates,
-                                                                   current_activity_date)
-                                      }
-                                      activities_dates <- sort(x = unique(lubridate::date(activities_dates)))
-                                      for (l in activities_dates) {
-                                        fishing_time_tmp <- 0
-                                        current_activities_code <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
-                                                                                 FUN = function(m) {
-                                                                                   if (current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_date == l) {
-                                                                                     current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_code
-                                                                                   } else {
-                                                                                     NA
-                                                                                   }
-                                                                                 }))
-                                        current_activities_code <- current_activities_code[!is.na(current_activities_code)]
-                                        if (any(! current_activities_code %in% c(4, 7, 10, 15, 100))) {
-                                          current_activities_location <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
-                                                                                   FUN = function(n) {
-                                                                                     if (current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_date == l) {
-                                                                                       paste(current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_latitude,
-                                                                                             current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_longitude,
-                                                                                             sep = "_")
+                            #' @description Process for fishing time calculation (in hours).
+                            #' @param sunrise_schema (character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
+                            #' @param sunset_schema (character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
+                            #' @seealso \code{\link{suncalc::getSunlightTimes}}
+                            #' @details
+                            #' Available variables are:
+                            #' \itemize{
+                            #'  \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
+                            #'  \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
+                            #'  \item{"goldenHourEnd"}{morning golden hour (soft light, best time for photography) ends}
+                            #'  \item{"solarNoon"}{solar noon (sun is in the highest position)}
+                            #'  \item{"goldenHour"}{evening golden hour starts}
+                            #'  \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
+                            #'  \item{"sunset"}{sunset (sun disappears below the horizon, evening civil twilight starts)}
+                            #'  \item{"dusk"}{dusk (evening nautical twilight starts)}
+                            #'  \item{"nauticalDusk"}{nautical dusk (evening astronomical twilight starts)}
+                            #'  \item{"night"}{night starts (dark enough for astronomical observations)}
+                            #'  \item{"nadir"}{nadir (darkest moment of the night, sun is in the lowest position)}
+                            #'  \item{"nightEnd"}{night ends (morning astronomical twilight starts)}
+                            #'  \item{"nauticalDawn"}{nautical dawn (morning nautical twilight starts)}
+                            #'  \item{"dawn"}{dawn (morning nautical twilight ends, morning civil twilight starts)}
+                            #' }
+                            fishing_time = function(sunrise_schema = "sunrise",
+                                                    sunset_schema = "sunset") {
+                              if (is.null(private$data_selected)) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Empty data selected in the R6 object\n",
+                                    " - Process 1.7 (fishing time calculation) cancelled\n",
+                                    sep = "")
+                              } else {
+                                for (i in 1:length(private$data_selected)) {
+                                  if (i == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Start process 1.7: fishing time calculation\n",
+                                        sep = "")
+                                  }
+                                  if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: trip avoided because not associated to a full trip\n",
+                                        "[trip: ",
+                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        "]\n",
+                                        sep = "")
+                                    next()
+                                  } else {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Ongoing process 1.7 on item ",
+                                        i,
+                                        "\n[trip: ",
+                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        "]\n",
+                                        sep = "")
+                                    for (j in 1:length(private$data_selected[[i]])) {
+                                      current_trip <- private$data_selected[[i]][[j]]
+                                      fishing_time <- 0
+                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        activities_dates <- vector(mode = "list")
+                                        for (k in 1:length(current_trip$.__enclos_env__$private$activities)) {
+                                          current_activity_date <- current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date
+                                          activities_dates <- append(activities_dates,
+                                                                     current_activity_date)
+                                        }
+                                        activities_dates <- sort(x = unique(lubridate::date(activities_dates)))
+                                        for (l in activities_dates) {
+                                          fishing_time_tmp <- 0
+                                          current_activities_code <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                                   FUN = function(m) {
+                                                                                     if (current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_date == l) {
+                                                                                       current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_code
                                                                                      } else {
                                                                                        NA
                                                                                      }
                                                                                    }))
-                                          current_activities_location <- current_activities_location[!is.na(current_activities_location)]
-                                          latitude_mean <- mean(sapply(X = 1:length(current_activities_location),
-                                                                       FUN = function(o) {
-                                                                         as.numeric(unlist(strsplit(current_activities_location[o],
-                                                                                                    '_'))[1])
-                                                                       }))
-                                          longitude_mean <- mean(sapply(X = 1:length(current_activities_location),
-                                                                        FUN = function(o) {
-                                                                          as.numeric(unlist(strsplit(current_activities_location[o],
-                                                                                                     '_'))[2])
-                                                                        }))
-                                          # sunrise (top edge of the sun appears on the horizon)
-                                          current_sunrise <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
-                                                                                       lat = latitude_mean,
-                                                                                       lon = longitude_mean)$sunrise
-                                          # sunset (sun disappears below the horizon, evening civil twilight starts)
-                                          current_sunset <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
-                                                                                      lat = latitude_mean,
-                                                                                      lon = longitude_mean)$sunset
-                                          fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
-                                                                                                        end = current_sunset)) / 3600
-                                          fishing_time <- fishing_time + fishing_time_tmp
+                                          current_activities_code <- current_activities_code[!is.na(current_activities_code)]
+                                          if (any(! current_activities_code %in% c(4, 7, 10, 15, 100))) {
+                                            current_activities_location <- unique(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                                         FUN = function(n) {
+                                                                                           if (current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_date == l) {
+                                                                                             paste(current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_latitude,
+                                                                                                   current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_longitude,
+                                                                                                   sep = "_")
+                                                                                           } else {
+                                                                                             NA
+                                                                                           }
+                                                                                         }))
+                                            current_activities_location <- current_activities_location[!is.na(current_activities_location)]
+                                            latitude_mean <- mean(sapply(X = 1:length(current_activities_location),
+                                                                         FUN = function(o) {
+                                                                           as.numeric(unlist(strsplit(current_activities_location[o],
+                                                                                                      '_'))[1])
+                                                                         }))
+                                            longitude_mean <- mean(sapply(X = 1:length(current_activities_location),
+                                                                          FUN = function(o) {
+                                                                            as.numeric(unlist(strsplit(current_activities_location[o],
+                                                                                                       '_'))[2])
+                                                                          }))
+                                            current_sunrise <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                                                                         lat = latitude_mean,
+                                                                                         lon = longitude_mean)[[sunrise_schema]]
+                                            current_sunset <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                                                                        lat = latitude_mean,
+                                                                                        lon = longitude_mean)[[sunset_schema]]
+                                            fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
+                                                                                                          end = current_sunset)) / 3600
+                                            fishing_time <- fishing_time + fishing_time_tmp
+                                          }
                                         }
                                       }
+                                      current_trip$.__enclos_env__$private$fishing_time <- fishing_time
                                     }
-                                    current_trip$.__enclos_env__$private$fishing_time <- fishing_time
                                   }
-                                }
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Process 1.7 successfull on item ",
-                                    i,
-                                    "\n[trip: ",
-                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                    "]\n",
-                                    sep = "")
-                                if (i == length(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End process 1.7: fishing time calculation\n",
-                                      sep = "")
-                                }
-                              }
-                            },
-                            # searching_time ----
-                            searching_time = function() {
-                              for (i in 1:length(private$data_selected)) {
-                                if (i == 1) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start process 1.8: searching time calculation\n",
-                                      sep = "")
-                                }
-                                if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: trip avoided because not associated to a full trip\n",
-                                      "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  next()
-                                } else {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process 1.8 on item ",
+                                      " - Process 1.7 successfull on item ",
                                       i,
                                       "\n[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  for (j in 1:length(private$data_selected[[i]])) {
-                                    current_trip <- private$data_selected[[i]][[j]]
-                                    if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                      activities_set_duration <- sum(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
-                                                                            FUN = function(k) {
-                                                                              if (! is.null(current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration)) {
-                                                                                current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration
-                                                                              } else {
-                                                                                0
-                                                                              }
-                                                                            })) / 60
-                                      if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: run fishing time calculation before searching time calculation\n",
-                                            sep = "")
-                                        stop()
-                                      } else {
-                                        searching_time <- current_trip$.__enclos_env__$private$fishing_time - activities_set_duration
-                                      }
-                                    } else {
-                                      searching_time <- 0
-                                    }
-                                    current_trip$.__enclos_env__$private$searching_time <- searching_time
+                                  if (i == length(private$data_selected)) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 1.7: fishing time calculation\n",
+                                        sep = "")
                                   }
                                 }
+                              }
+                            },
+                            # searching_time ----
+                            #' @description Process for searching time calculation (in hours, fishing time minus sets durations).
+                            searching_time = function() {
+                              if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Process 1.8 successfull on item ",
-                                    i,
-                                    "\n[trip: ",
-                                    private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                    "]\n",
+                                    " - Empty data selected in the R6 object\n",
+                                    " - Process 1.8 (fishing time calculation) cancelled\n",
                                     sep = "")
-                                if (i == length(private$data_selected)) {
+                              } else {
+                                for (i in 1:length(private$data_selected)) {
+                                  if (i == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Start process 1.8: searching time calculation\n",
+                                        sep = "")
+                                  }
+                                  if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: trip avoided because not associated to a full trip\n",
+                                        "[trip: ",
+                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        "]\n",
+                                        sep = "")
+                                    next()
+                                  } else {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Ongoing process 1.8 on item ",
+                                        i,
+                                        "\n[trip: ",
+                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        "]\n",
+                                        sep = "")
+                                    for (j in 1:length(private$data_selected[[i]])) {
+                                      current_trip <- private$data_selected[[i]][[j]]
+                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        activities_set_duration <- sum(sapply(X = 1:length(current_trip$.__enclos_env__$private$activities),
+                                                                              FUN = function(k) {
+                                                                                if (! is.null(current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration)) {
+                                                                                  current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration
+                                                                                } else {
+                                                                                  0
+                                                                                }
+                                                                              })) / 60
+                                        if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Error: run process 1. 7 (fishing time calculation) before this process\n",
+                                              sep = "")
+                                          stop()
+                                        } else {
+                                          searching_time <- current_trip$.__enclos_env__$private$fishing_time - activities_set_duration
+                                        }
+                                      } else {
+                                        searching_time <- 0
+                                      }
+                                      current_trip$.__enclos_env__$private$searching_time <- searching_time
+                                    }
+                                  }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End process 1.8: searching time calculation\n",
+                                      " - Process 1.8 successfull on item ",
+                                      i,
+                                      "\n[trip: ",
+                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
                                       sep = "")
+                                  if (i == length(private$data_selected)) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 1.8: searching time calculation\n",
+                                        sep = "")
+                                  }
                                 }
                               }
                             },
@@ -2505,7 +2561,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # path to level 3
+                            # path to level 3 ----
                             path_to_level3 = function() {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3\n",

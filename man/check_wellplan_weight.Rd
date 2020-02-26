@@ -7,8 +7,8 @@
 check_wellplan_weight(wellplan_weight)
 }
 \arguments{
-\item{wellplan_weight}{(numeric) Weight in tonnes filled in the well plan}
+\item{wellplan_weight}{(numeric) Weight in tonnes filled in the well plan.}
 }
 \description{
-Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero
+Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero.
 }

@@ -7,8 +7,8 @@
 check_landing_category_name(landing_category_name)
 }
 \arguments{
-\item{landing_category}{(landing_category_name) Landing category name identification}
+\item{landing_category_name}{(character) Landing category name identification.}
 }
 \description{
-Check if the item "landing_category_name" have one unique class identified as character
+Check if the item "landing_category_name" have one unique class identified as character.
 }

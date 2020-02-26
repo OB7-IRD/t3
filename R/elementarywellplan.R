@@ -5,6 +5,17 @@
 # elementarywellplan ----
 elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                   public = list(
+                                    # initialize ----
+                                    #' @description Initialize function for R6 elementarywellplan class.
+                                    #' @param wellplan_id (character) Wellplan identification.
+                                    #' @param well_id (character) Well identification.
+                                    #' @param activity_id (character) Activity identification.
+                                    #' @param sample_id (character) Sample identification.
+                                    #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                    #' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan.
+                                    #' @param wellplan_number (integer) Well plan number of individus.
+                                    #' @param wellplan_weigth_category_code (integer) Well plan category code identification.
+                                    #' @param wellplan_weigth_category_label (character) Well plan weight category identification.
                                     initialize = function(wellplan_id,
                                                           well_id,
                                                           activity_id,
@@ -15,7 +26,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                                           wellplan_weigth_category_code,
                                                           wellplan_weigth_category_label) {
                                       # attribut "wellplan_id" verification
-                                      t3:::check_trip_id(wellplan_id)
+                                      t3:::check_wellplan_id(wellplan_id)
                                       # attribut "well_id" verification
                                       t3:::check_well_id(well_id)
                                       # attribut "activity_id" verification

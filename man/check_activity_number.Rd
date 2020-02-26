@@ -7,8 +7,8 @@
 check_activity_number(activity_number)
 }
 \arguments{
-\item{activity_number}{(integer) Activity number}
+\item{activity_number}{(integer) Activity number.}
 }
 \description{
-Check if the item "activity_number" have one unique class identified as integer
+Check if the item "activity_number" have one unique class identified as integer.
 }

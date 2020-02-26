@@ -16,6 +16,7 @@ Create R6 reference object class elementarysampleraw
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 elementarysampleraw class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarysampleraw$new(
   trip_id,
@@ -32,6 +33,33 @@ Create R6 reference object class elementarysampleraw
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{well_id}}{(character) Well identification.}
+
+\item{\code{sample_id}}{(character) Sample identification.}
+
+\item{\code{sub_sample_id}}{(integer) Sub sample identification.}
+
+\item{\code{sample_quality}}{(integer) Sample quality identification.}
+
+\item{\code{sample_type}}{(integer) Sample type identification.}
+
+\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+
+\item{\code{length_type}}{(integer) Length type identification, 1 for LD1 and 2 for LF.}
+
+\item{\code{sample_total_count}}{(integer) Sample number of total individus counted.}
+
+\item{\code{sample_number_measured}}{(integer) Sample number of measured individus.}
+
+\item{\code{sample_length_class}}{(integer) Sample length class of measured individus.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

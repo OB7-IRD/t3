@@ -7,8 +7,8 @@
 check_logbook_category_name(logbook_category_name)
 }
 \arguments{
-\item{logbook_category_name}{(character) Logbook category name identification}
+\item{logbook_category_name}{(character) Logbook category name identification.}
 }
 \description{
-Check if the item "logbook_category_name" have one unique class identified as character
+Check if the item "logbook_category_name" have one unique class identified as character.
 }

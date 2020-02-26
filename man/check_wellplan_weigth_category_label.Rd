@@ -7,8 +7,8 @@
 check_wellplan_weigth_category_label(wellplan_weigth_category_label)
 }
 \arguments{
-\item{wellplan_weigth_category_label}{(character) Well plan weight category identification}
+\item{wellplan_weigth_category_label}{(character) Well plan weight category identification.}
 }
 \description{
-Check if the item "wellplan_weigth_category_label" have one unique class identified as character
+Check if the item "wellplan_weigth_category_label" have one unique class identified as character.
 }

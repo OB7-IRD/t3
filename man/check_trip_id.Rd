@@ -4,11 +4,11 @@
 \alias{check_trip_id}
 \title{Attribut "trip_id" verification}
 \usage{
-check_trip_id(trip_id)
+check_trip_id(wellplan_id)
 }
 \arguments{
-\item{trip_id}{(character) Trip identification}
+\item{trip_id}{(character) Trip identification.}
 }
 \description{
-Check if the item "trip_id" have one unique class identified as character
+Check if the item "trip_id" have one unique class identified as character.
 }

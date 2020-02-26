@@ -4,6 +4,16 @@
 #' @importFrom R6 R6Class
 elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                public = list(
+                                 # initialize ----
+                                 #' @description Initialize function for R6 activities class.
+                                 #' @param activity_id (character) Activity identification.
+                                 #' @param elementarycatch_id (character) Elementary catch identification.
+                                 #' @param ocean (integer) Ocean identification.
+                                 #' @param school_type (integer) School type identification.
+                                 #' @param logbook_category (integer) Logbook weight category.
+                                 #' @param logbook_category_name (character) Logbook category name identification.
+                                 #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                 #' @param catch_weight (numeric) Catch weight in tonnes.
                                  initialize = function(activity_id,
                                                        elementarycatch_id,
                                                        ocean,

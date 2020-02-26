@@ -4,10 +4,14 @@
 #' @importFrom R6 R6Class
 list_t3 <- R6Class(classname = "list_t3",
                    public = list(
+                     # initialize ----
+                     #' @description Initialize function for R6 list_t3 class.
                      initialize = function() {
                        private$data <- list()
                      },
                      # attribut(s) name(s) ----
+                     #' @description Function for display item's name(s) attribut.
+                     #' @param attribut (character) Display all names with "all" attribut or specify one.
                      name = function(attribut = "all") {
                        if (attribut == "all") {
                          return(names(private))
@@ -21,6 +25,9 @@ list_t3 <- R6Class(classname = "list_t3",
                        }
                      },
                      # add new element ----
+                     #' @description Function for add new element in specific attribut.
+                     #' @param new_item (all type) Item to add.
+                     #' @param attribut (character) Attribut's name. By default "data".
                      add = function(new_item, attribut = "data") {
                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                            " - Start add new item(s) of class ",
@@ -44,6 +51,9 @@ list_t3 <- R6Class(classname = "list_t3",
                        invisible(self)
                      },
                      # remove element ----
+                     #' @description Function for removed element of specific attribut.
+                     #' @param item_id (numeric) Identification number of item to remove.
+                     #' @param attribut (character) Attribut's name. By default "data".
                      remove = function(item_id, attribut = "data") {
                        if (! attribut %in% names(private)) {
                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -91,6 +101,9 @@ list_t3 <- R6Class(classname = "list_t3",
                        invisible(self)
                      },
                      # view element ----
+                     #' @description Function for display element(s) of specific attribut.
+                     #' @param ... (list) Identification number or name of item(s) to display.
+                     #' @param attribut (character) Attribut's name. By default "data".
                      view = function(..., attribut = "data") {
                        if (! attribut %in% names(private)) {
                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -143,6 +156,8 @@ list_t3 <- R6Class(classname = "list_t3",
                        invisible(self)
                      },
                      # number of element ----
+                     #' @description Function for display number of elements of a specific attribut.
+                     #' @param attribut (character) Attribut's name. By default "data".
                      count = function(attribut = "data") {
                        if (! attribut %in% names(private)) {
                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -154,6 +169,10 @@ list_t3 <- R6Class(classname = "list_t3",
                        }
                      },
                      # extract elements ----
+                     #' @description Function for extract element(s) of a specific attribut.
+                     #' @param attribut_l1 (character) First strate attribut's name. By default "data".
+                     #' @param attribut_l2 (character or NULL) Second strate attribut's name. By default NULL.
+                     #' @param id (integer) Number identification of element in the attribut.
                      extract = function(attribut_l1 = "data", attribut_l2 = NULL, id = NULL) {
                        attributs <- append(attribut_l1, attribut_l2)
                        if (length(class(attributs)) != 1 || class(attributs) != "character") {
@@ -208,7 +227,9 @@ list_t3 <- R6Class(classname = "list_t3",
                        }
                      },
                      # filter element ----
-                     # filter = "arg$trip_id %in% trips_selected"
+                     #' @description Function for select attribut's element(s) by specific filter.
+                     #' @param attribut_l1 (character) First strate attribut's name. By default "data".
+                     #' @param filter (character) Filter by a specific filter (for example "arg$trip_id %in% trips_selected").
                      filter = function(attribut_l1 = "data", filter) {
                        if (length(class(attribut_l1)) != 1 || class(attribut_l1) != "character") {
                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

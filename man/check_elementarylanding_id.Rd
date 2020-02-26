@@ -7,8 +7,8 @@
 check_elementarylanding_id(elementarylanding_id)
 }
 \arguments{
-\item{elementarylanding_id}{(character) Elementary landing identification}
+\item{elementarylanding_id}{(character) Elementary landing identification.}
 }
 \description{
-Check if the item "elementarylanding_id" have one unique class identified as character
+Check if the item "elementarylanding_id" have one unique class identified as character.
 }

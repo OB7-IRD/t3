@@ -7,8 +7,8 @@
 check_wellplan_number(wellplan_number)
 }
 \arguments{
-\item{wellplan_number}{(integer) Well plan number of individus}
+\item{wellplan_number}{(integer) Well plan number of individus.}
 }
 \description{
-Check if the item "wellplan_number" have one unique class identified as integer
+Check if the item "wellplan_number" have one unique class identified as integer.
 }

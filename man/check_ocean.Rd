@@ -7,8 +7,8 @@
 check_ocean(ocean)
 }
 \arguments{
-\item{ocean}{(integer) Ocean identification}
+\item{ocean}{(integer) Ocean identification.}
 }
 \description{
-Check if the item "ocean" is class integer and if all values are 1, 2, 3, 4 or 5
+Check if the item "ocean" is class integer and if all values are 1, 2, 3, 4 or 5.
 }

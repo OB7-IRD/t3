@@ -23,6 +23,7 @@ Create R6 reference object class list_t3
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 list_t3 class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$new()}\if{html}{\out{</div>}}
 }
@@ -31,58 +32,126 @@ Create R6 reference object class list_t3
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-name"></a>}}
 \subsection{Method \code{name()}}{
+Function for display item's name(s) attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$name(attribut = "all")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut}}{(character) Display all names with "all" attribut or specify one.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
 \subsection{Method \code{add()}}{
+Function for add new element in specific attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$add(new_item, attribut = "data")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{new_item}}{(all type) Item to add.}
+
+\item{\code{attribut}}{(character) Attribut's name. By default "data".}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove"></a>}}
 \subsection{Method \code{remove()}}{
+Function for removed element of specific attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$remove(item_id, attribut = "data")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item_id}}{(numeric) Identification number of item to remove.}
+
+\item{\code{attribut}}{(character) Attribut's name. By default "data".}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-view"></a>}}
 \subsection{Method \code{view()}}{
+Function for display element(s) of specific attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$view(..., attribut = "data")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{(list) Identification number or name of item(s) to display.}
+
+\item{\code{attribut}}{(character) Attribut's name. By default "data".}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-count"></a>}}
 \subsection{Method \code{count()}}{
+Function for display number of elements of a specific attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$count(attribut = "data")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut}}{(character) Attribut's name. By default "data".}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-extract"></a>}}
 \subsection{Method \code{extract()}}{
+Function for extract element(s) of a specific attribut.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$extract(attribut_l1 = "data", attribut_l2 = NULL, id = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
+
+\item{\code{attribut_l2}}{(character or NULL) Second strate attribut's name. By default NULL.}
+
+\item{\code{id}}{(integer) Number identification of element in the attribut.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter"></a>}}
 \subsection{Method \code{filter()}}{
+Function for select attribut's element(s) by specific filter.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{list_t3$filter(attribut_l1 = "data", filter)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
+
+\item{\code{filter}}{(character) Filter by a specific filter (for example "arg$trip_id %in% trips_selected").}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

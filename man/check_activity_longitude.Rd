@@ -7,8 +7,8 @@
 check_activity_longitude(activity_longitude)
 }
 \arguments{
-\item{activity_longitude}{(numeric) Longitude, in decimal degree, of the activity}
+\item{activity_longitude}{(numeric) Longitude, in decimal degree, of the activity.}
 }
 \description{
-Check if the item "activity_longitude" have one unique class identified as numeric
+Check if the item "activity_longitude" have one unique class identified as numeric.
 }

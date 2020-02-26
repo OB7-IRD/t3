@@ -7,8 +7,8 @@
 check_school_type(school_type)
 }
 \arguments{
-\item{school_type}{(integer) School type identification}
+\item{school_type}{(integer) School type identification.}
 }
 \description{
-Check if the item "school_type" is class integer and if all values are 1, 2, or 3
+Check if the item "school_type" is class integer and if all values are 1, 2, or 3.
 }

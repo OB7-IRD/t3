@@ -7,8 +7,8 @@
 check_landing_category(landing_category)
 }
 \arguments{
-\item{landing_category}{(integer) Landing category identification}
+\item{landing_category}{(integer) Landing category identification.}
 }
 \description{
-Check if the item "landing_category" have one unique class identified as integer
+Check if the item "landing_category" have one unique class identified as integer.
 }

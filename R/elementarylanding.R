@@ -5,6 +5,14 @@
 #' @importFrom lubridate ymd
 elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                  public = list(
+                                   # initialize ----
+                                   #' @description Initialize function for R6 elementarylanding class.
+                                   #' @param trip_id (character) Trip identification.
+                                   #' @param elementarylanding_id (character) Elementary landing identification.
+                                   #' @param landing_category (integer) Landing category identification.
+                                   #' @param landing_category_name (character) Landing category name identification.
+                                   #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                   #' @param landing_weight (numeric) Landing weight in tonnes.
                                    initialize = function(trip_id,
                                                          elementarylanding_id,
                                                          landing_category,

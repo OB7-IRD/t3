@@ -16,6 +16,7 @@ Create R6 reference object class elementarycatch
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 activities class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarycatch$new(
   activity_id,
@@ -29,6 +30,27 @@ Create R6 reference object class elementarycatch
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{activity_id}}{(character) Activity identification.}
+
+\item{\code{elementarycatch_id}}{(character) Elementary catch identification.}
+
+\item{\code{ocean}}{(integer) Ocean identification.}
+
+\item{\code{school_type}}{(integer) School type identification.}
+
+\item{\code{logbook_category}}{(integer) Logbook weight category.}
+
+\item{\code{logbook_category_name}}{(character) Logbook category name identification.}
+
+\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+
+\item{\code{catch_weight}}{(numeric) Catch weight in tonnes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

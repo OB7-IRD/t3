@@ -7,8 +7,8 @@
 check_sample_quality(sample_quality)
 }
 \arguments{
-\item{sample_quality}{(integer) Sample quality identification}
+\item{sample_quality}{(integer) Sample quality identification.}
 }
 \description{
-Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9
+Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9.
 }

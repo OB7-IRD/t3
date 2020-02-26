@@ -7,8 +7,8 @@
 check_sample_length_class(sample_length_class)
 }
 \arguments{
-\item{sample_length_class}{(integer) Sample length class of measured individus}
+\item{sample_length_class}{(integer) Sample length class of measured individus.}
 }
 \description{
-Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero
+Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero.
 }

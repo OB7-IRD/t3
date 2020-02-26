@@ -5,6 +5,9 @@
 elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                   inherit = t3:::list_t3,
                                   public = list(
+                                    # initialize ----
+                                    #' @description Initialize function for R6 elementarylandings class.
+                                    #' @param ... (empty, list or R6-elementarylanding classes) Nothing, a list of object R6-elementarylanding classes or one object R6-elementarylanding classes.
                                     initialize = function(...) {
                                       arguments <- list(...)
                                       if (nargs() == 0) {
@@ -32,7 +35,9 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                         }
                                       }
                                     },
-                                    # add new elementarylanding
+                                    # add new elementarylanding ----
+                                    #' @description Function for add a new elementarylanding in the object elementarylandings.
+                                    #' @param new_item (list or R6-elementarylanding classes) A list of object R6-elementarylanding classes or one object R6-elementarylanding classes.
                                     add = function(new_item) {
                                       if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                         for (i in length(new_item)) {
@@ -53,7 +58,9 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                         stop()
                                       }
                                     },
-                                    # filter_by_trip ----
+                                    # filter by trip ----
+                                    #' @description Function for filter elementarylandings by trip identification.
+                                    #' @param trip_id (character) Trip identification.
                                     filter_by_trip = function(trip_id) {
                                       current_elementarylandings <- vector(mode = "list")
                                       for (i in 1:length(private[["data"]])) {

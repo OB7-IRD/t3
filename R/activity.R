@@ -3,9 +3,22 @@
 #' @description Create R6 reference object class activity
 #' @importFrom R6 R6Class
 #' @importFrom lubridate ymd
-# activity ----
 activity <- R6::R6Class(classname = "activity",
                         public = list(
+                          # initialize ----
+                          #' @description Initialize function for R6 activities class.
+                          #' @param trip_id (character) Trip identification.
+                          #' @param activity_id (character) Activity identification.
+                          #' @param ocean (integer) Ocean identification.
+                          #' @param activity_date (date) Activity date in format year month day.
+                          #' @param activity_number (integer) Activity number.
+                          #' @param activity_latitude (numeric) Latitude, in decimal degree, of the activity.
+                          #' @param activity_longitude (numeric) Longitude, in decimal degree, of the activity.
+                          #' @param set_count (integer) Number of set associated to the activity.
+                          #' @param school_type (integer) School type identification.
+                          #' @param activity_code (integer) Activity code identification.
+                          #' @param activity_name (character) Activity identification.
+                          #' @param time_at_sea (integer) Time at sea in hours.
                           initialize = function(trip_id,
                                                 activity_id,
                                                 ocean,

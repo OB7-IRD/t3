@@ -7,8 +7,8 @@
 check_sample_total_count(sample_total_count)
 }
 \arguments{
-\item{sample_total_count}{(integer) Sample number of total individus counted}
+\item{sample_total_count}{(integer) Sample number of total individus counted.}
 }
 \description{
-Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero
+Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero.
 }

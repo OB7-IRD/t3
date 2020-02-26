@@ -7,8 +7,8 @@
 check_sample_standardised_length_class_lf(sample_standardised_length_class_lf)
 }
 \arguments{
-\item{sample_standardised_length_class_lf}{(integer) Sample standardised length class length fork of measured individus}
+\item{sample_standardised_length_class_lf}{(integer) Sample standardised length class length fork of measured individus.}
 }
 \description{
-Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero
+Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero.
 }

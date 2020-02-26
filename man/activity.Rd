@@ -16,6 +16,7 @@ Create R6 reference object class activity
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 activities class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{activity$new(
   trip_id,
@@ -33,6 +34,35 @@ Create R6 reference object class activity
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{activity_id}}{(character) Activity identification.}
+
+\item{\code{ocean}}{(integer) Ocean identification.}
+
+\item{\code{activity_date}}{(date) Activity date in format year month day.}
+
+\item{\code{activity_number}}{(integer) Activity number.}
+
+\item{\code{activity_latitude}}{(numeric) Latitude, in decimal degree, of the activity.}
+
+\item{\code{activity_longitude}}{(numeric) Longitude, in decimal degree, of the activity.}
+
+\item{\code{set_count}}{(integer) Number of set associated to the activity.}
+
+\item{\code{school_type}}{(integer) School type identification.}
+
+\item{\code{activity_code}}{(integer) Activity code identification.}
+
+\item{\code{activity_name}}{(character) Activity identification.}
+
+\item{\code{time_at_sea}}{(integer) Time at sea in hours.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

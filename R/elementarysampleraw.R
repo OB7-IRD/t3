@@ -5,6 +5,19 @@
 # elementarysampleraw ----
 elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                    public = list(
+                                     # initialize ----
+                                     #' @description Initialize function for R6 elementarysampleraw class.
+                                     #' @param trip_id (character) Trip identification.
+                                     #' @param well_id (character) Well identification.
+                                     #' @param sample_id (character) Sample identification.
+                                     #' @param sample_quality (integer) Sample quality identification.
+                                     #' @param sub_sample_id (integer) Sub sample identification.
+                                     #' @param sample_type (integer) Sample type identification.
+                                     #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                     #' @param length_type (integer) Length type identification, 1 for LD1 and 2 for LF.
+                                     #' @param sample_total_count (integer) Sample number of total individus counted.
+                                     #' @param sample_number_measured (integer) Sample number of measured individus.
+                                     #' @param sample_length_class (integer) Sample length class of measured individus.
                                      initialize = function(trip_id,
                                                            well_id,
                                                            sample_id,

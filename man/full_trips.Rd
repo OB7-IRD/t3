@@ -6,6 +6,9 @@
 \description{
 Create R6 reference object class full_trips
 }
+\seealso{
+\code{\link{suncalc::getSunlightTimes}}
+}
 \section{Super class}{
 \code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
 }
@@ -176,14 +179,45 @@ Process for time at sea calculation (in hours).
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fishing_time"></a>}}
 \subsection{Method \code{fishing_time()}}{
+Process for fishing time calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(sunrise_schema = "sunrise", sunset_schema = "sunset")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sunrise_schema}}{(character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
+
+\item{\code{sunset_schema}}{(character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Available variables are:
+\itemize{
+ \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
+ \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
+ \item{"goldenHourEnd"}{morning golden hour (soft light, best time for photography) ends}
+ \item{"solarNoon"}{solar noon (sun is in the highest position)}
+ \item{"goldenHour"}{evening golden hour starts}
+ \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
+ \item{"sunset"}{sunset (sun disappears below the horizon, evening civil twilight starts)}
+ \item{"dusk"}{dusk (evening nautical twilight starts)}
+ \item{"nauticalDusk"}{nautical dusk (evening astronomical twilight starts)}
+ \item{"night"}{night starts (dark enough for astronomical observations)}
+ \item{"nadir"}{nadir (darkest moment of the night, sun is in the lowest position)}
+ \item{"nightEnd"}{night ends (morning astronomical twilight starts)}
+ \item{"nauticalDawn"}{nautical dawn (morning nautical twilight starts)}
+ \item{"dawn"}{dawn (morning nautical twilight ends, morning civil twilight starts)}
+}
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-searching_time"></a>}}
 \subsection{Method \code{searching_time()}}{
+Process for searching time calculation (in hours, fishing time minus sets durations).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time()}\if{html}{\out{</div>}}
 }

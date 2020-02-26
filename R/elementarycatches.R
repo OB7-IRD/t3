@@ -5,6 +5,9 @@
 elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                  inherit = t3:::list_t3,
                                  public = list(
+                                   # initialize ----
+                                   #' @description Initialize function for R6 elementarycatches class.
+                                   #' @param ... (empty, list or R6-elementarycatch classes) Nothing, a list of object R6-elementarycatch classes or one object R6-elementarycatch classes.
                                    initialize = function(...) {
                                      arguments <- list(...)
                                      if (nargs() == 0) {
@@ -32,7 +35,9 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                        }
                                      }
                                    },
-                                   # add new elementarycatches ----
+                                   # add new elementarycatch ----
+                                   #' @description Function for add a new elementarycatch in the object elementarycatches.
+                                   #' @param new_item (list or R6-elementarycatch classes) A list of object R6-elementarycatch classes or one object R6-elementarycatch classes.
                                    add = function(new_item) {
                                      if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                        for (i in length(new_item)) {
@@ -53,7 +58,9 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                        stop()
                                      }
                                    },
-                                   # filter_by_activity ----
+                                   # filter by activity ----
+                                   #' @description Function for filter elementarycatches by activity identification.
+                                   #' @param activity_id (character) Activity identification.
                                    filter_by_activity = function(activity_id) {
                                      current_elementarycatches <- vector(mode = "list")
                                      for (i in 1:length(private[["data"]])) {

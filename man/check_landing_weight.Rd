@@ -7,8 +7,8 @@
 check_landing_weight(landing_weight)
 }
 \arguments{
-\item{landing_weight}{(numeric) Landing weight in tonne}
+\item{landing_weight}{(numeric) Landing weight in tonnes.}
 }
 \description{
-Check if the item "landing_weight" have one unique class identified as numeric
+Check if the item "landing_weight" have one unique class identified as numeric.
 }

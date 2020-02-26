@@ -7,8 +7,8 @@
 check_sample_id(sample_id)
 }
 \arguments{
-\item{sample_id}{(character) Sample identification}
+\item{sample_id}{(character) Sample identification.}
 }
 \description{
-Check if the item "sample_id" have one unique class identified as character
+Check if the item "sample_id" have one unique class identified as character.
 }

@@ -16,6 +16,7 @@ Create R6 reference object class elementarylanding
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 elementarylanding class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarylanding$new(
   trip_id,
@@ -27,6 +28,23 @@ Create R6 reference object class elementarylanding
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{elementarylanding_id}}{(character) Elementary landing identification.}
+
+\item{\code{landing_category}}{(integer) Landing category identification.}
+
+\item{\code{landing_category_name}}{(character) Landing category name identification.}
+
+\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+
+\item{\code{landing_weight}}{(numeric) Landing weight in tonnes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

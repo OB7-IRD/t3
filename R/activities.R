@@ -5,6 +5,9 @@
 activities <- R6::R6Class(classname = "activities",
                                  inherit = t3:::list_t3,
                                  public = list(
+                                   # initialize ----
+                                   #' @description Initialize function for R6 activities class.
+                                   #' @param ... (empty, list or R6-activity classes) Nothing, a list of object R6-activity classes or one object R6-activity classes.
                                    initialize = function(...) {
                                      arguments <- list(...)
                                      if (nargs() == 0) {
@@ -33,6 +36,8 @@ activities <- R6::R6Class(classname = "activities",
                                      }
                                    },
                                    # add new activity ----
+                                   #' @description Function for add a new activity in the object activities.
+                                   #' @param new_item (list or R6-activity classes) A list of object R6-activity classes or one object R6-activity classes.
                                    add = function(new_item) {
                                      if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                        for (i in length(new_item)) {
@@ -54,6 +59,8 @@ activities <- R6::R6Class(classname = "activities",
                                      }
                                    },
                                    # filter_by_trip ----
+                                   #' @description Function for filter activities by trip identification.
+                                   #' @param trip_id (character) Trip identification.
                                    filter_by_trip = function(trip_id) {
                                      current_activities <- vector(mode = "list")
                                      for (i in 1:length(private[["data"]])) {

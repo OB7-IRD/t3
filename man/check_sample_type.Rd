@@ -7,8 +7,8 @@
 check_sample_type(sample_type)
 }
 \arguments{
-\item{sample_type}{(integer) Sample type identification}
+\item{sample_type}{(integer) Sample type identification.}
 }
 \description{
-Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11
+Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11.
 }

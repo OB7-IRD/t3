@@ -7,8 +7,8 @@
 check_set_count(set_count)
 }
 \arguments{
-\item{set_count}{(integer) Number of set associated to the activity}
+\item{set_count}{(integer) Number of set associated to the activity.}
 }
 \description{
-Check if the item "set_count" have one unique class identified as integer and if value are >= 0
+Check if the item "set_count" have one unique class identified as integer and if value are superior or equal to 0
 }

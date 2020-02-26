@@ -7,8 +7,8 @@
 check_activity_id(activity_id)
 }
 \arguments{
-\item{activity_id}{(character) Activity identification}
+\item{activity_id}{(character) Activity identification.}
 }
 \description{
-Check if the item "activity_id" have one unique class identified as character
+Check if the item "activity_id" have one unique class identified as character.
 }

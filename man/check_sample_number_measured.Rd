@@ -7,8 +7,8 @@
 check_sample_number_measured(sample_number_measured)
 }
 \arguments{
-\item{sample_number_measured}{(integer) Sample number of measured individus}
+\item{sample_number_measured}{(integer) Sample number of measured individus.}
 }
 \description{
-Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero
+Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero.
 }

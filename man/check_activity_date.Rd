@@ -7,8 +7,8 @@
 check_activity_date(activity_date, landing_date = NULL)
 }
 \arguments{
-\item{activity_date}{(date) Activity date in format ymd}
+\item{activity_date}{(date) Activity date in format year month day.}
 }
 \description{
-Check if the item "activity_date" is in date format ymd, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)
+Check if the item "activity_date" is in date format year month day, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
 }

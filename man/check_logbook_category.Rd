@@ -7,8 +7,8 @@
 check_logbook_category(logbook_category)
 }
 \arguments{
-\item{logbook_category}{(integer) Logbook weight category}
+\item{logbook_category}{(integer) Logbook weight category.}
 }
 \description{
-Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13
+Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13.
 }

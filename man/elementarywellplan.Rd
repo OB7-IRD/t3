@@ -16,6 +16,7 @@ Create R6 reference object class elementarywellplan
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 elementarywellplan class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{elementarywellplan$new(
   wellplan_id,
@@ -30,6 +31,29 @@ Create R6 reference object class elementarywellplan
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{wellplan_id}}{(character) Wellplan identification.}
+
+\item{\code{well_id}}{(character) Well identification.}
+
+\item{\code{activity_id}}{(character) Activity identification.}
+
+\item{\code{sample_id}}{(character) Sample identification.}
+
+\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+
+\item{\code{wellplan_weight}}{(numeric) Weight in tonnes filled in the well plan.}
+
+\item{\code{wellplan_number}}{(integer) Well plan number of individus.}
+
+\item{\code{wellplan_weigth_category_code}}{(integer) Well plan category code identification.}
+
+\item{\code{wellplan_weigth_category_label}}{(character) Well plan weight category identification.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

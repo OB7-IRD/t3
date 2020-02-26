@@ -1,8 +1,7 @@
 #' @name check_trip_id
 #' @title Attribut "trip_id" verification
-#' @param trip_id (character) Trip identification
-#' @description Check if the item "trip_id" have one unique class identified as character
-# check trip_id ----
+#' @param trip_id (character) Trip identification.
+#' @description Check if the item "trip_id" have one unique class identified as character.
 check_trip_id = function(trip_id) {
   if (length(class(trip_id)) != 1 || class(trip_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -12,11 +11,23 @@ check_trip_id = function(trip_id) {
   }
 }
 
+#' @name check_wellplan_id
+#' @title Attribut "wellplan_id" verification
+#' @param wellplan_id (character) Wellplan identification.
+#' @description Check if the item "wellplan_id" have one unique class identified as character.
+check_trip_id = function(wellplan_id) {
+  if (length(class(wellplan_id)) != 1 || class(wellplan_id) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"wellplan_id\" argument\nclass character expected\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_sample_id
 #' @title Attribut "sample_id" verification
-#' @param sample_id (character) Sample identification
-#' @description Check if the item "sample_id" have one unique class identified as character
-# check sample_id ----
+#' @param sample_id (character) Sample identification.
+#' @description Check if the item "sample_id" have one unique class identified as character.
 check_sample_id = function(sample_id) {
   if (length(class(sample_id)) != 1 || class(sample_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -28,9 +39,8 @@ check_sample_id = function(sample_id) {
 
 #' @name check_well_id
 #' @title Attribut "well_id" verification
-#' @param well_id (character) Well identification
-#' @description Check if the item "well_id" have one unique class identified as character
-# check well_id ----
+#' @param well_id (character) Well identification.
+#' @description Check if the item "well_id" have one unique class identified as character.
 check_well_id = function(well_id) {
   if (length(class(well_id)) != 1 || class(well_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -42,9 +52,8 @@ check_well_id = function(well_id) {
 
 #' @name check_activity_id
 #' @title Attribut "activity_id" verification
-#' @param activity_id (character) Activity identification
-#' @description Check if the item "activity_id" have one unique class identified as character
-# check activity_id ----
+#' @param activity_id (character) Activity identification.
+#' @description Check if the item "activity_id" have one unique class identified as character.
 check_activity_id = function(activity_id) {
   if (length(class(activity_id)) != 1 || class(activity_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -56,9 +65,8 @@ check_activity_id = function(activity_id) {
 
 #' @name check_elementarylanding_id
 #' @title Attribut "elementarylanding_id" verification
-#' @param elementarylanding_id (character) Elementary landing identification
-#' @description Check if the item "elementarylanding_id" have one unique class identified as character
-# check elementarylanding_id ----
+#' @param elementarylanding_id (character) Elementary landing identification.
+#' @description Check if the item "elementarylanding_id" have one unique class identified as character.
 check_elementarylanding_id = function(elementarylanding_id) {
   if (length(class(elementarylanding_id)) != 1 || class(elementarylanding_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -70,9 +78,8 @@ check_elementarylanding_id = function(elementarylanding_id) {
 
 #' @name check_elementarycatch_id
 #' @title Attribut "elementarycatch_id" verification
-#' @param elementarycatch_id (character) Elementary catch identification
-#' @description Check if the item "elementarycatch_id" have one unique class identified as character
-# check elementarycatch_id ----
+#' @param elementarycatch_id (character) Elementary catch identification.
+#' @description Check if the item "elementarycatch_id" have one unique class identified as character.
 check_elementarycatch_id = function(elementarycatch_id) {
   if (length(class(elementarycatch_id)) != 1 || class(elementarycatch_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -84,9 +91,8 @@ check_elementarycatch_id = function(elementarycatch_id) {
 
 #' @name check_sub_sample_id
 #' @title Attribut "sub_sample_id" verification
-#' @param sub_sample_id (integer) Sub sample identification
-#' @description Check if the item "sub_sample_id" have one unique class identified as integer
-# check sub_sample_id ----
+#' @param sub_sample_id (integer) Sub sample identification.
+#' @description Check if the item "sub_sample_id" have one unique class identified as integer.
 check_sub_sample_id = function(sub_sample_id) {
   if (length(class(sub_sample_id)) != 1 || class(sub_sample_id) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -98,9 +104,8 @@ check_sub_sample_id = function(sub_sample_id) {
 
 #' @name check_landing_category
 #' @title Attribut "landing_category" verification
-#' @param landing_category (integer) Landing category identification
-#' @description Check if the item "landing_category" have one unique class identified as integer
-# check landing_category ----
+#' @param landing_category (integer) Landing category identification.
+#' @description Check if the item "landing_category" have one unique class identified as integer.
 check_landing_category = function(landing_category) {
   if (length(class(landing_category)) != 1 || class(landing_category) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -112,9 +117,8 @@ check_landing_category = function(landing_category) {
 
 #' @name check_landing_category_name
 #' @title Attribut "landing_category_name" verification
-#' @param landing_category (landing_category_name) Landing category name identification
-#' @description Check if the item "landing_category_name" have one unique class identified as character
-# check landing_category_name ----
+#' @param landing_category_name (character) Landing category name identification.
+#' @description Check if the item "landing_category_name" have one unique class identified as character.
 check_landing_category_name = function(landing_category_name) {
   if (length(class(landing_category_name)) != 1 || class(landing_category_name) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -146,10 +150,9 @@ check_landing_date = function(landing_date) {
 
 #' @name check_activity_date
 #' @title Attribut "activity_date" verification
-#' @param activity_date (date) Activity date in format ymd
-#' @description Check if the item "activity_date" is in date format ymd, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)
+#' @param activity_date (date) Activity date in format year month day.
+#' @description Check if the item "activity_date" is in date format year month day, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
 #' @importFrom lubridate ymd
-# check activity_date ----
 check_activity_date = function(activity_date, landing_date = NULL) {
   if (is.na(lubridate::ymd(activity_date, quiet = TRUE))) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -262,9 +265,8 @@ check_vessel_id = function(vessel_id) {
 
 #' @name check_activity_number
 #' @title Attribut "activity_number" verification
-#' @param activity_number (integer) Activity number
-#' @description Check if the item "activity_number" have one unique class identified as integer
-# check activity_number ----
+#' @param activity_number (integer) Activity number.
+#' @description Check if the item "activity_number" have one unique class identified as integer.
 check_activity_number = function(activity_number) {
   if (length(class(activity_number)) != 1 || class(activity_number) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -276,9 +278,8 @@ check_activity_number = function(activity_number) {
 
 #' @name check_ocean
 #' @title Attribut "ocean" verification
-#' @param ocean (integer) Ocean identification
-#' @description Check if the item "ocean" is class integer and if all values are 1, 2, 3, 4 or 5
-# check ocean ----
+#' @param ocean (integer) Ocean identification.
+#' @description Check if the item "ocean" is class integer and if all values are 1, 2, 3, 4 or 5.
 check_ocean = function(ocean) {
   if (length(class(ocean)) != 1 || class(ocean) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -295,9 +296,8 @@ check_ocean = function(ocean) {
 
 #' @name check_length_type
 #' @title Attribut "length_type" verification
-#' @param length_type (integer) Length type identification, 1 for LD1 and 2 for LF
-#' @description Check if the item "length_type" is class integer and if all values are 1 or 2
-# check length_type ----
+#' @param length_type (integer) Length type identification, 1 for LD1 and 2 for LF.
+#' @description Check if the item "length_type" is class integer and if all values are 1 or 2.
 check_length_type = function(length_type) {
   if (length(class(length_type)) != 1 || class(length_type) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -314,9 +314,8 @@ check_length_type = function(length_type) {
 
 #' @name check_school_type
 #' @title Attribut "school_type" verification
-#' @param school_type (integer) School type identification
-#' @description Check if the item "school_type" is class integer and if all values are 1, 2, or 3
-# check school_type ----
+#' @param school_type (integer) School type identification.
+#' @description Check if the item "school_type" is class integer and if all values are 1, 2, or 3.
 check_school_type = function(school_type) {
   if (length(class(school_type)) != 1 || class(school_type) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -333,9 +332,8 @@ check_school_type = function(school_type) {
 
 #' @name check_logbook_category
 #' @title Attribut "logbook_category" verification
-#' @param logbook_category (integer) Logbook weight category
-#' @description Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13
-# check logbook_category ----
+#' @param logbook_category (integer) Logbook weight category.
+#' @description Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13.
 check_logbook_category = function(logbook_category) {
   if (length(class(logbook_category)) != 1 || class(logbook_category) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -352,9 +350,8 @@ check_logbook_category = function(logbook_category) {
 
 #' @name check_logbook_category_name
 #' @title Attribut "logbook_category_name" verification
-#' @param logbook_category_name (character) Logbook category name identification
-#' @description Check if the item "logbook_category_name" have one unique class identified as character
-# check logbook_category_name ----
+#' @param logbook_category_name (character) Logbook category name identification.
+#' @description Check if the item "logbook_category_name" have one unique class identified as character.
 check_logbook_category_name = function(logbook_category_name) {
   if (length(class(logbook_category_name)) != 1 || class(logbook_category_name) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -366,9 +363,8 @@ check_logbook_category_name = function(logbook_category_name) {
 
 #' @name check_specie_code3l
 #' @title Attribut "specie_code3l" verification
-#' @param specie_code3l (character) Specie code identification on 3 characters
-#' @description Check if the item "specie_code3l" have one unique class identified as character and 3 characters
-# check specie_code3l ----
+#' @param specie_code3l (character) Specie code identification on 3 characters.
+#' @description Check if the item "specie_code3l" have one unique class identified as character and 3 characters.
 check_specie_code3l = function(specie_code3l) {
   if (length(class(specie_code3l)) != 1 || class(specie_code3l) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -385,8 +381,8 @@ check_specie_code3l = function(specie_code3l) {
 
 #' @name check_activity_name
 #' @title Attribut "activity_name" verification
-#' @param activity_name (character) Activity identification
-#' @description Check if the item "check_activity_name" have one unique class identified as character
+#' @param activity_name (character) Activity identification.
+#' @description Check if the item "check_activity_name" have one unique class identified as character.
 # check activity_name ----
 check_activity_name = function(check_activity_name) {
   if (length(class(check_activity_name)) != 1 || class(check_activity_name) != "character") {
@@ -413,9 +409,8 @@ check_fleet = function(fleet) {
 
 #' @name check_wellplan_weigth_category_label
 #' @title Attribut "wellplan_weigth_category_label" verification
-#' @param wellplan_weigth_category_label (character) Well plan weight category identification
-#' @description Check if the item "wellplan_weigth_category_label" have one unique class identified as character
-# check wellplan_weigth_category_label ----
+#' @param wellplan_weigth_category_label (character) Well plan weight category identification.
+#' @description Check if the item "wellplan_weigth_category_label" have one unique class identified as character.
 check_wellplan_weigth_category_label = function(wellplan_weigth_category_label) {
   if (length(class(wellplan_weigth_category_label)) != 1 || class(wellplan_weigth_category_label) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -427,9 +422,8 @@ check_wellplan_weigth_category_label = function(wellplan_weigth_category_label) 
 
 #' @name check_activity_code
 #' @title Attribut "activity_code" verification
-#' @param activity_code (integer) Activity code identification
-#' @description Check if the item "activity_code" have one unique class identified as integer
-# check activity_code ----
+#' @param activity_code (integer) Activity code identification.
+#' @description Check if the item "activity_code" have one unique class identified as integer.
 check_activity_code = function(activity_code) {
   if (length(class(activity_code)) != 1 || class(activity_code) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -441,9 +435,8 @@ check_activity_code = function(activity_code) {
 
 #' @name check_wellplan_number
 #' @title Attribut "wellplan_number" verification
-#' @param wellplan_number (integer) Well plan number of individus
-#' @description Check if the item "wellplan_number" have one unique class identified as integer
-# check wellplan_number ----
+#' @param wellplan_number (integer) Well plan number of individus.
+#' @description Check if the item "wellplan_number" have one unique class identified as integer.
 check_wellplan_number = function(wellplan_number) {
   if (length(class(wellplan_number)) != 1 || class(wellplan_number) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -455,8 +448,8 @@ check_wellplan_number = function(wellplan_number) {
 
 #' @name check_catch_weight
 #' @title Attribut "catch_weight" verification
-#' @param catch_weight (numeric) Catch weight in tonne
-#' @description Check if the item "catch_weight" have one unique class identified as numeric
+#' @param catch_weight (numeric) Catch weight in tonnes.
+#' @description Check if the item "catch_weight" have one unique class identified as numeric and if values are superior to zero.
 # check catch_weight ----
 check_catch_weight = function(catch_weight) {
   if (length(class(catch_weight)) != 1 || class(catch_weight) != "numeric") {
@@ -550,8 +543,8 @@ check_well_global_weigth = function(well_global_weigth) {
 
 #' @name check_landing_weight
 #' @title Attribut "landing_weight" verification
-#' @param landing_weight (numeric) Landing weight in tonne
-#' @description Check if the item "landing_weight" have one unique class identified as numeric
+#' @param landing_weight (numeric) Landing weight in tonnes.
+#' @description Check if the item "landing_weight" have one unique class identified as numeric.
 # check landing_weight ----
 check_landing_weight = function(landing_weight) {
   if (length(class(landing_weight)) != 1 || class(landing_weight) != "numeric") {
@@ -564,9 +557,8 @@ check_landing_weight = function(landing_weight) {
 
 #' @name check_set_count
 #' @title Attribut "set_count" verification
-#' @param set_count (integer) Number of set associated to the activity
-#' @description Check if the item "set_count" have one unique class identified as integer and if value are >= 0
-# check set_count ----
+#' @param set_count (integer) Number of set associated to the activity.
+#' @description Check if the item "set_count" have one unique class identified as integer and if value are superior or equal to 0
 check_set_count = function(set_count) {
   if (length(class(set_count)) != 1 || class(set_count) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -583,9 +575,8 @@ check_set_count = function(set_count) {
 
 #' @name check_time_at_sea
 #' @title Attribut "time_at_sea" verification
-#' @param time_at_sea (integer) Time at sea in hours
-#' @description Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero
-# check time_at_sea ----
+#' @param time_at_sea (integer) Time at sea in hours.
+#' @description Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero.
 check_time_at_sea = function(time_at_sea) {
   if (length(class(time_at_sea)) != 1 || class(time_at_sea) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -602,9 +593,8 @@ check_time_at_sea = function(time_at_sea) {
 
 #' @name check_sample_total_count
 #' @title Attribut "sample_total_count" verification
-#' @param sample_total_count (integer) Sample number of total individus counted
-#' @description Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero
-# check sample_total_count ----
+#' @param sample_total_count (integer) Sample number of total individus counted.
+#' @description Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_total_count = function(sample_total_count) {
   if (length(class(sample_total_count)) != 1 || class(sample_total_count) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -621,9 +611,8 @@ check_sample_total_count = function(sample_total_count) {
 
 #' @name check_sample_number_measured
 #' @title Attribut "sample_number_measured" verification
-#' @param sample_number_measured (integer) Sample number of measured individus
-#' @description Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero
-# check sample_number_measured ----
+#' @param sample_number_measured (integer) Sample number of measured individus.
+#' @description Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_number_measured = function(sample_number_measured) {
   if (length(class(sample_number_measured)) != 1 || class(sample_number_measured) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -640,9 +629,8 @@ check_sample_number_measured = function(sample_number_measured) {
 
 #' @name check_sample_number_measured_extrapolated_lf
 #' @title Attribut "sample_number_measured_extrapolated_lf" verification
-#' @param sample_number_measured_extrapolated_lf (numeric) Sample number of measured individus extrapolated to all counted individus
-#' @description Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero
-# check sample_number_measured_extrapolated_lf ----
+#' @param sample_number_measured_extrapolated_lf (numeric) Sample number of measured individus extrapolated to all counted individus.
+#' @description Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero.
 check_sample_number_measured_extrapolated_lf = function(sample_number_measured_extrapolated_lf) {
   if (length(class(sample_number_measured_extrapolated_lf)) != 1 || class(sample_number_measured_extrapolated_lf) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -678,9 +666,8 @@ check_sample_number_weighted = function(sample_number_weighted) {
 
 #' @name check_wellplan_weight
 #' @title Attribut "wellplan_weight" verification
-#' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan
-#' @description Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero
-# check wellplan_weight ----
+#' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan.
+#' @description Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero.
 check_wellplan_weight = function(wellplan_weight) {
   if (length(class(wellplan_weight)) != 1 || class(wellplan_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -697,9 +684,8 @@ check_wellplan_weight = function(wellplan_weight) {
 
 #' @name check_sample_length_class
 #' @title Attribut "sample_length_class" verification
-#' @param sample_length_class (integer) Sample length class of measured individus
-#' @description Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero
-# check sample_length_class ----
+#' @param sample_length_class (integer) Sample length class of measured individus.
+#' @description Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_length_class = function(sample_length_class) {
   if (length(class(sample_length_class)) != 1 || class(sample_length_class) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -716,9 +702,8 @@ check_sample_length_class = function(sample_length_class) {
 
 #' @name check_sample_quality
 #' @title Attribut "sample_quality" verification
-#' @param sample_quality (integer) Sample quality identification
-#' @description Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9
-# check sample_quality ----
+#' @param sample_quality (integer) Sample quality identification.
+#' @description Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9.
 check_sample_quality = function(sample_quality) {
   if (length(class(sample_quality)) != 1 || class(sample_quality) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -735,9 +720,8 @@ check_sample_quality = function(sample_quality) {
 
 #' @name check_sample_type
 #' @title Attribut "sample_type" verification
-#' @param sample_type (integer) Sample type identification
-#' @description Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11
-# check sample_type ----
+#' @param sample_type (integer) Sample type identification.
+#' @description Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11.
 check_sample_type = function(sample_type) {
   if (length(class(sample_type)) != 1 || class(sample_type) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -754,9 +738,8 @@ check_sample_type = function(sample_type) {
 
 #' @name check_wellplan_weigth_category_code
 #' @title Attribut "wellplan_weigth_category_code" verification
-#' @param wellplan_weigth_category_code (integer) Well plan category code identification
-#' @description Check if the item "wellplan_weigth_category_code" have one unique class identified as integer and if all values are 1, 2, 8 or 9
-# check wellplan_weigth_category_code ----
+#' @param wellplan_weigth_category_code (integer) Well plan category code identification.
+#' @description Check if the item "wellplan_weigth_category_code" have one unique class identified as integer and if all values are 1, 2, 8 or 9.
 check_wellplan_weigth_category_code = function(wellplan_weigth_category_code) {
   if (length(class(wellplan_weigth_category_code)) != 1 || class(wellplan_weigth_category_code) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -773,9 +756,8 @@ check_wellplan_weigth_category_code = function(wellplan_weigth_category_code) {
 
 #' @name check_sample_standardised_length_class_lf
 #' @title Attribut "sample_standardised_length_class_lf" verification
-#' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus
-#' @description Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero
-# check sample_length_class ----
+#' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus.
+#' @description Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_standardised_length_class_lf = function(sample_standardised_length_class_lf) {
   if (length(class(sample_standardised_length_class_lf)) != 1 || class(sample_standardised_length_class_lf) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -792,9 +774,8 @@ check_sample_standardised_length_class_lf = function(sample_standardised_length_
 
 #' @name check_activity_longitude
 #' @title Attribut "activity_longitude" verification
-#' @param activity_longitude (numeric) Longitude, in decimal degree, of the activity
-#' @description Check if the item "activity_longitude" have one unique class identified as numeric
-# check activity_longitude ----
+#' @param activity_longitude (numeric) Longitude, in decimal degree, of the activity.
+#' @description Check if the item "activity_longitude" have one unique class identified as numeric.
 check_activity_longitude = function(activity_longitude) {
   if (length(class(activity_longitude)) != 1 || class(activity_longitude) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -806,9 +787,8 @@ check_activity_longitude = function(activity_longitude) {
 
 #' @name check_activity_latitude
 #' @title Attribut "activity_latitude" verification
-#' @param activity_latitude (numeric) Latitude, in decimal degree, of the activity
-#' @description Check if the item "activity_latitude" have one unique class identified as numeric
-# check activity_latitude ----
+#' @param activity_latitude (numeric) Latitude, in decimal degree, of the activity.
+#' @description Check if the item "activity_latitude" have one unique class identified as numeric.
 check_activity_latitude = function(activity_latitude) {
   if (length(class(activity_latitude)) != 1 || class(activity_latitude) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

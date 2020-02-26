@@ -7,8 +7,8 @@
 check_well_id(well_id)
 }
 \arguments{
-\item{well_id}{(character) Well identification}
+\item{well_id}{(character) Well identification.}
 }
 \description{
-Check if the item "well_id" have one unique class identified as character
+Check if the item "well_id" have one unique class identified as character.
 }

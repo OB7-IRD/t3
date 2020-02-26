@@ -7,8 +7,8 @@
 check_elementarycatch_id(elementarycatch_id)
 }
 \arguments{
-\item{elementarycatch_id}{(character) Elementary catch identification}
+\item{elementarycatch_id}{(character) Elementary catch identification.}
 }
 \description{
-Check if the item "elementarycatch_id" have one unique class identified as character
+Check if the item "elementarycatch_id" have one unique class identified as character.
 }

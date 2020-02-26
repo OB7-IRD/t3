@@ -7,8 +7,8 @@
 check_specie_code3l(specie_code3l)
 }
 \arguments{
-\item{specie_code3l}{(character) Specie code identification on 3 characters}
+\item{specie_code3l}{(character) Specie code identification on 3 characters.}
 }
 \description{
-Check if the item "specie_code3l" have one unique class identified as character and 3 characters
+Check if the item "specie_code3l" have one unique class identified as character and 3 characters.
 }

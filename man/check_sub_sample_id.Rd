@@ -7,8 +7,8 @@
 check_sub_sample_id(sub_sample_id)
 }
 \arguments{
-\item{sub_sample_id}{(integer) Sub sample identification}
+\item{sub_sample_id}{(integer) Sub sample identification.}
 }
 \description{
-Check if the item "sub_sample_id" have one unique class identified as integer
+Check if the item "sub_sample_id" have one unique class identified as integer.
 }

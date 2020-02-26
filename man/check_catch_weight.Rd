@@ -7,8 +7,8 @@
 check_catch_weight(catch_weight)
 }
 \arguments{
-\item{catch_weight}{(numeric) Catch weight in tonne}
+\item{catch_weight}{(numeric) Catch weight in tonnes.}
 }
 \description{
-Check if the item "catch_weight" have one unique class identified as numeric
+Check if the item "catch_weight" have one unique class identified as numeric and if values are superior to zero.
 }

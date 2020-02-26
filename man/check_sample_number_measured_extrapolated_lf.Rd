@@ -9,8 +9,8 @@ check_sample_number_measured_extrapolated_lf(
 )
 }
 \arguments{
-\item{sample_number_measured_extrapolated_lf}{(numeric) Sample number of measured individus extrapolated to all counted individus}
+\item{sample_number_measured_extrapolated_lf}{(numeric) Sample number of measured individus extrapolated to all counted individus.}
 }
 \description{
-Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero
+Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero.
 }

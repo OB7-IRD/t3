@@ -7,8 +7,8 @@
 check_time_at_sea(time_at_sea)
 }
 \arguments{
-\item{time_at_sea}{(integer) Time at sea in hours}
+\item{time_at_sea}{(integer) Time at sea in hours.}
 }
 \description{
-Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero
+Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero.
 }
