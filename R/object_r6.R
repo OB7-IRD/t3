@@ -24,7 +24,7 @@ object_r6 <- function(class_name, ...) {
                      "$new()")
       object_r6 <- eval(parse(text = expr))
     } else {
-      for (i in 1:length(arguments)) {
+      for (i in seq_len(length.out = length(arguments))) {
         if (i == 1) {
           expr <- paste0("t3:::",
                          class_name,

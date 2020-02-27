@@ -4,7 +4,7 @@
 #' @param log_path (character) Path of the log file.
 #' @return A log file in text format at the location define in the argument "log_path".
 #' @export
-initiate_log_file = function(
+initiate_log_file <- function(
   log_path
 ) {
   # log_path verification ----

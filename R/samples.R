@@ -63,7 +63,7 @@ samples <- R6::R6Class(classname = "samples",
                                    #' @param trip_id (character) Trip identification.
                                    filter_by_trip = function(trip_id) {
                                      current_samples <- vector(mode = "list")
-                                     for (i in 1:length(private[["data"]])) {
+                                     for (i in seq_len(length.out = length(private[["data"]]))) {
                                        current_trip_id <- private[["data"]][[i]][[1]]$.__enclos_env__$private$trip_id
                                        if (trip_id == current_trip_id) {
                                          current_samples <- append(current_samples,

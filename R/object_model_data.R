@@ -38,7 +38,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          sep = "")
                                      trip_data <- unclass(trip_data)
                                      object_trips <- t3::object_r6(class_name = "trips")
-                                     object_trips$add(lapply(1:length(trip_data[[1]]),
+                                     object_trips$add(lapply(seq_len(length.out = length(trip_data[[1]])),
                                                              function(i) {
                                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                    " - Start importation of trip element ",
@@ -95,7 +95,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          sep = "")
                                      activities_data <- unclass(activities_data)
                                      object_activities <- t3::object_r6(class_name = "activities")
-                                     object_activities$add(lapply(1:length(activities_data[[1]]),
+                                     object_activities$add(lapply(seq_len(length.out = length(activities_data[[1]])),
                                                                   function(i) {
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                         " - Start importation of activity element ",
@@ -157,7 +157,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          sep = "")
                                      elementarycatch_data <- unclass(elementarycatch_data)
                                      object_elementarycatches <- t3::object_r6(class_name = "elementarycatches")
-                                     object_elementarycatches$add(lapply(1:length(elementarycatch_data[[1]]),
+                                     object_elementarycatches$add(lapply(seq_len(length.out = length(elementarycatch_data[[1]])),
                                                                          function(i) {
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                " - Start importation of elementary catch element ",
@@ -215,7 +215,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          sep = "")
                                      elementarylanding_data <- unclass(elementarylanding_data)
                                      object_elementarylandings <- t3::object_r6(class_name = "elementarylandings")
-                                     object_elementarylandings$add(lapply(1:length(elementarylanding_data[[1]]),
+                                     object_elementarylandings$add(lapply(seq_len(length.out = length(elementarylanding_data[[1]])),
                                                                           function(i) {
                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Start importation of elementary landing element ",
@@ -308,7 +308,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          if (is.na(well)) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: missing \"well_id\" argument in trip number: ", trip,"\n",
+                                               " - Warning: missing \"well_id\" argument in trip number: ", trip, "\n",
                                                sep = "")
                                            tmp_well <- dplyr::filter(.data = tmp_trip, is.na(well_id))
                                            if (length(unique(tmp_well$sample_id)) != 1) {
@@ -367,7 +367,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            tmp_sample <- dplyr::filter(.data = tmp_well, sample_id == sample)
                                            tmp_sample <- unclass(tmp_sample)
                                            object_well$.__enclos_env__$private$elementarysampleraw <- append(object_well$.__enclos_env__$private$elementarysampleraw,
-                                                                                                             list(lapply(X = 1:length(tmp_sample[[1]]),
+                                                                                                             list(lapply(X = seq_len(length.out = length(tmp_sample[[1]])),
                                                                                                                          FUN = function(i) {
                                                                                                                            t3:::elementarysampleraw$new(trip_id = trip,
                                                                                                                                                         well_id = well,
@@ -399,7 +399,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                sep = "")
                                            tmp_wellplan <- dplyr::filter(.data = wellplan_data, well_id == well)
                                            tmp_wellplan <- unclass(tmp_wellplan)
-                                           object_well$.__enclos_env__$private$wellplan <- lapply(X = 1:length(tmp_wellplan[[1]]),
+                                           object_well$.__enclos_env__$private$wellplan <- lapply(X = seq_len(length.out = length(tmp_wellplan[[1]])),
                                                                                                   FUN = function(j) {
                                                                                                     t3:::elementarywellplan$new(wellplan_id = tmp_wellplan[[1]][j],
                                                                                                                                 well_id = tmp_wellplan[[2]][j],

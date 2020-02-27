@@ -2,7 +2,6 @@
 
 export("%>%")
 export(initiate_log_file)
-export(object_full_trips)
 export(object_r6)
 importFrom(DBI,SQL)
 importFrom(DBI,dbGetQuery)
