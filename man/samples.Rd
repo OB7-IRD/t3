@@ -33,26 +33,50 @@ Create R6 reference object class samples
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 samples class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{samples$new(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{(empty, list or R6-elementarysample classes) Nothing, a list of object R6-elementarysample classes or one object R6-elementarysample classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
 \subsection{Method \code{add()}}{
+Function for add a new elementarysample in the object samples.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{samples$add(new_item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{new_item}}{(list or R6-elementarysample classes) A list of object R6-elementarysample classes or one object R6-elementarysample classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_trip"></a>}}
 \subsection{Method \code{filter_by_trip()}}{
+Function for filter elementarysample by trip identification.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{samples$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -5,6 +5,13 @@
 # well ----
 well <- R6::R6Class(classname = "well",
                     public = list(
+                      # initialize ----
+                      #' @description Initialize function for R6 well class.
+                      #' @param trip_id (character) Trip identification.
+                      #' @param well_id (character) Well identification.
+                      #' @param well_minus10_weigth (integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
+                      #' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
+                      #' @param well_global_weigth (integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
                       initialize = function(trip_id,
                                             well_id,
                                             well_minus10_weigth,

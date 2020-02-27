@@ -5,6 +5,9 @@
 trips <- R6::R6Class(classname = "trips",
                      inherit = t3:::list_t3,
                      public = list(
+                       # initialize ----
+                       #' @description Initialize function for R6 trips class.
+                       #' @param ... (empty, list or R6-trip classes) Nothing, a list of object R6-trip classes or one object R6-trip classes.
                        initialize = function(...) {
                          arguments <- list(...)
                          if (nargs() == 0) {
@@ -32,7 +35,9 @@ trips <- R6::R6Class(classname = "trips",
                            }
                          }
                        },
-                       # add new trip
+                       # add new trip ----
+                       #' @description Function for add a new trip in the object trips
+                       #' @param new_item (list or R6-trip classes) A list of object R6-trip classes or one object R6-trip classes.
                        add = function(new_item) {
                          if (length(class(new_item)) == 1 && class(new_item) == "list") {
                            for (i in length(new_item)) {

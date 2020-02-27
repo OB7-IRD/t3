@@ -5,6 +5,9 @@
 samples <- R6::R6Class(classname = "samples",
                                  inherit = t3:::list_t3,
                                  public = list(
+                                   # initialize ----
+                                   #' @description Initialize function for R6 samples class.
+                                   #' @param ... (empty, list or R6-elementarysample classes) Nothing, a list of object R6-elementarysample classes or one object R6-elementarysample classes.
                                    initialize = function(...) {
                                      arguments <- list(...)
                                      if (nargs() == 0) {
@@ -32,7 +35,9 @@ samples <- R6::R6Class(classname = "samples",
                                        }
                                      }
                                    },
-                                   # add new sample ----
+                                   # add new elementarysample ----
+                                   #' @description Function for add a new elementarysample in the object samples.
+                                   #' @param new_item (list or R6-elementarysample classes) A list of object R6-elementarysample classes or one object R6-elementarysample classes.
                                    add = function(new_item) {
                                      if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                        for (i in length(new_item)) {
@@ -53,7 +58,9 @@ samples <- R6::R6Class(classname = "samples",
                                        stop()
                                      }
                                    },
-                                   # filter_by_trip ----
+                                   # filter by trip ----
+                                   #' @description Function for filter elementarysample by trip identification.
+                                   #' @param trip_id (character) Trip identification.
                                    filter_by_trip = function(trip_id) {
                                      current_samples <- vector(mode = "list")
                                      for (i in 1:length(private[["data"]])) {

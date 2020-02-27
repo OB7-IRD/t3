@@ -33,26 +33,50 @@ Create R6 reference object class wells
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 wells class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{wells$new(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{(empty, list or R6-well classes) Nothing, a list of object R6-well classes or one object R6-well classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
 \subsection{Method \code{add()}}{
+Function for add a new well in the object wells.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{wells$add(new_item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{new_item}}{(list or R6-well classes) A list of object R6-well classes or one object R6-well classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_trip"></a>}}
 \subsection{Method \code{filter_by_trip()}}{
+Function for filter well by trip identification.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{wells$filter_by_trip(trip_id)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

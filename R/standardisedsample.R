@@ -2,9 +2,20 @@
 #' @title R6 class standardisedsample creation
 #' @description Create R6 reference object class standardisedsample
 #' @importFrom R6 R6Class
-# standardisedsample ----
 standardisedsample <- R6::R6Class(classname = "standardisedsample",
                                   public = list(
+                                    # initialize ----
+                                    #' @description Initialize function for R6 standardisedsample class.
+                                    #' @param trip_id (character) Trip identification.
+                                    #' @param well_id (character) Well identification.
+                                    #' @param sample_id (character) Sample identification.
+                                    #' @param sample_quality (integer) Sample quality identification.
+                                    #' @param sample_type (integer) Sample type identification.
+                                    #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                    #' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus.
+                                    #' @param sample_number_measured_extrapolated_lf (numeric) Sample number of measured individus extrapolated to all counted individus.
+                                    #' @param sample_total_count (integer) Sample number of total individus counted.
+                                    #' @param elementarysample (R6-elementarysample) A R6 reference object class elementarysample.
                                     initialize = function(trip_id,
                                                           well_id,
                                                           sample_id,

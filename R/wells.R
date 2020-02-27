@@ -5,6 +5,9 @@
 wells <- R6::R6Class(classname = "wells",
                                  inherit = t3:::list_t3,
                                  public = list(
+                                   # initialize ----
+                                   #' @description Initialize function for R6 wells class.
+                                   #' @param ... (empty, list or R6-well classes) Nothing, a list of object R6-well classes or one object R6-well classes.
                                    initialize = function(...) {
                                      arguments <- list(...)
                                      if (nargs() == 0) {
@@ -33,6 +36,8 @@ wells <- R6::R6Class(classname = "wells",
                                      }
                                    },
                                    # add new well ----
+                                   #' @description Function for add a new well in the object wells.
+                                   #' @param new_item (list or R6-well classes) A list of object R6-well classes or one object R6-well classes.
                                    add = function(new_item) {
                                      if (length(class(new_item)) == 1 && class(new_item) == "list") {
                                        for (i in length(new_item)) {
@@ -53,7 +58,9 @@ wells <- R6::R6Class(classname = "wells",
                                        stop()
                                      }
                                    },
-                                   # filter_by_trip ----
+                                   # filter by trip ----
+                                   #' @description Function for filter well by trip identification.
+                                   #' @param trip_id (character) Trip identification.
                                    filter_by_trip = function(trip_id) {
                                      current_wells <- vector(mode = "list")
                                      for (i in 1:length(private[["data"]])) {

@@ -7,8 +7,8 @@
 check_departure_date(departure_date, landing_date = NULL)
 }
 \arguments{
-\item{departure_date}{(date and hours) Departure date in format ymd_hms}
+\item{departure_date}{(date and hours) Departure date in format year month day hour minute second.}
 }
 \description{
-Check if the item "departure_date" is in date format ymd_hms, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)
+Check if the item "departure_date" is in date format year month day hour minute second, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
 }

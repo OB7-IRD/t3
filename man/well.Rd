@@ -16,6 +16,7 @@ Create R6 reference object class well
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 well class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{well$new(
   trip_id,
@@ -26,6 +27,21 @@ Create R6 reference object class well
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{well_id}}{(character) Well identification.}
+
+\item{\code{well_minus10_weigth}}{(integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).}
+
+\item{\code{well_plus10_weigth}}{(integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
+
+\item{\code{well_global_weigth}}{(integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

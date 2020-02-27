@@ -4,7 +4,7 @@
 \alias{check_trip_id}
 \title{Attribut "trip_id" verification}
 \usage{
-check_trip_id(wellplan_id)
+check_trip_id(trip_id)
 }
 \arguments{
 \item{trip_id}{(character) Trip identification.}

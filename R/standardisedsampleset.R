@@ -2,9 +2,23 @@
 #' @title R6 class standardisedsampleset creation
 #' @description Create R6 reference object class standardisedsampleset
 #' @importFrom R6 R6Class
-# standardisedsampleset ----
 standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                   public = list(
+                                    # initialize ----
+                                    #' @description Initialize function for R6 standardisedsampleset class.
+                                    #' @param trip_id (character) Trip identification.
+                                    #' @param activity_id (character) Activity identification.
+                                    #' @param well_id (character) Well identification.
+                                    #' @param sample_id (character) Sample identification.
+                                    #' @param sample_quality (integer) Sample quality identification.
+                                    #' @param sample_type (integer) Sample type identification.
+                                    #' @param specie_code3l (character) Specie code identification on 3 characters.
+                                    #' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus.
+                                    #' @param sample_number_weighted (numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
+                                    #' @param sample_weigth (numeric) Weight of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * (length class lf ^ coeficient b)
+                                    #' @param sample_weight_unit (numeric or na) Weight of one individu calculated by the length weight relationship: coeficient a * (length class lf ^ coeficient b).
+                                    #' @param sample_category (character) Sample category: -10kg or +10kg.
+                                    #' @param standardisedsample (R6-standardisedsample) A R6 reference object class standardisedsample.
                                     initialize = function(trip_id,
                                                           activity_id,
                                                           well_id,

@@ -7,8 +7,8 @@
 check_sample_number_weighted(sample_number_weighted)
 }
 \arguments{
-\item{sample_number_weighted}{(numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight}
+\item{sample_number_weighted}{(numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.}
 }
 \description{
-Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero
+Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero.
 }

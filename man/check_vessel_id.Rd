@@ -7,8 +7,8 @@
 check_vessel_id(vessel_id)
 }
 \arguments{
-\item{vessel_id}{(integer) Vessel identification}
+\item{vessel_id}{(integer) Vessel identification.}
 }
 \description{
-Check if the item "vessel_id" have one unique class identified as integer
+Check if the item "vessel_id" have one unique class identified as integer.
 }

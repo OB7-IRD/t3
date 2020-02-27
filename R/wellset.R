@@ -5,6 +5,15 @@
 # wellset ----
 wellset <- R6::R6Class(classname = "wellset",
                        public = list(
+                         # initialize ----
+                         #' @description Initialize function for R6 wellset class.
+                         #' @param trip_id (character) Trip identification.
+                         #' @param activity_id (character) Activity identification.
+                         #' @param well_id (character) Well identification.
+                         #' @param sample_id (character) Sample identification.
+                         #' @param weighted_weight (numeric) Set weight weighted by all set in the well(s).
+                         #' @param weighted_weight_minus10 (numeric) Set weight of individuals less than 10 kg (weighted by all set in the well(s))
+                         #' @param weighted_weight_plus10 (numeric) Set weight of individuals plus than 10 kg (weighted by all set in the well(s))
                          initialize = function(trip_id,
                                                activity_id,
                                                well_id,

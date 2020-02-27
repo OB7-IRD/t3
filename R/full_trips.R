@@ -20,7 +20,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               full_trips_tmp <- list()
                               full_trip_warning <- 0
                               i <- 1
-                              while(i <= object_trips$count()) {
+                              while (i <= object_trips$count()) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Start full trips creation\n",
@@ -41,13 +41,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (object_trips$view(j+1)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
                                           full_trips_tmp <- append(full_trips_tmp, object_trips$view(j+1)[[1]])
                                           i = j + 2
-                                          break()
+                                          break ()
                                         }
                                       } else {
                                         full_trip_warning <- 1
                                         full_trips_tmp <- append(full_trips_tmp, object_trips$view(j)[[1]])
                                         i = j + 1
-                                        break()
+                                        break ()
                                       }
                                     }
                                   }

@@ -15,7 +15,7 @@ check_trip_id = function(trip_id) {
 #' @title Attribut "wellplan_id" verification
 #' @param wellplan_id (character) Wellplan identification.
 #' @description Check if the item "wellplan_id" have one unique class identified as character.
-check_trip_id = function(wellplan_id) {
+check_wellplan_id = function(wellplan_id) {
   if (length(class(wellplan_id)) != 1 || class(wellplan_id) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_id\" argument\nclass character expected\n",
@@ -130,10 +130,9 @@ check_landing_category_name = function(landing_category_name) {
 
 #' @name check_landing_date
 #' @title Attribut "landing_date" verification
-#' @param landing_date (date and hours) Landing date in format ymd_hms UTC
-#' @description Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date
+#' @param landing_date (date and hours) Landing date in format ymd_hms UTC.
+#' @description Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date.
 #' @importFrom lubridate ymd
-# check landing_date ----
 check_landing_date = function(landing_date) {
   if (is.na(lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC"))) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -181,14 +180,13 @@ check_activity_date = function(activity_date, landing_date = NULL) {
 
 #' @name check_departure_date
 #' @title Attribut "departure_date" verification
-#' @param departure_date (date and hours) Departure date in format ymd_hms
-#' @description Check if the item "departure_date" is in date format ymd_hms, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)
+#' @param departure_date (date and hours) Departure date in format year month day hour minute second.
+#' @description Check if the item "departure_date" is in date format year month day hour minute second, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
 #' @importFrom lubridate ymd
-# check departure_date ----
 check_departure_date = function(departure_date, landing_date = NULL) {
   if (is.na(lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC"))) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"departure_date\" argument\nAt least one item failed to parse with format ymd_hms\n",
+        " - Error: invalide \"departure_date\" argument\nAt least one item failed to parse with format year month day hour minute second\n",
         sep = "")
     stop()
   } else if (lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC") > as.POSIXct(Sys.time(), tz = "UTC")) {
@@ -199,7 +197,7 @@ check_departure_date = function(departure_date, landing_date = NULL) {
   } else if (! is.null(landing_date)) {
     if (is.na(lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC"))) {
       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format ymd_hms\n",
+          " - Error: invalide \"landing_date\" argument\nat least one item failed to parse with format year month day hour minute second\n",
           sep = "")
       stop()
     } else if (lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC") > lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC")) {
@@ -213,9 +211,8 @@ check_departure_date = function(departure_date, landing_date = NULL) {
 
 #' @name check_logbook_availability
 #' @title Attribut "logbook_availability" verification
-#' @param logbook_availability (integer) Logbook availability value, 1 for available and 0 for not
-#' @description Check if the item "logbook_availability" is class integer and if all values are 1 or 0
-# check logbook_availability ----
+#' @param logbook_availability (integer) Logbook availability value, 1 for available and 0 for not.
+#' @description Check if the item "logbook_availability" is class integer and if all values are 1 or 0.
 check_logbook_availability = function(logbook_availability) {
   if (length(class(logbook_availability)) != 1 || class(logbook_availability) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -232,9 +229,8 @@ check_logbook_availability = function(logbook_availability) {
 
 #' @name check_fish_hold_empty
 #' @title Attribut "fish_hold_empty" verification
-#' @param fish_hold_empty (integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not
-#' @description Check if the item "fish_hold_empty" is class integer and if all values are 1 or 0
-# check fish_hold_empty ----
+#' @param fish_hold_empty (integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
+#' @description Check if the item "fish_hold_empty" is class integer and if all values are 1 or 0.
 check_fish_hold_empty = function(fish_hold_empty) {
   if (length(class(fish_hold_empty)) != 1 || class(fish_hold_empty) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -251,9 +247,8 @@ check_fish_hold_empty = function(fish_hold_empty) {
 
 #' @name check_vessel_id
 #' @title Attribut "vessel_id" verification
-#' @param vessel_id (integer) Vessel identification
-#' @description Check if the item "vessel_id" have one unique class identified as integer
-# check vessel_id ----
+#' @param vessel_id (integer) Vessel identification.
+#' @description Check if the item "vessel_id" have one unique class identified as integer.
 check_vessel_id = function(vessel_id) {
   if (length(class(vessel_id)) != 1 || class(vessel_id) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -383,7 +378,6 @@ check_specie_code3l = function(specie_code3l) {
 #' @title Attribut "activity_name" verification
 #' @param activity_name (character) Activity identification.
 #' @description Check if the item "check_activity_name" have one unique class identified as character.
-# check activity_name ----
 check_activity_name = function(check_activity_name) {
   if (length(class(check_activity_name)) != 1 || class(check_activity_name) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -395,9 +389,8 @@ check_activity_name = function(check_activity_name) {
 
 #' @name check_fleet
 #' @title Attribut "fleet" verification
-#' @param fleet (character) Fleet identification
-#' @description Check if the item "fleet" have one unique class identified as character
-# check fleet ----
+#' @param fleet (character) Fleet identification.
+#' @description Check if the item "fleet" have one unique class identified as character.
 check_fleet = function(fleet) {
   if (length(class(fleet)) != 1 || class(fleet) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -450,7 +443,6 @@ check_wellplan_number = function(wellplan_number) {
 #' @title Attribut "catch_weight" verification
 #' @param catch_weight (numeric) Catch weight in tonnes.
 #' @description Check if the item "catch_weight" have one unique class identified as numeric and if values are superior to zero.
-# check catch_weight ----
 check_catch_weight = function(catch_weight) {
   if (length(class(catch_weight)) != 1 || class(catch_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -467,9 +459,8 @@ check_catch_weight = function(catch_weight) {
 
 #' @name check_well_minus10_weigth
 #' @title Attribut "well_minus10_weigth" verification
-#' @param well_minus10_weigth (integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated)
-#' @description Check if the item "well_minus10_weigth" have one unique class identified as integer and if value are >= 0
-# check well_minus10_weigth ----
+#' @param well_minus10_weigth (integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
+#' @description Check if the item "well_minus10_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_minus10_weigth = function(well_minus10_weigth) {
   if (length(class(well_minus10_weigth)) != 1 || class(well_minus10_weigth) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -486,9 +477,8 @@ check_well_minus10_weigth = function(well_minus10_weigth) {
 
 #' @name check_weighted_weight
 #' @title Attribut "weighted_weight" verification
-#' @param weighted_weight (numeric) Set weight weighted by all set in the well(s)
-#' @description Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0
-# check weighted_weight ----
+#' @param weighted_weight (numeric) Set weight weighted by all set in the well(s).
+#' @description Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0.
 check_weighted_weight = function(weighted_weight) {
   if (length(class(weighted_weight)) != 1 || class(weighted_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -505,9 +495,8 @@ check_weighted_weight = function(weighted_weight) {
 
 #' @name check_well_plus10_weigth
 #' @title Attribut "well_plus10_weigth" verification
-#' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated)
-#' @description Check if the item "well_plus10_weigth" have one unique class identified as integer and if value are >= 0
-# check well_plus10_weigth ----
+#' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
+#' @description Check if the item "well_plus10_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_plus10_weigth = function(well_plus10_weigth) {
   if (length(class(well_plus10_weigth)) != 1 || class(well_plus10_weigth) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -524,9 +513,8 @@ check_well_plus10_weigth = function(well_plus10_weigth) {
 
 #' @name check_well_global_weigth
 #' @title Attribut "well_global_weigth" verification
-#' @param well_global_weigth (integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated)
-#' @description Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0
-# check well_global_weigth ----
+#' @param well_global_weigth (integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
+#' @description Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_global_weigth = function(well_global_weigth) {
   if (length(class(well_global_weigth)) != 1 || class(well_global_weigth) != "integer") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -545,7 +533,6 @@ check_well_global_weigth = function(well_global_weigth) {
 #' @title Attribut "landing_weight" verification
 #' @param landing_weight (numeric) Landing weight in tonnes.
 #' @description Check if the item "landing_weight" have one unique class identified as numeric.
-# check landing_weight ----
 check_landing_weight = function(landing_weight) {
   if (length(class(landing_weight)) != 1 || class(landing_weight) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -647,9 +634,8 @@ check_sample_number_measured_extrapolated_lf = function(sample_number_measured_e
 
 #' @name check_sample_number_weighted
 #' @title Attribut "sample_number_weighted" verification
-#' @param sample_number_weighted (numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight
-#' @description Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero
-# check sample_number_weighted ----
+#' @param sample_number_weighted (numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
+#' @description Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero.
 check_sample_number_weighted = function(sample_number_weighted) {
   if (length(class(sample_number_weighted)) != 1 || class(sample_number_weighted) != "numeric") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

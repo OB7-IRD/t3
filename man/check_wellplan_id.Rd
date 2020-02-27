@@ -2,10 +2,9 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_id}
 \alias{check_wellplan_id}
-\alias{check_trip_id}
 \title{Attribut "wellplan_id" verification}
 \usage{
-check_trip_id(wellplan_id)
+check_wellplan_id(wellplan_id)
 }
 \arguments{
 \item{wellplan_id}{(character) Wellplan identification.}

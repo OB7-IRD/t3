@@ -6,6 +6,15 @@
 # trip ----
 trip <- R6::R6Class(classname = "trip",
                     public = list(
+                      # initialize ----
+                      #' @description Initialize function for R6 trip class.
+                      #' @param trip_id (character) Trip identification.
+                      #' @param fleet (character) Fleet identification.
+                      #' @param landing_date (date and hours) Landing date in format ymd_hms UTC.
+                      #' @param departure_date (date and hours) Departure date in format year month day hour minute second.
+                      #' @param logbook_availability (integer) Logbook availability value, 1 for available and 0 for not.
+                      #' @param fish_hold_empty (integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
+                      #' @param vessel_id (integer) Vessel identification.
                       initialize = function(trip_id,
                                             fleet,
                                             landing_date,

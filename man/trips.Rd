@@ -32,18 +32,34 @@ Create R6 reference object class trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 trips class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trips$new(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{(empty, list or R6-trip classes) Nothing, a list of object R6-trip classes or one object R6-trip classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
 \subsection{Method \code{add()}}{
+Function for add a new trip in the object trips
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trips$add(new_item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{new_item}}{(list or R6-trip classes) A list of object R6-trip classes or one object R6-trip classes.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

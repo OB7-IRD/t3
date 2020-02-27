@@ -7,8 +7,8 @@
 check_weighted_weight(weighted_weight)
 }
 \arguments{
-\item{weighted_weight}{(numeric) Set weight weighted by all set in the well(s)}
+\item{weighted_weight}{(numeric) Set weight weighted by all set in the well(s).}
 }
 \description{
-Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0
+Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0.
 }

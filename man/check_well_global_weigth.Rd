@@ -7,8 +7,8 @@
 check_well_global_weigth(well_global_weigth)
 }
 \arguments{
-\item{well_global_weigth}{(integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated)}
+\item{well_global_weigth}{(integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
 }
 \description{
-Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0
+Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0.
 }

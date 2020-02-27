@@ -63,7 +63,7 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                    #' @param activity_id (character) Activity identification.
                                    filter_by_activity = function(activity_id) {
                                      current_elementarycatches <- vector(mode = "list")
-                                     for (i in 1:length(private[["data"]])) {
+                                     for (i in seq_len(length(private[["data"]]))) {
                                        current_activity_id <- private[["data"]][[i]]$.__enclos_env__$private$activity_id
                                        if (activity_id == current_activity_id) {
                                          current_elementarycatches <- append(current_elementarycatches,

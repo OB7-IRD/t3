@@ -1,9 +1,9 @@
 #' @name object_r6
 #' @title R6 object creation
 #' @description Creation object R6 in relation with R6 reference object class declared in function argument
-#' @param class_name (character) Name of the R6 reference class
-#' @param ... (empty, list or R6 object) Leave empty if you want to initialise the object or provide one or several item to add in the class
-#' @return A R6 reference object
+#' @param class_name (character) Name of the R6 reference class.
+#' @param ... (empty, list or R6 object) Leave empty if you want to initialise the object or provide one or several item to add in the class.
+#' @return A R6 reference object.
 #' @export
 object_r6 <- function(class_name, ...) {
   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

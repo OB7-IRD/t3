@@ -16,6 +16,7 @@ Create R6 reference object class trip
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 trip class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trip$new(
   trip_id,
@@ -28,6 +29,25 @@ Create R6 reference object class trip
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{fleet}}{(character) Fleet identification.}
+
+\item{\code{landing_date}}{(date and hours) Landing date in format ymd_hms UTC.}
+
+\item{\code{departure_date}}{(date and hours) Departure date in format year month day hour minute second.}
+
+\item{\code{logbook_availability}}{(integer) Logbook availability value, 1 for available and 0 for not.}
+
+\item{\code{fish_hold_empty}}{(integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
+
+\item{\code{vessel_id}}{(integer) Vessel identification.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

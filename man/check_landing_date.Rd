@@ -7,8 +7,8 @@
 check_landing_date(landing_date)
 }
 \arguments{
-\item{landing_date}{(date and hours) Landing date in format ymd_hms UTC}
+\item{landing_date}{(date and hours) Landing date in format ymd_hms UTC.}
 }
 \description{
-Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date
+Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date.
 }

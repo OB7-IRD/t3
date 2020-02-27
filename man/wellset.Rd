@@ -16,6 +16,7 @@ Create R6 reference object class wellset
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Initialize function for R6 wellset class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{wellset$new(
   trip_id,
@@ -28,6 +29,25 @@ Create R6 reference object class wellset
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{trip_id}}{(character) Trip identification.}
+
+\item{\code{activity_id}}{(character) Activity identification.}
+
+\item{\code{well_id}}{(character) Well identification.}
+
+\item{\code{sample_id}}{(character) Sample identification.}
+
+\item{\code{weighted_weight}}{(numeric) Set weight weighted by all set in the well(s).}
+
+\item{\code{weighted_weight_minus10}}{(numeric) Set weight of individuals less than 10 kg (weighted by all set in the well(s))}
+
+\item{\code{weighted_weight_plus10}}{(numeric) Set weight of individuals plus than 10 kg (weighted by all set in the well(s))}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

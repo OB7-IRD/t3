@@ -7,8 +7,8 @@
 check_fleet(fleet)
 }
 \arguments{
-\item{fleet}{(character) Fleet identification}
+\item{fleet}{(character) Fleet identification.}
 }
 \description{
-Check if the item "fleet" have one unique class identified as character
+Check if the item "fleet" have one unique class identified as character.
 }

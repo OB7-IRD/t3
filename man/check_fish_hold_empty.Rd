@@ -7,8 +7,8 @@
 check_fish_hold_empty(fish_hold_empty)
 }
 \arguments{
-\item{fish_hold_empty}{(integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not}
+\item{fish_hold_empty}{(integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
 }
 \description{
-Check if the item "fish_hold_empty" is class integer and if all values are 1 or 0
+Check if the item "fish_hold_empty" is class integer and if all values are 1 or 0.
 }
