@@ -3,6 +3,7 @@ SELECT
 	,el.topiaid::text AS elementarylanding_id
 	,wcla.code::integer AS landing_category
 	,wcla.sovlibelle::text AS landing_category_name
+	,s.code::integer AS specie_code
 	,s.code3l::text AS specie_code3l
 	,sum(el.weight)::numeric AS landing_weight
 FROM
@@ -20,5 +21,6 @@ GROUP BY
 	,elementarylanding_id
 	,landing_category
 	,landing_category_name
+	,specie_code
 	,specie_code3l
 ;

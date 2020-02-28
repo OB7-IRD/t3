@@ -4,7 +4,8 @@ SELECT
 	,o.code::integer AS ocean
 	,st.code::integer AS school_type
 	,wcl.code::integer AS logbook_category
-	,wcl.label1::text AS logbook_category_name 
+	,wcl.label1::text AS logbook_category_name
+	,s.code::integer AS specie_code
 	,s.code3l::text AS specie_code3l
 	,sum(ec.catchweight)::numeric AS catch_weight
 FROM
@@ -28,5 +29,6 @@ GROUP BY
 	,school_type
 	,logbook_category
 	,logbook_category_name
+	,specie_code
 	,specie_code3l
 ;

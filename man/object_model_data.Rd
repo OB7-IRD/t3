@@ -44,7 +44,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activities_object_creation"></a>}}
 \subsection{Method \code{activities_object_creation()}}{
-Creation of a R6 reference object class activities which contain one or more R6 reference object class activity
+Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   periode_reference,
@@ -156,7 +156,7 @@ Creation of a data frame object with parameters of set duration algorithms
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthstep_data"></a>}}
 \subsection{Method \code{lengthstep_data()}}{
-Creation of a data frame object with length ratio between ld1 and lf class
+Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data()}\if{html}{\out{</div>}}
 }
@@ -165,7 +165,7 @@ Creation of a data frame object with length ratio between ld1 and lf class
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sampleset_data"></a>}}
 \subsection{Method \code{sampleset_data()}}{
-Creation of a data frame object with weighted weigth of each set sampled
+Creation of a data frame object with weighted weigth of each set sampled.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$sampleset_data(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
 }
@@ -185,7 +185,7 @@ Creation of a data frame object with weighted weigth of each set sampled
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthweightrelationship_data"></a>}}
 \subsection{Method \code{lengthweightrelationship_data()}}{
-Creation of a data frame object with parameters for length weight relationship
+Creation of a data frame object with parameters for length weight relationship.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data()}\if{html}{\out{</div>}}
 }

@@ -12,6 +12,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  #' @param school_type (integer) School type identification.
                                  #' @param logbook_category (integer) Logbook weight category.
                                  #' @param logbook_category_name (character) Logbook category name identification.
+                                 #' @param specie_code (integer) Specie code identification.
                                  #' @param specie_code3l (character) Specie code identification on 3 characters.
                                  #' @param catch_weight (numeric) Catch weight in tonnes.
                                  initialize = function(activity_id,
@@ -20,6 +21,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        school_type,
                                                        logbook_category,
                                                        logbook_category_name,
+                                                       specie_code,
                                                        specie_code3l,
                                                        catch_weight) {
                                    # attribut "activity_id" verification
@@ -34,6 +36,8 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    t3:::check_logbook_category(logbook_category)
                                    # attribut "logbook_category_name" verification
                                    t3:::check_logbook_category_name(logbook_category_name)
+                                   # attribut "specie_code" verification
+                                   t3:::check_specie_code(specie_code)
                                    # attribut "specie_code3l" verification
                                    t3:::check_specie_code3l(specie_code3l)
                                    # attribut "catch_weight" verification
@@ -45,6 +49,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    private$school_type <- school_type
                                    private$logbook_category <- logbook_category
                                    private$logbook_category_name <- logbook_category_name
+                                   private$specie_code <- specie_code
                                    private$specie_code3l <- specie_code3l
                                    private$catch_weight <- catch_weight
                                  }),
@@ -55,6 +60,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  school_type = NULL,
                                  logbook_category = NULL,
                                  logbook_category_name = NULL,
+                                 specie_code = NULL,
                                  specie_code3l = NULL,
                                  catch_weight = NULL,
                                  catch_weight_rf1 = NULL,

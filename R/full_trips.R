@@ -9,7 +9,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = t3:::list_t3,
                           public = list(
                             # full trips creation ----
-                            #' @description
+                            #' @description Creation of full trip item from trips.
+                            #' @param object_trips (R6-trips) A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
                               if (! any(class(object_trips) == "R6") | ! any(class(object_trips) == "trips")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -55,7 +56,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (full_trip_warning == 1) {
                                     full_trip_warning <- 0
                                     private$id_not_full_trip <- append(private$id_not_full_trip, length(full_trips) + 1)
-                                    warning("missing trip(s) in item ", length(full_trips) + 1,
+                                    warning("missing trip(s) in item ",
+                                            length(full_trips) + 1,
                                             call. = FALSE)
                                   }
                                   full_trips <- append(full_trips, list(full_trips_tmp))
@@ -69,6 +71,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   sep = "")
                             },
                             # filter full trips by periode_reference ----
+                            #' @description Function for filter full trips by a reference periode.
+                            #' @param periode_reference (integer) Year(s) in 4 digits format.
                             filter_by_periode = function(periode_reference) {
                               if (any(class(periode_reference) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -120,6 +124,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # add activities ----
+                            #' @description Function for add activities in full trips object.
+                            #' @param object_activities (R6-activities) A R6 reference object of class activities.
                             add_activities = function(object_activities) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -150,6 +156,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # add elementary catches ----
+                            #' @description Function for add elementary catches in full trips object.
+                            #' @param object_elementarycatches (R6-elementarycatches) A R6 reference object of class elementarycatches.
                             add_elementarycatches = function(object_elementarycatches) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -186,6 +194,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # add elementary landings ----
+                            #' @description Function for add elementary landings in full trips object.
+                            #' @param object_elementarylandings (R6-elementarylandings) A R6 reference object of class elementarylandings.
                             add_elementarylandings = function(object_elementarylandings) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -216,6 +226,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # add wells and samples ----
+                            #' @description Function for add wells and samples caracteristics in full trips object.
+                            #' @param object_wells (R6-wells) A R6 reference object of class wells.
                             add_wells_samples = function(object_wells) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -247,15 +259,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # rf1 ----
                             #' @description Process of Raising Factor level 1 (rf1).
-                            #' @param species_rf1 (character) ISO code on 3 letters related to one or more species.
+                            #' @param species_rf1 (integer) Specie(s) code(s).
                             #' @param rf1_lowest_limit (numeric) Verification value for the lowest limit of the rf1.
                             #' @param rf1_highest_limit (numeric) Verification value for the highest limit of the rf1.
                             rf1 = function(species_rf1,
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2) {
-                              if (any(class(species_rf1) != "character")) {
+                              if (any(class(species_rf1) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"species_rf1\" argument\nclass character expected\n",
+                                    " - Error: invalid \"species_rf1\" argument\nclass integer expected\n",
                                     sep = "")
                                 stop()
                               } else if (length(class(rf1_lowest_limit)) != 1 || class(rf1_lowest_limit) != "numeric") {
@@ -444,7 +456,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         } else {
                                           current_elementarycatches_weight <- vector(mode = "numeric")
                                           for (o in seq_len(length.out = length(current_elementarycatches))) {
-                                            if (current_elementarycatches[[o]]$.__enclos_env__$private$specie_code3l %in% species_rf1) {
+                                            if (current_elementarycatches[[o]]$.__enclos_env__$private$specie_code %in% species_rf1) {
                                               current_elementarycatches_weight <- append(current_elementarycatches_weight,
                                                                                          current_elementarycatches[[o]]$.__enclos_env__$private$catch_weight)
                                             }
@@ -476,7 +488,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             # case 2.4: everything rocks dude !
                                             current_elementarylandings_weight <- vector(mode = "numeric")
                                             for (r in seq_len(length.out = length(current_elementarylandings))) {
-                                              if (current_elementarylandings[[r]]$.__enclos_env__$private$specie_code3l %in% species_rf1) {
+                                              if (current_elementarylandings[[r]]$.__enclos_env__$private$specie_code %in% species_rf1) {
                                                 current_elementarylandings_weight <- append(current_elementarylandings_weight,
                                                                                             current_elementarylandings[[r]]$.__enclos_env__$private$landing_weight)
                                               }
@@ -502,7 +514,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                       # assign rf1 to elementary catches
-                                      for (u in seq_len(length.out = 1:length(private$data_selected[[i]]))) {
+                                      for (u in seq_len(length.out = length(private$data_selected[[i]]))) {
                                         current_trip <- private$data_selected[[i]][[u]]
                                         current_rf1 <- current_trip$.__enclos_env__$private$rf1
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -823,10 +835,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     } else {
                                                       # for floating object school
                                                       if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
-                                                        if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(1, 2, 10)) {
+                                                        if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(1, 2, 10)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l == 4) {
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 4) {
                                                           current_elementarycatch_tmp <- current_elementarycatch$clone()
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_1
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
@@ -834,7 +846,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
                                                           private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                       current_elementarycatch_tmp)
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$specie_code3l %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                        } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                         } else if (current_elementarycatch$.__enclos_env__$private$logbook_category == 9) {
@@ -1369,7 +1381,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for fishing time calculation (in hours).
                             #' @param sunrise_schema (character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema (character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
-                            #' @seealso \code{\link{suncalc::getSunlightTimes}}
                             #' @details
                             #' Available variables are:
                             #' \itemize{
@@ -1564,6 +1575,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # sample_number_measured_extrapolation ----
+                            #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
                             sample_number_measured_extrapolation = function() {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -1651,6 +1663,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # sample_length_class_ld1_to_lf ----
+                            #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
+                            #' @param length_step (data.frame) Data frame object with length ratio between ld1 and lf class.
                             sample_length_class_ld1_to_lf =  function(length_step) {
                               length_step_count <- length_step %>%
                                 dplyr::group_by(ocean, specie_code3l, ld1_class) %>%
@@ -1793,6 +1807,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # sample_length_class_step_standardisation ----
+                            #' @description Process for step standardisation of lf length class.
                             sample_length_class_step_standardisation = function() {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -1873,6 +1888,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 sub_sample_id = current_sample_specie[[w]]$.__enclos_env__$private$sub_sample_id,
                                                                                                 sample_quality = current_sample_specie[[w]]$.__enclos_env__$private$sample_quality,
                                                                                                 sample_type = current_sample_specie[[w]]$.__enclos_env__$private$sample_type,
+                                                                                                specie_code = current_sample_specie[[w]]$.__enclos_env__$private$specie_code,
                                                                                                 specie_code3l = current_sample_specie[[w]]$.__enclos_env__$private$specie_code3l,
                                                                                                 sample_standardised_length_class_lf = current_sample_specie[[w]]$.__enclos_env__$private$sample_length_class_lf,
                                                                                                 sample_number_measured_extrapolated_lf = as.numeric(current_sample_specie[[w]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf),
@@ -1913,6 +1929,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   sub_sample_id = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                   sample_quality = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_quality,
                                                                                                   sample_type = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$sample_type,
+                                                                                                  specie_code = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$specie_code,
                                                                                                   specie_code3l = current_sample_specie_by_step_by_subid[[1]]$.__enclos_env__$private$specie_code3l,
                                                                                                   sample_standardised_length_class_lf = as.integer(lower_border),
                                                                                                   sample_number_measured_extrapolated_lf = sum(sapply(X = seq_len(length.out = length(current_sample_specie_by_step_by_subid)),
@@ -1948,6 +1965,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # well_set_weigth_categories ----
+                            #' @description Process for well set weigth categories definition.
+                            #' @param sample_set (data.frame) Data frame object with weighted weigth of each set sampled.
                             well_set_weigth_categories = function(sample_set) {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -2059,6 +2078,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # standardised_sample_creation ----
+                            #' @description Object standardised sample creation.
                             standardised_sample_creation = function() {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -2092,13 +2112,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (length(current_elementarysamples) != 0) {
                                           current_elementarysamples_species <- unique(sapply(X = seq_len(length.out = length(current_elementarysamples)),
                                                                                              FUN = function(l) {
-                                                                                               current_elementarysamples[[l]]$.__enclos_env__$private$specie_code3l
+                                                                                               paste(current_elementarysamples[[l]]$.__enclos_env__$private$specie_code,
+                                                                                                     current_elementarysamples[[l]]$.__enclos_env__$private$specie_code3l,
+                                                                                                     sep = "_")
                                                                                              }))
                                           for (m in current_elementarysamples_species) {
                                             current_elementarysamples_specie <- Filter(Negate(is.null),
                                                                                        lapply(X = seq_len(length.out = length(current_elementarysamples)),
                                                                                               FUN = function(n) {
-                                                                                                if (current_elementarysamples[[n]]$.__enclos_env__$private$specie_code3l == m) {
+                                                                                                if (current_elementarysamples[[n]]$.__enclos_env__$private$specie_code == as.integer(unlist(strsplit(m, "_"))[1])) {
                                                                                                   current_elementarysamples[[n]]
                                                                                                 }
                                                                                               }))
@@ -2146,7 +2168,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                               })),
                                                                                                     sample_quality = v,
                                                                                                     sample_type = y,
-                                                                                                    specie_code3l = m,
+                                                                                                    specie_code = as.integer(unlist(strsplit(m, "_"))[1]),
+                                                                                                    specie_code3l = unlist(strsplit(m, "_"))[2],
                                                                                                     sample_standardised_length_class_lf = as.integer(p),
                                                                                                     sample_number_measured_extrapolated_lf = sum(sapply(X = seq_len(length.out = length(current_elementarysamples_sample_quality)),
                                                                                                                                                         FUN = function(s) {
@@ -2183,6 +2206,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # standardised_sample_set_creation ----
+                            #' @description R6 object standardised sample set creation.
+                            #' @param length_weight_relationship_data (data.frame) Data frame object with parameters for length weight relationship.
                             standardised_sample_set_creation = function(length_weight_relationship_data) {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -2273,6 +2298,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                        sample_id = current_standardised_samples[[m]]$.__enclos_env__$private$sample_id,
                                                                                                                        sample_quality = current_standardised_samples[[m]]$.__enclos_env__$private$sample_quality,
                                                                                                                        sample_type = current_standardised_samples[[m]]$.__enclos_env__$private$sample_type,
+                                                                                                                       specie_code = current_standardised_samples[[m]]$.__enclos_env__$private$specie_code,
                                                                                                                        specie_code3l = current_standardised_samples[[m]]$.__enclos_env__$private$specie_code3l,
                                                                                                                        sample_standardised_length_class_lf = current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                        sample_number_weighted = current_standardised_samples[[m]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_sets$.__enclos_env__$private$prop_weighted_weight,
@@ -2305,11 +2331,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # raised_factors_determination ----
-                            raised_factors_determination = function(threshold_rf_minus10,
-                                                                    threshold_rf_plus10,
-                                                                    threshold_frequency_rf_minus10,
-                                                                    threshold_frequency_rf_plus10,
-                                                                    threshold_rf_total) {
+                            #' @description Raised factors determination for weigth sample set to set.
+                            #' @param threshold_rf_minus10 (integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.
+                            #' @param threshold_rf_plus10 (integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.
+                            #' @param threshold_frequency_rf_minus10 (integer) Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
+                            #' @param threshold_frequency_rf_plus10 (integer) Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
+                            #' @param threshold_rf_total (integer) Threshold limite value for raising factor (all categories). By default 250.
+                            raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
+                                                                    threshold_rf_plus10 = as.integer(500),
+                                                                    threshold_frequency_rf_minus10 = as.integer(75),
+                                                                    threshold_frequency_rf_plus10 = as.integer(75),
+                                                                    threshold_rf_total = as.integer(250)) {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2463,6 +2495,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # raised standardised sample set ----
+                            #' @description Application of process 2.7 raised factors on standardised sample set.
                             raised_standardised_sample_set = function() {
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
@@ -2563,6 +2596,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # path to level 3 ----
+                            #' @description Temporary link to the R object model with Antoine D. modelisation process.
                             path_to_level3 = function() {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3\n",
@@ -2602,6 +2636,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           tmp_elementarycatch <- data.frame("id_act" = current_elementarycatch$.__enclos_env__$private$activity_id,
                                                                             "w_lb_t3" = current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected,
                                                                             "date_act" = current_activity$.__enclos_env__$private$activity_date,
+                                                                            "sp_code" = current_elementarycatch$.__enclos_env__$private$specie_code,
                                                                             "sp" = current_elementarycatch$.__enclos_env__$private$specie_code3l,
                                                                             "wcat" = current_elementarycatch$.__enclos_env__$private$corrected_logbook_category,
                                                                             "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
@@ -2620,6 +2655,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (n in seq_len(length.out = length(current_standardisedsamplesets))) {
                                           current_standardisedsampleset <- current_standardisedsamplesets[[n]]
                                           tmp_standardisedsampleset <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
+                                                                                  "sp_code" = current_standardisedsampleset$.__enclos_env__$private$specie_code,
                                                                                   "sp" = current_standardisedsampleset$.__enclos_env__$private$specie_code3l,
                                                                                   "wcat" = current_standardisedsampleset$.__enclos_env__$private$sample_category,
                                                                                   "w_fit_t3" = current_standardisedsampleset$.__enclos_env__$private$sample_weigth_set,
@@ -2639,6 +2675,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           tmp_elementarywellplan <- data.frame("id_well" = current_elementarywellplan$.__enclos_env__$private$well_id,
                                                                                "id_act" = current_elementarywellplan$.__enclos_env__$private$activity_id,
                                                                                "id_sample" = current_elementarywellplan$.__enclos_env__$private$sample_id,
+                                                                               "sp_code" = current_elementarywellplan$.__enclos_env__$private$specie_code,
                                                                                "code3l" = current_elementarywellplan$.__enclos_env__$private$specie_code3l,
                                                                                "weight" = current_elementarywellplan$.__enclos_env__$private$wellplan_weight,
                                                                                "wcat_well" = current_elementarywellplan$.__enclos_env__$private$wellplan_weigth_category_label,
@@ -2653,7 +2690,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               inputs_level3[[1]] <- act
                               inputs_level3[[2]] <- act3
                               inputs_level3[[3]] <- data.frame(dplyr::group_by(.data = samw,
-                                                                               id_act, sp, wcat) %>%
+                                                                               id_act, sp_code, sp, wcat) %>%
                                                                  dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
                                                                  dplyr::ungroup())
                               inputs_level3[[4]] <- unique(sset)
@@ -2664,6 +2701,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               inputs_level3 <<- inputs_level3
                             },
                             # browser
+                            #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {
                               browser()
                             }),

@@ -11,6 +11,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     #' @param well_id (character) Well identification.
                                     #' @param activity_id (character) Activity identification.
                                     #' @param sample_id (character) Sample identification.
+                                    #' @param specie_code (integer) Specie code identifiation.
                                     #' @param specie_code3l (character) Specie code identification on 3 characters.
                                     #' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan.
                                     #' @param wellplan_number (integer) Well plan number of individus.
@@ -20,6 +21,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                                           well_id,
                                                           activity_id,
                                                           sample_id,
+                                                          specie_code,
                                                           specie_code3l,
                                                           wellplan_weight,
                                                           wellplan_number,
@@ -33,6 +35,8 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       t3:::check_activity_id(activity_id)
                                       # attribut "sample_id" verification
                                       t3:::check_sample_id(sample_id)
+                                      # attribut "specie_code" verification
+                                      t3:::check_specie_code(specie_code)
                                       # attribut "specie_code3l" verification
                                       t3:::check_specie_code3l(specie_code3l)
                                       # attribut "wellplan_weight" verification
@@ -48,6 +52,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       private$well_id <- well_id
                                       private$activity_id <- activity_id
                                       private$sample_id <- sample_id
+                                      private$specie_code <- specie_code
                                       private$specie_code3l <- specie_code3l
                                       private$wellplan_weight <- wellplan_weight
                                       private$wellplan_number <- wellplan_number
@@ -58,6 +63,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     well_id = NULL,
                                     activity_id = NULL,
                                     sample_id = NULL,
+                                    specie_code = NULL,
                                     specie_code3l = NULL,
                                     wellplan_weight = NULL,
                                     wellplan_number = NULL,

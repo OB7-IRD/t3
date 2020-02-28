@@ -25,6 +25,7 @@ Initialize function for R6 activities class.
   school_type,
   logbook_category,
   logbook_category_name,
+  specie_code,
   specie_code3l,
   catch_weight
 )}\if{html}{\out{</div>}}
@@ -44,6 +45,8 @@ Initialize function for R6 activities class.
 \item{\code{logbook_category}}{(integer) Logbook weight category.}
 
 \item{\code{logbook_category_name}}{(character) Logbook category name identification.}
+
+\item{\code{specie_code}}{(integer) Specie code identification.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 

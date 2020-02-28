@@ -6,9 +6,6 @@
 \description{
 Create R6 reference object class full_trips
 }
-\seealso{
-\code{\link{suncalc::getSunlightTimes}}
-}
 \section{Super class}{
 \code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
 }
@@ -59,50 +56,98 @@ Create R6 reference object class full_trips
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-create_full_trips"></a>}}
 \subsection{Method \code{create_full_trips()}}{
+Creation of full trip item from trips.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$create_full_trips(object_trips)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{object_trips}}{(R6-trips) A R6 reference object of class trips.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_periode"></a>}}
 \subsection{Method \code{filter_by_periode()}}{
+Function for filter full trips by a reference periode.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_periode(periode_reference)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{periode_reference}}{(integer) Year(s) in 4 digits format.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_activities"></a>}}
 \subsection{Method \code{add_activities()}}{
+Function for add activities in full trips object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$add_activities(object_activities)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{object_activities}}{(R6-activities) A R6 reference object of class activities.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_elementarycatches"></a>}}
 \subsection{Method \code{add_elementarycatches()}}{
+Function for add elementary catches in full trips object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarycatches(object_elementarycatches)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{object_elementarycatches}}{(R6-elementarycatches) A R6 reference object of class elementarycatches.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_elementarylandings"></a>}}
 \subsection{Method \code{add_elementarylandings()}}{
+Function for add elementary landings in full trips object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarylandings(object_elementarylandings)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{object_elementarylandings}}{(R6-elementarylandings) A R6 reference object of class elementarylandings.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_wells_samples"></a>}}
 \subsection{Method \code{add_wells_samples()}}{
+Function for add wells and samples caracteristics in full trips object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$add_wells_samples(object_wells)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{object_wells}}{(R6-wells) A R6 reference object of class wells.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rf1"></a>}}
@@ -115,7 +160,7 @@ Process of Raising Factor level 1 (rf1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{(character) ISO code on 3 letters related to one or more species.}
+\item{\code{species_rf1}}{(integer) Specie(s) code(s).}
 
 \item{\code{rf1_lowest_limit}}{(numeric) Verification value for the lowest limit of the rf1.}
 
@@ -226,6 +271,7 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_number_measured_extrapolation"></a>}}
 \subsection{Method \code{sample_number_measured_extrapolation()}}{
+Process for sample number measured individuals extrapolation to sample number individuals counted.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation()}\if{html}{\out{</div>}}
 }
@@ -234,14 +280,23 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_ld1_to_lf"></a>}}
 \subsection{Method \code{sample_length_class_ld1_to_lf()}}{
+Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(length_step)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{length_step}}{(data.frame) Data frame object with length ratio between ld1 and lf class.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_step_standardisation"></a>}}
 \subsection{Method \code{sample_length_class_step_standardisation()}}{
+Process for step standardisation of lf length class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation()}\if{html}{\out{</div>}}
 }
@@ -250,14 +305,23 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-well_set_weigth_categories"></a>}}
 \subsection{Method \code{well_set_weigth_categories()}}{
+Process for well set weigth categories definition.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(sample_set)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sample_set}}{(data.frame) Data frame object with weighted weigth of each set sampled.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardised_sample_creation"></a>}}
 \subsection{Method \code{standardised_sample_creation()}}{
+Object standardised sample creation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation()}\if{html}{\out{</div>}}
 }
@@ -266,28 +330,53 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardised_sample_set_creation"></a>}}
 \subsection{Method \code{standardised_sample_set_creation()}}{
+R6 object standardised sample set creation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(length_weight_relationship_data)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{length_weight_relationship_data}}{(data.frame) Data frame object with parameters for length weight relationship.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raised_factors_determination"></a>}}
 \subsection{Method \code{raised_factors_determination()}}{
+Raised factors determination for weigth sample set to set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_factors_determination(
-  threshold_rf_minus10,
-  threshold_rf_plus10,
-  threshold_frequency_rf_minus10,
-  threshold_frequency_rf_plus10,
-  threshold_rf_total
+  threshold_rf_minus10 = as.integer(500),
+  threshold_rf_plus10 = as.integer(500),
+  threshold_frequency_rf_minus10 = as.integer(75),
+  threshold_frequency_rf_plus10 = as.integer(75),
+  threshold_rf_total = as.integer(250)
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{threshold_rf_minus10}}{(integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.}
+
+\item{\code{threshold_rf_plus10}}{(integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.}
+
+\item{\code{threshold_frequency_rf_minus10}}{(integer) Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
+
+\item{\code{threshold_frequency_rf_plus10}}{(integer) Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
+
+\item{\code{threshold_rf_total}}{(integer) Threshold limite value for raising factor (all categories). By default 250.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raised_standardised_sample_set"></a>}}
 \subsection{Method \code{raised_standardised_sample_set()}}{
+Application of process 2.7 raised factors on standardised sample set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set()}\if{html}{\out{</div>}}
 }
@@ -296,6 +385,7 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-path_to_level3"></a>}}
 \subsection{Method \code{path_to_level3()}}{
+Temporary link to the R object model with Antoine D. modelisation process.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
 }
@@ -304,6 +394,7 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-show_me_what_you_got"></a>}}
 \subsection{Method \code{show_me_what_you_got()}}{
+Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$show_me_what_you_got()}\if{html}{\out{</div>}}
 }

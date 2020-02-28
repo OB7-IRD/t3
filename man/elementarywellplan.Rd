@@ -23,6 +23,7 @@ Initialize function for R6 elementarywellplan class.
   well_id,
   activity_id,
   sample_id,
+  specie_code,
   specie_code3l,
   wellplan_weight,
   wellplan_number,
@@ -41,6 +42,8 @@ Initialize function for R6 elementarywellplan class.
 \item{\code{activity_id}}{(character) Activity identification.}
 
 \item{\code{sample_id}}{(character) Sample identification.}
+
+\item{\code{specie_code}}{(integer) Specie code identifiation.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 

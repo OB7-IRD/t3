@@ -23,6 +23,7 @@ Initialize function for R6 elementarylanding class.
   elementarylanding_id,
   landing_category,
   landing_category_name,
+  specie_code,
   specie_code3l,
   landing_weight
 )}\if{html}{\out{</div>}}
@@ -38,6 +39,8 @@ Initialize function for R6 elementarylanding class.
 \item{\code{landing_category}}{(integer) Landing category identification.}
 
 \item{\code{landing_category_name}}{(character) Landing category name identification.}
+
+\item{\code{specie_code}}{(integer) Specie code identification.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 

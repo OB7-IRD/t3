@@ -25,6 +25,7 @@ Initialize function for R6 elementarysampleraw class.
   sub_sample_id,
   sample_quality,
   sample_type,
+  specie_code,
   specie_code3l,
   length_type,
   sample_total_count,
@@ -47,6 +48,8 @@ Initialize function for R6 elementarysampleraw class.
 \item{\code{sample_quality}}{(integer) Sample quality identification.}
 
 \item{\code{sample_type}}{(integer) Sample type identification.}
+
+\item{\code{specie_code}}{(integer) Specie code identification.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 

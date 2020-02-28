@@ -374,6 +374,24 @@ check_specie_code3l <- function(specie_code3l) {
   }
 }
 
+#' @name check_specie_code
+#' @title Attribut "specie_code" verification
+#' @param specie_code (integer) Specie code identification.
+#' @description Check if the item "specie_code" have one unique class identified as integer and superior to zero.
+check_specie_code <- function(specie_code) {
+  if (length(class(specie_code)) != 1 || class(specie_code) != "integer") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"specie_code\" argument\nclass integer expected\n",
+        sep = "")
+    stop()
+  } else if (specie_code <= 0) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"specie_code\" argument\ninteger expected with value superior to zero\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_activity_name
 #' @title Attribut "activity_name" verification
 #' @param activity_name (character) Activity identification.

@@ -63,7 +63,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                              }))
                                      private$trips <- object_trips
                                    },
-                                   #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity
+                                   #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries.
                                    #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
@@ -172,8 +172,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        school_type = elementarycatch_data[[4]][i],
                                                                                                                        logbook_category = elementarycatch_data[[5]][i],
                                                                                                                        logbook_category_name = elementarycatch_data[[6]][i],
-                                                                                                                       specie_code3l = elementarycatch_data[[7]][i],
-                                                                                                                       catch_weight = elementarycatch_data[[8]][i])
+                                                                                                                       specie_code = elementarycatch_data[[7]][i],
+                                                                                                                       specie_code3l = elementarycatch_data[[8]][i],
+                                                                                                                       catch_weight = elementarycatch_data[[9]][i])
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                " - Successful importation of elementary catch element ",
                                                                                i,
@@ -228,8 +229,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             elementarylanding_id = elementarylanding_data[[2]][i],
                                                                                                                             landing_category = elementarylanding_data[[3]][i],
                                                                                                                             landing_category_name = elementarylanding_data[[4]][i],
-                                                                                                                            specie_code3l = elementarylanding_data[[5]][i],
-                                                                                                                            landing_weight = elementarylanding_data[[6]][i])
+                                                                                                                            specie_code = elementarylanding_data[[5]][i],
+                                                                                                                            specie_code3l = elementarylanding_data[[6]][i],
+                                                                                                                            landing_weight = elementarylanding_data[[7]][i])
                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Successful importation of elementary landing element ",
                                                                                 i,
@@ -375,11 +377,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                         sub_sample_id = tmp_sample[[7]][i],
                                                                                                                                                         sample_quality = tmp_sample[[8]][i],
                                                                                                                                                         sample_type = tmp_sample[[9]][i],
-                                                                                                                                                        specie_code3l = tmp_sample[[10]][i],
-                                                                                                                                                        length_type = tmp_sample[[11]][i],
-                                                                                                                                                        sample_total_count = tmp_sample[[12]][i],
-                                                                                                                                                        sample_number_measured = tmp_sample[[13]][i],
-                                                                                                                                                        sample_length_class = tmp_sample[[14]][i])
+                                                                                                                                                        specie_code = tmp_sample[[10]][i],
+                                                                                                                                                        specie_code3l = tmp_sample[[11]][i],
+                                                                                                                                                        length_type = tmp_sample[[12]][i],
+                                                                                                                                                        sample_total_count = tmp_sample[[13]][i],
+                                                                                                                                                        sample_number_measured = tmp_sample[[14]][i],
+                                                                                                                                                        sample_length_class = tmp_sample[[15]][i])
                                                                                                                          })))
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Successful importation of sample data item ",
@@ -405,11 +408,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 well_id = tmp_wellplan[[2]][j],
                                                                                                                                 activity_id = tmp_wellplan[[3]][j],
                                                                                                                                 sample_id = tmp_wellplan[[4]][j],
-                                                                                                                                specie_code3l = tmp_wellplan[[5]][j],
-                                                                                                                                wellplan_weight = tmp_wellplan[[6]][j],
-                                                                                                                                wellplan_number = tmp_wellplan[[7]][j],
-                                                                                                                                wellplan_weigth_category_code = tmp_wellplan[[8]][j],
-                                                                                                                                wellplan_weigth_category_label = tmp_wellplan[[9]][j])
+                                                                                                                                specie_code = tmp_wellplan[[5]][j],
+                                                                                                                                specie_code3l = tmp_wellplan[[6]][j],
+                                                                                                                                wellplan_weight = tmp_wellplan[[7]][j],
+                                                                                                                                wellplan_number = tmp_wellplan[[8]][j],
+                                                                                                                                wellplan_weigth_category_code = tmp_wellplan[[9]][j],
+                                                                                                                                wellplan_weigth_category_label = tmp_wellplan[[10]][j])
                                                                                                   })
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Sucessful importation of well plan data item ",
@@ -469,7 +473,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful set duration data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   #' @description Creation of a data frame object with length ratio between ld1 and lf class
+                                   #' @description Creation of a data frame object with length ratio between ld1 and lf class.
                                    lengthstep_data = function() {
                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                          " - Start length steps data importation from T3 database\n",
@@ -484,7 +488,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful length steps data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   #' @description Creation of a data frame object with weighted weigth of each set sampled
+                                   #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries.
                                    #' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
@@ -516,7 +520,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          " - Successful sample sets data importation from T3 database\n",
                                          sep = "")
                                    },
-                                   #' @description Creation of a data frame object with parameters for length weight relationship
+                                   #' @description Creation of a data frame object with parameters for length weight relationship.
                                    lengthweightrelationship_data = function() {
                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                          " - Start length weight relationship data importation from T3 database\n",

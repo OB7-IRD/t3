@@ -8,6 +8,7 @@ SELECT
 	,ss.subsamplenumber::integer AS sub_sample_id
 	,sq.code::integer AS sample_quality
 	,st.code::integer AS sample_type
+	,sp.code::integer AS specie_code
 	,sp.code3l::text AS specie_code3l
 	,ss.ldlfflag::integer AS length_type
 	,ss.totalcount::integer AS sample_total_count
@@ -32,7 +33,7 @@ ORDER BY
 	,sample_id
 	,well_id
 	,sub_sample_id
-	,specie_code3l
+	,specie_code
 	,length_type
 	,sample_length_class
 ;

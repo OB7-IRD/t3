@@ -3,6 +3,7 @@ SELECT
 	,wp.well::text AS well_id
 	,wp.activity::text AS activity_id
 	,s.topiaid::text AS sample_id
+	,sp.code::integer AS specie_code
 	,sp.code3l::text AS specie_code3l
 	,wp.weight::numeric AS wellplan_weight
 	,wp.number::integer AS wellplan_number
@@ -26,6 +27,6 @@ ORDER BY
 	,well_id
 	,activity_id
 	,sample_id
-	,specie_code3l
+	,specie_code
 	,wellplan_weigth_category_code
 ;
