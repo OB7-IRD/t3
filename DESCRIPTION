@@ -14,4 +14,9 @@ RoxygenNote: 7.0.2
 URL: https://github.com/OB7-IRD/t3
 BugReports: https://github.com/OB7-IRD/t3/issues
 Imports: 
-    magrittr
+    magrittr (>= 1.5),
+    DBI (>= 1.1.0),
+    R6 (>= 2.4.1),
+    dplyr (>= 0.8.4),
+    lubridate (>= 1.7.4),
+    suncalc (>= 0.5.0)
