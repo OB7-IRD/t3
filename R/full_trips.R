@@ -1699,8 +1699,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 FUN = function(o) {
                                                                   if (length(current_wells[[o]]$.__enclos_env__$private$elementarysampleraw) != 0) {
                                                                     current_wells[[o]]$.__enclos_env__$private$elementarysampleraw
-                                                                  } else {
-                                                                    next()
                                                                   }
                                                                 })
                                       for (k in seq_len(length.out = length(current_well_samples))) {
@@ -1840,8 +1838,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       FUN = function(y) {
                                                                         if (length(current_wells[[y]]$.__enclos_env__$private$elementarysampleraw) != 0) {
                                                                           current_wells[[y]]$.__enclos_env__$private$elementarysampleraw
-                                                                        } else {
-                                                                          next()
                                                                         }
                                                                       })
                                       for (x in seq_len(length.out = length(current_wells_samples))) {

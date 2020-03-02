@@ -1,15 +1,12 @@
-#'@title t3 package
-#'@section Class declaration:
+#'@title Tropical Tunas Treatment (T3)
+#'@description The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
+#'@section R6 objets model creation:
 #'\itemize{
-#' \item{\code{\link{}}}
+#' \item{\code{\link{object_model_data}}}
 #' }
-#'@section Objets creation:
+#'@section Methods:
 #'\itemize{
-#' \item{\code{\link{}}}
-#' }
-#'@section Functions:
-#'\itemize{
-#' \item{\code{\link{}}}
+#' \item{\code{\link{full_trips}}}
 #' }
 #' @keywords internal
 "_PACKAGE"

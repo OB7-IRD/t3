@@ -4,29 +4,21 @@
 \name{t3-package}
 \alias{t3}
 \alias{t3-package}
-\title{t3 package}
+\title{Tropical Tunas Treatment (T3)}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
 }
-\section{Class declaration}{
+\section{R6 objets model creation}{
 
 \itemize{
-\item{\code{\link{}}}
+\item{\code{\link{object_model_data}}}
 }
 }
 
-\section{Objets creation}{
-
-\itemize{
-\item{\code{\link{}}}
-}
-}
-
-\section{Functions}{
+\section{Methods}{
 
 \itemize{
-\item{\code{\link{}}}
+\item{\code{\link{full_trips}}}
 }
 }
 
