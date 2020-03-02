@@ -1,6 +1,6 @@
 #' @name list_t3
 #' @title R6 class list_t3 creation
-#' @description Create R6 reference object class list_t3
+#' @description Create R6 reference object class list_t3.
 #' @importFrom R6 R6Class
 list_t3 <- R6Class(
   classname = "list_t3",
@@ -129,11 +129,10 @@ list_t3 <- R6Class(
     #' @param attribut (character) Attribut's name. By default "data".
     view = function(..., attribut = "data") {
       if (!attribut %in% names(private)) {
-        cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"attribut\" argument\nattribut doesn't exist\n",
-          sep = ""
-        )
+        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+            " - Error: invalid \"attribut\" argument\nattribut doesn't exist\n",
+            sep = ""
+            )
         stop()
       }
       item_id <- list(...)
@@ -150,30 +149,24 @@ list_t3 <- R6Class(
           for (i in seq_len(length.out = length(item_id))) {
             if (length(class(item_id[[i]])) != 1 ||
                 !class(item_id[[i]]) %in% c("numeric", "character", "integer")) {
-              cat(
-                format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                " - Error: invalid \"item_id\" argument\nmore than 1 class or not numeric/character\n",
-                sep = ""
-              )
+              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                  " - Error: invalid \"item_id\" argument\nmore than 1 class or not numeric/character\n",
+                  sep = "")
               stop()
             } else {
               for (j in seq_len(length.out = length(item_id[[i]]))) {
                 if (class(item_id[[i]]) %in% c("numeric", "integer") &&
                     (item_id[[i]][j] <= 0 |
                      item_id[[i]][j] > length(private[[attribut]]))) {
-                  cat(
-                    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                    " - Error: invalid \"item_id\" argument\nsubscript out of bounds\n",
-                    sep = ""
-                  )
+                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                      " - Error: invalid \"item_id\" argument\nsubscript out of bounds\n",
+                      sep = "")
                   stop()
                 } else if (class(item_id[[i]]) %in% c("character") &&
                            !item_id[[i]][j] %in% names(private[[attribut]])) {
-                  cat(
-                    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                    " - Error: invalid \"item_id\" argument\nitem_id not exist in the attribut\n",
-                    sep = ""
-                  )
+                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                      " - Error: invalid \"item_id\" argument\nitem_id not exist in the attribut\n",
+                      sep = "")
                   stop()
                 } else {
                   if (length(private[[attribut]][[item_id[[i]][j]]]) == 1) {
@@ -283,9 +276,10 @@ list_t3 <- R6Class(
       }
     },
     # filter element ----
+    # filter example arg$trip_id %in% trips_selected
     #' @description Function for select attribut's element(s) by specific filter.
     #' @param attribut_l1 (character) First strate attribut's name. By default "data".
-    #' @param filter (character) Filter by a specific filter (for example "arg$trip_id %in% trips_selected").
+    #' @param filter (character) Filter by a specific filter.
     filter = function(attribut_l1 = "data", filter) {
       if (length(class(attribut_l1)) != 1 ||
           class(attribut_l1) != "character") {

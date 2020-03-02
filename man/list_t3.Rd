@@ -4,7 +4,7 @@
 \alias{list_t3}
 \title{R6 class list_t3 creation}
 \description{
-Create R6 reference object class list_t3
+Create R6 reference object class list_t3.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -148,7 +148,7 @@ Function for select attribut's element(s) by specific filter.
 \describe{
 \item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
 
-\item{\code{filter}}{(character) Filter by a specific filter (for example "arg$trip_id %in% trips_selected").}
+\item{\code{filter}}{(character) Filter by a specific filter.}
 }
 \if{html}{\out{</div>}}
 }
