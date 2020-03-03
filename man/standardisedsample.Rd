@@ -24,6 +24,7 @@ Initialize function for R6 standardisedsample class.
   sample_id,
   sample_quality,
   sample_type,
+  specie_code,
   specie_code3l,
   sample_standardised_length_class_lf,
   sample_number_measured_extrapolated_lf,
@@ -44,6 +45,8 @@ Initialize function for R6 standardisedsample class.
 \item{\code{sample_quality}}{(integer) Sample quality identification.}
 
 \item{\code{sample_type}}{(integer) Sample type identification.}
+
+\item{\code{specie_code}}{(integer) Specie code identification.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 

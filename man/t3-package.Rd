@@ -6,7 +6,7 @@
 \alias{t3-package}
 \title{Tropical Tunas Treatment (T3)}
 \description{
-The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
+The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics. The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
 }
 \section{R6 objets model creation}{
 
@@ -31,16 +31,25 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ob7 - Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr}
+\strong{Maintainer}: Ob7 - Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} [copyright holder]
 
 Authors:
 \itemize{
-  \item name_Bob1 surname_bob1 \email{bob1@ird.fr}
+  \item Mathieu Depetris \email{mathieu.depetris@ird.fr}
+  \item Antoine Duparc \email{antoine.duparc@ird.fr}
+  \item Pascal Cauquil \email{pascal.cauquil@ird.fr}
+  \item Laurent Floc'h \email{laurent.floch@ird.fr}
+  \item Julien Lebranchu \email{julien.lebranchu@ird.fr}
+  \item Pascal Bach \email{pascal.bach@ird.fr}
 }
 
 Other contributors:
 \itemize{
-  \item name_Bob2 surname_bob2 \email{bob2@ird.fr} [copyright holder]
+  \item Alain Fonteneau \email{???} [contributor]
+  \item Viveca Fonteneau \email{???} [contributor]
+  \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
+  \item Laurent Dubroca \email{laurent.dubroca@ifremer.fr} [contributor]
+  \item Emmanuel Chassot \email{mchassot@sfa.sc} [contributor]
 }
 
 }

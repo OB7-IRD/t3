@@ -118,7 +118,12 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \subsection{Method \code{wells_object_creation()}}{
 Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(
+  periode_reference,
+  countries,
+  t3_con,
+  sample_type
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -129,6 +134,8 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...).}
 }
 \if{html}{\out{</div>}}
 }
