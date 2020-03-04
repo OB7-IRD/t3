@@ -12,7 +12,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Creation of full trip item from trips.
                             #' @param object_trips (R6-trips) A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
-                              if (! any(class(object_trips) == "R6") | ! any(class(object_trips) == "trips")) {
+                              if (paste(class(object_trips), collapse = " ") != "trips list_t3 R6") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"object_trips\" argument\nClass R6 and trips expected\n",
                                     sep = "")
