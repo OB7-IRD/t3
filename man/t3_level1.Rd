@@ -4,9 +4,19 @@
 \alias{t3_level1}
 \title{T3 process level 1}
 \usage{
-t3_level1(log_file = FALSE, log_path = NULL, log_name = "t3_level1")
+t3_level1(
+  species_rf1,
+  set_duration_ref,
+  log_file = FALSE,
+  log_path = NULL,
+  log_name = "t3_level1"
+)
 }
 \arguments{
+\item{species_rf1}{(integer) Specie(s) code(s) used for the rf1 process.}
+
+\item{set_duration_ref}{(data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).}
+
 \item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
 
 \item{log_path}{(character) Path of the log file directory. By default NULL.}
@@ -17,5 +27,5 @@ t3_level1(log_file = FALSE, log_path = NULL, log_name = "t3_level1")
 The function a R6 reference object of class "object_full_trips".
 }
 \description{
-Level 1 of t3 process (logbook standardisation).
+Level 1 of t3 process (logbooks standardisation).
 }

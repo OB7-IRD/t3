@@ -160,7 +160,7 @@ Process of Raising Factor level 1 (rf1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{(integer) Specie(s) code(s).}
+\item{\code{species_rf1}}{(integer) Specie(s) code(s) used for the rf1 process.}
 
 \item{\code{rf1_lowest_limit}}{(numeric) Verification value for the lowest limit of the rf1.}
 

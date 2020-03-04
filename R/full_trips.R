@@ -266,7 +266,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # rf1 ----
                             #' @description Process of Raising Factor level 1 (rf1).
-                            #' @param species_rf1 (integer) Specie(s) code(s).
+                            #' @param species_rf1 (integer) Specie(s) code(s) used for the rf1 process.
                             #' @param rf1_lowest_limit (numeric) Verification value for the lowest limit of the rf1.
                             #' @param rf1_highest_limit (numeric) Verification value for the highest limit of the rf1.
                             rf1 = function(species_rf1,
