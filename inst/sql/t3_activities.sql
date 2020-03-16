@@ -4,8 +4,8 @@ SELECT
 	,o.code::integer AS ocean
 	,r.date::date AS activity_date
 	,a.number::integer AS activity_number
-	,a.latitude::numeric AS activity_latitude
 	,a.longitude::numeric AS activity_longitude
+	,a.latitude::numeric AS activity_latitude
 	,a.setcount::integer AS set_count
 	,st.code::integer AS school_type
 	,va.code::integer AS activity_code
