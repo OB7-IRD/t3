@@ -35,6 +35,7 @@ Create R6 reference object class full_trips
 \item \href{#method-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
 \item \href{#method-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
 \item \href{#method-path_to_level3}{\code{full_trips$path_to_level3()}}
+\item \href{#method-data_preparatory}{\code{full_trips$data_preparatory()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -390,6 +391,48 @@ Temporary link to the R object model with Antoine D. modelisation process.
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-data_preparatory"></a>}}
+\subsection{Method \code{data_preparatory()}}{
+Data preparatory for the t3 modelling process (level 3).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$data_preparatory(
+  inputs_level3,
+  outputs_directory,
+  periode_reference,
+  targeted_year,
+  distance_maximum = as.integer(5),
+  number_sets_maximum = as.integer(5),
+  set_weight_minimum = as.integer(6),
+  minimum_set_frequency = 0.1,
+  vessel_id_ignored = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inputs_level3}}{(data frame) Imputs of levels 3 (see function path to level 3).}
+
+\item{\code{outputs_directory}}{(character) Path of the t3 processes outputs directory.}
+
+\item{\code{periode_reference}}{(integer) Year(s) period of reference for modelling estimation.}
+
+\item{\code{targeted_year}}{(integer) Targeted year for model estimaton and prediction.}
+
+\item{\code{distance_maximum}}{(integer) Maximum distance between all sets of a sampled well. By default 5.}
+
+\item{\code{number_sets_maximum}}{(integer) Maximum number of sets allowed in mixture. By default 5.}
+
+\item{\code{set_weight_minimum}}{(integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.}
+
+\item{\code{minimum_set_frequency}}{(numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.}
+
+\item{\code{vessel_id_ignored}}{(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-show_me_what_you_got"></a>}}

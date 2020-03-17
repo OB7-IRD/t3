@@ -2771,7 +2771,82 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   sep = "")
                               inputs_level3 <<- inputs_level3
                             },
-                            # browser
+                            # level 3 data preparatory ----
+                            #' @description Data preparatory for the t3 modelling process (level 3).
+                            #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
+                            #' @param outputs_directory (character) Path of the t3 processes outputs directory.
+                            #' @param periode_reference (integer) Year(s) period of reference for modelling estimation.
+                            #' @param targeted_year (integer) Targeted year for model estimaton and prediction.
+                            #' @param distance_maximum (integer) Maximum distance between all sets of a sampled well. By default 5.
+                            #' @param number_sets_maximum (integer) Maximum number of sets allowed in mixture. By default 5.
+                            #' @param set_weight_minimum (integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.
+                            #' @param minimum_set_frequency (numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.
+                            #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            data_preparatory = function(inputs_level3,
+                                                        outputs_directory,
+                                                        periode_reference,
+                                                        targeted_year,
+                                                        distance_maximum = as.integer(5),
+                                                        number_sets_maximum = as.integer(5),
+                                                        set_weight_minimum = as.integer(6),
+                                                        minimum_set_frequency = 0.1,
+                                                        vessel_id_ignored = NULL) {
+                              browser()
+                              if (class(outputs_directory) != "character") {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"outputs_directory\" argument\nClass character expected\n",
+                                    sep = "")
+                                stop()
+                              } else if (class(periode_reference) != "integer") {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"periode_reference\" argument\nClass integer expected\n",
+                                    sep = "")
+                                stop()
+                              } else if (class(targeted_year) != "integer" || length(targeted_year) != 1 || nchar(targeted_year) != 4) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"targeted_year\" argument\nOne value of class integer expected with a format on 4 digits\n",
+                                    sep = "")
+                                stop()
+                              } else {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Start process 3.1: data preparatory\n",
+                                    sep = "")
+                                outputs_directory_name <- format(Sys.time(), "%Y%m%d_%H%M%S_t3_level3_outputs")
+                                dir.create(path = file.path(outputs_directory,
+                                                            outputs_directory_name))
+                                for (directory in c("data", "figures", "functions", "outputs")) {
+                                  dir.create(path = file.path(outputs_directory,
+                                                              outputs_directory_name,
+                                                              directory))
+                                }
+                                # extract sets characteristics
+                                act_chr <- inputs_level3[[1]]
+                                # extract catches by set, species and categories from logbook (t3 level 1)
+                                catch_set_lb <- inputs_level3[[2]]
+                                # extract catches by set, species and categories (t3 level 2)
+                                samw <- inputs_level3[[3]]
+                                # extract data related to link between sample and set, with addition of sample quality and type
+                                sset <- inputs_level3[[4]]
+                                # extract of well plans
+                                wp <- inputs_level3[[5]]
+                                # standardizing weight categories
+                                catch_set_lb$wcat <- gsub("kg",
+                                                          "",
+                                                          catch_set_lb$wcat)
+                                catch_set_lb$wcat <- ifelse(catch_set_lb$wcat == "<10",
+                                                            "m10",
+                                                            "p10")
+                                # only one category (called less 10) use for SKJ
+                                catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
+                                # period parameters
+                                first_year <- dplyr::first(periode_reference,
+                                                           order_by = periode_reference)
+                                catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
+                                # subset selection for modelling period
+                                catch_set_lb <- catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= targeted_year,]
+                              }
+                            },
+                            # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {
                               browser()
