@@ -299,9 +299,18 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \subsection{Method \code{sample_length_class_step_standardisation()}}{
 Process for step standardisation of lf length class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation(
+  maximum_lf_class = as.integer(500)
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{maximum_lf_class}}{(integer) Theorical maximum lf class that can occur (all species considerated). By default 500.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-well_set_weigth_categories"></a>}}
