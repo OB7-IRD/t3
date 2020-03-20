@@ -16,8 +16,8 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @param specie_code3l (character) Specie code identification on 3 characters.
                                     #' @param sample_standardised_length_class_lf (integer) Sample standardised length class length fork of measured individus.
                                     #' @param sample_number_weighted (numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
-                                    #' @param sample_weigth (numeric) Weight of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * (length class lf ^ coeficient b)
-                                    #' @param sample_weight_unit (numeric or na) Weight of one individu calculated by the length weight relationship: coeficient a * (length class lf ^ coeficient b).
+                                    #' @param sample_weigth (numeric) Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).
+                                    #' @param sample_weight_unit (numeric or na) Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).
                                     #' @param sample_category (character) Sample category: -10kg or +10kg.
                                     #' @param standardisedsample (R6-standardisedsample) A R6 reference object class standardisedsample.
                                     initialize = function(trip_id,

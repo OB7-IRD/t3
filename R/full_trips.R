@@ -2147,10 +2147,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # standardised_sample_creation ----
+                            # process 2.5: standardised_sample_creation ----
                             #' @description Object standardised sample creation.
                             standardised_sample_creation = function() {
-                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object\n",
@@ -2186,7 +2185,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (k in seq_len(length.out = length(current_wells))) {
                                           current_well <- current_wells[[k]]
                                           current_elementarysamples <- unlist(current_well$.__enclos_env__$private$elementarysample)
-                                          if (length(current_elementarysamples) != 0) {
+                                          if (is.null(current_elementarysamples)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: the object elementarysample is NULL, please run processes 2.1 to 2.4 before this one.\n",
+                                                "[trip_id: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well_id: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          } else if (length(current_elementarysamples) != 0) {
                                             current_elementarysamples_species <- unique(sapply(X = seq_len(length.out = length(current_elementarysamples)),
                                                                                                FUN = function(l) {
                                                                                                  paste(current_elementarysamples[[l]]$.__enclos_env__$private$specie_code,
@@ -2243,8 +2252,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                 FUN = function(r) {
                                                                                                                                   current_elementarysamples_sample_quality[[r]]$.__enclos_env__$private$sample_id
                                                                                                                                 })),
-                                                                                                      sample_quality = v,
-                                                                                                      sample_type = y,
+                                                                                                      sample_quality = as.integer(y),
+                                                                                                      sample_type = as.integer(v),
                                                                                                       specie_code = as.integer(unlist(strsplit(m, "_"))[1]),
                                                                                                       specie_code3l = unlist(strsplit(m, "_"))[2],
                                                                                                       sample_standardised_length_class_lf = as.integer(p),
@@ -2283,11 +2292,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # standardised_sample_set_creation ----
+                            # process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
                             #' @param length_weight_relationship_data (data.frame) Data frame object with parameters for length weight relationship.
                             standardised_sample_set_creation = function(length_weight_relationship_data) {
-                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object\n",
@@ -2323,7 +2331,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (k in seq_len(length.out = length(current_wells))) {
                                           current_well <- current_wells[[k]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
+                                          if (is.null(current_wells_sets)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
+                                                "[trip_id: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well_id: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          }
                                           current_standardised_samples <- current_well$.__enclos_env__$private$standardisedsample
+                                          if (is.null(current_standardised_samples)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: the object wellsets is NULL, please run processes 2.1 to 2.5 before this one.\n",
+                                                "[trip_id: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well_id: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          }
                                           standardised_samples_sets <- vector(mode = "list",
                                                                               length = length(current_wells_sets))
                                           for (l in seq_len(length.out = length(current_wells_sets))) {
@@ -2362,7 +2392,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                             } else {
                                                                                               length_class_lf <- current_standardised_samples[[m]]$.__enclos_env__$private$sample_standardised_length_class_lf
                                                                                             }
-                                                                                            lwr <- coef_a * (length_class_lf ^ coef_b)
+                                                                                            lwr <- coef_a * length_class_lf ^ coef_b
                                                                                           } else {
                                                                                             lwr <- NA
                                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2416,7 +2446,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # raised_factors_determination ----
+                            # process 2.7: raised_factors_determination ----
                             #' @description Raised factors determination for weigth sample set to set.
                             #' @param threshold_rf_minus10 (integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.
                             #' @param threshold_rf_plus10 (integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.
@@ -2428,7 +2458,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250)) {
-                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object\n",
@@ -2464,9 +2493,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (k in seq_len(length.out = length(current_wells))) {
                                           current_well <- current_wells[[k]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
+                                          if (is.null(current_wells_sets)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
+                                                "[trip_id: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well_id: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          }
                                           for (l in seq_len(length.out = length(current_wells_sets))) {
                                             current_well_sets <- current_wells_sets[[l]]
                                             current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
+                                            if (is.null(current_well_standardisedsampleset)) {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: the object wellsets is NULL, please run process 2.1 to 2.6 before this one.\n",
+                                                  "[trip_id: ",
+                                                  current_well$.__enclos_env__$private$trip_id,
+                                                  ", well_id: ",
+                                                  current_well$.__enclos_env__$private$well_id,
+                                                  "]\n",
+                                                  sep = "")
+                                              stop()
+                                            }
                                             current_well_sets$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(lapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
                                                                                                                                     FUN = function(m) {
                                                                                                                                       if (current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit <= 10) {
@@ -2588,10 +2639,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # raised standardised sample set ----
-                            #' @description Application of process 2.7 raised factors on standardised sample set.
+                            # process 2.8: raised standardised sample set ----
+                            #' @description Application of process 2.8 raised factors on standardised sample set.
                             raised_standardised_sample_set = function() {
-                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object\n",
@@ -2627,9 +2677,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (k in seq_len(length.out = length(current_wells))) {
                                           current_well <- current_wells[[k]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
+                                          if (is.null(current_wells_sets)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
+                                                "[trip_id: ",
+                                                current_well$.__enclos_env__$private$trip_id,
+                                                ", well_id: ",
+                                                current_well$.__enclos_env__$private$well_id,
+                                                "]\n",
+                                                sep = "")
+                                            stop()
+                                          }
                                           for (l in seq_len(length.out = length(current_wells_sets))) {
                                             current_well_sets <- current_wells_sets[[l]]
                                             current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
+                                            if (is.null(current_well_standardisedsampleset)) {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: the object wellsets is NULL, please run process 2.1 to 2.7 before this one.\n",
+                                                  "[trip_id: ",
+                                                  current_well$.__enclos_env__$private$trip_id,
+                                                  ", well_id: ",
+                                                  current_well$.__enclos_env__$private$well_id,
+                                                  "]\n",
+                                                  sep = "")
+                                              stop()
+                                            }
                                             if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(1, 2)) {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Warning: raised factors not available for this well-set\n",
@@ -2663,7 +2735,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                             } else {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: raised factors verifications is not valide\n",
+                                                  " - Error: raised factors verifications is not valide. Run process 2.7 before this one.\n",
                                                   "[trip: ,",
                                                   current_well_sets$.__enclos_env__$private$trip_id,
                                                   ", activity: ",

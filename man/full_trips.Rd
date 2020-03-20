@@ -386,7 +386,7 @@ Raised factors determination for weigth sample set to set.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raised_standardised_sample_set"></a>}}
 \subsection{Method \code{raised_standardised_sample_set()}}{
-Application of process 2.7 raised factors on standardised sample set.
+Application of process 2.8 raised factors on standardised sample set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set()}\if{html}{\out{</div>}}
 }

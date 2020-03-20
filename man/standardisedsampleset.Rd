@@ -59,9 +59,9 @@ Initialize function for R6 standardisedsampleset class.
 
 \item{\code{sample_number_weighted}}{(numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.}
 
-\item{\code{sample_weigth}}{(numeric) Weight of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * (length class lf ^ coeficient b)}
+\item{\code{sample_weigth}}{(numeric) Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).}
 
-\item{\code{sample_weight_unit}}{(numeric or na) Weight of one individu calculated by the length weight relationship: coeficient a * (length class lf ^ coeficient b).}
+\item{\code{sample_weight_unit}}{(numeric or na) Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).}
 
 \item{\code{sample_category}}{(character) Sample category: -10kg or +10kg.}
 
