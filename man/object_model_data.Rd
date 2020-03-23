@@ -26,7 +26,13 @@ Create R6 reference object class object_model_data
 \subsection{Method \code{trips_object_creation()}}{
 Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(
+  periode_reference,
+  countries,
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -37,6 +43,10 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -49,7 +59,9 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   periode_reference,
   countries,
-  t3_con
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -61,6 +73,10 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -73,7 +89,9 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_object_creation(
   periode_reference,
   countries,
-  t3_con
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -85,6 +103,10 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -97,7 +119,9 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarylandings_object_creation(
   periode_reference,
   countries,
-  t3_con
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -109,6 +133,10 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -122,7 +150,10 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   periode_reference,
   countries,
   t3_con,
-  sample_type
+  sample_type,
+  data_source = "t3_db",
+  data_path_samples = NULL,
+  data_path_wellplans = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -136,6 +167,12 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
 
 \item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...).}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path_samples}}{(character) Path of the data sql/csv file for samples. By default NULL.}
+
+\item{\code{data_path_wellplans}}{(character) Path of the data sql/csv file for well plans. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -145,7 +182,13 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \subsection{Method \code{setduration_data()}}{
 Creation of a data frame object with parameters of set duration algorithms
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$setduration_data(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$setduration_data(
+  periode_reference,
+  countries,
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -156,6 +199,10 @@ Creation of a data frame object with parameters of set duration algorithms
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -165,16 +212,31 @@ Creation of a data frame object with parameters of set duration algorithms
 \subsection{Method \code{lengthstep_data()}}{
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data(data_source = "t3_db", data_path = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sampleset_data"></a>}}
 \subsection{Method \code{sampleset_data()}}{
 Creation of a data frame object with weighted weigth of each set sampled.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$sampleset_data(periode_reference, countries, t3_con)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$sampleset_data(
+  periode_reference,
+  countries,
+  t3_con,
+  data_source = "t3_db",
+  data_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -185,6 +247,10 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries.}
 
 \item{\code{t3_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -194,9 +260,21 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \subsection{Method \code{lengthweightrelationship_data()}}{
 Creation of a data frame object with parameters for length weight relationship.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data(
+  data_source = "t3_db",
+  data_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). If data source are different to "t3_db" all other arguments will be omitted.}
+
+\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
