@@ -212,12 +212,18 @@ Creation of a data frame object with parameters of set duration algorithms
 \subsection{Method \code{lengthstep_data()}}{
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data(data_source = "t3_db", data_path = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data(
+  db_con,
+  data_source = "t3_db",
+  data_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+
 \item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}

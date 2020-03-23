@@ -3,7 +3,7 @@
 #' @description Shortcut for initialisation of data's object model.
 #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
 #' @param countries (character) ISO code on 3 letters related to one or more countries.
-#' @param t3_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.
+#' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database.
 #' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path (character) Path of the log file directory. By default NULL.
 #' @param log_name (character) Name of the log file. By default "t3log".
@@ -11,7 +11,7 @@
 #' @export
 data_model_initialisation <- function(periode_reference,
                                       countries,
-                                      t3_con,
+                                      db_con,
                                       sample_type,
                                       log_file = FALSE,
                                       log_path = NULL,
@@ -25,36 +25,36 @@ data_model_initialisation <- function(periode_reference,
   # model creation: object trips creation ----
   object_model_data$trips_object_creation(periode_reference = periode_reference,
                                           countries = countries,
-                                          t3_con = t3_con)
+                                          db_con = t3_con)
   # model creation: object activites creation ----
   object_model_data$activities_object_creation(periode_reference = periode_reference,
                                                countries = countries,
-                                               t3_con = t3_con)
+                                               db_con = t3_con)
   # model creation: object elementarycatches creation ----
   object_model_data$elementarycatches_object_creation(periode_reference = periode_reference,
                                                       countries = countries,
-                                                      t3_con = t3_con)
+                                                      db_con = t3_con)
   # model creation: object elementarylandings creation ----
   object_model_data$elementarylandings_object_creation(periode_reference = periode_reference,
                                                        countries = countries,
-                                                       t3_con = t3_con)
+                                                       db_con = t3_con)
   # model creation: object wells creation ----
   object_model_data$wells_object_creation(periode_reference = periode_reference,
                                           countries = countries,
-                                          t3_con = t3_con,
+                                          db_con = t3_con,
                                           sample_type = sample_type)
   # model creation: set duration data ----
   object_model_data$setduration_data(periode_reference = periode_reference,
                                      countries = countries,
-                                     t3_con = t3_con)
+                                     db_con = t3_con)
   # model creation: length step data ----
-  object_model_data$lengthstep_data()
+  object_model_data$lengthstep_data(db_con = t3_con)
   # model creation: sample set data ----
   object_model_data$sampleset_data(periode_reference = periode_reference,
                                    countries = countries,
-                                   t3_con = t3_con)
+                                   db_con = t3_con)
   # model creation: length weight relationship data ----
-  object_model_data$lengthweightrelationship_data()
+  object_model_data$lengthweightrelationship_data(db_con = t3_con)
   # model creation: initialisation object for full trips class ----
   object_full_trips <- t3:::full_trips$new()
   # model creation: object full_trip creation ----

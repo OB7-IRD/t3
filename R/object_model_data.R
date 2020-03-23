@@ -874,9 +874,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$setdurationref <- setdurationref_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
+                                   #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   lengthstep_data = function(data_source = "t3_db",
+                                   lengthstep_data = function(db_con,
+                                                              data_source = "t3_db",
                                                               data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -886,7 +888,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                            "t3_lengthstep.sql",
                                                                                            package = "t3")),
                                                                collapse = "\n")
-                                       lengthstep_data <- DBI::dbGetQuery(db_con, lengthstep_sql)
+                                       lengthstep_data <- DBI::dbGetQuery(db_con,
+                                                                          lengthstep_sql)
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Successful length steps data importation from T3 database\n",
                                            sep = "")
@@ -909,7 +912,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          lengthstep_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                               collapse = "\n"))
-                                         lengthstep_data <- DBI::dbGetQuery(db_con, lengthstep_sql)
+                                         lengthstep_data <- DBI::dbGetQuery(db_con,
+                                                                            lengthstep_sql)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful length steps data importation from the database\n",
                                              sep = "")

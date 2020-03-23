@@ -7,7 +7,7 @@
 data_model_initialisation(
   periode_reference,
   countries,
-  t3_con,
+  db_con,
   sample_type,
   log_file = FALSE,
   log_path = NULL,
@@ -19,7 +19,7 @@ data_model_initialisation(
 
 \item{countries}{(character) ISO code on 3 letters related to one or more countries.}
 
-\item{t3_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a T3 database.}
+\item{db_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database.}
 
 \item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
 
