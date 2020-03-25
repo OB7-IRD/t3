@@ -7,15 +7,15 @@
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   trips_object_creation = function(periode_reference,
-                                                                    countries,
-                                                                    db_con,
+                                   trips_object_creation = function(db_con,
                                                                     data_source = "t3_db",
+                                                                    periode_reference = NULL,
+                                                                    countries = NULL,
                                                                     data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
@@ -136,15 +136,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$trips <- object_trips
                                    },
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   activities_object_creation = function(periode_reference,
-                                                                         countries,
-                                                                         db_con,
+                                   activities_object_creation = function(db_con,
                                                                          data_source = "t3_db",
+                                                                         periode_reference = NULL,
+                                                                         countries = NULL,
                                                                          data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
@@ -261,15 +261,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$activities <- object_activities
                                    },
                                    #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   elementarycatches_object_creation = function(periode_reference,
-                                                                                countries,
-                                                                                db_con,
+                                   elementarycatches_object_creation = function(db_con,
                                                                                 data_source = "t3_db",
+                                                                                periode_reference = NULL,
+                                                                                countries = NULL,
                                                                                 data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
@@ -383,15 +383,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$elementarycatches <- object_elementarycatches
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   elementarylandings_object_creation = function(periode_reference,
-                                                                                 countries,
-                                                                                 db_con,
+                                   elementarylandings_object_creation = function(db_con,
                                                                                  data_source = "t3_db",
+                                                                                 periode_reference = NULL,
+                                                                                 countries = NULL,
                                                                                  data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
@@ -503,18 +503,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$elementarylandings <- object_elementarylandings
                                    },
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param sample_type (integer) Sample type identification (landing, observer, ...).
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). By default NULL.
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
                                    #' @param data_path_samples (character) Path of the data sql/csv file for samples. By default NULL.
                                    #' @param data_path_wellplans (character) Path of the data sql/csv file for well plans. By default NULL.
-                                   wells_object_creation = function(periode_reference,
-                                                                    countries,
-                                                                    db_con,
-                                                                    sample_type,
+                                   wells_object_creation = function(db_con,
                                                                     data_source = "t3_db",
+                                                                    periode_reference = NULL,
+                                                                    countries = NULL,
+                                                                    sample_type = NULL,
                                                                     data_path_samples = NULL,
                                                                     data_path_wellplans = NULL) {
                                      if (data_source == "t3_db") {
@@ -780,15 +780,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$wells <- object_wells
                                    },
                                    #' @description Creation of a data frame object with parameters of set duration algorithms
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   setduration_data = function(periode_reference,
-                                                               countries,
-                                                               db_con,
+                                   setduration_data = function(db_con,
                                                                data_source = "t3_db",
+                                                               periode_reference = NULL,
+                                                               countries = NULL,
                                                                data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
@@ -938,15 +938,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$lengthstep <- lengthstep_data
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
-                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db".
-                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db".
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   sampleset_data = function(periode_reference,
-                                                             countries,
-                                                             db_con,
+                                   sampleset_data = function(db_con,
                                                              data_source = "t3_db",
+                                                             periode_reference = NULL,
+                                                             countries = NULL,
                                                              data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
