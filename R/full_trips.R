@@ -1621,63 +1621,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           if (length(current_samples) != 0) {
                                             for (k in seq_len(length.out = length(current_samples))) {
                                               current_sample <- current_samples[[k]]
-                                              sample_specie <- vector(mode = "integer")
-                                              for (l in seq_len(length.out = length(current_sample))) {
-                                                sample_specie <- append(sample_specie,
-                                                                        current_sample[[l]]$.__enclos_env__$private$specie_code)
-                                              }
-                                              sample_specie <- unique(sample_specie)
-                                              for (m in sample_specie) {
-                                                sum_sample_number_measured <- 0
-                                                sample_total_count_tmp <- vector(mode = "character")
-                                                current_sample_tmp <- vector(mode = "list")
-                                                for (n in seq_len(length.out = length(current_sample))) {
-                                                  if (current_sample[[n]]$.__enclos_env__$private$specie_code == m) {
-                                                    sum_sample_number_measured <- sum_sample_number_measured + current_sample[[n]]$.__enclos_env__$private$sample_number_measured
-                                                    sample_total_count_tmp <- append(sample_total_count_tmp,
-                                                                                     paste(current_sample[[n]]$.__enclos_env__$private$sub_sample_id,
-                                                                                           current_sample[[n]]$.__enclos_env__$private$length_type,
-                                                                                           current_sample[[n]]$.__enclos_env__$private$sample_total_count,
-                                                                                           sep = "_"))
-                                                    current_sample_tmp <- append(current_sample_tmp,
-                                                                                 current_sample[[n]])
+                                              sub_sample_id <- unique(sapply(X = seq_len(length.out = length(current_sample)),
+                                                                             FUN = function(a) {
+                                                                               current_sample[[a]]$.__enclos_env__$private$sub_sample_id
+                                                                             }))
+                                              for (b in sub_sample_id) {
+                                                current_sub_sample <- Filter(Negate(is.null),
+                                                                             lapply(X = seq_len(length.out = length(current_sample)),
+                                                                                    FUN = function(c) {
+                                                                                      if (current_sample[[c]]$.__enclos_env__$private$sub_sample_id == b) {
+                                                                                        current_sample[[c]]
+                                                                                      }
+                                                                                    }))
+                                                sample_specie <- vector(mode = "integer")
+                                                for (l in seq_len(length.out = length(current_sub_sample))) {
+                                                  sample_specie <- append(sample_specie,
+                                                                          current_sub_sample[[l]]$.__enclos_env__$private$specie_code)
+                                                }
+                                                sample_specie <- unique(sample_specie)
+                                                for (m in sample_specie) {
+                                                  sum_sub_sample_number_measured <- 0
+                                                  sub_sample_total_count_tmp <- vector(mode = "character")
+                                                  current_sub_sample_tmp <- vector(mode = "list")
+                                                  for (n in seq_len(length.out = length(current_sub_sample))) {
+                                                    if (current_sub_sample[[n]]$.__enclos_env__$private$specie_code == m) {
+                                                      sum_sub_sample_number_measured <- sum_sub_sample_number_measured + current_sub_sample[[n]]$.__enclos_env__$private$sample_number_measured
+                                                      sub_sample_total_count_tmp <- append(sub_sample_total_count_tmp,
+                                                                                       paste(current_sub_sample[[n]]$.__enclos_env__$private$sub_sample_id,
+                                                                                             current_sub_sample[[n]]$.__enclos_env__$private$length_type,
+                                                                                             current_sub_sample[[n]]$.__enclos_env__$private$sample_total_count,
+                                                                                             sep = "_"))
+                                                      current_sub_sample_tmp <- append(current_sub_sample_tmp,
+                                                                                       current_sub_sample[[n]])
+                                                    }
                                                   }
-                                                }
-                                                sample_total_count_tmp <- unique(sample_total_count_tmp)
-                                                sum_sample_total_count <- sum(sapply(X = seq_len(length.out = length(sample_total_count_tmp)),
-                                                                                     FUN = function(o) {
-                                                                                       as.numeric(unlist(strsplit(sample_total_count_tmp[o],
-                                                                                                                  "_"))[3])
-                                                                                     }))
-                                                rf4 <- sum_sample_number_measured / sum_sample_total_count
-                                                # rf4 verification ----
-                                                if (rf4 != 1 & (! m %in% c(2))) {
-                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: rf4 not egal to 1 (",
-                                                      rf4,
-                                                      ") for sampled specie different from SKJ\n",
-                                                      "[trip: ",
-                                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                                      ", sample: ",
-                                                      current_sample[[1]]$.__enclos_env__$private$sample_id,
-                                                      "]\n",
-                                                      sep = "")
-                                                }
-                                                if (rf4 > 1) {
-                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: rf4 superior to 1 (",
-                                                      rf4,
-                                                      ")\n",
-                                                      "[trip: ",
-                                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                                      ", sample: ",
-                                                      current_sample[[1]]$.__enclos_env__$private$sample_id,
-                                                      "]\n",
-                                                      sep = "")
-                                                }
-                                                for (p in seq_len(length.out = length(current_sample_tmp))) {
-                                                  current_sample_tmp[[p]]$.__enclos_env__$private$rf4 <- rf4
-                                                  current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated <- current_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured * rf4
+                                                  sub_sample_total_count_tmp <- unique(sub_sample_total_count_tmp)
+                                                  sum_sample_total_count <- sum(sapply(X = seq_len(length.out = length(sub_sample_total_count_tmp)),
+                                                                                       FUN = function(o) {
+                                                                                         as.numeric(unlist(strsplit(sub_sample_total_count_tmp[o],
+                                                                                                                    "_"))[3])
+                                                                                       }))
+                                                  rf4 <- sum_sample_total_count / sum_sub_sample_number_measured
+                                                  # rf4 verification ----
+                                                  if (rf4 != 1 & (! m %in% c(2))) {
+                                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                        " - Warning: rf4 not egal to 1 (",
+                                                        rf4,
+                                                        ") for sampled specie different from SKJ\n",
+                                                        "[trip: ",
+                                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                                        ", sample: ",
+                                                        current_sub_sample[[1]]$.__enclos_env__$private$sample_id,
+                                                        "]\n",
+                                                        sep = "")
+                                                  }
+                                                  if (rf4 < 1) {
+                                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                        " - Warning: rf4 inferior to 1 (",
+                                                        rf4,
+                                                        ")\n",
+                                                        "[trip: ",
+                                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                                        ", sample: ",
+                                                        current_sub_sample[[1]]$.__enclos_env__$private$sample_id,
+                                                        "]\n",
+                                                        sep = "")
+                                                  }
+                                                  for (p in seq_len(length.out = length(current_sub_sample_tmp))) {
+                                                    current_sub_sample_tmp[[p]]$.__enclos_env__$private$rf4 <- rf4
+                                                    current_sub_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated <- current_sub_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured * rf4
+                                                  }
                                                 }
                                               }
                                             }
@@ -2772,7 +2785,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # path to level 3 ----
                             #' @description Temporary link to the R object model with Antoine D. modelisation process.
                             path_to_level3 = function() {
-                              browser()
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3\n",
                                   sep = "")

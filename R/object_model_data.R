@@ -583,16 +583,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "sql_query") {
-                                       if (class(data_path) != "character") {
+                                       if (class(data_path_samples) != "character" || class(data_path_wellplans) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
+                                             " - Error: invalid \"data_path_samples\" argument and or \"data_path_wellplans\" argument, ",
                                              "class character expected.\n",
                                              sep = "")
                                          stop()
-                                       } else if (! file.exists(data_path)) {
+                                       } else if (! file.exists(data_path_samples) || ! file.exists(data_path_wellplans)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
-                                             "file doesn't exist.\n",
+                                             " - Error: invalid \"data_path_samples\" argument and or \"data_path_wellplans\" argument, ",
+                                             "file(s) doesn't exist.\n",
                                              sep = "")
                                          stop()
                                        } else {
