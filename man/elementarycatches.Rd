@@ -32,6 +32,7 @@ Create R6 reference object class elementarycatches
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarycatches class.
 \subsection{Usage}{
@@ -48,6 +49,7 @@ Initialize function for R6 elementarycatches class.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
+\if{latex}{\out{\hypertarget{method-add}{}}}
 \subsection{Method \code{add()}}{
 Function for add a new elementarycatch in the object elementarycatches.
 \subsection{Usage}{
@@ -64,6 +66,7 @@ Function for add a new elementarycatch in the object elementarycatches.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_activity"></a>}}
+\if{latex}{\out{\hypertarget{method-filter_by_activity}{}}}
 \subsection{Method \code{filter_by_activity()}}{
 Function for filter elementarycatches by activity identification.
 \subsection{Usage}{
@@ -80,6 +83,7 @@ Function for filter elementarycatches by activity identification.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

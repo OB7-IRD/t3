@@ -23,6 +23,7 @@ Create R6 reference object class object_model_data
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trips_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-trips_object_creation}{}}}
 \subsection{Method \code{trips_object_creation()}}{
 Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
 \subsection{Usage}{
@@ -53,6 +54,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activities_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-activities_object_creation}{}}}
 \subsection{Method \code{activities_object_creation()}}{
 Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
 \subsection{Usage}{
@@ -83,6 +85,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarycatches_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarycatches_object_creation}{}}}
 \subsection{Method \code{elementarycatches_object_creation()}}{
 Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
 \subsection{Usage}{
@@ -113,6 +116,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-elementarylandings_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarylandings_object_creation}{}}}
 \subsection{Method \code{elementarylandings_object_creation()}}{
 Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
 \subsection{Usage}{
@@ -143,6 +147,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wells_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-wells_object_creation}{}}}
 \subsection{Method \code{wells_object_creation()}}{
 Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
 \subsection{Usage}{
@@ -179,6 +184,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setduration_data"></a>}}
+\if{latex}{\out{\hypertarget{method-setduration_data}{}}}
 \subsection{Method \code{setduration_data()}}{
 Creation of a data frame object with parameters of set duration algorithms
 \subsection{Usage}{
@@ -209,6 +215,7 @@ Creation of a data frame object with parameters of set duration algorithms
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthstep_data"></a>}}
+\if{latex}{\out{\hypertarget{method-lengthstep_data}{}}}
 \subsection{Method \code{lengthstep_data()}}{
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
@@ -233,6 +240,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sampleset_data"></a>}}
+\if{latex}{\out{\hypertarget{method-sampleset_data}{}}}
 \subsection{Method \code{sampleset_data()}}{
 Creation of a data frame object with weighted weigth of each set sampled.
 \subsection{Usage}{
@@ -263,6 +271,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lengthweightrelationship_data"></a>}}
+\if{latex}{\out{\hypertarget{method-lengthweightrelationship_data}{}}}
 \subsection{Method \code{lengthweightrelationship_data()}}{
 Creation of a data frame object with parameters for length weight relationship.
 \subsection{Usage}{
@@ -287,6 +296,7 @@ Creation of a data frame object with parameters for length weight relationship.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

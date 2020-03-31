@@ -36,6 +36,7 @@ Create R6 reference object class full_trips
 \item \href{#method-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}
 \item \href{#method-path_to_level3}{\code{full_trips$path_to_level3()}}
 \item \href{#method-data_preparatory}{\code{full_trips$data_preparatory()}}
+\item \href{#method-random_forest_models}{\code{full_trips$random_forest_models()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -56,6 +57,7 @@ Create R6 reference object class full_trips
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-create_full_trips"></a>}}
+\if{latex}{\out{\hypertarget{method-create_full_trips}{}}}
 \subsection{Method \code{create_full_trips()}}{
 Creation of full trip item from trips.
 \subsection{Usage}{
@@ -72,6 +74,7 @@ Creation of full trip item from trips.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_periode"></a>}}
+\if{latex}{\out{\hypertarget{method-filter_by_periode}{}}}
 \subsection{Method \code{filter_by_periode()}}{
 Function for filter full trips by a reference periode.
 \subsection{Usage}{
@@ -88,6 +91,7 @@ Function for filter full trips by a reference periode.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_activities"></a>}}
+\if{latex}{\out{\hypertarget{method-add_activities}{}}}
 \subsection{Method \code{add_activities()}}{
 Function for add activities in full trips object.
 \subsection{Usage}{
@@ -104,6 +108,7 @@ Function for add activities in full trips object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_elementarycatches"></a>}}
+\if{latex}{\out{\hypertarget{method-add_elementarycatches}{}}}
 \subsection{Method \code{add_elementarycatches()}}{
 Function for add elementary catches in full trips object.
 \subsection{Usage}{
@@ -120,6 +125,7 @@ Function for add elementary catches in full trips object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_elementarylandings"></a>}}
+\if{latex}{\out{\hypertarget{method-add_elementarylandings}{}}}
 \subsection{Method \code{add_elementarylandings()}}{
 Function for add elementary landings in full trips object.
 \subsection{Usage}{
@@ -136,6 +142,7 @@ Function for add elementary landings in full trips object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_wells_samples"></a>}}
+\if{latex}{\out{\hypertarget{method-add_wells_samples}{}}}
 \subsection{Method \code{add_wells_samples()}}{
 Function for add wells and samples caracteristics in full trips object.
 \subsection{Usage}{
@@ -152,6 +159,7 @@ Function for add wells and samples caracteristics in full trips object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rf1"></a>}}
+\if{latex}{\out{\hypertarget{method-rf1}{}}}
 \subsection{Method \code{rf1()}}{
 Process of Raising Factor level 1 (rf1).
 \subsection{Usage}{
@@ -172,6 +180,7 @@ Process of Raising Factor level 1 (rf1).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rf2"></a>}}
+\if{latex}{\out{\hypertarget{method-rf2}{}}}
 \subsection{Method \code{rf2()}}{
 Process of Raising Factor level 2 (rf2).
 \subsection{Usage}{
@@ -181,6 +190,7 @@ Process of Raising Factor level 2 (rf2).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-conversion_weigth_category"></a>}}
+\if{latex}{\out{\hypertarget{method-conversion_weigth_category}{}}}
 \subsection{Method \code{conversion_weigth_category()}}{
 Process of logbook weigth categories conversion.
 \subsection{Usage}{
@@ -190,6 +200,7 @@ Process of logbook weigth categories conversion.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_count"></a>}}
+\if{latex}{\out{\hypertarget{method-set_count}{}}}
 \subsection{Method \code{set_count()}}{
 Process for postive sets count.
 \subsection{Usage}{
@@ -199,6 +210,7 @@ Process for postive sets count.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_duration"></a>}}
+\if{latex}{\out{\hypertarget{method-set_duration}{}}}
 \subsection{Method \code{set_duration()}}{
 Process for set duration calculation (in hours).
 \subsection{Usage}{
@@ -215,6 +227,7 @@ Process for set duration calculation (in hours).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-time_at_sea"></a>}}
+\if{latex}{\out{\hypertarget{method-time_at_sea}{}}}
 \subsection{Method \code{time_at_sea()}}{
 Process for time at sea calculation (in hours).
 \subsection{Usage}{
@@ -224,6 +237,7 @@ Process for time at sea calculation (in hours).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fishing_time"></a>}}
+\if{latex}{\out{\hypertarget{method-fishing_time}{}}}
 \subsection{Method \code{fishing_time()}}{
 Process for fishing time calculation (in hours).
 \subsection{Usage}{
@@ -262,6 +276,7 @@ Available variables are:
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-searching_time"></a>}}
+\if{latex}{\out{\hypertarget{method-searching_time}{}}}
 \subsection{Method \code{searching_time()}}{
 Process for searching time calculation (in hours, fishing time minus sets durations).
 \subsection{Usage}{
@@ -271,6 +286,7 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_number_measured_extrapolation"></a>}}
+\if{latex}{\out{\hypertarget{method-sample_number_measured_extrapolation}{}}}
 \subsection{Method \code{sample_number_measured_extrapolation()}}{
 Process for sample number measured individuals extrapolation to sample number individuals counted.
 \subsection{Usage}{
@@ -280,6 +296,7 @@ Process for sample number measured individuals extrapolation to sample number in
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_ld1_to_lf"></a>}}
+\if{latex}{\out{\hypertarget{method-sample_length_class_ld1_to_lf}{}}}
 \subsection{Method \code{sample_length_class_ld1_to_lf()}}{
 Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
 \subsection{Usage}{
@@ -296,6 +313,7 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_step_standardisation"></a>}}
+\if{latex}{\out{\hypertarget{method-sample_length_class_step_standardisation}{}}}
 \subsection{Method \code{sample_length_class_step_standardisation()}}{
 Process for step standardisation of lf length class.
 \subsection{Usage}{
@@ -314,6 +332,7 @@ Process for step standardisation of lf length class.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-well_set_weigth_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-well_set_weigth_categories}{}}}
 \subsection{Method \code{well_set_weigth_categories()}}{
 Process for well set weigth categories definition.
 \subsection{Usage}{
@@ -330,6 +349,7 @@ Process for well set weigth categories definition.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardised_sample_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-standardised_sample_creation}{}}}
 \subsection{Method \code{standardised_sample_creation()}}{
 Object standardised sample creation.
 \subsection{Usage}{
@@ -339,6 +359,7 @@ Object standardised sample creation.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-standardised_sample_set_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-standardised_sample_set_creation}{}}}
 \subsection{Method \code{standardised_sample_set_creation()}}{
 R6 object standardised sample set creation.
 \subsection{Usage}{
@@ -355,6 +376,7 @@ R6 object standardised sample set creation.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raised_factors_determination"></a>}}
+\if{latex}{\out{\hypertarget{method-raised_factors_determination}{}}}
 \subsection{Method \code{raised_factors_determination()}}{
 Raised factors determination for weigth sample set to set.
 \subsection{Usage}{
@@ -385,6 +407,7 @@ Raised factors determination for weigth sample set to set.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raised_standardised_sample_set"></a>}}
+\if{latex}{\out{\hypertarget{method-raised_standardised_sample_set}{}}}
 \subsection{Method \code{raised_standardised_sample_set()}}{
 Application of process 2.8 raised factors on standardised sample set.
 \subsection{Usage}{
@@ -394,6 +417,7 @@ Application of process 2.8 raised factors on standardised sample set.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-path_to_level3"></a>}}
+\if{latex}{\out{\hypertarget{method-path_to_level3}{}}}
 \subsection{Method \code{path_to_level3()}}{
 Temporary link to the R object model with Antoine D. modelisation process.
 \subsection{Usage}{
@@ -403,6 +427,7 @@ Temporary link to the R object model with Antoine D. modelisation process.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-data_preparatory"></a>}}
+\if{latex}{\out{\hypertarget{method-data_preparatory}{}}}
 \subsection{Method \code{data_preparatory()}}{
 Data preparatory for the t3 modelling process (level 3).
 \subsection{Usage}{
@@ -444,7 +469,25 @@ Data preparatory for the t3 modelling process (level 3).
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-random_forest_models"></a>}}
+\if{latex}{\out{\hypertarget{method-random_forest_models}{}}}
+\subsection{Method \code{random_forest_models()}}{
+Modelling proportions in sets througth random forest models.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(inputs_level3_process1)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inputs_level3_process1}}{(data frame) Output table data4mod from process 3.1.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-show_me_what_you_got"></a>}}
+\if{latex}{\out{\hypertarget{method-show_me_what_you_got}{}}}
 \subsection{Method \code{show_me_what_you_got()}}{
 Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
 \subsection{Usage}{
@@ -454,6 +497,7 @@ Most powerfull and "schwifty" function in the univers for "open the T3 process" 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

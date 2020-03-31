@@ -2788,7 +2788,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3\n",
                                   sep = "")
-                              data_levels3 <- list()
+                              data_level3 <- list()
                               raw_inputs_level3 <- vector(mode = "list",
                                                           length = 5)
                               names(raw_inputs_level3) <- c("act", "act3", "samw", "sset", "wp")
@@ -2886,11 +2886,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End path creation for level 3\n",
                                   sep = "")
-                              data_levels3 <- append(data_levels3,
-                                                     list(raw_inputs_level3))
-                              names(data_levels3)[length(data_levels3)] <- "raw_inputs_level3"
-                              assign(x = "data_levels3",
-                                     value = data_levels3,
+                              data_level3 <- append(data_level3,
+                                                    list(raw_inputs_level3))
+                              names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
+                              assign(x = "data_level3",
+                                     value = data_level3,
                                      envir = .GlobalEnv)
                             },
                             # level 3 data preparatory ----
@@ -2913,6 +2913,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         set_weight_minimum = as.integer(6),
                                                         minimum_set_frequency = 0.1,
                                                         vessel_id_ignored = NULL) {
+                              browser()
                               if (class(outputs_directory) != "character") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"outputs_directory\" argument\nClass character expected\n",
@@ -3173,31 +3174,45 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 data4mod <- dplyr::inner_join(data,
                                                               act_chr[ ,names(act_chr) %in% c("id_act","fmod", "lat", "lon", "year", "mon", "ocean", "vessel")],
                                                               by = "id_act")
-                                data4mod <- list(data4mod = data4mod)
                                 # export to global environment
                                 outputs_level3_process1 <- list(outputs_directory_final = file.path(outputs_directory,
                                                                                                     outputs_directory_name),
                                                                 act_chrivities = act_chrivities,
                                                                 data4mod = data4mod,
                                                                 proportion_t3_step2 = proportion_t3_step2)
-                                if (exists(x = "data_levels3",
+                                if (exists(x = "data_level3",
                                            envir = .GlobalEnv)) {
-                                  data_levels3 <- get(x = "data_levels3",
-                                                      envir = .GlobalEnv)
-                                  data_levels3 <- append(data_levels3,
-                                                         list(outputs_level3_process1))
-                                  names(data_levels3)[length(data_levels3)] <- "outputs_level3_process1"
+                                  data_level3 <- get(x = "data_level3",
+                                                     envir = .GlobalEnv)
+                                  data_level3 <- append(data_level3,
+                                                        list(outputs_level3_process1))
+                                  names(data_level3)[length(data_level3)] <- "outputs_level3_process1"
                                 } else {
-                                  data_levels3 <- list("raw_inputs_level3" = inputs_level3,
-                                                       "outputs_level3_process1" = outputs_level3_process1)
+                                  data_level3 <- list("raw_inputs_level3" = inputs_level3,
+                                                      "outputs_level3_process1" = outputs_level3_process1)
                                 }
-                                assign(x = "data_levels3",
-                                       value = data_levels3,
+                                assign(x = "data_level3",
+                                       value = data_level3,
                                        envir = .GlobalEnv)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End process 3.1: data preparatory\n",
                                     sep = "")
                               }
+                            },
+                            # process 3.2: random forest models ----
+                            #' @description Modelling proportions in sets througth random forest models.
+                            #' @param inputs_level3_process1 (data frame) Output table data4mod from process 3.1.
+                            random_forest_models = function(inputs_level3_process1) {
+                              browser()
+                              data4mod <- inputs_level3_process1
+                              # sum proportion by species when working on total
+                              data4mod <- tidyr::separate(data4mod,
+                                                          sp_cat,
+                                                          c("sp", "wcat"),
+                                                          sep = "_")
+                              data4mod <- tidyr::aggregate(cbind(prop_lb, prop_t3) ~ id_act + date_act + yr + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
+                                                           data = data4mod,
+                                                           sum)
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.

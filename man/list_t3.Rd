@@ -22,6 +22,7 @@ Create R6 reference object class list_t3.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 list_t3 class.
 \subsection{Usage}{
@@ -31,6 +32,7 @@ Initialize function for R6 list_t3 class.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-name"></a>}}
+\if{latex}{\out{\hypertarget{method-name}{}}}
 \subsection{Method \code{name()}}{
 Function for display item's name(s) attribut.
 \subsection{Usage}{
@@ -47,6 +49,7 @@ Function for display item's name(s) attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
+\if{latex}{\out{\hypertarget{method-add}{}}}
 \subsection{Method \code{add()}}{
 Function for add new element in specific attribut.
 \subsection{Usage}{
@@ -65,6 +68,7 @@ Function for add new element in specific attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove"></a>}}
+\if{latex}{\out{\hypertarget{method-remove}{}}}
 \subsection{Method \code{remove()}}{
 Function for removed element of specific attribut.
 \subsection{Usage}{
@@ -83,6 +87,7 @@ Function for removed element of specific attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-view"></a>}}
+\if{latex}{\out{\hypertarget{method-view}{}}}
 \subsection{Method \code{view()}}{
 Function for display element(s) of specific attribut.
 \subsection{Usage}{
@@ -101,6 +106,7 @@ Function for display element(s) of specific attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-count"></a>}}
+\if{latex}{\out{\hypertarget{method-count}{}}}
 \subsection{Method \code{count()}}{
 Function for display number of elements of a specific attribut.
 \subsection{Usage}{
@@ -117,6 +123,7 @@ Function for display number of elements of a specific attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-extract"></a>}}
+\if{latex}{\out{\hypertarget{method-extract}{}}}
 \subsection{Method \code{extract()}}{
 Function for extract element(s) of a specific attribut.
 \subsection{Usage}{
@@ -137,6 +144,7 @@ Function for extract element(s) of a specific attribut.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter"></a>}}
+\if{latex}{\out{\hypertarget{method-filter}{}}}
 \subsection{Method \code{filter()}}{
 Function for select attribut's element(s) by specific filter.
 \subsection{Usage}{
@@ -155,6 +163,7 @@ Function for select attribut's element(s) by specific filter.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

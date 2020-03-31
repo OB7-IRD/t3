@@ -32,6 +32,7 @@ Create R6 reference object class elementarylandings
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarylandings class.
 \subsection{Usage}{
@@ -48,6 +49,7 @@ Initialize function for R6 elementarylandings class.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
+\if{latex}{\out{\hypertarget{method-add}{}}}
 \subsection{Method \code{add()}}{
 Function for add a new elementarylanding in the object elementarylandings.
 \subsection{Usage}{
@@ -64,6 +66,7 @@ Function for add a new elementarylanding in the object elementarylandings.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_by_trip"></a>}}
+\if{latex}{\out{\hypertarget{method-filter_by_trip}{}}}
 \subsection{Method \code{filter_by_trip()}}{
 Function for filter elementarylandings by trip identification.
 \subsection{Usage}{
@@ -80,6 +83,7 @@ Function for filter elementarylandings by trip identification.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
