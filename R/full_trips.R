@@ -264,7 +264,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # rf1 ----
+                            # process 2.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (rf1).
                             #' @param species_rf1 (integer) Specie(s) code(s) used for the rf1 process.
                             #' @param rf1_lowest_limit (numeric) Verification value for the lowest limit of the rf1.
@@ -505,7 +505,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Warning: rf1 value of trip element ",
                                                   i,
-                                                  "out of theorical boundaries: ",
+                                                  " out of theorical boundaries: ",
                                                   round(current_rf1, 3),
                                                   "\n[trip: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
