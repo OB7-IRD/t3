@@ -2893,7 +2893,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                      value = data_level3,
                                      envir = .GlobalEnv)
                             },
-                            # level 3 data preparatory ----
+                            # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
                             #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
                             #' @param outputs_directory (character) Path of the t3 processes outputs directory.
@@ -2913,7 +2913,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         set_weight_minimum = as.integer(6),
                                                         minimum_set_frequency = 0.1,
                                                         vessel_id_ignored = NULL) {
-                              browser()
                               if (class(outputs_directory) != "character") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"outputs_directory\" argument\nClass character expected\n",
@@ -2966,18 +2965,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               outputs_directory_name,
                                                               directory))
                                 }
-                                # extract sets characteristics
+                                # load from t3 levels 1 and 2 outputs ----
+                                # sets characteristics
                                 act_chr <- inputs_level3[[1]]
-                                # extract catches by set, species and categories from logbook (t3 level 1)
+                                # catch by set, species and categories from logbook (t3 level 1)
                                 catch_set_lb <- inputs_level3[[2]]
-                                # extract catches by set, species and categories (t3 level 2)
+                                # catch by set, species and categories (t3 level 2)
                                 samw <- inputs_level3[[3]]
-
-                                # extract data related to link between sample and set, with addition of sample quality and type
+                                # link between sample and set, + sample quality and type
                                 sset <- inputs_level3[[4]]
-                                # extract of well plans
+                                # well plan
                                 wp <- inputs_level3[[5]]
-                                # standardizing weight categories
+                                # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
                                                           catch_set_lb$wcat)
@@ -2986,139 +2985,155 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             "p10")
                                 # only one category (called less 10) use for SKJ
                                 catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
-                                # period parameters
-                                first_year <- dplyr::first(periode_reference,
-                                                           order_by = periode_reference)
+                                # period parameters ----
+                                first_year <- dplyr::first(periode_reference)
+                                # select subset period for the modelling
                                 catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
-                                # subset selection for modelling period
-                                catch_set_lb <- catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= targeted_year,]
-                                # selection criteria
+                                catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= targeted_year, ]
+                                act_chr$year <- lubridate::year(x = act_chr$date_act)
+                                act_chr<-act_chr[act_chr$year > first_year & act_chr$year <= targeted_year, ]
+                                # compute selection criteria ----
                                 cdm <- act_chr$id_act[act_chr$vessel %in% vessel_id_ignored]
                                 sset <- sset[! sset$id_act %in% cdm, ]
                                 catch_set_lb <- catch_set_lb[! catch_set_lb$id_act %in% cdm, ]
+                                # selection criteria
                                 # remove bad quality sample and keep sample at landing
                                 sset <- sset[sset$quality == 1 & sset$type == 1, ]
                                 # number of act_chrivity by sample
-                                agg <- aggregate(cbind(nset = id_act) ~ id_sample,
+                                agg <- aggregate(formula = cbind(nset = id_act) ~ id_sample,
                                                  data = sset,
-                                                 length)
-                                sset <- merge(sset, agg,sort = F)
+                                                 FUN = length)
+                                sset <- merge(x = sset,
+                                              y = agg,
+                                              sort = F)
                                 # fishing mode homogeneity in sample
                                 # add fishing mode
-                                sset <- dplyr::inner_join(sset,
-                                                          act_chr[, c("id_act", "fmod", "lat", "lon")],
+                                sset <- dplyr::inner_join(x = sset,
+                                                          y = act_chr[, c("id_act", "fmod", "lat", "lon")],
                                                           by = "id_act")
-                                tmp <- unique(sset[, c("id_sample", "fmod")])
-                                agg <- aggregate(cbind(fm_purity = fmod) ~ id_sample,
+                                tmp <- unique(sset[, c("id_sample","fmod")])
+                                agg <- aggregate(formula = cbind(fm_purity = fmod) ~ id_sample,
                                                  data = tmp,
-                                                 length)
-                                sset <- merge(sset,
-                                              agg,sort = F)
+                                                 FUN = length)
+                                sset <- merge(x = sset,
+                                              y = agg,
+                                              sort = F)
                                 # fishing mode of the sample
                                 tmp <- unique(sset[sset$fm_purity == 1,
-                                                   c("id_sample","fmod")])
+                                                   c("id_sample", "fmod")])
                                 names(tmp)[2] <- "fmod_sample"
-                                sset <- merge(sset, tmp, all = T, sort = F)
+                                sset <- merge(x = sset,
+                                              y = tmp,
+                                              all = T,
+                                              sort = F)
                                 # code for mixed fishing mode
                                 sset$fmod_sample[is.na(sset$fmod_sample)] <- 999
                                 sset$fmod_sample <- factor(sset$fmod_sample)
                                 # extent of the sample
-                                agg <- aggregate(cbind(lat_sample_dif = lat,
-                                                       lon_sample_dif = lon) ~ id_sample,
+                                agg <- aggregate(formula = cbind(lat_sample_dif = lat, lon_sample_dif = lon) ~ id_sample,
                                                  data = sset,
-                                                 function(x) {
+                                                 FUN = function(x) {
                                                    max(x) - min(x)
                                                  })
-                                sset <- merge(sset, agg, sort = F)
+                                sset <- merge(x = sset,
+                                              y = agg,
+                                              sort = F)
                                 # compute total set weight
                                 sset <- droplevels(sset)
+
                                 tmp <- catch_set_lb
-                                tmp <- tmp[tmp$sp %in% c("YFT","BET","SKJ"),]
-                                agg3 <- aggregate(cbind(w_lb_t3 = w_lb_t3) ~ id_act,
+                                tmp <- tmp[tmp$sp %in% c("YFT","BET","SKJ"), ]
+                                agg3 <- aggregate(formula = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
                                                   data = tmp,
-                                                  function(x) {
-                                                    sum(x, na.rm = T)
+                                                  FUN = function(x) {
+                                                    sum(x,
+                                                        na.rm = T)
                                                   })
                                 agg3 <- agg3[agg3$id_act %in% sset$id_act, ]
-                                sset2 <- dplyr::inner_join(sset, agg3[, c("id_act","w_lb_t3")],
-                                                           sort = F,
-                                                           by = "id_act")
+                                sset2 <- dplyr::inner_join(x = sset,
+                                                           y = agg3[, c("id_act","w_lb_t3")],
+                                                           by = "id_act",
+                                                           sort = F)
+                                sample_set_char <- list(sset = sset,
+                                                        act_chr = act_chr,
+                                                        catch_set_lb = catch_set_lb)
                                 # compute set weight in each sample to detect non representivness of the sample
-                                agg_wp <- aggregate(cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
-                                                    data = wp, sum)
-                                agg_wp2 <- aggregate(cbind(w_tot_well = weight) ~ id_sample + id_well,
-                                                     data = wp, sum)
-                                agg_wp <- merge(agg_wp,agg_wp2)
+                                agg_wp <- aggregate(formula = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
+                                                    data = wp,
+                                                    FUN = sum)
+                                agg_wp2 <- aggregate(formula = cbind(w_tot_well = weight) ~ id_sample + id_well,
+                                                     data = wp,
+                                                     FUN = sum)
+                                agg_wp <- merge(x = agg_wp,
+                                                y = agg_wp2)
                                 # compute proportion of weight by set
                                 agg_wp$prop_act_chr <- agg_wp$w_in_well / agg_wp$w_tot_well
-                                ## selection of act_chrivities
-                                ## selection based on sets extrapolated (2 first step of the t3 process)
+                                # selection of act_chrivities ----
+                                # selection based on sets extrapolated (2 first step of the t3 process)
                                 kiset <- sset2
                                 # on sample
                                 # homogneous fishing mode in sample
                                 kiset <- kiset[kiset$fm_purity == 1, ]
                                 # spatial selection + mixture limit
-                                kiset<- kiset[kiset$lat_sample_dif < distance_maximum
-                                              & kiset$lon_sample_dif < distance_maximum
-                                              & kiset$nset<number_sets_maximum,]
+                                kiset <- kiset[kiset$lat_sample_dif < distance_maximum & kiset$lon_sample_dif < distance_maximum & kiset$nset < number_sets_maximum, ]
                                 # remove all small sets considered as missed catches
-                                kiset<-kiset[kiset$w_lb_t3 > set_weight_minimum,]
-                                ## on set weight in well
+                                kiset <- kiset[kiset$w_lb_t3 > set_weight_minimum, ]
+                                # on set weight in well
                                 # sets which represented less than 10 % of the sampled well
                                 remove_sets <- agg_wp[agg_wp$prop_act_chr < minimum_set_frequency, ]
                                 remove_sets$unik <- paste(remove_sets$id_sample,
-                                                          remove_sets$id_act, sep = "_")
-                                kiset$unik <- paste(kiset$id_sample,kiset$id_act,sep = "_")
+                                                          remove_sets$id_act,
+                                                          sep = "_")
+                                kiset$unik <- paste(kiset$id_sample,
+                                                    kiset$id_act,
+                                                    sep = "_")
                                 # remove sets with a too low weight in well for which we have the well plan
                                 kiset <- kiset[!kiset$unik %in% remove_sets$unik, ]
                                 kiset <- droplevels(kiset)
                                 kiset_end <- kiset
-                                ## select sets
+                                # select sets
                                 act_chr <- act_chr[act_chr$id_act %in% kiset_end$id_act, ]
                                 catch_set_lb <- catch_set_lb[catch_set_lb$id_act %in% kiset_end$id_act, ]
-                                act_chrivities <- list(act_chr = act_chr,
-                                                       catch_set_lb = catch_set_lb,
-                                                       kiset_end = kiset_end)
-                                ## format data and compute proportion
+                                data_selected <- list(act_chr = act_chr,
+                                                      catch_set_lb = catch_set_lb,
+                                                      kiset_end = kiset_end)
+                                # format data and compute proportion ----
                                 # name change
-                                act_chrivities[["catch_set_lb"]]$mon <- lubridate::month(act_chrivities[["catch_set_lb"]]$date_act)
+                                catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date_act)
                                 # select and rename species
-                                act_chrivities[["catch_set_lb"]]$sp[! act_chrivities[["catch_set_lb"]]$sp %in% c("YFT","BET","SKJ")] <- "OTH"
-                                act_chrivities[["catch_set_lb"]] <- droplevels(act_chrivities[["catch_set_lb"]])
+                                catch_set_lb$sp[!catch_set_lb$sp %in% c("YFT","BET","SKJ")] <- "OTH"
+                                catch_set_lb <- droplevels(catch_set_lb)
                                 # remove other species from lb before calculate species composition (to be compare to sample)
-                                act_chrivities[["catch_set_lb"]] <- act_chrivities[["catch_set_lb"]][act_chrivities[["catch_set_lb"]]$sp_code %in% c(1, 2, 3), ]
-                                act_chrivities[["catch_set_lb"]] <- droplevels(act_chrivities[["catch_set_lb"]])
+                                catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
+                                catch_set_lb <- droplevels(catch_set_lb)
                                 # calculate total catch for thonidae only
-                                tot <- aggregate(cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
-                                                 data = act_chrivities[["catch_set_lb"]],
-                                                 sum)
-                                act_chrivities[["catch_set_lb"]] <- merge(act_chrivities[["catch_set_lb"]],
-                                                                          tot,
-                                                                          sort = F)
-                                act_chrivities[["catch_set_lb"]]$year <- lubridate::year(act_chrivities[["catch_set_lb"]]$date_act)
-                                act_chrivities[["catch_set_lb"]]$mon <- lubridate::month(act_chrivities[["catch_set_lb"]]$date_act)
+                                tot <- aggregate(formula = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
+                                                 data = catch_set_lb,
+                                                 FUN = sum)
+                                catch_set_lb <- merge(x = catch_set_lb,
+                                                      y = tot,
+                                                      sort = F)
                                 # sum p10, 10-30 and p30 categories in Atlantic ocean
-                                act_chrivities[["catch_set_lb"]] <- aggregate(cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
-                                                                              data = act_chrivities[["catch_set_lb"]],
-                                                                              sum)
+                                catch_set_lb <- aggregate(formula = cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
+                                                          data = catch_set_lb,
+                                                          FUN = sum)
                                 # calculate proportions
-                                act_chrivities[["catch_set_lb"]]$sp_cat <- factor(paste(act_chrivities[["catch_set_lb"]]$sp,
-                                                                                        act_chrivities[["catch_set_lb"]]$wcat,
-                                                                                        sep = "_"))
-                                act_chrivities[["catch_set_lb"]]$sp <- NULL
-                                act_chrivities[["catch_set_lb"]]$wcat <- NULL
-                                tmp <- tidyr::spread(act_chrivities[["catch_set_lb"]],
+                                catch_set_lb$sp_cat <- factor(paste(catch_set_lb$sp,
+                                                                    catch_set_lb$wcat,
+                                                                    sep = "_"))
+                                catch_set_lb$sp <- NULL
+                                catch_set_lb$wcat <- NULL
+                                tmp <- tidyr::spread(data = catch_set_lb,
                                                      key = sp_cat,
                                                      value = w_lb_t3,
                                                      fill = 0)
-                                tmp2 <- tmp[, names(tmp) %in% levels(act_chrivities[["catch_set_lb"]]$sp_cat)]
+                                tmp2 <- tmp[, names(tmp) %in% levels(catch_set_lb$sp_cat)]
                                 tmp2 <- prop.table(as.matrix(tmp2), 1)
                                 tmp[, names(tmp) %in% colnames(tmp2)] <- tmp2
-                                lb_set <- tmp
-                                ## compute proportion from T3 step 2
-                                samw$sp[! samw$sp %in% c("YFT","BET","SKJ")] <- "OTH"
+                                lb_set<-tmp
+                                # compute proportion from t3 step 2 ----
+                                samw$sp[!samw$sp %in% c("YFT","BET","SKJ")] <- "OTH"
                                 samw <- samw[samw$sp_code %in% c(1, 2, 3), ]
-                                # standardize weight category
                                 samw$wcat <- gsub("kg",
                                                   "",
                                                   samw$wcat)
@@ -3126,7 +3141,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 samw$wcat <- ifelse(samw$wcat == "- 10",
                                                     "m10",
                                                     "p10")
-                                # only one category (called less 10)  use for SKJ
+                                # only one category (called less 10) use for SKJ
                                 samw$wcat[samw$sp == "SKJ"] <- "m10"
                                 samw$sp_cat <- factor(paste(samw$sp,
                                                             samw$wcat,
@@ -3134,18 +3149,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 samw$sp <- NULL
                                 samw$wcat <- NULL
                                 # sum the weight categories for SKJ
-                                samw <- aggregate(cbind(w_fit_t3) ~ id_act + sp_cat,
+                                samw <- aggregate(formula = cbind(w_fit_t3) ~ id_act + sp_cat,
                                                   data = samw,
-                                                  sum)
+                                                  FUN = sum)
                                 samw <- droplevels(samw)
-                                tmp <- tidyr::spread(samw,
+                                tmp <- tidyr::spread(data = samw,
                                                      key = sp_cat,
                                                      value = w_fit_t3,
                                                      fill = 0)
                                 tmp2 <- tmp[, names(tmp) %in% levels(samw$sp_cat)]
                                 tmp2 <- prop.table(as.matrix(tmp2), 1)
                                 tmp[, names(tmp) %in% colnames(tmp2)] <- tmp2
-                                samp_t3 <- tidyr::gather(tmp,
+                                samp_t3 <- tidyr::gather(data = tmp,
                                                          key = "sp_cat",
                                                          value = "prop_t3",
                                                          "BET_m10",
@@ -3153,13 +3168,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          "SKJ_m10",
                                                          "YFT_m10",
                                                          "YFT_p10")
-                                tmp <- dplyr::left_join(samp_t3,
-                                                        act_chr,
+                                tmp <- dplyr::left_join(x = samp_t3,
+                                                        y = act_chr,
                                                         by = "id_act")
-                                proportion_t3_step2 <- list(samw = samw,
+                                data_sample_extract <- list(samw = samw,
                                                             samp_t3 = samp_t3)
-                                ## fusion of the lb and sample composition
-                                lb_set_long <- tidyr::gather(lb_set,
+                                # fusion of the lb and sample composition ----
+                                lb_set_long <- tidyr::gather(data = lb_set,
                                                              "BET_m10",
                                                              "BET_p10",
                                                              "SKJ_m10",
@@ -3167,19 +3182,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              "YFT_p10",
                                                              key = "sp_cat",
                                                              value = "prop_lb",
-                                                             - "code_act_type")
-                                data <- dplyr::inner_join(lb_set_long,
-                                                          samp_t3,
+                                                             -"code_act_type")
+                                data <- dplyr::inner_join(x = lb_set_long,
+                                                          y = samp_t3,
                                                           by = c("id_act", "sp_cat"))
-                                data4mod <- dplyr::inner_join(data,
-                                                              act_chr[ ,names(act_chr) %in% c("id_act","fmod", "lat", "lon", "year", "mon", "ocean", "vessel")],
-                                                              by = "id_act")
+                                data4mod <- dplyr::inner_join(x = data,
+                                                              y = act_chr[, names(act_chr) %in% c("id_act",
+                                                                                                  "fmod",
+                                                                                                  "lat",
+                                                                                                  "lon",
+                                                                                                  "year",
+                                                                                                  "mon",
+                                                                                                  "ocean",
+                                                                                                  "vessel")],
+                                                              by = c("id_act", "year"))
+                                data_lb_sample_screened = list(data4mod = data4mod)
                                 # export to global environment
                                 outputs_level3_process1 <- list(outputs_directory_final = file.path(outputs_directory,
                                                                                                     outputs_directory_name),
-                                                                act_chrivities = act_chrivities,
-                                                                data4mod = data4mod,
-                                                                proportion_t3_step2 = proportion_t3_step2)
+                                                                sample_set_char = sample_set_char,
+                                                                data_selected = data_selected,
+                                                                data_sample_extract = data_sample_extract,
+                                                                data_lb_sample_screened = data_lb_sample_screened)
                                 if (exists(x = "data_level3",
                                            envir = .GlobalEnv)) {
                                   data_level3 <- get(x = "data_level3",
@@ -3204,15 +3228,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param inputs_level3_process1 (data frame) Output table data4mod from process 3.1.
                             random_forest_models = function(inputs_level3_process1) {
                               browser()
-                              data4mod <- inputs_level3_process1
-                              # sum proportion by species when working on total
-                              data4mod <- tidyr::separate(data4mod,
-                                                          sp_cat,
-                                                          c("sp", "wcat"),
-                                                          sep = "_")
-                              data4mod <- tidyr::aggregate(cbind(prop_lb, prop_t3) ~ id_act + date_act + yr + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
-                                                           data = data4mod,
-                                                           sum)
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
