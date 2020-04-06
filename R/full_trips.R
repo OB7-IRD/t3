@@ -3226,8 +3226,122 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # process 3.2: random forest models ----
                             #' @description Modelling proportions in sets througth random forest models.
                             #' @param inputs_level3_process1 (data frame) Output table data4mod from process 3.1.
-                            random_forest_models = function(inputs_level3_process1) {
+                            #' @param number_of_trees (integer) Number of trees for the random forest models. By default 1000.
+                            random_forest_models = function(inputs_level3_process1,
+                                                            number_of_trees = as.integer(1000)) {
                               browser()
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.2: random forest models\n",
+                                  sep = "")
+                              data4mod <- inputs_level3_process1
+                              # sum proportion by species when working on total
+                              data4mod <- tidyr::separate(data = data4mod,
+                                                          col = sp_cat,
+                                                          into = c("sp","wcat"),
+                                                          sep = "_")
+                              data4mod<- aggregate(formula = cbind(prop_lb, prop_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
+                                                   data = data4mod,
+                                                   FUN = sum)
+                              outputs_level3_process2 <- list()
+                              for (ocean in as.integer(c(1, 2))) {
+                                for(sp in c("SKJ","YFT")) {
+                                  for (fmod in as.integer(c(1, 2))) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Ongoing process 3.2 for ocean \"",
+                                        ocean,
+                                        "\", specie \"",
+                                        sp,
+                                        "\" and fishing mode \"",
+                                        fmod,
+                                        "\"",
+                                        "\n",
+                                        sep = "")
+                                    sub <- data4mod[data4mod$fmod == fmod & data4mod$ocean == ocean & data4mod$sp == sp, ]
+                                    if (nrow(sub) > 0) {
+                                      sub$resp <- (sub$prop_t3)
+                                      sub$tlb <- (sub$prop_lb)
+                                      sub$year <- factor(sub$year)
+                                      sub$mon <- factor(sub$mon)
+                                      sub$vessel <- factor(sub$vessel)
+                                      sub <- droplevels(sub)
+                                      # models ----
+                                      # model with spatio temporal variable only
+                                      set.seed(7)
+                                      modrf0 <- randomForest::randomForest(formula = resp ~ lon + lat + year + mon,
+                                                                           data = sub,
+                                                                           ntree = number_of_trees,
+                                                                           mtry = 2,
+                                                                           nPerm = 5,
+                                                                           importance = TRUE,
+                                                                           proximity = TRUE,
+                                                                           keep.forest = TRUE,
+                                                                           localImp = TRUE)
+                                      # model with no vessel id
+                                      set.seed(7)
+                                      modrf_wtv <- randomForest::randomForest(formula = resp ~ tlb + lon + lat + year + mon ,
+                                                                              data = sub,
+                                                                              ntree = number_of_trees,
+                                                                              mtry = 2,
+                                                                              nPerm = 5,
+                                                                              importance = TRUE,
+                                                                              proximity = TRUE,
+                                                                              keep.forest = TRUE,
+                                                                              localImp = TRUE)
+                                      # model with
+                                      set.seed(7)
+                                      modrf <- randomForest::randomForest(formula = resp ~ tlb + lon + lat + year + mon + vessel,
+                                                                          data = sub,
+                                                                          ntree = number_of_trees,
+                                                                          mtry = 2,
+                                                                          nPerm = 5,
+                                                                          importance = TRUE,
+                                                                          proximity = TRUE,
+                                                                          keep.forest = TRUE,
+                                                                          localImp = TRUE)
+                                      outputs_level3_process2 <- append(outputs_level3_process2,
+                                                                        list(list(data = sub,
+                                                                                  modrf0 = modrf0,
+                                                                                  modrf = modrf,
+                                                                                  modrf_wtv = modrf_wtv)))
+                                      names(outputs_level3_process2)[length(outputs_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 3.2 successfull for ocean \"",
+                                          ocean,
+                                          "\", specie \"",
+                                          sp,
+                                          "\" and fishing mode \"",
+                                          fmod,
+                                          "\"",
+                                          "\n",
+                                          sep = "")
+                                    } else {
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Warning: no data available for selected parameters\n",
+                                          "[ocean :",
+                                          ocean,
+                                          ", specie: ",
+                                          sp,
+                                          ", fishing mode: ",
+                                          fmod,
+                                          "]\n",
+                                          sep = "")
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 3.2 aborded for ocean \"",
+                                          ocean,
+                                          "\", specie \"",
+                                          sp,
+                                          "\" and fishing mode \"",
+                                          fmod,
+                                          "\"",
+                                          "\n",
+                                          sep = "")
+                                    }
+                                  }
+                                }
+                              }
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.2: random forest models\n",
+                                  sep = "")
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.

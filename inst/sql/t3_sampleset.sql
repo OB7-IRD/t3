@@ -13,4 +13,5 @@ FROM
 WHERE
 	t.landingdate BETWEEN ?begin_period AND ?end_period
 	AND c.codeiso3 IN (?countries)
+	AND t.topiaid IN (?trips_selected)
 ;

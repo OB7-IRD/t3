@@ -28,6 +28,7 @@ WHERE
 	t.landingdate BETWEEN ?begin_period AND ?end_period
 	AND c.codeiso3 IN (?countries)
 	AND st.code IN (?sample_type)
+	AND t.topiaid IN (?trips_selected)
 ORDER BY
 	trip_id
 	,sample_id

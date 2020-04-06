@@ -12,11 +12,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    trips_object_creation = function(db_con,
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
-                                                                    data_path = NULL) {
+                                                                    data_path = NULL,
+                                                                    trips_selected = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -44,18 +46,49 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                        "t3_trip.sql",
                                                                                        package = "t3")),
                                                            collapse = "\n")
-                                         trip_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                               sql = trip_sql,
-                                                                               begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                   order_by = periode_reference) - 1),
-                                                                                                     "-10-01"),
-                                                                               end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                order_by = periode_reference) + 1),
-                                                                                                   "-03-01"),
-                                                                               countries = DBI::SQL(paste0("'",
-                                                                                                           paste0(countries,
-                                                                                                                  collapse = "', '"),
-                                                                                                           "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             trip_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                   sql = trip_sql,
+                                                                                   begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                       order_by = periode_reference) - 1),
+                                                                                                         "-10-01"),
+                                                                                   end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                    order_by = periode_reference) + 1),
+                                                                                                       "-03-01"),
+                                                                                   countries = DBI::SQL(paste0("'",
+                                                                                                               paste0(countries,
+                                                                                                                      collapse = "', '"),
+                                                                                                               "'")),
+                                                                                   trips_selected = DBI::SQL(paste0("'",
+                                                                                                                    paste0(trips_selected,
+                                                                                                                           collapse = "', '"),
+                                                                                                                    "'")))
+                                           }
+                                         } else {
+                                           trip_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                           replacement = "",
+                                                           x = trip_sql,
+                                                           fixed = TRUE)
+                                           trip_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                 sql = trip_sql,
+                                                                                 begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                     order_by = periode_reference) - 1),
+                                                                                                       "-10-01"),
+                                                                                 end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                  order_by = periode_reference) + 1),
+                                                                                                     "-03-01"),
+                                                                                 countries = DBI::SQL(paste0("'",
+                                                                                                             paste0(countries,
+                                                                                                                    collapse = "', '"),
+                                                                                                             "'")))
+                                         }
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful trip(s) data importation from T3 database\n",
@@ -141,11 +174,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    activities_object_creation = function(db_con,
                                                                          data_source = "t3_db",
                                                                          periode_reference = NULL,
                                                                          countries = NULL,
-                                                                         data_path = NULL) {
+                                                                         data_path = NULL,
+                                                                         trips_selected = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -170,18 +205,49 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              "t3_activities.sql",
                                                                                              package = "t3")),
                                                                  collapse = "\n")
-                                         activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                     sql = activities_sql,
-                                                                                     begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                         order_by = periode_reference) - 1),
-                                                                                                           "-10-01"),
-                                                                                     end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                      order_by = periode_reference) + 1),
-                                                                                                         "-03-01"),
-                                                                                     countries = DBI::SQL(paste0("'",
-                                                                                                                 paste0(countries,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                         sql = activities_sql,
+                                                                                         begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                             order_by = periode_reference) - 1),
+                                                                                                               "-10-01"),
+                                                                                         end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                          order_by = periode_reference) + 1),
+                                                                                                             "-03-01"),
+                                                                                         countries = DBI::SQL(paste0("'",
+                                                                                                                     paste0(countries,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")),
+                                                                                         trips_selected = DBI::SQL(paste0("'",
+                                                                                                                          paste0(trips_selected,
+                                                                                                                                 collapse = "', '"),
+                                                                                                                          "'")))
+                                           }
+                                         } else {
+                                           activities_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                                 replacement = "",
+                                                                 x = activities_sql,
+                                                                 fixed = TRUE)
+                                           activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                       sql = activities_sql,
+                                                                                       begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                           order_by = periode_reference) - 1),
+                                                                                                             "-10-01"),
+                                                                                       end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                        order_by = periode_reference) + 1),
+                                                                                                           "-03-01"),
+                                                                                       countries = DBI::SQL(paste0("'",
+                                                                                                                   paste0(countries,
+                                                                                                                          collapse = "', '"),
+                                                                                                                   "'")))
+                                         }
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful activities data importation from T3 database\n",
@@ -266,11 +332,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    elementarycatches_object_creation = function(db_con,
                                                                                 data_source = "t3_db",
                                                                                 periode_reference = NULL,
                                                                                 countries = NULL,
-                                                                                data_path = NULL) {
+                                                                                data_path = NULL,
+                                                                                trips_selected = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -295,18 +363,49 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   "t3_elementarycatch.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n")
-                                         elementarycatch_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                          sql = elementarycatch_sql,
-                                                                                          begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                              order_by = periode_reference) - 1),
-                                                                                                                "-10-01"),
-                                                                                          end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                           order_by = periode_reference) + 1),
-                                                                                                              "-03-01"),
-                                                                                          countries = DBI::SQL(paste0("'",
-                                                                                                                      paste0(countries,
-                                                                                                                             collapse = "', '"),
-                                                                                                                      "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             elementarycatch_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                              sql = elementarycatch_sql,
+                                                                                              begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                                  order_by = periode_reference) - 1),
+                                                                                                                    "-10-01"),
+                                                                                              end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                               order_by = periode_reference) + 1),
+                                                                                                                  "-03-01"),
+                                                                                              countries = DBI::SQL(paste0("'",
+                                                                                                                          paste0(countries,
+                                                                                                                                 collapse = "', '"),
+                                                                                                                          "'")),
+                                                                                              trips_selected = DBI::SQL(paste0("'",
+                                                                                                                               paste0(trips_selected,
+                                                                                                                                      collapse = "', '"),
+                                                                                                                               "'")))
+                                           }
+                                         } else {
+                                           elementarycatch_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                                      replacement = "",
+                                                                      x = elementarycatch_sql,
+                                                                      fixed = TRUE)
+                                           elementarycatch_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                            sql = elementarycatch_sql,
+                                                                                            begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                                order_by = periode_reference) - 1),
+                                                                                                                  "-10-01"),
+                                                                                            end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                             order_by = periode_reference) + 1),
+                                                                                                                "-03-01"),
+                                                                                            countries = DBI::SQL(paste0("'",
+                                                                                                                        paste0(countries,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")))
+                                         }
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary catches data importation from T3 database\n",
@@ -388,11 +487,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    elementarylandings_object_creation = function(db_con,
                                                                                  data_source = "t3_db",
                                                                                  periode_reference = NULL,
                                                                                  countries = NULL,
-                                                                                 data_path = NULL) {
+                                                                                 data_path = NULL,
+                                                                                 trips_selected = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -417,18 +518,49 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                     "t3_elementarylanding.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n")
-                                         elementarylanding_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                            sql = elementarylanding_sql,
-                                                                                            begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                                order_by = periode_reference) - 1),
-                                                                                                                  "-10-01"),
-                                                                                            end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                             order_by = periode_reference) + 1),
-                                                                                                                "-03-01"),
-                                                                                            countries = DBI::SQL(paste0("'",
-                                                                                                                        paste0(countries,
-                                                                                                                               collapse = "', '"),
-                                                                                                                        "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             elementarylanding_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                                sql = elementarylanding_sql,
+                                                                                                begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                                    order_by = periode_reference) - 1),
+                                                                                                                      "-10-01"),
+                                                                                                end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                                 order_by = periode_reference) + 1),
+                                                                                                                    "-03-01"),
+                                                                                                countries = DBI::SQL(paste0("'",
+                                                                                                                            paste0(countries,
+                                                                                                                                   collapse = "', '"),
+                                                                                                                            "'")),
+                                                                                                trips_selected = DBI::SQL(paste0("'",
+                                                                                                                                 paste0(trips_selected,
+                                                                                                                                        collapse = "', '"),
+                                                                                                                                 "'")))
+                                           }
+                                         } else {
+                                           elementarylanding_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                                        replacement = "",
+                                                                        x = elementarylanding_sql,
+                                                                        fixed = TRUE)
+                                           elementarylanding_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                              sql = elementarylanding_sql,
+                                                                                              begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                                  order_by = periode_reference) - 1),
+                                                                                                                    "-10-01"),
+                                                                                              end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                               order_by = periode_reference) + 1),
+                                                                                                                  "-03-01"),
+                                                                                              countries = DBI::SQL(paste0("'",
+                                                                                                                          paste0(countries,
+                                                                                                                                 collapse = "', '"),
+                                                                                                                          "'")))
+                                         }
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful elementary landings data importation from T3 database\n",
@@ -508,6 +640,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
                                    #' @param data_path_samples (character) Path of the data sql/csv file for samples. By default NULL.
                                    #' @param data_path_wellplans (character) Path of the data sql/csv file for well plans. By default NULL.
                                    wells_object_creation = function(db_con,
@@ -515,6 +648,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
                                                                     sample_type = NULL,
+                                                                    trips_selected = NULL,
                                                                     data_path_samples = NULL,
                                                                     data_path_wellplans = NULL) {
                                      if (data_source == "t3_db") {
@@ -546,37 +680,101 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                           "t3_samples.sql",
                                                                                           package = "t3")),
                                                               collapse = "\n")
-                                         samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                  sql = samples_sql,
-                                                                                  begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                      order_by = periode_reference) - 1),
-                                                                                                        "-10-01"),
-                                                                                  end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                   order_by = periode_reference) + 1),
-                                                                                                      "-03-01"),
-                                                                                  countries = DBI::SQL(paste0("'",
-                                                                                                              paste0(countries,
-                                                                                                                     collapse = "', '"),
-                                                                                                              "'")),
-                                                                                  sample_type = DBI::SQL(paste0(sample_type,
-                                                                                                                collapse = ", ")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                      sql = samples_sql,
+                                                                                      begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                          order_by = periode_reference) - 1),
+                                                                                                            "-10-01"),
+                                                                                      end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                       order_by = periode_reference) + 1),
+                                                                                                          "-03-01"),
+                                                                                      countries = DBI::SQL(paste0("'",
+                                                                                                                  paste0(countries,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")),
+                                                                                      sample_type = DBI::SQL(paste0(sample_type,
+                                                                                                                    collapse = ", ")),
+                                                                                      trips_selected = DBI::SQL(paste0("'",
+                                                                                                                       paste0(trips_selected,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")))
+                                           }
+                                         } else {
+                                           samples_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                              replacement = "",
+                                                              x = samples_sql,
+                                                              fixed = TRUE)
+                                           samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                    sql = samples_sql,
+                                                                                    begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                        order_by = periode_reference) - 1),
+                                                                                                          "-10-01"),
+                                                                                    end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                     order_by = periode_reference) + 1),
+                                                                                                        "-03-01"),
+                                                                                    countries = DBI::SQL(paste0("'",
+                                                                                                                paste0(countries,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
+                                                                                    sample_type = DBI::SQL(paste0(sample_type,
+                                                                                                                  collapse = ", ")))
+                                         }
                                          samples_data <- DBI::dbGetQuery(db_con, samples_sql_final)
                                          wellplan_sql <- paste(readLines(con = system.file("sql",
                                                                                            "t3_wellplan.sql",
                                                                                            package = "t3")),
                                                                collapse = "\n")
-                                         wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                   sql = wellplan_sql,
-                                                                                   begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                       order_by = periode_reference) - 1),
-                                                                                                         "-10-01"),
-                                                                                   end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                    order_by = periode_reference) + 1),
-                                                                                                       "-03-01"),
-                                                                                   countries = DBI::SQL(paste0("'",
-                                                                                                               paste0(countries,
-                                                                                                                      collapse = "', '"),
-                                                                                                               "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                       sql = wellplan_sql,
+                                                                                       begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                           order_by = periode_reference) - 1),
+                                                                                                             "-10-01"),
+                                                                                       end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                        order_by = periode_reference) + 1),
+                                                                                                           "-03-01"),
+                                                                                       countries = DBI::SQL(paste0("'",
+                                                                                                                   paste0(countries,
+                                                                                                                          collapse = "', '"),
+                                                                                                                   "'")),
+                                                                                       trips_selected = DBI::SQL(paste0("'",
+                                                                                                                        paste0(trips_selected,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")))
+                                           }
+                                         } else {
+                                           wellplan_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                               replacement = "",
+                                                               x = wellplan_sql,
+                                                               fixed = TRUE)
+                                           wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                     sql = wellplan_sql,
+                                                                                     begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                         order_by = periode_reference) - 1),
+                                                                                                           "-10-01"),
+                                                                                     end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                      order_by = periode_reference) + 1),
+                                                                                                         "-03-01"),
+                                                                                     countries = DBI::SQL(paste0("'",
+                                                                                                                 paste0(countries,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")))
+                                         }
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful wells data (samples and well plans) importation from T3 database\n",
@@ -943,11 +1141,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    sampleset_data = function(db_con,
                                                              data_source = "t3_db",
                                                              periode_reference = NULL,
                                                              countries = NULL,
-                                                             data_path = NULL) {
+                                                             data_path = NULL,
+                                                             trips_selected = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -972,18 +1172,49 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "t3_sampleset.sql",
                                                                                             package = "t3")),
                                                                 collapse = "\n")
-                                         sampleset_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                    sql = sampleset_sql,
-                                                                                    begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                        order_by = periode_reference) - 1),
-                                                                                                          "-10-01"),
-                                                                                    end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                     order_by = periode_reference) + 1),
-                                                                                                        "-03-01"),
-                                                                                    countries = DBI::SQL(paste0("'",
-                                                                                                                paste0(countries,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")))
+                                         if (! is.null(trips_selected)) {
+                                           if (class(trips_selected) != "character") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 " - Error: invalid \"trips_selected\" argument\n",
+                                                 "class \"character\" expected if not NULL\n",
+                                                 sep = "")
+                                             stop()
+                                           } else {
+                                             sampleset_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                        sql = sampleset_sql,
+                                                                                        begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                            order_by = periode_reference) - 1),
+                                                                                                              "-10-01"),
+                                                                                        end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                         order_by = periode_reference) + 1),
+                                                                                                            "-03-01"),
+                                                                                        countries = DBI::SQL(paste0("'",
+                                                                                                                    paste0(countries,
+                                                                                                                           collapse = "', '"),
+                                                                                                                    "'")),
+                                                                                        trips_selected = DBI::SQL(paste0("'",
+                                                                                                                         paste0(trips_selected,
+                                                                                                                                collapse = "', '"),
+                                                                                                                         "'")))
+                                           }
+                                         } else {
+                                           sampleset_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
+                                                                replacement = "",
+                                                                x = sampleset_sql,
+                                                                fixed = TRUE)
+                                           sampleset_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                      sql = sampleset_sql,
+                                                                                      begin_period = paste0((dplyr::first(periode_reference,
+                                                                                                                          order_by = periode_reference) - 1),
+                                                                                                            "-10-01"),
+                                                                                      end_period = paste0((dplyr::last(periode_reference,
+                                                                                                                       order_by = periode_reference) + 1),
+                                                                                                          "-03-01"),
+                                                                                      countries = DBI::SQL(paste0("'",
+                                                                                                                  paste0(countries,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")))
+                                         }
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql_final)
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful sample sets data importation from T3 database\n",

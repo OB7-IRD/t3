@@ -1,12 +1,13 @@
 #' @name data_model_initialisation
 #' @title Data model initialisation
-#' @description Shortcut for initialisation of data's object model.
+#' @description Shortcut for initialisation of data's object model from a t3 database.
 #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
 #' @param countries (character) ISO code on 3 letters related to one or more countries.
-#' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database.
+#' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.
 #' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path (character) Path of the log file directory. By default NULL.
 #' @param log_name (character) Name of the log file. By default "t3log".
+#' @param trips_selected (character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
 #' @return The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
 #' @export
 data_model_initialisation <- function(periode_reference,
@@ -15,7 +16,8 @@ data_model_initialisation <- function(periode_reference,
                                       sample_type,
                                       log_file = FALSE,
                                       log_path = NULL,
-                                      log_name = "data_model_initialisation") {
+                                      log_name = "data_model_initialisation",
+                                      trips_selected = NULL) {
   # log file initialisation ----
   t3::initiate_log_file(log_file = log_file,
                         log_path = log_path,
@@ -25,24 +27,29 @@ data_model_initialisation <- function(periode_reference,
   # model creation: object trips creation ----
   object_model_data$trips_object_creation(periode_reference = periode_reference,
                                           countries = countries,
+                                          trips_selected = trips_selected,
                                           db_con = t3_con)
   # model creation: object activites creation ----
   object_model_data$activities_object_creation(periode_reference = periode_reference,
                                                countries = countries,
+                                               trips_selected = trips_selected,
                                                db_con = t3_con)
   # model creation: object elementarycatches creation ----
   object_model_data$elementarycatches_object_creation(periode_reference = periode_reference,
                                                       countries = countries,
+                                                      trips_selected = trips_selected,
                                                       db_con = t3_con)
   # model creation: object elementarylandings creation ----
   object_model_data$elementarylandings_object_creation(periode_reference = periode_reference,
                                                        countries = countries,
+                                                       trips_selected = trips_selected,
                                                        db_con = t3_con)
   # model creation: object wells creation ----
   object_model_data$wells_object_creation(periode_reference = periode_reference,
                                           countries = countries,
-                                          db_con = t3_con,
-                                          sample_type = sample_type)
+                                          sample_type = sample_type,
+                                          trips_selected = trips_selected,
+                                          db_con = t3_con)
   # model creation: set duration data ----
   object_model_data$setduration_data(periode_reference = periode_reference,
                                      countries = countries,
@@ -52,6 +59,7 @@ data_model_initialisation <- function(periode_reference,
   # model creation: sample set data ----
   object_model_data$sampleset_data(periode_reference = periode_reference,
                                    countries = countries,
+                                   trips_selected = trips_selected,
                                    db_con = t3_con)
   # model creation: length weight relationship data ----
   object_model_data$lengthweightrelationship_data(db_con = t3_con)

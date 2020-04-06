@@ -32,7 +32,8 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  trips_selected = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -48,6 +49,8 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -63,7 +66,8 @@ Creation of a R6 reference object class activities which contain one or more R6 
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  trips_selected = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -79,6 +83,8 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -94,7 +100,8 @@ Creation of a R6 reference object class elementarycatches which contain one or m
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  trips_selected = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -110,6 +117,8 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -125,7 +134,8 @@ Creation of a R6 reference object class elementarylandings which contain one or 
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  trips_selected = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -141,6 +151,8 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -157,6 +169,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   periode_reference = NULL,
   countries = NULL,
   sample_type = NULL,
+  trips_selected = NULL,
   data_path_samples = NULL,
   data_path_wellplans = NULL
 )}\if{html}{\out{</div>}}
@@ -174,6 +187,8 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.}
 
 \item{\code{data_path_samples}}{(character) Path of the data sql/csv file for samples. By default NULL.}
 
@@ -249,7 +264,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  trips_selected = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -265,6 +281,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \if{html}{\out{</div>}}
 }

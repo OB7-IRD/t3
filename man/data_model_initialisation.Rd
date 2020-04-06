@@ -11,7 +11,8 @@ data_model_initialisation(
   sample_type,
   log_file = FALSE,
   log_path = NULL,
-  log_name = "data_model_initialisation"
+  log_name = "data_model_initialisation",
+  trips_selected = NULL
 )
 }
 \arguments{
@@ -19,17 +20,19 @@ data_model_initialisation(
 
 \item{countries}{(character) ISO code on 3 letters related to one or more countries.}
 
-\item{db_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database.}
+\item{db_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.}
 
 \item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
 
 \item{log_path}{(character) Path of the log file directory. By default NULL.}
 
 \item{log_name}{(character) Name of the log file. By default "t3log".}
+
+\item{trips_selected}{(character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.}
 }
 \value{
 The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
 }
 \description{
-Shortcut for initialisation of data's object model.
+Shortcut for initialisation of data's object model from a t3 database.
 }

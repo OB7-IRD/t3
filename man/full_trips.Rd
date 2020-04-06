@@ -474,13 +474,18 @@ Data preparatory for the t3 modelling process (level 3).
 \subsection{Method \code{random_forest_models()}}{
 Modelling proportions in sets througth random forest models.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(inputs_level3_process1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(
+  inputs_level3_process1,
+  number_of_trees = as.integer(1000)
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{inputs_level3_process1}}{(data frame) Output table data4mod from process 3.1.}
+
+\item{\code{number_of_trees}}{(integer) Number of trees for the random forest models. By default 1000.}
 }
 \if{html}{\out{</div>}}
 }
