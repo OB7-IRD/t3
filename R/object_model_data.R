@@ -861,31 +861,34 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          }
                                          if (length(unique(tmp_well$well_minus10_weigth)) != 1) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"well_minus10_weigth\" argument for trip id \"",
+                                               " - Warning: invalid \"well_minus10_weigth\" argument. Well data avoided and not imported.\n",
+                                               "[trip: ",
                                                trip,
-                                               "\" and well id \"",
+                                               ", well: ",
                                                well,
-                                               "\"\n",
+                                               "]\n",
                                                sep = "")
-                                           stop()
+                                           next()
                                          } else if (length(unique(tmp_well$well_plus10_weigth)) != 1) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"well_plus10_weigth\" argument for trip id \"",
+                                               " - Warning: invalid \"well_plus10_weigth\" argument. Well data avoided and not imported.\n",
+                                               "[trip: ",
                                                trip,
-                                               "\" and well id \"",
+                                               ", well: ",
                                                well,
-                                               "\"\n",
+                                               "]\n",
                                                sep = "")
-                                           stop()
+                                           next()
                                          } else if (length(unique(tmp_well$well_global_weigth)) != 1) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"well_global_weigth\" argument for trip id \"",
+                                               " - Warning: invalid \"well_global_weigth\" argument. Well data avoided and not imported.\n",
+                                               "[trip: ",
                                                trip,
-                                               "\" and well id \"",
+                                               ", well: ",
                                                well,
-                                               "\"\n",
+                                               "]\n",
                                                sep = "")
-                                           stop()
+                                           next()
                                          } else {
                                            object_well <- t3:::well$new(trip_id = trip,
                                                                         well_id = well,
