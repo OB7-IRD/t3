@@ -14,7 +14,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             create_full_trips = function(object_trips) {
                               if (paste(class(object_trips), collapse = " ") != "trips list_t3 R6") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_trips\" argument\nClass R6 and trips expected\n",
+                                    " - Error: invalid \"object_trips\" argument\nClass R6 and trips expected.\n",
                                     sep = "")
                                 stop()
                               }
@@ -25,7 +25,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               while (i <= object_trips$count()) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start full trips creation\n",
+                                      " - Start full trips creation.\n",
                                       sep = "")
                                 }
                                 if (object_trips$view(i)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
@@ -59,7 +59,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: missing trip(s) in item ",
                                         length(full_trips) + 1,
-                                        "\n[trip: ",
+                                        ".\n[trip: ",
                                         object_trips$view(j)[[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -71,7 +71,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               names(full_trips) <- seq_len(length.out = length(full_trips))
                               private$data <- full_trips
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End of full trips creation\n",
+                                  " - End of full trips creation.\n",
                                   sep = "")
                             },
                             # filter full trips by periode_reference ----
@@ -80,19 +80,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             filter_by_periode = function(periode_reference) {
                               if (any(class(periode_reference) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument\nclass integer expected\n",
+                                    " - Error: invalid \"periode_reference\" argument\nclass integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (any(nchar(periode_reference) != 4)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument\nyear format on 4 digits expected\n",
+                                    " - Error: invalid \"periode_reference\" argument\nyear format on 4 digits expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in seq_len(length.out = length(private$data))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of full trips filtering by reference periode\n",
+                                        " - Start of full trips filtering by reference periode.\n",
                                         sep = "")
                                   }
                                   full_trips_tmp <- private$data[[i]]
@@ -114,11 +114,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                                 if (any(private$id_not_full_trip %in% names(private$data_selected))) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: missing trip(s) in at least one full trip item\n",
-                                      "check id(s): ",
-                                      intersect(private$id_not_full_trip,
-                                                private$data_selected),
-                                      "\n",
+                                      " - Warning: missing trip(s) in at least one full trip item.\n",
+                                      "[id(s) element(s): ",
+                                      paste(intersect(private$id_not_full_trip,
+                                                      private$data_selected),
+                                            collapse = ", "),
+                                      "]\n",
                                       sep = "")
                                   private$id_not_full_trip_retained <- intersect(
                                     private$id_not_full_trip,
@@ -126,7 +127,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   )
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of full trips filtering\n",
+                                    " - End of full trips filtering.\n",
                                     sep = "")
                               }
                             },
@@ -136,19 +137,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             add_activities = function(object_activities) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selected\" empty\nlaunch selection data before\n",
+                                    " - Error: argument \"data_selected\" empty, ",
+                                    "launch selection data before.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(object_activities) == "activities")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_activities\" argument\nclass activities expected\n",
+                                    " - Error: invalid \"object_activities\" argument, ",
+                                    "class activities expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add activity\n",
+                                        " - Start of add activity.\n",
                                         sep = "")
                                   }
                                   for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -158,7 +161,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add activity\n",
+                                    " - End of add activity.\n",
                                     sep = "")
                               }
                             },
@@ -168,19 +171,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             add_elementarycatches = function(object_elementarycatches) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selected\" empty\nlaunch selection data before\n",
+                                    " - Error: argument \"data_selected\" empty, ",
+                                    "launch selection data before.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(object_elementarycatches) == "elementarycatches")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_elementarycatches\" argument\nclass elementarycatches expected\n",
+                                    " - Error: invalid \"object_elementarycatches\" argument, ",
+                                    "class elementarycatches expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add elementary catches\n",
+                                        " - Start of add elementary catches.\n",
                                         sep = "")
                                   }
                                   for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -196,7 +201,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add elementary catches\n",
+                                    " - End of add elementary catches.\n",
                                     sep = "")
                               }
                             },
@@ -206,19 +211,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             add_elementarylandings = function(object_elementarylandings) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selecetd\" empty\nlaunch selection data before\n",
+                                    " - Error: argument \"data_selecetd\" empty, ",
+                                    "launch selection data before.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(object_elementarylandings) == "elementarylandings")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_elementarylandings\" argument\nclass elementarylandings expected\n",
+                                    " - Error: invalid \"object_elementarylandings\" argument, ",
+                                    "class elementarylandings expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add elementary landings\n",
+                                        " - Start of add elementary landings.\n",
                                         sep = "")
                                   }
                                   for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -228,7 +235,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add elementary landings\n",
+                                    " - End of add elementary landings.\n",
                                     sep = "")
                               }
                             },
@@ -238,19 +245,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             add_wells_samples = function(object_wells) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selecetd\" empty\nlaunch selection data before\n",
+                                    " - Error: argument \"data_selecetd\" empty, ",
+                                    "launch selection data before.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(object_wells) == "wells")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_wells\" argument\nclass wells expected\n",
+                                    " - Error: invalid \"object_wells\" argument, ",
+                                    "class wells expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add well(s) - sample(s)\n",
+                                        " - Start of add well(s) - sample(s).\n",
                                         sep = "")
                                   }
                                   for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -260,7 +269,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add well(s) - sample(s)\n",
+                                    " - End of add well(s) - sample(s).\n",
                                     sep = "")
                               }
                             },
@@ -274,30 +283,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            rf1_highest_limit = 1.2) {
                               if (any(class(species_rf1) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"species_rf1\" argument\nclass integer expected\n",
+                                    " - Error: invalid \"species_rf1\" argument, ",
+                                    "class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (length(class(rf1_lowest_limit)) != 1 || class(rf1_lowest_limit) != "numeric") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"rf1_lowest_limit\" argument\nclass numeric with one value expected\n",
+                                    " - Error: invalid \"rf1_lowest_limit\" argument, ",
+                                    "class numeric with one value expected.\n",
                                     sep = "")
                                 stop()
                               } else if (length(class(rf1_highest_limit)) != 1 || class(rf1_highest_limit) != "numeric") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"rf1_highest_limit\" argument\nclass numeric with one value expected\n",
+                                    " - Error: invalid \"rf1_highest_limit\" argument, ",
+                                    "class numeric with one value expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 if (is.null(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Empty data selected in the R6 object\n",
-                                      " - Process 1.1 (raising factor level 1) cancelled\n",
+                                      " - Empty data selected in the R6 object.\n",
+                                      " - Process 1.1 (raising factor level 1) cancelled.\n",
                                       sep = "")
                                 } else {
                                   for (i in seq_len(length.out = length(private$data_selected))) {
                                     if (i == 1) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Start process 1.1: raising factor level 1\n",
+                                          " - Start process 1.1: raising factor level 1.\n",
                                           sep = "")
                                     }
                                     if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
@@ -306,7 +318,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Warning: missing trip(s) in full trip element ",
                                           i,
-                                          "\n",
+                                          ".\n",
                                           sep = "")
                                       stop <- 0
                                       for (k in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -322,7 +334,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                 " - Warning: missing logbook in trip element ",
                                                 i,
-                                                "\n[trip: ",
+                                                ".\n",
+                                                "[trip: ",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
@@ -378,7 +391,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Warning: missing elementary landing in trip element ",
                                                   i,
-                                                  "\n[trip: ",
+                                                  ".\n",
+                                                  "[trip: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   "]\n",
                                                   sep = "")
@@ -427,7 +441,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                 " - Warning: missing logbook in trip element ",
                                                 i,
-                                                "\n[trip: ",
+                                                ".\n"
+                                                ,"[trip: ",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
@@ -482,7 +497,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                 " - Warning: missing elementary landing in trip element ",
                                                 i,
-                                                "\n[trip: ",
+                                                ".\n",
+                                                "[trip: ",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
@@ -507,7 +523,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   i,
                                                   " out of theorical boundaries: ",
                                                   round(current_rf1, 3),
-                                                  "\n[trip: ",
+                                                  ".\n",
+                                                  "[trip: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   "]\n",
                                                   sep = "")
@@ -540,7 +557,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process 1.1: raising factor level 1\n",
+                                      " - Successful process 1.1: raising factor level 1.\n",
                                       sep = "")
                                 }
                               }
@@ -550,21 +567,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             rf2 = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.2 (raising factor level 2) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.2 (raising factor level 2) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.2: raising factor level 2\n",
+                                        " - Start process 1.2: raising factor level 2.\n",
                                         sep = "")
                                   }
                                   if (is.null(private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Argument \"statut_rf1\" is null for the trip element ",
                                         i,
-                                        "\nProcess 1.2 inapplicable, switch to next element\n",
+                                        ".\n",
+                                        "Process 1.2 inapplicable, switch to next element.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -573,7 +591,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
                                       # case 1: rf2 calculated
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Error: rf2 not developped yet\n",
+                                          " - Error: rf2 not developped yet.\n",
                                           sep = "")
                                       stop()
                                     } else if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
@@ -608,7 +626,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End of raising factor process 2\n",
+                                        " - End of raising factor process 2.\n",
                                         sep = "")
                                   }
                                 }
@@ -624,19 +642,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               category_5 <- "unknown"
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.3 (logbook weight categories) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.3 (logbook weight categories) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.3: logbook weight categories conversion\n",
+                                        " - Start process 1.3: logbook weight categories conversion.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -646,7 +664,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.3 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -654,8 +673,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Warning: rf2 is null for the item ",
                                           i,
-                                          "check if the process 1.2 (raising factor level 2) was successfully applied\n",
-                                          "Switch to next element\n",
+                                          ".\n",
+                                          "Check if the process 1.2 (raising factor level 2) was successfully applied.\n",
+                                          "Switch to next element.\n",
                                           "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
@@ -719,7 +739,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                               " - Error: logbook category ",
                                                               current_elementarycatch$.__enclos_env__$private$logbook_category,
-                                                              " not set in the algorithm\n",
+                                                              " not set in the algorithm.\n",
                                                               "[trip: ",
                                                               current_trip$.__enclos_env__$private$trip_id,
                                                               ", activity: ",
@@ -766,7 +786,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                               " - Error: logbook category ",
                                                               current_elementarycatch$.__enclos_env__$private$logbook_category,
-                                                              " not set in the algorithm\n",
+                                                              " not set in the algorithm.\n",
                                                               "[trip: ",
                                                               current_trip$.__enclos_env__$private$trip_id,
                                                               ", activity: ",
@@ -816,7 +836,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                               " - Error: logbook category ",
                                                               current_elementarycatch$.__enclos_env__$private$logbook_category,
-                                                              " not set in the algorithm\n",
+                                                              " not set in the algorithm.\n",
                                                               "[trip: ",
                                                               current_trip$.__enclos_env__$private$trip_id,
                                                               ", activity: ",
@@ -863,7 +883,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                               " - Error: logbook category ",
                                                               current_elementarycatch$.__enclos_env__$private$logbook_category,
-                                                              " not set in the algorithm\n",
+                                                              " not set in the algorithm.\n",
                                                               "[trip: ",
                                                               current_trip$.__enclos_env__$private$trip_id,
                                                               ", activity: ",
@@ -891,7 +911,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Error: algorithm not developed yet for the ocean number ",
                                                         ocean_activity,
-                                                        "\n[trip: ",
+                                                        ".\n",
+                                                        "[trip: ",
                                                         current_trip$.__enclos_env__$private$trip_id,
                                                         ", activity: ",
                                                         current_trip$.__enclos_env__$private$activities[[w]]$.__enclos_env__$private$activity_id,
@@ -1013,14 +1034,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Process 1.3 successfull on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
                                   }
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.3: logbook weight categories conversion\n",
+                                        " - End process 1.3: logbook weight categories conversion.\n",
                                         sep = "")
                                   }
                                 }
@@ -1031,19 +1053,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             set_count = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.4 (set count) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.4 (set count) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.4: set count\n",
+                                        " - Start process 1.4: set count.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1053,7 +1075,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.4 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1069,8 +1092,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                             FUN = function(l) {
                                                                                               if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                    " - Error: argument \"catch_weight_category_corrected\" is null\n",
-                                                                                                    "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
+                                                                                                    " - Error: argument \"catch_weight_category_corrected\" is null.\n",
+                                                                                                    "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
                                                                                                     "\n[trip: ",
                                                                                                     current_activity$.__enclos_env__$private$trip_id,
                                                                                                     ", activity: ",
@@ -1098,13 +1121,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 1.4 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.4: set count\n",
+                                        " - End process 1.4: set count.\n",
                                         sep = "")
                                   }
                                 }
@@ -1116,26 +1140,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             set_duration = function(set_duration_ref) {
                               if (length(class(set_duration_ref)) != 1 || class(set_duration_ref) != "data.frame" || dim(set_duration_ref)[2] != 7 || dim(set_duration_ref)[1] < 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"set_duration_ref\" argument\n",
-                                    "class \"data.frame\" expected with 7 columns and at least 1 row",
+                                    " - Error: invalid \"set_duration_ref\" argument, ",
+                                    "class \"data.frame\" expected with 7 columns and at least 1 row.",
                                     sep = "")
                                 stop()
                               }
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.5 (set duration calculation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.5 (set duration calculation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.5: set duration calculation\n",
+                                        " - Start process 1.5: set duration calculation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1145,7 +1169,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.5 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1163,7 +1188,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Error: invalid \"set_duration_ref\" argument.\n",
-                                                    "No correspondance with activity parameters (ocean and/or school type)\n",
+                                                    "No correspondance with activity parameters (ocean and/or school type).\n",
                                                     "[trip: ",
                                                     current_trip$.__enclos_env__$private$trip_id,
                                                     ", activity: ",
@@ -1177,8 +1202,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               FUN = function(l) {
                                                                                                 if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                      " - Error: argument \"catch_weight_category_corrected\" is null\n",
-                                                                                                      "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
+                                                                                                      " - Error: argument \"catch_weight_category_corrected\" is null.\n",
+                                                                                                      "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
                                                                                                       "\n[trip: ",
                                                                                                       current_activity$.__enclos_env__$private$trip_id,
                                                                                                       ", activity: ",
@@ -1211,8 +1236,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                        & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"set_duration_ref\" argument\n",
-                                                    "No correspondance with activity parameters (ocean and/or school type)\n",
+                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
+                                                    "No correspondance with activity parameters (ocean and/or school type).\n",
                                                     "[trip: ",
                                                     current_trip$.__enclos_env__$private$trip_id,
                                                     ", activity: ",
@@ -1226,8 +1251,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 FUN = function(l) {
                                                                                                   if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                        " - Error: argument \"catch_weight_category_corrected\" is null\n",
-                                                                                                        "Check if the process 1.3 (logbook weight categories conversion) has already been launched",
+                                                                                                        " - Error: argument \"catch_weight_category_corrected\" is null.\n",
+                                                                                                        "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
                                                                                                         "\n[trip: ",
                                                                                                         current_activity$.__enclos_env__$private$trip_id,
                                                                                                         ", activity: ",
@@ -1250,7 +1275,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                                 } else {
                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Error: set declared as positive but without elementary catch",
+                                                      " - Error: set declared as positive but without elementary catch.",
                                                       "\n[trip: ",
                                                       current_trip$.__enclos_env__$private$trip_id,
                                                       ", activity: ",
@@ -1264,7 +1289,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Error: algorithms not developed yet for the activity code ",
                                                   current_activity$.__enclos_env__$private$activity_code,
-                                                  "\n[trip: ",
+                                                  ".\n",
+                                                  "[trip: ",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   ", activity: ",
                                                   current_activity$.__enclos_env__$private$activity_id,
@@ -1280,7 +1306,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 1.5 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
@@ -1297,19 +1324,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             time_at_sea = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.6 (set duration calculation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.6 (set duration calculation) cancelled.\n",
                                     sep = "")
                               }
                               for (i in seq_len(length.out = length(private$data_selected))) {
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start process 1.6: time at sea calculation\n",
+                                      " - Start process 1.6: time at sea calculation.\n",
                                       sep = "")
                                 }
                                 if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                      " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                       "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
@@ -1319,7 +1346,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Ongoing process 1.6 on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
@@ -1373,13 +1401,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Process 1.6 successfull on item ",
                                     i,
-                                    "\n[trip: ",
+                                    ".\n",
+                                    "[trip: ",
                                     private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                     "]\n",
                                     sep = "")
                                 if (i == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End process 1.6: time at sea calculation\n",
+                                      " - End process 1.6: time at sea calculation.\n",
                                       sep = "")
                                 }
                               }
@@ -1410,19 +1439,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     sunset_schema = "sunset") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.7 (fishing time calculation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.7 (fishing time calculation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.7: fishing time calculation\n",
+                                        " - Start process 1.7: fishing time calculation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1432,7 +1461,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.7 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1498,13 +1528,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 1.7 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.7: fishing time calculation\n",
+                                        " - End process 1.7: fishing time calculation.\n",
                                         sep = "")
                                   }
                                 }
@@ -1515,19 +1546,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             searching_time = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 1.8 (fishing time calculation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.8 (fishing time calculation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.8: searching time calculation\n",
+                                        " - Start process 1.8: searching time calculation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1537,7 +1568,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.8 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1554,7 +1586,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                               })) / 60
                                         if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: run process 1. 7 (fishing time calculation) before this process\n",
+                                              " - Error: run process 1. 7 (fishing time calculation) before this process.\n",
                                               sep = "")
                                           stop()
                                         } else {
@@ -1569,13 +1601,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 1.8 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.8: searching time calculation\n",
+                                        " - End process 1.8: searching time calculation.\n",
                                         sep = "")
                                   }
                                 }
@@ -1586,19 +1619,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             sample_number_measured_extrapolation = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.1 (sample number measured extrapolation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.1 (sample number measured extrapolation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.1: sample number measured extrapolation\n",
+                                        " - Start process 2.1: sample number measured extrapolation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1608,7 +1641,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.1 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1667,7 +1701,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Warning: rf4 not egal to 1 (",
                                                         rf4,
-                                                        ") for sampled specie different from SKJ\n",
+                                                        ") for sampled specie different from SKJ.\n",
                                                         "[trip: ",
                                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                                         ", sample: ",
@@ -1679,7 +1713,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Warning: rf4 inferior to 1 (",
                                                         rf4,
-                                                        ")\n",
+                                                        ").\n",
                                                         "[trip: ",
                                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                                         ", sample: ",
@@ -1702,13 +1736,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.1 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.1: sample number measured extrapolation\n",
+                                        " - End process 2.1: sample number measured extrapolation.\n",
                                         sep = "")
                                   }
                                 }
@@ -1720,13 +1755,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             sample_length_class_ld1_to_lf =  function(length_step) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.2 (sample length class conversion ld1 to lf) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.2 (sample length class conversion ld1 to lf) cancelled.\n",
                                     sep = "")
                               } else {
                                 if (class(length_step) != "data.frame" || ncol(length_step) != 6 || nrow(length_step) == 0) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - invalid \"length_step\" argument\nclass \"data.frame\" with 6 columns and at least 1 row expected\n",
+                                      " - invalid \"length_step\" argument, class \"data.frame\" with 6 columns and at least 1 row expected.\n",
                                       sep = "")
                                 } else {
                                   length_step_count <- length_step %>%
@@ -1736,12 +1771,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.2: sample length class conversion ld1 to lf\n",
+                                        " - Start process 2.2: sample length class conversion ld1 to lf.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1751,7 +1786,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.2 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -1780,14 +1816,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     ocean_activities <- unique(ocean_activities)
                                                     if (length(ocean_activities) != 1) {
                                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                          " - Error: activites associated to sample in more than one ocean\n",
+                                                          " - Error: activites associated to sample in more than one ocean.\n",
                                                           "[trip_id: ",
                                                           current_elementary_sample$.__enclos_env__$private$trip_id,
-                                                          "\n, well_id: ",
+                                                          ", well_id: ",
                                                           current_elementary_sample$.__enclos_env__$private$well_id,
-                                                          "\n, sample_id: ",
+                                                          ", sample_id: ",
                                                           current_elementary_sample$.__enclos_env__$private$sample_id,
-                                                          "]",
+                                                          "]\n",
                                                           sep = "")
                                                       stop()
                                                     } else {
@@ -1796,14 +1832,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                 & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"])
                                                       if (is.na(current_length_step_count)) {
                                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                            " - Error: no correspondance between sample length class and ld1-lf reference table\n",
+                                                            " - Error: no correspondance between sample length class and ld1-lf reference table.\n",
                                                             "[trip_id: ",
                                                             current_elementary_sample$.__enclos_env__$private$trip_id,
-                                                            "\n, well_id: ",
+                                                            ", well_id: ",
                                                             current_elementary_sample$.__enclos_env__$private$well_id,
-                                                            "\n, sample_id: ",
+                                                            ", sample_id: ",
                                                             current_elementary_sample$.__enclos_env__$private$sample_id,
-                                                            "]",
+                                                            "]\n",
                                                             sep = "")
                                                         stop()
                                                       } else {
@@ -1833,14 +1869,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     }
                                                   } else {
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                        " - Error: sample detected without any activity associated\n",
+                                                        " - Error: sample detected without any activity associated.\n",
                                                         "[trip_id: ",
                                                         current_elementary_sample$.__enclos_env__$private$trip_id,
-                                                        "\nwell_id: ",
+                                                        ", well_id: ",
                                                         current_elementary_sample$.__enclos_env__$private$well_id,
-                                                        "\nsample_id: ",
+                                                        ", sample_id: ",
                                                         current_elementary_sample$.__enclos_env__$private$sample_id,
-                                                        "]",
+                                                        "]\n",
                                                         sep = "")
                                                     stop()
                                                   }
@@ -1855,13 +1891,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.2 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.2 sample length class conversion ld1 to lf\n",
+                                        " - End process 2.2 sample length class conversion ld1 to lf.\n",
                                         sep = "")
                                   }
                                 }
@@ -1873,20 +1910,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500)) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.3 (sample length class step standardisation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.3 (sample length class step standardisation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.3: sample length class step standardisation\n",
+                                        " - Start process 2.3: sample length class step standardisation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     # full trip is not complet (missing at least one trip)
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -1896,7 +1933,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.3 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -2013,13 +2051,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.3 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.3: sample length class step standardisation\n",
+                                        " - End process 2.3: sample length class step standardisation.\n",
                                         sep = "")
                                   }
                                 }
@@ -2031,24 +2070,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             well_set_weigth_categories = function(sample_set) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.4 (well-set weight categories definition) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.4 (well-set weight categories definition) cancelled.\n",
                                     sep = "")
                               } else {
                                 if (class(sample_set) != "data.frame" || ncol(sample_set) != 5 || nrow(sample_set) == 0) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - invalid \"sample_set\" argument\nclass \"data.frame\" with 5 columns and at least 1 row expected\n",
+                                      " - invalid \"sample_set\" argument, class \"data.frame\" with 5 columns and at least 1 row expected.\n",
                                       sep = "")
                                 } else {
                                   for (i in seq_len(length.out = length(private$data_selected))) {
                                     if (i == 1) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Start process 2.4: well-set weight categories definition\n",
+                                          " - Start process 2.4: well-set weight categories definition.\n",
                                           sep = "")
                                     }
                                     if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                          " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                           "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
@@ -2058,7 +2097,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Ongoing process 2.4 on item ",
                                           i,
-                                          "\n[trip: ",
+                                          ".\n",
+                                          "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
                                           sep = "")
@@ -2099,8 +2139,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Warning: ",
                                                     length(unique(sample_set_well$sample_id)),
-                                                    " samples detected in a single well.",
-                                                    " Only the first sample well set weighted weight will be considerated\n",
+                                                    " samples detected in a single well.\n",
+                                                    " Only the first sample well set weighted weight will be considerated.\n",
                                                     "[trip: ",
                                                     current_well$.__enclos_env__$private$trip_id,
                                                     ", well: ",
@@ -2132,7 +2172,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                             } else {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: we don't know le proportion of -10/+10 in the well or the global weight. Sample(s) in the well is/are not useable.\n",
+                                                  " - Warning: we don't know le proportion of -10/+10 in the well or the global weight.\n",
+                                                  "Sample(s) in the well is/are not useable.\n",
                                                   "[trip: ",
                                                   current_well$.__enclos_env__$private$trip_id,
                                                   ", well: ",
@@ -2147,13 +2188,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Process 2.4 successfull on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
                                     if (i == length(private$data_selected)) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - End process 2.4 well-set weight categories definition\n",
+                                          " - End process 2.4 well-set weight categories definition.\n",
                                           sep = "")
                                     }
                                   }
@@ -2165,19 +2207,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             standardised_sample_creation = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.5 (standardised sample creation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.5 (standardised sample creation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.5: standardised sample creation\n",
+                                        " - Start process 2.5: standardised sample creation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -2187,7 +2229,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.5 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -2293,13 +2336,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.5 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.5 standardised sample creation\n",
+                                        " - End process 2.5 standardised sample creation.\n",
                                         sep = "")
                                   }
                                 }
@@ -2311,19 +2355,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             standardised_sample_set_creation = function(length_weight_relationship_data) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.6 (standardised sample set creation) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.6 (standardised sample set creation) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.6: standardised sample set creation\n",
+                                        " - Start process 2.6: standardised sample set creation.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -2333,7 +2377,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.6 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -2380,7 +2425,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                    })))
                                             if (is.null(current_ocean)) {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: sample activity missing from trip activities\n",
+                                                  " - Error: sample activity missing from trip activities.\n",
                                                   "[trip: ",
                                                   private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                                   ", sample activity: ",
@@ -2409,7 +2454,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                           } else {
                                                                                             lwr <- NA
                                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                " - Warning: length to weight conversion impossible\n",
+                                                                                                " - Warning: length to weight conversion impossible.\n",
                                                                                                 "[trip: ",
                                                                                                 private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                                                                                 ", well_id: ",
@@ -2447,13 +2492,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.6 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.6: standardised sample set creation\n",
+                                        " - End process 2.6: standardised sample set creation.\n",
                                         sep = "")
                                   }
                                 }
@@ -2473,19 +2519,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_rf_total = as.integer(250)) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.7 (raised factors determination) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.7 (raised factors determination) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.7: raised factors determination\n",
+                                        " - Start process 2.7: raised factors determination.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -2495,7 +2541,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.7 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -2551,7 +2598,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # scenario 1
                                               current_well_sets$.__enclos_env__$private$rf_validation <- 1
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: well-set avoided because weighted samples total value egal to zero\n",
+                                                  " - Warning: well-set avoided because weighted samples total value egal to zero.\n",
                                                   "[trip: ,",
                                                   current_well_sets$.__enclos_env__$private$trip_id,
                                                   ", activity: ",
@@ -2569,7 +2616,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # scenario 2
                                               current_well_sets$.__enclos_env__$private$rf_validation <- 2
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: well-set avoided because invalid weighted weigth\n",
+                                                  " - Warning: well-set avoided because invalid weighted weigth.\n",
                                                   "[trip: ,",
                                                   current_well_sets$.__enclos_env__$private$trip_id,
                                                   ", activity: ",
@@ -2620,7 +2667,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                   " - Warning: well-set \"rf_total\" argument superior to ",
                                                   threshold_rf_total,
-                                                  "\n[trip: ,",
+                                                  ".\n",
+                                                  "[trip: ,",
                                                   current_well_sets$.__enclos_env__$private$trip_id,
                                                   ", activity: ",
                                                   current_well_sets$.__enclos_env__$private$activity_id,
@@ -2640,13 +2688,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.7 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.7: raised factors determination\n",
+                                        " - End process 2.7: raised factors determination.\n",
                                         sep = "")
                                   }
                                 }
@@ -2657,19 +2706,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             raised_standardised_sample_set = function() {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object\n",
-                                    " - Process 2.8 (raised standardised sample set) cancelled\n",
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 2.8 (raised standardised sample set) cancelled.\n",
                                     sep = "")
                               } else {
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.8: raised standardised sample set\n",
+                                        " - Start process 2.8: raised standardised sample set.\n",
                                         sep = "")
                                   }
                                   if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing\n",
+                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -2679,7 +2728,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.8 on item ",
                                         i,
-                                        "\n[trip: ",
+                                        ".\n",
+                                        "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
@@ -2717,7 +2767,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                             if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(1, 2)) {
                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: raised factors not available for this well-set\n",
+                                                  " - Warning: raised factors not available for this well-set.\n",
                                                   "[trip: ,",
                                                   current_well_sets$.__enclos_env__$private$trip_id,
                                                   ", activity: ",
@@ -2770,13 +2820,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.8 successfull on item ",
                                       i,
-                                      "\n[trip: ",
+                                      ".\n",
+                                      "[trip: ",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
                                   if (i == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End 2.8 process: raised standardised sample set\n",
+                                        " - End 2.8 process: raised standardised sample set.\n",
                                         sep = "")
                                   }
                                 }
@@ -2786,7 +2837,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Temporary link to the R object model with Antoine D. modelisation process.
                             path_to_level3 = function() {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - Start path creation for level 3\n",
+                                  " - Start path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- list()
                               raw_inputs_level3 <- vector(mode = "list",
@@ -2884,7 +2935,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               raw_inputs_level3[[4]] <- unique(sset)
                               raw_inputs_level3[[5]] <- wp
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End path creation for level 3\n",
+                                  " - End path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- append(data_level3,
                                                     list(raw_inputs_level3))
@@ -2915,47 +2966,47 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         vessel_id_ignored = NULL) {
                               if (class(outputs_directory) != "character") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"outputs_directory\" argument\nClass character expected\n",
+                                    " - Error: invalid \"outputs_directory\" argument, class character expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(periode_reference) != "integer") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument\nClass integer expected\n",
+                                    " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(targeted_year) != "integer" || length(targeted_year) != 1 || nchar(targeted_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"targeted_year\" argument\nOne value of class integer expected with a format on 4 digits\n",
+                                    " - Error: invalid \"targeted_year\" argument, one value of class integer expected with a format on 4 digits.\n",
                                     sep = "")
                                 stop()
                               } else if (class(distance_maximum) != "integer" || length(distance_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"distance_maximum\" argument\nOne value of class integer expected\n",
+                                    " - Error: invalid \"distance_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(number_sets_maximum) != "integer" || length(number_sets_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"number_sets_maximum\" argument\nOne value of class integer expected\n",
+                                    " - Error: invalid \"number_sets_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(set_weight_minimum) != "integer" || length(set_weight_minimum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"set_weight_minimum\" argument\nOne value of class integer expected\n",
+                                    " - Error: invalid \"set_weight_minimum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(minimum_set_frequency) != "numeric" || length(minimum_set_frequency) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"minimum_set_frequency\" argument\nOne value of class numeric expected\n",
+                                    " - Error: invalid \"minimum_set_frequency\" argument, one value of class numeric expected.\n",
                                     sep = "")
                                 stop()
                               } else if (! class(vessel_id_ignored) %in% c("NULL", "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"vessel_id_ignored\" argument\nClass NULL of value(s) of class integer expected\n",
+                                    " - Error: invalid \"vessel_id_ignored\" argument, class NULL of value(s) of class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Start process 3.1: data preparatory\n",
+                                    " - Start process 3.1: data preparatory.\n",
                                     sep = "")
                                 outputs_directory_name <- format(Sys.time(), "%Y%m%d_%H%M%S_t3_level3_outputs")
                                 dir.create(path = file.path(outputs_directory,
@@ -3219,7 +3270,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                        value = data_level3,
                                        envir = .GlobalEnv)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End process 3.1: data preparatory\n",
+                                    " - End process 3.1: data preparatory.\n",
                                     sep = "")
                               }
                             },
@@ -3231,7 +3282,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             number_of_trees = as.integer(1000)) {
                               browser()
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - Start process 3.2: random forest models\n",
+                                  " - Start process 3.2: random forest models.\n",
                                   sep = "")
                               data4mod <- inputs_level3_process1
                               # sum proportion by species when working on total
@@ -3254,7 +3305,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\" and fishing mode \"",
                                         fmod,
                                         "\"",
-                                        "\n",
+                                        ".\n",
                                         sep = "")
                                     sub <- data4mod[data4mod$fmod == fmod & data4mod$ocean == ocean & data4mod$sp == sp, ]
                                     if (nrow(sub) > 0) {
@@ -3312,11 +3363,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           "\" and fishing mode \"",
                                           fmod,
                                           "\"",
-                                          "\n",
+                                          ".\n",
                                           sep = "")
                                     } else {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: no data available for selected parameters\n",
+                                          " - Warning: no data available for selected parameters.\n",
                                           "[ocean :",
                                           ocean,
                                           ", specie: ",
@@ -3333,14 +3384,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           "\" and fishing mode \"",
                                           fmod,
                                           "\"",
-                                          "\n",
+                                          ".\n",
                                           sep = "")
                                     }
                                   }
                                 }
                               }
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End process 3.2: random forest models\n",
+                                  " - End process 3.2: random forest models.\n",
                                   sep = "")
                             },
                             # browser ----

@@ -12,20 +12,20 @@ initiate_log_file <- function(log_file = FALSE,
   # verifications ----
   if (class(log_file) != "logical") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalid \"log_file\" argument\n",
-        "class \"logical\" expected\n",
+        " - Error: invalid \"log_file\" argument, ",
+        "class \"logical\" expected.\n",
         sep = "")
   } else {
     if (log_file %in% c(T, TRUE)) {
       if (class(log_path) != "character") {
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-            " - Error: invalid \"log_path\" argument\n",
-            "class \"character\" expected\n",
+            " - Error: invalid \"log_path\" argument, ",
+            "class \"character\" expected.\n",
             sep = "")
       } else if (class(log_name) != "character") {
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-            " - Error: invalid \"log_name\" argument\n",
-            "class \"character\" expected\n",
+            " - Error: invalid \"log_name\" argument, ",
+            "class \"character\" expected.\n",
             sep = "")
       } else {
         # function ----
@@ -43,12 +43,12 @@ initiate_log_file <- function(log_file = FALSE,
              type = "output",
              split = T)
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-            " - Filling of the log file start now\n",
+            " - Filling of the log file start now.\n",
             "[file path: ",
             final_log_path,
             "]\n",
             "For stop the recording run:",
-            " closeAllConnections()",
+            " closeAllConnections().",
             "\n",
             sep = "")
       }

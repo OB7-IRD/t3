@@ -17,8 +17,8 @@ t3_level1 <- function(species_rf1,
     object_full_trips <- get(x = "object_full_trips", envir = .GlobalEnv)
     if (paste0(class(object_full_trips), collapse = " ") != "full_trips list_t3 R6") {
       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"object_full_trips\" argument\n",
-          "classes \"full_trips\", \"list_t3\" and \"R6\" expected\n",
+          " - Error: invalid \"object_full_trips\" argument.\n",
+          "Classes \"full_trips\", \"list_t3\" and \"R6\" expected.\n",
           sep = "")
       stop()
     } else {
@@ -52,7 +52,7 @@ t3_level1 <- function(species_rf1,
     }
   } else {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-        " - Error: object \"object_full_trips\" don't exist in the global environment\n",
+        " - Error: object \"object_full_trips\" don't exist in the global environment.\n",
         sep = "")
     stop()
   }

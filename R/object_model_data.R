@@ -22,25 +22,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                          stop()
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                          stop()
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start trip(s) data importation from T3 database\n",
+                                             " - Start trip(s) data importation from T3 database.\n",
                                              sep = "")
                                          trip_sql <- paste(readLines(con = system.file("sql",
                                                                                        "t3_trip.sql",
@@ -49,8 +49,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -90,9 +90,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                              "'")))
                                          }
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(trip_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -109,14 +116,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from the database\n",
+                                             " - Start trip(s) data importation from database.\n",
                                              sep = "")
                                          trip_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                         collapse = "\n"))
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(trip_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -132,12 +146,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start trip(s) data importation from csv file.\n",
+                                             sep = "")
                                          trip_data <- read.csv2(file = data_path)
+                                         if (nrow(trip_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\" or \"csv_file\" expected)\n",
+                                           "(\"t3_db\", \"sql_query\" or \"csv_file\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -148,7 +175,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                    " - Start importation of trip element ",
                                                                    i,
-                                                                   "\n[trip: ",
+                                                                   ".\n",
+                                                                   "[trip: ",
                                                                    trip_data[[1]][i],
                                                                    "]\n",
                                                                    sep = "")
@@ -162,7 +190,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                    " - Successful importation of trip element ",
                                                                    i,
-                                                                   "\n",
+                                                                   ".\n",
                                                                    sep = "")
                                                                return(trip)
                                                              }))
@@ -184,22 +212,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from T3 database\n",
+                                             " - Start activities data importation from T3 database.\n",
                                              sep = "")
                                          activities_sql <- paste(readLines(con = system.file("sql",
                                                                                              "t3_activities.sql",
@@ -208,8 +236,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -249,9 +277,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    "'")))
                                          }
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(activities_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activities data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -268,14 +303,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from the database\n",
+                                             " - Start activities data importation from the database.\n",
                                              sep = "")
                                          activities_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                               collapse = "\n"))
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(activities_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activities data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -291,7 +333,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start activities data importation from csv file.\n",
+                                             sep = "")
                                          activities_data <- read.csv2(file = data_path)
+                                         if (nrow(activities_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activities data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      activities_data <- unclass(activities_data)
@@ -301,7 +356,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                         " - Start importation of activity element ",
                                                                         i,
-                                                                        "\n[activity: ",
+                                                                        ".\n",
+                                                                        "[activity: ",
                                                                         activities_data[[2]][i],
                                                                         "]\n",
                                                                         sep = "")
@@ -320,7 +376,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                         " - Successful importation of activity element ",
                                                                         i,
-                                                                        "\n",
+                                                                        ".\n",
                                                                         sep = "")
                                                                     return(activity)
                                                                   }))
@@ -342,22 +398,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary catches data importation from T3 database\n",
+                                             " - Start elementary catches data importation from T3 database.\n",
                                              sep = "")
                                          elementarycatch_sql <- paste(readLines(con = system.file("sql",
                                                                                                   "t3_elementarycatch.sql",
@@ -366,8 +422,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -407,9 +463,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                         "'")))
                                          }
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary catches data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(elementarycatch_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary catches data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -426,14 +489,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary catches data importation from the database\n",
+                                             " - Start elementary catches data importation from the database.\n",
                                              sep = "")
                                          elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                    collapse = "\n"))
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary catches data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(elementarycatch_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary catches data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -449,7 +519,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start elementary catches data importation from csv file.\n",
+                                             sep = "")
                                          elementarycatch_data <- read.csv2(file = data_path)
+                                         if (nrow(elementarycatch_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary catches data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      elementarycatch_data <- unclass(elementarycatch_data)
@@ -459,7 +542,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                " - Start importation of elementary catch element ",
                                                                                i,
-                                                                               "\n[elementarycatch: ",
+                                                                               ".\n",
+                                                                               "[elementarycatch: ",
                                                                                elementarycatch_data[[2]][i],
                                                                                "]\n",
                                                                                sep = "")
@@ -475,7 +559,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                " - Successful importation of elementary catch element ",
                                                                                i,
-                                                                               "\n",
+                                                                               ".\n",
                                                                                sep = "")
                                                                            return(elementarycatch)
                                                                          }))
@@ -497,22 +581,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landings data importation from T3 database\n",
+                                             " - Start elementary landings data importation from T3 database.\n",
                                              sep = "")
                                          elementarylanding_sql <- paste(readLines(con = system.file("sql",
                                                                                                     "t3_elementarylanding.sql",
@@ -521,8 +605,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -562,9 +646,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           "'")))
                                          }
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(elementarylanding_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary landings data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -581,14 +672,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landings data importation from the database\n",
+                                             " - Start elementary landings data importation from the database.\n",
                                              sep = "")
                                          elementarylanding_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                      collapse = "\n"))
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(elementarylanding_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary landings data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -604,7 +702,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start elementary landings data importation from csv file.\n",
+                                             sep = "")
                                          elementarylanding_data <- read.csv2(file = data_path)
+                                         if (nrow(elementarylanding_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary landings data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      elementarylanding_data <- unclass(elementarylanding_data)
@@ -614,7 +725,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Start importation of elementary landing element ",
                                                                                 i,
-                                                                                "\n[elementarylanding: ",
+                                                                                ".\n",
+                                                                                "[elementarylanding: ",
                                                                                 elementarylanding_data[[2]][i],
                                                                                 "]\n",
                                                                                 sep = "")
@@ -628,7 +740,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Successful importation of elementary landing element ",
                                                                                 i,
-                                                                                "\n",
+                                                                                ".\n",
                                                                                 sep = "")
                                                                             return(elementarylanding)
                                                                           }))
@@ -654,27 +766,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else if (class(sample_type) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"sample_type\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"sample_type\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start wells data (samples and well plans) importation from T3 database\n",
+                                             " - Start samples data importation from T3 database.\n",
                                              sep = "")
                                          samples_sql <- paste(readLines(con = system.file("sql",
                                                                                           "t3_samples.sql",
@@ -683,8 +795,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -728,6 +840,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                   collapse = ", ")))
                                          }
                                          samples_data <- DBI::dbGetQuery(db_con, samples_sql_final)
+                                         if (nrow(samples_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful samples data importation from T3 database.\n",
+                                               sep = "")
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start well plans data importation from T3 database.\n",
+                                             sep = "")
                                          wellplan_sql <- paste(readLines(con = system.file("sql",
                                                                                            "t3_wellplan.sql",
                                                                                            package = "t3")),
@@ -735,8 +860,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -776,9 +901,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                  "'")))
                                          }
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful wells data (samples and well plans) importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(wellplan_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful well plans data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path_samples) != "character" || class(data_path_wellplans) != "character") {
@@ -795,17 +927,37 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start wells data (samples and well plans) importation from the database\n",
+                                             " - Start samples data importation from the database.\n",
                                              sep = "")
                                          samples_sql <- DBI::SQL(x = paste(readLines(con = data_path_samples),
                                                                            collapse = "\n"))
                                          samples_data <- DBI::dbGetQuery(db_con, samples_sql)
+                                         if (nrow(samples_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful samples data importation from the database.\n",
+                                               sep = "")
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start well plans data importation from the database.\n",
+                                             sep = "")
                                          wellplan_sql <- DBI::SQL(x = paste(readLines(con = data_path_wellplans),
                                                                             collapse = "\n"))
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful wells data (samples and well plans) importation from the database\n",
-                                             sep = "")
+                                         if (nrow(wellplan_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful well plans data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path_samples) != "character" || class(data_path_wellplans) != "character") {
@@ -821,8 +973,34 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start samples data importation from csv file.\n",
+                                             sep = "")
                                          samples_data <- read.csv2(file = data_path_samples)
+                                         if (nrow(samples_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful samples data importation from csv file.\n",
+                                               sep = "")
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start well plans data importation from csv file.\n",
+                                             sep = "")
                                          wellplan_data <- read.csv2(file = data_path_wellplans)
+                                         if (nrow(wellplan_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful well plans data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      object_wells <- t3::object_r6(class_name = "wells")
@@ -830,7 +1008,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Start importation of well(s) data for trip element ",
                                            which(unique(samples_data$trip_id) == trip),
-                                           "\n[trip: ",
+                                           ".\n",
+                                           "[trip: ",
                                            trip,
                                            "]\n",
                                            sep = "")
@@ -839,20 +1018,24 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start importation of well data item ",
                                              which(unique(tmp_trip$well_id) == well),
-                                             "\n[well: ",
+                                             ".\n",
+                                             "[well: ",
                                              well,
                                              "]\n",
                                              sep = "")
                                          if (is.na(well)) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: missing \"well_id\" argument in trip number: ", trip, "\n",
+                                               " - Warning: missing \"well_id\" argument in trip number: \"",
+                                               trip,
+                                               "\".\n",
                                                sep = "")
                                            tmp_well <- dplyr::filter(.data = tmp_trip, is.na(well_id))
                                            if (length(unique(tmp_well$sample_id)) != 1) {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Warning: well unknown identify in trip number \" ",
+                                                 " - Warning: well unknown identify in trip number \"",
                                                  trip,
-                                                 "\" have more than one sampling associated. Data avoided for model incrementation\n",
+                                                 "\" have more than one sampling associated.\n",
+                                                 "Data avoided for model incrementation.\n",
                                                  sep = "")
                                              next()
                                            }
@@ -900,7 +1083,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Start importation of sample data item ",
                                                which(unique(tmp_well$sample_id) == sample),
-                                               "\n[sample: ",
+                                               ".\n",
+                                               "[sample: ",
                                                sample,
                                                "]\n",
                                                sep = "")
@@ -925,7 +1109,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Successful importation of sample data item ",
                                                which(unique(tmp_well$sample_id) == sample),
-                                               "\n[sample: ",
+                                               ".\n",
+                                               "[sample: ",
                                                sample,
                                                "]\n",
                                                sep = "")
@@ -934,7 +1119,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Start importation of well plan data item ",
                                                which(unique(wellplan_data$well_id) == well),
-                                               "\n[well: ",
+                                               ".\n",
+                                               "[well: ",
                                                well,
                                                "]\n",
                                                sep = "")
@@ -956,7 +1142,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Sucessful importation of well plan data item ",
                                                which(unique(wellplan_data$well_id) == well),
-                                               "\n[well: ",
+                                               ".\n",
+                                               "[well: ",
                                                well,
                                                "]\n",
                                                sep = "")
@@ -965,7 +1152,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful importation of well data item ",
                                              which(unique(tmp_trip$well_id) == well),
-                                             "\n[well: ",
+                                             ".\n",
+                                             "[well: ",
                                              well,
                                              "]\n",
                                              sep = "")
@@ -973,7 +1161,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Successful importation of well(s) data for trip element ",
                                            which(unique(samples_data$trip_id) == trip),
-                                           "\n[trip: ",
+                                           ".\n",
+                                           "[trip: ",
                                            trip,
                                            "]\n",
                                            sep = "")
@@ -994,22 +1183,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start set duration data importation from T3 database\n",
+                                             " - Start set duration data importation from T3 database.\n",
                                              sep = "")
                                          setdurationref_sql <- paste(readLines(con = system.file("sql",
                                                                                                  "t3_setdurationref.sql",
@@ -1027,9 +1216,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
                                          setdurationref_data <- DBI::dbGetQuery(db_con, setdurationref_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(setdurationref_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful set duration data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -1046,14 +1242,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start set duration data importation from the database\n",
+                                             " - Start set duration data importation from the database.\n",
                                              sep = "")
                                          setdurationref_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                   collapse = "\n"))
                                          setdurationref_data <- DBI::dbGetQuery(db_con, setdurationref_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(setdurationref_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful set duration data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -1069,7 +1272,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful set duration data importation from csv file.\n",
+                                             sep = "")
                                          setdurationref_data <- read.csv2(file = data_path)
+                                         if (nrow(setdurationref_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful set duration data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      private$setdurationref <- setdurationref_data
@@ -1083,7 +1299,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                               data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from T3 database\n",
+                                           " - Start length steps data importation from T3 database.\n",
                                            sep = "")
                                        lengthstep_sql <- paste(readLines(con = system.file("sql",
                                                                                            "t3_lengthstep.sql",
@@ -1091,9 +1307,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                collapse = "\n")
                                        lengthstep_data <- DBI::dbGetQuery(db_con,
                                                                           lengthstep_sql)
-                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length steps data importation from T3 database\n",
-                                           sep = "")
+                                       if (nrow(lengthstep_data) == 0) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: no data imported, check the query and query's parameters.\n",
+                                             sep = "")
+                                         stop()
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length steps data importation from T3 database.\n",
+                                             sep = "")
+                                       }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1109,15 +1332,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length steps data importation from the database\n",
+                                             " - Start length steps data importation from the database.\n",
                                              sep = "")
                                          lengthstep_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                               collapse = "\n"))
                                          lengthstep_data <- DBI::dbGetQuery(db_con,
                                                                             lengthstep_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(lengthstep_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length steps data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -1133,7 +1363,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start length steps data importation from csv file.\n",
+                                             sep = "")
                                          lengthstep_sql <- read.csv2(file = data_path)
+                                         if (nrow(lengthstep_sql) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length steps data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      private$lengthstep <- lengthstep_data
@@ -1154,22 +1397,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument\n",
-                                             "class \"integer\" expected\n",
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (length(class(countries)) != 1 || class(countries) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument\n",
-                                             "class \"character\" expected\n",
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument\n",
-                                             "class \"PostgreSQLConnection\" expected\n",
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"PostgreSQLConnection\" expected.\n",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start sample sets data importation from T3 database\n",
+                                             " - Start sample sets data importation from T3 database.\n",
                                              sep = "")
                                          sampleset_sql <- paste(readLines(con = system.file("sql",
                                                                                             "t3_sampleset.sql",
@@ -1178,8 +1421,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(trips_selected)) {
                                            if (class(trips_selected) != "character") {
                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument\n",
-                                                 "class \"character\" expected if not NULL\n",
+                                                 " - Error: invalid \"trips_selected\" argument, ",
+                                                 "class \"character\" expected if not NULL.\n",
                                                  sep = "")
                                              stop()
                                            } else {
@@ -1219,9 +1462,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                   "'")))
                                          }
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql_final)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from T3 database\n",
-                                             sep = "")
+                                         if (nrow(sampleset_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample sets data importation from T3 database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
@@ -1238,14 +1488,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start sample sets data importation from the database\n",
+                                             " - Start sample sets data importation from the database.\n",
                                              sep = "")
                                          sampleset_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                              collapse = "\n"))
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(sampleset_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample sets data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -1261,7 +1518,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start sample sets data importation from csv file.\n",
+                                             sep = "")
                                          sampleset_data <- read.csv2(file = data_path)
+                                         if (nrow(sampleset_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample sets data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      private$sampleset <- sampleset_data
@@ -1275,16 +1545,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                             data_path = NULL) {
                                      if (data_source == "t3_db") {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship data importation from T3 database\n",
+                                           " - Start length weight relationship data importation from T3 database.\n",
                                            sep = "")
                                        lengthweightrelationship_sql <- paste(readLines(con = system.file("sql",
                                                                                                          "t3_lengthweightrelationship.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
                                        lengthweightrelationship_data <- DBI::dbGetQuery(db_con, lengthweightrelationship_sql)
-                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length weight relationship data importation from T3 database\n",
-                                           sep = "")
+                                       if (nrow(lengthweightrelationship_data) == 0) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: no data imported, check the query and query's parameters.\n",
+                                             sep = "")
+                                         stop()
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length weight relationship data importation from T3 database.\n",
+                                             sep = "")
+                                       }
                                      } else if (data_source == "sql_query") {
                                        if (class(data_path) != "character") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1300,14 +1577,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationship data importation from the database\n",
+                                             " - Start length weight relationship data importation from the database.\n",
                                              sep = "")
                                          lengthweightrelationship_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                             collapse = "\n"))
                                          lengthweightrelationship_data <- DBI::dbGetQuery(db_con, lengthweightrelationship_sql)
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship data importation from the database\n",
-                                             sep = "")
+                                         if (nrow(lengthweightrelationship_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length weight relationship data importation from the database.\n",
+                                               sep = "")
+                                         }
                                        }
                                      } else if (data_source == "csv_file") {
                                        if (class(data_path) != "character") {
@@ -1323,7 +1607,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start length weight relationship data importation from csv file.\n",
+                                             sep = "")
                                          lengthweightrelationship_data <- read.csv2(file = data_path)
+                                         if (nrow(lengthweightrelationship_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the csv file.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length weight relationship data importation from csv file.\n",
+                                               sep = "")
+                                         }
                                        }
                                      }
                                      private$lengthweightrelationship <- lengthweightrelationship_data

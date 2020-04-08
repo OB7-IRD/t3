@@ -18,7 +18,7 @@ trips <- R6::R6Class(classname = "trips",
                                for (i in length(arguments[[i]])) {
                                  if (length(class(arguments[[i]][[i]])) == 2 && (! any(class(arguments[[i]][[i]]) == "R6") & ! any(class(new_item[[i]]) == "trip"))) {
                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                       " - Error: invalid \"data\" argument\nClass list or R6-trip expected\n",
+                                       " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                        sep = "")
                                    stop()
                                  }
@@ -28,7 +28,7 @@ trips <- R6::R6Class(classname = "trips",
                                private$data <- append(private$data, arguments[[i]])
                              } else {
                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                   " - Error: invalid \"data\" argument\nClass list or R6-trip expected\n",
+                                   " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                    sep = "")
                                stop()
                              }
@@ -43,7 +43,7 @@ trips <- R6::R6Class(classname = "trips",
                            for (i in length(new_item)) {
                              if (length(class(new_item[[i]])) == 2 && (! any(class(new_item[[i]]) == "R6") & ! any(class(new_item[[i]]) == "trip"))) {
                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                   " - Error: invalid \"data\" argument\nClass list or R6-trip expected\n",
+                                   " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                    sep = "")
                                stop()
                              }
@@ -53,7 +53,7 @@ trips <- R6::R6Class(classname = "trips",
                            super$add(new_item)
                          } else {
                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                               " - Error: invalid \"data\" argument\nClass list or R6-trip expected\n",
+                               " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                sep = "")
                            stop()
                          }
