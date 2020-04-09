@@ -3249,9 +3249,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               by = c("id_act", "year"))
                                 data_lb_sample_screened = list(data4mod = data4mod)
                                 # export to global environment
-                                outputs_level3_process1 <- list(outputs_directory_final = file.path(outputs_directory,
-                                                                                                    outputs_directory_name),
-                                                                sample_set_char = sample_set_char,
+                                outputs_level3_process1 <- list(sample_set_char = sample_set_char,
                                                                 data_selected = data_selected,
                                                                 data_sample_extract = data_sample_extract,
                                                                 data_lb_sample_screened = data_lb_sample_screened)
@@ -3260,10 +3258,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   data_level3 <- get(x = "data_level3",
                                                      envir = .GlobalEnv)
                                   data_level3 <- append(data_level3,
-                                                        list(outputs_level3_process1))
+                                                        c(file.path(outputs_directory,
+                                                                    outputs_directory_name),
+                                                          list(outputs_level3_process1)))
+                                  names(data_level3)[length(data_level3) - 1] <- "outputs_directory"
                                   names(data_level3)[length(data_level3)] <- "outputs_level3_process1"
                                 } else {
                                   data_level3 <- list("raw_inputs_level3" = inputs_level3,
+                                                      'outputs_directory' = file.path(outputs_directory,
+                                                                                      outputs_directory_name),
                                                       "outputs_level3_process1" = outputs_level3_process1)
                                 }
                                 assign(x = "data_level3",
@@ -3276,9 +3279,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.2: random forest models ----
                             #' @description Modelling proportions in sets througth random forest models.
-                            #' @param inputs_level3_process1 (data frame) Output table data4mod from process 3.1.
+                            #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
                             #' @param number_of_trees (integer) Number of trees for the random forest models. By default 1000.
-                            random_forest_models = function(inputs_level3_process1,
+                            random_forest_models = function(outputs_level3_process1,
                                                             number_of_trees = as.integer(1000)) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.2: random forest models.\n",
@@ -3286,7 +3289,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
-                              data4mod <- inputs_level3_process1
+                              data4mod <- outputs_level3_process1
                               # sum proportion by species when working on total
                               data4mod <- tidyr::separate(data = data4mod,
                                                           col = sp_cat,
@@ -3382,9 +3385,37 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
+                              if (exists(x = "data_level3",
+                                         envir = .GlobalEnv)) {
+                                data_level3 <- get(x = "data_level3",
+                                                   envir = .GlobalEnv)
+                                data_level3 <- append(data_level3,
+                                                      list(outputs_level3_process2))
+                                names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
+                              } else {
+                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
+                                                    "outputs_level3_process2" = outputs_level3_process2)
+                              }
+                              assign(x = "data_level3",
+                                     value = data_level3,
+                                     envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.2: random forest models.\n",
                                   sep = "")
+                            },
+                            # process 3.3: models checking ----
+                            #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
+                            #' @param outputs_level3_process2 (list) Outputs models and data from process 3.2.
+                            #' @param outputs_path (character) Outputs directory path.
+                            models_checking = function(outputs_level3_process2,
+                                                       outputs_path) {
+                              browser()
+                              for (a in seq_len(length.out = length(outputs_level3_process2))) {
+                                current_model_outputs <- outputs_level3_process2[[a]]
+                                specie = "SKJ"
+                                ocean = 1
+                                fishing_mode = 1
+                              }
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.

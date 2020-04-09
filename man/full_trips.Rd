@@ -37,6 +37,7 @@ Create R6 reference object class full_trips
 \item \href{#method-path_to_level3}{\code{full_trips$path_to_level3()}}
 \item \href{#method-data_preparatory}{\code{full_trips$data_preparatory()}}
 \item \href{#method-random_forest_models}{\code{full_trips$random_forest_models()}}
+\item \href{#method-models_checking}{\code{full_trips$models_checking()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -475,7 +476,7 @@ Data preparatory for the t3 modelling process (level 3).
 Modelling proportions in sets througth random forest models.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(
-  inputs_level3_process1,
+  outputs_level3_process1,
   number_of_trees = as.integer(1000)
 )}\if{html}{\out{</div>}}
 }
@@ -483,9 +484,28 @@ Modelling proportions in sets througth random forest models.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3_process1}}{(data frame) Output table data4mod from process 3.1.}
+\item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
 
 \item{\code{number_of_trees}}{(integer) Number of trees for the random forest models. By default 1000.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-models_checking"></a>}}
+\if{latex}{\out{\hypertarget{method-models_checking}{}}}
+\subsection{Method \code{models_checking()}}{
+Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(outputs_level3_process2, outputs_path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{outputs_level3_process2}}{(list) Outputs models and data from process 3.2.}
+
+\item{\code{outputs_path}}{(character) Outputs directory path.}
 }
 \if{html}{\out{</div>}}
 }
