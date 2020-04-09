@@ -273,7 +273,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # process 2.1: rf1 ----
+                            # process 1.2: rf1 ----
                             #' @description Process of Raising Factor level 1 (rf1).
                             #' @param species_rf1 (integer) Specie(s) code(s) used for the rf1 process.
                             #' @param rf1_lowest_limit (numeric) Verification value for the lowest limit of the rf1.
@@ -562,7 +562,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # rf2 ----
+                            # process 1.2: rf2 ----
                             #' @description Process of Raising Factor level 2 (rf2).
                             rf2 = function() {
                               if (is.null(private$data_selected)) {
@@ -632,7 +632,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # conversion_weigth_category ----
+                            # process 1.3: conversion_weigth_category ----
                             #' @description Process of logbook weigth categories conversion.
                             conversion_weigth_category = function() {
                               category_1 <- "<10kg"
@@ -1048,7 +1048,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # set_count ----
+                            # process 1.4: set_count ----
                             #' @description Process for postive sets count.
                             set_count = function() {
                               if (is.null(private$data_selected)) {
@@ -1134,7 +1134,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # set_duration ----
+                            # process 1.5: set_duration ----
                             #' @description Process for set duration calculation (in hours).
                             #' @param set_duration_ref (data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).
                             set_duration = function(set_duration_ref) {
@@ -1319,7 +1319,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # time at sea ----
+                            # process 1.6: time at sea ----
                             #' @description Process for time at sea calculation (in hours).
                             time_at_sea = function() {
                               if (is.null(private$data_selected)) {
@@ -1413,7 +1413,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # fishing_time ----
+                            # process 1.7: fishing_time ----
                             #' @description Process for fishing time calculation (in hours).
                             #' @param sunrise_schema (character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema (character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
@@ -1541,7 +1541,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # searching_time ----
+                            # process 1.8: searching_time ----
                             #' @description Process for searching time calculation (in hours, fishing time minus sets durations).
                             searching_time = function() {
                               if (is.null(private$data_selected)) {
@@ -3280,10 +3280,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param number_of_trees (integer) Number of trees for the random forest models. By default 1000.
                             random_forest_models = function(inputs_level3_process1,
                                                             number_of_trees = as.integer(1000)) {
-                              browser()
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.2: random forest models.\n",
                                   sep = "")
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 1)
                               data4mod <- inputs_level3_process1
                               # sum proportion by species when working on total
                               data4mod <- tidyr::separate(data = data4mod,
@@ -3294,21 +3296,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    data = data4mod,
                                                    FUN = sum)
                               outputs_level3_process2 <- list()
-                              for (ocean in as.integer(c(1, 2))) {
-                                for(sp in c("SKJ","YFT")) {
-                                  for (fmod in as.integer(c(1, 2))) {
+                              for (ocean in unique(data4mod$ocean)) {
+                                data4mod_ocean <- data4mod[data4mod$ocean == ocean, ]
+                                for(sp in unique(data4mod_ocean$sp)) {
+                                  if (! sp %in% c("SKJ","YFT")) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process 3.2 for ocean \"",
-                                        ocean,
-                                        "\", specie \"",
+                                        " - Warning: process 3.2 not developed yet for the specie \"",
                                         sp,
-                                        "\" and fishing mode \"",
-                                        fmod,
-                                        "\"",
-                                        ".\n",
+                                        "\" in the ocean \"",
+                                        ocean,
+                                        "\".\n",
+                                        "Data associated not used for this process.\n",
                                         sep = "")
-                                    sub <- data4mod[data4mod$fmod == fmod & data4mod$ocean == ocean & data4mod$sp == sp, ]
-                                    if (nrow(sub) > 0) {
+                                  } else {
+                                    data4mod_ocean_specie <- data4mod_ocean[data4mod_ocean$sp == sp, ]
+                                    for (fmod in unique(data4mod_ocean_specie$fmod)) {
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Ongoing process 3.2 for ocean \"",
+                                          ocean,
+                                          "\", specie \"",
+                                          sp,
+                                          "\" and fishing mode \"",
+                                          fmod,
+                                          "\"",
+                                          ".\n",
+                                          sep = "")
+                                      sub <- data4mod_ocean_specie[data4mod_ocean_specie$fmod == fmod, ]
                                       sub$resp <- (sub$prop_t3)
                                       sub$tlb <- (sub$prop_lb)
                                       sub$year <- factor(sub$year)
@@ -3357,27 +3370,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       names(outputs_level3_process2)[length(outputs_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Process 3.2 successfull for ocean \"",
-                                          ocean,
-                                          "\", specie \"",
-                                          sp,
-                                          "\" and fishing mode \"",
-                                          fmod,
-                                          "\"",
-                                          ".\n",
-                                          sep = "")
-                                    } else {
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: no data available for selected parameters.\n",
-                                          "[ocean :",
-                                          ocean,
-                                          ", specie: ",
-                                          sp,
-                                          ", fishing mode: ",
-                                          fmod,
-                                          "]\n",
-                                          sep = "")
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 3.2 aborded for ocean \"",
                                           ocean,
                                           "\", specie \"",
                                           sp,
