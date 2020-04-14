@@ -3605,7 +3605,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                             "prop_t3",
                                                                             key = "Source" ,
                                                                             value = "prop")
-                                reporting_vs_sampling <- ggplot2::ggplot(reporting_vs_sampling_data,
+                                reporting_vs_sampling <- ggplot2::ggplot(data = reporting_vs_sampling_data,
                                                                          ggplot2::aes(x = year,
                                                                                       y = prop,
                                                                                       color = Source)) +
@@ -3647,6 +3647,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            new_data = newgrid)
                                 interp_data <- as.data.frame(krig$krige_output)
                                 colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
+                                # correct for abnormal fitted value with kriging
+                                interp_data$fit[interp_data$fit > 1] <- 1
                                 data("wrld_simpl",
                                      package = "maptools")
                                 wrld_sf <- sf::st_as_sf(wrld_simpl)
@@ -3693,6 +3695,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                        height = 10,
                                        units = c("cm"),
                                        pointsize = 10)
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("set_sampled_map" = set_sampled_map))
                                 # model checking
                                 # compute model residuals
                                 resrf <- current_model_data$resp - stats::predict(current_model_outputs[[3]])
@@ -3704,31 +3708,78 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_model_data$fit_rf0 <- stats::predict(current_model_outputs[[2]])
                                 current_model_data$fit_rf_wtv <- stats::predict(current_model_outputs[[4]])
                                 # check number of trees enought: should be stable
-                                jpeg(filename = file.path(figures_directory,
-                                                          paste("mse_stability_checking_",
-                                                                ocean,
-                                                                "_",
-                                                                specie,
-                                                                "_",
-                                                                fishing_mode,
-                                                                ".jpeg",
-                                                                sep = "")))
-                                plot(current_model_outputs[[3]],
-                                     main = NULL)
-                                dev.off()
+                                mse_stability_checking <- data.frame("mse" = current_model_outputs[[3]]$mse,
+                                                                     "ntree" = seq_len(length.out = current_model_outputs[[3]]$ntree))
+                                mse_stability_checking <- ggplot2::ggplot(data = mse_stability_checking,
+                                                                          ggplot2::aes(x = ntree,
+                                                                                       y = mse)) +
+                                  ggplot2::geom_line() +
+                                  ggplot2::xlab("trees") +
+                                  ggplot2::ylab("Error")
+                                ggplot2::ggsave(plot = mse_stability_checking,
+                                                file = file.path(figures_directory,
+                                                                 paste("mse_stability_checking_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                                width = 15,
+                                                height = 5,
+                                                units = c("in"),
+                                                dpi = 300)
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("mse_stability_checking" = mse_stability_checking))
                                 # look at variable importance in the model
-                                jpeg(filename = file.path(figures_directory,
-                                                          paste("variable_importance_",
-                                                                ocean,
-                                                                "_",
-                                                                specie,
-                                                                "_",
-                                                                fishing_mode,
-                                                                ".jpeg",
-                                                                sep = "")))
-                                randomForest::varImpPlot(current_model_outputs[[3]],
-                                                         main = NULL)
-                                dev.off()
+                                variables_importance <- data.frame(randomForest::importance(current_model_outputs[[3]]))
+                                variables_importance$variable <- rownames(variables_importance)
+                                names(variables_importance)[1:2] <-  c("pourcentage_inc_mse", "inc_node_purity")
+                                variables_importance[, 3] <- as.factor(variables_importance[, 3])
+                                variables_importance[, 3] <- ordered(variables_importance[, 3],
+                                                                     levels = variables_importance[order(variables_importance[, 1],
+                                                                                                         decreasing = FALSE),
+                                                                                                   "variable"])
+                                pourcentage_inc_mse <- ggplot2::ggplot(data = variables_importance,
+                                                                       ggplot2::aes(x = pourcentage_inc_mse,
+                                                                                    y = variable)) +
+                                  ggplot2::geom_dotplot(binaxis = 'y',
+                                                        stackdir = 'center',
+                                                        binwidth = 0.1) +
+                                  ggplot2::ylab(NULL)
+                                variables_importance[, 3] <- ordered(variables_importance[, 3],
+                                                                     levels = variables_importance[order(variables_importance[, 2],
+                                                                                                         decreasing = FALSE),
+                                                                                                   "variable"])
+                                inc_node_purity <- ggplot2::ggplot(data = variables_importance,
+                                                                   ggplot2::aes(x = inc_node_purity,
+                                                                                y = variable)) +
+                                  ggplot2::geom_dotplot(binaxis = 'y',
+                                                        stackdir = 'center',
+                                                        binwidth = 0.1) +
+                                  ggplot2::ylab(NULL)
+                                variables_importance <- ggpubr::ggarrange(pourcentage_inc_mse,
+                                                                          inc_node_purity,
+                                                                          nrow = 1,
+                                                                          ncol = 2)
+                                ggplot2::ggsave(plot = variables_importance,
+                                                file = file.path(figures_directory,
+                                                                 paste("variables_importance_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                                width = 15,
+                                                height = 5,
+                                                units = c("in"),
+                                                dpi = 300)
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("variables_importance" = variables_importance))
+                                # test for spatial and temporal correlation on residuals
                               }
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
