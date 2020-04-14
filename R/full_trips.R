@@ -3011,7 +3011,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_directory_name <- format(Sys.time(), "%Y%m%d_%H%M%S_t3_level3_outputs")
                                 dir.create(path = file.path(outputs_directory,
                                                             outputs_directory_name))
-                                for (directory in c("data", "figures", "functions", "outputs")) {
+                                for (directory in c("data", "figures", "tables", "functions", "outputs")) {
                                   dir.create(path = file.path(outputs_directory,
                                                               outputs_directory_name,
                                                               directory))
@@ -3410,12 +3410,329 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             models_checking = function(outputs_level3_process2,
                                                        outputs_path) {
                               browser()
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.3: models checking.\n",
+                                  sep = "")
+                              outputs_level3_process3 <- list()
                               for (a in seq_len(length.out = length(outputs_level3_process2))) {
+                                current_outputs_level3_process3 <- vector(mode = "list",
+                                                                          length = 2)
+                                names(current_outputs_level3_process3) <- c("figures", "tables")
                                 current_model_outputs <- outputs_level3_process2[[a]]
-                                specie = "SKJ"
-                                ocean = 1
-                                fishing_mode = 1
+                                ocean = unlist(strsplit(names(outputs_level3_process2)[[a]],
+                                                        '_'))[1]
+                                specie = unlist(strsplit(names(outputs_level3_process2)[[a]],
+                                                         '_'))[2]
+                                fishing_mode = unlist(strsplit(names(outputs_level3_process2)[[a]],
+                                                               '_'))[3]
+                                figures_directory <- file.path(outputs_path,
+                                                               "figures",
+                                                               names(outputs_level3_process2)[[a]])
+                                names(figures_directory) <- "figures"
+                                tables_directory <- file.path(outputs_path,
+                                                              "tables",
+                                                              names(outputs_level3_process2)[[a]])
+                                names(tables_directory) <- "tables"
+                                for (b in c(figures_directory, tables_directory)) {
+                                  if (file.exists(b)) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Outputs \"",
+                                        names(b),
+                                        "\" directory for ocean \"",
+                                        ocean,
+                                        "\", specie \"",
+                                        specie,
+                                        "\" and fishing mode \"",
+                                        fishing_mode,
+                                        "\" already exists.\n",
+                                        "Outputs associated will used this directory (be careful of overwriting previous files).\n",
+                                        sep = "")
+                                  } else {
+                                    dir.create(b)
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Outputs \"",
+                                        names(b),
+                                        "\" directory for ocean \"",
+                                        ocean,
+                                        "\", specie \"",
+                                        specie,
+                                        "\" and fishing mode \"",
+                                        fishing_mode,
+                                        "\" created.\n",
+                                        "[directory path: ",
+                                        figures_directory,
+                                        "]\n",
+                                        sep = "")
+                                  }
+                                }
+                                # check data subset for modelling ----
+                                current_model_data <- current_model_outputs[[1]]
+                                period <- paste0("period: ",
+                                                 min(as.numeric(as.character(current_model_data$year))),
+                                                 " - ",
+                                                 max(as.numeric(as.character(current_model_data$year))))
+                                # tests for collinearity
+                                covariance_matrix <- cor(x = current_model_data[, c("lat",
+                                                                                    "lon",
+                                                                                    "resp",
+                                                                                    "tlb",
+                                                                                    "wtot_lb_t3")])
+                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
+                                                                               list("covariance_matrix" = covariance_matrix))
+                                multi_collinearity_test <- rfUtilities::multi.collinear(x = current_model_data[, c("lat",
+                                                                                                                   "lon",
+                                                                                                                   "resp",
+                                                                                                                   "tlb",
+                                                                                                                   "wtot_lb_t3",
+                                                                                                                   "mon",
+                                                                                                                   "year")],
+                                                                                        perm = TRUE,
+                                                                                        leave.out = TRUE)
+                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
+                                                                               list("multi_collinearity_test" = multi_collinearity_test))
+                                # figure on logbook vs sample set
+                                logbook_vs_sample_1 <- ggplot2::ggplot(current_model_data,
+                                                                       ggplot2::aes(y = prop_t3,
+                                                                                    x = prop_lb,
+                                                                                    color = year)) +
+                                  ggplot2::geom_point() +
+                                  ggplot2::geom_smooth(method = "loess",
+                                                       se = FALSE,
+                                                       formula = "y ~ x") +
+                                  ggplot2::geom_abline(slope = 1,
+                                                       intercept = 0) +
+                                  ggplot2::xlab("Species Frequency in set from logbook") +
+                                  ggplot2::ylab("Species Frequency in set from sample") +
+                                  ggplot2::ggtitle(paste(specie,
+                                                         "on",
+                                                         fishing_mode,
+                                                         "sets",
+                                                         sep = " "))
+                                logbook_vs_sample_2 <- ggplot2::ggplot(current_model_data,
+                                                                       ggplot2::aes(x = prop_lb,
+                                                                                    color = year)) +
+                                  ggplot2::geom_density(fill = rgb(0,0,0,0.1),
+                                                        ggplot2::aes(y = ..scaled..)) +
+                                  ggplot2::xlab("Species Frequency in set from logbook")
+                                logbook_vs_sample <- ggpubr::ggarrange(logbook_vs_sample_1,
+                                                                       logbook_vs_sample_2,
+                                                                       nrow = 2,
+                                                                       ncol = 1)
+                                ggplot2::ggsave(plot = logbook_vs_sample,
+                                                file = file.path(figures_directory,
+                                                                 paste("logbook_vs_sample_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                                width = 15,
+                                                height = 30,
+                                                units = c("cm"))
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("logbook_vs_sample" = logbook_vs_sample))
+                                # various figures to visualize some relationship from data before modelling
+                                # single vessel effect
+                                vessel_effect <- ggplot2::ggplot(current_model_data,
+                                                                 ggplot2::aes(x = vessel,
+                                                                              y = resp)) +
+                                  ggplot2::geom_boxplot() +
+                                  ggplot2::ylab("Species Frequency in set from sample")
+                                ggplot2::ggsave(plot = vessel_effect,
+                                                file = file.path(figures_directory,
+                                                                 paste("vessel_effect_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                                width = 8,
+                                                height = 8,
+                                                units = c("cm"))
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("vessel_effect" = vessel_effect))
+                                # month effect
+                                month_variation <- ggplot2::ggplot(current_model_data,
+                                                                   ggplot2::aes(x = mon,
+                                                                                y = resp)) +
+                                  ggplot2::geom_boxplot() +
+                                  ggplot2::labs(x = "Month",
+                                                y = "Species Frequency in set from sample")
+                                ggplot2::ggsave(plot = month_variation,
+                                                file = file.path(figures_directory,
+                                                                 paste("month_effect_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                                width = 8,
+                                                height = 8,
+                                                units = c("cm"))
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("month_variation" = month_variation))
+                                # year effect
+                                year_effect <- ggplot2::ggplot(current_model_data,
+                                                               ggplot2::aes(x = year,
+                                                                            y = resp)) +
+                                  ggplot2::geom_boxplot() +
+                                  ggplot2::labs(x = NULL,
+                                                y = "Species Frequency in set from sample")
+                                ggplot2::ggsave(plot = year_effect,
+                                                file = file.path(figures_directory,
+                                                                 paste("year_effect_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                       width = 8,
+                                       height = 8,
+                                       units = c("cm"))
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("year_effect" = year_effect))
+                                # species composition in logbook vs sampleset (t3 level 1)
+                                reporting_vs_sampling_data <- tidyr::gather(current_model_data,
+                                                                            "prop_lb",
+                                                                            "prop_t3",
+                                                                            key = "Source" ,
+                                                                            value = "prop")
+                                reporting_vs_sampling <- ggplot2::ggplot(reporting_vs_sampling_data,
+                                                                         ggplot2::aes(x = year,
+                                                                                      y = prop,
+                                                                                      color = Source)) +
+                                  ggplot2::geom_boxplot() +
+                                  ggplot2::labs(x = "Year",
+                                                y = "Proportion in sets") +
+                                  ggplot2::scale_color_discrete(labels = c("Reporting",
+                                                                           "Sampling"))
+                                ggplot2::ggsave(plot = reporting_vs_sampling,
+                                                file = file.path(figures_directory,
+                                                                 paste("reporting_vs_sampling_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                       width = 16,
+                                       height = 16,
+                                       units = c("cm"))
+                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                               list("reporting_vs_sampling" = reporting_vs_sampling))
+                                # map of the data used for modelling
+                                current_model_data_map <- current_model_data
+                                sp::coordinates(obj = current_model_data_map) <- ~ lon + lat
+                                ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_model_data_map),
+                                                              grid = 500)
+                                ker2 <- adehabitatHR::getvolumeUD(x = ker)
+                                grid <- as(object = ker2,
+                                            Class = "SpatialPixelsDataFrame")
+                                newgrid <- grid
+                                sp::fullgrid(obj = newgrid) <- FALSE
+                                sp::gridded(obj = newgrid) <- FALSE
+                                newgrid[newgrid$n > 99] <- NA
+                                newgrid <- newgrid[ !is.na(newgrid$n), ]
+                                krig <- automap::autoKrige(formula = resp ~ 1,
+                                                           input_data = current_model_data_map,
+                                                           new_data = newgrid)
+                                interp_data <- as.data.frame(krig$krige_output)
+                                colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
+                                data("wrld_simpl",
+                                     package = "maptools")
+                                wrld_sf <- sf::st_as_sf(wrld_simpl)
+                                set_sampled_map <- ggplot2::ggplot() +
+                                  ggplot2::geom_tile(data = interp_data,
+                                                     ggplot2::aes(x = lon,
+                                                                  y = lat,
+                                                                  fill = fit),
+                                                     color = NA) +
+                                  ggplot2::scale_fill_gradient2(low = "blue",
+                                                                mid = "white",
+                                                                high = "red",
+                                                                midpoint = mean(interp_data$fit),
+                                                                name = "Proportion") +
+                                  ggplot2::geom_point(data = current_model_data,
+                                                      ggplot2::aes(x = lon,
+                                                                   y = lat),
+                                                      color = "black",
+                                                      size = 0.3) +
+                                  ggplot2::geom_sf(data = wrld_sf) +
+                                  ggplot2::coord_sf(xlim = c(min(interp_data$lon),
+                                                             max(interp_data$lon)),
+                                                    ylim = c(min(interp_data$lat),
+                                                             max(interp_data$lat))) +
+                                  ggplot2::labs(x = NULL,
+                                                y = NULL,
+                                                subtitle = paste(specie,
+                                                                 ocean,
+                                                                 fishing_mode,
+                                                                 period,
+                                                                 sep = "_")) +
+                                  ggplot2::theme_classic()
+                                ggplot2::ggsave(plot = set_sampled_map,
+                                                file = file.path(figures_directory,
+                                                                 paste("set_sampled_map_",
+                                                                       ocean,
+                                                                       "_",
+                                                                       specie,
+                                                                       "_",
+                                                                       fishing_mode,
+                                                                       ".jpeg",
+                                                                       sep = "")),
+                                       width = 18,
+                                       height = 10,
+                                       units = c("cm"),
+                                       pointsize = 10)
+                                # model checking
+                                # compute model residuals
+                                resrf <- current_model_data$resp - stats::predict(current_model_outputs[[3]])
+                                current_model_data$res <- resrf
+                                current_model_data$fit <- stats::predict(current_model_outputs[[3]])
+                                # method
+                                # comparison of the model fitted value
+                                current_model_data$fit_rf <- stats::predict(current_model_outputs[[3]])
+                                current_model_data$fit_rf0 <- stats::predict(current_model_outputs[[2]])
+                                current_model_data$fit_rf_wtv <- stats::predict(current_model_outputs[[4]])
+                                # check number of trees enought: should be stable
+                                jpeg(filename = file.path(figures_directory,
+                                                          paste("mse_stability_checking_",
+                                                                ocean,
+                                                                "_",
+                                                                specie,
+                                                                "_",
+                                                                fishing_mode,
+                                                                ".jpeg",
+                                                                sep = "")))
+                                plot(current_model_outputs[[3]],
+                                     main = NULL)
+                                dev.off()
+                                # look at variable importance in the model
+                                jpeg(filename = file.path(figures_directory,
+                                                          paste("variable_importance_",
+                                                                ocean,
+                                                                "_",
+                                                                specie,
+                                                                "_",
+                                                                fishing_mode,
+                                                                ".jpeg",
+                                                                sep = "")))
+                                randomForest::varImpPlot(current_model_outputs[[3]],
+                                                         main = NULL)
+                                dev.off()
                               }
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.3: models checking.\n",
+                                  sep = "")
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
