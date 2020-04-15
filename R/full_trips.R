@@ -3477,6 +3477,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                     "resp",
                                                                                     "tlb",
                                                                                     "wtot_lb_t3")])
+                                write.csv2(x = covariance_matrix,
+                                           file = file.path(tables_directory,
+                                                            paste("covariance_matrix_",
+                                                                  ocean,
+                                                                  "_",
+                                                                  specie,
+                                                                  "_",
+                                                                  fishing_mode,
+                                                                  ".csv",
+                                                                  sep = "")),
+                                           row.names = TRUE)
                                 current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                list("covariance_matrix" = covariance_matrix))
                                 multi_collinearity_test <- rfUtilities::multi.collinear(x = current_model_data[, c("lat",
@@ -3488,6 +3499,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                    "year")],
                                                                                         perm = TRUE,
                                                                                         leave.out = TRUE)
+                                write.csv2(x = multi_collinearity_test,
+                                           file = file.path(tables_directory,
+                                                            paste("multi_collinearity_test_",
+                                                                  ocean,
+                                                                  "_",
+                                                                  specie,
+                                                                  "_",
+                                                                  fishing_mode,
+                                                                  ".csv",
+                                                                  sep = "")),
+                                           row.names = FALSE)
                                 current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                list("multi_collinearity_test" = multi_collinearity_test))
                                 # figure on logbook vs sample set
@@ -3630,9 +3652,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("reporting_vs_sampling" = reporting_vs_sampling))
                                 # map of the data used for modelling
-                                current_model_data_map <- current_model_data
-                                sp::coordinates(obj = current_model_data_map) <- ~ lon + lat
-                                ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_model_data_map),
+                                current_data_map <- current_model_data
+                                sp::coordinates(obj = current_data_map) <- ~ lon + lat
+                                ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
                                                               grid = 500)
                                 ker2 <- adehabitatHR::getvolumeUD(x = ker)
                                 grid <- as(object = ker2,
@@ -3643,7 +3665,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 newgrid[newgrid$n > 99] <- NA
                                 newgrid <- newgrid[ !is.na(newgrid$n), ]
                                 krig <- automap::autoKrige(formula = resp ~ 1,
-                                                           input_data = current_model_data_map,
+                                                           input_data = current_data_map,
                                                            new_data = newgrid)
                                 interp_data <- as.data.frame(krig$krige_output)
                                 colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
@@ -3780,6 +3802,117 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("variables_importance" = variables_importance))
                                 # test for spatial and temporal correlation on residuals
+                                current_model_data_map <- current_model_data
+                                sp::coordinates(current_model_data_map) <- ~ lon+lat
+                                sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
+                                current_model_data_map <- sp::spTransform(current_model_data_map,
+                                                                          sp::CRS("+init=epsg:3395"))
+                                # moran index on residual
+                                mil <- vector("list",
+                                              length = 10)
+                                mil2 <- vector("list",
+                                               length = 10)
+                                for (c in seq_len(10)){
+                                  nb <- spdep::dnearneigh(as.matrix(current_model_data[, c("lon", "lat")]),
+                                                          d1 = 0,
+                                                          d2 = c * 100,
+                                                          longlat = TRUE)
+                                  listw <- spdep::nb2listw(neighbours = nb,
+                                                           zero.policy = TRUE)
+                                  mil[[c]] <- spdep::moran.mc(x = current_model_data$res,
+                                                              listw = listw,
+                                                              zero.policy = TRUE,
+                                                              nsim = 999,
+                                                              alternative = "greater")
+                                  mil2[[c]] <- spdep::moran.test(x = current_model_data$res,
+                                                                 listw = listw,
+                                                                 zero.policy = TRUE,
+                                                                 alternative = "two.sided")
+                                }
+                                moran_residual_test <- data.frame(dist = 1:10,
+                                                                  estimate = unlist(lapply(mil2,
+                                                                                           function(d) {
+                                                                                             d$estimate[1]
+                                                                                           })))
+                                moran_residual_test$var <- unlist(lapply(mil2,
+                                                                         function(e) {
+                                                                           e$estimate[3]
+                                                                         }))
+                                moran_residual_test$pvaltest <- unlist(lapply(mil2,
+                                                                              function(f) {
+                                                                                f$p.value
+                                                                              }))
+                                moran_residual_test$pvalmc <- unlist(lapply(mil,
+                                                                            function(g) {
+                                                                              g$p.value
+                                                                            }))
+                                write.csv2(x = moran_residual_test,
+                                           file = file.path(tables_directory,
+                                                            paste("moran_residual_test_",
+                                                                  ocean,
+                                                                  "_",
+                                                                  specie,
+                                                                  "_",
+                                                                  fishing_mode,
+                                                                  ".csv",
+                                                                  sep = "")),
+                                           row.names = FALSE)
+                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
+                                                                               list("moran_residual_test" = moran_residual_test))
+
+
+
+                                jpeg(filename =file.path(root_path,"figure", subDir, paste("spatio-temporal_checking",specie,"_",ocean,"_",fishing_mode,".jpeg",sep=""), fsep="\\"), width = 25, height = 25, units = "cm", res = 300)
+
+                                par(mfrow=c(2,2))
+                                par(mar=c(5,5,1,1))
+
+                                variogram_resp_data <- gstat::variogram(object = resp ~ 1,
+                                                                        data = current_model_data_map,
+                                                                        cutoff = 4000000,
+                                                                        width = 100000)
+                                variogram_resp_data$label <- "Observed data"
+                                variogram_res_data <- gstat::variogram(object = res ~ 1,
+                                                                       data = current_model_data_map,
+                                                                       cutoff = 4000000,
+                                                                       width = 100000)
+                                variogram_res_data$label <- "Residuals"
+                                variogram_data <- dplyr::bind_rows(variogram_resp_data,
+                                                                   variogram_res_data)
+                                variogram <- ggplot2::ggplot(data = variogram_data,
+                                                             ggplot2::aes(x = dist,
+                                                                          y = gamma,
+                                                                          group = label,
+                                                                          color = label)) +
+                                  ggplot2::scale_color_manual(values=c("black", "red")) +
+                                  ggplot2::geom_line() +
+                                  ggplot2::theme(legend.position = "bottom",
+                                                 legend.title = ggplot2::element_blank()) +
+                                  ggplot2::xlab("Distance (m)") +
+                                  ggplot2::ylab("Semivariance")
+
+                                correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
+                                                                        lag_max = 300)
+
+
+
+                                atime <- acf(x = current_model_data$resp[order(current_model_data$date_act)],
+                                             lag.max = 300,
+                                             plot = FALSE)
+
+
+
+                                title("Observed data", line = -2)
+
+                                plot(moran_residual_test[c(1,2)],type="b",ylim=c(-0.1,0.4),ylab="Moran Index",xlab="Distance (10^2 km)")
+                                abline(h=c(0),lty=3,col="grey")
+                                lines(moran_residual_test$dist,moran_residual_test$estimate+sqrt(moran_residual_test$var))
+                                lines(moran_residual_test$dist,moran_residual_test$estimate-sqrt(moran_residual_test$var))
+
+                                atime <- acf(current_model_data$res[order(current_model_data$date_act)],lag.max = 300)
+                                title("Residuals", line = -2)
+
+                                dev.off()
                               }
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
