@@ -3525,7 +3525,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                list("multi_collinearity_test" = multi_collinearity_test))
                                 # figure on logbook vs sample set
-                                logbook_vs_sample_1 <- ggplot2::ggplot(current_model_data,
+                                logbook_vs_sample_1 <- ggplot2::ggplot(data = current_model_data,
                                                                        ggplot2::aes(y = prop_t3,
                                                                                     x = prop_lb,
                                                                                     color = year)) +
@@ -4027,7 +4027,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 npartition <- 10
                                 df <- current_model_data
                                 set.seed(7)
-                                fold <- data.frame(row_ord = sample(x = 1:nrow(df),
+                                fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
                                                                     size = nrow(df),
                                                                     replace = FALSE),
                                                    nfold = rep_len(x = 1:npartition,
@@ -4038,8 +4038,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 length = npartition)
 
                                 for (h in seq_len(length.out = npartition)) {
-                                  test = df[fold$row_ord[fold$nfold == h], ]
-                                  train = df[fold$row_ord[fold$nfold != h], ]
+                                  test <- df[fold$row_ord[fold$nfold == h], ]
+                                  train <- df[fold$row_ord[fold$nfold != h], ]
                                   set.seed(7)
                                   model <- randomForest::randomForest(formula = resp ~ lon + lat + mon + year + tlb ,
                                                                       data = current_model_data,
@@ -4138,7 +4138,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        outputs_level3_process1,
                                                                        targeted_year,
                                                                        vessel_id_ignored = NULL) {
-                              browser()
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.4: data formatting for predictions.\n",
                                   sep = "")
@@ -4231,7 +4230,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              tmp2,
                                                              by = c("id_act", "sp"),
                                                              sort = FALSE)
-                              # assign fishing mode to unknow (classification model to optimize )
+                              # assign fishing mode to unknow (classification model to optimize)
                               sets_wide$fmod <- factor(sets_wide$fmod)
                               sets_long$fmod <- factor(sets_long$fmod)
                               train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
@@ -4243,53 +4242,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                mtry = 2,
                                                                nperm = 5,
                                                                ntree = ntree)
-                              plot(rf)
-                              rf
-                              varImpPlot(rf)
-                              # tuneRF(train[,c("p_YFT","p_SKJ","p_BET","ocean","mon","yr")],train$fmod,stepFactor=2,ntreeTry=100,mtryStart=1,improve=0.0001)
-                              1-sum(diag(rf$confusion))/sum(rf$confusion[1:4])
+                              test$fmod2 <- predict(rf,
+                                                    newdata = test)
 
-                              test$fmod2 <- predict(rf,newdata = test)
-
-                              tmp <- left_join(sets_long,test[,c("id_act","fmod2")])
-
-
-                              ### figure of the output of the classification
-                              # library(ggpur)
-                              #
-                              # tmp$fmod2[tmp$fmod != 3] <- tmp$fmod[tmp$fmod != 3]
-                              # tmp$fmod2[tmp$fmod != 3] <- paste(tmp$fmod[tmp$fmod != 3],2, sep="")
-                              #
-                              #
-                              # bo_plot <-  ggplot()+
-                              #   geom_boxplot(data = tmp[tmp$fmod2 == 1,], aes(x = sp, y = prop_lb, fill = fmod), outlier.colour= rgb(0,0,0,0.1), outlier.size = 1)+
-                              # labs(x ="", y = "Proportion in set", fill = "Fishing mode") +
-                              #   scale_fill_manual(labels = c("FOB", "UNK"), values = c("grey", rgb(1,0.5,0.5))) +
-                              #     theme_bw()+
-                              #   theme(legend.position = "top")
-                              #
-                              #
-                              # bl_plot <-  ggplot()+
-                              #   geom_boxplot(data = tmp[tmp$fmod2 == 2,], aes(x = sp, y = prop_lb, fill = fmod), outlier.colour= rgb(0,0,0,0.1), outlier.size = 1) +
-                              #   labs(x ="", y = "Proportion in set", fill = "Fishing mode") +
-                              #   scale_fill_manual(labels = c("FSC", "UNK"), values = c(rgb(0.5,0.5,1), rgb(1,0.5,0.5))) +
-                              #   theme_bw()+
-                              #   theme(legend.position = "top")
-                              #
-                              # fig <- ggarrange(bo_plot,bl_plot, nrow = 1, ncol = 2)
-                              # annot1 <-   annotate_figure(fig, top = text_grob("Comparison of the classification of unknown sets to other sets", face= "italic"))
-                              #
-                              #   annotate_figure(annot1, fig, top = text_grob("Species composition in set by fishing mode reported in logbook", face= "bold"))
-
-                              #########
-
+                              tmp <- dplyr::left_join(sets_long,
+                                                      test[, c("id_act","fmod2")],
+                                                      by = "id_act")
                               tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
                               tmp$fmod2 <- NULL
-                              sets_long<-droplevels(tmp)
-
-                              # save(sets_long,sets_wide,file=file.path(root_path,"data","nonsampled_sets.Ddata",fsep="\\"))
-                              save(sets_long,sets_wide,file=file.path(root_path,"data","nonsampled_sets_ao.RData",fsep="\\"))
-
+                              sets_long <- droplevels(tmp)
+                              outputs_level3_process4 <- append(outputs_level3_process4,
+                                                                list(list("sets_long" = sets_long,
+                                                                          "sets_wide" = sets_wide)))
+                              names(outputs_level3_process4)[length(outputs_level3_process4)] <- "nonsampled_sets"
+                              if (exists(x = "data_level3",
+                                         envir = .GlobalEnv)) {
+                                data_level3 <- get(x = "data_level3",
+                                                   envir = .GlobalEnv)
+                                data_level3 <- append(data_level3,
+                                                      list(outputs_level3_process4))
+                                names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
+                              } else {
+                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
+                                                    "outputs_level3_process4" = outputs_level3_process4)
+                              }
+                              assign(x = "data_level3",
+                                     value = data_level3,
+                                     envir = .GlobalEnv)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.4: data formatting for predictions.\n",
+                                  sep = "")
                             },
                             # process 3.5: predictions ----
                             predictions = function() {
