@@ -4128,6 +4128,173 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End process 3.3: models checking.\n",
                                   sep = "")
                             },
+                            # process 3.4: data formatting for predictions ----
+                            #' @description Formatting data for model predictions.
+                            #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
+                            #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
+                            #' @param targeted_year (integer) Targeted year for model estimaton and prediction.
+                            #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            data_formatting_for_predictions = function(inputs_level3,
+                                                                       outputs_level3_process1,
+                                                                       targeted_year,
+                                                                       vessel_id_ignored = NULL) {
+                              browser()
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.4: data formatting for predictions.\n",
+                                  sep = "")
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 1)
+                              outputs_level3_process4 <- list()
+                              # load from t3 levels 1 and 2 outputs ----
+                              # sets characteristics
+                              act_chr <- inputs_level3[[1]]
+                              # catch by set, species and categories from logbook (t3 level 1)
+                              catch_set_lb <- inputs_level3[[2]]
+                              # catch by set, species and categories (t3 level 2)
+                              samw <- inputs_level3[[3]]
+                              # link between sample and set, + sample quality and type
+                              sset <- inputs_level3[[4]]
+                              # well plan
+                              wp <- inputs_level3[[5]]
+                              # standardize weight category
+                              catch_set_lb$wcat <- gsub("kg",
+                                                        "",
+                                                        catch_set_lb$wcat)
+                              catch_set_lb$wcat <- ifelse(catch_set_lb$wcat == "<10",
+                                                          "m10",
+                                                          "p10")
+                              # only one category (called less 10) use for SKJ
+                              catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
+                              # set use for modeling to remove for prediction
+                              data4mod <- outputs_level3_process1
+                              sampleset <- unique(data4mod[, c("id_act",
+                                                               "fmod",
+                                                               "ocean",
+                                                               "year")])
+                              act_chr$yr <- year(x = act_chr$date)
+                              act_chr$mon <- lubridate::month(x = act_chr$date)
+                              act_chr$fmod <- as.factor(act_chr$fmod)
+                              act_chr$vessel <- as.factor(act_chr$vessel)
+                              # non sampled set
+                              # reduce data to the period considered in the modelling
+                              act_chr <- act_chr[act_chr$yr %in% targeted_year, ]
+                              # add the weigth by categoies, species from logbook (corrected by t3 level 1)
+                              catch_set_lb$yr <- lubridate::year(x = catch_set_lb$date)
+                              catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date)
+                              catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
+                              catch_set_lb <- droplevels(catch_set_lb)
+                              # format data
+                              # sum catches categories of sets
+                              agg <- catch_set_lb %>%
+                                dplyr::group_by(id_act, sp) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3))
+                              sets <- dplyr::inner_join(act_chr,
+                                                        agg,
+                                                        by = "id_act")
+                              # catches keep onboard only = set
+                              sets <- sets[sets$code_act_type %in% c(0,1,2), ]
+                              sets$sp <- factor(sets$sp)
+                              sets$ocean <- factor(sets$ocean)
+                              sets <- sets[! sets$vessel %in% vessel_id_ignored, ]
+                              # calculate proportion of weight from t3 level 1
+                              sets_wide <- tidyr::spread(data = sets,
+                                                         key = sp,
+                                                         value = w_lb_t3,
+                                                         fill = 0)
+                              sets_wide$w_tuna <- rowSums(sets_wide[, c("BET","SKJ","YFT")])
+                              # remove activity with no catch
+                              sets_wide <- sets_wide[sets_wide$w_tuna > 0, ]
+                              tmp <- sets_wide[, names(sets_wide) %in% c("id_act", as.character(unique(sets$sp)))]
+                              tmp[is.na(tmp)] <- 0
+                              tmp[as.character(unique(sets$sp))] <- prop.table(as.matrix(tmp[, as.character(unique(sets$sp))]), 1)
+                              tmp2 <- tidyr::gather(as.data.frame(tmp),
+                                                    key = "sp",
+                                                    value = "prop_lb",
+                                                    as.character(unique(sets$sp)))
+                              colnames(tmp) <- c("id_act", paste("p_",
+                                                                 levels(sets$sp),
+                                                                 sep = ""))
+                              sets_wide <- dplyr::inner_join(sets_wide,
+                                                             tmp,
+                                                             by = "id_act",
+                                                             sort = FALSE)
+                              sets_long <- tidyr::gather(sets_wide[, ! names(sets_wide) %in% c("p_BET", "p_SKJ", "p_YFT")],
+                                                         key = "sp",
+                                                         value = w_lb_t3,
+                                                         BET,
+                                                         SKJ,
+                                                         YFT,
+                                                         factor_key = TRUE)
+                              sets_long$sp <- as.character(sets_long$sp)
+                              sets_long <- dplyr::inner_join(sets_long,
+                                                             tmp2,
+                                                             by = c("id_act", "sp"),
+                                                             sort = FALSE)
+                              # assign fishing mode to unknow (classification model to optimize )
+                              sets_wide$fmod <- factor(sets_wide$fmod)
+                              sets_long$fmod <- factor(sets_long$fmod)
+                              train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
+                              test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
+                              ntree <- 1000
+                              set.seed(7)
+                              rf <- randomForest::randomForest(formula = fmod ~ p_YFT + p_SKJ + p_BET,
+                                                               data = train,
+                                                               mtry = 2,
+                                                               nperm = 5,
+                                                               ntree = ntree)
+                              plot(rf)
+                              rf
+                              varImpPlot(rf)
+                              # tuneRF(train[,c("p_YFT","p_SKJ","p_BET","ocean","mon","yr")],train$fmod,stepFactor=2,ntreeTry=100,mtryStart=1,improve=0.0001)
+                              1-sum(diag(rf$confusion))/sum(rf$confusion[1:4])
+
+                              test$fmod2 <- predict(rf,newdata = test)
+
+                              tmp <- left_join(sets_long,test[,c("id_act","fmod2")])
+
+
+                              ### figure of the output of the classification
+                              # library(ggpur)
+                              #
+                              # tmp$fmod2[tmp$fmod != 3] <- tmp$fmod[tmp$fmod != 3]
+                              # tmp$fmod2[tmp$fmod != 3] <- paste(tmp$fmod[tmp$fmod != 3],2, sep="")
+                              #
+                              #
+                              # bo_plot <-  ggplot()+
+                              #   geom_boxplot(data = tmp[tmp$fmod2 == 1,], aes(x = sp, y = prop_lb, fill = fmod), outlier.colour= rgb(0,0,0,0.1), outlier.size = 1)+
+                              # labs(x ="", y = "Proportion in set", fill = "Fishing mode") +
+                              #   scale_fill_manual(labels = c("FOB", "UNK"), values = c("grey", rgb(1,0.5,0.5))) +
+                              #     theme_bw()+
+                              #   theme(legend.position = "top")
+                              #
+                              #
+                              # bl_plot <-  ggplot()+
+                              #   geom_boxplot(data = tmp[tmp$fmod2 == 2,], aes(x = sp, y = prop_lb, fill = fmod), outlier.colour= rgb(0,0,0,0.1), outlier.size = 1) +
+                              #   labs(x ="", y = "Proportion in set", fill = "Fishing mode") +
+                              #   scale_fill_manual(labels = c("FSC", "UNK"), values = c(rgb(0.5,0.5,1), rgb(1,0.5,0.5))) +
+                              #   theme_bw()+
+                              #   theme(legend.position = "top")
+                              #
+                              # fig <- ggarrange(bo_plot,bl_plot, nrow = 1, ncol = 2)
+                              # annot1 <-   annotate_figure(fig, top = text_grob("Comparison of the classification of unknown sets to other sets", face= "italic"))
+                              #
+                              #   annotate_figure(annot1, fig, top = text_grob("Species composition in set by fishing mode reported in logbook", face= "bold"))
+
+                              #########
+
+                              tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
+                              tmp$fmod2 <- NULL
+                              sets_long<-droplevels(tmp)
+
+                              # save(sets_long,sets_wide,file=file.path(root_path,"data","nonsampled_sets.Ddata",fsep="\\"))
+                              save(sets_long,sets_wide,file=file.path(root_path,"data","nonsampled_sets_ao.RData",fsep="\\"))
+
+                            },
+                            # process 3.5: predictions ----
+                            predictions = function() {
+                              browser()
+                            },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {

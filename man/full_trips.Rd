@@ -38,6 +38,8 @@ Create R6 reference object class full_trips
 \item \href{#method-data_preparatory}{\code{full_trips$data_preparatory()}}
 \item \href{#method-random_forest_models}{\code{full_trips$random_forest_models()}}
 \item \href{#method-models_checking}{\code{full_trips$models_checking()}}
+\item \href{#method-data_formatting_for_predictions}{\code{full_trips$data_formatting_for_predictions()}}
+\item \href{#method-predictions}{\code{full_trips$predictions()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -509,6 +511,43 @@ Load each full model and compute figures and tables to check the model quality. 
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-data_formatting_for_predictions"></a>}}
+\if{latex}{\out{\hypertarget{method-data_formatting_for_predictions}{}}}
+\subsection{Method \code{data_formatting_for_predictions()}}{
+Formatting data for model predictions.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$data_formatting_for_predictions(
+  inputs_level3,
+  outputs_level3_process1,
+  targeted_year,
+  vessel_id_ignored = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inputs_level3}}{(data frame) Imputs of levels 3 (see function path to level 3).}
+
+\item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
+
+\item{\code{targeted_year}}{(integer) Targeted year for model estimaton and prediction.}
+
+\item{\code{vessel_id_ignored}}{(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-predictions"></a>}}
+\if{latex}{\out{\hypertarget{method-predictions}{}}}
+\subsection{Method \code{predictions()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$predictions()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-show_me_what_you_got"></a>}}
