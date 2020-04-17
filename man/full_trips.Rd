@@ -39,7 +39,7 @@ Create R6 reference object class full_trips
 \item \href{#method-random_forest_models}{\code{full_trips$random_forest_models()}}
 \item \href{#method-models_checking}{\code{full_trips$models_checking()}}
 \item \href{#method-data_formatting_for_predictions}{\code{full_trips$data_formatting_for_predictions()}}
-\item \href{#method-predictions}{\code{full_trips$predictions()}}
+\item \href{#method-model_predictions}{\code{full_trips$model_predictions()}}
 \item \href{#method-show_me_what_you_got}{\code{full_trips$show_me_what_you_got()}}
 \item \href{#method-clone}{\code{full_trips$clone()}}
 }
@@ -541,13 +541,21 @@ Formatting data for model predictions.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-predictions"></a>}}
-\if{latex}{\out{\hypertarget{method-predictions}{}}}
-\subsection{Method \code{predictions()}}{
+\if{html}{\out{<a id="method-model_predictions"></a>}}
+\if{latex}{\out{\hypertarget{method-model_predictions}{}}}
+\subsection{Method \code{model_predictions()}}{
+Model predictions for the species composition and computing of catches.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$predictions()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(outputs_level3_process4)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{outputs_level3_process4}}{(list) Outputs from level 3 process 4 (data formatting for predictions).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-show_me_what_you_got"></a>}}

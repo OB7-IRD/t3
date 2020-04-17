@@ -3683,8 +3683,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
                                 # correct for abnormal fitted value with kriging
                                 interp_data$fit[interp_data$fit > 1] <- 1
-                                data("wrld_simpl",
-                                     package = "maptools")
+                                wrld_sf <- data("wrld_simpl",
+                                                package = "maptools")
                                 wrld_sf <- sf::st_as_sf(wrld_simpl)
                                 set_sampled_map <- ggplot2::ggplot() +
                                   ggplot2::geom_tile(data = interp_data,
@@ -4273,9 +4273,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End process 3.4: data formatting for predictions.\n",
                                   sep = "")
                             },
-                            # process 3.5: predictions ----
-                            predictions = function() {
+                            # process 3.5: model predictions ----
+                            #' @description Model predictions for the species composition and computing of catches.
+                            #' @param outputs_level3_process4 (list) Outputs from level 3 process 4 (data formatting for predictions).
+                            model_predictions = function(outputs_level3_process4) {
                               browser()
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: model predictions.\n",
+                                  sep = "")
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 1)
+                              wrld_sf <- data("wrld_simpl",
+                                              package = "maptools")
+                              # function to add empty levels for the prediction with the predict.randomforest
+                              addmissinglevel <- function(df, a){
+                                if (is.factor(df[, a])) {
+                                  return(factor(df[, a],
+                                                levels = c(levels(df[, a]),
+                                                           setdiff(modrf$forest$xlevels[a][[1]],
+                                                                   levels(df[, a])))))
+                                }
+                              }
+                              if (exists(x = "data_level3",
+                                         envir = .GlobalEnv)) {
+                                data_level3 <- get(x = "data_level3",
+                                                   envir = .GlobalEnv)
+                                data_level3 <- append(data_level3,
+                                                      list(outputs_level3_process5))
+                                names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
+                              } else {
+                                data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
+                              }
+                              assign(x = "data_level3",
+                                     value = data_level3,
+                                     envir = .GlobalEnv)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: model predictions.\n",
+                                  sep = "")
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
