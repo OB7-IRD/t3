@@ -89,6 +89,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                     collapse = "', '"),
                                                                                                              "'")))
                                          }
+                                         cat("[", trip_sql_final, "]\n", sep = "")
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql_final)
                                          if (nrow(trip_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -120,6 +121,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          trip_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                         collapse = "\n"))
+                                         cat("[", trip_sql, "]\n", sep = "")
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql)
                                          if (nrow(trip_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -276,6 +278,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           collapse = "', '"),
                                                                                                                    "'")))
                                          }
+                                         cat("[", activities_sql_final, "]\n", sep = "")
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql_final)
                                          if (nrow(activities_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -307,6 +310,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          activities_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                               collapse = "\n"))
+                                         cat("[", activities_sql, "]\n", sep = "")
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql)
                                          if (nrow(activities_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -462,6 +466,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                collapse = "', '"),
                                                                                                                         "'")))
                                          }
+                                         cat("[", elementarycatch_sql_final, "]\n", sep = "")
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql_final)
                                          if (nrow(elementarycatch_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -493,6 +498,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                    collapse = "\n"))
+                                         cat("[", elementarycatch_sql, "]\n", sep = "")
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql)
                                          if (nrow(elementarycatch_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -645,6 +651,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")))
                                          }
+                                         cat("[", elementarylanding_sql_final, "]\n", sep = "")
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql_final)
                                          if (nrow(elementarylanding_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -676,6 +683,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          elementarylanding_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                      collapse = "\n"))
+                                         cat("[", elementarylanding_sql, "]\n", sep = "")
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql)
                                          if (nrow(elementarylanding_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -839,6 +847,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                     sample_type = DBI::SQL(paste0(sample_type,
                                                                                                                   collapse = ", ")))
                                          }
+                                         cat("[", samples_sql_final, "]\n", sep = "")
                                          samples_data <- DBI::dbGetQuery(db_con, samples_sql_final)
                                          if (nrow(samples_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -900,6 +909,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                         collapse = "', '"),
                                                                                                                  "'")))
                                          }
+                                         cat("[", wellplan_sql_final, "]\n", sep = "")
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql_final)
                                          if (nrow(wellplan_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -931,6 +941,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          samples_sql <- DBI::SQL(x = paste(readLines(con = data_path_samples),
                                                                            collapse = "\n"))
+                                         cat("[", samples_sql, "]\n", sep = "")
                                          samples_data <- DBI::dbGetQuery(db_con, samples_sql)
                                          if (nrow(samples_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -947,6 +958,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          wellplan_sql <- DBI::SQL(x = paste(readLines(con = data_path_wellplans),
                                                                             collapse = "\n"))
+                                         cat("[", wellplan_sql, "]\n", sep = "")
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql)
                                          if (nrow(wellplan_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1215,6 +1227,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      paste0(countries,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
+                                         cat("[", setdurationref_sql_final, "]\n", sep = "")
                                          setdurationref_data <- DBI::dbGetQuery(db_con, setdurationref_sql_final)
                                          if (nrow(setdurationref_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1246,6 +1259,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          setdurationref_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                   collapse = "\n"))
+                                         cat("[", setdurationref_sql, "]\n", sep = "")
                                          setdurationref_data <- DBI::dbGetQuery(db_con, setdurationref_sql)
                                          if (nrow(setdurationref_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1305,6 +1319,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                            "t3_lengthstep.sql",
                                                                                            package = "t3")),
                                                                collapse = "\n")
+                                       cat("[", lengthstep_sql, "]\n", sep = "")
                                        lengthstep_data <- DBI::dbGetQuery(db_con,
                                                                           lengthstep_sql)
                                        if (nrow(lengthstep_data) == 0) {
@@ -1336,6 +1351,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          lengthstep_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                               collapse = "\n"))
+                                         cat("[", lengthstep_sql, "]\n", sep = "")
                                          lengthstep_data <- DBI::dbGetQuery(db_con,
                                                                             lengthstep_sql)
                                          if (nrow(lengthstep_data) == 0) {
@@ -1461,6 +1477,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          collapse = "', '"),
                                                                                                                   "'")))
                                          }
+                                         cat("[", sampleset_sql_final, "]\n", sep = "")
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql_final)
                                          if (nrow(sampleset_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1492,6 +1509,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          sampleset_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                              collapse = "\n"))
+                                         cat("[", sampleset_sql, "]\n", sep = "")
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql)
                                          if (nrow(sampleset_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1551,6 +1569,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                          "t3_lengthweightrelationship.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
+                                       cat("[", lengthweightrelationship_sql, "]\n", sep = "")
                                        lengthweightrelationship_data <- DBI::dbGetQuery(db_con, lengthweightrelationship_sql)
                                        if (nrow(lengthweightrelationship_data) == 0) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1581,6 +1600,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          lengthweightrelationship_sql <- DBI::SQL(x = paste(readLines(con = data_path),
                                                                                             collapse = "\n"))
+                                         cat("[", lengthweightrelationship_sql, "]\n", sep = "")
                                          lengthweightrelationship_data <- DBI::dbGetQuery(db_con, lengthweightrelationship_sql)
                                          if (nrow(lengthweightrelationship_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

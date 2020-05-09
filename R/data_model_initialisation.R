@@ -22,6 +22,20 @@ data_model_initialisation <- function(periode_reference,
   t3::initiate_log_file(log_file = log_file,
                         log_path = log_path,
                         log_name = log_name)
+  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+      " - Start function data model initialisation.\n",
+      "[periode reference: ",
+      paste0(periode_reference, collapse = ", "),
+      "; countries: ",
+      paste0(countries, collapse = ", "),
+      "; sample type: ",
+      sample_type,
+      ifelse(test = is.null(trips_selected),
+             yes = "]\n",
+             no = paste0(", trips selected: ",
+                         paste0(trips_selected, collapse = ", "),
+                         "]\n")),
+      sep = "")
   # initialisation object for data's object model ----
   object_model_data <- t3:::object_model_data$new()
   # model creation: object trips creation ----

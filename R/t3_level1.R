@@ -26,6 +26,12 @@ t3_level1 <- function(species_rf1,
       t3::initiate_log_file(log_file = log_file,
                             log_path = log_path,
                             log_name = log_name)
+      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Start function t3 process level 1.\n",
+          "[species rf1: ",
+          paste0(species_rf1, collapse = ", "),
+          "]\n",
+          sep = "")
       # level 1.1: rf1 ----
       object_full_trips$rf1(species_rf1 = species_rf1)
       # level 1.2: rf2 ----

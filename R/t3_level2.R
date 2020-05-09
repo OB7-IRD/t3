@@ -28,6 +28,9 @@ t3_level2 <- function(length_step,
       t3::initiate_log_file(log_file = log_file,
                             log_path = log_path,
                             log_name = log_name)
+      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Start function t3 process level 2.\n",
+          sep = "")
       # level 2.1: sample number measured extrapolation ----
       object_full_trips$sample_number_measured_extrapolation()
       # level 2.2: sample length class ld1 to lf conversion ----

@@ -4295,6 +4295,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    levels(df[, a])))))
                                 }
                               }
+                              # select set to predict
+                              sp_level = c("SKJ","YFT")
+                              ocean_level = c(1, 2)
+                              fmod_level = c(1, 2)
+                              # create list to store the results
+                              nominal_catch <- vector("list",
+                                                      length = length(sp_level) * length(ocean_level) * length(fmod_level))
+                              names(nominal_catch) <- apply(X = expand.grid(sp_level,
+                                                                            fmod_level,
+                                                                            ocean_level),
+                                                            MARGIN = 1,
+                                                            FUN = function(x) {
+                                                              paste(x,collapse="_")
+                                                            })
+
+
                               if (exists(x = "data_level3",
                                          envir = .GlobalEnv)) {
                                 data_level3 <- get(x = "data_level3",
