@@ -46,5 +46,33 @@ test_that(desc = "number_activities_data_extracted_vs_data_model",
                          expected = length(object_model_data$.__enclos_env__$private$activities$.__enclos_env__$private$data))
           })
 
+# compare number of elementary catches between data elementary catches extracted and data model (classes elementarycatch and elementarycatches) ----
+capture.output(object_model_data$elementarycatches_object_creation(data_source = "csv_file",
+                                                                   data_path = system.file("test_data",
+                                                                                           "elementary_catches.csv",
+                                                                                           package = "t3")),
+               file = "NUL")
 
+# compare number of elementary landings between data elementary landings extracted and data model (classes elementarylanding and elementarylandings) ----
+capture.output(object_model_data$elementarylandings_object_creation(data_source = "csv_file",
+                                                                    data_path = system.file("test_data",
+                                                                                            "elementary_landings.csv",
+                                                                                            package = "t3")),
+               file = "NUL")
 
+# compare number of samples and well plans between data samples and well plans extracted and data model (classes well, wells, elementarysampleraw and elementarywellplan) ----
+capture.output(object_model_data$wells_object_creation(data_source = "csv_file",
+                                                       data_path_samples = system.file("test_data",
+                                                                                       "samples.csv",
+                                                                                       package = "t3"),
+                                                       data_path_wellplans = system.file("test_data",
+                                                                                         "well_plans.csv",
+                                                                                         package = "t3")),
+               file = "NUL")
+
+# compare number of set duration data between data set duration extracted and data model ----
+capture.output(object_model_data$setduration_data(data_source = "csv_file",
+                                                  data_path = system.file("test_data",
+                                                                          "set_duration_ref.csv",
+                                                                          package = "t3")),
+               file = "NUL")
