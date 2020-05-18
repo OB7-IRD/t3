@@ -8,12 +8,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv_file" (with separator character ";" and decimal ",") or "rdata".
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param data_path (character) Path of the data sql/csv/RData file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   trips_object_creation = function(db_con,
+                                   trips_object_creation = function(db_con = NULL,
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
@@ -151,7 +151,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start trip(s) data importation from csv file.\n",
                                              sep = "")
-                                         trip_data <- read.csv2(file = data_path)
+                                         trip_data <- read.csv2(file = data_path,
+                                                                stringsAsFactors = FALSE)
                                          if (nrow(trip_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -163,10 +164,72 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                sep = "")
                                          }
                                        }
+                                     } else if (data_source == "rdata") {
+                                       if (class(data_path) != "character") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"data_path\" argument, ",
+                                             "class character expected.\n",
+                                             sep = "")
+                                         stop()
+                                       } else if (! file.exists(data_path)) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"data_path\" argument, ",
+                                             "file doesn't exist.\n",
+                                             sep = "")
+                                         stop()
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start trip(s) data importation from RData.\n",
+                                             sep = "")
+                                         if (class(data_path) != "character"
+                                             || length(data_path) != 1
+                                             || tools::file_ext(data_path) != "RData") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"data_path\" argument, class character with one value inside linked to a \"RData\" extension expected.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           if (file.exists(data_path)) {
+                                             load(file = data_path,
+                                                  envir = tmp_envir <- new.env())
+                                           } else {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 "invalid \"data_path\" argument, no RData available at the location.\n",
+                                                 sep = "")
+                                             stop()
+                                           }
+                                         }
+                                         if (exists(x = "trip",
+                                                    envir = tmp_envir)) {
+                                           trip_data <- get(x = "trip",
+                                                            envir = tmp_envir)
+                                           if (class(trip_data) != "data.frame") {
+                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                 "invalid \"trip_data\" argument, class \"data.frame\" expected.\n",
+                                                 sep = "")
+                                             stop()
+                                           }
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid RData, no R object named \"trip\" available in the R environment provided.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(trip_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the RData.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from RData.\n",
+                                               sep = "")
+                                         }
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\" or \"csv_file\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv_file\" or \"rdata\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -205,7 +268,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   activities_object_creation = function(db_con,
+                                   activities_object_creation = function(db_con = NULL,
                                                                          data_source = "t3_db",
                                                                          periode_reference = NULL,
                                                                          countries = NULL,
@@ -340,7 +403,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from csv file.\n",
                                              sep = "")
-                                         activities_data <- read.csv2(file = data_path)
+                                         activities_data <- read.csv2(file = data_path,
+                                                                      stringsAsFactors = FALSE)
                                          if (nrow(activities_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -393,7 +457,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   elementarycatches_object_creation = function(db_con,
+                                   elementarycatches_object_creation = function(db_con = NULL,
                                                                                 data_source = "t3_db",
                                                                                 periode_reference = NULL,
                                                                                 countries = NULL,
@@ -528,7 +592,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary catches data importation from csv file.\n",
                                              sep = "")
-                                         elementarycatch_data <- read.csv2(file = data_path)
+                                         elementarycatch_data <- read.csv2(file = data_path,
+                                                                           stringsAsFactors = FALSE)
                                          if (nrow(elementarycatch_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -578,7 +643,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   elementarylandings_object_creation = function(db_con,
+                                   elementarylandings_object_creation = function(db_con = NULL,
                                                                                  data_source = "t3_db",
                                                                                  periode_reference = NULL,
                                                                                  countries = NULL,
@@ -713,7 +778,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary landings data importation from csv file.\n",
                                              sep = "")
-                                         elementarylanding_data <- read.csv2(file = data_path)
+                                         elementarylanding_data <- read.csv2(file = data_path,
+                                                                             stringsAsFactors = FALSE)
                                          if (nrow(elementarylanding_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -763,7 +829,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
                                    #' @param data_path_samples (character) Path of the data sql/csv file for samples. By default NULL.
                                    #' @param data_path_wellplans (character) Path of the data sql/csv file for well plans. By default NULL.
-                                   wells_object_creation = function(db_con,
+                                   wells_object_creation = function(db_con = NULL,
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
@@ -988,7 +1054,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start samples data importation from csv file.\n",
                                              sep = "")
-                                         samples_data <- read.csv2(file = data_path_samples)
+                                         samples_data <- read.csv2(file = data_path_samples,
+                                                                   stringsAsFactors = FALSE)
                                          if (nrow(samples_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -1002,7 +1069,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start well plans data importation from csv file.\n",
                                              sep = "")
-                                         wellplan_data <- read.csv2(file = data_path_wellplans)
+                                         wellplan_data <- read.csv2(file = data_path_wellplans,
+                                                                    stringsAsFactors = FALSE)
                                          if (nrow(wellplan_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -1187,7 +1255,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   setduration_data = function(db_con,
+                                   setduration_data = function(db_con = NULL,
                                                                data_source = "t3_db",
                                                                periode_reference = NULL,
                                                                countries = NULL,
@@ -1289,7 +1357,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Successful set duration data importation from csv file.\n",
                                              sep = "")
-                                         setdurationref_data <- read.csv2(file = data_path)
+                                         setdurationref_data <- read.csv2(file = data_path,
+                                                                          stringsAsFactors = FALSE)
                                          if (nrow(setdurationref_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -1308,7 +1377,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   lengthstep_data = function(db_con,
+                                   lengthstep_data = function(db_con = NULL,
                                                               data_source = "t3_db",
                                                               data_path = NULL) {
                                      if (data_source == "t3_db") {
@@ -1382,7 +1451,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start length steps data importation from csv file.\n",
                                              sep = "")
-                                         lengthstep_sql <- read.csv2(file = data_path)
+                                         lengthstep_sql <- read.csv2(file = data_path,
+                                                                     stringsAsFactors = FALSE)
                                          if (nrow(lengthstep_sql) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -1404,7 +1474,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   sampleset_data = function(db_con,
+                                   sampleset_data = function(db_con = NULL,
                                                              data_source = "t3_db",
                                                              periode_reference = NULL,
                                                              countries = NULL,
@@ -1539,7 +1609,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start sample sets data importation from csv file.\n",
                                              sep = "")
-                                         sampleset_data <- read.csv2(file = data_path)
+                                         sampleset_data <- read.csv2(file = data_path,
+                                                                     stringsAsFactors = FALSE)
                                          if (nrow(sampleset_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
@@ -1558,7 +1629,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
-                                   lengthweightrelationship_data = function(db_con,
+                                   lengthweightrelationship_data = function(db_con = NULL,
                                                                             data_source = "t3_db",
                                                                             data_path = NULL) {
                                      if (data_source == "t3_db") {
@@ -1630,7 +1701,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start length weight relationship data importation from csv file.\n",
                                              sep = "")
-                                         lengthweightrelationship_data <- read.csv2(file = data_path)
+                                         lengthweightrelationship_data <- read.csv2(file = data_path,
+                                                                                    stringsAsFactors = FALSE)
                                          if (nrow(lengthweightrelationship_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the csv file.\n",
