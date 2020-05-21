@@ -72,7 +72,6 @@ capture.output(object_model_data$wells_object_creation(data_source = "rdata",
                                                                                          "data_test.RData",
                                                                                          package = "t3")),
                file = "NUL")
-
 test_that(desc = "comparison_number_well_samples_data_extracted_vs_data_model",
           code = {
             expect_equal(object = c(length(unique(samples$well_id)),

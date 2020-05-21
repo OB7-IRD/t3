@@ -4,21 +4,24 @@
 #' @importFrom R6 R6Class
 #' @importFrom DBI sqlInterpolate SQL dbGetQuery
 #' @importFrom dplyr first last filter
+#' @importFrom rlang global_env current_env
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ",") or "rdata".
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv/RData file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    trips_object_creation = function(db_con = NULL,
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
                                                                     data_path = NULL,
-                                                                    trips_selected = NULL) {
+                                                                    trips_selected = NULL,
+                                                                    envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -206,10 +209,56 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful trip(s) data importation from RData.\n",
                                              sep = "")
                                        }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "trips",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start trip(s) data importation from R global environment.\n",
+                                             sep = "")
+                                         trip_data <- get(x = "trips",
+                                                          envir = if ( envir == "global") {
+                                                            rlang::global_env()
+                                                          } else {
+                                                            rlang::current_env()
+                                                          })
+                                         if (class(trip_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"trip_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(trip_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"trips\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful trip(s) data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"trips\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -243,17 +292,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    activities_object_creation = function(db_con = NULL,
                                                                          data_source = "t3_db",
                                                                          periode_reference = NULL,
                                                                          countries = NULL,
                                                                          data_path = NULL,
-                                                                         trips_selected = NULL) {
+                                                                         trips_selected = NULL,
+                                                                         envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -435,13 +486,59 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from RData.\n",
+                                             " - Successful activities data importation from RData.\n",
                                              sep = "")
+                                       }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "activities",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start activities data importation from R global environment.\n",
+                                             sep = "")
+                                         activities_data <- get(x = "activities",
+                                                                envir = if ( envir == "global") {
+                                                                  rlang::global_env()
+                                                                } else {
+                                                                  rlang::current_env()
+                                                                })
+                                         if (class(activities_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(activities_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"activities\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful activities data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"activities\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
                                        }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -480,17 +577,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    elementarycatches_object_creation = function(db_con = NULL,
                                                                                 data_source = "t3_db",
                                                                                 periode_reference = NULL,
                                                                                 countries = NULL,
                                                                                 data_path = NULL,
-                                                                                trips_selected = NULL) {
+                                                                                trips_selected = NULL,
+                                                                                envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -672,13 +771,59 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from RData.\n",
+                                             " - Successful elementary catches data importation from RData.\n",
                                              sep = "")
+                                       }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "elementary_catches",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start elementary catches data importation from R global environment.\n",
+                                             sep = "")
+                                         elementarycatch_data <- get(x = "elementary_catches",
+                                                                     envir = if ( envir == "global") {
+                                                                       rlang::global_env()
+                                                                     } else {
+                                                                       rlang::current_env()
+                                                                     })
+                                         if (class(elementarycatch_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"elementarycatch_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(elementarycatch_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"elementary catches\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful elementary catches data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"elementary_catches\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
                                        }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -714,17 +859,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    elementarylandings_object_creation = function(db_con = NULL,
                                                                                  data_source = "t3_db",
                                                                                  periode_reference = NULL,
                                                                                  countries = NULL,
                                                                                  data_path = NULL,
-                                                                                 trips_selected = NULL) {
+                                                                                 trips_selected = NULL,
+                                                                                 envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -906,13 +1053,59 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from RData.\n",
+                                             " - Successful elementary landings data importation from RData.\n",
                                              sep = "")
+                                       }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "elementary_landings",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start elementary landings data importation from R global environment.\n",
+                                             sep = "")
+                                         elementarylanding_data <- get(x = "elementary_landings",
+                                                                       envir = if ( envir == "global") {
+                                                                         rlang::global_env()
+                                                                       } else {
+                                                                         rlang::current_env()
+                                                                       })
+                                         if (class(elementarylanding_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"elementarylanding_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(elementarylanding_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"elementary landings\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful elementary landings data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"elementary_landings\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
                                        }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -946,13 +1139,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ","). By default NULL.
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
                                    #' @param data_path_samples (character) Path of the data sql/csv file for samples. By default NULL.
                                    #' @param data_path_wellplans (character) Path of the data sql/csv file for well plans. By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    wells_object_creation = function(db_con = NULL,
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
@@ -960,7 +1154,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     sample_type = NULL,
                                                                     trips_selected = NULL,
                                                                     data_path_samples = NULL,
-                                                                    data_path_wellplans = NULL) {
+                                                                    data_path_wellplans = NULL,
+                                                                    envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1288,10 +1483,92 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful well plans data importation from RData.\n",
                                              sep = "")
                                        }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "samples",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start samples data importation from R global environment.\n",
+                                             sep = "")
+                                         samples_data <- get(x = "samples",
+                                                             envir = if ( envir == "global") {
+                                                               rlang::global_env()
+                                                             } else {
+                                                               rlang::current_env()
+                                                             })
+                                         if (class(samples_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(samples_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"samples\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful samples data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"samples\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "well_plans",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start well plans data importation from R global environment.\n",
+                                             sep = "")
+                                         wellplan_data <- get(x = "well_plans",
+                                                              envir = if ( envir == "global") {
+                                                                rlang::global_env()
+                                                              } else {
+                                                                rlang::current_env()
+                                                              })
+                                         if (class(wellplan_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"wellplan_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(wellplan_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"well plans\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful well plans data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"well_plans\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -1463,15 +1740,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with parameters of set duration algorithms
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    setduration_data = function(db_con = NULL,
                                                                data_source = "t3_db",
                                                                periode_reference = NULL,
                                                                countries = NULL,
-                                                               data_path = NULL) {
+                                                               data_path = NULL,
+                                                               envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1624,10 +1903,56 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful set duration references data importation from RData.\n",
                                              sep = "")
                                        }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "set_duration_ref",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start set duration references data importation from R global environment.\n",
+                                             sep = "")
+                                         setdurationref_data <- get(x = "set_duration_ref",
+                                                                    envir = if ( envir == "global") {
+                                                                      rlang::global_env()
+                                                                    } else {
+                                                                      rlang::current_env()
+                                                                    })
+                                         if (class(setdurationref_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"setdurationref_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(setdurationref_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"elementary landings\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful set duration references data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"set_duration_ref\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -1635,11 +1960,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    lengthstep_data = function(db_con = NULL,
                                                               data_source = "t3_db",
-                                                              data_path = NULL) {
+                                                              data_path = NULL,
+                                                              envir = "global") {
                                      if (data_source == "t3_db") {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Start length steps data importation from T3 database.\n",
@@ -1766,10 +2093,56 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful length step data importation from RData.\n",
                                              sep = "")
                                        }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "length_step",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start length step data importation from R global environment.\n",
+                                             sep = "")
+                                         lengthstep_data <- get(x = "length_step",
+                                                                envir = if ( envir == "global") {
+                                                                  rlang::global_env()
+                                                                } else {
+                                                                  rlang::current_env()
+                                                                })
+                                         if (class(lengthstep_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"lengthstep_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(lengthstep_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"length step\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length step data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"length_step\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -1777,17 +2150,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    sampleset_data = function(db_con = NULL,
                                                              data_source = "t3_db",
                                                              periode_reference = NULL,
                                                              countries = NULL,
                                                              data_path = NULL,
-                                                             trips_selected = NULL) {
+                                                             trips_selected = NULL,
+                                                             envir = "global") {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1972,10 +2347,56 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful samples set data importation from RData.\n",
                                              sep = "")
                                        }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "samples_set",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start samples set data importation from R global environment.\n",
+                                             sep = "")
+                                         sampleset_data <- get(x = "samples_set",
+                                                               envir = if ( envir == "global") {
+                                                                 rlang::global_env()
+                                                               } else {
+                                                                 rlang::current_env()
+                                                               })
+                                         if (class(sampleset_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"sampleset_data\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(sampleset_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"samples set\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful samples set data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"samples_set\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
+                                       }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }
@@ -1983,11 +2404,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with parameters for length weight relationship.
                                    #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").
+                                   #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
+                                   #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
                                    lengthweightrelationship_data = function(db_con = NULL,
                                                                             data_source = "t3_db",
-                                                                            data_path = NULL) {
+                                                                            data_path = NULL,
+                                                                            envir = "global") {
                                      if (data_source == "t3_db") {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Start length weight relationship data importation from T3 database.\n",
@@ -2109,13 +2532,59 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from RData.\n",
+                                             " - Successful length weight relationships data importation from RData.\n",
                                              sep = "")
+                                       }
+                                     } else if (data_source == "envir") {
+                                       if (class(envir) != "character"
+                                           || length(envir) != 1
+                                           || ! envir %in% c("global", "current")) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                             "(\"global\" or \"current\").\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                       if (exists(x = "length_weight_relationships",
+                                                  envir = if ( envir == "global") {
+                                                    rlang::global_env()
+                                                  } else {
+                                                    rlang::current_env()
+                                                  })) {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Start length weight relationships data importation from R global environment.\n",
+                                             sep = "")
+                                         lengthweightrelationship_data <- get(x = "length_weight_relationships",
+                                                                              envir = if ( envir == "global") {
+                                                                                rlang::global_env()
+                                                                              } else {
+                                                                                rlang::current_env()
+                                                                              })
+                                         if (class(lengthweightrelationship_data) != "data.frame") {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               "invalid \"length_weight_relationships\" argument, class \"data.frame\" expected.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         if (nrow(lengthweightrelationship_data) == 0) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data in \"length weight relationships\" data frame.\n",
+                                               sep = "")
+                                           stop()
+                                         }
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length weight relationships data importation R global environment.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             "no R object named \"length_weight_relationships\" available in the R global environment.\n",
+                                             sep = "")
+                                         stop()
                                        }
                                      } else {
                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument ",
-                                           "(\"t3_db\", \"sql_query\", \"csv\" or \"rdata\" expected).\n",
+                                           "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
                                      }

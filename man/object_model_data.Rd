@@ -33,7 +33,8 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  trips_selected = NULL
+  trips_selected = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -42,7 +43,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ",") or "rdata".}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -51,6 +52,8 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \item{\code{data_path}}{(character) Path of the data sql/csv/RData file. By default NULL.}
 
 \item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -67,7 +70,8 @@ Creation of a R6 reference object class activities which contain one or more R6 
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  trips_selected = NULL
+  trips_selected = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -76,7 +80,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -85,6 +89,8 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
 \item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -101,7 +107,8 @@ Creation of a R6 reference object class elementarycatches which contain one or m
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  trips_selected = NULL
+  trips_selected = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -110,7 +117,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -119,6 +126,8 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
 \item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -135,7 +144,8 @@ Creation of a R6 reference object class elementarylandings which contain one or 
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  trips_selected = NULL
+  trips_selected = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -144,7 +154,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -153,6 +163,8 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
 \item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -171,7 +183,8 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   sample_type = NULL,
   trips_selected = NULL,
   data_path_samples = NULL,
-  data_path_wellplans = NULL
+  data_path_wellplans = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -180,7 +193,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ","). By default NULL.}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -193,6 +206,8 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \item{\code{data_path_samples}}{(character) Path of the data sql/csv file for samples. By default NULL.}
 
 \item{\code{data_path_wellplans}}{(character) Path of the data sql/csv file for well plans. By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -208,7 +223,8 @@ Creation of a data frame object with parameters of set duration algorithms
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
-  data_path = NULL
+  data_path = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -217,13 +233,15 @@ Creation of a data frame object with parameters of set duration algorithms
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -237,7 +255,8 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data(
   db_con = NULL,
   data_source = "t3_db",
-  data_path = NULL
+  data_path = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -246,9 +265,11 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -265,7 +286,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  trips_selected = NULL
+  trips_selected = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -274,7 +296,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -283,6 +305,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
 \item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
@@ -296,7 +320,8 @@ Creation of a data frame object with parameters for length weight relationship.
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data(
   db_con = NULL,
   data_source = "t3_db",
-  data_path = NULL
+  data_path = NULL,
+  envir = "global"
 )}\if{html}{\out{</div>}}
 }
 
@@ -305,9 +330,11 @@ Creation of a data frame object with parameters for length weight relationship.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+
+\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
 }
 \if{html}{\out{</div>}}
 }
