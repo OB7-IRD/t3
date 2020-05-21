@@ -15,7 +15,7 @@ FROM
 	JOIN public.route r ON (a.route = r.topiaid)
 	JOIN public.trip t ON (r.trip = t.topiaid)
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
-	JOIN public.country c ON (v.fleetcountry = c.topiaid)
+	JOIN public.country c ON (v.flagcountry = c.topiaid)
 	JOIN public.species sp ON (wp.species = sp.topiaid)
 	JOIN public.weightcategorywellplan wcwp ON (wcwp.topiaid = wp.weightcategorywellplan)
 	LEFT JOIN public.sample s ON (wp.well = s.well)

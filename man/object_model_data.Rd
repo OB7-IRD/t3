@@ -42,7 +42,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv_file" (with separator character ";" and decimal ",") or "rdata".}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ",") or "rdata".}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -76,7 +76,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -110,7 +110,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -144,7 +144,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -180,7 +180,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ","). By default NULL.}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ","). By default NULL.}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -217,7 +217,7 @@ Creation of a data frame object with parameters of set duration algorithms
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -246,7 +246,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }
@@ -274,7 +274,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -305,7 +305,7 @@ Creation of a data frame object with parameters for length weight relationship.
 \describe{
 \item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv_file" (with separator character ";" and decimal ",").}
+\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query" or "csv" (with separator character ";" and decimal ",").}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 }

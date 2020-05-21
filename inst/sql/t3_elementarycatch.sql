@@ -18,7 +18,7 @@ FROM
 	JOIN public.route r ON (a.route = r.topiaid)
 	JOIN public.trip t ON (r.trip = t.topiaid)
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
-	JOIN public.country c ON (v.fleetcountry = c.topiaid)
+	JOIN public.country c ON (v.flagcountry = c.topiaid)
 WHERE
 	t.landingdate BETWEEN ?begin_period AND ?end_period
 	AND c.codeiso3 IN (?countries)

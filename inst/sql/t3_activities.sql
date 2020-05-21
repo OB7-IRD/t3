@@ -16,7 +16,7 @@ FROM
 	JOIN public.route r ON (a.route = r.topiaid)
 	JOIN public.trip t ON (r.trip = t.topiaid)
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
-	JOIN public.country c ON (v.fleetcountry = c.topiaid)
+	JOIN public.country c ON (v.flagcountry = c.topiaid)
 	JOIN public.ocean o ON (a.ocean = o.topiaid)
 	JOIN public.schooltype st ON (a.schooltype = st.topiaid)
 	JOIN public.vesselactivity va ON (a.vesselactivity = va.topiaid)

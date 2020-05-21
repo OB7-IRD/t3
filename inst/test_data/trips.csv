@@ -1,4 +1,0 @@
-"trip_id";"fleet";"departure_date";"landing_date";"logbook_availability";"fish_hold_empty";"vessel_id"
-"trip_1";"DMC";"2017-08-13 00:00:00";"2017-09-25 00:00:00";1;1;1
-"trip_2";"DMC";"2017-05-11 00:00:00";"2017-06-10 00:00:00";1;0;2
-"trip_3";"DMC";"2017-06-13 00:00:00";"2017-07-02 00:00:00";1;1;2

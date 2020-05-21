@@ -18,7 +18,7 @@ FROM
 	public.sample s 
 	JOIN public.trip t ON (t.topiaid = s.trip)
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
-	JOIN public.country c ON (v.fleetcountry = c.topiaid)
+	JOIN public.country c ON (v.flagcountry = c.topiaid)
 	JOIN public.samplespecies ss ON (ss.sample = s.topiaid)
 	JOIN public.species sp ON (sp.topiaid = ss.species)
 	JOIN public.samplespeciesfrequency ssf ON (ssf.samplespecies = ss.topiaid)
