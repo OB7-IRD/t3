@@ -71,7 +71,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
   countries = NULL,
   data_path = NULL,
   trips_selected = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 

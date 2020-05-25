@@ -210,30 +210,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "trips")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "trips",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start trip(s) data importation from R global environment.\n",
                                              sep = "")
                                          trip_data <- get(x = "trips",
-                                                          envir = if ( envir == "global") {
-                                                            rlang::global_env()
-                                                          } else {
-                                                            rlang::current_env()
-                                                          })
+                                                          envir = environment_name)
                                          if (class(trip_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"trip_data\" argument, class \"data.frame\" expected.\n",
@@ -304,7 +301,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          countries = NULL,
                                                                          data_path = NULL,
                                                                          trips_selected = NULL,
-                                                                         envir = "global") {
+                                                                         envir = NULL) {
                                      if (data_source == "t3_db") {
                                        if (length(class(periode_reference)) != 1 || class(periode_reference) != "integer") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -490,33 +487,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "activities")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "activities",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from R global environment.\n",
                                              sep = "")
                                          activities_data <- get(x = "activities",
-                                                                envir = if ( envir == "global") {
-                                                                  rlang::global_env()
-                                                                } else {
-                                                                  rlang::current_env()
-                                                                })
+                                                                envir = environment_name)
                                          if (class(activities_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
+                                               " - Error: invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
                                                sep = "")
                                            stop()
                                          }
@@ -531,7 +525,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        } else {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"activities\" available in the R global environment.\n",
+                                             " - Error: no R object named \"activities\" available in the R global environment.\n",
                                              sep = "")
                                          stop()
                                        }
@@ -775,30 +769,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "elementary_catches")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "elementary_catches",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary catches data importation from R global environment.\n",
                                              sep = "")
                                          elementarycatch_data <- get(x = "elementary_catches",
-                                                                     envir = if ( envir == "global") {
-                                                                       rlang::global_env()
-                                                                     } else {
-                                                                       rlang::current_env()
-                                                                     })
+                                                                     envir = environment_name)
                                          if (class(elementarycatch_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarycatch_data\" argument, class \"data.frame\" expected.\n",
@@ -1057,30 +1048,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "elementary_landings")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "elementary_landings",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary landings data importation from R global environment.\n",
                                              sep = "")
                                          elementarylanding_data <- get(x = "elementary_landings",
-                                                                       envir = if ( envir == "global") {
-                                                                         rlang::global_env()
-                                                                       } else {
-                                                                         rlang::current_env()
-                                                                       })
+                                                                       envir = environment_name)
                                          if (class(elementarylanding_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarylanding_data\" argument, class \"data.frame\" expected.\n",
@@ -1484,30 +1472,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "samples")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "samples",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start samples data importation from R global environment.\n",
                                              sep = "")
                                          samples_data <- get(x = "samples",
-                                                             envir = if ( envir == "global") {
-                                                               rlang::global_env()
-                                                             } else {
-                                                               rlang::current_env()
-                                                             })
+                                                             envir = environment_name)
                                          if (class(samples_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
@@ -1904,30 +1889,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "set_duration_ref")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "set_duration_ref",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start set duration references data importation from R global environment.\n",
                                              sep = "")
                                          setdurationref_data <- get(x = "set_duration_ref",
-                                                                    envir = if ( envir == "global") {
-                                                                      rlang::global_env()
-                                                                    } else {
-                                                                      rlang::current_env()
-                                                                    })
+                                                                    envir = environment_name)
                                          if (class(setdurationref_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"setdurationref_data\" argument, class \"data.frame\" expected.\n",
@@ -2094,30 +2076,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "length_step")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "length_step",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start length step data importation from R global environment.\n",
                                              sep = "")
                                          lengthstep_data <- get(x = "length_step",
-                                                                envir = if ( envir == "global") {
-                                                                  rlang::global_env()
-                                                                } else {
-                                                                  rlang::current_env()
-                                                                })
+                                                                envir = environment_name)
                                          if (class(lengthstep_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"lengthstep_data\" argument, class \"data.frame\" expected.\n",
@@ -2348,30 +2327,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "samples_set")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "samples_set",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start samples set data importation from R global environment.\n",
                                              sep = "")
                                          sampleset_data <- get(x = "samples_set",
-                                                               envir = if ( envir == "global") {
-                                                                 rlang::global_env()
-                                                               } else {
-                                                                 rlang::current_env()
-                                                               })
+                                                               envir = environment_name)
                                          if (class(sampleset_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"sampleset_data\" argument, class \"data.frame\" expected.\n",
@@ -2536,30 +2512,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                        }
                                      } else if (data_source == "envir") {
-                                       if (class(envir) != "character"
-                                           || length(envir) != 1
-                                           || ! envir %in% c("global", "current")) {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
-                                             "(\"global\" or \"current\").\n",
-                                             sep = "")
-                                         stop()
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "length_weight_relationships")[1])
+                                       } else {
+                                         if ((class(x = envir) != "character"
+                                              || length(x = envir) != 1)) {
+                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"envir\" argument, one value of class \"character\" expected.\n",
+                                               "(\"global\" or \"current\").\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           environment_name <- as.environment(envir)
+                                         }
                                        }
                                        if (exists(x = "length_weight_relationships",
-                                                  envir = if ( envir == "global") {
-                                                    rlang::global_env()
-                                                  } else {
-                                                    rlang::current_env()
-                                                  })) {
+                                                  envir = environment_name)) {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Start length weight relationships data importation from R global environment.\n",
                                              sep = "")
                                          lengthweightrelationship_data <- get(x = "length_weight_relationships",
-                                                                              envir = if ( envir == "global") {
-                                                                                rlang::global_env()
-                                                                              } else {
-                                                                                rlang::current_env()
-                                                                              })
+                                                                              envir = environment_name)
                                          if (class(lengthweightrelationship_data) != "data.frame") {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"length_weight_relationships\" argument, class \"data.frame\" expected.\n",
