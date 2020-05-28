@@ -16,9 +16,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'T3++'
-copyright = '2019, Ob7'
-author = 'Mathieu Depetris, Julien Lebranchu'
+project = 'T3R'
+copyright = '2019 - 2020, Ob7'
+author = "Mathieu Depetris, Antoine Duparc, Pascal Cauquil, Laurent Floc'h, Julien Lebranchu"
 
 # The full version, including alpha/beta/rc tags
 release = 'v3.0'
