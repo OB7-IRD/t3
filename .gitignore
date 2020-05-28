@@ -4,3 +4,5 @@
 /docs/source/_build
 /docs/build
 .nosync
+/.vscode
+
