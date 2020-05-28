@@ -21,7 +21,7 @@ copyright = '2019, Ob7'
 author = 'Mathieu Depetris, Julien Lebranchu'
 
 # The full version, including alpha/beta/rc tags
-release = 'v1.0'
+release = 'v3.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +30,7 @@ release = 'v1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme",
+    "sphinx_rtd_theme", 
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -50,7 +50,8 @@ exclude_patterns = []
 # flask 	The standard Flask documentation theme for large projects
 # flask_small 	Small single page theme. Intended to be used by very small addon libraries for Flask.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = 'sphinx_ob7_theme'
+html_theme_path = ['_themes']
 
 # flasky To use Flask pygments style
 # monokai 
