@@ -1,3 +1,3 @@
 [submodule "docs/source/_themes/sphinx_ob7_theme"]
-	path = docs/source/_themes/sphinx_ob7_theme
+	path = docsrc/source/_themes/sphinx_ob7_theme
 	url = git@github.com:OB7-IRD/sphinx_ob7_theme.git
