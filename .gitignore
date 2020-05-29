@@ -5,4 +5,6 @@
 /docsrc/build
 .nosync
 /.vscode
+.vscode
+*.code-workspace
 

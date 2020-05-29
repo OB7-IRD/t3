@@ -6,6 +6,8 @@
 Tropical Tuna Treatment's documentation!
 ========================================
 
+.. warning:: STILL UNDER WRITING
+
 Introduction
 ============
 
@@ -20,9 +22,3 @@ Documentation
    installation
    development
    tutorial
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
