@@ -546,7 +546,11 @@ Formatting data for model predictions.
 \subsection{Method \code{model_predictions()}}{
 Model predictions for the species composition and computing of catches.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(outputs_level3_process2, outputs_level3_process4)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
+  outputs_level3_process2,
+  outputs_level3_process4,
+  outputs_path
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -555,6 +559,8 @@ Model predictions for the species composition and computing of catches.
 \item{\code{outputs_level3_process2}}{(list) Outputs from level 3 process 2 (random forest models).}
 
 \item{\code{outputs_level3_process4}}{(list) Outputs from level 3 process 4 (data formatting for predictions).}
+
+\item{\code{outputs_path}}{(character) Outputs directory path.}
 }
 \if{html}{\out{</div>}}
 }

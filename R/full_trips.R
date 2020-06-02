@@ -4277,8 +4277,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Model predictions for the species composition and computing of catches.
                             #' @param outputs_level3_process2 (list) Outputs from level 3 process 2 (random forest models).
                             #' @param outputs_level3_process4 (list) Outputs from level 3 process 4 (data formatting for predictions).
+                            #' @param outputs_path (character) Outputs directory path.
                             model_predictions = function(outputs_level3_process2,
-                                                         outputs_level3_process4) {
+                                                         outputs_level3_process4,
+                                                         outputs_path) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
@@ -4295,6 +4297,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            setdiff(current_outputs_level3_process2[[3]]$forest$xlevels[a][[1]],
                                                                    levels(df[, a])))))
                                 }
+                              }
+                              # function which create an empty worfd raster with custom pixel size
+                              rastermap <- function(x, y) {
+                                raster::raster(nrows = (length(x = seq(from = -180,
+                                                                       to = 180, by = x * 2)) -1),
+                                               ncols = (length(x = seq(from = -90,
+                                                                       to = 90,
+                                                                       by= y / 2)) -1),
+                                               xmn = -180,
+                                               xmx = 180,
+                                               ymn = -90,
+                                               ymx = 90,
+                                               crs = raster::crs(x = "+init=epsg:4326"),
+                                               vals = NA)
                               }
                               outputs_level3_process5 <- vector(mode = "list",
                                                                 length = 1)
@@ -4421,7 +4437,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                            fishing_mode,
                                                                                                                            sep = "_")
                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Process 3.2 successfull for ocean \"",
+                                            " - Process 3.5 (predictions step) successfull for ocean \"",
                                             ocean,
                                             "\", specie \"",
                                             specie,
@@ -4518,11 +4534,180 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               fmod_fig = unique(sps$fmod)
                               ocean_fig <- unique(sps$ocean)
                               # common extent for all figures
+                              wrl <- rastermap(x = 1,
+                                               y = 1)
                               wrld <- raster::crop(x = wrld_simpl,
                                                    y = (raster::extent(sps) + 5))
                               palette4catch <- grDevices::colorRampPalette(c("yellow", "red"))
-                              browser()
-
+                              outputs_level3_process5 <- append(outputs_level3_process5,
+                                                                list(list()))
+                              names(outputs_level3_process5)[length(outputs_level3_process5)] <- "figures"
+                              # map of the proportion
+                              for (specie in unique(sps$sp)) {
+                                if (! specie %in% c("BET", "SKJ", "YFT")) {
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Warning: process 3.5 not developed yet for the specie \"",
+                                      specie,
+                                      "\".\n",
+                                      sep = "")
+                                } else {
+                                  sps_specie <- sps[sps$sp == specie, ]
+                                  for (fishing_mode in unique(sps_specie$fmod)) {
+                                    sps_fishing_mode <- sps_specie[sps_specie$fmod == fishing_mode, ]
+                                    for (ocean in unique(sps_fishing_mode$ocean)) {
+                                      sps_ocean <- sps_fishing_mode[sps_fishing_mode$ocean == ocean, ]
+                                      for (year in unique(sps_ocean$year)) {
+                                        sps_year <- sps_ocean[sps_ocean$year == year, ]
+                                        figures_directory <- file.path(outputs_path,
+                                                                       "figures",
+                                                                       paste(ocean,
+                                                                             specie,
+                                                                             fishing_mode,
+                                                                             sep = "_"))
+                                        if (file.exists(figures_directory)) {
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Outputs \"figures\" directory for ocean \"",
+                                              ocean,
+                                              "\", specie \"",
+                                              specie,
+                                              "\" and fishing mode \"",
+                                              fishing_mode,
+                                              "\" already exists.\n",
+                                              "Outputs associated will used this directory (be careful of overwriting previous files).\n",
+                                              sep = "")
+                                        } else {
+                                          dir.create(figures_directory)
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Outputs \"figures\" directory for ocean \"",
+                                              ocean,
+                                              "\", specie \"",
+                                              specie,
+                                              "\" and fishing mode \"",
+                                              fishing_mode,
+                                              "\" created.\n",
+                                              "[directory path: ",
+                                              figures_directory,
+                                              "]\n",
+                                              sep = "")
+                                        }
+                                        # create the raster
+                                        wrl2 <- raster::rasterize(x = sps_year,
+                                                                  y = wrl,
+                                                                  field = "fit_prop_t3_ST")
+                                        wrld_sf <- sf::st_as_sf(x = wrld)
+                                        wrld_df <- as.data.frame(x = wrld)
+                                        r_points = raster::rasterToPoints(x = wrl2)
+                                        r_df = data.frame(r_points)
+                                        f_prop <- ggplot2::ggplot() +
+                                          ggplot2::geom_sf(data = wrld_sf) +
+                                          ggplot2::coord_sf() +
+                                          ggplot2::geom_tile(data = r_df,
+                                                             ggplot2::aes(x = x,
+                                                                          y = year,
+                                                                          fill = layer)) +
+                                          ggplot2::scale_fill_gradient2("Catches (t)",
+                                                                        low = "blue",
+                                                                        high = "red",
+                                                                        mid = "Yellow",
+                                                                        midpoint = 0.5,
+                                                                        limits = c(0,1)) +
+                                          ggplot2::theme_bw() +
+                                          ggplot2::labs(x = "Longitude",
+                                                        y = "Latitude",
+                                                        title = paste(specie,
+                                                                      ifelse(test = fishing_mode == 1,
+                                                                             yes = "FOB",
+                                                                             no = "FSC"),
+                                                                      year,
+                                                                      sep = "-"))
+                                        outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                               list(f_prop))
+                                        names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("prop",
+                                                                                                                           year,
+                                                                                                                           ocean,
+                                                                                                                           specie,
+                                                                                                                           fishing_mode,
+                                                                                                                           sep = "_")
+                                        ggplot2::ggsave(plot = f_prop,
+                                                        file = file.path(figures_directory,
+                                                                         paste0("prop_",
+                                                                               year,
+                                                                               "_",
+                                                                               ocean,
+                                                                               "_",
+                                                                               specie,
+                                                                               "_",
+                                                                               fishing_mode,
+                                                                               ".jpeg")),
+                                                        width = 12,
+                                                        height = 10,
+                                                        units = c("cm"),
+                                                        dpi = 300,
+                                                        pointsize = 6)
+                                        # create the raster
+                                        wrl2 <- raster::rasterize(x = sps_year,
+                                                          y = wrl,
+                                                          field =  "catch_t3_N3")
+                                        wrld_sf <- sf::st_as_sf(x = wrld)
+                                        # the world map
+                                        wrld_df <- as.data.frame(x = wrld)
+                                        r_points = raster::rasterToPoints(x = wrl2)
+                                        # t2
+                                        r_df = data.frame(r_points)
+                                        # breaks for the legend
+                                        qt <- raster::quantile(x = r_df$layer,
+                                                               na.rm = T,
+                                                               seq(0.1,1,0.1))
+                                        # catch categories
+                                        r_df$labs <- raster::cut(x = r_df$layer,
+                                                                 right = F,
+                                                                 breaks = unique(c(0, ceiling(qt))))
+                                        f_catch <- ggplot2::ggplot() +
+                                          ggplot2::geom_sf(data = wrld_sf) +
+                                          ggplot2::coord_sf() +
+                                          ggplot2::geom_tile(data = r_df,
+                                                             ggplot2::aes(x = x,
+                                                                          y = year,
+                                                                          fill = labs))+
+                                          ggplot2::scale_fill_manual("Catches (t)",
+                                                                     values = palette4catch(length(levels(r_df$labs)))) +
+                                          ggplot2::theme_bw() +
+                                          ggplot2::labs(x = "Longitude",
+                                                        y = "Latitude",
+                                                        title = paste(specie, ifelse(test = fishing_mode == 1,
+                                                                                     yes = "FOB",
+                                                                                     no = "FSC"),
+                                                                      year,
+                                                                      sep = "-"))
+                                        outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                               list(f_catch))
+                                        names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("catch",
+                                                                                                                           year,
+                                                                                                                           ocean,
+                                                                                                                           specie,
+                                                                                                                           fishing_mode,
+                                                                                                                           sep = "_")
+                                        ggplot2::ggsave(plot = f_catch,
+                                                        file = file.path(figures_directory,
+                                                                         paste0("catch_",
+                                                                                year,
+                                                                                "_",
+                                                                                ocean,
+                                                                                "_",
+                                                                                specie,
+                                                                                "_",
+                                                                                fishing_mode,
+                                                                                ".jpeg")),
+                                                        width = 12,
+                                                        height = 10,
+                                                        units = c("cm"),
+                                                        dpi = 300,
+                                                        pointsize = 6)
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                               if (exists(x = "data_level3",
                                          envir = .GlobalEnv)) {
                                 data_level3 <- get(x = "data_level3",
