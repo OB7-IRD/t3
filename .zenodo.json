@@ -1,0 +1,35 @@
+{
+    "description": "<p>Beta release of T3R package</p>\n<p>This version contains a functional workflow to process tuna data.</p>\n<p>Major functionalities added :</p>\n<ul>\n<li>Implementation of the model layer in R6class</li>\n<li>Implementation of all logbooks standardization sub-processes</li>\n<li>Implementation of all samples standardization sub-processes</li>\n<li>Implementation of sub-processes for assessing species composition in relation to non-sampled assemblages<ul>\n<li>Strict selection of samples used in the model training according to several criteria on sets and wells: school type, location, date, sample quality.      </li>\n<li>Classification of unknown school type (no data available) by clustering according to major tuna species composition.      </li>\n<li>Development of a statistical model accounting for:<ul>\n<li>Spatial and temporal structure of the fishery: location and date of the catch</li>\n<li>Vessel specificity which impacts the species composition of the catch</li>\n<li>Crew reporting information which enables more flexibility in the model when a marginal composition is caught</li>\n<li>Several years of fishing in the training to increase the robustness of the estimates</li>\n</ul>\n</li>\n<li>Model checking to ensure reliability of the results</li>\n<li>Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations. </li>\n</ul>\n</li>\n</ul>\n<p><strong>Note:</strong> The functionality to import data from RData or CSV files is under development.</p>", 
+    "license": "other-open", 
+    "title": "OB7-IRD/t3: Beta version of T3 software", 
+    "version": "0.9.0", 
+    "upload_type": "software", 
+    "publication_date": "2020-06-05", 
+    "creators": [
+        {
+            "affiliation": "IRD", 
+            "name": "Mathieu Depetris"
+        }, 
+        {
+            "affiliation": "IRD", 
+            "name": "Julien Lebranchu"
+        }, 
+        {
+            "affiliation": "IRD", 
+            "name": "Antoine Duparc"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/OB7-IRD/t3/tree/0.9.0", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.3878124", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
