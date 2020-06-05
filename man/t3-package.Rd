@@ -47,11 +47,11 @@ Authors:
   \item Pascal Cauquil \email{pascal.cauquil@ird.fr}
   \item Laurent Floc'h \email{laurent.floch@ird.fr}
   \item Julien Lebranchu \email{julien.lebranchu@ird.fr}
-  \item Pascal Bach \email{pascal.bach@ird.fr}
 }
 
 Other contributors:
 \itemize{
+  \item Pascal Bach \email{pascal.bach@ird.fr} [contributor]
   \item Alain Fonteneau \email{???} [contributor]
   \item Viveca Fonteneau \email{???} [contributor]
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
