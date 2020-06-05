@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
+
 ![t3_logo](t3_logo.png)
 # Package t3
 
