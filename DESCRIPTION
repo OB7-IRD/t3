@@ -8,7 +8,7 @@ Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosyste
     person("Pascal", "Cauquil", email = "pascal.cauquil@ird.fr", role = c("aut")),
     person("Laurent", "Floc'h", email = "laurent.floch@ird.fr", role = c("aut")),
     person("Julien", "Lebranchu", email = "julien.lebranchu@ird.fr", role = c("aut")),
-    person("Pascal", "Bach", email = "pascal.bach@ird.fr", role = c("aut")),
+    person("Pascal", "Bach", email = "pascal.bach@ird.fr", role = c("ctb")),
     person("Alain", "Fonteneau", email = "???", role = c("ctb")),
     person("Viveca", "Fonteneau", email = "???", role = c("ctb")),
     person("Norbet", "Billet", email = "norbert.billet@ifremer.fr", role = c("ctb")),
