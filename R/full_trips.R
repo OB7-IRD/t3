@@ -5,6 +5,7 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
+#' @importFrom ranger ranger
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = t3:::list_t3,
                           public = list(
@@ -3280,9 +3281,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # process 3.2: random forest models ----
                             #' @description Modelling proportions in sets througth random forest models.
                             #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
-                            #' @param number_of_trees (integer) Number of trees for the random forest models. By default 1000.
+                            #' @param num.trees (integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
+                            #' @param mtry Number of variables randomly sampled as candidates at each split. The default value is 2.
+                            #' @param min.node.size Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
+                            #' @param seed_number  Set the initial seed for the modelling. The default value is 7.
                             random_forest_models = function(outputs_level3_process1,
-                                                            number_of_trees = as.integer(1000)) {
+                                                            num.trees = 1000L,
+                                                            mtry = 2L,
+                                                            min.node.size = 5,
+                                                            seed_number = 7L) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.2: random forest models.\n",
                                   sep = "")
@@ -3333,43 +3340,49 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sub <- droplevels(sub)
                                       # models ----
                                       # model with spatio temporal variable only
-                                      set.seed(7)
-                                      modrf0 <- randomForest::randomForest(formula = resp ~ lon + lat + year + mon,
-                                                                           data = sub,
-                                                                           ntree = number_of_trees,
-                                                                           mtry = 2,
-                                                                           nPerm = 5,
-                                                                           importance = TRUE,
-                                                                           proximity = TRUE,
-                                                                           keep.forest = TRUE,
-                                                                           localImp = TRUE)
+                                      set.seed(seed_number)
+                                      model_rf_simple <- ranger::ranger(resp ~ lon + lat + year + mon,
+                                                                        data = sub,
+                                                                        num.trees = num.trees,
+                                                                        mtry = mtry,
+                                                                        min.node.size = min.node.size,
+                                                                        splitrule = "variance",
+                                                                        importance = "impurity",
+                                                                        replace = TRUE,
+                                                                        quantreg = FALSE,
+                                                                        keep.inbag= FALSE)
+
                                       # model with no vessel id
-                                      set.seed(7)
-                                      modrf_wtv <- randomForest::randomForest(formula = resp ~ tlb + lon + lat + year + mon ,
-                                                                              data = sub,
-                                                                              ntree = number_of_trees,
-                                                                              mtry = 2,
-                                                                              nPerm = 5,
-                                                                              importance = TRUE,
-                                                                              proximity = TRUE,
-                                                                              keep.forest = TRUE,
-                                                                              localImp = TRUE)
-                                      # model with
-                                      set.seed(7)
-                                      modrf <- randomForest::randomForest(formula = resp ~ tlb + lon + lat + year + mon + vessel,
+                                      set.seed(seed_number)
+                                      model_rf_wtvessel <- ranger::ranger(resp ~ tlb + lon + lat + year + mon,
                                                                           data = sub,
-                                                                          ntree = number_of_trees,
-                                                                          mtry = 2,
-                                                                          nPerm = 5,
-                                                                          importance = TRUE,
-                                                                          proximity = TRUE,
-                                                                          keep.forest = TRUE,
-                                                                          localImp = TRUE)
+                                                                          num.trees = num.trees,
+                                                                          mtry = mtry,
+                                                                          min.node.size = min.node.size,
+                                                                          splitrule = "variance",
+                                                                          importance = "impurity",
+                                                                          replace = TRUE,
+                                                                          quantreg = FALSE,
+                                                                          keep.inbag= FALSE)
+
+                                      # full model
+                                      set.seed(seed_number)
+                                      model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + year + mon + vessel,
+                                                                      data = sub,
+                                                                      num.trees = num.trees,
+                                                                      mtry = mtry,
+                                                                      min.node.size = min.node.size,
+                                                                      splitrule = "variance",
+                                                                      importance = "impurity",
+                                                                      replace = TRUE,
+                                                                      quantreg = FALSE,
+                                                                      keep.inbag= FALSE)
+
                                       outputs_level3_process2 <- append(outputs_level3_process2,
                                                                         list(list(data = sub,
-                                                                                  modrf0 = modrf0,
-                                                                                  modrf = modrf,
-                                                                                  modrf_wtv = modrf_wtv)))
+                                                                                  model_rf_simple = model_rf_simple,
+                                                                                  model_rf_full = model_rf_full,
+                                                                                  model_rf_wtvessel = model_rf_wtvessel)))
                                       names(outputs_level3_process2)[length(outputs_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Process 3.2 successfull for ocean \"",

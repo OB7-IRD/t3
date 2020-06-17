@@ -479,7 +479,10 @@ Modelling proportions in sets througth random forest models.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(
   outputs_level3_process1,
-  number_of_trees = as.integer(1000)
+  num.trees = 1000L,
+  mtry = 2L,
+  min.node.size = 5,
+  seed_number = 7L
 )}\if{html}{\out{</div>}}
 }
 
@@ -488,7 +491,13 @@ Modelling proportions in sets througth random forest models.
 \describe{
 \item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
 
-\item{\code{number_of_trees}}{(integer) Number of trees for the random forest models. By default 1000.}
+\item{\code{num.trees}}{(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
+
+\item{\code{mtry}}{Number of variables randomly sampled as candidates at each split. The default value is 2.}
+
+\item{\code{min.node.size}}{Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
+
+\item{\code{seed_number}}{Set the initial seed for the modelling. The default value is 7.}
 }
 \if{html}{\out{</div>}}
 }
