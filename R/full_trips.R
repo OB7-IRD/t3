@@ -1833,7 +1833,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           "]\n",
                                                           sep = "")
                                                        # stop()
-                                                      browser()
                                                        object_full_trips$.__enclos_env__$private$data_selected[[i]][[j]]$.__enclos_env__$private$wells[[k]]$.__enclos_env__$private$elementarysampleraw[[l]] <- NULL
                                                       break
                                                       # ocean_activities <- which(ocean_activities == max(ocean_activities))
