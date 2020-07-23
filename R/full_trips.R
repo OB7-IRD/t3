@@ -5,7 +5,12 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
-#' @importFrom ranger ranger
+#' @importFrom ranger ranger predictions importance
+#' @importFrom tidyr gather spread separate
+#' @importFrom sp coordinates proj4string spTransform
+#' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
+#' @importFrom rfUtilities multi.collinear
+#' @importFrom gstat variogram
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = t3:::list_t3,
                           public = list(
@@ -3728,7 +3733,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  period,
                                                                  sep = "_")) +
                                   ggplot2::theme_classic()
-                                ggplot2::ggsave(plot = set_sampled_map,
+                                  ggplot2::ggsave(plot = set_sampled_map,
                                                 file = file.path(figures_directory,
                                                                  paste("set_sampled_map_",
                                                                        ocean,
@@ -3746,71 +3751,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                list("set_sampled_map" = set_sampled_map))
                                 # model checking
                                 # compute model residuals
-                                resrf <- current_model_data$resp - stats::predict(current_model_outputs[[3]])
+                                resrf <- current_model_data$resp - ranger::predictions(current_model_outputs[[3]])
                                 current_model_data$res <- resrf
-                                current_model_data$fit <- stats::predict(current_model_outputs[[3]])
+                                current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_outputs[[3]]))
+                                current_model_data$fit<-ranger::predictions(current_model_outputs[[3]])
+
                                 # method
                                 # comparison of the model fitted value
-                                current_model_data$fit_rf <- stats::predict(current_model_outputs[[3]])
-                                current_model_data$fit_rf0 <- stats::predict(current_model_outputs[[2]])
-                                current_model_data$fit_rf_wtv <- stats::predict(current_model_outputs[[4]])
-                                # check number of trees enought: should be stable
-                                mse_stability_checking <- data.frame("mse" = current_model_outputs[[3]]$mse,
-                                                                     "ntree" = seq_len(length.out = current_model_outputs[[3]]$ntree))
-                                mse_stability_checking <- ggplot2::ggplot(data = mse_stability_checking,
-                                                                          ggplot2::aes(x = ntree,
-                                                                                       y = mse)) +
-                                  ggplot2::geom_line() +
-                                  ggplot2::xlab("trees") +
-                                  ggplot2::ylab("Error")
-                                ggplot2::ggsave(plot = mse_stability_checking,
-                                                file = file.path(figures_directory,
-                                                                 paste("mse_stability_checking_",
-                                                                       ocean,
-                                                                       "_",
-                                                                       specie,
-                                                                       "_",
-                                                                       fishing_mode,
-                                                                       ".jpeg",
-                                                                       sep = "")),
-                                                width = 15,
-                                                height = 5,
-                                                units = c("in"),
-                                                dpi = 300)
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("mse_stability_checking" = mse_stability_checking))
+
                                 # look at variable importance in the model
-                                variables_importance <- data.frame(randomForest::importance(current_model_outputs[[3]]))
-                                variables_importance$variable <- rownames(variables_importance)
-                                names(variables_importance)[1:2] <-  c("pourcentage_inc_mse", "inc_node_purity")
-                                variables_importance[, 3] <- as.factor(variables_importance[, 3])
-                                variables_importance[, 3] <- ordered(variables_importance[, 3],
-                                                                     levels = variables_importance[order(variables_importance[, 1],
-                                                                                                         decreasing = FALSE),
-                                                                                                   "variable"])
-                                pourcentage_inc_mse <- ggplot2::ggplot(data = variables_importance,
-                                                                       ggplot2::aes(x = pourcentage_inc_mse,
-                                                                                    y = variable)) +
-                                  ggplot2::geom_dotplot(binaxis = 'y',
-                                                        stackdir = 'center',
-                                                        binwidth = 0.1) +
-                                  ggplot2::ylab(NULL)
-                                variables_importance[, 3] <- ordered(variables_importance[, 3],
-                                                                     levels = variables_importance[order(variables_importance[, 2],
-                                                                                                         decreasing = FALSE),
-                                                                                                   "variable"])
-                                inc_node_purity <- ggplot2::ggplot(data = variables_importance,
-                                                                   ggplot2::aes(x = inc_node_purity,
-                                                                                y = variable)) +
-                                  ggplot2::geom_dotplot(binaxis = 'y',
-                                                        stackdir = 'center',
-                                                        binwidth = 0.1) +
-                                  ggplot2::ylab(NULL)
-                                variables_importance <- ggpubr::ggarrange(pourcentage_inc_mse,
-                                                                          inc_node_purity,
-                                                                          nrow = 1,
-                                                                          ncol = 2)
-                                ggplot2::ggsave(plot = variables_importance,
+                                variables_importance <- as.data.frame(ranger::importance(current_model_outputs[[3]]))
+                                names(variables_importance) <- "value"
+                                variables_importance$var_name <- rownames(variables_importance)
+
+                                variables_importance <- variables_importance[order(variables_importance$value, decreasing = F),]
+
+                                variables_importance_plot <- ggplot2::ggplot(data = variables_importance,
+                                                ggplot2::aes(y = var_name,
+                                                             x = value))+
+                                  ggplot2::geom_point()+
+                                  ggplot2::geom_segment(data = variables_importance,
+                                                        ggplot2::aes(x = 0,
+                                                                     xend = value,
+                                                                     y = var_name,
+                                                                     yend = var_name)) +
+                                  ggplot2::scale_y_discrete(name = "Variables",
+                                                   limits= variables_importance$var_name)+
+                                  ggplot2::xlab("Importance (impurity)")
+
+
+                                  ggplot2::ggsave(plot = variables_importance_plot,
                                                 file = file.path(figures_directory,
                                                                  paste("variables_importance_",
                                                                        ocean,
@@ -3820,10 +3790,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                                width = 15,
-                                                height = 5,
-                                                units = c("in"),
-                                                dpi = 300)
+                                                width = 8,
+                                                height = 8,
+                                                units = c("cm"),
+                                                dpi = 300,
+                                                pointsize = 10)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("variables_importance" = variables_importance))
                                 # test for spatial and temporal correlation on residuals
@@ -3832,6 +3803,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
                                 current_model_data_map <- sp::spTransform(current_model_data_map,
                                                                           sp::CRS("+init=epsg:3395"))
+                                # variogram
+                                variogram_resp_data <- gstat::variogram(object = resp ~ 1,
+                                                                        data = current_model_data_map,
+                                                                        cutoff = 4000000,
+                                                                        width = 100000)
+                                variogram_resp_data$label <- "Observed data"
+                                variogram_res_data <- gstat::variogram(object = res ~ 1,
+                                                                       data = current_model_data_map,
+                                                                       cutoff = 4000000,
+                                                                       width = 100000)
+                                variogram_res_data$label <- "Residuals"
+                                variogram_data <- dplyr::bind_rows(variogram_resp_data,
+                                                                   variogram_res_data)
+                                variogram <- ggplot2::ggplot(data = variogram_data,
+                                                             ggplot2::aes(x = dist,
+                                                                          y = gamma,
+                                                                          group = label,
+                                                                          color = label)) +
+                                  ggplot2::scale_color_manual(values = c("black", "red")) +
+                                  ggplot2::geom_line() +
+                                  ggplot2::theme(legend.position = c(0,1),
+                                                 legend.justification = c(0,1),
+                                                 legend.direction="horizontal",
+                                                 legend.title = ggplot2::element_blank()) +
+                                  ggplot2::xlab("Distance (m)") +
+                                  ggplot2::ylab("Semivariance")
+
+
                                 # moran index on residual
                                 mil <- vector("list",
                                               length = 10)
@@ -3884,29 +3883,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            row.names = FALSE)
                                 current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                list("moran_residual_test" = moran_residual_test))
-                                variogram_resp_data <- gstat::variogram(object = resp ~ 1,
-                                                                        data = current_model_data_map,
-                                                                        cutoff = 4000000,
-                                                                        width = 100000)
-                                variogram_resp_data$label <- "Observed data"
-                                variogram_res_data <- gstat::variogram(object = res ~ 1,
-                                                                       data = current_model_data_map,
-                                                                       cutoff = 4000000,
-                                                                       width = 100000)
-                                variogram_res_data$label <- "Residuals"
-                                variogram_data <- dplyr::bind_rows(variogram_resp_data,
-                                                                   variogram_res_data)
-                                variogram <- ggplot2::ggplot(data = variogram_data,
-                                                             ggplot2::aes(x = dist,
-                                                                          y = gamma,
-                                                                          group = label,
-                                                                          color = label)) +
-                                  ggplot2::scale_color_manual(values = c("black", "red")) +
-                                  ggplot2::geom_line() +
-                                  ggplot2::theme(legend.position = "bottom",
-                                                 legend.title = ggplot2::element_blank()) +
-                                  ggplot2::xlab("Distance (m)") +
-                                  ggplot2::ylab("Semivariance")
+
                                 correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
                                                                         lag_max = 300)
                                 correlogram_resp_acf <- correlogram_resp[[1]] +
@@ -3952,73 +3929,92 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                                width = 15,
-                                                height = 5,
-                                                units = c("in"),
+                                                width = 30,
+                                                height = 20,
+                                                units = c("cm"),
                                                 dpi = 300)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("spatio_temporal_checking" = spatio_temporal_checking))
                                 # model validity
-                                model_validation_1 <- ggplot2::ggplot(current_model_data,
-                                                      ggplot2::aes(x = res)) +
-                                  ggplot2::geom_density(fill = rgb(1,0,0,0.2),
+                                model_validation_density_res <- ggplot2::ggplot(current_model_data,
+                                                      ggplot2::aes(x = res_ST)) +
+                                  ggplot2::geom_density(stat = "density",
+                                                        fill = rgb(1,0,0,0.2),
                                                         ggplot2::aes(y = ..scaled..)) +
-                                  ggplot2::scale_x_continuous(expand = c(0, 0))
-                                model_validation_2 <- ggplot2::ggplot(data = current_model_data,
-                                                                      ggplot2::aes(x = tlb,
-                                                                                   y = res)) +
+                                  ggplot2::scale_x_continuous(expand = c(0, 0)) +
+                                  ggplot2::labs(x = "Standardized Residuals")
+                                model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
+                                  ggplot2::stat_qq()+
+                                  ggplot2::stat_qq_line(col = 2)+
+                                  ggplot2::labs(x = "Theoretical quantiles", y = "Sample quantiles")
+                                model_validation_response_fit <- ggplot2::ggplot(data = current_model_data,
+                                                                            ggplot2::aes(x = resp,
+                                                                                         y = fit)) +
                                   ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "loess",
-                                                       formula = "y ~ x") +
-                                  ggplot2::geom_abline(slope = 0,
+                                  ggplot2::geom_smooth(method = "gam",
+                                                       formula = y ~ s(x, bs = "cs"))+
+                                  ggplot2::geom_abline(slope = 1,
                                                        intercept = 0,
                                                        col = "red") +
-                                  ggplot2::labs(x = "Proportion in logbook",
-                                                y = "Standardized Residuals")
-                                model_validation_3 <- ggplot2::ggplot(data = current_model_data,
+                                  ggplot2::labs(x = "Observed values",
+                                                y = "Fitted values")
+                                model_validation_fit_res <- ggplot2::ggplot(data = current_model_data,
                                                                       ggplot2::aes(x = fit,
-                                                                                   y = res)) +
+                                                                                   y = res_ST)) +
                                   ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "loess",
-                                                       formula = "y ~ x") +
+                                  ggplot2::geom_smooth(method = "gam",
+                                                       formula = y ~ s(x, bs = "cs"))+
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
                                                        col = "red") +
                                   ggplot2::labs(x = "Fitted values",
                                                 y = "Standardized Residuals")
-                                model_validation_4 <- ggplot2::ggplot(data = current_model_data,
+                                model_validation_logbook_res <- ggplot2::ggplot(data = current_model_data,
+                                                                                ggplot2::aes(x = tlb,
+                                                                                             y = res_ST)) +
+                                  ggplot2::geom_point() +
+                                  ggplot2::geom_smooth(method = "gam",
+                                                       formula = y ~ s(x, bs = "cs")) +
+                                  ggplot2::geom_abline(slope = 0,
+                                                       intercept = 0,
+                                                       col = "red") +
+                                  ggplot2::labs(x = "Proportion in logbook",
+                                                y = "Standardized Residuals")
+                                model_validation_yr_res <- ggplot2::ggplot(data = current_model_data,
                                                                       ggplot2::aes(x = year,
-                                                                                   y = res)) +
+                                                                                   y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
                                                        col = "red") +
                                   ggplot2::labs(x = NULL,
                                                 y = "Standardized Residuals")
-                                model_validation_5 <- ggplot2::ggplot(data = current_model_data,
+                                model_validation_mon_res <- ggplot2::ggplot(data = current_model_data,
                                                                       ggplot2::aes(x = mon,
-                                                                                   y = res)) +
+                                                                                   y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
                                                        col = "red") +
                                   ggplot2::labs(x = "Month",
                                                 y = "Standardized Residuals")
-                                model_validation_6 <- ggplot2::ggplot(data = current_model_data,
+                                model_validation_vessel_res <- ggplot2::ggplot(data = current_model_data,
                                                                       ggplot2::aes(x = vessel,
-                                                                                   y = res)) +
+                                                                                   y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0, intercept = 0, col="red") +
                                   ggplot2::labs(x = "Vessel",
                                                 y = "Standardized Residuals")
-                                model_validation <- ggpubr::ggarrange(model_validation_1,
-                                                                      model_validation_2,
-                                                                      model_validation_3,
-                                                                      model_validation_4,
-                                                                      model_validation_5,
-                                                                      model_validation_6,
+                                model_validation <- ggpubr::ggarrange(model_validation_density_res,
+                                                                      model_validation_qqplot_res,
+                                                                      model_validation_response_fit,
+                                                                      model_validation_fit_res,
+                                                                      model_validation_logbook_res,
+                                                                      model_validation_yr_res,
+                                                                      model_validation_mon_res,
+                                                                      model_validation_vessel_res,
                                                                       nrow = 2,
-                                                                      ncol = 3)
+                                                                      ncol = 4)
                                 ggplot2::ggsave(plot = model_validation,
                                                 file = file.path(figures_directory,
                                                                  paste("model_validation_",
@@ -4029,42 +4025,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                                width = 15,
-                                                height = 5,
-                                                units = c("in"),
+                                                width = 30,
+                                                height = 20,
+                                                units = c("cm"),
                                                 dpi = 300)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("model_validation" = model_validation))
                                 # model accuracy
                                 # cross validation by k-folds
-                                npartition <- 10
+                                npartition <- 10 # not a parameter
                                 df <- current_model_data
+
+                                model_formula <- strsplit(as.character(current_model_outputs[[3]]$call),",")[[2]]
+                                model_ntree <- current_model_outputs[[3]]$num.trees
+                                model_mtry <- current_model_outputs[[3]]$mtry
+                                model_node <- current_model_outputs[[3]]$min.node.size
+
                                 set.seed(7)
                                 fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
                                                                     size = nrow(df),
                                                                     replace = FALSE),
-                                                   nfold = rep_len(x = 1:npartition,
+                                                   nfold = rep_len(x = seq_len(length.out = npartition),
                                                                    length.out = nrow(df)))
                                 resi <- vector(mode = "list",
                                                length = npartition)
                                 mufit <- vector(mode = "list",
                                                 length = npartition)
-
                                 for (h in seq_len(length.out = npartition)) {
                                   test <- df[fold$row_ord[fold$nfold == h], ]
                                   train <- df[fold$row_ord[fold$nfold != h], ]
                                   set.seed(7)
-                                  model <- randomForest::randomForest(formula = resp ~ lon + lat + mon + year + tlb ,
-                                                                      data = current_model_data,
-                                                                      ntree = 1000,
-                                                                      mtry = 2,
-                                                                      nPerm = 5,
-                                                                      importance = FALSE,
-                                                                      proximity = FALSE,
-                                                                      keep.forest = TRUE,
-                                                                      localImp = FALSE)
-                                  test$fit <- predict(object = model,
-                                                      newdata = test)
+                                  model <- ranger::ranger(formula = model_formula,
+                                                          data = train,
+                                                          num.trees = model_ntree,
+                                                          mtry = model_mtry,
+                                                          min.node.size = model_node,
+                                                          splitrule = "variance")
+
+                                  test$fit <- ranger:::predict.ranger(model,data = test)$predictions
                                   resi[[h]] = test$resp - test$fit
                                   mufit[[h]] = mean(test$resp)
                                 }
