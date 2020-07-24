@@ -4182,7 +4182,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                "fmod",
                                                                "ocean",
                                                                "year")])
-                              act_chr$yr <- year(x = act_chr$date)
+                              act_chr$yr <- lubridate::year(x = act_chr$date)
                               act_chr$mon <- lubridate::month(x = act_chr$date)
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
@@ -4241,27 +4241,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              tmp2,
                                                              by = c("id_act", "sp"),
                                                              sort = FALSE)
-                              # assign fishing mode to unknow (classification model to optimize)
+                              # Assign fishing mode to unknown
                               sets_wide$fmod <- factor(sets_wide$fmod)
                               sets_long$fmod <- factor(sets_long$fmod)
                               train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
                               test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
-                              ntree <- 1000
-                              set.seed(7)
-                              rf <- randomForest::randomForest(formula = fmod ~ p_YFT + p_SKJ + p_BET,
-                                                               data = train,
-                                                               mtry = 2,
-                                                               nperm = 5,
-                                                               ntree = ntree)
-                              test$fmod2 <- predict(rf,
-                                                    newdata = test)
-
+                              if(nrow(test) >0) {
+                                ntree <- 1000
+                                set.seed(7)
+                                rfg <- ranger::ranger(fmod ~ p_YFT + p_SKJ + p_BET,
+                                                      data = train,
+                                                      mtry=2L,
+                                                      num.trees = ntree,
+                                                      min.node.size = 5L,
+                                                      splitrule = "gini",
+                                                      importance = "impurity",
+                                                      replace = TRUE,
+                                                      quantreg = FALSE,
+                                                      keep.inbag= FALSE)
+                              test$fmod2 <- ranger:::predict.ranger(rfg,
+                                                                    data = test)$predictions
                               tmp <- dplyr::left_join(sets_long,
                                                       test[, c("id_act","fmod2")],
                                                       by = "id_act")
                               tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
                               tmp$fmod2 <- NULL
                               sets_long <- droplevels(tmp)
+                              }
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
@@ -4309,7 +4315,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    levels(df[, a])))))
                                 }
                               }
-                              # function which create an empty worfd raster with custom pixel size
+                              # function which create an empty world raster with custom pixel size
                               rastermap <- function(x, y) {
                                 raster::raster(nrows = (length(x = seq(from = -180,
                                                                        to = 180, by = x * 2)) -1),
