@@ -4306,7 +4306,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               options(warn = 1)
                               wrld_sf <- data("wrld_simpl",
                                               package = "maptools")
-                              # function to add empty levels for the prediction with the predict.randomforest
+                              # function to add empty levels for the prediction with randomforest::predict.randomforest
                               addmissinglevel <- function(df, a){
                                 if (is.factor(df[, a])) {
                                   return(factor(df[, a],
@@ -4346,6 +4346,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "Data associated not used for this process.\n",
                                         sep = "")
                                   } else {
+                                    browser()
                                     sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == specie, ]
                                     for (fishing_mode in unique(sets_long_specie$fmod)) {
                                       sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
