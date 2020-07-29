@@ -558,7 +558,9 @@ Model predictions for the species composition and computing of catches.
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
   outputs_level3_process2,
   outputs_level3_process4,
-  outputs_path
+  outputs_path,
+  ci = FALSE,
+  Nboot = 10
 )}\if{html}{\out{</div>}}
 }
 
@@ -570,6 +572,10 @@ Model predictions for the species composition and computing of catches.
 \item{\code{outputs_level3_process4}}{(list) Outputs from level 3 process 4 (data formatting for predictions).}
 
 \item{\code{outputs_path}}{(character) Outputs directory path.}
+
+\item{\code{ci}}{Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
+
+\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The fefault value is 10.}
 }
 \if{html}{\out{</div>}}
 }

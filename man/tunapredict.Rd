@@ -7,9 +7,6 @@
 tunapredict(
   sample_data,
   allset_data,
-  schooltype = 1,
-  ocean = 1,
-  species = "SKJ",
   Ntree = 1000,
   Nmtry = 2,
   Nseed = 7,
@@ -21,12 +18,6 @@ tunapredict(
 \item{sample_data}{(data frame) Data used for the modelling. Output table from process 3.1.}
 
 \item{allset_data}{(data frame) Data used for prediction.Output table from process 3.4.}
-
-\item{schooltype}{(integer) Fishing mode of the catch.}
-
-\item{ocean}{(integer) Target ocean.}
-
-\item{species}{(character) Target species. 'SKJ' for kipjack and 'YFT' for yellowfin.}
 
 \item{Ntree}{(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
 

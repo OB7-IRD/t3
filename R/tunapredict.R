@@ -3,9 +3,9 @@
 #' @description Compute proportion by species fishing mode and ocean
 #' @param sample_data (data frame) Data used for the modelling. Output table from process 3.1.
 #' @param allset_data (data frame) Data used for prediction.Output table from process 3.4.
-#' @param schooltype (integer) Fishing mode of the catch.
-#' @param ocean (integer) Target ocean.
-#' @param species (character) Target species. 'SKJ' for kipjack and 'YFT' for yellowfin.
+# @param schooltype (integer) Fishing mode of the catch.
+# @param ocean (integer) Target ocean.
+# @param species (character) Target species. 'SKJ' for kipjack and 'YFT' for yellowfin.
 #' @param Ntree (integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
 #' @param Nmtry (integer) Number of variables randomly sampled as candidates at each split. The default value is 2.
 #' @param Nseed (integer) Set the initial seed for the modelling. The default value is 7.
@@ -17,9 +17,9 @@
 
 tunapredict <- function(sample_data,
                      allset_data,
-                     schooltype = 1,
-                     ocean = 1,
-                     species = "SKJ",
+                     # schooltype = 1,
+                     # ocean = 1,
+                     # species = "SKJ",
                      # model parameters
                      Ntree = 1000,
                      Nmtry = 2,
@@ -28,31 +28,19 @@ tunapredict <- function(sample_data,
                      target_period
 )
 {
-
   if(missing(target_period)){target_period = allset_data$yr[1]}
-
-  # build structure of the output list for the bootstrap
-  # boot_output_list <- vector('list', length = Nboot)
-  # boot_output_list <- lapply(boot_output_list, function (x){
-  #   tmp <- vector('list', length = 3)
-  #   names(tmp) <- c("task1", "task2","loop")
-  #   return(tmp)
-  # })
-
   # subset of all sampled set
-  sub <- sample_data[sample_data$fmod == schooltype &
-                       sample_data$ocean == ocean &
-                       sample_data$sp == species,]
+  sub <- sample_data
 
   # format columns
   sub$resp <- (sub$prop_t3)
   sub$tlb <- (sub$prop_lb)
-  sub$yr <- factor(sub$yr)
+  sub$yr <- factor(sub$year)
   sub$mon <- factor(sub$mon)
   sub$vessel <- factor(sub$vessel)
   sub <- droplevels(sub)
 
-          ### remove set used to train models from data to predict
+    ### remove set used to train models from data to predict
     no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
     no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
 
@@ -68,19 +56,6 @@ tunapredict <- function(sample_data,
 
     no_sampled_set$data_source <- NA # assign source later
     no_sampled_set$fit_prop <- NA # stock final proportion
-
-    # add potential missing level - bug of the predict function
-
-    # no_sampled_set$yr <- addmissinglevel(no_sampled_set, "yr")
-    # no_sampled_set$mon <- addmissinglevel(no_sampled_set, "mon")
-    # no_sampled_set$vessel <- addmissinglevel(no_sampled_set, "vessel")
-
-    # missinglevel<- setdiff(levels(sub$vessel), levels(tmp$vessel))
-    # levels(tmp$vessel) <- c(levels(tmp$vessel),missinglevel)
-
-    # levels(no_sampled_set$vessel) <- modrf$forest$xlevels$vessel
-    # levels(no_sampled_set$yr) <- modrf$forest$xlevels$yr
-    # levels(no_sampled_set$mon) <- modrf$forest$xlevels$mon
 
     # not sampled vessel list
     vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),levels(sub$vessel))
@@ -112,10 +87,7 @@ tunapredict <- function(sample_data,
                                       splitrule = "variance",
                                       replace = TRUE,
                                       quantreg = FALSE,
-                                      keep.inbag= FALSE
-      )
-
-
+                                      keep.inbag= FALSE)
 
       newd$fit_prop <- ranger:::predict.ranger(model_rf_full, data = newd)$predictions
       newd$data_source <- "full_model" # add flag
@@ -134,12 +106,9 @@ tunapredict <- function(sample_data,
                                           splitrule = "variance",
                                           replace = TRUE,
                                           quantreg = FALSE,
-                                          keep.inbag= FALSE
-      )
+                                          keep.inbag= FALSE)
 
-
-
-      new_wtv$fit_prop<- ranger:::predict.ranger(model_rf_wtvessel,data=new_wtv)
+      new_wtv$fit_prop<- ranger:::predict.ranger(model_rf_wtvessel,data=new_wtv)$predictions
       new_wtv$data_source <- "model_wtv" # add flag
     }
 
@@ -160,7 +129,7 @@ tunapredict <- function(sample_data,
                                         keep.inbag= FALSE
       )
 
-      new_0$fit_prop<- ranger:::predict.ranger(modrf0,newdata=new_0)
+      new_0$fit_prop<- ranger:::predict.ranger(modrf0,newdata=new_0)$predictions
       new_0$data_source <- "simple_model" # add flag
     }
 
@@ -170,12 +139,26 @@ tunapredict <- function(sample_data,
     sampled_set <- unique(sub[sub$yr %in% target_period,])
     ## add sample not corrected catch by species
     sampled_set$data_source <- "sample" # add flag
-    sampled_set <- dplyr::rename(sampled_set, fit_prop = prop_t3)
-
+    sampled_set <- dplyr::rename(sampled_set,
+                                 fit_prop = prop_t3)
 
     ##
-    column_keep <- c("id_act","fmod","sp","lat","lon","date_act","vessel","ocean", "yr", "mon","fit_prop","wtot_lb_t3","data_source")
-    all_set <- rbind(newd[, names(newd) %in% column_keep], new_wtv[, names(new_wtv) %in% column_keep], new_0[, names(new_0) %in% column_keep], sampled_set[, names(sampled_set) %in% column_keep])
+    column_keep <- c("id_act",
+                     "fmod","sp",
+                     "lat",
+                     "lon",
+                     "date_act",
+                     "vessel",
+                     "ocean",
+                     "yr",
+                     "mon",
+                     "fit_prop",
+                     "wtot_lb_t3",
+                     "data_source")
+    all_set <- rbind(newd[, names(newd) %in% column_keep],
+                     new_wtv[, names(new_wtv) %in% column_keep],
+                     new_0[, names(new_0) %in% column_keep],
+                     sampled_set[, names(sampled_set) %in% column_keep])
 
   return(all_set)
 

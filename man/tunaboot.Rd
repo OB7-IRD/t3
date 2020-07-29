@@ -7,9 +7,6 @@
 tunaboot(
   sample_data,
   allset_data,
-  schooltype = 1,
-  ocean = 1,
-  species = "SKJ",
   Ntree = 1000,
   Nmtry = 2,
   Nseed = 7,
@@ -24,12 +21,6 @@ tunaboot(
 
 \item{allset_data}{(data frame) Data used for prediction.Output table from process 3.4.}
 
-\item{schooltype}{(integer) Fishing mode of the catch.}
-
-\item{ocean}{(integer) Target ocean.}
-
-\item{species}{(character) Target species. 'SKJ' for kipjack and 'YFT' for yellowfin.}
-
 \item{Ntree}{(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
 
 \item{Nmtry}{Number of variables randomly sampled as candidates at each split. The default value is 2.}
@@ -38,7 +29,7 @@ tunaboot(
 
 \item{min_node}{Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
 
-\item{Nboot}{The number of bootstrap samples desired? The fefault value is 10}
+\item{Nboot}{The number of bootstrap samples desired. The fefault value is 10}
 
 \item{Nseed_boot}{Set the initial seed for the modelling. The default value is equal to Nseed parameter}
 

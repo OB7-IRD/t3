@@ -4295,9 +4295,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process2 (list) Outputs from level 3 process 2 (random forest models).
                             #' @param outputs_level3_process4 (list) Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param outputs_path (character) Outputs directory path.
+                            #' @param ci Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
+                            #' @param Nboot The number of bootstrap samples desired for the ci computation. The fefault value is 10.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
-                                                         outputs_path) {
+                                                         outputs_path,
+                                                         ci = FALSE,
+                                                         Nboot = 10) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
@@ -4330,8 +4334,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                vals = NA)
                               }
                               outputs_level3_process5 <- vector(mode = "list",
-                                                                length = 1)
-                              names(outputs_level3_process5) <- c("nominal_catch")
+                                                                length = 4)
+                              names(outputs_level3_process5) <- c("Estimated_catch",
+                                                                  "Estimated_catch_ST",
+                                                                  "Boot_output_list",
+                                                                  "Boot_output_list_ST")
                               sets_long <- outputs_level3_process4[[1]][[1]]
                               for (ocean in unique(sets_long$ocean)) {
                                 sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
@@ -4346,12 +4353,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "Data associated not used for this process.\n",
                                         sep = "")
                                   } else {
-                                    browser()
                                     sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == specie, ]
                                     for (fishing_mode in unique(sets_long_specie$fmod)) {
                                       sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Ongoing process 3.5 (predictions step) for ocean \"",
+                                          " - Ongoing process 3.5 (Predictions step) for ocean \"",
                                           ocean,
                                           "\", specie \"",
                                           specie,
@@ -4360,102 +4366,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           "\"",
                                           ".\n",
                                           sep = "")
-                                      subsets <- sets_long_fishing_mode
-                                      # models
-                                      current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                        specie,
-                                                                                                        fishing_mode,
-                                                                                                        sep = "_")]]
-                                      if (is.null(current_outputs_level3_process2)) {
+                                      if(nrow(sets_long_fishing_mode) > 0){
+                                        # models
+                                        current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
+                                                                                                          specie,
+                                                                                                          fishing_mode,
+                                                                                                          sep = "_")]]
+                                         res <- t3:::tunapredict(sample_data = current_outputs_level3_process2[[1]],
+                                                                allset_data = sets_long_fishing_mode,
+                                                                                          Ntree = 1000,
+                                                                                          Nmtry = 2,
+                                                                                          Nseed = 7)
+
+                                      outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
+                                                                             list(res))
+                                      names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
+                                                                                                                         specie,
+                                                                                                                         fishing_mode,
+                                                                                                                         sep = "_")
                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Warning: no level 3 process 2 outputs available for this ocean, specie and fishing mode.",
-                                            " Switch to next item.\n",
-                                            sep = "")
-                                      } else {
-                                        sample_set <- dplyr::inner_join(x = current_outputs_level3_process2[[1]],
-                                                                        y = subsets[, c("id_act", "w_tuna")],
-                                                                        by = "id_act")
-                                        # remove set used to train models
-                                        subsets <- droplevels(x = subsets[! (subsets$id_act %in% unique(current_outputs_level3_process2[[1]]$id_act)), ])
-                                        subsets <- droplevels(x = subsets[subsets$yr %in% current_outputs_level3_process2[[1]]$year, ])
-                                        subsets <- droplevels(x = subsets[subsets$mon %in% current_outputs_level3_process2[[1]]$mon, ])
-                                        subsets <- droplevels(x = subsets[subsets$vessel %in% current_outputs_level3_process2[[1]]$vessel, ])
-                                        # prepare data
-                                        # transform predictor if necessary
-                                        subsets$tlb <- subsets$prop_lb
-                                        subsets$year <- factor(subsets$yr)
-                                        subsets$mon <- factor(subsets$mon)
-                                        subsets$vessel <- factor(subsets$vessel)
-                                        # split dataframe for different treatment if needed
-                                        # total tuna catch of each set
-                                        subsets$wtot_lb_t3 <- subsets$w_tuna
-                                        subsets$data_source <- "NA"
-                                        # add potential missing level, bug of the predict function
-                                        subsets$year <- addmissinglevel(df = subsets,
-                                                                        a = "year")
-                                        subsets$mon <- addmissinglevel(df = subsets,
-                                                                       a = "mon")
-                                        subsets$vessel <- addmissinglevel(df = subsets,
-                                                                          a = "vessel")
-                                        vessel_not_train <- setdiff(x = levels(subsets$vessel),
-                                                                    y = levels(current_outputs_level3_process2[[1]]$vessel))
-                                        # dataset with all information
-                                        newd <- subsets[! subsets$vessel %in% vessel_not_train, ]
-                                        # dataset with vessel not sampled
-                                        new_wtv <- subsets[subsets$vessel %in% vessel_not_train & ! is.na(subsets$prop_lb), ]
-                                        # dataset with no logbook
-                                        new_0 <- subsets[subsets$vessel %in% vessel_not_train & is.na(subsets$prop_lb), ]
-                                        # predict for best case  (all information)
-                                        newd$fit_prop <- stats::predict(current_outputs_level3_process2[[3]],
-                                                                        newdata = newd)
-                                        # add flag
-                                        newd$data_source <- "full_model"
-                                        #  without vessel information
-                                        new_wtv$fit_prop <-  stats::predict(current_outputs_level3_process2[[4]],
-                                                                            newdata = new_wtv)
-                                        # add flag
-                                        if (nrow(new_wtv) > 0) {
-                                          new_wtv$data_source <- "reduce_model"
-                                        }
-                                        # without logbook information, no case for now but to develop for historical data
-                                        new_0$fit_prop <-  stats::predict(current_outputs_level3_process2[[2]],
-                                                                          newdata = new_0)
-                                        # add flag
-                                        if (nrow(new_0) > 0) {
-                                          new_0$data_source <- "simplest_model"
-                                        }
-                                        # compute catch by species by set
-                                        # add sample not corrected catch by species
-                                        # add flag
-                                        sample_set$data_source <- "sample"
-                                        sample_set <- dplyr::rename(.data = sample_set,
-                                                                    fit_prop = prop_t3 )
-                                        sample_set <- sample_set[sample_set$year %in% sets_long$yr, ]
-                                        column_keep <- c("id_act",
-                                                         "fmod",
-                                                         "sp",
-                                                         "lat",
-                                                         "lon",
-                                                         "date_act",
-                                                         "vessel",
-                                                         "ocean",
-                                                         "year",
-                                                         "mon",
-                                                         "fit_prop",
-                                                         "wtot_lb_t3",
-                                                         "data_source")
-                                        res <- rbind(newd[, column_keep],
-                                                     new_wtv[, column_keep],
-                                                     new_0[, column_keep],
-                                                     sample_set[, column_keep])
-                                        outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
-                                                                               list(res))
-                                        names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
-                                                                                                                           specie,
-                                                                                                                           fishing_mode,
-                                                                                                                           sep = "_")
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Process 3.5 (predictions step) successfull for ocean \"",
+                                            " - Process 3.5 (Predictions step) successfull for ocean \"",
                                             ocean,
                                             "\", specie \"",
                                             specie,
@@ -4464,86 +4394,246 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "\"",
                                             ".\n",
                                             sep = "")
+
                                       }
                                     }
                                   }
                                 }
                               }
-                              catch_set_t3_long <- do.call(what = rbind,
-                                                           args = outputs_level3_process5[[1]])
-                              catch_set_t3_wide <- tidyr::spread(data = catch_set_t3_long[, names(catch_set_t3_long) != "catch_t3_N3"],
-                                                                 key = "sp",
-                                                                 value = fit_prop)
-                              # standardized YFT and SKJ estimates for case with more than 100 percent
-                              catch_set_t3_wide$S <- catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT
-                              catch_set_t3_wide$SKJ <- ifelse(test = catch_set_t3_wide$S > 1,
-                                                              yes = catch_set_t3_wide$SKJ / catch_set_t3_wide$S,
-                                                              no = catch_set_t3_wide$SKJ)
-                              catch_set_t3_wide$YFT <- ifelse(test = catch_set_t3_wide$S > 1,
-                                                              yes = catch_set_t3_wide$YFT / catch_set_t3_wide$S,
-                                                              no = catch_set_t3_wide$YFT)
-                              catch_set_t3_wide$BET <- 1 - (catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT)
-                              tmp <- tidyr::gather(data = catch_set_t3_wide,
-                                                   key = "sp",
-                                                   value = "fit_prop_t3_ST", "BET", "SKJ", "YFT")
-                              # add column with standardized estimates
-                              catch_set_t3_long <- dplyr::right_join(x = catch_set_t3_long,
-                                                                     y = tmp,
-                                                                     by = c("id_act", "fmod", "sp", "lat", "lon", "date_act", "vessel", "ocean", "year", "mon", "wtot_lb_t3", "data_source"))
-                              catch_set_t3_long$catch_t3_N3 <- catch_set_t3_long$fit_prop_t3_ST * catch_set_t3_long$wtot_lb_t3
-                              # task 1
-                              tot <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + ocean,
-                                               data = catch_set_t3_long,
-                                              FUN = sum)
-                              t1 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean,
-                                              data = catch_set_t3_long,
-                                              FUN = sum)
-                              # task 2
-                              tmp <- catch_set_t3_long
-                              cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
-                                                                      data_longitude = as.character(tmp$lon),
-                                                                      data_latitude = as.character(tmp$lat),
-                                                                      input_degree_format = "decimal_degree",
-                                                                      cwp_resolution = "1deg_x_1deg")
-                              cwp$longitude_decimal_degree <- as.numeric(cwp$longitude_decimal_degree)
-                              cwp$latitude_decimal_degree <- as.numeric(cwp$latitude_decimal_degree)
-                              tmp <- dplyr::inner_join(x = tmp,
-                                                       y = cwp,
-                                                       by = c("lon" = "longitude_decimal_degree",
-                                                              "lat" = "latitude_decimal_degree")) %>%
-                                dplyr::rename(cwp1 = cwp)
-                              # mean proportion by 1 degree / month
-                              tmp2 <- aggregate(formula = cbind(fit_prop_t3_ST) ~ year + fmod + sp + ocean + cwp1,
-                                                data = tmp,
-                                                FUN = mean)
-                              # catch by 1 degree/month
-                              tmp3 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean + cwp1,
-                                                data = tmp,
-                                                FUN = sum)
-                              t2 <-  dplyr::inner_join(x = tmp3,
-                                                       y = tmp2,
-                                                       by = c("year", "fmod", "sp", "ocean", "cwp1"))
-                              lon_lat <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "cwp_to_lat_lon",
-                                                                          data_cwp = as.character(t2$cwp1),
-                                                                          output_degree_format = "decimal_degree",
-                                                                          output_degree_cwp_parameter = "centroid",
-                                                                          cwp_resolution = "1deg_x_1deg")
-                              lon_lat$longitude_decimal_degree_centroid <- as.numeric(lon_lat$longitude_decimal_degree_centroid)
-                              lon_lat$latitude_decimal_degree_centroid <- as.numeric(lon_lat$latitude_decimal_degree_centroid)
-                              t2 <- dplyr::inner_join(x = t2,
-                                                      y = lon_lat,
-                                                      by = c("cwp1" = "cwp")) %>%
-                                dplyr::rename(lon = longitude_decimal_degree_centroid,
-                                              lat = latitude_decimal_degree_centroid)
-                              outputs_level3_process5 <- append(outputs_level3_process5,
-                                                                list(list(catch_set_t3_long,
-                                                                          t1,
-                                                                          t2)))
-                              names(outputs_level3_process5)[[2]] <- paste0("raw_t1_t2_",
-                                                                            unique(catch_set_t3_long$year))
-                              names(outputs_level3_process5[[2]]) <- c("catch_set_t3_long",
-                                                                       "t1",
-                                                                       "t2")
+
+                              # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch
+                              for (ocean in unique(sets_long$ocean)) {
+                                outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
+                                                                      x = names(outputs_level3_process5[[1]]))]
+                                boot_tmp_element <- do.call(what = rbind,
+                                                            args = outputs_level3_process5_ocean)
+                                boot_tmp_element <- tidyr::spread(data = boot_tmp_element,
+                                                                  key = "sp",
+                                                                  value = fit_prop)
+                                boot_tmp_element$S <- boot_tmp_element$SKJ + boot_tmp_element$YFT
+                                boot_tmp_element$SKJ <- base::ifelse(test = boot_tmp_element$S > 1,
+                                                                     yes = boot_tmp_element$SKJ/boot_tmp_element$S,
+                                                                     no = boot_tmp_element$SKJ)
+                                boot_tmp_element$YFT <- base::ifelse(test = boot_tmp_element$S > 1,
+                                                                     yes = boot_tmp_element$YFT/boot_tmp_element$S,
+                                                                     no = boot_tmp_element$YFT)
+                                boot_tmp_element$BET <- 1 - (boot_tmp_element$SKJ + boot_tmp_element$YFT)
+
+                                boot_tmp_element <- tidyr::gather(data = boot_tmp_element,
+                                                                  key = "sp",
+                                                                  value = "fit_prop_t3_ST",
+                                                                  "BET", "SKJ", "YFT")
+
+                                boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+
+                                outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
+                                                                       list(boot_tmp_element))
+                                names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
+                                                                                                                   ocean,
+                                                                                                                   sep = "_")
+                              }
+
+                              # bootstrap CI
+                              # bootstrap step 1 - bootstrap on models and predicts
+
+                              if (ci == TRUE){
+
+                                for (ocean in unique(sets_long$ocean)) {
+                                  sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
+                                  for (specie in unique(sets_long_ocean$sp)) {
+                                    if (! specie %in% c("SKJ","YFT")) {
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Warning: process 3.5 not developed yet for the specie \"",
+                                          specie,
+                                          "\" in the ocean \"",
+                                          ocean,
+                                          "\".\n",
+                                          "Data associated not used for this process.\n",
+                                          sep = "")
+                                    } else {
+                                      sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == specie, ]
+                                      for (fishing_mode in unique(sets_long_specie$fmod)) {
+                                        sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
+                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                            " - Ongoing process 3.5 (Bootstrap step) for ocean \"",
+                                            ocean,
+                                            "\", specie \"",
+                                            specie,
+                                            "\" and fishing mode \"",
+                                            fishing_mode,
+                                            "\"",
+                                            ".\n",
+                                            sep = "")
+                                        if(nrow(sets_long_fishing_mode) > 0){
+                                            current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
+                                                                                                              specie,
+                                                                                                              fishing_mode,
+                                                                                                              sep = "_")]]
+                                      boot_output <- tunaboot(sample_data = current_outputs_level3_process2[[1]],
+                                                              allset_data = sets_long_fishing_mode,
+                                                              # model parameters
+                                                              Ntree = 1000,
+                                                              Nmtry = 2,
+                                                              Nseed = 7,
+                                                              # bootstrap parameters
+                                                              Nboot = Nboot,
+                                                              target_period = dplyr::first(x = sets_long_fishing_mode$yr))
+
+                                      outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                             list(boot_output))
+                                      names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
+                                                                                                                         specie,
+                                                                                                                         fishing_mode,
+                                                                                                                         sep = "_")
+                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 3.5 (Bootstrap step) successfull for ocean \"",
+                                          ocean,
+                                          "\", specie \"",
+                                          specie,
+                                          "\" and fishing mode \"",
+                                          fishing_mode,
+                                          "\"",
+                                          ".\n",
+                                          sep = "")
+
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+
+
+                              # bootrstap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch #
+                              # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
+                              for (ocean in unique(sets_long$ocean)) {
+                                browser()
+                                outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
+                                                                                                   x = names(outputs_level3_process5[[3]]))]
+
+                                list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
+
+                                  for(element in (seq.int(from = 1,
+                                                          to = length(outputs_level3_process5_ocean[[1]])))){
+                                  boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
+                                  boot_tmp_element <- do.call(what = rbind,
+                                                              args = boot_tmp_element)
+
+                                  boot_tmp_element <- tidyr::spread(boot_tmp_element,
+                                                                    key = "sp",
+                                                                    value = fit_prop)
+                                  boot_tmp_element$S <- boot_tmp_element$SKJ + boot_tmp_element$YFT
+                                  boot_tmp_element$SKJ <- base::ifelse(boot_tmp_element$S > 1,
+                                                                       boot_tmp_element$SKJ/boot_tmp_element$S,
+                                                                       boot_tmp_element$SKJ)
+                                  boot_tmp_element$YFT <- base::ifelse(boot_tmp_element$S > 1,
+                                                                       boot_tmp_element$YFT/boot_tmp_element$S,
+                                                                       boot_tmp_element$YFT)
+                                  boot_tmp_element$BET <- 1 - (boot_tmp_element$SKJ + boot_tmp_element$YFT)
+
+                                  boot_tmp_element <- tidyr::gather(boot_tmp_element,
+                                                                    key = "sp",
+                                                                    value = "fit_prop_t3_ST","BET", "SKJ", "YFT")
+
+                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+
+                                  list_boot_ST_ocean[[element]] <- boot_tmp_element
+
+                                }
+
+                                outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
+                                                                       list(list_boot_ST_ocean))
+                                names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
+                                                                                                                   ocean,
+                                                                                                                   sep = "_")
+                              }
+
+
+                              # bootstrap step 3 - compute confident intervals
+                              # nominal catch by species (task 1)
+                              browser()
+
+                              t1_all <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,data = t1_fmod, sum)
+                              t1_all_boot <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean + loop ,data = t1_fmod_boot, sum)
+
+                              # compute final CI
+                              t1_all_final <- catch_ci_calculator(fit_df = t1_all,boot_df = t1_all_boot)
+
+                                                           # catch_set_t3_long <- do.call(what = rbind,
+                              #                              args = outputs_level3_process5[[1]])
+                              # catch_set_t3_wide <- tidyr::spread(data = catch_set_t3_long[, names(catch_set_t3_long) != "catch_t3_N3"],
+                              #                                    key = "sp",
+                              #                                    value = fit_prop)
+                              # # standardized YFT and SKJ estimates for case with more than 100 percent
+                              # catch_set_t3_wide$S <- catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT
+                              # catch_set_t3_wide$SKJ <- ifelse(test = catch_set_t3_wide$S > 1,
+                              #                                 yes = catch_set_t3_wide$SKJ / catch_set_t3_wide$S,
+                              #                                 no = catch_set_t3_wide$SKJ)
+                              # catch_set_t3_wide$YFT <- ifelse(test = catch_set_t3_wide$S > 1,
+                              #                                 yes = catch_set_t3_wide$YFT / catch_set_t3_wide$S,
+                              #                                 no = catch_set_t3_wide$YFT)
+                              # catch_set_t3_wide$BET <- 1 - (catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT)
+                              # tmp <- tidyr::gather(data = catch_set_t3_wide,
+                              #                      key = "sp",
+                              #                      value = "fit_prop_t3_ST", "BET", "SKJ", "YFT")
+                              # # add column with standardized estimates
+                              # catch_set_t3_long <- dplyr::right_join(x = catch_set_t3_long,
+                              #                                        y = tmp,
+                              #                                        by = c("id_act", "fmod", "sp", "lat", "lon", "date_act", "vessel", "ocean", "year", "mon", "wtot_lb_t3", "data_source"))
+                              # catch_set_t3_long$catch_t3_N3 <- catch_set_t3_long$fit_prop_t3_ST * catch_set_t3_long$wtot_lb_t3
+                              # # task 1
+                              # tot <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + ocean,
+                              #                  data = catch_set_t3_long,
+                              #                 FUN = sum)
+                              # t1 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean,
+                              #                 data = catch_set_t3_long,
+                              #                 FUN = sum)
+                              # # task 2
+                              # tmp <- catch_set_t3_long
+                              # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
+                              #                                         data_longitude = as.character(tmp$lon),
+                              #                                         data_latitude = as.character(tmp$lat),
+                              #                                         input_degree_format = "decimal_degree",
+                              #                                         cwp_resolution = "1deg_x_1deg")
+                              # cwp$longitude_decimal_degree <- as.numeric(cwp$longitude_decimal_degree)
+                              # cwp$latitude_decimal_degree <- as.numeric(cwp$latitude_decimal_degree)
+                              # tmp <- dplyr::inner_join(x = tmp,
+                              #                          y = cwp,
+                              #                          by = c("lon" = "longitude_decimal_degree",
+                              #                                 "lat" = "latitude_decimal_degree")) %>%
+                              #   dplyr::rename(cwp1 = cwp)
+                              # # mean proportion by 1 degree / month
+                              # tmp2 <- aggregate(formula = cbind(fit_prop_t3_ST) ~ year + fmod + sp + ocean + cwp1,
+                              #                   data = tmp,
+                              #                   FUN = mean)
+                              # # catch by 1 degree/month
+                              # tmp3 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean + cwp1,
+                              #                   data = tmp,
+                              #                   FUN = sum)
+                              # t2 <-  dplyr::inner_join(x = tmp3,
+                              #                          y = tmp2,
+                              #                          by = c("year", "fmod", "sp", "ocean", "cwp1"))
+                              # lon_lat <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "cwp_to_lat_lon",
+                              #                                             data_cwp = as.character(t2$cwp1),
+                              #                                             output_degree_format = "decimal_degree",
+                              #                                             output_degree_cwp_parameter = "centroid",
+                              #                                             cwp_resolution = "1deg_x_1deg")
+                              # lon_lat$longitude_decimal_degree_centroid <- as.numeric(lon_lat$longitude_decimal_degree_centroid)
+                              # lon_lat$latitude_decimal_degree_centroid <- as.numeric(lon_lat$latitude_decimal_degree_centroid)
+                              # t2 <- dplyr::inner_join(x = t2,
+                              #                         y = lon_lat,
+                              #                         by = c("cwp1" = "cwp")) %>%
+                              #   dplyr::rename(lon = longitude_decimal_degree_centroid,
+                              #                 lat = latitude_decimal_degree_centroid)
+                              # outputs_level3_process5 <- append(outputs_level3_process5,
+                              #                                   list(list(catch_set_t3_long,
+                              #                                             t1,
+                              #                                             t2)))
+                              # names(outputs_level3_process5)[[2]] <- paste0("raw_t1_t2_",
+                              #                                               unique(catch_set_t3_long$year))
+                              # names(outputs_level3_process5[[2]]) <- c("catch_set_t3_long",
+                              #                                          "t1",
+                              #                                          "t2")
                               # figure task 2 and proportion
                               sps <- t2
                               sp::coordinates(object = sps) <- ~ lon + lat
