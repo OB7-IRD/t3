@@ -4334,11 +4334,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                vals = NA)
                               }
                               outputs_level3_process5 <- vector(mode = "list",
-                                                                length = 4)
+                                                                length = 5)
                               names(outputs_level3_process5) <- c("Estimated_catch",
                                                                   "Estimated_catch_ST",
                                                                   "Boot_output_list",
-                                                                  "Boot_output_list_ST")
+                                                                  "Boot_output_list_ST",
+                                                                  "Final_output")
                               sets_long <- outputs_level3_process4[[1]][[1]]
                               for (ocean in unique(sets_long$ocean)) {
                                 sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
@@ -4507,7 +4508,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootrstap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch #
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                               for (ocean in unique(sets_long$ocean)) {
-                                browser()
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[3]]))]
 
@@ -4551,14 +4551,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # bootstrap step 3 - compute confident intervals
                               # nominal catch by species (task 1)
-                              browser()
+                             t1_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST,
+                                                             function(x){
+                             t1_tmp_element <-aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,
+                                                  data = x,
+                                                  FUN = sum)
+                             return(t1_tmp_element)
+                                                             }))
 
-                              t1_all <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,data = t1_fmod, sum)
-                              t1_all_boot <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean + loop ,data = t1_fmod_boot, sum)
+                              t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                                  function(x){
+                                                                  boot_tmp_element <-do.call(rbind,
+                                                                                             lapply(seq.int(1:length(x)),
+                                                                                                    function(i){
+                                                                                                      boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
+                                                                                                                                       data=x[[i]], sum)
+                                                                    boot_tmp_subelement$loop <- i
+                                                                    return(boot_tmp_subelement)
+                                                                  }))
+                                return(boot_tmp_element)
+                              }))
+
 
                               # compute final CI
-                              t1_all_final <- catch_ci_calculator(fit_df = t1_all,boot_df = t1_all_boot)
+                              t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
 
+                              for (o in levels(t1_all$ocean)){
+                                t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
+                                                                  boot_data = t1_all_boot[t1_all_boot$ocean == o,])
+                              }
+
+                              t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
+
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t1_all_final_ocean))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
+
+
+                              # nominal catch by species and fishing mode (task 1 by fishing mode)
+                              t1_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                                boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x, sum)
+                                return(boot_tmp_subelement)
+
+                              }))
+
+                              # bootstrap distribution
+                              t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
+                                boot_tmp_element <-do.call(rbind,
+                                                           lapply(seq.int(1:length(x)),
+                                                                  function(i){
+                                  boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x[[i]], sum)
+                                  boot_tmp_subelement$loop <- i
+                                  return(boot_tmp_subelement)
+                                }))
+                                return(boot_tmp_element)
+                              }))
+
+                              # compute final CI
+                              t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
+
+                              for (o in levels(t1_fmod$ocean)){
+                                t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
+                                                                   boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
+                              }
+
+                              t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
+
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t1_fmod_final_ocean))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
+                              browser()
                                                            # catch_set_t3_long <- do.call(what = rbind,
                               #                              args = outputs_level3_process5[[1]])
                               # catch_set_t3_wide <- tidyr::spread(data = catch_set_t3_long[, names(catch_set_t3_long) != "catch_t3_N3"],
