@@ -7,6 +7,7 @@
 data_model_initialisation(
   periode_reference,
   countries,
+  oceans,
   db_con,
   sample_type,
   log_file = FALSE,
@@ -19,6 +20,8 @@ data_model_initialisation(
 \item{periode_reference}{(integer) Year(s) of the reference period coded on 4 digits.}
 
 \item{countries}{(character) ISO code on 3 letters related to one or more countries.}
+
+\item{oceans}{(integer) Ocean(s) related to data coded on 1 digit.}
 
 \item{db_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.}
 

@@ -3295,7 +3295,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           col = sp_cat,
                                                           into = c("sp","wcat"),
                                                           sep = "_")
-                              data4mod<- aggregate(formula = cbind(prop_lb, prop_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
+                              data4mod <- aggregate(formula = cbind(prop_lb, prop_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
                                                    data = data4mod,
                                                    FUN = sum)
                               outputs_level3_process2 <- list()

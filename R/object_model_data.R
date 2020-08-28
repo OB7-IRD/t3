@@ -12,6 +12,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv/RData file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
@@ -19,6 +20,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
+                                                                    oceans = NULL,
                                                                     data_path = NULL,
                                                                     trips_selected = NULL,
                                                                     envir = "global") {
@@ -35,6 +37,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              "class \"character\" expected.\n",
                                              sep = "")
                                          stop()
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -69,6 +76,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                paste0(countries,
                                                                                                                       collapse = "', '"),
                                                                                                                "'")),
+                                                                                   oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                   collapse = ", "))),
                                                                                    trips_selected = DBI::SQL(paste0("'",
                                                                                                                     paste0(trips_selected,
                                                                                                                            collapse = "', '"),
@@ -90,7 +99,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                  countries = DBI::SQL(paste0("'",
                                                                                                              paste0(countries,
                                                                                                                     collapse = "', '"),
-                                                                                                             "'")))
+                                                                                                             "'")),
+                                                                                 oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                 collapse = ", "))))
                                          }
                                          cat("[", trip_sql_final, "]\n", sep = "")
                                          trip_data <- DBI::dbGetQuery(db_con, trip_sql_final)
@@ -292,6 +303,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
@@ -299,6 +311,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          data_source = "t3_db",
                                                                          periode_reference = NULL,
                                                                          countries = NULL,
+                                                                         oceans = NULL,
                                                                          data_path = NULL,
                                                                          trips_selected = NULL,
                                                                          envir = NULL) {
@@ -312,6 +325,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument, ",
                                              "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -346,6 +364,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      paste0(countries,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")),
+                                                                                         oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                         collapse = ", "))),
                                                                                          trips_selected = DBI::SQL(paste0("'",
                                                                                                                           paste0(trips_selected,
                                                                                                                                  collapse = "', '"),
@@ -367,7 +387,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                        countries = DBI::SQL(paste0("'",
                                                                                                                    paste0(countries,
                                                                                                                           collapse = "', '"),
-                                                                                                                   "'")))
+                                                                                                                   "'")),
+                                                                                       oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                       collapse = ", "))))
                                          }
                                          cat("[", activities_sql_final, "]\n", sep = "")
                                          activities_data <- DBI::dbGetQuery(db_con, activities_sql_final)
@@ -574,6 +596,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
@@ -581,6 +604,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 data_source = "t3_db",
                                                                                 periode_reference = NULL,
                                                                                 countries = NULL,
+                                                                                oceans = NULL,
                                                                                 data_path = NULL,
                                                                                 trips_selected = NULL,
                                                                                 envir = "global") {
@@ -594,6 +618,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument, ",
                                              "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -628,6 +657,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           paste0(countries,
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")),
+                                                                                              oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                              collapse = ", "))),
                                                                                               trips_selected = DBI::SQL(paste0("'",
                                                                                                                                paste0(trips_selected,
                                                                                                                                       collapse = "', '"),
@@ -649,7 +680,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             countries = DBI::SQL(paste0("'",
                                                                                                                         paste0(countries,
                                                                                                                                collapse = "', '"),
-                                                                                                                        "'")))
+                                                                                                                        "'")),
+                                                                                            oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                            collapse = ", "))))
                                          }
                                          cat("[", elementarycatch_sql_final, "]\n", sep = "")
                                          elementarycatch_data <- DBI::dbGetQuery(db_con, elementarycatch_sql_final)
@@ -853,6 +886,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
@@ -860,6 +894,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                  data_source = "t3_db",
                                                                                  periode_reference = NULL,
                                                                                  countries = NULL,
+                                                                                 oceans = NULL,
                                                                                  data_path = NULL,
                                                                                  trips_selected = NULL,
                                                                                  envir = "global") {
@@ -873,6 +908,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument, ",
                                              "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -907,6 +947,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             paste0(countries,
                                                                                                                                    collapse = "', '"),
                                                                                                                             "'")),
+                                                                                                oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                                collapse = ", "))),
                                                                                                 trips_selected = DBI::SQL(paste0("'",
                                                                                                                                  paste0(trips_selected,
                                                                                                                                         collapse = "', '"),
@@ -928,7 +970,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                               countries = DBI::SQL(paste0("'",
                                                                                                                           paste0(countries,
                                                                                                                                  collapse = "', '"),
-                                                                                                                          "'")))
+                                                                                                                          "'")),
+                                                                                              oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                              collapse = ", "))))
                                          }
                                          cat("[", elementarylanding_sql_final, "]\n", sep = "")
                                          elementarylanding_data <- DBI::dbGetQuery(db_con, elementarylanding_sql_final)
@@ -1130,6 +1174,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
                                    #' @param data_path_samples (character) Path of the data sql/csv file for samples. By default NULL.
@@ -1139,6 +1184,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     data_source = "t3_db",
                                                                     periode_reference = NULL,
                                                                     countries = NULL,
+                                                                    oceans = NULL,
                                                                     sample_type = NULL,
                                                                     trips_selected = NULL,
                                                                     data_path_samples = NULL,
@@ -1154,6 +1200,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument, ",
                                              "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1193,6 +1244,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                   paste0(countries,
                                                                                                                          collapse = "', '"),
                                                                                                                   "'")),
+                                                                                      oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                      collapse = ", "))),
                                                                                       sample_type = DBI::SQL(paste0(sample_type,
                                                                                                                     collapse = ", ")),
                                                                                       trips_selected = DBI::SQL(paste0("'",
@@ -1216,7 +1269,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                     countries = DBI::SQL(paste0("'",
                                                                                                                 paste0(countries,
                                                                                                                        collapse = "', '"),
+
                                                                                                                 "'")),
+                                                                                    oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                    collapse = ", "))),
                                                                                     sample_type = DBI::SQL(paste0(sample_type,
                                                                                                                   collapse = ", ")))
                                          }
@@ -1259,6 +1315,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    paste0(countries,
                                                                                                                           collapse = "', '"),
                                                                                                                    "'")),
+                                                                                       oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                       collapse = ", "))),
                                                                                        trips_selected = DBI::SQL(paste0("'",
                                                                                                                         paste0(trips_selected,
                                                                                                                                collapse = "', '"),
@@ -1280,7 +1338,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                      countries = DBI::SQL(paste0("'",
                                                                                                                  paste0(countries,
                                                                                                                         collapse = "', '"),
-                                                                                                                 "'")))
+                                                                                                                 "'")),
+                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                     collapse = ", "))))
                                          }
                                          cat("[", wellplan_sql_final, "]\n", sep = "")
                                          wellplan_data <- DBI::dbGetQuery(db_con, wellplan_sql_final)
@@ -1524,7 +1584,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Start well plans data importation from R global environment.\n",
                                              sep = "")
                                          wellplan_data <- get(x = "well_plans",
-                                                              envir = if ( envir == "global") {
+                                                              envir = if (envir == "global") {
                                                                 rlang::global_env()
                                                               } else {
                                                                 rlang::current_env()
@@ -2132,6 +2192,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source (character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).
                                    #' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries (character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param oceans (integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path (character) Path of the data sql/csv file. By default NULL.
                                    #' @param trips_selected (character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir (character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.
@@ -2139,6 +2200,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                              data_source = "t3_db",
                                                              periode_reference = NULL,
                                                              countries = NULL,
+                                                             oceans = NULL,
                                                              data_path = NULL,
                                                              trips_selected = NULL,
                                                              envir = "global") {
@@ -2152,6 +2214,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument, ",
                                              "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(class(oceans)) != 1 || class(oceans) != "integer") {
+                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
                                              sep = "")
                                        } else if (class(db_con) != "PostgreSQLConnection") {
                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2186,6 +2253,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                     paste0(countries,
                                                                                                                            collapse = "', '"),
                                                                                                                     "'")),
+                                                                                        oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                        collapse = ", "))),
                                                                                         trips_selected = DBI::SQL(paste0("'",
                                                                                                                          paste0(trips_selected,
                                                                                                                                 collapse = "', '"),
@@ -2207,7 +2276,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                       countries = DBI::SQL(paste0("'",
                                                                                                                   paste0(countries,
                                                                                                                          collapse = "', '"),
-                                                                                                                  "'")))
+                                                                                                                  "'")),
+                                                                                      oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                      collapse = ", "))))
                                          }
                                          cat("[", sampleset_sql_final, "]\n", sep = "")
                                          sampleset_data <- DBI::dbGetQuery(db_con, sampleset_sql_final)

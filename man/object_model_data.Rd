@@ -32,6 +32,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
   envir = "global"
@@ -48,6 +49,8 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv/RData file. By default NULL.}
 
@@ -69,6 +72,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
   envir = NULL
@@ -85,6 +89,8 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
@@ -106,6 +112,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
   envir = "global"
@@ -122,6 +129,8 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
@@ -143,6 +152,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
   envir = "global"
@@ -159,6 +169,8 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
@@ -180,6 +192,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   sample_type = NULL,
   trips_selected = NULL,
   data_path_samples = NULL,
@@ -198,6 +211,8 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
 
@@ -285,6 +300,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
+  oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
   envir = "global"
@@ -301,6 +317,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
 
