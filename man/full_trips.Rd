@@ -345,7 +345,7 @@ Process for well set weigth categories definition.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sample_set}}{(data.frame) Data frame object with weighted weigth of each set sampled.}
+\item{\code{sample_set}}{(data.frame) Data frame object with weighted weigh of each set sampled.}
 }
 \if{html}{\out{</div>}}
 }
