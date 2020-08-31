@@ -1998,6 +1998,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        stop()
                                      }
+                                     cat("Be careful! Manual added set duration parameters for 2020, don't forget to remove it after updating reference table in the database.\n")
+                                     set_duration_ref_tmp <- data.frame(year = c(2020, 2020, 2020, 2020, 2020, 2020),
+                                                                        country = c("FRA", "FRA", "FRA", "FRA", "FRA", "FRA"),
+                                                                        ocean = c(1, 1, 1, 2, 2, 2),
+                                                                        school_type = c(2, 1, 3, 2, 1, 3),
+                                                                        parameter_a = c(0.68568, 0.60206, 0.64752, 0.56406, 0.56406, 0.56406),
+                                                                        parameter_b = c(128.525, 138.829, 133.745, 141.223, 141.223, 141.223),
+                                                                        null_set_value = c(111.2, 142.7, 123.0, 125.7, 140.2, 133.1))
+                                     setdurationref_data <- rbind(setdurationref_data, set_duration_ref_tmp)
                                      private$setdurationref <- setdurationref_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
