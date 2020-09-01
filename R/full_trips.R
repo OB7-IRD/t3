@@ -1753,7 +1753,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
                             #' @param length_step (data.frame) Data frame object with length ratio between ld1 and lf class.
                             sample_length_class_ld1_to_lf =  function(length_step) {
-                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
