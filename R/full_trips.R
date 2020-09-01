@@ -1470,7 +1470,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_trip <- private$data_selected[[i]][[j]]
                                       fishing_time <- 0
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        activities_dates <- vector(mode = "list")
+                                        activities_dates <- NULL
                                         for (k in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                           current_activity_date <- current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date
                                           activities_dates <- append(activities_dates,
@@ -1753,6 +1753,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
                             #' @param length_step (data.frame) Data frame object with length ratio between ld1 and lf class.
                             sample_length_class_ld1_to_lf =  function(length_step) {
+                              browser()
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
@@ -1766,7 +1767,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   length_step_count <- length_step %>%
                                     dplyr::group_by(ocean, specie_code, specie_code3l, ld1_class) %>%
-                                    dplyr::summarise(nb = n())
+                                    dplyr::summarise(nb = dplyr::n(),
+                                                     .groups = "drop")
                                 }
                                 for (i in seq_len(length.out = length(private$data_selected))) {
                                   if (i == 1) {
