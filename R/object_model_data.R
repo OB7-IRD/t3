@@ -2199,7 +2199,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                        specie_code = 3,
                                                                        specie_code3l = "BET",
                                                                        ld1_class = 55,
-                                                                       lf_class = 190,
+                                                                       lf_class = ((55 + 21.45108)^2 / (5.28756^2)),
                                                                        ratio = 100)
                                      lengthstep_data <- rbind(lengthstep_data_tmp,
                                                               lengthstep_data)

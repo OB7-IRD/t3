@@ -8,12 +8,12 @@ FROM
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
 	JOIN public.country c ON (v.flagcountry = c.topiaid)
 	JOIN public.ocean o ON (a.ocean = o.topiaid)
-	JOIN public.vesselactivity va ON (a.vesselactivity = va.topiaid)
+	--JOIN public.vesselactivity va ON (a.vesselactivity = va.topiaid)
 WHERE
 	t.landingdate BETWEEN ?begin_period AND ?end_period
 	AND c.codeiso3 IN (?countries)
 	AND o.code IN (?oceans)
-	AND va.code IN (0, 1, 2, 8, 9, 14, 100)
+	--AND va.code IN (0, 1, 2, 8, 9, 14, 100)
 	AND t.topiaid IN (?trips_selected)
 )
 SELECT
