@@ -31,10 +31,10 @@ t3_level2 <- function(length_step,
       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Start function t3 process level 2.\n",
           sep = "")
-      # level 2.1: sample number measured extrapolation ----
-      object_full_trips$sample_number_measured_extrapolation()
-      # level 2.2: sample length class ld1 to lf conversion ----
+      # level 2.1: sample length class ld1 to lf conversion ----
       object_full_trips$sample_length_class_ld1_to_lf(length_step = length_step)
+      # level 2.2: sample number measured extrapolation ----
+      object_full_trips$sample_number_measured_extrapolation()
       # level 2.3: sample step length class standardisation ----
       object_full_trips$sample_length_class_step_standardisation()
       # level 2.4: sample weight categories ----
