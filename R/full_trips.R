@@ -2953,18 +2953,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
                             #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
+                            #' @param inputs_level3_path (character) Path to the folder containing yearly data ouptut of the level 1 and 2.
                             #' @param outputs_directory (character) Path of the t3 processes outputs directory.
                             #' @param periode_reference (integer) Year(s) period of reference for modelling estimation.
-                            #' @param targeted_year (integer) Targeted year for model estimaton and prediction.
+                            #' @param target_year (integer) Year of interest for the model estimaton and prediction.
+                            #' @param period_duration (integer) number of year use for the modelling. The default value is 5
                             #' @param distance_maximum (integer) Maximum distance between all sets of a sampled well. By default 5.
                             #' @param number_sets_maximum (integer) Maximum number of sets allowed in mixture. By default 5.
                             #' @param set_weight_minimum (integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.
                             #' @param minimum_set_frequency (numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.
                             #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
-                            data_preparatory = function(inputs_level3,
+                            data_preparatory = function(inputs_level3 = NULL,
+                                                        inputs_level3_path,
                                                         outputs_directory,
                                                         periode_reference,
-                                                        targeted_year,
+                                                        target_year,
+                                                        period_duration = 5L,
                                                         distance_maximum = as.integer(5),
                                                         number_sets_maximum = as.integer(5),
                                                         set_weight_minimum = as.integer(6),
@@ -2980,9 +2984,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(targeted_year) != "integer" || length(targeted_year) != 1 || nchar(targeted_year) != 4) {
+                              } else if (class(target_year) != "integer" || length(target_year) != 1 || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"targeted_year\" argument, one value of class integer expected with a format on 4 digits.\n",
+                                    " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
                                     sep = "")
                                 stop()
                               } else if (class(distance_maximum) != "integer" || length(distance_maximum) != 1) {
@@ -3022,17 +3026,53 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               outputs_directory_name,
                                                               directory))
                                 }
-                                # load from t3 levels 1 and 2 outputs ----
+                                # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
+                                file_available <- list.files(path = inputs_level3_path,
+                                                             pattern = "inputs_level3_")
+                                file_year <- as.numeric(gsub("inputs_level3_|.RData","", file_available))
+                                target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
+
+                                dataset_target <- vector("list",
+                                                         length = 5)
+                                names(dataset_target) <- c("act_chr",
+                                                           "catch_set_lb",
+                                                           "samw",
+                                                           "sset",
+                                                           "wp")
+                                dataset_target<- lapply(dataset_target,
+                                                        function(x){
+                                                          x <- vector("list",
+                                                                      length = length(target_file))
+                                })
+                                for(x in seq_len(length.out = length(target_file))){
+                                  load(file.path(inputs_level3_path,
+                                                 target_file[x],
+                                                 fsep ="\\"))
+                                  # sets characteristics
+                                  dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
+                                  # catch by set, species and categories from logbook (t3 level 1)
+                                  dataset_target$catch_set_lb[[x]] <- data_level3[[1]][[2]]
+                                  # catch by set, species and categories (t3 level 2)
+                                  dataset_target$samw[[x]] <- data_level3[[1]][[3]]
+                                  # link between sample and set, + sample quality and type
+                                  dataset_target$sset[[x]] <- data_level3[[1]][[4]]
+                                  # well plan
+                                  dataset_target$wp[[x]] <- data_level3[[1]][[5]]
+                                }
+                                dataset_target <- lapply(X = dataset_target,
+                                              FUN = function(x){
+                                                do.call(rbind,x)
+                                              })
                                 # sets characteristics
-                                act_chr <- inputs_level3[[1]]
+                                act_chr <- dataset_target[[1]]
                                 # catch by set, species and categories from logbook (t3 level 1)
-                                catch_set_lb <- inputs_level3[[2]]
+                                catch_set_lb <- dataset_target[[2]]
                                 # catch by set, species and categories (t3 level 2)
-                                samw <- inputs_level3[[3]]
+                                samw <- dataset_target[[3]]
                                 # link between sample and set, + sample quality and type
-                                sset <- inputs_level3[[4]]
+                                sset <- dataset_target[[4]]
                                 # well plan
-                                wp <- inputs_level3[[5]]
+                                wp <- dataset_target[[5]]
                                 # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
@@ -3046,9 +3086,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 first_year <- dplyr::first(periode_reference)
                                 # select subset period for the modelling
                                 catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
-                                catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= targeted_year, ]
+                                catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= target_year, ]
                                 act_chr$year <- lubridate::year(x = act_chr$date_act)
-                                act_chr<-act_chr[act_chr$year > first_year & act_chr$year <= targeted_year, ]
+                                act_chr<-act_chr[act_chr$year > first_year & act_chr$year <= target_year, ]
                                 # compute selection criteria ----
                                 cdm <- act_chr$id_act[act_chr$vessel %in% vessel_id_ignored]
                                 sset <- sset[! sset$id_act %in% cdm, ]
@@ -4143,11 +4183,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Formatting data for model predictions.
                             #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
                             #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
-                            #' @param targeted_year (integer) Targeted year for model estimaton and prediction.
+                            #' @param target_year (integer) The year of interest for the model estimaton and prediction.
                             #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        outputs_level3_process1,
-                                                                       targeted_year,
+                                                                       target_year,
                                                                        vessel_id_ignored = NULL) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.4: data formatting for predictions.\n",
@@ -4188,7 +4228,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
                               # reduce data to the period considered in the modelling
-                              act_chr <- act_chr[act_chr$yr %in% targeted_year, ]
+                              act_chr <- act_chr[act_chr$yr %in% target_year, ]
                               # add the weigth by categoies, species from logbook (corrected by t3 level 1)
                               catch_set_lb$yr <- lubridate::year(x = catch_set_lb$date)
                               catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date)
@@ -4297,14 +4337,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_path (character) Outputs directory path.
                             #' @param ci Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
                             #' @param Nboot The number of bootstrap samples desired for the ci computation. The fefault value is 10.
+                            #' @param plot_predict Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
                                                          outputs_path,
                                                          ci = FALSE,
-                                                         Nboot = 10) {
+                                                         Nboot = 10,
+                                                         plot_predict = FALSE) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
+                              figures_directory <- file.path(outputs_path,
+                                                             "figures")
+                              names(figures_directory) <- "figures"
+                              tables_directory <- file.path(outputs_path,
+                                                            "tables")
+                              names(tables_directory) <- "tables"
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
@@ -4582,11 +4630,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
 
                               t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
-
+                              t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
+                                                                                    "ci_inf",
+                                                                                    "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                        digits = 2)
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_all_final_ocean))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
 
+                              write.csv2(x = t1_all_final_ocean,
+                                         file = file.path(tables_directory,
+                                                          paste("t1_all_ocean",
+                                                                ".csv",
+                                                                sep = "")),
+                                         row.names = FALSE)
 
                               # nominal catch by species and fishing mode (task 1 by fishing mode)
                               t1_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
@@ -4596,11 +4653,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }))
 
                               # bootstrap distribution
-                              t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
+                              t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                                   FUN = function(x){
                                 boot_tmp_element <-do.call(rbind,
                                                            lapply(seq.int(1:length(x)),
                                                                   function(i){
-                                  boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x[[i]], sum)
+                                  boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
+                                                                   data=x[[i]],
+                                                                   FUN = sum)
                                   boot_tmp_subelement$loop <- i
                                   return(boot_tmp_subelement)
                                 }))
@@ -4617,40 +4677,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
 
+                              t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
+                                                                                      "ci_inf",
+                                                                                      "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                          digits = 2)
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_fmod_final_ocean))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
-                              browser()
-                                                           # catch_set_t3_long <- do.call(what = rbind,
-                              #                              args = outputs_level3_process5[[1]])
-                              # catch_set_t3_wide <- tidyr::spread(data = catch_set_t3_long[, names(catch_set_t3_long) != "catch_t3_N3"],
-                              #                                    key = "sp",
-                              #                                    value = fit_prop)
-                              # # standardized YFT and SKJ estimates for case with more than 100 percent
-                              # catch_set_t3_wide$S <- catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT
-                              # catch_set_t3_wide$SKJ <- ifelse(test = catch_set_t3_wide$S > 1,
-                              #                                 yes = catch_set_t3_wide$SKJ / catch_set_t3_wide$S,
-                              #                                 no = catch_set_t3_wide$SKJ)
-                              # catch_set_t3_wide$YFT <- ifelse(test = catch_set_t3_wide$S > 1,
-                              #                                 yes = catch_set_t3_wide$YFT / catch_set_t3_wide$S,
-                              #                                 no = catch_set_t3_wide$YFT)
-                              # catch_set_t3_wide$BET <- 1 - (catch_set_t3_wide$SKJ + catch_set_t3_wide$YFT)
-                              # tmp <- tidyr::gather(data = catch_set_t3_wide,
-                              #                      key = "sp",
-                              #                      value = "fit_prop_t3_ST", "BET", "SKJ", "YFT")
-                              # # add column with standardized estimates
-                              # catch_set_t3_long <- dplyr::right_join(x = catch_set_t3_long,
-                              #                                        y = tmp,
-                              #                                        by = c("id_act", "fmod", "sp", "lat", "lon", "date_act", "vessel", "ocean", "year", "mon", "wtot_lb_t3", "data_source"))
-                              # catch_set_t3_long$catch_t3_N3 <- catch_set_t3_long$fit_prop_t3_ST * catch_set_t3_long$wtot_lb_t3
-                              # # task 1
-                              # tot <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + ocean,
-                              #                  data = catch_set_t3_long,
-                              #                 FUN = sum)
-                              # t1 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean,
-                              #                 data = catch_set_t3_long,
-                              #                 FUN = sum)
-                              # # task 2
+                              write.csv2(x = t1_fmod_final_ocean,
+                                         file = file.path(tables_directory,
+                                                          paste("t1_fmod_ocean",
+                                                                ".csv",
+                                                                sep = "")),
+                                         row.names = FALSE)
+
+                              ## catch effort (task2)
+
                               # tmp <- catch_set_t3_long
                               # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
                               #                                         data_longitude = as.character(tmp$lon),
@@ -4697,6 +4739,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                                          "t1",
                               #                                          "t2")
                               # figure task 2 and proportion
+
+                              if(plot_predict == T){
                               sps <- t2
                               sp::coordinates(object = sps) <- ~ lon + lat
                               # select for the year
@@ -4888,6 +4932,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               } else {
                                 data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
                               }
+                              }# link to if(plot_predict)
                               assign(x = "data_level3",
                                      value = data_level3,
                                      envir = .GlobalEnv)

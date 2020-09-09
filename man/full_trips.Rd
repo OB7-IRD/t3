@@ -435,10 +435,12 @@ Temporary link to the R object model with Antoine D. modelisation process.
 Data preparatory for the t3 modelling process (level 3).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$data_preparatory(
-  inputs_level3,
+  inputs_level3 = NULL,
+  inputs_level3_path,
   outputs_directory,
   periode_reference,
-  targeted_year,
+  target_year,
+  period_duration = 5L,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -452,11 +454,15 @@ Data preparatory for the t3 modelling process (level 3).
 \describe{
 \item{\code{inputs_level3}}{(data frame) Imputs of levels 3 (see function path to level 3).}
 
+\item{\code{inputs_level3_path}}{(character) Path to the folder containing yearly data ouptut of the level 1 and 2.}
+
 \item{\code{outputs_directory}}{(character) Path of the t3 processes outputs directory.}
 
 \item{\code{periode_reference}}{(integer) Year(s) period of reference for modelling estimation.}
 
-\item{\code{targeted_year}}{(integer) Targeted year for model estimaton and prediction.}
+\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.}
+
+\item{\code{period_duration}}{(integer) number of year use for the modelling. The default value is 5}
 
 \item{\code{distance_maximum}}{(integer) Maximum distance between all sets of a sampled well. By default 5.}
 
@@ -530,7 +536,7 @@ Formatting data for model predictions.
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$data_formatting_for_predictions(
   inputs_level3,
   outputs_level3_process1,
-  targeted_year,
+  target_year,
   vessel_id_ignored = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -542,7 +548,7 @@ Formatting data for model predictions.
 
 \item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
 
-\item{\code{targeted_year}}{(integer) Targeted year for model estimaton and prediction.}
+\item{\code{target_year}}{(integer) The year of interest for the model estimaton and prediction.}
 
 \item{\code{vessel_id_ignored}}{(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
 }
@@ -560,7 +566,8 @@ Model predictions for the species composition and computing of catches.
   outputs_level3_process4,
   outputs_path,
   ci = FALSE,
-  Nboot = 10
+  Nboot = 10,
+  plot_predict = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -576,6 +583,8 @@ Model predictions for the species composition and computing of catches.
 \item{\code{ci}}{Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
 \item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The fefault value is 10.}
+
+\item{\code{plot_predict}}{Logical indicating whether maps of catch at size have to be done.}
 }
 \if{html}{\out{</div>}}
 }
