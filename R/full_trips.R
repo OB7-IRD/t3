@@ -3061,18 +3061,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                                 dataset_target <- lapply(X = dataset_target,
                                               FUN = function(x){
-                                                do.call(rbind,x)
+                                                return(unique(do.call(rbind,x)))
                                               })
+                                # stock raw data
+                                inputs_level3 <- dataset_target
                                 # sets characteristics
-                                act_chr <- dataset_target[[1]]
+                                act_chr <- inputs_level3[[1]]
                                 # catch by set, species and categories from logbook (t3 level 1)
-                                catch_set_lb <- dataset_target[[2]]
+                                catch_set_lb <- inputs_level3[[2]]
                                 # catch by set, species and categories (t3 level 2)
-                                samw <- dataset_target[[3]]
+                                samw <- inputs_level3[[3]]
                                 # link between sample and set, + sample quality and type
-                                sset <- dataset_target[[4]]
+                                sset <- inputs_level3[[4]]
                                 # well plan
-                                wp <- dataset_target[[5]]
+                                wp <- inputs_level3[[5]]
                                 # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
