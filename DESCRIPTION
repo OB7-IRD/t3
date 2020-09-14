@@ -28,6 +28,12 @@ Imports:
     R6 (>= 2.4.1),
     dplyr (>= 0.8.4),
     lubridate (>= 1.7.4),
-    suncalc (>= 0.5.0)
+    suncalc (>= 0.5.0),
+    ranger (>= 0.12.1),
+    tidyr (>= 1.1.2),
+    sp (>= 1.4.2),
+    spdep (>= 1.1.5),
+    rfUtilities (>= 2.1.5),
+    gstat (>= 2.0.6)
 Suggests: 
     testthat (>= 2.1.0)
