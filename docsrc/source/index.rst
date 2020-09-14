@@ -8,15 +8,10 @@ Tropical Tuna Treatment's documentation!
 
 .. warning:: STILL UNDER WRITING
 
-Introduction
-============
-
-Documentation
-==============
-
-
 .. toctree::
    :maxdepth: 1
+
+   introduction.md
 
    whatsnew
    installation
