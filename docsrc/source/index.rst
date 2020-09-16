@@ -12,8 +12,8 @@ Tropical Tuna Treatment's documentation!
    :maxdepth: 1
 
    introduction.md
-
+   installation.md
    whatsnew
-   installation
+   userguide.md
    development
    tutorial
