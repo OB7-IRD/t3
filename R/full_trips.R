@@ -3090,9 +3090,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
                                 file_available <- list.files(path = inputs_level3_path,
                                                              pattern = "inputs_level3_")
-                                file_year <- as.numeric(gsub("inputs_level3_|.RData","", file_available))
+                                file_year <-  as.numeric(do.call(rbind,
+                                                           strsplit(x = file_available,
+                                                                    split = "_"))[,3])
                                 target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
-
                                 dataset_target <- vector("list",
                                                          length = 5)
                                 names(dataset_target) <- c("act_chr",
