@@ -36,7 +36,6 @@ t3_con <- furdeb::db_connection(
 
 log_path <- paste0(config_t3[["work_path"]], "/logs")
 
-
 global_start_time <- Sys.time()
 # shortcut functions ----
 # data model initialisation
@@ -82,15 +81,10 @@ cat("Path to level 3 : time elpased", end_time - start_time, " mins")
 global_end_time <- Sys.time()
 cat("Global : time elpased", global_end_time - global_start_time, " mins")
 
-
-
 # Level 3
 
 load(paste0(config_t3[["work_path"]], "inputs_level3_2017.RData"))
 object_full_trips <- t3:::full_trips$new()
-
-
-
 
 # level 3.1: data preparatory ----
 object_full_trips$data_preparatory(inputs_level3 = data_level3[[1]],
@@ -117,6 +111,4 @@ object_full_trips$data_formatting_for_predictions(inputs_level3 = data_level3[[1
 object_full_trips$model_predictions(outputs_level3_process2 = data_level3[[4]],
                                     outputs_level3_process4 = data_level3[[6]],
                                     outputs_path = data_level3[[2]])
-
-
 ```
