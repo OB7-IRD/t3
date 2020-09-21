@@ -86,11 +86,19 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Context</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">How to install <strong>T3</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release notes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimal-example-to-run-t3">Minimal example to run <strong>T3</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-complex-example">More complex example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-the-config-file">Create the config file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connection-to-the-t3-database">Connection to the T3 database</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Minimal example to run <strong>T3</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html#create-the-config-file">Create the config file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html#example-with-a-connection-to-the-t3-database">Example with a connection to the T3 database</a></li>
 </ul>
 
             
@@ -158,6 +166,136 @@
             
   <div class="section" id="user-guide">
 <h1>User guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="minimal-example-to-run-t3">
+<h3>Minimal example to run <strong>T3</strong><a class="headerlink" href="#minimal-example-to-run-t3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">furdeb</span><span class="p">)</span>
+
+<span class="n">work_path</span> <span class="o">&lt;-</span> <span class="nf">getwd</span><span class="p">()</span>
+<span class="n">log_path</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">work_path</span><span class="p">,</span> <span class="s">&quot;/logs&quot;</span><span class="p">)</span>
+
+<span class="n">t3_data</span> <span class="o">&lt;-</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="more-complex-example">
+<h3>More complex example<a class="headerlink" href="#more-complex-example" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="create-the-config-file">
+<h4>Create the config file<a class="headerlink" href="#create-the-config-file" title="Permalink to this headline">¶</a></h4>
+<p>The first step is to create the config file as followed :</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>section;sub_section;value
+parameters_for_r_environnement;location_of_working_directory;/path/to/working/directory
+configuration_for_java;memory_allowed_for_java;8g
+configuration_for_java;location_of_java_folder;/usr/lib/jvm/default-java/
+parameters_of_t3plus_db;t3plus_user_id;DB_USER
+parameters_of_t3plus_db;t3plus_password_id;DB_PWD
+parameters_of_t3plus_db;t3plus_dbname;DB_NAME
+parameters_of_t3plus_db;t3plus_host;DB_HOST
+parameters_of_t3plus_db;t3plus_port;DB_PORT
+</pre></div>
+</div>
+</div>
+<div class="section" id="connection-to-the-t3-database">
+<h4>Connection to the T3 database<a class="headerlink" href="#connection-to-the-t3-database" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">furdeb</span><span class="p">)</span>
+
+<span class="n">config_t3</span> <span class="o">&lt;-</span> <span class="n">furdeb</span><span class="o">::</span><span class="nf">configuration_file</span><span class="p">(</span><span class="n">new_config</span>  <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+                                        <span class="n">path_config</span><span class="o">=</span> <span class="s">&quot;full/path/to/configfile_t3.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># database connection ----</span>
+<span class="n">t3_con</span> <span class="o">&lt;-</span> <span class="n">furdeb</span><span class="o">::</span><span class="nf">db_connection</span><span class="p">(</span>
+  <span class="n">db_user</span> <span class="o">=</span> <span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;t3plus_user&quot;</span><span class="p">]],</span>
+  <span class="n">db_password</span> <span class="o">=</span> <span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;t3plus_password&quot;</span><span class="p">]],</span>
+  <span class="n">db_dbname</span> <span class="o">=</span> <span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;t3plus_dbname&quot;</span><span class="p">]],</span>
+  <span class="n">db_host</span> <span class="o">=</span> <span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;t3plus_host&quot;</span><span class="p">]],</span>
+  <span class="n">db_port</span> <span class="o">=</span> <span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;t3plus_port&quot;</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="n">log_path</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;work_path&quot;</span><span class="p">]],</span> <span class="s">&quot;/logs&quot;</span><span class="p">)</span>
+
+<span class="n">global_start_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="c1"># shortcut functions ----</span>
+<span class="c1"># data model initialisation</span>
+<span class="n">start_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="n">t3</span><span class="o">::</span><span class="nf">data_model_initialisation</span><span class="p">(</span><span class="n">periode_reference</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">2015</span><span class="p">),</span>
+                              <span class="n">countries</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;FRA&quot;</span><span class="p">,</span> <span class="s">&quot;MYT&quot;</span><span class="p">),</span>
+                              <span class="n">oceans</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">)),</span>
+                              <span class="n">sample_type</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">1</span><span class="p">),</span>
+                              <span class="n">db_con</span> <span class="o">=</span> <span class="n">t3_con</span><span class="p">,</span>
+                              <span class="n">log_file</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+                              <span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span><span class="p">)</span>
+<span class="n">end_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Data model init : time elpased&quot;</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">&quot; mins&quot;</span><span class="p">)</span>
+
+<span class="c1"># level 1</span>
+<span class="n">start_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="n">t3</span><span class="o">::</span><span class="nf">t3_level1</span><span class="p">(</span><span class="n">species_rf1</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">11</span><span class="p">)),</span>
+              <span class="n">set_duration_ref</span> <span class="o">=</span> <span class="n">object_model_data</span><span class="o">$</span><span class="n">.__enclos_env__</span><span class="o">$</span><span class="n">private</span><span class="o">$</span><span class="n">setdurationref</span><span class="p">,</span>
+              <span class="n">log_file</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+              <span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span><span class="p">)</span>
+<span class="n">end_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Level 1 : time elpased&quot;</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">&quot; mins&quot;</span><span class="p">)</span>
+
+<span class="c1"># level 2</span>
+<span class="n">start_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="n">t3</span><span class="o">::</span><span class="nf">t3_level2</span><span class="p">(</span><span class="n">length_step</span> <span class="o">=</span> <span class="n">object_model_data</span><span class="o">$</span><span class="n">.__enclos_env__</span><span class="o">$</span><span class="n">private</span><span class="o">$</span><span class="n">lengthstep</span><span class="p">,</span>
+               <span class="n">sample_set</span> <span class="o">=</span> <span class="n">object_model_data</span><span class="o">$</span><span class="n">.__enclos_env__</span><span class="o">$</span><span class="n">private</span><span class="o">$</span><span class="n">sampleset</span><span class="p">,</span>
+               <span class="n">length_weight_relationship_data</span> <span class="o">=</span> <span class="n">object_model_data</span><span class="o">$</span><span class="n">.__enclos_env__</span><span class="o">$</span><span class="n">private</span><span class="o">$</span><span class="n">lengthweightrelationship</span><span class="p">,</span>
+               <span class="n">log_file</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+               <span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span><span class="p">)</span>
+<span class="n">end_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Level 2 : time elpased&quot;</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">&quot; mins&quot;</span><span class="p">)</span>
+
+<span class="c1"># path to level 3 ----</span>
+<span class="n">start_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">path_to_level3</span><span class="p">()</span>
+<span class="nf">save</span><span class="p">(</span>
+  <span class="n">data_level3</span><span class="p">,</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;work_path&quot;</span><span class="p">]],</span> <span class="s">&quot;inputs_level3_2015.RData&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">end_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Path to level 3 : time elpased&quot;</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="s">&quot; mins&quot;</span><span class="p">)</span>
+<span class="n">global_end_time</span> <span class="o">&lt;-</span> <span class="nf">Sys.time</span><span class="p">()</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;Global : time elpased&quot;</span><span class="p">,</span> <span class="n">global_end_time</span> <span class="o">-</span> <span class="n">global_start_time</span><span class="p">,</span> <span class="s">&quot; mins&quot;</span><span class="p">)</span>
+
+<span class="c1"># Level 3</span>
+
+<span class="nf">load</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;work_path&quot;</span><span class="p">]],</span> <span class="s">&quot;inputs_level3_2017.RData&quot;</span><span class="p">))</span>
+<span class="n">object_full_trips</span> <span class="o">&lt;-</span> <span class="n">t3</span><span class="o">:::</span><span class="n">full_trips</span><span class="o">$</span><span class="nf">new</span><span class="p">()</span>
+
+<span class="c1"># level 3.1: data preparatory ----</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">data_preparatory</span><span class="p">(</span><span class="n">inputs_level3</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">1</span><span class="p">]],</span>
+                                   <span class="n">outputs_directory</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">config_t3</span><span class="p">[[</span><span class="s">&quot;work_path&quot;</span><span class="p">]],</span>
+                                                              <span class="s">&quot;\\05-Outputs&quot;</span><span class="p">),</span>
+                                   <span class="n">periode_reference</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">2015</span><span class="o">:</span><span class="m">2017</span><span class="p">),</span>
+                                   <span class="n">targeted_year</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">2017</span><span class="p">),</span>
+                                   <span class="n">vessel_id_ignored</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">427</span><span class="p">))</span>
+
+<span class="c1"># level 3.2: random forest models ----</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">random_forest_models</span><span class="p">(</span><span class="n">outputs_level3_process1</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">3</span><span class="p">]][[</span><span class="m">4</span><span class="p">]][[</span><span class="m">1</span><span class="p">]])</span>
+
+<span class="c1"># level 3.3: models checking ----</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">models_checking</span><span class="p">(</span><span class="n">outputs_level3_process2</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">4</span><span class="p">]],</span>
+                                  <span class="n">outputs_path</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">2</span><span class="p">]])</span>
+
+<span class="c1"># level 3.4: data formatting for predictions ----</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">data_formatting_for_predictions</span><span class="p">(</span><span class="n">inputs_level3</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">1</span><span class="p">]],</span>
+                                                  <span class="n">outputs_level3_process1</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">3</span><span class="p">]][[</span><span class="m">4</span><span class="p">]][[</span><span class="m">1</span><span class="p">]],</span>
+                                                  <span class="n">targeted_year</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">2017</span><span class="p">),</span>
+                                                  <span class="n">vessel_id_ignored</span> <span class="o">=</span> <span class="nf">as.integer</span><span class="p">(</span><span class="m">427</span><span class="p">))</span>
+
+<span class="c1"># level 3.5: predictions ----</span>
+<span class="n">object_full_trips</span><span class="o">$</span><span class="nf">model_predictions</span><span class="p">(</span><span class="n">outputs_level3_process2</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">4</span><span class="p">]],</span>
+                                    <span class="n">outputs_level3_process4</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">6</span><span class="p">]],</span>
+                                    <span class="n">outputs_path</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">2</span><span class="p">]])</span>
+</pre></div>
+</div>
+<!--  --></div>
+</div>
+</div>
 </div>
 
 

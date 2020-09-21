@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>T3 tutorial &mdash; T3R v3.0 documentation</title>
+  <title>Tutorial &mdash; T3R v3.0 documentation</title>
   
 
   
@@ -17,25 +17,25 @@
 
   
   <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
+    <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/js/theme.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> T3R
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> T3R
           
 
           
@@ -62,7 +62,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -81,12 +81,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Context</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">How to install <strong>T3</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="userguide.html">User guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="userguide.html#t3-tutorial"> T3 tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to install <strong>T3</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whatsnew.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
 </ul>
 
             
@@ -102,7 +101,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">T3R</a>
+          <a href="../index.html">T3R</a>
         
       </nav>
 
@@ -131,15 +130,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li> T3 tutorial</li>
+      <li>Tutorial</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/tutorial.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/userguide/tutorial.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -152,8 +151,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="t3-tutorial">
-<h1> T3 tutorial<a class="headerlink" href="#t3-tutorial" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="minimal-example-to-run-t3">
 <h2>Minimal example to run <strong>T3</strong><a class="headerlink" href="#minimal-example-to-run-t3" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
@@ -166,8 +165,10 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="more-complex-example">
+<h2>More complex example<a class="headerlink" href="#more-complex-example" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="create-the-config-file">
-<h2>Create the config file<a class="headerlink" href="#create-the-config-file" title="Permalink to this headline">¶</a></h2>
+<h3>Create the config file<a class="headerlink" href="#create-the-config-file" title="Permalink to this headline">¶</a></h3>
 <p>The first step is to create the config file as followed :</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>section;sub_section;value
 parameters_for_r_environnement;location_of_working_directory;/path/to/working/directory
@@ -181,8 +182,8 @@ parameters_of_t3plus_db;t3plus_port;DB_PORT
 </pre></div>
 </div>
 </div>
-<div class="section" id="example-with-a-connection-to-the-t3-database">
-<h2>Example with a connection to the T3 database<a class="headerlink" href="#example-with-a-connection-to-the-t3-database" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connection-to-the-t3-database">
+<h3>Connection to the T3 database<a class="headerlink" href="#connection-to-the-t3-database" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">furdeb</span><span class="p">)</span>
 
@@ -276,6 +277,7 @@ parameters_of_t3plus_db;t3plus_port;DB_PORT
                                     <span class="n">outputs_level3_process4</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">6</span><span class="p">]],</span>
                                     <span class="n">outputs_path</span> <span class="o">=</span> <span class="n">data_level3</span><span class="p">[[</span><span class="m">2</span><span class="p">]])</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>

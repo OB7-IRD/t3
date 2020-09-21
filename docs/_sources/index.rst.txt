@@ -31,4 +31,3 @@ Contents
    whatsnew.md
    userguide.md
    development
-   tutorial
