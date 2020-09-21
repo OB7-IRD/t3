@@ -1,5 +1,5 @@
 
-# Introduction
+# Context
 
 The mission of the Observatory of Exploited Tropical Pelagic Ecosystems (Ob7) of the Institute of Research for Development (IRD) is to ensure the statistical monitoring of the tropical tuna seine fishery. and cane in the Atlantic and Indian Oceans. 
 This monitoring consists of a continuous collection of data in the field, on the one hand, and a series of statistical treatments applied to these data in order to make them usable for expert questions (e.g. stock assessment) and for more academic research related to IRD's research themes (e.g. biodiversity conservation) on the other hand. 
