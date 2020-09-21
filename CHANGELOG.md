@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2020-09-21
+### Added
+- Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)
+- Implementation of boostrap method as base for all confidence intervals
+- Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode
+- Implementation of outputs for the he nominal catches by species and by fishing mode
+
+### Changed
+- Improve modelling configuration (addition of new parameters)
+- Rewrite several figures for the model checking
+- Improve time computing using faster implementation of random forests for the species composition modeling in the level3 
+
+### Removed
+- Disabling task and effort computation while waiting for confident interval implementation
+
 ## [0.9.0] - 2020-06-05
 ### Added
 - Implentation of the model layer in R6class
