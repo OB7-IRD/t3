@@ -4,7 +4,7 @@ The release notes provide more details for users moving to the new release, alon
 with a link to the full release change log.
 
 ## 0.9.1 release notes
-The release is available: https://github.com/OB7-IRD/t3/releases/tag/0.9.1
+The release is available: [https://github.com/OB7-IRD/t3/releases/tag/0.9.1]
 
 Major changes :
 - Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode
@@ -13,7 +13,7 @@ Major changes :
 
 
 ## 0.9.0 release notes
-The release is available: https://github.com/OB7-IRD/t3/releases/tag/0.9.0
+The release is available: [https://github.com/OB7-IRD/t3/releases/tag/0.9.0]
 
 List of all functionalities available in the package:
 
