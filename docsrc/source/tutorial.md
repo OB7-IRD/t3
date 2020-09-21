@@ -1,5 +1,17 @@
 # T3 tutorial
 
+## Minimal example to run **T3**
+
+```R
+library(t3)
+library(furdeb)
+
+work_path <- getwd()
+log_path <- paste0(work_path, "/logs")
+
+t3_data <-
+
+```
 ## Create the config file
 
 The first step is to create the config file as followed :
