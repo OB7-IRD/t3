@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="How to Install T3++" href="installation.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" /> 
+    <link rel="next" title="User guide" href="userguide.html" />
+    <link rel="prev" title="How to install T3" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,11 +83,18 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Release notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">How to Install <strong>T3++</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">How to install <strong>T3</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.9.1 release notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.9.0 release notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">T3 tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Minimal example to run <strong>T3</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#create-the-config-file">Create the config file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#example-with-a-connection-to-the-t3-database">Example with a connection to the T3 database</a></li>
 </ul>
 
             
@@ -140,7 +147,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/whatsnew.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/whatsnew.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,9 +164,42 @@
 <h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
 <p>The release notes provide more details for users moving to the new release, along
 with a link to the full release change log.</p>
+<div class="section" id="id1">
+<h2>0.9.1 release notes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The release is available: https://github.com/OB7-IRD/t3/releases/tag/0.9.1</p>
+<p>Major changes :</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/OB7-IRD/t3/releases/tag/v1.0.0">T3++ v1.0.0 release notes</a>.</p></li>
+<li><p>Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode</p></li>
+<li><p>Improve time computing using faster implementation of random forests for the species composition modeling in the level3</p></li>
+<li><p>Disabling task and effort computation while waiting for confident interval implementation</p></li>
 </ul>
+</div>
+<div class="section" id="id2">
+<h2>0.9.0 release notes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>The release is available: https://github.com/OB7-IRD/t3/releases/tag/0.9.0</p>
+<p>List of all functionalities available in the package:</p>
+<ul class="simple">
+<li><p>Implentation of the model layer in R6class</p></li>
+<li><p>Implementation of all logbooks standardization sub-processes</p></li>
+<li><p>Implementation of all samples standardization sub-processes</p></li>
+<li><p>Implementation of sub-processes for assessing species composition in relation to non-sampled assemblages</p>
+<ul>
+<li><p>Strict selection of samples used in the model training according to several criteria on sets and wells: school type, location, date, sample quality.</p></li>
+<li><p>Classification of unknown school type (no data available) by clustering according to major tuna species composition.</p></li>
+<li><p>Development of a statistical model accounting for:</p>
+<ul>
+<li><p>Spatial and temporal structure of the fishery: location and date of the catch</p></li>
+<li><p>Vessel specificity which impacts the species composition of the catch</p></li>
+<li><p>Crew reporting information which enables more flexibility in the model when a marginal composition is caught</p></li>
+<li><p>Several years of fishing in the training to increase the robustness of the estimates</p></li>
+</ul>
+</li>
+<li><p>Model checking to ensure reliability of the results</p></li>
+<li><p>Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations.</p></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -170,10 +210,10 @@ with a link to the full release change log.</p>
     
       <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         
-          <a href="installation.html" class="btn btn-neutral float-right" title="How to Install T3++" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+          <a href="userguide.html" class="btn btn-neutral float-right" title="User guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
         
         
-          <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+          <a href="installation.html" class="btn btn-neutral" title="How to install T3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
         
       </div>
     

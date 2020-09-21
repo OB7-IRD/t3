@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to Install T3++ &mdash; T3R v3.0 documentation</title>
+  <title>How to install T3 &mdash; T3R v3.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Development" href="development.html" />
-    <link rel="prev" title="Release notes" href="whatsnew.html" /> 
+    <link rel="next" title="Release notes" href="whatsnew.html" />
+    <link rel="prev" title="Context" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,11 +83,30 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Context</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to install <strong>T3</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#r-package">R package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#r-package-from-github">R package from GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#database-and-web-application">Database and web application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-by-step">Step by step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#web-application-s-installation">Web application’s installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Step by step</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release notes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Install <strong>T3++</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">T3 tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Minimal example to run <strong>T3</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#create-the-config-file">Create the config file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#example-with-a-connection-to-the-t3-database">Example with a connection to the T3 database</a></li>
 </ul>
 
             
@@ -134,13 +153,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>How to Install <strong>T3++</strong></li>
+      <li>How to install <strong>T3</strong></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/installation.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -154,7 +173,51 @@
            <div itemprop="articleBody">
             
   <div class="section" id="how-to-install-t3">
-<h1>How to Install <strong>T3++</strong><a class="headerlink" href="#how-to-install-t3" title="Permalink to this headline">¶</a></h1>
+<h1>How to install <strong>T3</strong><a class="headerlink" href="#how-to-install-t3" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="r-package">
+<h2>R package<a class="headerlink" href="#r-package" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>T3 package</strong> contains all methods for standardising the data and processing it in order to estimate :</p>
+<ul class="simple">
+<li><p>Nominal annual catch by species, region, gear, flag, separated between EEZ and High Seas, when its possible.</p></li>
+<li><p>Catch and fishing effort statistics for each species by small area (1x1 degree squares for most gears, 5x5 degree squares for longlines), gear, flag, and month.</p></li>
+<li><p>Size frequencies of samples measured for each species by small area, gear, flag and month.</p></li>
+</ul>
+<p>The package offers the possibilty to analyse data from three sources: RData file, CSV file and a dedicated database. The RData and CSV format are explained in the <a class="reference internal" href="userguide.html"><span class="doc">User Guide</span></a>. The installation of the database and its populatation are presented in the section below (see  “database and web application” section).</p>
+<div class="section" id="r-package-from-github">
+<h3>R package from GitHub<a class="headerlink" href="#r-package-from-github" title="Permalink to this headline">¶</a></h3>
+<p>To install <strong>T3 package</strong> from <a class="reference external" href="https://github.com/OB7-IRD/t3">Github</a>, the <code class="docutils literal notranslate"><span class="pre">devtools</span></code> package is necessary. So you need to run the commands below to <em>install</em>, <em>compile</em> and <em>load</em> the <strong>T3 package</strong>:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
+<span class="c1"># download the package from GitHub</span>
+<span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;https://github.com/OB7-IRD/t3&quot;</span><span class="p">)</span>
+<span class="c1"># load the library</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
+<span class="c1"># package documentation</span>
+<span class="o">?</span><span class="n">t3</span>
+</pre></div>
+</div>
+<!-- ### R package from CRAN --><p>Once the package installed you can read the <a class="reference internal" href="tutorial.html"><span class="doc">tutorial</span></a></p>
+</div>
+</div>
+<div class="section" id="database-and-web-application">
+<h2>Database and web application<a class="headerlink" href="#database-and-web-application" title="Permalink to this headline">¶</a></h2>
+<p>As explained above, you can extract the data from a dedicated database. This section present how to install the database and the web application.</p>
+<p>### Database’s installation</p>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="step-by-step">
+<h3>Step by step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="web-application-s-installation">
+<h3>Web application’s installation<a class="headerlink" href="#web-application-s-installation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>Requirements<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id2">
+<h4>Step by step<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -165,10 +228,10 @@
     
       <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         
-          <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+          <a href="whatsnew.html" class="btn btn-neutral float-right" title="Release notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
         
         
-          <a href="whatsnew.html" class="btn btn-neutral" title="Release notes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+          <a href="introduction.html" class="btn btn-neutral" title="Context" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
         
       </div>
     
