@@ -14,9 +14,10 @@ Tropical Tuna Treatment's documentation!
 
 `T3 package` aims to facilitate the processing of tuna data from purse seine catches in order to calculate the nomical catch on the one hand, and the catch and fishing effort statistics for each species on the other hand.
 
-The software enable result reproducibility and versioning  (Depetris et al., 2020) `DOI: 10.5281/zenodo.3878124`_
+The software enable result reproducibility and versioning  (Depetris et al., 2020)
 
-.. _`DOI: 10.5281/zenodo.3878124`: https://doi.org/10.5281/zenodo.3878124
+.. image:: https://zenodo.org/badge/210599699.svg
+   :target: https://zenodo.org/badge/latestdoi/210599699
 
 
 Contents
