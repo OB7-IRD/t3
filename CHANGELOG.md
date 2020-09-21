@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implementation of boostrap method as base for all confidence intervals
 - Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode
 - Implementation of outputs for the he nominal catches by species and by fishing mode
+- Fix minor bugs in all different processes (P1, P2, P3)
 
 ### Changed
 - Improve modelling configuration (addition of new parameters)
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Disabling task and effort computation while waiting for confident interval implementation
+- Remove the documentation from the package. Stay available at https://ob7-ird.github.io/t3/index.html
 
 ## [0.9.0] - 2020-06-05
 ### Added
