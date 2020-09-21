@@ -1,6 +1,7 @@
-# T3 tutorial
 
-## Minimal example to run **T3**
+## Tutorial 
+
+### Minimal example to run **T3**
 
 ```R
 library(t3)
@@ -12,7 +13,11 @@ log_path <- paste0(work_path, "/logs")
 t3_data <-
 
 ```
-## Create the config file
+
+
+### More complex example
+
+#### Create the config file
 
 The first step is to create the config file as followed :
 
@@ -28,7 +33,7 @@ parameters_of_t3plus_db;t3plus_host;DB_HOST
 parameters_of_t3plus_db;t3plus_port;DB_PORT
 ```
 
-## Example with a connection to the T3 database
+#### Connection to the T3 database
 
 ```R
 library(t3)
