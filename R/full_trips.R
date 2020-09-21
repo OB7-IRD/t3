@@ -2956,7 +2956,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param inputs_level3_path (character) Path to the folder containing yearly data ouptut of the level 1 and 2.
                             #' @param outputs_directory (character) Path of the t3 processes outputs directory.
                             #' @param periode_reference (integer) Year(s) period of reference for modelling estimation.
-                            #' @param target_year (integer) Year of interest for the model estimaton and prediction.
+                            #' @param target_year (integer) Year of interest for the model estimaton and prediction.Default value is current year -1.
                             #' @param period_duration (integer) number of year use for the modelling. The default value is 5
                             #' @param distance_maximum (integer) Maximum distance between all sets of a sampled well. By default 5.
                             #' @param number_sets_maximum (integer) Maximum number of sets allowed in mixture. By default 5.
@@ -2966,9 +2966,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             data_preparatory = function(inputs_level3 = NULL,
                                                         inputs_level3_path,
                                                         outputs_directory,
-                                                        periode_reference,
-                                                        target_year,
-                                                        period_duration = 5L,
+                                                        periode_reference = NULL,
+                                                        target_year = as.integer(lubridate::year(Sys.time()-1)),
+                                                        period_duration = 4L,
                                                         distance_maximum = as.integer(5),
                                                         number_sets_maximum = as.integer(5),
                                                         set_weight_minimum = as.integer(6),
@@ -2979,14 +2979,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Error: invalid \"outputs_directory\" argument, class character expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(periode_reference) != "integer") {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
-                                    sep = "")
-                                stop()
                               } else if (class(target_year) != "integer" || length(target_year) != 1 || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
+                                    sep = "")
+                                stop()
+                              } else if (class(period_duration) != "integer" || length(period_duration) != 1 || period_duration > 99) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"period_duration\" argument, one value of class integer expected with  maximum value 99.\n",
+                                    sep = "")
+                                stop()
+                              } else if (!is.null(periode_reference) && class(periode_reference) != "integer") {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (class(distance_maximum) != "integer" || length(distance_maximum) != 1) {
@@ -3025,6 +3030,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dir.create(path = file.path(outputs_directory,
                                                               outputs_directory_name,
                                                               directory))
+                                }
+                                if (is.null(periode_reference)) {
+                                periode_reference <- seq.int(from = target_year,
+                                                             to = target_year - period_duration)
                                 }
                                 # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
                                 file_available <- list.files(path = inputs_level3_path,
@@ -3089,9 +3098,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 first_year <- dplyr::first(periode_reference)
                                 # select subset period for the modelling
                                 catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
-                                catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= target_year, ]
+                                # catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= target_year, ]
+                                catch_set_lb<-catch_set_lb[catch_set_lb$year %in% periode_reference,]
                                 act_chr$year <- lubridate::year(x = act_chr$date_act)
-                                act_chr<-act_chr[act_chr$year > first_year & act_chr$year <= target_year, ]
+                                act_chr<-act_chr[act_chr$year %in% periode_reference, ]
                                 # compute selection criteria ----
                                 cdm <- act_chr$id_act[act_chr$vessel %in% vessel_id_ignored]
                                 sset <- sset[! sset$id_act %in% cdm, ]
@@ -4640,10 +4650,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_all_final_ocean))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
-
                               write.csv2(x = t1_all_final_ocean,
                                          file = file.path(tables_directory,
-                                                          paste("t1_all_ocean",
+                                                          paste("t1_all_ocean_",
+                                                                paste(unique(t1_all_final_ocean$yr),
+                                                                      collapse = "-"),
+                                                                "_",
+                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                      collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
@@ -4690,6 +4704,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = t1_fmod_final_ocean,
                                          file = file.path(tables_directory,
                                                           paste("t1_fmod_ocean",
+                                                                paste(unique(t1_all_final_ocean$yr),
+                                                                      collapse = "-"),
+                                                                "_",
+                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                      collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
@@ -4925,6 +4944,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
+                              }# link to if(plot_predict)
                               if (exists(x = "data_level3",
                                          envir = .GlobalEnv)) {
                                 data_level3 <- get(x = "data_level3",
@@ -4935,7 +4955,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               } else {
                                 data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
                               }
-                              }# link to if(plot_predict)
                               assign(x = "data_level3",
                                      value = data_level3,
                                      envir = .GlobalEnv)

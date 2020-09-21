@@ -438,9 +438,9 @@ Data preparatory for the t3 modelling process (level 3).
   inputs_level3 = NULL,
   inputs_level3_path,
   outputs_directory,
-  periode_reference,
-  target_year,
-  period_duration = 5L,
+  periode_reference = NULL,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
+  period_duration = 4L,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -460,7 +460,7 @@ Data preparatory for the t3 modelling process (level 3).
 
 \item{\code{periode_reference}}{(integer) Year(s) period of reference for modelling estimation.}
 
-\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.}
+\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.Default value is current year -1.}
 
 \item{\code{period_duration}}{(integer) number of year use for the modelling. The default value is 5}
 
