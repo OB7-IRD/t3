@@ -438,9 +438,9 @@ Data preparatory for the t3 modelling process (level 3).
   inputs_level3 = NULL,
   inputs_level3_path,
   outputs_directory,
-  periode_reference,
-  target_year,
-  period_duration = 5L,
+  periode_reference = NULL,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
+  period_duration = 4L,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -460,7 +460,7 @@ Data preparatory for the t3 modelling process (level 3).
 
 \item{\code{periode_reference}}{(integer) Year(s) period of reference for modelling estimation.}
 
-\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.}
+\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.Default value is current year -1.}
 
 \item{\code{period_duration}}{(integer) number of year use for the modelling. The default value is 5}
 
@@ -582,7 +582,7 @@ Model predictions for the species composition and computing of catches.
 
 \item{\code{ci}}{Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
-\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The fefault value is 10.}
+\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The default value is 10.}
 
 \item{\code{plot_predict}}{Logical indicating whether maps of catch at size have to be done.}
 }
