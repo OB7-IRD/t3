@@ -4240,9 +4240,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
-                              # reduce data to the period considered in the modelling
+                              # reduce data to the period considered in the modeling
                               act_chr <- act_chr[act_chr$yr %in% target_year, ]
-                              # add the weigth by categoies, species from logbook (corrected by t3 level 1)
+                              # add the weight by categories, species from logbook (corrected by t3 level 1)
                               catch_set_lb$yr <- lubridate::year(x = catch_set_lb$date)
                               catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date)
                               catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
@@ -4349,7 +4349,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process4 (list) Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param outputs_path (character) Outputs directory path.
                             #' @param ci Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
-                            #' @param Nboot The number of bootstrap samples desired for the ci computation. The fefault value is 10.
+                            #' @param Nboot The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
@@ -4402,7 +4402,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   "Boot_output_list_ST",
                                                                   "Final_output")
                               sets_long <- outputs_level3_process4[[1]][[1]]
-                              for (ocean in unique(sets_long$ocean)) {
+                              ocean_level <- unique(do.call(what = rbind,
+                                                            args = strsplit(names(outputs_level3_process2),
+                                                                            split = "_"))[,1])
+                              for (ocean in ocean_level) {
                                 sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
                                 for (specie in unique(sets_long_ocean$sp)) {
                                   if (! specie %in% c("SKJ","YFT")) {
@@ -4464,7 +4467,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
 
                               # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch
-                              for (ocean in unique(sets_long$ocean)) {
+                              for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                       x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- do.call(what = rbind,
@@ -4500,7 +4503,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               if (ci == TRUE){
 
-                                for (ocean in unique(sets_long$ocean)) {
+                                for (ocean in ocean_level) {
                                   sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
                                   for (specie in unique(sets_long_ocean$sp)) {
                                     if (! specie %in% c("SKJ","YFT")) {
@@ -4568,7 +4571,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # bootrstap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch #
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
-                              for (ocean in unique(sets_long$ocean)) {
+                              for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[3]]))]
 

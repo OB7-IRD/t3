@@ -582,7 +582,7 @@ Model predictions for the species composition and computing of catches.
 
 \item{\code{ci}}{Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
-\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The fefault value is 10.}
+\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The default value is 10.}
 
 \item{\code{plot_predict}}{Logical indicating whether maps of catch at size have to be done.}
 }
