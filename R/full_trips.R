@@ -4717,6 +4717,54 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          row.names = FALSE)
 
                               ## catch effort (task2)
+                              browser()
+                              # function for rounding, rounding up and down to a specific base
+                              mtrunc <- function(x,base){
+                                base*trunc(x/base)
+                              }
+
+                              mroundup <- function(x, base)
+                              {
+                                base*(x%/%base + as.logical(x%%base))
+                              }
+
+                              # assign coordinates to cwp witt a specific base
+                              latlon2cwp<-function(lat,lon,base){
+                                quad<-ifelse(lon>0,ifelse(lat>0,1,2),ifelse(lat>0,4,3)) # define quadrant
+                                lat_tmp<-ifelse(quad %in% c(1,4),sprintf("%02d",abs(mtrunc(lat,base))),sprintf("%02d",abs(mroundup(lat,base))))
+                                lon_tmp<-ifelse(quad %in% c(1,2),sprintf("%03d",abs(mtrunc(lon,base))),sprintf("%03d",abs(mroundup(lon,base))))
+                                return(paste(quad,lat_tmp,lon_tmp,sep=""))
+
+                              }
+
+                              t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                                x$cwp <- latlon2cwp(lat = x$lat,
+                                                  lon = x$lon,
+                                                  base = 1)
+                                # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
+                                #                                         data_longitude = as.character(x$lon),
+                                #                                         data_latitude = as.character(x$lat),
+                                #                                         input_degree_format = "decimal_degree",
+                                #                                         cwp_resolution = "1deg_x_1deg")
+                                boot_tmp_subelement <- x %>%
+                                  group_by(yr, fmod, sp, ocean, cwp) %>%
+                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                return(boot_tmp_subelement)
+                              }))
+
+                              t2_fmod_final_ocean <- t2_fmod
+
+                              write.csv2(x = t2_fmod_final_ocean,
+                                         file = file.path(tables_directory,
+                                                          paste("t2_fmod_ocean",
+                                                                paste(unique(t1_all_final_ocean$yr),
+                                                                      collapse = "-"),
+                                                                "_",
+                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                      collapse = "-"),
+                                                                ".csv",
+                                                                sep = "")),
+                                         row.names = FALSE)
 
                               # tmp <- catch_set_t3_long
                               # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
