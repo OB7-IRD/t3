@@ -5,16 +5,15 @@
 
 ## Tropical Tunas Treatment
 
-
-
 ### Package initilization on R
 
 ```R
 # devtools package is necessary for t3 package compilation
 # for install it, run the following line
 install.packages("devtools")
-# download the package from GitHub
-devtools::install_github("https://github.com/OB7-IRD/t3")
+# download the last package release stable from GitHub 
+devtools::install_github("https://github.com/OB7-IRD/t3",
+                         ref = "0.9.1")
 # load the library
 library(t3)
 # package documentation
