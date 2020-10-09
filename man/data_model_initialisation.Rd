@@ -29,7 +29,7 @@ data_model_initialisation(
 
 \item{log_path}{(character) Path of the log file directory. By default NULL.}
 
-\item{log_name}{(character) Name of the log file. By default "t3log".}
+\item{log_name}{(character) Name of the log file. By default "data_model_initialisation".}
 
 \item{trips_selected}{(character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.}
 }

@@ -258,6 +258,19 @@ check_vessel_id <- function(vessel_id) {
   }
 }
 
+#' @name check_vessel_type
+#' @title Attribut "vessel_type" verification
+#' @param vessel_type (character) Vessel type identification.
+#' @description Check if the item "vessel_type" have one unique class identified as character.
+check_vessel_type <- function(vessel_type) {
+  if (length(class(vessel_type)) != 1 || class(vessel_type) != "character") {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"vessel_type\" argument, class character expected.\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_activity_number
 #' @title Attribut "activity_number" verification
 #' @param activity_number (integer) Activity number.

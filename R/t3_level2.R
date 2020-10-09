@@ -6,7 +6,7 @@
 #' @param length_weight_relationship_data (data.frame) Data frame object with parameters for length weight relationship.
 #' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path (character) Path of the log file directory. By default NULL.
-#' @param log_name (character) Name of the log file. By default "t3log".
+#' @param log_name (character) Name of the log file. By default "t3_level2".
 #' @return The function a R6 reference object of class "object_full_trips".
 #' @export
 t3_level2 <- function(length_step,

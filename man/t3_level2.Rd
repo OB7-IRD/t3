@@ -24,7 +24,7 @@ t3_level2(
 
 \item{log_path}{(character) Path of the log file directory. By default NULL.}
 
-\item{log_name}{(character) Name of the log file. By default "t3log".}
+\item{log_name}{(character) Name of the log file. By default "t3_level2".}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

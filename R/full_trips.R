@@ -2165,84 +2165,225 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           sep = "")
                                       for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
                                         current_trip <- private$data_selected[[i]][[j]]
-                                        current_wells <- current_trip$.__enclos_env__$private$wells
-                                        if (length(current_wells) != 0) {
-                                          for (k in seq_len(length.out = length(current_wells))) {
-                                            current_well <- current_wells[[k]]
-                                            if (current_well$.__enclos_env__$private$well_minus10_weigth != 0 || current_well$.__enclos_env__$private$well_plus10_weigth != 0) {
-                                              # case 1: we use proportion of -10/+10 in the well
-                                              proportion_verification <- 1
-                                            } else if (current_well$.__enclos_env__$private$well_global_weigth != 0) {
-                                              # case 2: we don't know the proportion of -10/+10 in the well, we use global weight
-                                              proportion_verification <- 2
-                                            } else {
-                                              # case 3: damn we know nothing... sample(s) in the well is/are not useable
-                                              proportion_verification <- 3
+                                        if (current_trip$.__enclos_env__$private$vessel_type == "Senneur") {
+                                          current_wells <- current_trip$.__enclos_env__$private$wells
+                                          if (length(current_wells) != 0) {
+                                            wells_activities_samples_id <- vector(mode = "list",
+                                                                                  length = length(current_wells))
+                                            for (p in seq_len(length.out = length(current_wells))) {
+                                              if (length(current_wells[[p]]$.__enclos_env__$private$wellplan) != 0) {
+                                                activities_id <- unique(sapply(X = seq_len(length.out = length(current_wells[[p]]$.__enclos_env__$private$wellplan)),
+                                                                               FUN = function(t) {
+                                                                                 current_wells[[p]]$.__enclos_env__$private$wellplan[[t]]$.__enclos_env__$private$activity_id
+                                                                               }))
+                                                wells_activities_samples_id[[p]][[1]] <- activities_id
+                                              } else {
+                                                wells_activities_samples_id[[p]][[1]] <- "no_well_plan_available"
+                                              }
+                                              if (length(unlist(current_wells[[p]]$.__enclos_env__$private$elementarysampleraw)) != 0) {
+                                                samples_id <- unique(sapply(X = seq_len(length.out = length(unlist(current_wells[[p]]$.__enclos_env__$private$elementarysampleraw))),
+                                                                            FUN = function(q) {
+                                                                              unlist(current_wells[[p]]$.__enclos_env__$private$elementarysampleraw)[[q]]$.__enclos_env__$private$sample_id
+                                                                            }))
+                                                wells_activities_samples_id[[p]][[2]] <- samples_id
+                                              } else {
+                                                wells_activities_samples_id[[p]][[2]] <- "well_not_sampled"
+                                              }
                                             }
-                                            current_well$.__enclos_env__$private$proportion_verification <- proportion_verification
-                                            if (proportion_verification %in% c(1, 2)) {
-                                              if (proportion_verification == 1) {
-                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
-                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                            for (k in seq_len(length.out = length(current_wells))) {
+                                              current_well <- current_wells[[k]]
+                                              # information from the well plan
+                                              # do we have a well plan associated to the current well ?
+                                              if (length(current_well$.__enclos_env__$private$wellplan) != 0) {
+                                                # yes
+                                                current_well_plan <- current_well$.__enclos_env__$private$wellplan
+                                                # calcul of proportion of minus and plus 10 kg
+                                                current_wellplan_weigth_category <- unique(sapply(X = seq_len(length.out = length(current_well_plan)),
+                                                                                                  FUN = function(b) {
+                                                                                                    current_well_plan[[b]]$.__enclos_env__$private$wellplan_weigth_category_label
+                                                                                                  }))
+                                                well_prop_minus10_weigth <- 0
+                                                well_prop_plus10_weigth <- 0
+                                                well_prop_global_weigth <- 0
+                                                if (! "inconnu" %in% current_wellplan_weigth_category) {
+                                                  for (c in length(current_well_plan)) {
+                                                    if (current_well_plan[[c]]$.__enclos_env__$private$wellplan_weigth_category_label == "- 10 kg") {
+                                                      well_prop_minus10_weigth <- well_prop_minus10_weigth + current_well_plan[[c]]$.__enclos_env__$private$wellplan_weight
+                                                      well_prop_global_weigth <- well_prop_global_weigth + current_well_plan[[c]]$.__enclos_env__$private$wellplan_weight
+                                                    } else if (current_well_plan[[c]]$.__enclos_env__$private$wellplan_weigth_category_label == "+ 10 kg") {
+                                                      well_prop_plus10_weigth <- well_prop_plus10_weigth + current_well_plan[[c]]$.__enclos_env__$private$wellplan_weight
+                                                      well_prop_global_weigth <- well_prop_global_weigth + current_well_plan[[c]]$.__enclos_env__$private$wellplan_weight
+                                                    } else {
+                                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                          " - Error: ",
+                                                          "Well plan weight category unknown.\n",
+                                                          "[trip: ",
+                                                          current_well$.__enclos_env__$private$trip_id,
+                                                          ", well: ",
+                                                          current_well$.__enclos_env__$private$well_id,
+                                                          "]\n",
+                                                          sep = "")
+                                                      stop()
+                                                    }
+                                                  }
+                                                } else {
+                                                  well_prop_minus10_weigth <- NA
+                                                  well_prop_plus10_weigth <- NA
+                                                  for (d in length(current_well_plan)) {
+                                                    well_prop_global_weigth <- well_prop_global_weigth + current_well_plan[[d]]$.__enclos_env__$private$wellplan_weight
+                                                  }
+                                                }
+                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- well_prop_minus10_weigth / well_prop_global_weigth
+                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- well_prop_plus10_weigth / well_prop_global_weigth
+                                                # do we have more than one well associated to the trip ?
+                                                if (length(wells_activities_samples_id) == 1) {
+                                                  # no, one unique well
+                                                  current_well_sets <- list()
+                                                  for (activity in wells_activities_samples_id[[1]][[1]]) {
+                                                    current_weighted_weight <- sum(sapply(X = seq_len(length.out = length(current_well_plan)),
+                                                                                          FUN = function(s) {
+                                                                                            if (current_well_plan[[s]]$.__enclos_env__$private$activity_id == activity) {
+                                                                                              current_well_plan[[s]]$.__enclos_env__$private$wellplan_weight
+                                                                                            } else {
+                                                                                              0
+                                                                                            }
+                                                                                          }))
+                                                    current_well_sets <- append(current_well_sets,
+                                                                                t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                 activity_id = activity,
+                                                                                                 well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                 sample_id = unlist(wells_activities_samples_id[[k]][[2]]),
+                                                                                                 weighted_weight = current_weighted_weight,
+                                                                                                 weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                 weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth))
+                                                  }
+                                                } else {
+                                                  # yes, at least two wells for the trip
+                                                  current_well_activities_samples <- wells_activities_samples_id[[k]]
+                                                  current_well_sets <- list()
+                                                  for (u in current_well_activities_samples[[1]]) {
+                                                    wells_associated <- as.integer()
+                                                    for (v in seq_len(length.out = length(wells_activities_samples_id))[seq_len(length.out = length(wells_activities_samples_id)) != k]) {
+                                                      if (u %in% wells_activities_samples_id[[v]][[1]]) {
+                                                        wells_associated <- append(wells_associated,
+                                                                                   v)
+                                                      }
+                                                    }
+                                                    # do we have at least one activity of the current well store in one or more other well(s) ?
+                                                    if (length(wells_associated) != 0) {
+                                                      # yes
+                                                      current_well_sets <- list()
+                                                      # all wells associated have a well plan available ?
+                                                      wells_activities_samples_id_associated <- unlist(sapply(X = wells_associated,
+                                                                                                              FUN = function(e) {
+                                                                                                                wells_activities_samples_id[[e]][1]
+                                                                                                              }))
+                                                      if (! "no_well_plan_available" %in% wells_activities_samples_id_associated) {
+                                                        # yes
+                                                        for (activity in current_well_activities_samples[[1]]) {
+                                                          w1 <- sum(sapply(X = seq_len(length.out = length(current_well_plan)),
+                                                                           FUN = function(x) {
+                                                                             if (current_well_plan[[x]]$.__enclos_env__$private$activity_id == activity) {
+                                                                               current_well_plan[[x]]$.__enclos_env__$private$wellplan_weight
+                                                                             } else {
+                                                                               0
+                                                                             }
+                                                                           }))
+                                                          w2 <- w1
+                                                          wt <- w1
+                                                          for (y in wells_associated) {
+                                                            current_well_activities_samples_tmp <- wells_activities_samples_id[[y]]
+                                                            current_well_plan_tmp <- current_wells[[y]]$.__enclos_env__$private$wellplan
+                                                            if (current_well_activities_samples_tmp[[2]] == "well_not_sampled") {
+                                                              for (z in seq_len(length.out = length(current_well_plan_tmp))) {
+                                                                if (current_well_plan_tmp[[z]]$.__enclos_env__$private$activity_id == activity) {
+                                                                  wt <- wt + current_well_plan_tmp[[z]]$.__enclos_env__$private$wellplan_weight
+                                                                }
+                                                              }
+                                                            } else {
+                                                              for (a in seq_len(length.out = length(current_well_plan_tmp))) {
+                                                                if (current_well_plan_tmp[[a]]$.__enclos_env__$private$activity_id == activity) {
+                                                                  w2 <- w2 + current_well_plan_tmp[[a]]$.__enclos_env__$private$wellplan_weight
+                                                                  wt <- wt + current_well_plan_tmp[[a]]$.__enclos_env__$private$wellplan_weight
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                          current_weighted_weight <- w1 / w2 * wt
+                                                          current_well_sets <- append(current_well_sets,
+                                                                                      t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                       activity_id = activity,
+                                                                                                       well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                       sample_id = unlist(wells_activities_samples_id[[k]][[2]]),
+                                                                                                       weighted_weight = current_weighted_weight,
+                                                                                                       weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                       weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth))
+                                                        }
+                                                      } else {
+                                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                            " - Error: ",
+                                                            " At least one well plan is missing for finishing the process.\n",
+                                                            "[trip: ",
+                                                            current_well$.__enclos_env__$private$trip_id,
+                                                            ", well: ",
+                                                            current_well$.__enclos_env__$private$well_id,
+                                                            "]\n",
+                                                            sep = "")
+                                                        stop()
+                                                      }
+                                                    } else {
+                                                      # no
+                                                      current_weighted_weight <- sum(sapply(X = seq_len(length.out = length(current_well_plan)),
+                                                                                            FUN = function(w) {
+                                                                                              if (current_well_plan[[w]]$.__enclos_env__$private$activity_id == u) {
+                                                                                                current_well_plan[[w]]$.__enclos_env__$private$wellplan_weight
+                                                                                              } else {
+                                                                                                0
+                                                                                              }
+                                                                                            }))
+                                                      current_well_sets <- append(current_well_sets,
+                                                                                  t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                   activity_id = u,
+                                                                                                   well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                   sample_id = unlist(wells_activities_samples_id[[k]][[2]]),
+                                                                                                   weighted_weight = current_weighted_weight,
+                                                                                                   weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                   weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth))
+                                                    }
+                                                  }
+                                                }
+                                                current_well$.__enclos_env__$private$wellsets <- current_well_sets
+                                                sum_weighted_weight <- sum(sapply(X = seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets)),
+                                                                                  FUN = function(m) {
+                                                                                    current_well$.__enclos_env__$private$wellsets[[m]]$.__enclos_env__$private$weighted_weight
+                                                                                  }))
+                                                for (n in seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets))) {
+                                                  current_well$.__enclos_env__$private$wellsets[[n]]$.__enclos_env__$private$prop_weighted_weight <- current_well$.__enclos_env__$private$wellsets[[n]]$.__enclos_env__$private$weighted_weight / sum_weighted_weight
+                                                }
                                               } else {
-                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- NA
-                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- NA
-                                              }
-                                              if (is.na(current_well$.__enclos_env__$private$well_id)) {
-                                                # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
-                                                sample_set_well <- dplyr::filter(.data = sample_set,
-                                                                                 sample_id == current_well$.__enclos_env__$private$elementarysample[[1]][[1]]$.__enclos_env__$private$sample_id)
-                                              } else {
-                                                sample_set_well <- dplyr::filter(.data = sample_set,
-                                                                                 well_id == current_well$.__enclos_env__$private$well_id)
-                                              }
-                                              if (length(unique(sample_set_well$sample_id)) != 1) {
+                                                # no
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Warning: ",
-                                                    length(unique(sample_set_well$sample_id)),
-                                                    " samples detected in a single well.\n",
-                                                    " Only the first sample well set weighted weight will be considerated.\n",
+                                                    " No well plan availabe for this well.\n",
                                                     "[trip: ",
                                                     current_well$.__enclos_env__$private$trip_id,
                                                     ", well: ",
                                                     current_well$.__enclos_env__$private$well_id,
-                                                    ", samples: ",
-                                                    paste0(unique(sample_set_well$sample_id),
-                                                           collapse = " - "),
                                                     "]\n",
                                                     sep = "")
-                                                sample_set_well <- dplyr::filter(.data = sample_set_well,
-                                                                                 sample_id == unique(sample_set_well$sample_id)[[1]])
+                                                # put her the weighed weight of the database
                                               }
-                                              current_well$.__enclos_env__$private$wellsets <- lapply(X = seq_len(length.out = nrow(x = sample_set_well)),
-                                                                                                      FUN = function(l) {
-                                                                                                        t3:::wellset$new(trip_id = sample_set_well[l, 1],
-                                                                                                                         activity_id = sample_set_well[l, 2],
-                                                                                                                         well_id = sample_set_well[l, 3],
-                                                                                                                         sample_id = sample_set_well[l, 4],
-                                                                                                                         weighted_weight = sample_set_well[l, 5],
-                                                                                                                         weighted_weight_minus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                         weighted_weight_plus10 =  sample_set_well[l, 5] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)
-                                                                                                      })
-                                              sum_weighted_weight <- sum(sapply(X = seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets)),
-                                                                                FUN = function(m) {
-                                                                                  current_well$.__enclos_env__$private$wellsets[[m]]$.__enclos_env__$private$weighted_weight
-                                                                                }))
-                                              for (n in seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets))) {
-                                                current_well$.__enclos_env__$private$wellsets[[n]]$.__enclos_env__$private$prop_weighted_weight <- current_well$.__enclos_env__$private$wellsets[[n]]$.__enclos_env__$private$weighted_weight / sum_weighted_weight
-                                              }
-                                            } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: we don't know le proportion of -10/+10 in the well or the global weight.\n",
-                                                  "Sample(s) in the well is/are not useable.\n",
-                                                  "[trip: ",
-                                                  current_well$.__enclos_env__$private$trip_id,
-                                                  ", well: ",
-                                                  current_well$.__enclos_env__$private$well_id,
-                                                  "]\n",
-                                                  sep = "")
                                             }
                                           }
+                                        } else if (current_trip$.__enclos_env__$private$vessel_type == "Canneur") {
+                                          stop("Function not developed yet, come back soon!\n.")
+                                        } else {
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Warning: process not available for this vessel type.\n",
+                                              "[trip: ",
+                                              current_trip$.__enclos_env__$private$trip_id,
+                                              "]\n",
+                                              sep = "")
                                         }
                                       }
                                     }

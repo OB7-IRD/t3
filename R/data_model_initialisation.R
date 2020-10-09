@@ -7,7 +7,7 @@
 #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.
 #' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path (character) Path of the log file directory. By default NULL.
-#' @param log_name (character) Name of the log file. By default "t3log".
+#' @param log_name (character) Name of the log file. By default "data_model_initialisation".
 #' @param trips_selected (character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
 #' @return The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
 #' @export

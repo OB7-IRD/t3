@@ -26,7 +26,8 @@ Initialize function for R6 trip class.
   departure_date,
   logbook_availability,
   fish_hold_empty,
-  vessel_id
+  vessel_id,
+  vessel_type
 )}\if{html}{\out{</div>}}
 }
 
@@ -46,6 +47,8 @@ Initialize function for R6 trip class.
 \item{\code{fish_hold_empty}}{(integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
 
 \item{\code{vessel_id}}{(integer) Vessel identification.}
+
+\item{\code{vessel_type}}{(character) Vessel type identification.}
 }
 \if{html}{\out{</div>}}
 }

@@ -5,7 +5,7 @@
 #' @param set_duration_ref (data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).
 #' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path (character) Path of the log file directory. By default NULL.
-#' @param log_name (character) Name of the log file. By default "t3log".
+#' @param log_name (character) Name of the log file. By default "t3_level1".
 #' @return The function a R6 reference object of class "object_full_trips".
 #' @export
 t3_level1 <- function(species_rf1,

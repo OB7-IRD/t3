@@ -288,7 +288,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                      landing_date = trip_data[[4]][i],
                                                                                      logbook_availability = trip_data[[5]][i],
                                                                                      fish_hold_empty = trip_data[[6]][i],
-                                                                                     vessel_id = trip_data[[7]][i])
+                                                                                     vessel_id = trip_data[[7]][i],
+                                                                                     vessel_type = trip_data[[8]][i])
                                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                    " - Successful importation of trip element ",
                                                                    i,
@@ -1738,6 +1739,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                well,
                                                "]\n",
                                                sep = "")
+                                           if (well == "fr.ird.t3.entities.data.Well#1584558866921#0.7612530116341976") {
+                                             browser()
+                                           }
                                            tmp_wellplan <- dplyr::filter(.data = wellplan_data, well_id == well)
                                            tmp_wellplan <- unclass(tmp_wellplan)
                                            object_well$.__enclos_env__$private$wellplan <- lapply(X = seq_len(length.out = length(tmp_wellplan[[1]])),

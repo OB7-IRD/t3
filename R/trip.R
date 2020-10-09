@@ -15,13 +15,15 @@ trip <- R6::R6Class(classname = "trip",
                       #' @param logbook_availability (integer) Logbook availability value, 1 for available and 0 for not.
                       #' @param fish_hold_empty (integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
                       #' @param vessel_id (integer) Vessel identification.
+                      #' @param vessel_type (character) Vessel type identification.
                       initialize = function(trip_id,
                                             fleet,
                                             landing_date,
                                             departure_date,
                                             logbook_availability,
                                             fish_hold_empty,
-                                            vessel_id) {
+                                            vessel_id,
+                                            vessel_type) {
                         # attribut "trip_id" verification
                         t3:::check_trip_id(trip_id)
                         # attribut "fleet" verification
@@ -36,6 +38,8 @@ trip <- R6::R6Class(classname = "trip",
                         t3:::check_fish_hold_empty(fish_hold_empty)
                         # attribut "vessel_id" verification
                         t3:::check_vessel_id(vessel_id)
+                        # attribut "vessel_type" verification
+                        t3:::check_vessel_type(vessel_type)
                         # attributions
                         private$trip_id <- trip_id
                         private$fleet <- fleet
@@ -43,7 +47,8 @@ trip <- R6::R6Class(classname = "trip",
                         private$departure_date <- lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC")
                         private$logbook_availability <- logbook_availability
                         private$fish_hold_empty <- fish_hold_empty
-                        private$vessel_id <- vessel_id}),
+                        private$vessel_id <- vessel_id
+                        private$vessel_type <- vessel_type}),
                     private = list(
                       trip_id = NULL,
                       fleet = NULL,
@@ -55,6 +60,7 @@ trip <- R6::R6Class(classname = "trip",
                       logbook_availability = NULL,
                       fish_hold_empty = NULL,
                       vessel_id = NULL,
+                      vessel_type = NULL,
                       rf1 = NULL,
                       statut_rf1 = NULL,
                       rf2 = NULL,
