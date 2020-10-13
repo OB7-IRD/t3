@@ -2377,7 +2377,48 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     current_well$.__enclos_env__$private$well_id,
                                                     "]\n",
                                                     sep = "")
-                                                # put her the weighed weight of the database
+                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                                if (is.na(current_well$.__enclos_env__$private$well_id)) {
+                                                  # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
+                                                  sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                                   sample_id == current_well$.__enclos_env__$private$elementarysample[[1]][[1]]$.__enclos_env__$private$sample_id)
+                                                } else {
+                                                  sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                                   well_id == current_well$.__enclos_env__$private$well_id)
+                                                }
+                                                if (nrow(sample_set_well) == 0) {
+                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                      " - Error: ",
+                                                      " No weighted weight availabe for this well in the database.\n",
+                                                      "[trip: ",
+                                                      current_well$.__enclos_env__$private$trip_id,
+                                                      ", well: ",
+                                                      current_well$.__enclos_env__$private$well_id,
+                                                      "]\n",
+                                                      sep = "")
+                                                  stop()
+                                                } else {
+                                                  current_well_sets <- list()
+                                                  for (e in seq_len(length.out = nrow(sample_set_well))) {
+                                                    current_well_sets <- append(current_well_sets,
+                                                                                t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                 activity_id = sample_set_well[e, "activity_id"],
+                                                                                                 well_id = sample_set_well[e, "well_id"],
+                                                                                                 sample_id = sample_set_well[e, "sample_id"],
+                                                                                                 weighted_weight = sample_set_well[e, "well_set_weighted_weight"],
+                                                                                                 weighted_weight_minus10 =  sample_set_well[e, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                 weighted_weight_plus10 =  sample_set_well[e, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_plus10_weigth))
+                                                  }
+                                                  current_well$.__enclos_env__$private$wellsets <- current_well_sets
+                                                  sum_weighted_weight <- sum(sapply(X = seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets)),
+                                                                                    FUN = function(f) {
+                                                                                      current_well$.__enclos_env__$private$wellsets[[f]]$.__enclos_env__$private$weighted_weight
+                                                                                    }))
+                                                  for (g in seq_len(length.out = length(current_well$.__enclos_env__$private$wellsets))) {
+                                                    current_well$.__enclos_env__$private$wellsets[[g]]$.__enclos_env__$private$prop_weighted_weight <- current_well$.__enclos_env__$private$wellsets[[g]]$.__enclos_env__$private$weighted_weight / sum_weighted_weight
+                                                  }
+                                                }
                                               }
                                             }
                                           }
