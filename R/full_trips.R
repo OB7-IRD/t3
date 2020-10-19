@@ -279,11 +279,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # process 1.1: rf1 ----
-                            #' @description Process of Raising Factor level 1 (rf1).
-                            #' @param species_rf1 (integer) Specie(s) code(s) used for the rf1 process.
-                            #' @param rf1_lowest_limit (numeric) Verification value for the lowest limit of the rf1.
-                            #' @param rf1_highest_limit (numeric) Verification value for the highest limit of the rf1.
+                            # process 1.1: RF1 ----
+                            #' @description Process of Raising Factor level 1 (RF1).
+                            #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process.
+                            #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
+                            #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
                             rf1 = function(species_rf1,
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2) {
@@ -293,13 +293,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     "class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (length(class(rf1_lowest_limit)) != 1 || class(rf1_lowest_limit) != "numeric") {
+                              } else if (length(class(rf1_lowest_limit)) != 1
+                                         || class(rf1_lowest_limit) != "numeric") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"rf1_lowest_limit\" argument, ",
                                     "class numeric with one value expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (length(class(rf1_highest_limit)) != 1 || class(rf1_highest_limit) != "numeric") {
+                              } else if (length(class(rf1_highest_limit)) != 1
+                                         || class(rf1_highest_limit) != "numeric") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"rf1_highest_limit\" argument, ",
                                     "class numeric with one value expected.\n",
@@ -309,18 +311,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (is.null(private$data_selected)) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Empty data selected in the R6 object.\n",
-                                      " - Process 1.1 (raising factor level 1) cancelled.\n",
+                                      " - Process 1.1 (Raising Factor level 1) cancelled.\n",
                                       sep = "")
                                 } else {
                                   for (i in seq_len(length.out = length(private$data_selected))) {
                                     if (i == 1) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Start process 1.1: raising factor level 1.\n",
+                                          " - Start process 1.1: Raising Factor level 1.\n",
                                           sep = "")
                                     }
                                     if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                      # case 1: at least on trip is missing in the full trip item
-                                      # check if functions for selection of elementary catches and elementary landings ran before
+                                      # case 1: at least one trip is missing in the full trip item
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Warning: missing trip(s) in full trip element \"",
                                           names(private$data_selected)[i],
@@ -372,7 +373,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           for (n in seq_len(length.out = length(private$data_selected[[i]]))) {
                                             current_trip <- private$data_selected[[i]][[n]]
                                             current_trip$.__enclos_env__$private$rf1 <- 1
-                                            current_trip$.__enclos_env__$private$statut_rf1 <- 2.2
+                                            current_trip$.__enclos_env__$private$statut_rf1 <- 1.2
                                           }
                                         } else {
                                           for (p in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -413,18 +414,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_trip <- private$data_selected[[i]][[s]]
                                                 current_trip$.__enclos_env__$private$rf1 <- 1
                                                 current_trip$.__enclos_env__$private$statut_rf1 <- 1.4
-                                                if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                                  current_elementarycatches <- NULL
-                                                  for (z in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                                    current_elementarycatches <- append(current_elementarycatches,
-                                                                                        current_trip$.__enclos_env__$private$activities[[z]]$.__enclos_env__$private$elementarycatches)
-                                                  }
-                                                }
-                                                if (! is.null(current_elementarycatches)) {
-                                                  for (t in seq_len(length.out = length(current_elementarycatches))) {
-                                                    current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[t]]$.__enclos_env__$private$catch_weight
-                                                  }
-                                                }
                                               }
                                             }
                                           }
@@ -432,10 +421,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     } else {
                                       # case 2: full trip is complet
-                                      # check if functions for selection of elementary catches and elementary landings ran before
                                       stop <- 0
-                                      # case 2.1: at least one logbook is missing in complet full trip item
                                       for (k in seq_len(length.out = length(private$data_selected[[i]]))) {
+                                        # case 2.1: at least one logbook is missing in complet full trip item
                                         if (k == 1) {
                                           logbook_availability <- vector(mode = "integer")
                                         }
@@ -462,10 +450,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                       if (stop != 1) {
+                                        current_elementarycatches <- NULL
                                         for (m in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                          if (m == 1) {
-                                            current_elementarycatches <- NULL
-                                          }
                                           current_trip <- private$data_selected[[i]][[m]]
                                           if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (w in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
@@ -489,11 +475,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                          current_elementarycatches[[o]]$.__enclos_env__$private$catch_weight)
                                             }
                                           }
+                                          current_elementarylandings <- NULL
                                           for (p in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                            if (p == 1) {
-                                              current_elementarylandings <- NULL
-                                              stop_bis <- 0
-                                            }
                                             current_trip <- private$data_selected[[i]][[p]]
                                             current_elementarylandings <- append(current_elementarylandings,
                                                                                  unlist(current_trip$.__enclos_env__$private$elementarylandings))
@@ -543,32 +526,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                      # assign rf1 to elementary catches
-                                      for (u in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                        current_trip <- private$data_selected[[i]][[u]]
-                                        current_rf1 <- current_trip$.__enclos_env__$private$rf1
-                                        if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                          current_elementarycatches <- NULL
-                                          for (x in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                            current_elementarycatches <- append(current_elementarycatches,
-                                                                                current_trip$.__enclos_env__$private$activities[[x]]$.__enclos_env__$private$elementarycatches)
-                                          }
-                                        }
-                                        if (! is.null(current_elementarycatches)) {
-                                          for (v in seq_len(length.out = length(current_elementarycatches))) {
-                                            current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight * current_rf1
+                                    }
+                                    # assign RF1 to elementary catches
+                                    for (u in seq_len(length.out = length(private$data_selected[[i]]))) {
+                                      current_trip <- private$data_selected[[i]][[u]]
+                                      current_rf1 <- current_trip$.__enclos_env__$private$rf1
+                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        for (x in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
+                                          current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[x]]$.__enclos_env__$private$elementarycatches
+                                          if (! is.null(current_elementarycatches)) {
+                                            for (v in seq_len(length.out = length(current_elementarycatches))) {
+                                              current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[v]]$.__enclos_env__$private$catch_weight * current_rf1
+                                            }
                                           }
                                         }
                                       }
                                     }
                                   }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process 1.1: raising factor level 1.\n",
+                                      " - Successful process 1.1: Raising Factor level 1.\n",
                                       sep = "")
                                 }
                               }
                             },
-                            # process 1.2: rf2 ----
+                            # process 1.2: RF2 ----
                             #' @description Process of Raising Factor level 2 (rf2).
                             rf2 = function() {
                               if (is.null(private$data_selected)) {

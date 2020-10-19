@@ -164,7 +164,7 @@ Function for add wells and samples caracteristics in full trips object.
 \if{html}{\out{<a id="method-rf1"></a>}}
 \if{latex}{\out{\hypertarget{method-rf1}{}}}
 \subsection{Method \code{rf1()}}{
-Process of Raising Factor level 1 (rf1).
+Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(species_rf1, rf1_lowest_limit = 0.8, rf1_highest_limit = 1.2)}\if{html}{\out{</div>}}
 }
@@ -172,11 +172,11 @@ Process of Raising Factor level 1 (rf1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{(integer) Specie(s) code(s) used for the rf1 process.}
+\item{\code{species_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process.}
 
-\item{\code{rf1_lowest_limit}}{(numeric) Verification value for the lowest limit of the rf1.}
+\item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
-\item{\code{rf1_highest_limit}}{(numeric) Verification value for the highest limit of the rf1.}
+\item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
 }
 \if{html}{\out{</div>}}
 }
