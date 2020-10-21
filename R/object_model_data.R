@@ -104,7 +104,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                  collapse = ", "))))
                                          }
                                          cat("[", trip_sql_final, "]\n", sep = "")
-                                         trip_data <- DBI::dbGetQuery(db_con, trip_sql_final)
+                                         trip_data <- DBI::dbGetQuery(conn = db_con,
+                                                                      statement = trip_sql_final)
                                          if (nrow(trip_data) == 0) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                " - Error: no data imported, check the query and query's parameters.\n",
