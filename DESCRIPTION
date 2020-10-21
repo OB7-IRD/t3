@@ -9,11 +9,11 @@ Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosyste
     person("Laurent", "Floc'h", email = "laurent.floch@ird.fr", role = c("aut")),
     person("Julien", "Lebranchu", email = "julien.lebranchu@ird.fr", role = c("aut")),
     person("Pascal", "Bach", email = "pascal.bach@ird.fr", role = c("ctb")),
-    person("Alain", "Fonteneau", email = "???", role = c("ctb")),
-    person("Viveca", "Fonteneau", email = "???", role = c("ctb")),
+    person("Alain", "Fonteneau", email = "alain.fonteneau@ird.fr", role = c("ctb")),
+    person("Viveca", "Fonteneau", email = "vivinord@wanadoo.fr", role = c("ctb")),
     person("Norbet", "Billet", email = "norbert.billet@ifremer.fr", role = c("ctb")),
     person("Laurent", "Dubroca", email = "laurent.dubroca@ifremer.fr", role = c("ctb")),
-    person("Emmanuel", "Chassot", email = "mchassot@sfa.sc", role = c("ctb")))
+    person("Emmanuel", "Chassot", email = "emmanuel.Chassot@fao.org", role = c("ctb")))
 Description: The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics.
     The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
 License: GPL-3
