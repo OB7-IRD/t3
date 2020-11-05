@@ -1,6 +1,6 @@
 # 1 - Checking object_model_data ----
 source(system.file("test_data",
-                   "test_object_model_data.R",
+                   "data_test.RData",
                    package = "t3"),
        local = TRUE)
 # 1.1 - Comparison number of activities between data extracted and data model ----

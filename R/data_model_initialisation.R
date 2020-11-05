@@ -73,20 +73,20 @@ data_model_initialisation <- function(periode_reference,
                                           sample_type = sample_type,
                                           trips_selected = trips_selected,
                                           db_con = t3_con)
-  # model creation: set duration data ----
-  object_model_data$setduration_data(periode_reference = periode_reference,
+  # model creation: set durations data ----
+  object_model_data$setdurations_data(periode_reference = periode_reference,
                                      countries = countries,
                                      db_con = t3_con)
-  # model creation: length step data ----
-  object_model_data$lengthstep_data(db_con = t3_con)
-  # model creation: sample set data ----
-  object_model_data$sampleset_data(periode_reference = periode_reference,
-                                   countries = countries,
-                                   oceans = oceans,
-                                   trips_selected = trips_selected,
-                                   db_con = t3_con)
-  # model creation: length weight relationship data ----
-  object_model_data$lengthweightrelationship_data(db_con = t3_con)
+  # model creation: length steps data ----
+  object_model_data$lengthsteps_data(db_con = t3_con)
+  # model creation: sample sets data ----
+  object_model_data$samplesets_data(periode_reference = periode_reference,
+                                    countries = countries,
+                                    oceans = oceans,
+                                    trips_selected = trips_selected,
+                                    db_con = t3_con)
+  # model creation: length weight relationships data ----
+  object_model_data$lengthweightrelationships_data(db_con = t3_con)
   # model creation: initialisation object for full trips class ----
   object_full_trips <- t3:::full_trips$new()
   # model creation: object full_trip creation ----
