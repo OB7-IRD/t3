@@ -6,7 +6,10 @@
 <!-- badges: start -->
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/package=t3)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
+
 <!-- badges: end -->
 
 ## Warning
