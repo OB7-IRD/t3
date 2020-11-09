@@ -59,7 +59,7 @@ devtools::install_github("https://github.com/OB7-IRD/t3/tree/development")
 
 ## Cheatsheet
 
-Working in progress for this section.
+Working in progress for this section. Be patient.
 
 ## Usage
 
