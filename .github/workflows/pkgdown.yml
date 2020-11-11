@@ -4,7 +4,7 @@ on:
     - master
     - doc-and-test-model-creation
 
-name: pkgdown
+name: build and deploy gh-pages
 
 jobs:
   pkgdown:
