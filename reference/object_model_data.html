@@ -138,51 +138,18 @@
 <li><p><a href='#method-elementarycatches_object_creation'><code>object_model_data$elementarycatches_object_creation()</code></a></p></li>
 <li><p><a href='#method-elementarylandings_object_creation'><code>object_model_data$elementarylandings_object_creation()</code></a></p></li>
 <li><p><a href='#method-wells_object_creation'><code>object_model_data$wells_object_creation()</code></a></p></li>
-<li><p><a href='#method-setduration_data'><code>object_model_data$setduration_data()</code></a></p></li>
-<li><p><a href='#method-lengthstep_data'><code>object_model_data$lengthstep_data()</code></a></p></li>
-<li><p><a href='#method-sampleset_data'><code>object_model_data$sampleset_data()</code></a></p></li>
-<li><p><a href='#method-lengthweightrelationship_data'><code>object_model_data$lengthweightrelationship_data()</code></a></p></li>
+<li><p><a href='#method-setdurationrefs_data'><code>object_model_data$setdurationrefs_data()</code></a></p></li>
+<li><p><a href='#method-lengthsteps_data'><code>object_model_data$lengthsteps_data()</code></a></p></li>
+<li><p><a href='#method-samplesets_data'><code>object_model_data$samplesets_data()</code></a></p></li>
+<li><p><a href='#method-lengthweightrelationships_data'><code>object_model_data$lengthweightrelationships_data()</code></a></p></li>
 <li><p><a href='#method-clone'><code>object_model_data$clone()</code></a></p></li>
 </ul>
 <p><hr>
 <a id="method-trips_object_creation"></a></p><h3>Method <code>trips_object_creation()</code></h3>
-<p>Creation of a R6 reference object class trips which contain one or more R6 reference object class trip</p><h3>Usage</h3>
+<p>Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>trips_object_creation</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
-  periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
-  countries <span class='op'>=</span> <span class='cn'>NULL</span>,
-  oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
-  data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
-  trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
-<span class='op'>)</span></pre><p></div></p>
-
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
-
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
-
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
-
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
-
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
-
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv/RData file. By default NULL.</p></dd>
-
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
-
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
-
-</dl><p></div></p>
-<p><hr>
-<a id="method-activities_object_creation"></a></p><h3>Method <code>activities_object_creation()</code></h3>
-<p>Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>activities_object_creation</span><span class='op'>(</span>
   db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
-  data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -193,95 +160,128 @@
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-elementarycatches_object_creation"></a></p><h3>Method <code>elementarycatches_object_creation()</code></h3>
-<p>Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>elementarycatches_object_creation</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
+<a id="method-activities_object_creation"></a></p><h3>Method <code>activities_object_creation()</code></h3>
+<p>Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>activities_object_creation</span><span class='op'>(</span>
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-elementarycatches_object_creation"></a></p><h3>Method <code>elementarycatches_object_creation()</code></h3>
+<p>Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>elementarycatches_object_creation</span><span class='op'>(</span>
+  data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
+  periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
+  countries <span class='op'>=</span> <span class='cn'>NULL</span>,
+  oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
+
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
+
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-elementarylandings_object_creation"></a></p><h3>Method <code>elementarylandings_object_creation()</code></h3>
 <p>Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>elementarylandings_object_creation</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-wells_object_creation"></a></p><h3>Method <code>wells_object_creation()</code></h3>
-<p>Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples</p><h3>Usage</h3>
+<p>Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples.</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>wells_object_creation</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -289,132 +289,132 @@
   trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path_samples <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path_wellplans <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
 <dt><code>sample_type</code></dt><dd><p>(integer) Sample type identification (landing, observer, ...). By default NULL.</p></dd>
 
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.</p></dd>
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
 
-<dt><code>data_path_samples</code></dt><dd><p>(character) Path of the data sql/csv file for samples. By default NULL.</p></dd>
+<dt><code>data_path_samples</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv file for samples. By default NULL.</p></dd>
 
-<dt><code>data_path_wellplans</code></dt><dd><p>(character) Path of the data sql/csv file for well plans. By default NULL.</p></dd>
+<dt><code>data_path_wellplans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv file for well plans. By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-setduration_data"></a></p><h3>Method <code>setduration_data()</code></h3>
-<p>Creation of a data frame object with parameters of set duration algorithms</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>setduration_data</span><span class='op'>(</span>
+<a id="method-setdurationrefs_data"></a></p><h3>Method <code>setdurationrefs_data()</code></h3>
+<p>Creation of a data frame object with parameters of set duration algorithms.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>setdurationrefs_data</span><span class='op'>(</span>
   db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-lengthstep_data"></a></p><h3>Method <code>lengthstep_data()</code></h3>
+<a id="method-lengthsteps_data"></a></p><h3>Method <code>lengthsteps_data()</code></h3>
 <p>Creation of a data frame object with length ratio between ld1 and lf class.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>lengthstep_data</span><span class='op'>(</span>
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>lengthsteps_data</span><span class='op'>(</span>
   db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-sampleset_data"></a></p><h3>Method <code>sampleset_data()</code></h3>
+<a id="method-samplesets_data"></a></p><h3>Method <code>samplesets_data()</code></h3>
 <p>Creation of a data frame object with weighted weigth of each set sampled.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>sampleset_data</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>samplesets_data</span><span class='op'>(</span>
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   countries <span class='op'>=</span> <span class='cn'>NULL</span>,
   oceans <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   trips_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>countries</code></dt><dd><p>(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>countries</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>oceans</code></dt><dd><p>(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
+<dt><code>oceans</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>trips_selected</code></dt><dd><p>(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+<dt><code>trips_selected</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-lengthweightrelationship_data"></a></p><h3>Method <code>lengthweightrelationship_data()</code></h3>
+<a id="method-lengthweightrelationships_data"></a></p><h3>Method <code>lengthweightrelationships_data()</code></h3>
 <p>Creation of a data frame object with parameters for length weight relationship.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>lengthweightrelationship_data</span><span class='op'>(</span>
-  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
+<p><div class="r"></p><pre><span class='va'>object_model_data</span><span class='op'>$</span><span class='fu'>lengthweightrelationships_data</span><span class='op'>(</span>
   data_source <span class='op'>=</span> <span class='st'>"t3_db"</span>,
+  db_con <span class='op'>=</span> <span class='cn'>NULL</span>,
   data_path <span class='op'>=</span> <span class='cn'>NULL</span>,
-  envir <span class='op'>=</span> <span class='st'>"global"</span>
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>db_con</code></dt><dd><p>(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
+<dt><code>data_source</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
 
-<dt><code>data_source</code></dt><dd><p>(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).</p></dd>
+<dt><code>db_con</code></dt><dd><p>Object of class "database" expected. Check dbConnect. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".</p></dd>
 
-<dt><code>data_path</code></dt><dd><p>(character) Path of the data sql/csv file. By default NULL.</p></dd>
+<dt><code>data_path</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Path of the data sql/csv/RData file. By default NULL.</p></dd>
 
-<dt><code>envir</code></dt><dd><p>(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.</p></dd>
+<dt><code>envir</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
