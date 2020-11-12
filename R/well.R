@@ -7,25 +7,25 @@ well <- R6::R6Class(classname = "well",
                     public = list(
                       # initialize ----
                       #' @description Initialize function for R6 well class.
-                      #' @param trip_id (character) Trip identification.
-                      #' @param well_id (character) Well identification.
-                      #' @param well_minus10_weigth (integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
-                      #' @param well_plus10_weigth (integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
-                      #' @param well_global_weigth (integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
+                      #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
+                      #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
+                      #' @param well_minus10_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
+                      #' @param well_plus10_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
+                      #' @param well_global_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
                       initialize = function(trip_id,
                                             well_id,
                                             well_minus10_weigth,
                                             well_plus10_weigth,
                                             well_global_weigth) {
-                        # attribut "trip_id" verification
+                        # attribute "trip_id" verification
                         t3:::check_trip_id(trip_id)
-                        # attribut "well_id" verification
+                        # attribute "well_id" verification
                         t3:::check_well_id(well_id)
-                        # attribut "well_minus10_weigth" verification
+                        # attribute "well_minus10_weigth" verification
                         t3:::check_well_minus10_weigth(well_minus10_weigth)
-                        # attribut "well_plus10_weigth" verification
+                        # attribute "well_plus10_weigth" verification
                         t3:::check_well_plus10_weigth(well_plus10_weigth)
-                        # attribut "well_global_weigth" verification
+                        # attribute "well_global_weigth" verification
                         t3:::check_well_global_weigth(well_global_weigth)
                         # attributions
                         private$trip_id <- trip_id

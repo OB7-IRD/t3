@@ -52,11 +52,11 @@ Authors:
 Other contributors:
 \itemize{
   \item Pascal Bach \email{pascal.bach@ird.fr} [contributor]
-  \item Alain Fonteneau \email{???} [contributor]
-  \item Viveca Fonteneau \email{???} [contributor]
+  \item Alain Fonteneau \email{alain.fonteneau@ird.fr} [contributor]
+  \item Viveca Fonteneau \email{vivinord@wanadoo.fr} [contributor]
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
   \item Laurent Dubroca \email{laurent.dubroca@ifremer.fr} [contributor]
-  \item Emmanuel Chassot \email{mchassot@sfa.sc} [contributor]
+  \item Emmanuel Chassot \email{emmanuel.Chassot@fao.org} [contributor]
 }
 
 }

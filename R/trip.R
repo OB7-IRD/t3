@@ -8,14 +8,14 @@ trip <- R6::R6Class(classname = "trip",
                     public = list(
                       # initialize ----
                       #' @description Initialize function for R6 trip class.
-                      #' @param trip_id (character) Trip identification.
-                      #' @param fleet (character) Fleet identification.
-                      #' @param landing_date (date and hours) Landing date in format ymd_hms UTC.
-                      #' @param departure_date (date and hours) Departure date in format year month day hour minute second.
-                      #' @param logbook_availability (integer) Logbook availability value, 1 for available and 0 for not.
-                      #' @param fish_hold_empty (integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
-                      #' @param vessel_id (integer) Vessel identification.
-                      #' @param vessel_type (character) Vessel type identification.
+                      #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
+                      #' @param fleet Object of class {\link[base]{character}} expected. Fleet identification.
+                      #' @param landing_date Object of class {\link[base]{character}} expected. Landing date in format ymd_hms UTC.
+                      #' @param departure_date Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.
+                      #' @param logbook_availability Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.
+                      #' @param fish_hold_empty Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
+                      #' @param vessel_id Object of class {\link[base]{integer}} expected. Vessel identification.
+                      #' @param vessel_type Object of class {\link[base]{character}} expected. Vessel type identification.
                       initialize = function(trip_id,
                                             fleet,
                                             landing_date,
@@ -24,21 +24,21 @@ trip <- R6::R6Class(classname = "trip",
                                             fish_hold_empty,
                                             vessel_id,
                                             vessel_type) {
-                        # attribut "trip_id" verification
+                        # attribute "trip_id" verification
                         t3:::check_trip_id(trip_id)
-                        # attribut "fleet" verification
+                        # attribute "fleet" verification
                         t3:::check_fleet(fleet)
-                        # attribut "landing_date" verification
+                        # attribute "landing_date" verification
                         t3:::check_landing_date(landing_date)
-                        # attribut "departure_date" verification
+                        # attribute "departure_date" verification
                         t3:::check_departure_date(departure_date, landing_date)
-                        # attribut "logbook_availability" verification
+                        # attribute "logbook_availability" verification
                         t3:::check_logbook_availability(logbook_availability)
-                        # attribut "fish_hold_empty" verification
+                        # attribute "fish_hold_empty" verification
                         t3:::check_fish_hold_empty(fish_hold_empty)
-                        # attribut "vessel_id" verification
+                        # attribute "vessel_id" verification
                         t3:::check_vessel_id(vessel_id)
-                        # attribut "vessel_type" verification
+                        # attribute "vessel_type" verification
                         t3:::check_vessel_type(vessel_type)
                         # attributions
                         private$trip_id <- trip_id

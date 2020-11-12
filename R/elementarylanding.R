@@ -7,13 +7,13 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                  public = list(
                                    # initialize ----
                                    #' @description Initialize function for R6 elementarylanding class.
-                                   #' @param trip_id (character) Trip identification.
-                                   #' @param elementarylanding_id (character) Elementary landing identification.
-                                   #' @param landing_category (integer) Landing category identification.
-                                   #' @param landing_category_name (character) Landing category name identification.
-                                   #' @param specie_code (integer) Specie code identification.
-                                   #' @param specie_code3l (character) Specie code identification on 3 characters.
-                                   #' @param landing_weight (numeric) Landing weight in tonnes.
+                                   #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
+                                   #' @param elementarylanding_id Object of class {\link[base]{character}} expected. Elementary landing identification.
+                                   #' @param landing_category Object of class {\link[base]{integer}} expected. Landing category identification.
+                                   #' @param landing_category_name Object of class {\link[base]{character}} expected. Landing category name identification.
+                                   #' @param specie_code Object of class {\link[base]{integer}} expected. Specie code identification.
+                                   #' @param specie_code3l Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
+                                   #' @param landing_weight Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.
                                    initialize = function(trip_id,
                                                          elementarylanding_id,
                                                          landing_category,
@@ -21,21 +21,21 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                                          specie_code,
                                                          specie_code3l,
                                                          landing_weight) {
-                                     # attribut "trip_id" verification
+                                     # attribute "trip_id" verification
                                      t3:::check_trip_id(trip_id)
-                                     # attribut "elementarylanding_id" verification
+                                     # attribute "elementarylanding_id" verification
                                      t3:::check_elementarylanding_id(elementarylanding_id)
-                                     # attribut "landing_category" verification
+                                     # attribute "landing_category" verification
                                      t3:::check_landing_category(landing_category)
-                                     # attribut "landing_category_name" verification
+                                     # attribute "landing_category_name" verification
                                      t3:::check_landing_category_name(landing_category_name)
-                                     # attribut "specie_code" verification
+                                     # attribute "specie_code" verification
                                      t3:::check_specie_code(specie_code)
-                                     # attribut "specie_code3l" verification
+                                     # attribute "specie_code3l" verification
                                      t3:::check_specie_code3l(specie_code3l)
-                                     # attribut "landing_weight" verification
+                                     # attribute "landing_weight" verification
                                      t3:::check_landing_weight(landing_weight)
-                                     # attributions
+                                     # attributeions
                                      private$trip_id <- trip_id
                                      private$elementarylanding_id <- elementarylanding_id
                                      private$landing_category <- landing_category

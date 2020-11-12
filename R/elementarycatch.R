@@ -6,15 +6,15 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                public = list(
                                  # initialize ----
                                  #' @description Initialize function for R6 activities class.
-                                 #' @param activity_id (character) Activity identification.
-                                 #' @param elementarycatch_id (character) Elementary catch identification.
-                                 #' @param ocean (integer) Ocean identification.
-                                 #' @param school_type (integer) School type identification.
-                                 #' @param logbook_category (integer) Logbook weight category.
-                                 #' @param logbook_category_name (character) Logbook category name identification.
-                                 #' @param specie_code (integer) Specie code identification.
-                                 #' @param specie_code3l (character) Specie code identification on 3 characters.
-                                 #' @param catch_weight (numeric) Catch weight in tonnes.
+                                 #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                                 #' @param elementarycatch_id Object of class {\link[base]{character}} expected. Elementary catch identification.
+                                 #' @param ocean Object of class {\link[base]{integer}} expected. Ocean identification.
+                                 #' @param school_type Object of class {\link[base]{integer}} expected. School type identification.
+                                 #' @param logbook_category Object of class {\link[base]{integer}} expected. Logbook weight category.
+                                 #' @param logbook_category_name Object of class {\link[base]{character}} expected. Logbook category name identification.
+                                 #' @param specie_code Object of class {\link[base]{integer}} expected. Specie code identification.
+                                 #' @param specie_code3l Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
+                                 #' @param catch_weight Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.
                                  initialize = function(activity_id,
                                                        elementarycatch_id,
                                                        ocean,
@@ -24,25 +24,25 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        specie_code,
                                                        specie_code3l,
                                                        catch_weight) {
-                                   # attribut "activity_id" verification
+                                   # attributee "activity_id" verification
                                    t3:::check_activity_id(activity_id)
-                                   # attribut "elementarycatch_id" verification
+                                   # attribute "elementarycatch_id" verification
                                    t3:::check_elementarycatch_id(elementarycatch_id)
-                                   # attribut "ocean" verification
+                                   # attribute "ocean" verification
                                    t3:::check_ocean(ocean)
-                                   # attribut "school_type" verification
+                                   # attribute "school_type" verification
                                    t3:::check_school_type(school_type)
-                                   # attribut "logbook_category" verification
+                                   # attribute "logbook_category" verification
                                    t3:::check_logbook_category(logbook_category)
-                                   # attribut "logbook_category_name" verification
+                                   # attribute "logbook_category_name" verification
                                    t3:::check_logbook_category_name(logbook_category_name)
-                                   # attribut "specie_code" verification
+                                   # attribute "specie_code" verification
                                    t3:::check_specie_code(specie_code)
-                                   # attribut "specie_code3l" verification
+                                   # attribute "specie_code3l" verification
                                    t3:::check_specie_code3l(specie_code3l)
-                                   # attribut "catch_weight" verification
+                                   # attribute "catch_weight" verification
                                    t3:::check_catch_weight(catch_weight)
-                                   # attributions
+                                   # attributeions
                                    private$activity_id <- activity_id
                                    private$elementarycatch_id <- elementarycatch_id
                                    private$ocean <- ocean

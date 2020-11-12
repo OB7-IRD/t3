@@ -7,18 +7,18 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                    public = list(
                                      # initialize ----
                                      #' @description Initialize function for R6 elementarysampleraw class.
-                                     #' @param trip_id (character) Trip identification.
-                                     #' @param well_id (character) Well identification.
-                                     #' @param sample_id (character) Sample identification.
-                                     #' @param sample_quality (integer) Sample quality identification.
-                                     #' @param sub_sample_id (integer) Sub sample identification.
-                                     #' @param sample_type (integer) Sample type identification.
-                                     #' @param specie_code (integer) Specie code identification.
-                                     #' @param specie_code3l (character) Specie code identification on 3 characters.
-                                     #' @param length_type (integer) Length type identification, 1 for LD1 and 2 for LF.
-                                     #' @param sample_total_count (integer) Sample number of total individus counted.
-                                     #' @param sample_number_measured (integer) Sample number of measured individus.
-                                     #' @param sample_length_class (integer) Sample length class of measured individus.
+                                     #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
+                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
+                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
+                                     #' @param sample_quality Object of class {\link[base]{integer}} expected. Sample quality identification.
+                                     #' @param sub_sample_id Object of class {\link[base]{integer}} expected. Sub sample identification.
+                                     #' @param sample_type Object of class {\link[base]{integer}} expected. Sample type identification.
+                                     #' @param specie_code Object of class {\link[base]{integer}} expected. Specie code identification.
+                                     #' @param specie_code3l Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
+                                     #' @param length_type Object of class {\link[base]{integer}} expected. Length type identification, 1 for LD1 and 2 for LF.
+                                     #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
+                                     #' @param sample_number_measured Object of class {\link[base]{integer}} expected. Sample number of measured individus.
+                                     #' @param sample_length_class Object of class {\link[base]{integer}} expected. Sample length class of measured individus.
                                      initialize = function(trip_id,
                                                            well_id,
                                                            sample_id,
@@ -31,31 +31,31 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                            sample_total_count,
                                                            sample_number_measured,
                                                            sample_length_class) {
-                                       # attribut "trip_id" verification
+                                       # attribute "trip_id" verification
                                        t3:::check_trip_id(trip_id)
-                                       # attribut "well_id" verification
+                                       # attribute "well_id" verification
                                        t3:::check_well_id(well_id)
-                                       # attribut "sample_id" verification
+                                       # attribute "sample_id" verification
                                        t3:::check_sample_id(sample_id)
-                                       # attribut "sub_sample_id" verification
+                                       # attribute "sub_sample_id" verification
                                        t3:::check_sub_sample_id(sub_sample_id)
-                                       # attribut "sample_quality" verification
+                                       # attribute "sample_quality" verification
                                        t3:::check_sample_quality(sample_quality)
-                                       # attribut "sample_type" verification
+                                       # attribute "sample_type" verification
                                        t3:::check_sample_type(sample_type)
-                                       # attribut "specie_code" verification
+                                       # attribute "specie_code" verification
                                        t3:::check_specie_code(specie_code)
-                                       # attribut "specie_code3l" verification
+                                       # attribute "specie_code3l" verification
                                        t3:::check_specie_code3l(specie_code3l)
-                                       # attribut "length_type" verification
+                                       # attribute "length_type" verification
                                        t3:::check_length_type(length_type)
-                                       # attribut "sample_total_count" verification
+                                       # attribute "sample_total_count" verification
                                        t3:::check_sample_total_count(sample_total_count)
-                                       # attribut "sample_number_measured" verification
+                                       # attribute "sample_number_measured" verification
                                        t3:::check_sample_number_measured(sample_number_measured)
-                                       # attribut "sample_length_class" verification
+                                       # attribute "sample_length_class" verification
                                        t3:::check_sample_length_class(sample_length_class)
-                                       # attributions
+                                       # attributeions
                                        private$trip_id <- trip_id
                                        private$well_id <- well_id
                                        private$sample_id <- sample_id

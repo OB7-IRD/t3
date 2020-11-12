@@ -14,10 +14,10 @@ Create R6 reference object class object_model_data
 \item \href{#method-elementarycatches_object_creation}{\code{object_model_data$elementarycatches_object_creation()}}
 \item \href{#method-elementarylandings_object_creation}{\code{object_model_data$elementarylandings_object_creation()}}
 \item \href{#method-wells_object_creation}{\code{object_model_data$wells_object_creation()}}
-\item \href{#method-setduration_data}{\code{object_model_data$setduration_data()}}
-\item \href{#method-lengthstep_data}{\code{object_model_data$lengthstep_data()}}
-\item \href{#method-sampleset_data}{\code{object_model_data$sampleset_data()}}
-\item \href{#method-lengthweightrelationship_data}{\code{object_model_data$lengthweightrelationship_data()}}
+\item \href{#method-setdurationrefs_data}{\code{object_model_data$setdurationrefs_data()}}
+\item \href{#method-lengthsteps_data}{\code{object_model_data$lengthsteps_data()}}
+\item \href{#method-samplesets_data}{\code{object_model_data$samplesets_data()}}
+\item \href{#method-lengthweightrelationships_data}{\code{object_model_data$lengthweightrelationships_data()}}
 \item \href{#method-clone}{\code{object_model_data$clone()}}
 }
 }
@@ -25,51 +25,11 @@ Create R6 reference object class object_model_data
 \if{html}{\out{<a id="method-trips_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-trips_object_creation}{}}}
 \subsection{Method \code{trips_object_creation()}}{
-Creation of a R6 reference object class trips which contain one or more R6 reference object class trip
+Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(
-  db_con = NULL,
   data_source = "t3_db",
-  periode_reference = NULL,
-  countries = NULL,
-  oceans = NULL,
-  data_path = NULL,
-  trips_selected = NULL,
-  envir = "global"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
-
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
-
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
-
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
-
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
-
-\item{\code{data_path}}{(character) Path of the data sql/csv/RData file. By default NULL.}
-
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
-
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-activities_object_creation"></a>}}
-\if{latex}{\out{\hypertarget{method-activities_object_creation}{}}}
-\subsection{Method \code{activities_object_creation()}}{
-Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   db_con = NULL,
-  data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
   oceans = NULL,
@@ -82,21 +42,61 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-activities_object_creation"></a>}}
+\if{latex}{\out{\hypertarget{method-activities_object_creation}{}}}
+\subsection{Method \code{activities_object_creation()}}{
+Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
+  data_source = "t3_db",
+  db_con = NULL,
+  periode_reference = NULL,
+  countries = NULL,
+  oceans = NULL,
+  data_path = NULL,
+  trips_selected = NULL,
+  envir = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
+
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
+
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
@@ -105,38 +105,38 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \if{html}{\out{<a id="method-elementarycatches_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-elementarycatches_object_creation}{}}}
 \subsection{Method \code{elementarycatches_object_creation()}}{
-Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch
+Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_object_creation(
-  db_con = NULL,
   data_source = "t3_db",
+  db_con = NULL,
   periode_reference = NULL,
   countries = NULL,
   oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
@@ -148,35 +148,35 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarylandings_object_creation(
-  db_con = NULL,
   data_source = "t3_db",
+  db_con = NULL,
   periode_reference = NULL,
   countries = NULL,
   oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
@@ -185,11 +185,11 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \if{html}{\out{<a id="method-wells_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-wells_object_creation}{}}}
 \subsection{Method \code{wells_object_creation()}}{
-Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples
+Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(
-  db_con = NULL,
   data_source = "t3_db",
+  db_con = NULL,
   periode_reference = NULL,
   countries = NULL,
   oceans = NULL,
@@ -197,162 +197,162 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   trips_selected = NULL,
   data_path_samples = NULL,
   data_path_wellplans = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
 
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.}
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 
-\item{\code{data_path_samples}}{(character) Path of the data sql/csv file for samples. By default NULL.}
+\item{\code{data_path_samples}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv file for samples. By default NULL.}
 
-\item{\code{data_path_wellplans}}{(character) Path of the data sql/csv file for well plans. By default NULL.}
+\item{\code{data_path_wellplans}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv file for well plans. By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setduration_data"></a>}}
-\if{latex}{\out{\hypertarget{method-setduration_data}{}}}
-\subsection{Method \code{setduration_data()}}{
-Creation of a data frame object with parameters of set duration algorithms
+\if{html}{\out{<a id="method-setdurationrefs_data"></a>}}
+\if{latex}{\out{\hypertarget{method-setdurationrefs_data}{}}}
+\subsection{Method \code{setdurationrefs_data()}}{
+Creation of a data frame object with parameters of set duration algorithms.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$setduration_data(
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$setdurationrefs_data(
   db_con = NULL,
   data_source = "t3_db",
   periode_reference = NULL,
   countries = NULL,
   data_path = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-lengthstep_data"></a>}}
-\if{latex}{\out{\hypertarget{method-lengthstep_data}{}}}
-\subsection{Method \code{lengthstep_data()}}{
+\if{html}{\out{<a id="method-lengthsteps_data"></a>}}
+\if{latex}{\out{\hypertarget{method-lengthsteps_data}{}}}
+\subsection{Method \code{lengthsteps_data()}}{
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthstep_data(
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthsteps_data(
   db_con = NULL,
   data_source = "t3_db",
   data_path = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sampleset_data"></a>}}
-\if{latex}{\out{\hypertarget{method-sampleset_data}{}}}
-\subsection{Method \code{sampleset_data()}}{
+\if{html}{\out{<a id="method-samplesets_data"></a>}}
+\if{latex}{\out{\hypertarget{method-samplesets_data}{}}}
+\subsection{Method \code{samplesets_data()}}{
 Creation of a data frame object with weighted weigth of each set sampled.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$sampleset_data(
-  db_con = NULL,
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$samplesets_data(
   data_source = "t3_db",
+  db_con = NULL,
   periode_reference = NULL,
   countries = NULL,
   oceans = NULL,
   data_path = NULL,
   trips_selected = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{periode_reference}}{(integer) Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{countries}}{(character) ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{oceans}}{(integer) Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{trips_selected}}{(character) Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-lengthweightrelationship_data"></a>}}
-\if{latex}{\out{\hypertarget{method-lengthweightrelationship_data}{}}}
-\subsection{Method \code{lengthweightrelationship_data()}}{
+\if{html}{\out{<a id="method-lengthweightrelationships_data"></a>}}
+\if{latex}{\out{\hypertarget{method-lengthweightrelationships_data}{}}}
+\subsection{Method \code{lengthweightrelationships_data()}}{
 Creation of a data frame object with parameters for length weight relationship.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationship_data(
-  db_con = NULL,
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationships_data(
   data_source = "t3_db",
+  db_con = NULL,
   data_path = NULL,
-  envir = "global"
+  envir = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{(character) Identification of data source. By default "t3_db" but you can switch with "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R global environment).}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
 
-\item{\code{data_path}}{(character) Path of the data sql/csv file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
-\item{\code{envir}}{(character) Specify an environment to look in for data source "envir". You can choose between "global" and "current". By default "global.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
 }
 \if{html}{\out{</div>}}
 }
