@@ -1,5 +1,5 @@
 #' @name elementarysampleraw
-#' @title R6 class trip creation
+#' @title R6 class trip
 #' @description Create R6 reference object class elementarysampleraw
 #' @importFrom R6 R6Class
 # elementarysampleraw ----

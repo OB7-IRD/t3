@@ -1,8 +1,7 @@
 # 2 - Checking full_trips ----
-source(system.file("test_data",
-                   "test_full_trips.R",
-                   package = "t3"),
-       local = TRUE)
+load(file = system.file("test_data",
+                        "data_test.RData",
+                        package = "t3"))
 # 2.1 - Comparison number of trips between data model and full trips ----
 test_that(desc = "comparison_number_trips_data_model_vs_full_trips",
           code = {

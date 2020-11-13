@@ -1,5 +1,5 @@
 #' @name trip
-#' @title R6 class trip creation
+#' @title R6 class trip
 #' @description Create R6 reference object class trip
 #' @importFrom R6 R6Class
 #' @importFrom lubridate ymd

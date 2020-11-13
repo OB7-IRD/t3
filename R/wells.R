@@ -1,5 +1,5 @@
 #' @name wells
-#' @title R6 class wells creation
+#' @title R6 class wells
 #' @description Create R6 reference object class wells
 #' @importFrom R6 R6Class
 wells <- R6::R6Class(classname = "wells",

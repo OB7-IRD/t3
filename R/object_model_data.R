@@ -1,4 +1,4 @@
-#' @title R6 class object_model_data creation
+#' @title R6 class object_model_data
 #' @name object_model_data
 #' @description Create R6 reference object class object_model_data
 #' @importFrom R6 R6Class

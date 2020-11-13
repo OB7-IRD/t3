@@ -1,5 +1,5 @@
 #' @name elementarylanding
-#' @title R6 class elementarylanding creation
+#' @title R6 class elementarylanding
 #' @description Create R6 reference object class elementarylanding
 #' @importFrom R6 R6Class
 #' @importFrom lubridate ymd

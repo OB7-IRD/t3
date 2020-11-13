@@ -1,5 +1,5 @@
 #' @name standardisedsample
-#' @title R6 class standardisedsample creation
+#' @title R6 class standardisedsample
 #' @description Create R6 reference object class standardisedsample
 #' @importFrom R6 R6Class
 standardisedsample <- R6::R6Class(classname = "standardisedsample",

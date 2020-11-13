@@ -1,5 +1,5 @@
 #' @name trips
-#' @title R6 class trips creation
+#' @title R6 class trips
 #' @description Create R6 reference object class trips
 #' @importFrom R6 R6Class
 trips <- R6::R6Class(classname = "trips",

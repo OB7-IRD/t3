@@ -1,5 +1,5 @@
 #' @name elementarywellplan
-#' @title R6 class elementarywellplan creation
+#' @title R6 class elementarywellplan
 #' @description Create R6 reference object class elementarywellplan
 #' @importFrom R6 R6Class
 # elementarywellplan ----

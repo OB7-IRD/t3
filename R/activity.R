@@ -1,5 +1,5 @@
 #' @name activity
-#' @title R6 class activity creation
+#' @title R6 class activity
 #' @description Create R6 reference object class activity
 #' @importFrom R6 R6Class
 #' @importFrom lubridate ymd

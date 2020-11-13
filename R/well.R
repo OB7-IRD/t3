@@ -1,5 +1,5 @@
 #' @name well
-#' @title R6 class well creation
+#' @title R6 class well
 #' @description Create R6 reference object class well
 #' @importFrom R6 R6Class
 # well ----

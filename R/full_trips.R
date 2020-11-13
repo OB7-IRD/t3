@@ -1,5 +1,5 @@
 #' @name full_trips
-#' @title R6 class full_trips creation
+#' @title R6 class full_trips
 #' @description Create R6 reference object class full_trips
 #' @importFrom R6 R6Class
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
