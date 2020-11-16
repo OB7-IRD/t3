@@ -3,6 +3,7 @@ on:
     branches:
     - master
     - doc-and-test-model-creation
+    - development
 
 name: build and deploy gh-pages
 
