@@ -102,7 +102,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_model.html">Data model</a>
+      <a href="../articles/level_1.html">Level 1</a>
+    </li>
+    <li>
+      <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
     </li>
   </ul>
 </li>
@@ -141,24 +144,31 @@
 <div id="added" class="section level2">
 <h2 class="hasAnchor">
 <a href="#added" class="anchor"></a>Added</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">*</span><span class="st"> </span>Implementation <span class="cf">for</span> the import of annual dataset from outputs of the level <span class="dv">1</span> and <span class="dv">2</span> (period length customizable)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="op">*</span><span class="st"> </span>Implementation of boostrap method as base <span class="cf">for</span> all confidence intervals</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="op">*</span><span class="st"> </span>Computation of confidence <span class="kw">interval</span> (bootstrap interval) <span class="cf">for</span> the nominal catches by species and by fishing mode</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="op">*</span><span class="st"> </span>Implementation of outputs <span class="cf">for</span> the he nominal catches by species and by fishing mode</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="op">*</span><span class="st"> </span>Fix minor bugs <span class="cf">in</span> all different <span class="kw">processes</span> (P1, P2, P3)</span></code></pre></div>
+<ul>
+<li>Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)</li>
+<li>Implementation of boostrap method as base for all confidence intervals</li>
+<li>Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode</li>
+<li>Implementation of outputs for the he nominal catches by species and by fishing mode</li>
+<li>Fix minor bugs in all different processes (P1, P2, P3)</li>
+</ul>
 </div>
 <div id="changed" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changed" class="anchor"></a>Changed</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">*</span><span class="st"> </span>Improve modelling <span class="kw">configuration</span> (addition of new parameters)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="op">*</span><span class="st"> </span>Rewrite several figures <span class="cf">for</span> the model checking</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="op">*</span><span class="st"> </span>Improve time computing using faster implementation of random forests <span class="cf">for</span> the species composition modeling <span class="cf">in</span> the level3 </span></code></pre></div>
+<ul>
+<li>Improve modelling configuration (addition of new parameters)</li>
+<li>Rewrite several figures for the model checking</li>
+<li>Improve time computing using faster implementation of random forests for the species composition modeling in the level3</li>
+</ul>
 </div>
 <div id="removed" class="section level2">
 <h2 class="hasAnchor">
 <a href="#removed" class="anchor"></a>Removed</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">*</span><span class="st"> </span>Disabling task and effort computation <span class="cf">while</span> waiting <span class="cf">for</span> confident interval implementation</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="op">*</span><span class="st"> </span>Remove the documentation from the package. Stay available at https<span class="op">:</span><span class="er">//</span>ob7<span class="op">-</span>ird.github.io<span class="op">/</span>t3<span class="op">/</span>index.html</span></code></pre></div>
+<ul>
+<li>Disabling task and effort computation while waiting for confident interval implementation</li>
+<li>Remove the documentation from the package. Stay available at <a href="https://ob7-ird.github.io/t3/index.html" class="uri">https://ob7-ird.github.io/t3/index.html</a>
+</li>
+</ul>
 </div>
 </div>
 <div id="t3-090---2020-06-05" class="section level1">
@@ -167,19 +177,26 @@
 <div id="added-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#added-1" class="anchor"></a>Added</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">*</span><span class="st"> </span>Implentation of the model layer <span class="cf">in</span> R6class</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="op">*</span><span class="st"> </span>Implementation of all logbooks standardization sub<span class="op">-</span>processes</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="op">*</span><span class="st"> </span>Implementation of all samples standardization sub<span class="op">-</span>processes</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="op">*</span><span class="st"> </span>Implementation of sub<span class="op">-</span>processes <span class="cf">for</span> assessing species composition <span class="cf">in</span> relation to non<span class="op">-</span>sampled assemblages</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="op">*</span><span class="st"> </span>Strict selection of samples used <span class="cf">in</span> the model training according to several criteria on sets and <span class="kw">wells</span> (school type, location, date, sample quality).      </span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="op">*</span><span class="st"> </span>Classification of unknown school <span class="kw">type</span> (no data available) by clustering according to major tuna species composition.      </span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="op">*</span><span class="st"> </span>Development of a statistical model accounting <span class="cf">for</span><span class="op">:</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="st">    </span><span class="op">-</span><span class="st"> </span>Spatial and temporal structure of the <span class="kw">fishery</span> (location and date of the catch)</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="op">-</span><span class="st"> </span>Vessel specificity which impacts the species composition of the catch</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    <span class="op">-</span><span class="st"> </span>Crew reporting information which enables more flexibility <span class="cf">in</span> the model when a marginal composition is caught</span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="op">-</span><span class="st"> </span>Several years of fishing <span class="cf">in</span> the training to increase the robustness of the estimates</span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="op">*</span><span class="st"> </span>Model checking to ensure reliability of the results</span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="op">*</span><span class="st"> </span>Computation of a confidence <span class="kw">interval</span> (bootstrap method) which give the trust level on catch estimations. </span></code></pre></div>
+<ul>
+<li>Implentation of the model layer in R6class</li>
+<li>Implementation of all logbooks standardization sub-processes</li>
+<li>Implementation of all samples standardization sub-processes</li>
+<li>Implementation of sub-processes for assessing species composition in relation to non-sampled assemblages</li>
+<li>Strict selection of samples used in the model training according to several criteria on sets and wells (school type, location, date, sample quality).<br>
+</li>
+<li>Classification of unknown school type (no data available) by clustering according to major tuna species composition.<br>
+</li>
+<li>Development of a statistical model accounting for:
+<ul>
+<li>Spatial and temporal structure of the fishery (location and date of the catch)</li>
+<li>Vessel specificity which impacts the species composition of the catch</li>
+<li>Crew reporting information which enables more flexibility in the model when a marginal composition is caught</li>
+<li>Several years of fishing in the training to increase the robustness of the estimates</li>
+</ul>
+</li>
+<li>Model checking to ensure reliability of the results</li>
+<li>Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations.</li>
+</ul>
 </div>
 </div>
 </div>
