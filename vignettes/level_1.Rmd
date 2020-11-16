@@ -1,0 +1,26 @@
+---
+title: "Level 1"
+output: rmarkdown::html_vignette
+description: |
+  Description of the t3 level 1 and how initialise it.
+vignette: |
+  %\VignetteIndexEntry{Level 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<div style="text-align: justify">
+
+## Level 1 process
+
+
+
+
+</div>

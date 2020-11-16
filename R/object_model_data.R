@@ -1300,7 +1300,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                           }))
                                      private$elementarylandings <- object_elementarylandings
                                    },
-                                   #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples.
+                                   #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
                                    #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.

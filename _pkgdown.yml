@@ -1,6 +1,7 @@
 template:
   params:
     bootswatch: cerulean
+
 reference:
 - title: "Shortcut functions"
   desc: >
@@ -53,4 +54,10 @@ reference:
 - contents:
   - object_r6
   - initiate_log_file
+
 url: https://ob7-ird.github.io/t3
+
+authors:
+  Ob7 Observatory of Exploited Tropical Pelagic Ecosystemse:
+    href: "https://www.ob7.ird.fr/"
+    html: "<img src='man/figures/logo_obs7.png' height=24>"

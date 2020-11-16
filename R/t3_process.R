@@ -8,13 +8,8 @@
 #' @param countries (character) ISO code on 3 letters related to one or more countries.
 #' @param oceans (integer) Ocean(s) related to data coded on 1 digit.
 #' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.
-#' @param trips_selected (character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
 #' @param species_rf1 (integer) Specie(s) code(s) used for the rf1 process.
-#' @param set_duration_ref (data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).
-#' @return The function a R6 reference object of class "object_full_trips".
-#' @param length_step (data.frame) Data frame object with length ratio between ld1 and lf class.
-#' @param sample_set (data.frame) Data frame object with weighted weigth of each set sampled.
-#' @param length_weight_relationship_data (data.frame) Data frame object with parameters for length weight relationship.
+#' @param trips_selected (character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
 #' @details
 #' For the argument "process", you can choose between 5 modalities (descending size classification):
 #' \itemize{
@@ -33,10 +28,6 @@ t3_process <- function(process = "all",
                        oceans,
                        sample_type,
                        species_rf1,
-                       set_duration_ref,
-                       length_step,
-                       sample_set,
-                       length_weight_relationship_data,
                        trips_selected = NULL) {
   if (paste(class(process), collapse = " ") != "character"
       || length(process) != 1
@@ -62,15 +53,15 @@ t3_process <- function(process = "all",
                                   log_name = "data_model_initialisation")
     if (process %in% c("all", "level1", "until_level2")) {
       t3::t3_level1(species_rf1 = species_rf1,
-                    set_duration_ref = set_duration_ref,
+                    set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
                     log_file = log_file,
                     log_path = log_path,
                     log_name = "t3_level1")
     }
     if (process %in% c("all", "level2", "until_level2")) {
-      t3::t3_level2(length_step,
-                    sample_set,
-                    length_weight_relationship_data,
+      t3::t3_level2(length_step = object_model_data$.__enclos_env__$private$lengthweightrelationships,
+                    sample_set = object_model_data$.__enclos_env__$private$samplesets,
+                    length_weight_relationship_data = object_model_data$.__enclos_env__$private$lengthsteps,
                     log_file = log_file,
                     log_path = log_path,
                     log_name = "t3_level2")
