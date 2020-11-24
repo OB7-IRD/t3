@@ -61,3 +61,13 @@ authors:
   Ob7 Observatory of Exploited Tropical Pelagic Ecosystemse:
     href: "https://www.ob7.ird.fr/"
     html: "<img src='man/figures/logo_obs7.png' height=24>"
+
+articles:
+- title: t3 processes description
+  navbar: ~
+  contents:
+  - model_initialisation
+  - level_1
+
+development:
+  mode: auto
