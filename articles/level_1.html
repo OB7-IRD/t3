@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Level 1 • t3</title>
+<title>Level 1 process • t3</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Level 1">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Level 1 process">
 <meta property="og:description" content="Description of the t3 level 1 and how initialise it.
 ">
 <meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png">
@@ -62,10 +62,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/level_1.html">Level 1</a>
+      <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
     </li>
     <li>
-      <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
+      <a href="../articles/level_1.html">Level 1 process</a>
     </li>
   </ul>
 </li>
@@ -94,7 +94,7 @@
 <script src="level_1_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Level 1</h1>
+      <h1 data-toc-skip>Level 1 process</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/master/vignettes/level_1.Rmd"><code>vignettes/level_1.Rmd</code></a></small>
@@ -105,7 +105,85 @@
     
     
 <div style="text-align: justify">
-<h2 id="level-1-process">Level 1 process</h2>
+<h2 id="logbooks-standardisation">Logbooks standardisation</h2>
+<p>The first level of the t3 process aim to standardize logbook data. These standardization was divided into 8 steps:</p>
+<table class="table">
+<colgroup>
+<col width="35%">
+<col width="30%">
+<col width="20%">
+<col width="13%">
+</colgroup>
+<thead><tr class="header">
+<th>Process</th>
+<th>Code/method associated</th>
+<th>Class(es) associated</th>
+<th>Observations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Process of Raising Factor level 1</td>
+<td><code>rf1()</code></td>
+<td>full_trips</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Process of Raising Factor level 2</td>
+<td><code>rf2()</code></td>
+<td>full_trips</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Logbook weigth categories conversion</td>
+<td><code>conversion_weigth_category()</code></td>
+<td>full_trips</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Postive sets count</td>
+<td><code>set_count()</code></td>
+<td>full_trips</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Set duration calculation</td>
+<td><code>set_duration()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="even">
+<td>Time at sea calculation</td>
+<td><code>time_at_sea()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="odd">
+<td>Fishing time calculation</td>
+<td><code>fishing_time()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="even">
+<td>Searching time calculation</td>
+<td><code>searching_time()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+</tbody>
+</table>
+<h3 id="raising-factor-level-1">Raising Factor level 1</h3>
+<p>Catches filled in logbooks are based on visual estimations when they rise from the purse senner salabarde. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a peson located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.</p>
+<p>Regarding this process, for each full trip (one full trip should be composed of one or several partial trip, for example if the vessel unloads a part of theses wells and go back to sea with not empty well(s)) we will calculate a raising factor, ratio of landing weight on catches weight. Furthermore, if a full trRf1 value are normally between 0.8 and 1.2 and values out of range should be investigated for quality control. This range could be modified through function parameter <code>rf1_lowest_limit</code> (by default at 0.8) and <code>rf1_highest_limit</code> (by default at 1.2). In addition, you will in the function log a warning if the rf1 value is out of range. This ratio will be applied on logbook catches (associated with the full trip) to adjust declared values (by rising or lower them).</p>
+<p>By aware that for know, even if a rf1 value are out of user range, it will be apply anyway on the logbook catches associated. It’s up to the user to check the log file and correct (if necessary) values associated before switch to the next process.</p>
+<p>Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, theses species should be different for each fleet, especially because canneries don’t purchased through the same rules according to the each fleet. This raising factor will be estimate only on theses species. Species list could be modify through the function parameter <code>species_rf1</code>. For now theses following selections were validated since several years:</p>
+<ul>
+<li><p>for French (French and Mayotte fleets), use codes 1 (<em>Thunnus albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3 (<em>Thunnus obesus</em>), 4 (<em>Thunnus alalunga</em>), 9 (mix of tunas species) and 11 (<em>Thunnus tonggol</em>).</p></li>
+<li><p>for Spain (Spanish and Seychelles fleets), use codes 1 (<em>Thunnus albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3 (<em>Thunnus obesus</em>), 4 (<em>Thunnus alalunga</em>), 5 (<em>Euthynnus alletteratus</em>), 6 (<em>Auxis thazard</em>), 9 (mix of tunas species) and 11 (<em>Thunnus tonggol</em>).</p></li>
+</ul>
+<p>In addition, if logbook(s) are missing we can’t apply the process. In that case, we will tried to apply the process of raising factor level 2 (see below in the next function).</p>
+<p>By the way, there are several cases when the rf1 can’t be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.</p>
+<p><img style="display: block;margin-left: -10%; margin-right: auto; width: 120%;" src="process_1.1.png"></p>
+<h3 id="raising-factor-level-2">Raising Factor level 2</h3>
 </div>
   </div>
 
