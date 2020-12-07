@@ -72,7 +72,7 @@ In addition, if logbook(s) are missing we can't apply the process. In that case,
 
 By the way, there are several cases when the rf1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
 
-<img style="display: block;margin-left: -10%; margin-right: auto; width: 120%;" src='process_1.1.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_1.1.png'/>
 
 ### Raising Factor level 2
     

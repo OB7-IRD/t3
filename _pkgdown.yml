@@ -1,6 +1,9 @@
 template:
   params:
     bootswatch: cerulean
+    docsearch:
+      api_key: b232a295f4339cb13abbd7adee1da479
+      index_name: ob7-ird
 
 reference:
 - title: "Shortcut functions"

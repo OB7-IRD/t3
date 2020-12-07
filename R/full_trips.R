@@ -573,22 +573,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # process 1.2: rf2 ----
                             #' @description Process of Raising Factor level 2 (rf2).
                             rf2 = function() {
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              if (is.null(x = private$data_selected)) {
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
                                     " - Process 1.2 (raising factor level 2) cancelled.\n",
                                     sep = "")
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
+                                for (i in seq_len(length.out = length(x = private$data_selected))) {
                                   if (i == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
                                         " - Start process 1.2: raising factor level 2.\n",
                                         sep = "")
                                   }
-                                  if (is.null(private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (is.null(x = private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1)) {
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
                                         " - Argument \"statut_rf1\" is null for the trip element \"",
-                                        names(private$data_selected)[i],
+                                        names(x = private$data_selected)[i],
                                         "\".\n",
                                         "Process 1.2 inapplicable, switch to next element.\n",
                                         "[trip: ",
@@ -597,34 +600,38 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sep = "")
                                   } else {
                                     if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
-                                      # case 1: rf2 calculated
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      # case 1 ----
+                                      # rf2 calculated
+                                      cat(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
                                           " - Error: rf2 not developped yet.\n",
                                           sep = "")
                                       stop()
                                     } else if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
-                                      # case 2: rf2 not need to be calculated
-                                      for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
+                                      # case 2 ----
+                                      # rf2 not need to be calculated
+                                      for (j in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                         current_trip <- private$data_selected[[i]][[j]]
                                         current_rf2 <- 1
                                         current_trip$.__enclos_env__$private$rf2 <- current_rf2
                                         current_trip$.__enclos_env__$private$statut_rf2 <- 2
-                                        if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                           current_elementarycatches <- NULL
-                                          for (m in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
+                                          for (m in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                             current_elementarycatches <- append(current_elementarycatches,
                                                                                 current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
                                           }
                                         }
-                                        if (length(current_elementarycatches) != 0) {
-                                          for (k in seq_len(length.out = length(current_elementarycatches))) {
+                                        if (length(x = current_elementarycatches) != 0) {
+                                          for (k in seq_len(length.out = length(x = current_elementarycatches))) {
                                             current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1 * current_rf2
                                           }
                                         }
                                       }
                                     } else {
-                                      # case 3: full trip not complete
-                                      for (l in seq_len(length.out = length(private$data_selected[[i]]))) {
+                                      # case 3 ----
+                                      # full trip not complete
+                                      for (l in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                         current_trip <- private$data_selected[[i]][[l]]
                                         current_rf2 <- 1
                                         current_trip$.__enclos_env__$private$rf2 <- current_rf2
@@ -632,8 +639,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   }
-                                  if (i == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (i == length(x = private$data_selected)) {
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
                                         " - End of raising factor process 2.\n",
                                         sep = "")
                                   }
