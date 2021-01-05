@@ -7,3 +7,4 @@
 .vscode
 *.code-workspace
 docs
+tests/testthat/testthat-problems.rds

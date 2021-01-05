@@ -281,10 +281,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1).
-                            #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process.
+                            #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
-                            rf1 = function(species_rf1,
+                            rf1 = function(species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2) {
                               # function parameters verification ----
