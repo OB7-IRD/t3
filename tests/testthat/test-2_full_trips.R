@@ -30,19 +30,36 @@ species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11))
 capture.output(object_full_trips$rf1(species_rf1 = species_rf1),
                file = "NUL")
 
+# level 1.2: rf2 ----
+capture.output(object_full_trips$rf2(),
+               file = "NUL")
+
+# level 1.3: logbook weigth categories conversion ----
+capture.output(object_full_trips$conversion_weigth_category(),
+               file = "NUL")
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   current_trips <- object_full_trips$.__enclos_env__$private$data_selected[[a]]
-  current_sum_elementarycatches_corrected <- 0
+  current_sum_elementarycatches_rf1 <- 0
+  current_sum_elementarycatches_rf2 <- 0
   current_sum_elementarylandings <- 0
   for (b in seq_len(length.out = length(x = current_trips))) {
     current_trip <- current_trips[[b]]
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
+    current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
     current_rf1 <- current_trip$.__enclos_env__$private$rf1
-    # 201 - Checking if rf1 was tried to be applied on all trips ----
-    testthat::test_that(desc = "202 - Checking if rf1 was tried to be applied on all trips",
+    current_rf2 <- current_trip$.__enclos_env__$private$rf2
+    # 201 - Checking if rf1 process was applied on all trips ----
+    testthat::test_that(desc = "202 - Checking if rf1 process was applied on all trips",
                         code = {
                           testthat::expect_true(object = (current_trip$.__enclos_env__$private$statut_rf1 %in% c(1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4)))
                           testthat::expect_true(object = is.numeric(current_rf1))
+                        })
+    # 203 - Checking if rf2 process was applied on all trips ----
+    testthat::test_that(desc = "203 - Checking if rf2 process was applied on all trips",
+                        code = {
+                          testthat::expect_true(object = (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2)))
+                          testthat::expect_true(object = is.numeric(current_rf2))
                         })
     current_activities <- current_trip$.__enclos_env__$private$activities
     current_elementarylandings <- current_trip$.__enclos_env__$private$elementarylandings
@@ -54,7 +71,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
           for (d in seq_len(length.out = length(current_elementarycatches))) {
             if (current_elementarycatches[[d]]$.__enclos_env__$private$specie_code %in% species_rf1
                 && ! is.null(current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf1)) {
-              current_sum_elementarycatches_corrected <- current_sum_elementarycatches_corrected + current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf1
+              current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf1
+              current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf2
             }
           }
         }
@@ -68,11 +86,17 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
       }
     }
   }
-  # 202 - Checking if sum elementary catches corrected equal to sum elementary landings ----
+  # 202 - Checking if sum elementary catches corrected by rf1 is equal to sum elementary landings ----
   testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
                       code = {
                         testthat::expect_equal(object = current_sum_elementarylandings,
-                                               expected = current_sum_elementarycatches_corrected)
+                                               expected = current_sum_elementarycatches_rf1)
+                      })
+  # 204 - Checking if sum elementary catches corrected by rf2 is equal to sum elementary landings ----
+  testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
+                      code = {
+                        testthat::expect_equal(object = current_sum_elementarylandings,
+                                               expected = current_sum_elementarycatches_rf2)
                       })
 }
 

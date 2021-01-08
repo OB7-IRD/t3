@@ -43,18 +43,18 @@ embed_png <- function(path,
 
 The first level of the t3 process aim to standardize logbook data. These standardization was divided into 8 steps:
 
-| Process                              | Code/method associated         | Class(es) associated | Observations |
-|--------------------------------------|--------------------------------|----------------------|--------------|
-| Process of Raising Factor level 1    | `rf1()`                        | full_trips           |              |
-| Process of Raising Factor level 2    | `rf2()`                        | full_trips           |              |
-| Logbook weigth categories conversion | `conversion_weigth_category()` | full_trips           |              |
-| Postive sets count                   | `set_count()`                  | full_trips           |              |
-| Set duration calculation             | `set_duration()`               | full_trips           | In hours     |
-| Time at sea calculation              | `time_at_sea()`                | full_trips           | In hours     |
-| Fishing time calculation             | `fishing_time()`               | full_trips           | In hours     |
-| Searching time calculation           | `searching_time()`             | full_trips           | In hours     |
+| Process                                           | Code/method associated         | Class(es) associated | Observations |
+|---------------------------------------------------|--------------------------------|----------------------|--------------|
+| Process 1.1: Raising Factor level 1               | `rf1()`                        | full_trips           |              |
+| Process 1.2: Raising Factor level 2               | `rf2()`                        | full_trips           |              |
+| Process 1.3: Logbook weigth categories conversion | `conversion_weigth_category()` | full_trips           |              |
+| Process 1.4: Postive sets count                   | `set_count()`                  | full_trips           |              |
+| Process 1.5: Set duration calculation             | `set_duration()`               | full_trips           | In hours     |
+| Process 1.6: Time at sea calculation              | `time_at_sea()`                | full_trips           | In hours     |
+| Process 1.7: Fishing time calculation             | `fishing_time()`               | full_trips           | In hours     |
+| Process 1.8: Searching time calculation           | `searching_time()`             | full_trips           | In hours     |
 
-### Raising Factor level 1
+### Process 1.1: Raising Factor level 1
 
 Catches filled in logbooks are based on visual estimations when they rise from the purse senner salabarde. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a peson located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
@@ -74,6 +74,16 @@ By the way, there are several cases when the rf1 can't be calculated. Take a loo
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_1.1.png'/>
 
-### Raising Factor level 2
+### Process 1.2: Raising Factor level 2
+
+This process is useful for historical data, especially when logbooks trips were not collected or available. In theses cases, don't apply the RF2 mean a under-estimation of catches due to the missing logbooks. Like in the process 1.1, we made the hypotesis that all the landings were known and available.
+
+#### Information: due to time constraints, this process is partially implemented in the source code. The figure below, after the methodology explication, display what is currently operational.
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.2.png'/>
+
+### Process 1.3: Logbook weigth categories conversion
+
+
     
 </div>

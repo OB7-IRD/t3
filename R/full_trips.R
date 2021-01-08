@@ -109,8 +109,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               as.integer(
                                                                 lubridate::year(
                                                                   x = full_trips_tmp_bis$.__enclos_env__$private$landing_date)
-                                                                )
                                                               )
+                                    )
                                   }
                                   if (any(year_full_trips %in% periode_reference)) {
                                     private$data_selected <- append(private$data_selected,
@@ -593,7 +593,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Argument \"statut_rf1\" is null for the trip element \"",
                                         names(x = private$data_selected)[i],
                                         "\".\n",
-                                        "Process 1.2 inapplicable, switch to next element.\n",
+                                        "Process 1.2 inapplicable before process 1.1, switch to next element.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
@@ -607,16 +607,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           " - Error: rf2 not developped yet.\n",
                                           sep = "")
                                       stop()
-                                    } else if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
-                                      # case 2 ----
-                                      # rf2 not need to be calculated
-                                      for (j in seq_len(length.out = length(x = private$data_selected[[i]]))) {
-                                        current_trip <- private$data_selected[[i]][[j]]
-                                        current_rf2 <- 1
-                                        current_trip$.__enclos_env__$private$rf2 <- current_rf2
-                                        current_trip$.__enclos_env__$private$statut_rf2 <- 2
+                                    } else {
+                                      if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
+                                        # case 2 ----
+                                        # rf2 not need to be calculated
+                                        for (j in seq_len(length.out = length(x = private$data_selected[[i]]))) {
+                                          current_trip <- private$data_selected[[i]][[j]]
+                                          current_rf2 <- 1
+                                          current_trip$.__enclos_env__$private$rf2 <- current_rf2
+                                          current_trip$.__enclos_env__$private$statut_rf2 <- 2
+                                        }
+                                      } else {
+                                        # case 3 ----
+                                        # full trip not complete
+                                        for (l in seq_len(length.out = length(x = private$data_selected[[i]]))) {
+                                          current_trip <- private$data_selected[[i]][[l]]
+                                          current_rf2 <- 1
+                                          current_trip$.__enclos_env__$private$rf2 <- current_rf2
+                                          current_trip$.__enclos_env__$private$statut_rf2 <- 3
+                                        }
+                                        current_elementarycatches <- NULL
                                         if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                          current_elementarycatches <- NULL
                                           for (m in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                             current_elementarycatches <- append(current_elementarycatches,
                                                                                 current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
@@ -624,26 +635,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                         if (length(x = current_elementarycatches) != 0) {
                                           for (k in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1 * current_rf2
+                                            current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1
                                           }
                                         }
                                       }
-                                    } else {
-                                      # case 3 ----
-                                      # full trip not complete
-                                      for (l in seq_len(length.out = length(x = private$data_selected[[i]]))) {
-                                        current_trip <- private$data_selected[[i]][[l]]
-                                        current_rf2 <- 1
-                                        current_trip$.__enclos_env__$private$rf2 <- current_rf2
-                                        current_trip$.__enclos_env__$private$statut_rf2 <- 3
-                                      }
                                     }
-                                  }
-                                  if (i == length(x = private$data_selected)) {
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - End of raising factor process 2.\n",
-                                        sep = "")
+                                    if (i == length(x = private$data_selected)) {
+                                      cat(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - End of raising factor process 2.\n",
+                                          sep = "")
+                                    }
                                   }
                                 }
                               }
@@ -1403,7 +1405,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                         time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
                                                                                                  end = landing_date - lubridate::days(x = 1))
-                                                                             ) / 3600
+                                        ) / 3600
                                         time_at_sea <- time_at_sea + current_activities_departure_date_time_at_sea + current_activities_landing_date_time_at_sea
                                       } else {
                                         time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
@@ -1913,10 +1915,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     if (current_sub_sample[[n]]$.__enclos_env__$private$specie_code == m) {
                                                       sum_sub_sample_number_measured <- sum_sub_sample_number_measured + current_sub_sample[[n]]$.__enclos_env__$private$sample_number_measured_lf
                                                       sub_sample_total_count_tmp <- append(sub_sample_total_count_tmp,
-                                                                                       paste(current_sub_sample[[n]]$.__enclos_env__$private$sub_sample_id,
-                                                                                             current_sub_sample[[n]]$.__enclos_env__$private$length_type,
-                                                                                             current_sub_sample[[n]]$.__enclos_env__$private$sample_total_count,
-                                                                                             sep = "_"))
+                                                                                           paste(current_sub_sample[[n]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                 current_sub_sample[[n]]$.__enclos_env__$private$length_type,
+                                                                                                 current_sub_sample[[n]]$.__enclos_env__$private$sample_total_count,
+                                                                                                 sep = "_"))
                                                       current_sub_sample_tmp <- append(current_sub_sample_tmp,
                                                                                        current_sub_sample[[n]])
                                                     }
@@ -2070,7 +2072,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   sample_total_count = as.integer(current_sample_specie[[r]]$.__enclos_env__$private$sample_total_count),
                                                                                                   elementarysampleraw = current_sample_specie[[r]])
                                                   current_well$.__enclos_env__$private$elementarysample[[l]] <- append(current_well$.__enclos_env__$private$elementarysample[[l]],
-                                                                                                                  object_elementarysample)
+                                                                                                                       object_elementarysample)
                                                 }
                                               } else {
                                                 lower_border_reference <- seq(from = 0, to = maximum_lf_class - 1, by = step)
@@ -3285,15 +3287,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               directory))
                                 }
                                 if (is.null(periode_reference)) {
-                                periode_reference <- seq.int(from = target_year,
-                                                             to = target_year - period_duration)
+                                  periode_reference <- seq.int(from = target_year,
+                                                               to = target_year - period_duration)
                                 }
                                 # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
                                 file_available <- list.files(path = inputs_level3_path,
                                                              pattern = "inputs_level3_")
                                 file_year <-  as.numeric(do.call(rbind,
-                                                           strsplit(x = file_available,
-                                                                    split = "_"))[,3])
+                                                                 strsplit(x = file_available,
+                                                                          split = "_"))[,3])
                                 target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
                                 dataset_target <- vector("list",
                                                          length = 5)
@@ -3306,7 +3308,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         function(x){
                                                           x <- vector("list",
                                                                       length = length(target_file))
-                                })
+                                                        })
                                 for(x in seq_len(length.out = length(target_file))){
                                   load(file.path(inputs_level3_path,
                                                  target_file[x],
@@ -3323,9 +3325,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dataset_target$wp[[x]] <- data_level3[[1]][[5]]
                                 }
                                 dataset_target <- lapply(X = dataset_target,
-                                              FUN = function(x){
-                                                return(unique(do.call(rbind,x)))
-                                              })
+                                                         FUN = function(x){
+                                                           return(unique(do.call(rbind,x)))
+                                                         })
                                 # stock raw data
                                 inputs_level3 <- dataset_target
                                 # sets characteristics
@@ -3614,8 +3616,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           into = c("sp","wcat"),
                                                           sep = "_")
                               data4mod <- aggregate(formula = cbind(prop_lb, prop_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
-                                                   data = data4mod,
-                                                   FUN = sum)
+                                                    data = data4mod,
+                                                    FUN = sum)
                               outputs_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
                                 data4mod_ocean <- data4mod[data4mod$ocean == ocean, ]
@@ -3952,9 +3954,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                       width = 8,
-                                       height = 8,
-                                       units = c("cm"))
+                                                width = 8,
+                                                height = 8,
+                                                units = c("cm"))
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("year_effect" = year_effect))
                                 # species composition in logbook vs sampleset (t3 level 1)
@@ -3982,9 +3984,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                       width = 16,
-                                       height = 16,
-                                       units = c("cm"))
+                                                width = 16,
+                                                height = 16,
+                                                units = c("cm"))
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("reporting_vs_sampling" = reporting_vs_sampling))
                                 # map of the data used for modelling
@@ -3994,7 +3996,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               grid = 500)
                                 ker2 <- adehabitatHR::getvolumeUD(x = ker)
                                 grid <- as(object = ker2,
-                                            Class = "SpatialPixelsDataFrame")
+                                           Class = "SpatialPixelsDataFrame")
                                 newgrid <- grid
                                 sp::fullgrid(obj = newgrid) <- FALSE
                                 sp::gridded(obj = newgrid) <- FALSE
@@ -4039,7 +4041,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  period,
                                                                  sep = "_")) +
                                   ggplot2::theme_classic()
-                                  ggplot2::ggsave(plot = set_sampled_map,
+                                ggplot2::ggsave(plot = set_sampled_map,
                                                 file = file.path(figures_directory,
                                                                  paste("set_sampled_map_",
                                                                        ocean,
@@ -4049,10 +4051,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fishing_mode,
                                                                        ".jpeg",
                                                                        sep = "")),
-                                       width = 18,
-                                       height = 10,
-                                       units = c("cm"),
-                                       pointsize = 10)
+                                                width = 18,
+                                                height = 10,
+                                                units = c("cm"),
+                                                pointsize = 10)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("set_sampled_map" = set_sampled_map))
                                 # model checking
@@ -4073,8 +4075,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 variables_importance <- variables_importance[order(variables_importance$value, decreasing = F),]
 
                                 variables_importance_plot <- ggplot2::ggplot(data = variables_importance,
-                                                ggplot2::aes(y = var_name,
-                                                             x = value))+
+                                                                             ggplot2::aes(y = var_name,
+                                                                                          x = value))+
                                   ggplot2::geom_point()+
                                   ggplot2::geom_segment(data = variables_importance,
                                                         ggplot2::aes(x = 0,
@@ -4082,11 +4084,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      y = var_name,
                                                                      yend = var_name)) +
                                   ggplot2::scale_y_discrete(name = "Variables",
-                                                   limits= variables_importance$var_name)+
+                                                            limits= variables_importance$var_name)+
                                   ggplot2::xlab("Importance (impurity)")
 
 
-                                  ggplot2::ggsave(plot = variables_importance_plot,
+                                ggplot2::ggsave(plot = variables_importance_plot,
                                                 file = file.path(figures_directory,
                                                                  paste("variables_importance_",
                                                                        ocean,
@@ -4243,7 +4245,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                list("spatio_temporal_checking" = spatio_temporal_checking))
                                 # model validity
                                 model_validation_density_res <- ggplot2::ggplot(current_model_data,
-                                                      ggplot2::aes(x = res_ST)) +
+                                                                                ggplot2::aes(x = res_ST)) +
                                   ggplot2::geom_density(stat = "density",
                                                         fill = rgb(1,0,0,0.2),
                                                         ggplot2::aes(y = ..scaled..)) +
@@ -4254,8 +4256,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::stat_qq_line(col = 2)+
                                   ggplot2::labs(x = "Theoretical quantiles", y = "Sample quantiles")
                                 model_validation_response_fit <- ggplot2::ggplot(data = current_model_data,
-                                                                            ggplot2::aes(x = resp,
-                                                                                         y = fit)) +
+                                                                                 ggplot2::aes(x = resp,
+                                                                                              y = fit)) +
                                   ggplot2::geom_point() +
                                   ggplot2::geom_smooth(method = "gam",
                                                        formula = y ~ s(x, bs = "cs"))+
@@ -4265,8 +4267,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = "Observed values",
                                                 y = "Fitted values")
                                 model_validation_fit_res <- ggplot2::ggplot(data = current_model_data,
-                                                                      ggplot2::aes(x = fit,
-                                                                                   y = res_ST)) +
+                                                                            ggplot2::aes(x = fit,
+                                                                                         y = res_ST)) +
                                   ggplot2::geom_point() +
                                   ggplot2::geom_smooth(method = "gam",
                                                        formula = y ~ s(x, bs = "cs"))+
@@ -4287,8 +4289,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = "Proportion in logbook",
                                                 y = "Standardized Residuals")
                                 model_validation_yr_res <- ggplot2::ggplot(data = current_model_data,
-                                                                      ggplot2::aes(x = year,
-                                                                                   y = res_ST)) +
+                                                                           ggplot2::aes(x = year,
+                                                                                        y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
@@ -4296,8 +4298,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = NULL,
                                                 y = "Standardized Residuals")
                                 model_validation_mon_res <- ggplot2::ggplot(data = current_model_data,
-                                                                      ggplot2::aes(x = mon,
-                                                                                   y = res_ST)) +
+                                                                            ggplot2::aes(x = mon,
+                                                                                         y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
@@ -4305,8 +4307,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = "Month",
                                                 y = "Standardized Residuals")
                                 model_validation_vessel_res <- ggplot2::ggplot(data = current_model_data,
-                                                                      ggplot2::aes(x = vessel,
-                                                                                   y = res_ST)) +
+                                                                               ggplot2::aes(x = vessel,
+                                                                                            y = res_ST)) +
                                   ggplot2::geom_boxplot() +
                                   ggplot2::geom_abline(slope = 0, intercept = 0, col="red") +
                                   ggplot2::labs(x = "Vessel",
@@ -4380,13 +4382,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         ifelse(test = ! is.null(i),
                                                                yes = sqrt(mean((i^2))),
                                                                no = NA)
-                                                        }))
+                                                      }))
                                 MAE <- unlist(lapply(resi,
                                                      function(j) {
                                                        ifelse(test = ! is.null(j),
                                                               yes = mean(abs(j)),
                                                               no = NA)
-                                                       }))
+                                                     }))
                                 CVMAE <- MAE / (unlist(mufit))
                                 kfold <- data.frame(index = c("RMSE",
                                                               "MAE",
@@ -4565,14 +4567,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       replace = TRUE,
                                                       quantreg = FALSE,
                                                       keep.inbag= FALSE)
-                              test$fmod2 <- ranger:::predict.ranger(rfg,
-                                                                    data = test)$predictions
-                              tmp <- dplyr::left_join(sets_long,
-                                                      test[, c("id_act","fmod2")],
-                                                      by = "id_act")
-                              tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
-                              tmp$fmod2 <- NULL
-                              sets_long <- droplevels(tmp)
+                                test$fmod2 <- ranger:::predict.ranger(rfg,
+                                                                      data = test)$predictions
+                                tmp <- dplyr::left_join(sets_long,
+                                                        test[, c("id_act","fmod2")],
+                                                        by = "id_act")
+                                tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
+                                tmp$fmod2 <- NULL
+                                sets_long <- droplevels(tmp)
                               }
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
@@ -4690,18 +4692,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                           specie,
                                                                                                           fishing_mode,
                                                                                                           sep = "_")]]
-                                         res <- t3:::tunapredict(sample_data = current_outputs_level3_process2[[1]],
+                                        res <- t3:::tunapredict(sample_data = current_outputs_level3_process2[[1]],
                                                                 allset_data = sets_long_fishing_mode,
-                                                                                          Ntree = 1000,
-                                                                                          Nmtry = 2,
-                                                                                          Nseed = 7)
+                                                                Ntree = 1000,
+                                                                Nmtry = 2,
+                                                                Nseed = 7)
 
-                                      outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
-                                                                             list(res))
-                                      names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
-                                                                                                                         specie,
-                                                                                                                         fishing_mode,
-                                                                                                                         sep = "_")
+                                        outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
+                                                                               list(res))
+                                        names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
+                                                                                                                           specie,
+                                                                                                                           fishing_mode,
+                                                                                                                           sep = "_")
                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                             " - Process 3.5 (Predictions step) successfull for ocean \"",
                                             ocean,
@@ -4722,7 +4724,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch
                               for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
-                                                                      x = names(outputs_level3_process5[[1]]))]
+                                                                                                   x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- do.call(what = rbind,
                                                             args = outputs_level3_process5_ocean)
                                 boot_tmp_element <- tidyr::spread(data = boot_tmp_element,
@@ -4783,36 +4785,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             ".\n",
                                             sep = "")
                                         if(nrow(sets_long_fishing_mode) > 0){
-                                            current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                              specie,
-                                                                                                              fishing_mode,
-                                                                                                              sep = "_")]]
-                                      boot_output <- tunaboot(sample_data = current_outputs_level3_process2[[1]],
-                                                              allset_data = sets_long_fishing_mode,
-                                                              # model parameters
-                                                              Ntree = 1000,
-                                                              Nmtry = 2,
-                                                              Nseed = 7,
-                                                              # bootstrap parameters
-                                                              Nboot = Nboot,
-                                                              target_period = dplyr::first(x = sets_long_fishing_mode$yr))
+                                          current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
+                                                                                                            specie,
+                                                                                                            fishing_mode,
+                                                                                                            sep = "_")]]
+                                          boot_output <- tunaboot(sample_data = current_outputs_level3_process2[[1]],
+                                                                  allset_data = sets_long_fishing_mode,
+                                                                  # model parameters
+                                                                  Ntree = 1000,
+                                                                  Nmtry = 2,
+                                                                  Nseed = 7,
+                                                                  # bootstrap parameters
+                                                                  Nboot = Nboot,
+                                                                  target_period = dplyr::first(x = sets_long_fishing_mode$yr))
 
-                                      outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
-                                                                             list(boot_output))
-                                      names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
-                                                                                                                         specie,
-                                                                                                                         fishing_mode,
-                                                                                                                         sep = "_")
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 3.5 (Bootstrap step) successfull for ocean \"",
-                                          ocean,
-                                          "\", specie \"",
-                                          specie,
-                                          "\" and fishing mode \"",
-                                          fishing_mode,
-                                          "\"",
-                                          ".\n",
-                                          sep = "")
+                                          outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                                 list(boot_output))
+                                          names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
+                                                                                                                             specie,
+                                                                                                                             fishing_mode,
+                                                                                                                             sep = "_")
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Process 3.5 (Bootstrap step) successfull for ocean \"",
+                                              ocean,
+                                              "\", specie \"",
+                                              specie,
+                                              "\" and fishing mode \"",
+                                              fishing_mode,
+                                              "\"",
+                                              ".\n",
+                                              sep = "")
 
                                         }
                                       }
@@ -4830,8 +4832,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
 
-                                  for(element in (seq.int(from = 1,
-                                                          to = length(outputs_level3_process5_ocean[[1]])))){
+                                for(element in (seq.int(from = 1,
+                                                        to = length(outputs_level3_process5_ocean[[1]])))){
                                   boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
                                   boot_tmp_element <- do.call(what = rbind,
                                                               args = boot_tmp_element)
@@ -4868,26 +4870,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # bootstrap step 3 - compute confident intervals
                               # nominal catch by species (task 1)
-                             t1_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST,
+                              t1_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST,
                                                              function(x){
-                             t1_tmp_element <-aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,
-                                                  data = x,
-                                                  FUN = sum)
-                             return(t1_tmp_element)
+                                                               t1_tmp_element <-aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,
+                                                                                          data = x,
+                                                                                          FUN = sum)
+                                                               return(t1_tmp_element)
                                                              }))
 
                               t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                   function(x){
-                                                                  boot_tmp_element <-do.call(rbind,
-                                                                                             lapply(seq.int(1:length(x)),
-                                                                                                    function(i){
-                                                                                                      boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
-                                                                                                                                       data=x[[i]], sum)
-                                                                    boot_tmp_subelement$loop <- i
-                                                                    return(boot_tmp_subelement)
+                                                                    boot_tmp_element <-do.call(rbind,
+                                                                                               lapply(seq.int(1:length(x)),
+                                                                                                      function(i){
+                                                                                                        boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
+                                                                                                                                         data=x[[i]], sum)
+                                                                                                        boot_tmp_subelement$loop <- i
+                                                                                                        return(boot_tmp_subelement)
+                                                                                                      }))
+                                                                    return(boot_tmp_element)
                                                                   }))
-                                return(boot_tmp_element)
-                              }))
 
 
                               # compute final CI
@@ -4895,7 +4897,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               for (o in levels(t1_all$ocean)){
                                 t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
-                                                                  boot_data = t1_all_boot[t1_all_boot$ocean == o,])
+                                                                                                boot_data = t1_all_boot[t1_all_boot$ocean == o,])
                               }
 
                               t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
@@ -4928,24 +4930,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootstrap distribution
                               t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
-                                boot_tmp_element <-do.call(rbind,
-                                                           lapply(seq.int(1:length(x)),
-                                                                  function(i){
-                                  boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
-                                                                   data=x[[i]],
-                                                                   FUN = sum)
-                                  boot_tmp_subelement$loop <- i
-                                  return(boot_tmp_subelement)
-                                }))
-                                return(boot_tmp_element)
-                              }))
+                                                                     boot_tmp_element <-do.call(rbind,
+                                                                                                lapply(seq.int(1:length(x)),
+                                                                                                       function(i){
+                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
+                                                                                                                                          data=x[[i]],
+                                                                                                                                          FUN = sum)
+                                                                                                         boot_tmp_subelement$loop <- i
+                                                                                                         return(boot_tmp_subelement)
+                                                                                                       }))
+                                                                     return(boot_tmp_element)
+                                                                   }))
 
                               # compute final CI
                               t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
 
                               for (o in levels(t1_fmod$ocean)){
                                 t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
-                                                                   boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
+                                                                                                 boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
                               }
 
                               t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
@@ -4992,8 +4994,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 x$cwp <- latlon2cwp(lat = x$lat,
-                                                  lon = x$lon,
-                                                  base = 1)
+                                                    lon = x$lon,
+                                                    base = 1)
                                 # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
                                 #                                         data_longitude = as.character(x$lon),
                                 #                                         data_latitude = as.character(x$lat),
@@ -5067,187 +5069,187 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # figure task 2 and proportion
 
                               if(plot_predict == T){
-                              sps <- t2
-                              sp::coordinates(object = sps) <- ~ lon + lat
-                              # select for the year
-                              yr_fig = as.character(unique(sps$year))
-                              fmod_fig = unique(sps$fmod)
-                              ocean_fig <- unique(sps$ocean)
-                              # common extent for all figures
-                              wrl <- rastermap(x = 1,
-                                               y = 1)
-                              wrld <- raster::crop(x = wrld_simpl,
-                                                   y = (raster::extent(sps) + 5))
-                              palette4catch <- grDevices::colorRampPalette(c("yellow", "red"))
-                              outputs_level3_process5 <- append(outputs_level3_process5,
-                                                                list(list()))
-                              names(outputs_level3_process5)[length(outputs_level3_process5)] <- "figures"
-                              # map of the proportion
-                              for (specie in unique(sps$sp)) {
-                                if (! specie %in% c("BET", "SKJ", "YFT")) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: process 3.5 not developed yet for the specie \"",
-                                      specie,
-                                      "\".\n",
-                                      sep = "")
-                                } else {
-                                  sps_specie <- sps[sps$sp == specie, ]
-                                  for (fishing_mode in unique(sps_specie$fmod)) {
-                                    sps_fishing_mode <- sps_specie[sps_specie$fmod == fishing_mode, ]
-                                    for (ocean in unique(sps_fishing_mode$ocean)) {
-                                      sps_ocean <- sps_fishing_mode[sps_fishing_mode$ocean == ocean, ]
-                                      for (year in unique(sps_ocean$year)) {
-                                        sps_year <- sps_ocean[sps_ocean$year == year, ]
-                                        figures_directory <- file.path(outputs_path,
-                                                                       "figures",
-                                                                       paste(ocean,
-                                                                             specie,
-                                                                             fishing_mode,
-                                                                             sep = "_"))
-                                        if (file.exists(figures_directory)) {
-                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Outputs \"figures\" directory for ocean \"",
-                                              ocean,
-                                              "\", specie \"",
-                                              specie,
-                                              "\" and fishing mode \"",
-                                              fishing_mode,
-                                              "\" already exists.\n",
-                                              "Outputs associated will used this directory (be careful of overwriting previous files).\n",
-                                              sep = "")
-                                        } else {
-                                          dir.create(figures_directory)
-                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Outputs \"figures\" directory for ocean \"",
-                                              ocean,
-                                              "\", specie \"",
-                                              specie,
-                                              "\" and fishing mode \"",
-                                              fishing_mode,
-                                              "\" created.\n",
-                                              "[directory path: ",
-                                              figures_directory,
-                                              "]\n",
-                                              sep = "")
-                                        }
-                                        # create the raster
-                                        wrl2 <- raster::rasterize(x = sps_year,
-                                                                  y = wrl,
-                                                                  field = "fit_prop_t3_ST")
-                                        wrld_sf <- sf::st_as_sf(x = wrld)
-                                        wrld_df <- as.data.frame(x = wrld)
-                                        r_points = raster::rasterToPoints(x = wrl2)
-                                        r_df = data.frame(r_points)
-                                        f_prop <- ggplot2::ggplot() +
-                                          ggplot2::geom_sf(data = wrld_sf) +
-                                          ggplot2::coord_sf() +
-                                          ggplot2::geom_tile(data = r_df,
-                                                             ggplot2::aes(x = x,
-                                                                          y = year,
-                                                                          fill = layer)) +
-                                          ggplot2::scale_fill_gradient2("Catches (t)",
-                                                                        low = "blue",
-                                                                        high = "red",
-                                                                        mid = "Yellow",
-                                                                        midpoint = 0.5,
-                                                                        limits = c(0,1)) +
-                                          ggplot2::theme_bw() +
-                                          ggplot2::labs(x = "Longitude",
-                                                        y = "Latitude",
-                                                        title = paste(specie,
-                                                                      ifelse(test = fishing_mode == 1,
-                                                                             yes = "FOB",
-                                                                             no = "FSC"),
-                                                                      year,
-                                                                      sep = "-"))
-                                        outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
-                                                                               list(f_prop))
-                                        names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("prop",
-                                                                                                                           year,
-                                                                                                                           ocean,
-                                                                                                                           specie,
-                                                                                                                           fishing_mode,
-                                                                                                                           sep = "_")
-                                        ggplot2::ggsave(plot = f_prop,
-                                                        file = file.path(figures_directory,
-                                                                         paste0("prop_",
-                                                                               year,
-                                                                               "_",
-                                                                               ocean,
-                                                                               "_",
+                                sps <- t2
+                                sp::coordinates(object = sps) <- ~ lon + lat
+                                # select for the year
+                                yr_fig = as.character(unique(sps$year))
+                                fmod_fig = unique(sps$fmod)
+                                ocean_fig <- unique(sps$ocean)
+                                # common extent for all figures
+                                wrl <- rastermap(x = 1,
+                                                 y = 1)
+                                wrld <- raster::crop(x = wrld_simpl,
+                                                     y = (raster::extent(sps) + 5))
+                                palette4catch <- grDevices::colorRampPalette(c("yellow", "red"))
+                                outputs_level3_process5 <- append(outputs_level3_process5,
+                                                                  list(list()))
+                                names(outputs_level3_process5)[length(outputs_level3_process5)] <- "figures"
+                                # map of the proportion
+                                for (specie in unique(sps$sp)) {
+                                  if (! specie %in% c("BET", "SKJ", "YFT")) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: process 3.5 not developed yet for the specie \"",
+                                        specie,
+                                        "\".\n",
+                                        sep = "")
+                                  } else {
+                                    sps_specie <- sps[sps$sp == specie, ]
+                                    for (fishing_mode in unique(sps_specie$fmod)) {
+                                      sps_fishing_mode <- sps_specie[sps_specie$fmod == fishing_mode, ]
+                                      for (ocean in unique(sps_fishing_mode$ocean)) {
+                                        sps_ocean <- sps_fishing_mode[sps_fishing_mode$ocean == ocean, ]
+                                        for (year in unique(sps_ocean$year)) {
+                                          sps_year <- sps_ocean[sps_ocean$year == year, ]
+                                          figures_directory <- file.path(outputs_path,
+                                                                         "figures",
+                                                                         paste(ocean,
                                                                                specie,
-                                                                               "_",
                                                                                fishing_mode,
-                                                                               ".jpeg")),
-                                                        width = 12,
-                                                        height = 10,
-                                                        units = c("cm"),
-                                                        dpi = 300,
-                                                        pointsize = 6)
-                                        # create the raster
-                                        wrl2 <- raster::rasterize(x = sps_year,
-                                                          y = wrl,
-                                                          field =  "catch_t3_N3")
-                                        wrld_sf <- sf::st_as_sf(x = wrld)
-                                        # the world map
-                                        wrld_df <- as.data.frame(x = wrld)
-                                        r_points = raster::rasterToPoints(x = wrl2)
-                                        # t2
-                                        r_df = data.frame(r_points)
-                                        # breaks for the legend
-                                        qt <- raster::quantile(x = r_df$layer,
-                                                               na.rm = T,
-                                                               seq(0.1,1,0.1))
-                                        # catch categories
-                                        r_df$labs <- raster::cut(x = r_df$layer,
-                                                                 right = F,
-                                                                 breaks = unique(c(0, ceiling(qt))))
-                                        f_catch <- ggplot2::ggplot() +
-                                          ggplot2::geom_sf(data = wrld_sf) +
-                                          ggplot2::coord_sf() +
-                                          ggplot2::geom_tile(data = r_df,
-                                                             ggplot2::aes(x = x,
-                                                                          y = year,
-                                                                          fill = labs))+
-                                          ggplot2::scale_fill_manual("Catches (t)",
-                                                                     values = palette4catch(length(levels(r_df$labs)))) +
-                                          ggplot2::theme_bw() +
-                                          ggplot2::labs(x = "Longitude",
-                                                        y = "Latitude",
-                                                        title = paste(specie, ifelse(test = fishing_mode == 1,
-                                                                                     yes = "FOB",
-                                                                                     no = "FSC"),
-                                                                      year,
-                                                                      sep = "-"))
-                                        outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
-                                                                               list(f_catch))
-                                        names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("catch",
-                                                                                                                           year,
-                                                                                                                           ocean,
-                                                                                                                           specie,
-                                                                                                                           fishing_mode,
-                                                                                                                           sep = "_")
-                                        ggplot2::ggsave(plot = f_catch,
-                                                        file = file.path(figures_directory,
-                                                                         paste0("catch_",
-                                                                                year,
-                                                                                "_",
-                                                                                ocean,
-                                                                                "_",
-                                                                                specie,
-                                                                                "_",
-                                                                                fishing_mode,
-                                                                                ".jpeg")),
-                                                        width = 12,
-                                                        height = 10,
-                                                        units = c("cm"),
-                                                        dpi = 300,
-                                                        pointsize = 6)
+                                                                               sep = "_"))
+                                          if (file.exists(figures_directory)) {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Outputs \"figures\" directory for ocean \"",
+                                                ocean,
+                                                "\", specie \"",
+                                                specie,
+                                                "\" and fishing mode \"",
+                                                fishing_mode,
+                                                "\" already exists.\n",
+                                                "Outputs associated will used this directory (be careful of overwriting previous files).\n",
+                                                sep = "")
+                                          } else {
+                                            dir.create(figures_directory)
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Outputs \"figures\" directory for ocean \"",
+                                                ocean,
+                                                "\", specie \"",
+                                                specie,
+                                                "\" and fishing mode \"",
+                                                fishing_mode,
+                                                "\" created.\n",
+                                                "[directory path: ",
+                                                figures_directory,
+                                                "]\n",
+                                                sep = "")
+                                          }
+                                          # create the raster
+                                          wrl2 <- raster::rasterize(x = sps_year,
+                                                                    y = wrl,
+                                                                    field = "fit_prop_t3_ST")
+                                          wrld_sf <- sf::st_as_sf(x = wrld)
+                                          wrld_df <- as.data.frame(x = wrld)
+                                          r_points = raster::rasterToPoints(x = wrl2)
+                                          r_df = data.frame(r_points)
+                                          f_prop <- ggplot2::ggplot() +
+                                            ggplot2::geom_sf(data = wrld_sf) +
+                                            ggplot2::coord_sf() +
+                                            ggplot2::geom_tile(data = r_df,
+                                                               ggplot2::aes(x = x,
+                                                                            y = year,
+                                                                            fill = layer)) +
+                                            ggplot2::scale_fill_gradient2("Catches (t)",
+                                                                          low = "blue",
+                                                                          high = "red",
+                                                                          mid = "Yellow",
+                                                                          midpoint = 0.5,
+                                                                          limits = c(0,1)) +
+                                            ggplot2::theme_bw() +
+                                            ggplot2::labs(x = "Longitude",
+                                                          y = "Latitude",
+                                                          title = paste(specie,
+                                                                        ifelse(test = fishing_mode == 1,
+                                                                               yes = "FOB",
+                                                                               no = "FSC"),
+                                                                        year,
+                                                                        sep = "-"))
+                                          outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                                 list(f_prop))
+                                          names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("prop",
+                                                                                                                             year,
+                                                                                                                             ocean,
+                                                                                                                             specie,
+                                                                                                                             fishing_mode,
+                                                                                                                             sep = "_")
+                                          ggplot2::ggsave(plot = f_prop,
+                                                          file = file.path(figures_directory,
+                                                                           paste0("prop_",
+                                                                                  year,
+                                                                                  "_",
+                                                                                  ocean,
+                                                                                  "_",
+                                                                                  specie,
+                                                                                  "_",
+                                                                                  fishing_mode,
+                                                                                  ".jpeg")),
+                                                          width = 12,
+                                                          height = 10,
+                                                          units = c("cm"),
+                                                          dpi = 300,
+                                                          pointsize = 6)
+                                          # create the raster
+                                          wrl2 <- raster::rasterize(x = sps_year,
+                                                                    y = wrl,
+                                                                    field =  "catch_t3_N3")
+                                          wrld_sf <- sf::st_as_sf(x = wrld)
+                                          # the world map
+                                          wrld_df <- as.data.frame(x = wrld)
+                                          r_points = raster::rasterToPoints(x = wrl2)
+                                          # t2
+                                          r_df = data.frame(r_points)
+                                          # breaks for the legend
+                                          qt <- raster::quantile(x = r_df$layer,
+                                                                 na.rm = T,
+                                                                 seq(0.1,1,0.1))
+                                          # catch categories
+                                          r_df$labs <- raster::cut(x = r_df$layer,
+                                                                   right = F,
+                                                                   breaks = unique(c(0, ceiling(qt))))
+                                          f_catch <- ggplot2::ggplot() +
+                                            ggplot2::geom_sf(data = wrld_sf) +
+                                            ggplot2::coord_sf() +
+                                            ggplot2::geom_tile(data = r_df,
+                                                               ggplot2::aes(x = x,
+                                                                            y = year,
+                                                                            fill = labs))+
+                                            ggplot2::scale_fill_manual("Catches (t)",
+                                                                       values = palette4catch(length(levels(r_df$labs)))) +
+                                            ggplot2::theme_bw() +
+                                            ggplot2::labs(x = "Longitude",
+                                                          y = "Latitude",
+                                                          title = paste(specie, ifelse(test = fishing_mode == 1,
+                                                                                       yes = "FOB",
+                                                                                       no = "FSC"),
+                                                                        year,
+                                                                        sep = "-"))
+                                          outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
+                                                                                 list(f_catch))
+                                          names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste("catch",
+                                                                                                                             year,
+                                                                                                                             ocean,
+                                                                                                                             specie,
+                                                                                                                             fishing_mode,
+                                                                                                                             sep = "_")
+                                          ggplot2::ggsave(plot = f_catch,
+                                                          file = file.path(figures_directory,
+                                                                           paste0("catch_",
+                                                                                  year,
+                                                                                  "_",
+                                                                                  ocean,
+                                                                                  "_",
+                                                                                  specie,
+                                                                                  "_",
+                                                                                  fishing_mode,
+                                                                                  ".jpeg")),
+                                                          width = 12,
+                                                          height = 10,
+                                                          units = c("cm"),
+                                                          dpi = 300,
+                                                          pointsize = 6)
+                                        }
                                       }
                                     }
                                   }
                                 }
-                              }
                               }# link to if(plot_predict)
                               if (exists(x = "data_level3",
                                          envir = .GlobalEnv)) {
