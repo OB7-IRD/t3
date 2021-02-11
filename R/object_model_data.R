@@ -130,6 +130,88 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                sep = "")
                                          }
                                        }
+                                     } else if (data_source == "avdth_db") {
+                                       # avdth db source ----
+                                       if (length(x = class(x = periode_reference)) != 1
+                                           || class(x = periode_reference) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                         stop()
+                                       } else if (length(x = class(x = countries)) != 1
+                                                  || class(x = countries) != "character") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
+                                             sep = "")
+                                         stop()
+                                       } else if (length(x = class(x = oceans)) != 1
+                                                  || class(x = oceans) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                       } else if (class(x = db_con) != "JDBCConnection") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"JDBCConnection\" expected.\n",
+                                             sep = "")
+                                         stop()
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Start trip(s) data importation from avdth database.\n",
+                                             sep = "")
+                                         trips_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                                                                        "avdth_trip.sql",
+                                                                                        package = "t3")),
+                                                            collapse = "\n")
+                                         trips_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                sql = trips_sql,
+                                                                                begin_period = DBI::SQL(paste0("#",
+                                                                                                               (dplyr::first(periode_reference,
+                                                                                                                             order_by = periode_reference) - 1),
+                                                                                                               "-10-01#")),
+                                                                                end_period = DBI::SQL(paste0("#",
+                                                                                                             (dplyr::last(periode_reference,
+                                                                                                                          order_by = periode_reference) + 1),
+                                                                                                             "-03-01#")),
+                                                                                countries = DBI::SQL(paste0("'",
+                                                                                                            paste0(countries,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")),
+                                                                                oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                collapse = ", "))))
+
+                                         cat("[", trips_sql_final, "]\n", sep = "")
+                                         trips_data <- DBI::dbGetQuery(conn = db_con,
+                                                                       statement = trips_sql_final)
+                                         trips_data$trip_id <- as.character(trips_data$trip_id)
+                                         trips_data$fleet <- as.character(trips_data$fleet)
+                                         trips_data$departure_date <- as.character(trips_data$departure_date)
+                                         trips_data$landing_date <- as.character(trips_data$landing_date)
+                                         trips_data$logbook_availability <- as.integer(trips_data$logbook_availability)
+                                         trips_data$fish_hold_empty <- as.integer(trips_data$fish_hold_empty)
+                                         trips_data$vessel_id <- as.integer(trips_data$vessel_id)
+                                         trips_data$vessel_type <- as.character(trips_data$vessel_type)
+                                         if (nrow(x = trips_data) == 0) {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from avdht database.\n",
+                                               sep = "")
+                                         }
+                                       }
                                      } else if (data_source == "sql_query") {
                                        # sql queries source ----
                                        if (class(x = data_path) != "character") {
@@ -439,6 +521,89 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat("[", activities_sql_final, "]\n", sep = "")
                                          activities_data <- DBI::dbGetQuery(conn = db_con,
                                                                             statement = activities_sql_final)
+                                         if (nrow(x = activities_data) == 0) {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activities data importation from T3 database.\n",
+                                               sep = "")
+                                         }
+                                       }
+                                     } else if (data_source == "avdth_db") {
+                                       # avdth db source ----
+                                       if (length(x = class(x = periode_reference)) != 1
+                                           || class(periode_reference) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                       } else if (length(x = class(x = countries)) != 1
+                                                  || class(x = countries) != "character") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(x = class(x = oceans)) != 1
+                                                  || class(x = oceans) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                       } else if (class(db_con) != "JDBCConnection") {
+                                         cat(format(x = Sys.time(),
+                                                    format =  "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"JDBCConnection\" expected.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Start activities data importation from avdth database.\n",
+                                             sep = "")
+                                         activities_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                                                                             "avdth_activities.sql",
+                                                                                             package = "t3")),
+                                                                 collapse = "\n")
+                                         activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                     sql = activities_sql,
+                                                                                     begin_period = DBI::SQL(paste0("#",
+                                                                                                                    (dplyr::first(periode_reference,
+                                                                                                                                  order_by = periode_reference) - 1),
+                                                                                                                    "-10-01#")),
+                                                                                     end_period = DBI::SQL(paste0("#",
+                                                                                                                  (dplyr::last(periode_reference,
+                                                                                                                               order_by = periode_reference) + 1),
+                                                                                                                  "-03-01#")),
+                                                                                     countries = DBI::SQL(paste0("'",
+                                                                                                                 paste0(countries,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                     collapse = ", "))))
+
+                                         cat("[", activities_sql_final, "]\n", sep = "")
+                                         activities_data <- DBI::dbGetQuery(conn = db_con,
+                                                                            statement = activities_sql_final)
+                                         activities_data$trip_id <- as.character(activities_data$trip_id)
+                                         activities_data$activity_id <- as.character(activities_data$activity_id)
+                                         activities_data$ocean <- as.integer(activities_data$ocean)
+                                         activities_data$activity_date <- as.Date(activities_data$activity_date)
+                                         activities_data$activity_number <- as.integer(activities_data$activity_number)
+                                         activities_data$activity_longitude <- as.numeric(activities_data$activity_longitude)
+                                         activities_data$activity_latitude <- as.numeric(activities_data$activity_latitude)
+                                         activities_data$set_count <- as.integer(activities_data$set_count)
+                                         activities_data$school_type <- as.integer(activities_data$school_type)
+                                         activities_data$activity_code <- as.integer(activities_data$activity_code)
+                                         activities_data$activity_name <- as.character(activities_data$activity_name)
+                                         activities_data$time_at_sea <- as.integer(activities_data$time_at_sea)
                                          if (nrow(x = activities_data) == 0) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
