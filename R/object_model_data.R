@@ -613,7 +613,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activities data importation from T3 database.\n",
+                                               " - Successful activities data importation from avdth database.\n",
                                                sep = "")
                                          }
                                        }
@@ -938,7 +938,86 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catches data importation from T3 database.\n",
+                                               " - Successful elementary catches data importation from T3 database.\n",
+                                               sep = "")
+                                         }
+                                       }
+                                     } else if (data_source == "avdth_db") {
+                                       # avdth db source ----
+                                       if (length(x = class(periode_reference)) != 1
+                                           || class(x = periode_reference) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"periode_reference\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                       } else if (length(x = class(x = countries)) != 1
+                                                  || class(x = countries) != "character") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"countries\" argument, ",
+                                             "class \"character\" expected.\n",
+                                             sep = "")
+                                       } else if (length(x = class(x = oceans)) != 1
+                                                  || class(x = oceans) != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument, ",
+                                             "class \"integer\" expected.\n",
+                                             sep = "")
+                                       } else if (class(x = db_con) != "JDBCConnection") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"db_con\" argument, ",
+                                             "class \"JDBCConnection\" expected.\n",
+                                             sep = "")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Start elementary catches data importation from avdth database.\n",
+                                             sep = "")
+                                         elementarycatches_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                                                                                    "avdth_elementarycatches.sql",
+                                                                                                    package = "t3")),
+                                                                        collapse = "\n")
+                                         elementarycatches_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                            sql = elementarycatches_sql,
+                                                                                            begin_period = DBI::SQL(paste0("#",
+                                                                                                                           (dplyr::first(periode_reference,
+                                                                                                                                         order_by = periode_reference) - 1),
+                                                                                                                           "-10-01#")),
+                                                                                            end_period = DBI::SQL(paste0("#",
+                                                                                                                         (dplyr::last(periode_reference,
+                                                                                                                                      order_by = periode_reference) + 1),
+                                                                                                                         "-03-01#")),
+                                                                                            countries = DBI::SQL(paste0("'",
+                                                                                                                        paste0(countries,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")),
+                                                                                            oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                            collapse = ", "))))
+                                         cat("[", elementarycatches_sql_final, "]\n", sep = "")
+                                         elementarycatches_data <- DBI::dbGetQuery(conn = db_con,
+                                                                                   statement = elementarycatches_sql_final)
+                                         elementarycatches_data$activity_id <- as.character(elementarycatches_data$activity_id)
+                                         elementarycatches_data$elementarycatch_id <- as.character(elementarycatches_data$elementarycatch_id)
+                                         elementarycatches_data$ocean <- as.integer(elementarycatches_data$ocean)
+                                         elementarycatches_data$school_type <- as.integer(elementarycatches_data$school_type)
+                                         elementarycatches_data$logbook_category <- as.integer(elementarycatches_data$logbook_category)
+                                         elementarycatches_data$logbook_category_name <- as.character(elementarycatches_data$logbook_category_name)
+                                         elementarycatches_data$specie_code <- as.integer(elementarycatches_data$specie_code)
+                                         elementarycatches_data$specie_code3l <- as.character(elementarycatches_data$specie_code3l)
+                                         elementarycatches_data$catch_weight <- as.numeric(elementarycatches_data$catch_weight)
+                                         if (nrow(x = elementarycatches_data) == 0) {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: no data imported, check the query and query's parameters.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           cat(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary catches data importation from avdth database.\n",
                                                sep = "")
                                          }
                                        }
