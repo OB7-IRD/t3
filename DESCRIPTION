@@ -39,3 +39,5 @@ Imports:
     tools (>= 4.0.3)
 Suggests: 
     testthat (>= 2.1.0)
+Remotes:
+    OB7-IRD/furdeb
