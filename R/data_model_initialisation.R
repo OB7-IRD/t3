@@ -74,9 +74,9 @@ data_model_initialisation <- function(periode_reference,
                                           trips_selected = trips_selected,
                                           db_con = t3_con)
   # model creation: set durations data ----
-  object_model_data$setdurations_data(periode_reference = periode_reference,
-                                     countries = countries,
-                                     db_con = t3_con)
+  object_model_data$setdurationrefs_data(periode_reference = periode_reference,
+                                         countries = countries,
+                                         db_con = t3_con)
   # model creation: length steps data ----
   object_model_data$lengthsteps_data(db_con = t3_con)
   # model creation: sample sets data ----
