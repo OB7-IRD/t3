@@ -3,15 +3,16 @@ SELECT
 		& format(a.C_BAT, '0000')
 		& '#'
 		& YEAR(a.D_DBQ)
-		& format(MONTH(a.D_DBQ), "00")
-		& format(DAY(a.D_DBQ), "00") AS trip_id
+		& format(MONTH(a.D_DBQ), '00')
+		& format(DAY(a.D_DBQ), '00') AS trip_id
 	,'fr.ird.t3.entities.data.Activity#'
 		& format(a.C_BAT, '0000')
 		& '#'
 		& YEAR(a.D_DBQ)
-		& format(MONTH(a.D_DBQ), "00")
-		& format(DAY(a.D_DBQ), "00")
-		& format(a.N_ACT, "00") AS activity_id
+		& format(MONTH(a.D_DBQ), '00')
+		& format(DAY(a.D_DBQ), '00')
+		& format(a.D_ACT, 'YYYYMMDD')
+		& format(a.N_ACT, '00') AS activity_id
 	,a.C_OCEA AS ocean
 	,a.D_ACT AS activity_date
 	,a.N_ACT AS activity_number
@@ -36,14 +37,14 @@ WHERE
 			& format(a.C_BAT, '0000')
 			& '#'
 			& YEAR(a.D_DBQ)
-			& format(MONTH(a.D_DBQ), "00")
-			& format(DAY(a.D_DBQ), "00") IN (SELECT DISTINCT 
+			& format(MONTH(a.D_DBQ), '00')
+			& format(DAY(a.D_DBQ), '00') IN (SELECT DISTINCT 
 												'fr.ird.t3.entities.data.Trip#'
-													& format(a.C_BAT,'0000')
+													& format(a.C_BAT, '0000')
 													& '#'
-													& year(a.D_DBQ)
-													& format(month(a.D_DBQ), "00")
-													& format(day(a.D_DBQ), "00") AS trip_id
+													& YEAR(a.D_DBQ)
+													& format(MONTH(a.D_DBQ), '00')
+													& format(DAY(a.D_DBQ), '00') AS trip_id
 											FROM
 												((ACTIVITE a
 												INNER JOIN BATEAU b ON a.C_BAT = b.C_BAT)

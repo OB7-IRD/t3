@@ -1,9 +1,10 @@
 SELECT
 	'fr.ird.t3.entities.data.Trip#'
-	& format(b.C_BAT,'0000')
-	& '#' & year(m.D_DBQ)
-	& format(month(m.D_DBQ), "00")
-	& format(day(m.D_DBQ), "00") AS trip_id
+		& format(b.C_BAT, '0000')
+		& '#'
+		& YEAR(m.D_DBQ)
+		& format(MONTH(m.D_DBQ), '00')
+		& format(DAY(m.D_DBQ), '00') AS trip_id
 	,p.C_ISO3166_A3 AS fleet
 	,m.D_DEPART AS departure_date
 	,m.D_DBQ AS landing_date
@@ -21,11 +22,16 @@ WHERE
 	m.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
 	AND 'fr.ird.t3.entities.data.Trip#'
-		& format(b.C_BAT,'0000')
-		& '#' & year(m.D_DBQ)
-		& format(month(m.D_DBQ), "00")
-		& format(day(m.D_DBQ), "00") IN (SELECT DISTINCT 
-											'fr.ird.t3.entities.data.Trip#' & format(a.C_BAT,'0000') & '#' & year(a.D_DBQ) & format(month(a.D_DBQ), "00") & format(day(a.D_DBQ), "00") AS trip_id
+		& format(b.C_BAT, '0000')
+		& '#' & YEAR(m.D_DBQ)
+		& format(MONTH(m.D_DBQ), '00')
+		& format(DAY(m.D_DBQ), '00') IN (SELECT DISTINCT 
+											'fr.ird.t3.entities.data.Trip#'
+												& format(a.C_BAT, '0000')
+												& '#'
+												& YEAR(a.D_DBQ)
+												& format(MONTH(a.D_DBQ), '00')
+												& format(DAY(a.D_DBQ), '00') AS trip_id
 										FROM
 											((ACTIVITE a
 											INNER JOIN BATEAU b ON a.C_BAT = b.C_BAT)
