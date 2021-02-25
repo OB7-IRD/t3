@@ -1,11 +1,11 @@
 SELECT
-	'fr.ird.t3.entities.data.Trip#'
-		& format(e.C_BAT,'0000')
+	'fr.ird.avdth.entities.data.Trip#'
+		& format(e.C_BAT, '0000')
 		& '#'
 		& YEAR(e.D_DBQ)
 		& format(MONTH(e.D_DBQ), '00')
 		& format(DAY(e.D_DBQ), '00') AS trip_id
-	,'fr.ird.t3.entities.data.Well#'
+	,'fr.ird.avdth.entities.data.Well#'
 		& format(e.c_bat, '0000')
 		& '#'
 		& YEAR(e.D_DBQ)
@@ -17,7 +17,7 @@ SELECT
 	,e.V_POIDS_M10 AS well_minus10_weigth
 	,e.V_POIDS_P10 AS well_plus10_weigth
 	,e.V_POIDS_ECH AS well_global_weigth
-	,'fr.ird.t3.entities.data.Sample#'
+	,'fr.ird.avdth.entities.data.Sample#'
 		& format(e.c_bat, '0000')
 		& '#'
 		& YEAR(e.D_DBQ)
@@ -48,14 +48,14 @@ WHERE
 	e.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
 	AND e.C_TYP_ECH IN (?sample_type)
-	AND 'fr.ird.t3.entities.data.Trip#'
+	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(e.C_BAT, '0000')
 			& '#'
 			& YEAR(e.D_DBQ)
 			& format(MONTH(e.D_DBQ), '00')
 			& format(DAY(e.D_DBQ), '00') IN (SELECT DISTINCT 
-												'fr.ird.t3.entities.data.Trip#'
-													& format(a.C_BAT,'0000')
+												'fr.ird.avdth.entities.data.Trip#'
+													& format(a.C_BAT, '0000')
 													& '#'
 													& YEAR(a.D_DBQ)
 													& format(MONTH(a.D_DBQ), '00')

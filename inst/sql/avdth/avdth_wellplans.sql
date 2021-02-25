@@ -1,11 +1,11 @@
 SELECT
-	'fr.ird.t3.entities.data.WellPlan#'
+	'fr.ird.avdth.entities.data.WellPlan#'
 		& format(cc.C_BAT, '0000')
 		& '#'
 		& YEAR(cc.D_DBQ)
 		& format(MONTH(cc.D_DBQ), '00')
 		& format(DAY(cc.D_DBQ), '00') AS wellplan_id
-	,'fr.ird.t3.entities.data.Well#'
+	,'fr.ird.avdth.entities.data.Well#'
 		& format(cc.C_BAT, '0000')
 		& '#'
 		& YEAR(cc.D_DBQ)
@@ -14,7 +14,7 @@ SELECT
 		& '.'
 		& cc.N_CUVE
 		& cc.F_POS_CUVE AS well_id
-	,'fr.ird.t3.entities.data.Activity#'
+	,'fr.ird.avdth.entities.data.Activity#'
 		& format(cc.C_BAT, '0000')
 		& '#'
 		& YEAR(cc.D_DBQ)
@@ -22,7 +22,7 @@ SELECT
 		& format(DAY(cc.D_DBQ), '00')
 		& format(cc.D_ACT, 'YYYYMMDD')
 		& format(cc.N_ACT, '00') AS activity_id
-	,'fr.ird.t3.entities.data.Sample#'
+	,'fr.ird.avdth.entities.data.Sample#'
 		& format(cc.C_BAT, '0000')
 		& '#'
 		& YEAR(cc.D_DBQ)
@@ -49,13 +49,13 @@ FROM
 WHERE
 	cc.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
-	AND 'fr.ird.t3.entities.data.Trip#'
+	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(cc.C_BAT, '0000')
 			& '#'
 			& YEAR(cc.D_DBQ)
 			& format(MONTH(cc.D_DBQ), '00')
 			& format(DAY(cc.D_DBQ), '00') IN (SELECT DISTINCT 
-												'fr.ird.t3.entities.data.Trip#'
+												'fr.ird.avdth.entities.data.Trip#'
 													& format(a.C_BAT, '0000')
 													& '#'
 													& YEAR(a.D_DBQ)

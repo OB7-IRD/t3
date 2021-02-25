@@ -1,18 +1,18 @@
 SELECT
-	'fr.ird.t3.entities.data.Activity#'
+	'fr.ird.avdth.entities.data.Activity#'
 		& format(ce.C_BAT, '0000')
 		& '#' 
 		& YEAR(ce.D_DBQ)
-		& format(MONTH(ce.D_DBQ), "00")
-		& format(DAY(ce.D_DBQ), "00")
+		& format(MONTH(ce.D_DBQ), '00')
+		& format(DAY(ce.D_DBQ), '00')
 		& format(ce.D_ACT, 'YYYYMMDD')
-		& format(ce.N_ACT, "00") AS activity_id
-	,'fr.ird.t3.entities.data.ElementaryCatch#'
+		& format(ce.N_ACT, '00') AS activity_id
+	,'fr.ird.avdth.entities.data.ElementaryCatch#'
 		& format(ce.C_BAT, '0000')
 		& '#'
 		& YEAR(ce.D_DBQ)
-		& format(MONTH(ce.D_DBQ), "00")
-		& Format(DAY(ce.D_DBQ), "00")
+		& format(MONTH(ce.D_DBQ), '00')
+		& Format(DAY(ce.D_DBQ), '00')
 		& ce.N_ACT
 		& '.'
 		& ce.N_CAPT AS elementarycatch_id
@@ -33,18 +33,18 @@ FROM
 WHERE
 	a.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
-	AND 'fr.ird.t3.entities.data.Trip#'
+	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(ce.C_BAT, '0000')
 			& '#'
 			& YEAR(ce.D_DBQ)
-			& format(MONTH(ce.D_DBQ), "00")
-			& format(DAY(ce.D_DBQ), "00") IN (SELECT DISTINCT 
-												'fr.ird.t3.entities.data.Trip#'
-													& format(a.C_BAT,'0000')
+			& format(MONTH(ce.D_DBQ), '00')
+			& format(DAY(ce.D_DBQ), '00') IN (SELECT DISTINCT 
+												'fr.ird.avdth.entities.data.Trip#'
+													& format(a.C_BAT, '0000')
 													& '#'
-													& year(a.D_DBQ)
-													& format(month(a.D_DBQ), "00")
-													& format(day(a.D_DBQ), "00") AS trip_id
+													& YEAR(a.D_DBQ)
+													& format(MONTH(a.D_DBQ), '00')
+													& format(DAY(a.D_DBQ), '00') AS trip_id
 											FROM
 												((ACTIVITE a
 												INNER JOIN BATEAU b ON a.C_BAT = b.C_BAT)

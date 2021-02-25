@@ -16,7 +16,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                           public = list(
                             # full trips creation ----
                             #' @description Creation of full trip item from trips.
-                            #' @param object_trips (R6-trips) A R6 reference object of class trips.
+                            #' @param object_trips Object of type R6-trips expected. A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
                               if (paste(class(object_trips), collapse = " ") != "trips list_t3 R6") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -82,7 +82,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # filter full trips by periode_reference ----
                             #' @description Function for filter full trips by a reference periode.
-                            #' @param periode_reference (integer) Year(s) in 4 digits format.
+                            #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
                             filter_by_periode = function(periode_reference) {
                               if (any(class(periode_reference) != "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -139,7 +139,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # add activities ----
                             #' @description Function for add activities in full trips object.
-                            #' @param object_activities (R6-activities) A R6 reference object of class activities.
+                            #' @param object_activities Object of type R6-activities expected. A R6 reference object of class activities.
                             add_activities = function(object_activities) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -173,7 +173,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.
-                            #' @param object_elementarycatches (R6-elementarycatches) A R6 reference object of class elementarycatches.
+                            #' @param object_elementarycatches Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.
                             add_elementarycatches = function(object_elementarycatches) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -213,7 +213,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # add elementary landings ----
                             #' @description Function for add elementary landings in full trips object.
-                            #' @param object_elementarylandings (R6-elementarylandings) A R6 reference object of class elementarylandings.
+                            #' @param object_elementarylandings Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.
                             add_elementarylandings = function(object_elementarylandings) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -247,7 +247,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # add wells and samples ----
                             #' @description Function for add wells and samples caracteristics in full trips object.
-                            #' @param object_wells (R6-wells) A R6 reference object of class wells.
+                            #' @param object_wells Object of type R6-wells expected. A R6 reference object of class wells.
                             add_wells_samples = function(object_wells) {
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -616,6 +616,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_rf2 <- 1
                                           current_trip$.__enclos_env__$private$rf2 <- current_rf2
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 2
+                                          current_elementarycatches <- NULL
+                                          if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                            for (m in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                              current_elementarycatches <- append(current_elementarycatches,
+                                                                                  current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
+                                            }
+                                          }
+                                          if (length(x = current_elementarycatches) != 0) {
+                                            for (k in seq_len(length.out = length(x = current_elementarycatches))) {
+                                              current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1
+                                            }
+                                          }
                                         }
                                       } else {
                                         # case 3 ----
@@ -625,17 +637,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_rf2 <- 1
                                           current_trip$.__enclos_env__$private$rf2 <- current_rf2
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 3
-                                        }
-                                        current_elementarycatches <- NULL
-                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                          for (m in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                            current_elementarycatches <- append(current_elementarycatches,
-                                                                                current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
+                                          current_elementarycatches <- NULL
+                                          if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                            for (m in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                              current_elementarycatches <- append(current_elementarycatches,
+                                                                                  current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$elementarycatches)
+                                            }
                                           }
-                                        }
-                                        if (length(x = current_elementarycatches) != 0) {
-                                          for (k in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1
+                                          if (length(x = current_elementarycatches) != 0) {
+                                            for (k in seq_len(length.out = length(x = current_elementarycatches))) {
+                                              current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[k]]$.__enclos_env__$private$catch_weight_rf1
+                                            }
                                           }
                                         }
                                       }
@@ -1154,9 +1166,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 1.5: set_duration ----
                             #' @description Process for set duration calculation (in hours).
-                            #' @param set_duration_ref (data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).
+                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
                             set_duration = function(set_duration_ref) {
-                              if (length(class(set_duration_ref)) != 1 || class(set_duration_ref) != "data.frame" || dim(set_duration_ref)[2] != 7 || dim(set_duration_ref)[1] < 1) {
+                              if (length(class(set_duration_ref)) != 1
+                                  || class(set_duration_ref) != "data.frame"
+                                  || dim(set_duration_ref)[2] != 7
+                                  || dim(set_duration_ref)[1] < 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"set_duration_ref\" argument, ",
                                     "class \"data.frame\" expected with 7 columns and at least 1 row.",
@@ -1203,7 +1218,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
                                               if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                        & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
+                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                       & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Error: invalid \"set_duration_ref\" argument.\n",
                                                     "No correspondance with activity parameters (ocean and/or school type).\n",
@@ -1237,22 +1253,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               }))
                                                 parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
+                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_a"]
                                                 parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
+                                                                                & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
                                                 current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                                                           & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                                                          & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "null_set_value"]
+                                                                                                                          & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                                                          & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "null_set_value"]
                                               }
                                             } else if (current_activity$.__enclos_env__$private$activity_code == 1) {
                                               # for a set declared as positive (1)
                                               current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
                                               if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                        & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, ])[1] != 1) {
+                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                       & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Error: invalid \"set_duration_ref\" argument.\n",
                                                     "No correspondance with activity parameters (ocean and/or school type).\n",
@@ -1286,10 +1306,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 }))
                                                   parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                   & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_a"]
+                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                  & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_a"]
                                                   parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                   & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type, "parameter_b"]
+                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                  & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_b"]
                                                   current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                                 } else {
                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1433,8 +1455,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 1.7: fishing_time ----
                             #' @description Process for fishing time calculation (in hours).
-                            #' @param sunrise_schema (character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
-                            #' @param sunset_schema (character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
+                            #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
+                            #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
                             #' @details
                             #' Available variables are:
                             #' \itemize{
@@ -1634,7 +1656,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 2.1: sample_length_class_ld1_to_lf ----
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
-                            #' @param length_step (data.frame) Data frame object with length ratio between ld1 and lf class.
+                            #' @param length_step Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.
                             sample_length_class_ld1_to_lf =  function(length_step) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1985,7 +2007,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 2.3: sample_length_class_step_standardisation ----
                             #' @description Process for step standardisation of lf length class.
-                            #' @param maximum_lf_class (integer) Theorical maximum lf class that can occur (all species considerated). By default 500.
+                            #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500)) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2145,7 +2167,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 2.4: well_set_weigth_categories ----
                             #' @description Process for well set weigth categories definition.
-                            #' @param sample_set (data.frame) Data frame object with weighted weigh of each set sampled.
+                            #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             well_set_weigth_categories = function(sample_set) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2612,7 +2634,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
-                            #' @param length_weight_relationship_data (data.frame) Data frame object with parameters for length weight relationship.
+                            #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.
                             standardised_sample_set_creation = function(length_weight_relationship_data) {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -2768,11 +2790,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 2.7: raised_factors_determination ----
                             #' @description Raised factors determination for weigth sample set to set.
-                            #' @param threshold_rf_minus10 (integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.
-                            #' @param threshold_rf_plus10 (integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.
-                            #' @param threshold_frequency_rf_minus10 (integer) Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
-                            #' @param threshold_frequency_rf_plus10 (integer) Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
-                            #' @param threshold_rf_total (integer) Threshold limite value for raising factor (all categories). By default 250.
+                            #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
+                            #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
+                            #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
+                            #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
+                            #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
@@ -3207,19 +3229,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
-                            #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
-                            #' @param inputs_level3_path (character) Path to the folder containing yearly data ouptut of the level 1 and 2.
-                            #' @param outputs_directory (character) Path of the t3 processes outputs directory.
-                            #' @param periode_reference (integer) Year(s) period of reference for modelling estimation.
-                            #' @param target_year (integer) Year of interest for the model estimaton and prediction.Default value is current year -1.
-                            #' @param period_duration (integer) number of year use for the modelling. The default value is 5
-                            #' @param distance_maximum (integer) Maximum distance between all sets of a sampled well. By default 5.
-                            #' @param number_sets_maximum (integer) Maximum number of sets allowed in mixture. By default 5.
-                            #' @param set_weight_minimum (integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.
-                            #' @param minimum_set_frequency (numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.
-                            #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).
+                            #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data ouptut of the level 1 and 2.
+                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.
+                            #' @param periode_reference Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimaton and prediction.Default value is current year -1.
+                            #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of year use for the modelling. The default value is 5
+                            #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
+                            #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
+                            #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.
+                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.
+                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
                             data_preparatory = function(inputs_level3 = NULL,
-                                                        inputs_level3_path,
+                                                        inputs_level3_path = NULL,
                                                         outputs_directory,
                                                         periode_reference = NULL,
                                                         target_year = as.integer(lubridate::year(Sys.time()-1)),
@@ -3290,46 +3312,48 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   periode_reference <- seq.int(from = target_year,
                                                                to = target_year - period_duration)
                                 }
-                                # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
-                                file_available <- list.files(path = inputs_level3_path,
-                                                             pattern = "inputs_level3_")
-                                file_year <-  as.numeric(do.call(rbind,
-                                                                 strsplit(x = file_available,
-                                                                          split = "_"))[,3])
-                                target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
-                                dataset_target <- vector("list",
-                                                         length = 5)
-                                names(dataset_target) <- c("act_chr",
-                                                           "catch_set_lb",
-                                                           "samw",
-                                                           "sset",
-                                                           "wp")
-                                dataset_target<- lapply(dataset_target,
-                                                        function(x){
-                                                          x <- vector("list",
-                                                                      length = length(target_file))
-                                                        })
-                                for(x in seq_len(length.out = length(target_file))){
-                                  load(file.path(inputs_level3_path,
-                                                 target_file[x],
-                                                 fsep ="\\"))
-                                  # sets characteristics
-                                  dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
-                                  # catch by set, species and categories from logbook (t3 level 1)
-                                  dataset_target$catch_set_lb[[x]] <- data_level3[[1]][[2]]
-                                  # catch by set, species and categories (t3 level 2)
-                                  dataset_target$samw[[x]] <- data_level3[[1]][[3]]
-                                  # link between sample and set, + sample quality and type
-                                  dataset_target$sset[[x]] <- data_level3[[1]][[4]]
-                                  # well plan
-                                  dataset_target$wp[[x]] <- data_level3[[1]][[5]]
+                                if (!is.null(inputs_level3_path)) {
+                                  # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
+                                  file_available <- list.files(path = inputs_level3_path,
+                                                               pattern = "inputs_level3_")
+                                  file_year <-  as.numeric(do.call(rbind,
+                                                                   strsplit(x = file_available,
+                                                                            split = "_"))[,3])
+                                  target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
+                                  dataset_target <- vector("list",
+                                                           length = 5)
+                                  names(dataset_target) <- c("act_chr",
+                                                             "catch_set_lb",
+                                                             "samw",
+                                                             "sset",
+                                                             "wp")
+                                  dataset_target<- lapply(dataset_target,
+                                                          function(x){
+                                                            x <- vector("list",
+                                                                        length = length(target_file))
+                                                          })
+                                  for(x in seq_len(length.out = length(target_file))){
+                                    load(file.path(inputs_level3_path,
+                                                   target_file[x],
+                                                   fsep ="\\"))
+                                    # sets characteristics
+                                    dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
+                                    # catch by set, species and categories from logbook (t3 level 1)
+                                    dataset_target$catch_set_lb[[x]] <- data_level3[[1]][[2]]
+                                    # catch by set, species and categories (t3 level 2)
+                                    dataset_target$samw[[x]] <- data_level3[[1]][[3]]
+                                    # link between sample and set, + sample quality and type
+                                    dataset_target$sset[[x]] <- data_level3[[1]][[4]]
+                                    # well plan
+                                    dataset_target$wp[[x]] <- data_level3[[1]][[5]]
+                                  }
+                                  dataset_target <- lapply(X = dataset_target,
+                                                           FUN = function(x){
+                                                             return(unique(do.call(rbind,x)))
+                                                           })
+                                  # stock raw data
+                                  inputs_level3 <- dataset_target
                                 }
-                                dataset_target <- lapply(X = dataset_target,
-                                                         FUN = function(x){
-                                                           return(unique(do.call(rbind,x)))
-                                                         })
-                                # stock raw data
-                                inputs_level3 <- dataset_target
                                 # sets characteristics
                                 act_chr <- inputs_level3[[1]]
                                 # catch by set, species and categories from logbook (t3 level 1)
@@ -3593,11 +3617,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.2: random forest models ----
                             #' @description Modelling proportions in sets througth random forest models.
-                            #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
-                            #' @param num.trees (integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
-                            #' @param mtry Number of variables randomly sampled as candidates at each split. The default value is 2.
-                            #' @param min.node.size Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
-                            #' @param seed_number  Set the initial seed for the modelling. The default value is 7.
+                            #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
+                            #' @param num.trees Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
+                            #' @param mtry Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.
+                            #' @param min.node.size Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
+                            #' @param seed_number Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.
                             random_forest_models = function(outputs_level3_process1,
                                                             num.trees = 1000L,
                                                             mtry = 2L,
@@ -3731,8 +3755,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.3: models checking ----
                             #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
-                            #' @param outputs_level3_process2 (list) Outputs models and data from process 3.2.
-                            #' @param outputs_path (character) Outputs directory path.
+                            #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
+                            #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             models_checking = function(outputs_level3_process2,
                                                        outputs_path) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -4449,10 +4473,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.4: data formatting for predictions ----
                             #' @description Formatting data for model predictions.
-                            #' @param inputs_level3 (data frame) Imputs of levels 3 (see function path to level 3).
-                            #' @param outputs_level3_process1 (data frame) Output table data_lb_sample_screened from process 3.1.
-                            #' @param target_year (integer) The year of interest for the model estimaton and prediction.
-                            #' @param vessel_id_ignored (integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).
+                            #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimaton and prediction.
+                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        outputs_level3_process1,
                                                                        target_year,
@@ -4600,12 +4624,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.5: model predictions ----
                             #' @description Model predictions for the species composition and computing of catches.
-                            #' @param outputs_level3_process2 (list) Outputs from level 3 process 2 (random forest models).
-                            #' @param outputs_level3_process4 (list) Outputs from level 3 process 4 (data formatting for predictions).
-                            #' @param outputs_path (character) Outputs directory path.
-                            #' @param ci Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
-                            #' @param Nboot The number of bootstrap samples desired for the ci computation. The default value is 10.
-                            #' @param plot_predict Logical indicating whether maps of catch at size have to be done.
+                            #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
+                            #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
+                            #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
+                            #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
+                            #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
                                                          outputs_path,
@@ -4972,7 +4996,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          row.names = FALSE)
 
                               ## catch effort (task2)
-                              browser()
                               # function for rounding, rounding up and down to a specific base
                               mtrunc <- function(x,base){
                                 base*trunc(x/base)

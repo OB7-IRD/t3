@@ -9,11 +9,11 @@
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
+                                   #' @param data_source  Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db", "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
+                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db", "avdth_db" and "sql_query".
+                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
+                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
+                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
                                    #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
@@ -1629,7 +1629,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
+                                   #' @param sample_type Object of class {\link[base]{integer}} expected. Sample type identification (landing, observer, ...). By default NULL.
                                    #' @param data_path_samples Object of class {\link[base]{character}} expected. Path of the data sql/csv file for samples. By default NULL.
                                    #' @param data_path_wellplans Object of class {\link[base]{character}} expected. Path of the data sql/csv file for well plans. By default NULL.
                                    wells_object_creation = function(data_source = "t3_db",
@@ -2697,6 +2697,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                         null_set_value = c(111.2, 142.7, 123.0, 125.7, 140.2, 133.1))
                                      set_duration_refs_data <- rbind(set_duration_refs_data,
                                                                      set_duration_ref_tmp)
+                                     # manual typage ----
+                                     if (data_source %in% c("csv")) {
+                                       set_duration_refs_data$year <- as.integer(set_duration_refs_data$year)
+                                       set_duration_refs_data$country <- as.character(set_duration_refs_data$country)
+                                       set_duration_refs_data$ocean <- as.integer(set_duration_refs_data$ocean)
+                                       set_duration_refs_data$school_type <- as.integer(set_duration_refs_data$school_type)
+                                       set_duration_refs_data$parameter_a <- as.numeric(set_duration_refs_data$parameter_a)
+                                       set_duration_refs_data$parameter_b <- as.numeric(set_duration_refs_data$parameter_b)
+                                       set_duration_refs_data$null_set_value <- as.numeric(set_duration_refs_data$null_set_value)
+                                     }
                                      private$setdurationrefs <- set_duration_refs_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
@@ -3559,6 +3569,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            "(\"t3_db\", \"sql_query\", \"csv\", \"rdata\" or \"envir\" expected).\n",
                                            sep = "")
                                        stop()
+                                     }
+                                     # manual typage ----
+                                     if (data_source %in% c("csv")) {
+                                       lengthweightrelationships_data$ocean <- as.integer(lengthweightrelationships_data$ocean)
+                                       lengthweightrelationships_data$specie_code <- as.integer(lengthweightrelationships_data$specie_code)
+                                       lengthweightrelationships_data$specie_code3l <- as.character(lengthweightrelationships_data$specie_code3l)
+                                       lengthweightrelationships_data$lwr_a <- as.numeric(lengthweightrelationships_data$lwr_a)
+                                       lengthweightrelationships_data$lwr_b <- as.numeric(lengthweightrelationships_data$lwr_b)
                                      }
                                      private$lengthweightrelationships <- lengthweightrelationships_data
                                    }

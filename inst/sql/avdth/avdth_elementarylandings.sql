@@ -1,12 +1,12 @@
 SELECT
 	'fr.ird.avdth.entities.data.Trip#'
-		& format(lc.C_BAT,'0000')
+		& format(lc.C_BAT, '0000')
 		& '#'
 		& YEAR(lc.D_DBQ)
 		& format(MONTH(lc.D_DBQ), '00')
 		& format(DAY(lc.D_DBQ), '00') AS trip_id
 	,'fr.ird.avdth.entities.data.ElementaryLanding#'
-		& format(lc.C_BAT,'0000')
+		& format(lc.C_BAT, '0000')
 		& '#'
 		& YEAR(lc.D_DBQ)
 		& format(MONTH(lc.D_DBQ), '00')
@@ -29,14 +29,14 @@ FROM
 WHERE
 	lc.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
-	AND 'fr.ird.t3.entities.data.Trip#'
+	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(lc.C_BAT, '0000')
 			& '#'
 			& YEAR(lc.D_DBQ)
 			& format(MONTH(lc.D_DBQ), '00')
 			& format(DAY(lc.D_DBQ), '00') IN (SELECT DISTINCT 
-												'fr.ird.t3.entities.data.Trip#'
-													& format(a.C_BAT,'0000')
+												'fr.ird.avdth.entities.data.Trip#'
+													& format(a.C_BAT, '0000')
 													& '#'
 													& YEAR(a.D_DBQ)
 													& format(MONTH(a.D_DBQ), '00')

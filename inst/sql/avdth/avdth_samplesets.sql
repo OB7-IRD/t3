@@ -1,11 +1,11 @@
 SELECT
-	'fr.ird.t3.entities.data.Trip#'
+	'fr.ird.avdth.entities.data.Trip#'
 		& format(ec.C_BAT, '0000')
 		& '#'
 		& YEAR(ec.D_DBQ)
 		& format(MONTH(ec.D_DBQ), '00')
 		& format(DAY(ec.D_DBQ), '00') AS trip_id
-	,'fr.ird.t3.entities.data.Activity#'
+	,'fr.ird.avdth.entities.data.Activity#'
 		& format(ec.C_BAT, '0000')
 		& '#'
 		& YEAR(ec.D_DBQ)
@@ -13,7 +13,7 @@ SELECT
 		& format(DAY(ec.D_DBQ), '00')
 		& format(ec.D_ACT, 'YYYYMMDD')
 		& format(ec.N_ACT, '00') AS activity_id
-	,'fr.ird.t3.entities.data.Well#'
+	,'fr.ird.avdth.entities.data.Well#'
 		& format(ec.C_BAT, '0000')
 		& '#'
 		& YEAR(ec.D_DBQ)
@@ -22,7 +22,7 @@ SELECT
 		& '.'
 		& e.N_CUVE
 		& e.F_POS_CUVE AS well_id
-	,'fr.ird.t3.entities.data.Sample#'
+	,'fr.ird.avdth.entities.data.Sample#'
 		& format(ec.C_BAT, '0000')
 		& '#'
 		& YEAR(ec.D_DBQ)
@@ -42,13 +42,13 @@ FROM
 WHERE
 	ec.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
-	AND 'fr.ird.t3.entities.data.Trip#'
+	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(ec.C_BAT, '0000')
 			& '#'
 			& YEAR(ec.D_DBQ)
 			& format(MONTH(ec.D_DBQ), '00')
 			& format(DAY(ec.D_DBQ), '00') IN (SELECT DISTINCT 
-												'fr.ird.t3.entities.data.Trip#'
+												'fr.ird.avdth.entities.data.Trip#'
 													& format(a.C_BAT, '0000')
 													& '#'
 													& YEAR(a.D_DBQ)

@@ -11,7 +11,4 @@ FROM
 	JOIN public.country c ON (sd.country = c.topiaid)
 	JOIN public.ocean o ON (sd.ocean = o.topiaid)
 	JOIN public.schooltype st ON (sd.schooltype = st.topiaid)
-WHERE
-	sd.year IN (?period)
-	AND c.codeiso3 IN (?countries)
 ;

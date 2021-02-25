@@ -1,24 +1,27 @@
 #' @name data_model_initialisation
 #' @title Data model initialisation
-#' @description Shortcut for initialisation of data's object model from a t3 database.
-#' @param periode_reference (integer) Year(s) of the reference period coded on 4 digits.
-#' @param countries (character) ISO code on 3 letters related to one or more countries.
-#' @param oceans (integer) Ocean(s) related to data coded on 1 digit.
-#' @param db_con (PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.
-#' @param log_file (logical) Initiation or not for log file creation. By default FALSE (no).
-#' @param log_path (character) Path of the log file directory. By default NULL.
-#' @param log_name (character) Name of the log file. By default "data_model_initialisation".
-#' @param trips_selected (character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.
+#' @description Shortcut for initialisation of data's object model from a t3 or a avdth database.
+#' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".
+#' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.
+#' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
+#' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
+#' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".
+#' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.
+#' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.
+#' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.
+#' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
+#' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
 #' @return The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
 #' @export
-data_model_initialisation <- function(periode_reference,
-                                      countries,
-                                      oceans,
+data_model_initialisation <- function(data_source = "t3_db",
                                       db_con,
-                                      sample_type,
                                       log_file = FALSE,
                                       log_path = NULL,
                                       log_name = "data_model_initialisation",
+                                      periode_reference,
+                                      countries,
+                                      oceans,
+                                      sample_type,
                                       trips_selected = NULL) {
   # log file initialisation ----
   t3::initiate_log_file(log_file = log_file,
@@ -27,66 +30,92 @@ data_model_initialisation <- function(periode_reference,
   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
       " - Start function data model initialisation.\n",
       "[periode reference: ",
-      paste0(periode_reference, collapse = ", "),
+      paste0(periode_reference,
+             collapse = ", "),
       "; countries: ",
-      paste0(countries, collapse = ", "),
+      paste0(countries,
+             collapse = ", "),
       "; oceans: ",
-      paste0(oceans, collapse = ", "),
+      paste0(oceans,
+             collapse = ", "),
       "; sample type: ",
       sample_type,
       ifelse(test = is.null(trips_selected),
              yes = "]\n",
              no = paste0(", trips selected: ",
-                         paste0(trips_selected, collapse = ", "),
+                         paste0(trips_selected,
+                                collapse = ", "),
                          "]\n")),
       sep = "")
   # initialisation object for data's object model ----
   object_model_data <- t3:::object_model_data$new()
   # model creation: object trips creation ----
-  object_model_data$trips_object_creation(periode_reference = periode_reference,
+  object_model_data$trips_object_creation(data_source = data_source,
+                                          db_con = db_con,
+                                          periode_reference = periode_reference,
                                           countries = countries,
                                           oceans = oceans,
-                                          trips_selected = trips_selected,
-                                          db_con = t3_con)
+                                          trips_selected = trips_selected)
   # model creation: object activites creation ----
-  object_model_data$activities_object_creation(periode_reference = periode_reference,
+  object_model_data$activities_object_creation(data_source = data_source,
+                                               db_con = db_con,
+                                               periode_reference = periode_reference,
                                                countries = countries,
                                                oceans = oceans,
-                                               trips_selected = trips_selected,
-                                               db_con = t3_con)
+                                               trips_selected = trips_selected)
   # model creation: object elementarycatches creation ----
-  object_model_data$elementarycatches_object_creation(periode_reference = periode_reference,
+  object_model_data$elementarycatches_object_creation(data_source = data_source,
+                                                      db_con = db_con,
+                                                      periode_reference = periode_reference,
                                                       countries = countries,
                                                       oceans = oceans,
-                                                      trips_selected = trips_selected,
-                                                      db_con = t3_con)
+                                                      trips_selected = trips_selected)
   # model creation: object elementarylandings creation ----
-  object_model_data$elementarylandings_object_creation(periode_reference = periode_reference,
+  object_model_data$elementarylandings_object_creation(data_source = data_source,
+                                                       db_con = db_con,
+                                                       periode_reference = periode_reference,
                                                        countries = countries,
                                                        oceans = oceans,
-                                                       trips_selected = trips_selected,
-                                                       db_con = t3_con)
+                                                       trips_selected = trips_selected)
   # model creation: object wells creation ----
-  object_model_data$wells_object_creation(periode_reference = periode_reference,
+  object_model_data$wells_object_creation(data_source = data_source,
+                                          db_con = db_con,
+                                          periode_reference = periode_reference,
                                           countries = countries,
                                           oceans = oceans,
                                           sample_type = sample_type,
-                                          trips_selected = trips_selected,
-                                          db_con = t3_con)
+                                          trips_selected = trips_selected)
   # model creation: set durations data ----
-  object_model_data$setdurationrefs_data(periode_reference = periode_reference,
-                                         countries = countries,
-                                         db_con = t3_con)
+  if (data_source == "avdth_db") {
+    object_model_data$setdurationrefs_data(data_source = "csv",
+                                           data_path = system.file("t3_setdurationrefs.csv",
+                                                                   package = "t3"),
+                                           periode_reference = periode_reference,
+                                           countries = countries)
+  } else {
+    object_model_data$setdurationrefs_data(data_source = data_source,
+                                           db_con = db_con,
+                                           periode_reference = periode_reference,
+                                           countries = countries)
+  }
   # model creation: length steps data ----
-  object_model_data$lengthsteps_data(db_con = t3_con)
+  object_model_data$lengthsteps_data(data_source = data_source,
+                                     db_con = db_con)
   # model creation: sample sets data ----
-  object_model_data$samplesets_data(periode_reference = periode_reference,
+  object_model_data$samplesets_data(data_source = data_source,
+                                    db_con = db_con,
+                                    periode_reference = periode_reference,
                                     countries = countries,
                                     oceans = oceans,
-                                    trips_selected = trips_selected,
-                                    db_con = t3_con)
+                                    trips_selected = trips_selected)
   # model creation: length weight relationships data ----
-  object_model_data$lengthweightrelationships_data(db_con = t3_con)
+  if (data_source == "avdth_db") {
+    object_model_data$lengthweightrelationships_data(data_source = "csv",
+                                                     data_path = system.file("t3_lengthweightrelationships.csv",
+                                                                             package = "t3"))
+  } else {
+    object_model_data$lengthweightrelationships_data(db_con = t3_con)
+  }
   # model creation: initialisation object for full trips class ----
   object_full_trips <- t3:::full_trips$new()
   # model creation: object full_trip creation ----
