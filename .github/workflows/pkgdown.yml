@@ -64,6 +64,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          R CMD javareconf
           install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_github("krlmlr/pkgdown@fix/examples-dontshow")
