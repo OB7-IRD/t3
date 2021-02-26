@@ -33,6 +33,10 @@ jobs:
           export LD_LIBRARY_PATH=$JAVA_LD_LIBRARY_PATH
           sudo R CMD javareconf
 
+      - name: install rJava
+        run: install.packages("rJava")
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-pandoc@v1
       
       - uses: r-lib/actions/setup-tinytex@v1
