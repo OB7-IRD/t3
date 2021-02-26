@@ -40,7 +40,7 @@ jobs:
 
       - name: Install furdeb
         run: |
-          pak::pkg_install("devtools")
+          install.packages("rJava", dependencies = TRUE)
           pak::pkg_install("OB7-IRD/furdeb")
         shell: Rscript {0}
 
