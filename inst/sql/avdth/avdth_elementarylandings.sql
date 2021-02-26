@@ -21,14 +21,17 @@ SELECT
 	,e.C_ESP_3L AS specie_code3l
 	,SUM(lc.V_POIDS_LC) AS landing_weight
 FROM
-	((((LOT_COM lc
+	((((((LOT_COM lc
 	INNER JOIN CAT_COM cc ON lc.C_ESP = cc.C_ESP AND lc.C_CAT_C = cc.C_CAT_C)
 	INNER JOIN ESPECE e ON lc.C_ESP = e.C_ESP)
 	INNER JOIN BATEAU b ON lc.C_BAT = b.C_BAT)
+	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
+	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	lc.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(lc.C_BAT, '0000')
 			& '#'

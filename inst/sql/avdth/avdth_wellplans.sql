@@ -40,15 +40,18 @@ SELECT
 	,cc.C_CAT_POIDS AS wellplan_weigth_category_code
 	,cp.L_CAT_POIDS AS wellplan_weigth_category_label
 FROM
-	(((((CUVE_CALEE cc
+	(((((((CUVE_CALEE cc
 	LEFT JOIN ECHANTILLON e ON (cc.F_POS_CUVE = e.F_POS_CUVE) AND (cc.N_CUVE = e.N_CUVE) AND (cc.D_DBQ = e.D_DBQ) AND (cc.C_BAT = e.C_BAT))
 	INNER JOIN ESPECE es ON cc.C_ESP = es.C_ESP)
 	INNER JOIN CAT_POIDS cp ON cc.C_CAT_POIDS = cp.C_CAT_POIDS)
 	INNER JOIN BATEAU b ON cc.C_BAT = b.C_BAT)
+	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
+	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	cc.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(cc.C_BAT, '0000')
 			& '#'

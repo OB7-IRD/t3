@@ -26,13 +26,16 @@ SELECT
 	,o.L_OPERA AS activity_name
 	,a.V_TMER AS time_at_sea
 FROM
-	(((ACTIVITE a
+	(((((ACTIVITE a
 	INNER JOIN OPERA o ON a.C_OPERA = o.C_OPERA)
 	INNER JOIN BATEAU b ON a.C_BAT = b.C_BAT)
+	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
+	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	a.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(a.C_BAT, '0000')
 			& '#'

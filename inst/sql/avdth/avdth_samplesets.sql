@@ -35,13 +35,16 @@ SELECT
 		& e.N_ECH AS sample_id
 	,ec.V_POND AS well_set_weighted_weight
 FROM
-	(((ECH_CALEE ec
+	(((((ECH_CALEE ec
 	INNER JOIN ECHANTILLON e ON e.C_BAT = ec.C_BAT AND ec.D_DBQ = e.D_DBQ AND ec.N_ECH = e.N_ECH)
 	INNER JOIN BATEAU b ON ec.C_BAT = b.C_BAT)
+	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
+	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	ec.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(ec.C_BAT, '0000')
 			& '#'

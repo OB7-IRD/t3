@@ -38,16 +38,19 @@ SELECT
 	,ef.V_EFF AS sample_number_measured
 	,ef.V_LONG AS sample_length_class
 FROM
-	(((((ECHANTILLON e
+	(((((((ECHANTILLON e
 	INNER JOIN ECH_ESP ee ON e.C_BAT = ee.C_BAT AND e.D_DBQ = ee.D_DBQ AND e.N_ECH = ee.N_ECH)
 	INNER JOIN ECH_FREQT ef ON ee.C_BAT = ef.C_BAT AND ee.D_DBQ = ef.D_DBQ AND ee.N_ECH =ef.N_ECH AND ee.N_S_ECH = ef.N_S_ECH AND ee.C_ESP = ef.C_ESP AND ee.F_LDLF = ef.F_LDLF)
 	INNER JOIN ESPECE es ON es.C_ESP = ee.C_ESP)
 	INNER JOIN BATEAU b ON e.C_BAT = b.C_BAT)
+	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
+	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	e.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
 	AND e.C_TYP_ECH IN (?sample_type)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(e.C_BAT, '0000')
 			& '#'

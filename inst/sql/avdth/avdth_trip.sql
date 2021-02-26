@@ -21,6 +21,7 @@ FROM
 WHERE
 	m.D_DBQ BETWEEN ?begin_period AND ?end_period
 	AND p.C_ISO3166_A3 IN (?countries)
+	AND ttb.C_TYP_TYPE_B IN (1)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 		& format(b.C_BAT, '0000')
 		& '#' & YEAR(m.D_DBQ)
