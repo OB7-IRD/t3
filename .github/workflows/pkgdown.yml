@@ -41,11 +41,11 @@ jobs:
         run: |
           install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
           saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
-          pak::pkg_install("OB7-IRD/furdeb")
         shell: Rscript {0}
 
       - name: Install furdeb
         run: |
+          pak::pkg_install("devtools")
           pak::pkg_install("OB7-IRD/furdeb")
         shell: Rscript {0}
 
