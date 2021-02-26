@@ -33,8 +33,10 @@ jobs:
           export LD_LIBRARY_PATH=$JAVA_LD_LIBRARY_PATH
           sudo R CMD javareconf
 
-      - name: install rJava
-        run: install.packages("rJava")
+      - name: install furdeb
+        run: |
+          install.packages("devtools")
+          devtools::install_github("https://github.com/OB7-IRD/furdeb")
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-pandoc@v1
