@@ -57,6 +57,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          Sys.setenv(JAVA_HOME = "/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64")
           pak::local_install_dev_deps(upgrade = TRUE)
           pak::pkg_install("pkgdown")
         shell: Rscript {0}
