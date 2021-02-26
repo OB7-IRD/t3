@@ -33,12 +33,6 @@ jobs:
           export LD_LIBRARY_PATH=$JAVA_LD_LIBRARY_PATH
           sudo R CMD javareconf
 
-      - name: install furdeb
-        run: |
-          install.packages("devtools")
-          devtools::install_github("https://github.com/OB7-IRD/furdeb")
-        shell: Rscript {0}
-
       - uses: r-lib/actions/setup-pandoc@v1
       
       - uses: r-lib/actions/setup-tinytex@v1
@@ -47,6 +41,12 @@ jobs:
         run: |
           install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
           saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
+          pak::pkg_install("OB7-IRD/furdeb")
+        shell: Rscript {0}
+
+      - name: Install furdeb
+        run: |
+          pak::pkg_install("OB7-IRD/furdeb")
         shell: Rscript {0}
 
       - name: Cache R packages
