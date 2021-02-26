@@ -43,7 +43,9 @@ jobs:
 
       - name: Install furdeb
         run: |
-          install.packages("rJava", dependencies = TRUE)
+          Sys.getenv(x="JAVA_HOME")
+          Sys.setenv(JAVA_HOME="/opt/hostedtoolcache/jre/8.0.282/x86")
+          Sys.getenv(x="JAVA_HOME")
           pak::pkg_install("OB7-IRD/furdeb")
         shell: Rscript {0}
 
