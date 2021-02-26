@@ -17,8 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: install java
-        run: sudo apt install openjdk-8-jre
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '1.8.0' # The version to make available on the path.
+          java-package: jre # (jre, jdk, or jdk+fx) - defaults to jdk
+          architecture: x86 # (x64 or x86) - defaults to x64
 
       - uses: r-lib/actions/setup-r@v1
         with:
