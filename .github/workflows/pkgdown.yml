@@ -32,7 +32,11 @@ jobs:
               architecture: x64 # (x64 or x86) - defaults to x64
               
           - name: Configurate java
-            run: sudo R CMD javareconf
+            run: |
+              sudo R CMD javareconf
+              sudo rstudio-server stop
+              export LD_LIBRARY_PATH=/usr/lib/jvm/jre/lib/amd64:/usr/lib/jvm/jre/lib/amd64/default
+              sudo rstudio-server start
 
           - uses: r-lib/actions/setup-pandoc@v1
           
