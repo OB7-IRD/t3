@@ -1,37 +1,59 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-#
-# See https://github.com/r-lib/actions/tree/master/examples#readme for
-# additional example workflows available for the R community.
-
-name: R
-
 on:
   push:
-    branches: [ doc-test-level-1 ]
-  pull_request:
-    branches: [ doc-test-level-1 ]
+    branches:
+    - master
+    - doc-test-level-1
+    - development
+
+name: Test
 
 jobs:
-  build:
+  pkgdown:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        r-version: [4.0]
+    env:
+      RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      isPush: ${{ github.event_name == 'push' }}
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up R ${{ matrix.r-version }}
-        uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
-        with:
-          r-version: ${{ matrix.r-version }}
-      - name: Install dependencies
-        run: |
-          install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
-      - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
-        shell: Rscript {0}
+          - uses: actions/checkout@v2
+
+          - name: Install java and configurate on R
+            run: |
+              sudo apt-get install default-jre
+              sudo apt-get install default-jdk
+              sudo R CMD javareconf
+          - uses: r-lib/actions/setup-r@v1
+            with:
+              r-version: '4.0.0'
+            id: install-r
+            
+          - name: Install furdeb
+            run: |
+              Sys.getenv("JAVA_HOME")
+              pak::pkg_install("OB7-IRD/furdeb")
+            shell: Rscript {0}
+            
+          - name: Install system dependencies
+            if: runner.os == 'Linux'
+            run: |
+              pak::local_system_requirements(execute = TRUE)
+              pak::pkg_system_requirements("pkgdown", execute = TRUE)
+            shell: Rscript {0}
+
+          - name: Install dependencies
+            run: |
+              pak::local_install_dev_deps(upgrade = TRUE)
+              pak::pkg_install("pkgdown")
+            shell: Rscript {0}
+
+          - name: Install package
+            run: R CMD INSTALL .
+
+          - name: Build and deploy pkgdown site
+            if: contains(env.isPush, 'true')
+            run: |
+              git config --local user.name "$GITHUB_ACTOR"
+              git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+              Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
