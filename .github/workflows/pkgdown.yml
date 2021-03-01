@@ -33,6 +33,10 @@ jobs:
             run: install.packages("rJava", dependencies = TRUE)
             shell: Rscript {0}
 
+          - run: |
+              ls -l /home/runner/work/_temp/Library/rJava/
+              locate  rJava.so
+
           - uses: r-lib/actions/setup-pandoc@v1
           
           - uses: r-lib/actions/setup-tinytex@v1
@@ -45,8 +49,6 @@ jobs:
           
           - name: Install furdeb
             run: |
-              ls -l /home/runner/work/_temp/Library/rJava/
-              locate  rJava.so
               Sys.getenv("JAVA_HOME")
               pak::pkg_install("OB7-IRD/furdeb")
             shell: Rscript {0}
