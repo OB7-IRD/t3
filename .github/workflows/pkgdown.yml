@@ -34,9 +34,6 @@ jobs:
           - name: Configurate java
             run: |
               sudo R CMD javareconf
-              sudo rstudio-server stop
-              export LD_LIBRARY_PATH=/usr/lib/jvm/jre/lib/amd64:/usr/lib/jvm/jre/lib/amd64/default
-              sudo rstudio-server start
 
           - uses: r-lib/actions/setup-pandoc@v1
           
@@ -51,7 +48,7 @@ jobs:
           - name: Install furdeb
             run: |
               Sys.getenv("JAVA_HOME")
-              Sys.setenv(JAVA_HOME = "/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/jre/bin/java")
+              Sys.setenv(JAVA_HOME = "/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/jre/lib/amd64/server")
               pak::pkg_install("OB7-IRD/furdeb")
             shell: Rscript {0}
 
