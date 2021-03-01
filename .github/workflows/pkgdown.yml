@@ -28,7 +28,10 @@ jobs:
             run: |
               sudo apt-get install default-jdk
               sudo R CMD javareconf
-              sudo apt-get install r-cran-rjava
+          
+          - name: Install rjava
+            run: install.packages("rJava", dependencies = TRUE)
+            shell: Rscript {0}
 
           - uses: r-lib/actions/setup-pandoc@v1
           
