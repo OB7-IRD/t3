@@ -45,6 +45,8 @@ jobs:
           
           - name: Install furdeb
             run: |
+              ls -l /home/runner/work/_temp/Library/rJava/
+              locate  rJava.so
               Sys.getenv("JAVA_HOME")
               pak::pkg_install("OB7-IRD/furdeb")
             shell: Rscript {0}
