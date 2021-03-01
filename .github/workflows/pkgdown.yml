@@ -10,7 +10,7 @@ name: build and deploy gh-pages
 jobs:
   pkgdown:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork == false
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     env:
       RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -21,9 +21,7 @@ jobs:
 
           - name: Install java and configurate on R
             run: |
-              sudo apt-get install default-jre
               sudo apt-get install default-jdk
-              export JAVA_LIBS="$JAVA_LIBS -ldl"
               sudo R CMD javareconf
 
           - uses: r-lib/actions/setup-r@v1
