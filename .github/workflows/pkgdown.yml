@@ -19,15 +19,13 @@ jobs:
     steps:
           - uses: actions/checkout@v2
 
+          - name: Install R
+            run: sudo apt install r-base
+
           - name: Install java and configurate on R
             run: |
               sudo apt-get install default-jdk
               sudo R CMD javareconf
-
-          - uses: r-lib/actions/setup-r@v1
-            with:
-              r-version: '4.0.0'
-            id: install-r
 
           - uses: r-lib/actions/setup-pandoc@v1
           
