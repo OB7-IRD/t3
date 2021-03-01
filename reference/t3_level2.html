@@ -156,9 +156,12 @@
     </div>
 
     <pre class="usage"><span class='fu'>t3_level2</span><span class='op'>(</span>
-  <span class='va'>length_step</span>,
-  <span class='va'>sample_set</span>,
-  <span class='va'>length_weight_relationship_data</span>,
+  maximum_lf_class <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>,
+  threshold_rf_minus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>,
+  threshold_rf_plus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>,
+  threshold_frequency_rf_minus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>75</span><span class='op'>)</span>,
+  threshold_frequency_rf_plus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>75</span><span class='op'>)</span>,
+  threshold_rf_total <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>250</span><span class='op'>)</span>,
   log_file <span class='op'>=</span> <span class='cn'>FALSE</span>,
   log_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   log_name <span class='op'>=</span> <span class='st'>"t3_level2"</span>
@@ -168,28 +171,40 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>length_step</th>
-      <td><p>(data.frame) Data frame object with length ratio between ld1 and lf class.</p></td>
+      <th>maximum_lf_class</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Theorical maximum lf class that can occur (all species considerated). By default 500.</p></td>
     </tr>
     <tr>
-      <th>sample_set</th>
-      <td><p>(data.frame) Data frame object with weighted weigth of each set sampled.</p></td>
+      <th>threshold_rf_minus10</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.</p></td>
     </tr>
     <tr>
-      <th>length_weight_relationship_data</th>
-      <td><p>(data.frame) Data frame object with parameters for length weight relationship.</p></td>
+      <th>threshold_rf_plus10</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.</p></td>
+    </tr>
+    <tr>
+      <th>threshold_frequency_rf_minus10</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.</p></td>
+    </tr>
+    <tr>
+      <th>threshold_frequency_rf_plus10</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.</p></td>
+    </tr>
+    <tr>
+      <th>threshold_rf_total</th>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></td>
     </tr>
     <tr>
       <th>log_file</th>
-      <td><p>(logical) Initiation or not for log file creation. By default FALSE (no).</p></td>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Initiation or not for log file creation. By default FALSE (no).</p></td>
     </tr>
     <tr>
       <th>log_path</th>
-      <td><p>(character) Path of the log file directory. By default NULL.</p></td>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Path of the log file directory. By default NULL.</p></td>
     </tr>
     <tr>
       <th>log_name</th>
-      <td><p>(character) Name of the log file. By default "t3_level2".</p></td>
+      <td><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Name of the log file. By default "t3_level2".</p></td>
     </tr>
     </table>
 

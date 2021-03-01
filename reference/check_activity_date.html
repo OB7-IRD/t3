@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attribut "activity_date" verification — check_activity_date • t3</title>
+<title>Attribute "activity_date" verification — check_activity_date • t3</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,7 +52,7 @@
 
 
 
-<meta property="og:title" content="Attribut "activity_date" verification — check_activity_date" />
+<meta property="og:title" content="Attribute "activity_date" verification — check_activity_date" />
 <meta property="og:description" content="Check if the item &quot;activity_date&quot; is in date format year month day, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided)." />
 <meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png" />
 
@@ -146,7 +146,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Attribut "activity_date" verification</h1>
+    <h1>Attribute "activity_date" verification</h1>
     <small class="dont-index">Source: <a href='https://github.com/OB7-IRD/t3/blob/master/R/checks.R'><code>R/checks.R</code></a></small>
     <div class="hidden name"><code>check_activity_date.Rd</code></div>
     </div>
@@ -162,7 +162,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>activity_date</th>
-      <td><p>(date) Activity date in format year month day.</p></td>
+      <td><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Activity date in format year month day.</p></td>
+    </tr>
+    <tr>
+      <th>landing_date</th>
+      <td><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Landing date in format year month day hour minute second UTC. By default NULL.</p></td>
     </tr>
     </table>
 
