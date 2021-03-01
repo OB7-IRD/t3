@@ -6,14 +6,21 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>R6 class full_trips creation — full_trips • t3</title>
+<title>R6 class full_trips — full_trips • t3</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -37,10 +44,17 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="R6 class full_trips creation — full_trips" />
+
+<meta property="og:title" content="R6 class full_trips — full_trips" />
 <meta property="og:description" content="Create R6 reference object class full_trips" />
+<meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png" />
 
 
 
@@ -72,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -87,6 +101,24 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
+    </li>
+    <li>
+      <a href="../articles/level_1.html">Level 1 process</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -96,6 +128,12 @@
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -108,7 +146,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>R6 class full_trips creation</h1>
+    <h1>R6 class full_trips</h1>
     <small class="dont-index">Source: <a href='https://github.com/OB7-IRD/t3/blob/master/R/full_trips.R'><code>R/full_trips.R</code></a></small>
     <div class="hidden name"><code>full_trips.Rd</code></div>
     </div>
@@ -125,7 +163,7 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-create_full_trips'><code>full_trips$create_full_trips()</code></a></p></li>
@@ -142,8 +180,8 @@
 <li><p><a href='#method-time_at_sea'><code>full_trips$time_at_sea()</code></a></p></li>
 <li><p><a href='#method-fishing_time'><code>full_trips$fishing_time()</code></a></p></li>
 <li><p><a href='#method-searching_time'><code>full_trips$searching_time()</code></a></p></li>
-<li><p><a href='#method-sample_number_measured_extrapolation'><code>full_trips$sample_number_measured_extrapolation()</code></a></p></li>
 <li><p><a href='#method-sample_length_class_ld1_to_lf'><code>full_trips$sample_length_class_ld1_to_lf()</code></a></p></li>
+<li><p><a href='#method-sample_number_measured_extrapolation'><code>full_trips$sample_number_measured_extrapolation()</code></a></p></li>
 <li><p><a href='#method-sample_length_class_step_standardisation'><code>full_trips$sample_length_class_step_standardisation()</code></a></p></li>
 <li><p><a href='#method-well_set_weigth_categories'><code>full_trips$well_set_weigth_categories()</code></a></p></li>
 <li><p><a href='#method-standardised_sample_creation'><code>full_trips$standardised_sample_creation()</code></a></p></li>
@@ -173,73 +211,77 @@
 </details>
 
 <hr>
-<a id="method-create_full_trips"></a></p><h3>Method <code>create_full_trips()</code></h3>
-<p>Creation of full trip item from trips.</p><h3>Usage</h3>
+<a id="method-create_full_trips"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>create_full_trips()</code></h3>
+<p>Creation of full trip item from trips.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>create_full_trips</span><span class='op'>(</span><span class='va'>object_trips</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>object_trips</code></dt><dd><p>(R6-trips) A R6 reference object of class trips.</p></dd>
+<dt><code>object_trips</code></dt><dd><p>Object of type R6-trips expected. A R6 reference object of class trips.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-filter_by_periode"></a></p><h3>Method <code>filter_by_periode()</code></h3>
-<p>Function for filter full trips by a reference periode.</p><h3>Usage</h3>
+<a id="method-filter_by_periode"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>filter_by_periode()</code></h3>
+<p>Function for filter full trips by a reference periode.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>filter_by_periode</span><span class='op'>(</span><span class='va'>periode_reference</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) in 4 digits format.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/integer.html'>integer</a> expected. Year(s) in 4 digits format.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-add_activities"></a></p><h3>Method <code>add_activities()</code></h3>
-<p>Function for add activities in full trips object.</p><h3>Usage</h3>
+<a id="method-add_activities"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_activities()</code></h3>
+<p>Function for add activities in full trips object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>add_activities</span><span class='op'>(</span><span class='va'>object_activities</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>object_activities</code></dt><dd><p>(R6-activities) A R6 reference object of class activities.</p></dd>
+<dt><code>object_activities</code></dt><dd><p>Object of type R6-activities expected. A R6 reference object of class activities.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-add_elementarycatches"></a></p><h3>Method <code>add_elementarycatches()</code></h3>
-<p>Function for add elementary catches in full trips object.</p><h3>Usage</h3>
+<a id="method-add_elementarycatches"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_elementarycatches()</code></h3>
+<p>Function for add elementary catches in full trips object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>add_elementarycatches</span><span class='op'>(</span><span class='va'>object_elementarycatches</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>object_elementarycatches</code></dt><dd><p>(R6-elementarycatches) A R6 reference object of class elementarycatches.</p></dd>
+<dt><code>object_elementarycatches</code></dt><dd><p>Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-add_elementarylandings"></a></p><h3>Method <code>add_elementarylandings()</code></h3>
-<p>Function for add elementary landings in full trips object.</p><h3>Usage</h3>
+<a id="method-add_elementarylandings"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_elementarylandings()</code></h3>
+<p>Function for add elementary landings in full trips object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>add_elementarylandings</span><span class='op'>(</span><span class='va'>object_elementarylandings</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>object_elementarylandings</code></dt><dd><p>(R6-elementarylandings) A R6 reference object of class elementarylandings.</p></dd>
+<dt><code>object_elementarylandings</code></dt><dd><p>Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-add_wells_samples"></a></p><h3>Method <code>add_wells_samples()</code></h3>
-<p>Function for add wells and samples caracteristics in full trips object.</p><h3>Usage</h3>
+<a id="method-add_wells_samples"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_wells_samples()</code></h3>
+<p>Function for add wells and samples caracteristics in full trips object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>add_wells_samples</span><span class='op'>(</span><span class='va'>object_wells</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>object_wells</code></dt><dd><p>(R6-wells) A R6 reference object of class wells.</p></dd>
+<dt><code>object_wells</code></dt><dd><p>Object of type R6-wells expected. A R6 reference object of class wells.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-rf1"></a></p><h3>Method <code>rf1()</code></h3>
-<p>Process of Raising Factor level 1 (RF1).</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>rf1</span><span class='op'>(</span><span class='va'>species_rf1</span>, rf1_lowest_limit <span class='op'>=</span> <span class='fl'>0.8</span>, rf1_highest_limit <span class='op'>=</span> <span class='fl'>1.2</span><span class='op'>)</span></pre><p></div></p>
+<a id="method-rf1"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>rf1()</code></h3>
+<p>Process of Raising Factor level 1 (RF1).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>rf1</span><span class='op'>(</span>
+  species_rf1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>9</span>, <span class='fl'>11</span><span class='op'>)</span><span class='op'>)</span>,
+  rf1_lowest_limit <span class='op'>=</span> <span class='fl'>0.8</span>,
+  rf1_highest_limit <span class='op'>=</span> <span class='fl'>1.2</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>species_rf1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specie(s) code(s) used for the RF1 process.</p></dd>
+<dt><code>species_rf1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).</p></dd>
 
 <dt><code>rf1_lowest_limit</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> expected. Verification value for the lowest limit of the RF1. By default 0.8.</p></dd>
 
@@ -247,48 +289,48 @@
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-rf2"></a></p><h3>Method <code>rf2()</code></h3>
-<p>Process of Raising Factor level 2 (rf2).</p><h3>Usage</h3>
+<a id="method-rf2"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>rf2()</code></h3>
+<p>Process of Raising Factor level 2 (rf2).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>rf2</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-conversion_weigth_category"></a></p><h3>Method <code>conversion_weigth_category()</code></h3>
-<p>Process of logbook weigth categories conversion.</p><h3>Usage</h3>
+<a id="method-conversion_weigth_category"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>conversion_weigth_category()</code></h3>
+<p>Process of logbook weigth categories conversion.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>conversion_weigth_category</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-set_count"></a></p><h3>Method <code>set_count()</code></h3>
-<p>Process for postive sets count.</p><h3>Usage</h3>
+<a id="method-set_count"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_count()</code></h3>
+<p>Process for postive sets count.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>set_count</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-set_duration"></a></p><h3>Method <code>set_duration()</code></h3>
-<p>Process for set duration calculation (in hours).</p><h3>Usage</h3>
+<a id="method-set_duration"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_duration()</code></h3>
+<p>Process for set duration calculation (in hours).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>set_duration</span><span class='op'>(</span><span class='va'>set_duration_ref</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>set_duration_ref</code></dt><dd><p>(data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).</p></dd>
+<dt><code>set_duration_ref</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Data and parameters for set duration calculation (by year, country, ocean and school type).</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-time_at_sea"></a></p><h3>Method <code>time_at_sea()</code></h3>
-<p>Process for time at sea calculation (in hours).</p><h3>Usage</h3>
+<a id="method-time_at_sea"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>time_at_sea()</code></h3>
+<p>Process for time at sea calculation (in hours).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>time_at_sea</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-fishing_time"></a></p><h3>Method <code>fishing_time()</code></h3>
-<p>Process for fishing time calculation (in hours).</p><h3>Usage</h3>
+<a id="method-fishing_time"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>fishing_time()</code></h3>
+<p>Process for fishing time calculation (in hours).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>fishing_time</span><span class='op'>(</span>sunrise_schema <span class='op'>=</span> <span class='st'>"sunrise"</span>, sunset_schema <span class='op'>=</span> <span class='st'>"sunset"</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>sunrise_schema</code></dt><dd><p>(character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.</p></dd>
+<dt><code>sunrise_schema</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.</p></dd>
 
-<dt><code>sunset_schema</code></dt><dd><p>(character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.</p></dd>
+<dt><code>sunset_schema</code></dt><dd><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Details</h4>
 <p>Available variables are:</p><ul>
 <li><p>"sunrise"sunrise (top edge of the sun appears on the horizon)</p></li>
 <li><p>"sunriseEnd"sunrise ends (bottom edge of the sun touches the horizon)</p></li>
@@ -308,65 +350,65 @@
 
 
 <p><hr>
-<a id="method-searching_time"></a></p><h3>Method <code>searching_time()</code></h3>
-<p>Process for searching time calculation (in hours, fishing time minus sets durations).</p><h3>Usage</h3>
+<a id="method-searching_time"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>searching_time()</code></h3>
+<p>Process for searching time calculation (in hours, fishing time minus sets durations).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>searching_time</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-sample_number_measured_extrapolation"></a></p><h3>Method <code>sample_number_measured_extrapolation()</code></h3>
-<p>Process for sample number measured individuals extrapolation to sample number individuals counted.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>sample_number_measured_extrapolation</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
-
-<p><hr>
-<a id="method-sample_length_class_ld1_to_lf"></a></p><h3>Method <code>sample_length_class_ld1_to_lf()</code></h3>
-<p>Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).</p><h3>Usage</h3>
+<a id="method-sample_length_class_ld1_to_lf"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sample_length_class_ld1_to_lf()</code></h3>
+<p>Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>sample_length_class_ld1_to_lf</span><span class='op'>(</span><span class='va'>length_step</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>length_step</code></dt><dd><p>(data.frame) Data frame object with length ratio between ld1 and lf class.</p></dd>
+<dt><code>length_step</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Data frame object with length ratio between ld1 and lf class.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-sample_length_class_step_standardisation"></a></p><h3>Method <code>sample_length_class_step_standardisation()</code></h3>
-<p>Process for step standardisation of lf length class.</p><h3>Usage</h3>
+<a id="method-sample_number_measured_extrapolation"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sample_number_measured_extrapolation()</code></h3>
+<p>Process for sample number measured individuals extrapolation to sample number individuals counted.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>sample_number_measured_extrapolation</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-sample_length_class_step_standardisation"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sample_length_class_step_standardisation()</code></h3>
+<p>Process for step standardisation of lf length class.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>sample_length_class_step_standardisation</span><span class='op'>(</span>
   maximum_lf_class <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>maximum_lf_class</code></dt><dd><p>(integer) Theorical maximum lf class that can occur (all species considerated). By default 500.</p></dd>
+<dt><code>maximum_lf_class</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Theorical maximum lf class that can occur (all species considerated). By default 500.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-well_set_weigth_categories"></a></p><h3>Method <code>well_set_weigth_categories()</code></h3>
-<p>Process for well set weigth categories definition.</p><h3>Usage</h3>
+<a id="method-well_set_weigth_categories"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>well_set_weigth_categories()</code></h3>
+<p>Process for well set weigth categories definition.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>well_set_weigth_categories</span><span class='op'>(</span><span class='va'>sample_set</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>sample_set</code></dt><dd><p>(data.frame) Data frame object with weighted weigh of each set sampled.</p></dd>
+<dt><code>sample_set</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Data frame object with weighted weigh of each set sampled.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-standardised_sample_creation"></a></p><h3>Method <code>standardised_sample_creation()</code></h3>
-<p>Object standardised sample creation.</p><h3>Usage</h3>
+<a id="method-standardised_sample_creation"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>standardised_sample_creation()</code></h3>
+<p>Object standardised sample creation.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>standardised_sample_creation</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-standardised_sample_set_creation"></a></p><h3>Method <code>standardised_sample_set_creation()</code></h3>
-<p>R6 object standardised sample set creation.</p><h3>Usage</h3>
+<a id="method-standardised_sample_set_creation"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>standardised_sample_set_creation()</code></h3>
+<p>R6 object standardised sample set creation.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>standardised_sample_set_creation</span><span class='op'>(</span><span class='va'>length_weight_relationship_data</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>length_weight_relationship_data</code></dt><dd><p>(data.frame) Data frame object with parameters for length weight relationship.</p></dd>
+<dt><code>length_weight_relationship_data</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Data frame object with parameters for length weight relationship.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-raised_factors_determination"></a></p><h3>Method <code>raised_factors_determination()</code></h3>
-<p>Raised factors determination for weigth sample set to set.</p><h3>Usage</h3>
+<a id="method-raised_factors_determination"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>raised_factors_determination()</code></h3>
+<p>Raised factors determination for weigth sample set to set.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>raised_factors_determination</span><span class='op'>(</span>
   threshold_rf_minus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>,
   threshold_rf_plus10 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>,
@@ -375,35 +417,35 @@
   threshold_rf_total <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fl'>250</span><span class='op'>)</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>threshold_rf_minus10</code></dt><dd><p>(integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.</p></dd>
+<dt><code>threshold_rf_minus10</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.</p></dd>
 
-<dt><code>threshold_rf_plus10</code></dt><dd><p>(integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.</p></dd>
+<dt><code>threshold_rf_plus10</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.</p></dd>
 
-<dt><code>threshold_frequency_rf_minus10</code></dt><dd><p>(integer) Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
+<dt><code>threshold_frequency_rf_minus10</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
 
-<dt><code>threshold_frequency_rf_plus10</code></dt><dd><p>(integer) Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
+<dt><code>threshold_frequency_rf_plus10</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
 
-<dt><code>threshold_rf_total</code></dt><dd><p>(integer) Threshold limite value for raising factor (all categories). By default 250.</p></dd>
+<dt><code>threshold_rf_total</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-raised_standardised_sample_set"></a></p><h3>Method <code>raised_standardised_sample_set()</code></h3>
-<p>Application of process 2.8 raised factors on standardised sample set.</p><h3>Usage</h3>
+<a id="method-raised_standardised_sample_set"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>raised_standardised_sample_set()</code></h3>
+<p>Application of process 2.8 raised factors on standardised sample set.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>raised_standardised_sample_set</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-path_to_level3"></a></p><h3>Method <code>path_to_level3()</code></h3>
-<p>Temporary link to the R object model with Antoine D. modelisation process.</p><h3>Usage</h3>
+<a id="method-path_to_level3"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>path_to_level3()</code></h3>
+<p>Temporary link to the R object model with Antoine D. modelisation process.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>path_to_level3</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-data_preparatory"></a></p><h3>Method <code>data_preparatory()</code></h3>
-<p>Data preparatory for the t3 modelling process (level 3).</p><h3>Usage</h3>
+<a id="method-data_preparatory"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>data_preparatory()</code></h3>
+<p>Data preparatory for the t3 modelling process (level 3).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>data_preparatory</span><span class='op'>(</span>
   inputs_level3 <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>inputs_level3_path</span>,
+  inputs_level3_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>outputs_directory</span>,
   periode_reference <span class='op'>=</span> <span class='cn'>NULL</span>,
   target_year <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/year.html'>year</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
@@ -415,34 +457,34 @@
   vessel_id_ignored <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>inputs_level3</code></dt><dd><p>(data frame) Imputs of levels 3 (see function path to level 3).</p></dd>
+<dt><code>inputs_level3</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Imputs of levels 3 (see function path to level 3).</p></dd>
 
-<dt><code>inputs_level3_path</code></dt><dd><p>(character) Path to the folder containing yearly data ouptut of the level 1 and 2.</p></dd>
+<dt><code>inputs_level3_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Path to the folder containing yearly data ouptut of the level 1 and 2.</p></dd>
 
-<dt><code>outputs_directory</code></dt><dd><p>(character) Path of the t3 processes outputs directory.</p></dd>
+<dt><code>outputs_directory</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Path of the t3 processes outputs directory.</p></dd>
 
-<dt><code>periode_reference</code></dt><dd><p>(integer) Year(s) period of reference for modelling estimation.</p></dd>
+<dt><code>periode_reference</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Year(s) period of reference for modelling estimation.</p></dd>
 
-<dt><code>target_year</code></dt><dd><p>(integer) Year of interest for the model estimaton and prediction.Default value is current year -1.</p></dd>
+<dt><code>target_year</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Year of interest for the model estimaton and prediction.Default value is current year -1.</p></dd>
 
-<dt><code>period_duration</code></dt><dd><p>(integer) number of year use for the modelling. The default value is 5</p></dd>
+<dt><code>period_duration</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. number of year use for the modelling. The default value is 5</p></dd>
 
-<dt><code>distance_maximum</code></dt><dd><p>(integer) Maximum distance between all sets of a sampled well. By default 5.</p></dd>
+<dt><code>distance_maximum</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Maximum distance between all sets of a sampled well. By default 5.</p></dd>
 
-<dt><code>number_sets_maximum</code></dt><dd><p>(integer) Maximum number of sets allowed in mixture. By default 5.</p></dd>
+<dt><code>number_sets_maximum</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Maximum number of sets allowed in mixture. By default 5.</p></dd>
 
-<dt><code>set_weight_minimum</code></dt><dd><p>(integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.</p></dd>
+<dt><code>set_weight_minimum</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.</p></dd>
 
-<dt><code>minimum_set_frequency</code></dt><dd><p>(numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.</p></dd>
+<dt><code>minimum_set_frequency</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> expected. Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.</p></dd>
 
-<dt><code>vessel_id_ignored</code></dt><dd><p>(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
+<dt><code>vessel_id_ignored</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-random_forest_models"></a></p><h3>Method <code>random_forest_models()</code></h3>
-<p>Modelling proportions in sets througth random forest models.</p><h3>Usage</h3>
+<a id="method-random_forest_models"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>random_forest_models()</code></h3>
+<p>Modelling proportions in sets througth random forest models.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>random_forest_models</span><span class='op'>(</span>
   <span class='va'>outputs_level3_process1</span>,
   num.trees <span class='op'>=</span> <span class='fl'>1000L</span>,
@@ -451,34 +493,34 @@
   seed_number <span class='op'>=</span> <span class='fl'>7L</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>outputs_level3_process1</code></dt><dd><p>(data frame) Output table data_lb_sample_screened from process 3.1.</p></dd>
+<dt><code>outputs_level3_process1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
-<dt><code>num.trees</code></dt><dd><p>(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.</p></dd>
+<dt><code>num.trees</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.</p></dd>
 
-<dt><code>mtry</code></dt><dd><p>Number of variables randomly sampled as candidates at each split. The default value is 2.</p></dd>
+<dt><code>mtry</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Number of variables randomly sampled as candidates at each split. The default value is 2.</p></dd>
 
-<dt><code>min.node.size</code></dt><dd><p>Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.</p></dd>
+<dt><code>min.node.size</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.</p></dd>
 
-<dt><code>seed_number</code></dt><dd><p>Set the initial seed for the modelling. The default value is 7.</p></dd>
+<dt><code>seed_number</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Set the initial seed for the modelling. The default value is 7.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-models_checking"></a></p><h3>Method <code>models_checking()</code></h3>
-<p>Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><h3>Usage</h3>
+<a id="method-models_checking"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>models_checking()</code></h3>
+<p>Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>models_checking</span><span class='op'>(</span><span class='va'>outputs_level3_process2</span>, <span class='va'>outputs_path</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>outputs_level3_process2</code></dt><dd><p>(list) Outputs models and data from process 3.2.</p></dd>
+<dt><code>outputs_level3_process2</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> expected. Outputs models and data from process 3.2.</p></dd>
 
-<dt><code>outputs_path</code></dt><dd><p>(character) Outputs directory path.</p></dd>
+<dt><code>outputs_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Outputs directory path.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-data_formatting_for_predictions"></a></p><h3>Method <code>data_formatting_for_predictions()</code></h3>
-<p>Formatting data for model predictions.</p><h3>Usage</h3>
+<a id="method-data_formatting_for_predictions"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>data_formatting_for_predictions()</code></h3>
+<p>Formatting data for model predictions.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>data_formatting_for_predictions</span><span class='op'>(</span>
   <span class='va'>inputs_level3</span>,
   <span class='va'>outputs_level3_process1</span>,
@@ -486,20 +528,20 @@
   vessel_id_ignored <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>inputs_level3</code></dt><dd><p>(data frame) Imputs of levels 3 (see function path to level 3).</p></dd>
+<dt><code>inputs_level3</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Imputs of levels 3 (see function path to level 3).</p></dd>
 
-<dt><code>outputs_level3_process1</code></dt><dd><p>(data frame) Output table data_lb_sample_screened from process 3.1.</p></dd>
+<dt><code>outputs_level3_process1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
-<dt><code>target_year</code></dt><dd><p>(integer) The year of interest for the model estimaton and prediction.</p></dd>
+<dt><code>target_year</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. The year of interest for the model estimaton and prediction.</p></dd>
 
-<dt><code>vessel_id_ignored</code></dt><dd><p>(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
+<dt><code>vessel_id_ignored</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-model_predictions"></a></p><h3>Method <code>model_predictions()</code></h3>
-<p>Model predictions for the species composition and computing of catches.</p><h3>Usage</h3>
+<a id="method-model_predictions"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>model_predictions()</code></h3>
+<p>Model predictions for the species composition and computing of catches.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>model_predictions</span><span class='op'>(</span>
   <span class='va'>outputs_level3_process2</span>,
   <span class='va'>outputs_level3_process4</span>,
@@ -509,32 +551,32 @@
   plot_predict <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>outputs_level3_process2</code></dt><dd><p>(list) Outputs from level 3 process 2 (random forest models).</p></dd>
+<dt><code>outputs_level3_process2</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> expected. Outputs from level 3 process 2 (random forest models).</p></dd>
 
-<dt><code>outputs_level3_process4</code></dt><dd><p>(list) Outputs from level 3 process 4 (data formatting for predictions).</p></dd>
+<dt><code>outputs_level3_process4</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> expected. Outputs from level 3 process 4 (data formatting for predictions).</p></dd>
 
-<dt><code>outputs_path</code></dt><dd><p>(character) Outputs directory path.</p></dd>
+<dt><code>outputs_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Outputs directory path.</p></dd>
 
-<dt><code>ci</code></dt><dd><p>Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.</p></dd>
+<dt><code>ci</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.</p></dd>
 
-<dt><code>Nboot</code></dt><dd><p>The number of bootstrap samples desired for the ci computation. The default value is 10.</p></dd>
+<dt><code>Nboot</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> expected. The number of bootstrap samples desired for the ci computation. The default value is 10.</p></dd>
 
-<dt><code>plot_predict</code></dt><dd><p>Logical indicating whether maps of catch at size have to be done.</p></dd>
+<dt><code>plot_predict</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Logical indicating whether maps of catch at size have to be done.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-show_me_what_you_got"></a></p><h3>Method <code>show_me_what_you_got()</code></h3>
-<p>Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.</p><h3>Usage</h3>
+<a id="method-show_me_what_you_got"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>show_me_what_you_got()</code></h3>
+<p>Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>show_me_what_you_got</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
@@ -557,13 +599,30 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'b232a295f4339cb13abbd7adee1da479',
+    indexName: 'ob7-ird',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>
