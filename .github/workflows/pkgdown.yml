@@ -23,6 +23,7 @@ jobs:
             run: |
               sudo apt-get install default-jre
               sudo apt-get install default-jdk
+              export JAVA_LIBS="$JAVA_LIBS -ldl"
               sudo R CMD javareconf
 
           - uses: r-lib/actions/setup-r@v1
