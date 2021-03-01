@@ -45,6 +45,7 @@ jobs:
           
           - name: Install furdeb
             run: |
+              Sys.setenv('JAVA_HOME' = '/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/jre')
               Sys.getenv(x = "JAVA_HOME")
               pak::pkg_install("OB7-IRD/furdeb")
             shell: Rscript {0}
