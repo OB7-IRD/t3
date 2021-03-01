@@ -2,7 +2,7 @@
 % Please edit documentation in R/list_t3.R
 \name{list_t3}
 \alias{list_t3}
-\title{R6 class list_t3 creation}
+\title{R6 class list_t3}
 \description{
 Create R6 reference object class list_t3.
 }

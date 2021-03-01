@@ -33,6 +33,7 @@ The multi-species nature of tropical tuna surface fisheries gives rise to a seri
 Useful links:
 \itemize{
   \item \url{https://github.com/OB7-IRD/t3}
+  \item \url{https://ob7-ird.github.io/t3}
   \item Report bugs at \url{https://github.com/OB7-IRD/t3/issues}
 }
 

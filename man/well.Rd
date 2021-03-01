@@ -2,7 +2,7 @@
 % Please edit documentation in R/well.R
 \name{well}
 \alias{well}
-\title{R6 class well creation}
+\title{R6 class well}
 \description{
 Create R6 reference object class well
 }
@@ -31,15 +31,15 @@ Initialize function for R6 well class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{well_id}}{(character) Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{well_minus10_weigth}}{(integer) Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).}
+\item{\code{well_minus10_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).}
 
-\item{\code{well_plus10_weigth}}{(integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
+\item{\code{well_plus10_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
 
-\item{\code{well_global_weigth}}{(integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
+\item{\code{well_global_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
 }
 \if{html}{\out{</div>}}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/standardisedsample.R
 \name{standardisedsample}
 \alias{standardisedsample}
-\title{R6 class standardisedsample creation}
+\title{R6 class standardisedsample}
 \description{
 Create R6 reference object class standardisedsample
 }
@@ -43,21 +43,21 @@ Initialize function for R6 standardisedsample class.
 
 \item{\code{sample_id}}{(character) Sample identification.}
 
-\item{\code{sample_quality}}{(integer) Sample quality identification.}
+\item{\code{sample_quality}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
-\item{\code{sample_type}}{(integer) Sample type identification.}
+\item{\code{sample_type}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
 
-\item{\code{specie_code}}{(integer) Specie code identification.}
+\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
 \item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
 
-\item{\code{sample_standardised_length_class_lf}}{(integer) Sample standardised length class length fork of measured individus.}
+\item{\code{sample_standardised_length_class_lf}}{Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.}
 
-\item{\code{sample_number_measured_extrapolated_lf}}{(numeric) Sample number of measured individus extrapolated to all counted individus.}
+\item{\code{sample_number_measured_extrapolated_lf}}{Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.}
 
-\item{\code{sample_total_count}}{(integer) Sample number of total individus counted.}
+\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
 
-\item{\code{elementarysample}}{(R6-elementarysample) A R6 reference object class elementarysample.}
+\item{\code{elementarysample}}{Object of class R6-elementarysample expected. A R6 reference object class elementarysample.}
 }
 \if{html}{\out{</div>}}
 }

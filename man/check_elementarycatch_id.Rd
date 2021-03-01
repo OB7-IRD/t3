@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_elementarycatch_id}
 \alias{check_elementarycatch_id}
-\title{Attribut "elementarycatch_id" verification}
+\title{Attribute "elementarycatch_id" verification}
 \usage{
 check_elementarycatch_id(elementarycatch_id)
 }
 \arguments{
-\item{elementarycatch_id}{(character) Elementary catch identification.}
+\item{elementarycatch_id}{Object of class {\link[base]{character}} expected. Elementary catch identification.}
 }
 \description{
 Check if the item "elementarycatch_id" have one unique class identified as character.

@@ -5,37 +5,42 @@
 \title{Data model initialisation}
 \usage{
 data_model_initialisation(
-  periode_reference,
-  countries,
-  oceans,
+  data_source = "t3_db",
   db_con,
-  sample_type,
   log_file = FALSE,
   log_path = NULL,
   log_name = "data_model_initialisation",
+  periode_reference,
+  countries,
+  oceans,
+  sample_type,
   trips_selected = NULL
 )
 }
 \arguments{
-\item{periode_reference}{(integer) Year(s) of the reference period coded on 4 digits.}
+\item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".}
 
-\item{countries}{(character) ISO code on 3 letters related to one or more countries.}
+\item{db_con}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.}
 
-\item{oceans}{(integer) Ocean(s) related to data coded on 1 digit.}
+\item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
 
-\item{db_con}{(PostgreSQLConnection) An R's object which contain connexion identifiers for a t3 database.}
+\item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
-\item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
+\item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".}
 
-\item{log_path}{(character) Path of the log file directory. By default NULL.}
+\item{periode_reference}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.}
 
-\item{log_name}{(character) Name of the log file. By default "data_model_initialisation".}
+\item{countries}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.}
 
-\item{trips_selected}{(character) Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference, countries and sample types). By default NULL.}
+\item{oceans}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.}
+
+\item{sample_type}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
+
+\item{trips_selected}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \value{
 The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
 }
 \description{
-Shortcut for initialisation of data's object model from a t3 database.
+Shortcut for initialisation of data's object model from a t3 or a avdth database.
 }

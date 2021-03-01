@@ -2,7 +2,7 @@
 % Please edit documentation in R/samples.R
 \name{samples}
 \alias{samples}
-\title{R6 class samples creation}
+\title{R6 class samples}
 \description{
 Create R6 reference object class samples
 }

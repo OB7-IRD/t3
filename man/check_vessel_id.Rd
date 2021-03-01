@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_vessel_id}
 \alias{check_vessel_id}
-\title{Attribut "vessel_id" verification}
+\title{Attribute "vessel_id" verification}
 \usage{
 check_vessel_id(vessel_id)
 }
 \arguments{
-\item{vessel_id}{(integer) Vessel identification.}
+\item{vessel_id}{Object of class {\link[base]{integer}} expected. Vessel identification.}
 }
 \description{
 Check if the item "vessel_id" have one unique class identified as integer.

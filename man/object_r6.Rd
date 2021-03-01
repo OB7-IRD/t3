@@ -2,7 +2,7 @@
 % Please edit documentation in R/object_r6.R
 \name{object_r6}
 \alias{object_r6}
-\title{R6 object creation}
+\title{R6 object}
 \usage{
 object_r6(class_name, ...)
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_logbook_category}
 \alias{check_logbook_category}
-\title{Attribut "logbook_category" verification}
+\title{Attribute "logbook_category" verification}
 \usage{
 check_logbook_category(logbook_category)
 }
 \arguments{
-\item{logbook_category}{(integer) Logbook weight category.}
+\item{logbook_category}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
 }
 \description{
 Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13.

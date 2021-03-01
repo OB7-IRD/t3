@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_id}
 \alias{check_sample_id}
-\title{Attribut "sample_id" verification}
+\title{Attribute "sample_id" verification}
 \usage{
 check_sample_id(sample_id)
 }
 \arguments{
-\item{sample_id}{(character) Sample identification.}
+\item{sample_id}{Object of class {\link[base]{character}} expected. Sample identification.}
 }
 \description{
 Check if the item "sample_id" have one unique class identified as character.

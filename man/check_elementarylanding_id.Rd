@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_elementarylanding_id}
 \alias{check_elementarylanding_id}
-\title{Attribut "elementarylanding_id" verification}
+\title{Attribute "elementarylanding_id" verification}
 \usage{
 check_elementarylanding_id(elementarylanding_id)
 }
 \arguments{
-\item{elementarylanding_id}{(character) Elementary landing identification.}
+\item{elementarylanding_id}{Object of class {\link[base]{character}} expected. Elementary landing identification.}
 }
 \description{
 Check if the item "elementarylanding_id" have one unique class identified as character.

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_landing_category_name}
 \alias{check_landing_category_name}
-\title{Attribut "landing_category_name" verification}
+\title{Attribute "landing_category_name" verification}
 \usage{
 check_landing_category_name(landing_category_name)
 }
 \arguments{
-\item{landing_category_name}{(character) Landing category name identification.}
+\item{landing_category_name}{Object of class {\link[base]{character}} expected. Landing category name identification.}
 }
 \description{
 Check if the item "landing_category_name" have one unique class identified as character.

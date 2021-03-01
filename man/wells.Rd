@@ -2,7 +2,7 @@
 % Please edit documentation in R/wells.R
 \name{wells}
 \alias{wells}
-\title{R6 class wells creation}
+\title{R6 class wells}
 \description{
 Create R6 reference object class wells
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarycatches.R
 \name{elementarycatches}
 \alias{elementarycatches}
-\title{R6 class elementarycatches creation}
+\title{R6 class elementarycatches}
 \description{
 Create R6 reference object class elementarycatches
 }

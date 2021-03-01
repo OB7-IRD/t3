@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_weight}
 \alias{check_wellplan_weight}
-\title{Attribut "wellplan_weight" verification}
+\title{Attribute "wellplan_weight" verification}
 \usage{
 check_wellplan_weight(wellplan_weight)
 }
 \arguments{
-\item{wellplan_weight}{(numeric) Weight in tonnes filled in the well plan.}
+\item{wellplan_weight}{Object of class {\link[base]{numeric}} Weight in tonnes filled in the well plan.}
 }
 \description{
 Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero.

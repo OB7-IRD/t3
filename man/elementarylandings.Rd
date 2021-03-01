@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarylandings.R
 \name{elementarylandings}
 \alias{elementarylandings}
-\title{R6 class elementarylandings creation}
+\title{R6 class elementarylandings}
 \description{
 Create R6 reference object class elementarylandings
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sub_sample_id}
 \alias{check_sub_sample_id}
-\title{Attribut "sub_sample_id" verification}
+\title{Attribute "sub_sample_id" verification}
 \usage{
 check_sub_sample_id(sub_sample_id)
 }
 \arguments{
-\item{sub_sample_id}{(integer) Sub sample identification.}
+\item{sub_sample_id}{Object of class {\link[base]{integer}} expected. Sub sample identification.}
 }
 \description{
 Check if the item "sub_sample_id" have one unique class identified as integer.

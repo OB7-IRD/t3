@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_logbook_availability}
 \alias{check_logbook_availability}
-\title{Attribut "logbook_availability" verification}
+\title{Attribute "logbook_availability" verification}
 \usage{
 check_logbook_availability(logbook_availability)
 }
 \arguments{
-\item{logbook_availability}{(integer) Logbook availability value, 1 for available and 0 for not.}
+\item{logbook_availability}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
 }
 \description{
 Check if the item "logbook_availability" is class integer and if all values are 1 or 0.

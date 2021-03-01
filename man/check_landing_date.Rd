@@ -2,13 +2,13 @@
 % Please edit documentation in R/checks.R
 \name{check_landing_date}
 \alias{check_landing_date}
-\title{Attribut "landing_date" verification}
+\title{Attribute "landing_date" verification}
 \usage{
 check_landing_date(landing_date)
 }
 \arguments{
-\item{landing_date}{(date and hours) Landing date in format ymd_hms UTC.}
+\item{landing_date}{Object of class {\link[base]{character}} expected. Landing date in format year month day hour minute second UTC.}
 }
 \description{
-Check if the item "landing_date" is in date format ymd_hms and check if the value is inferior to the actual date.
+Check if the item "landing_date" is in date format year month day hour minute second UTC and check if the value is inferior to the actual date.
 }

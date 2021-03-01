@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_standardised_length_class_lf}
 \alias{check_sample_standardised_length_class_lf}
-\title{Attribut "sample_standardised_length_class_lf" verification}
+\title{Attribute "sample_standardised_length_class_lf" verification}
 \usage{
 check_sample_standardised_length_class_lf(sample_standardised_length_class_lf)
 }
 \arguments{
-\item{sample_standardised_length_class_lf}{(integer) Sample standardised length class length fork of measured individus.}
+\item{sample_standardised_length_class_lf}{Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.}
 }
 \description{
 Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero.

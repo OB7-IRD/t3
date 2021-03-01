@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarywellplan.R
 \name{elementarywellplan}
 \alias{elementarywellplan}
-\title{R6 class elementarywellplan creation}
+\title{R6 class elementarywellplan}
 \description{
 Create R6 reference object class elementarywellplan
 }
@@ -36,25 +36,25 @@ Initialize function for R6 elementarywellplan class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{wellplan_id}}{(character) Wellplan identification.}
+\item{\code{wellplan_id}}{Object of class {\link[base]{character}} expected. Wellplan identification.}
 
-\item{\code{well_id}}{(character) Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{activity_id}}{(character) Activity identification.}
+\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{sample_id}}{(character) Sample identification.}
+\item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{specie_code}}{(integer) Specie code identifiation.}
+\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identifiation.}
 
-\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
 \item{\code{wellplan_weight}}{(numeric) Weight in tonnes filled in the well plan.}
 
-\item{\code{wellplan_number}}{(integer) Well plan number of individus.}
+\item{\code{wellplan_number}}{Object of class {\link[base]{integer}} expected. Well plan number of individus.}
 
-\item{\code{wellplan_weigth_category_code}}{(integer) Well plan category code identification.}
+\item{\code{wellplan_weigth_category_code}}{Object of class {\link[base]{integer}} expected. Well plan category code identification.}
 
-\item{\code{wellplan_weigth_category_label}}{(character) Well plan weight category identification.}
+\item{\code{wellplan_weigth_category_label}}{Object of class {\link[base]{character}} expected. Well plan weight category identification.}
 }
 \if{html}{\out{</div>}}
 }

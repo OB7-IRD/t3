@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_vessel_type}
 \alias{check_vessel_type}
-\title{Attribut "vessel_type" verification}
+\title{Attribute "vessel_type" verification}
 \usage{
 check_vessel_type(vessel_type)
 }
 \arguments{
-\item{vessel_type}{(character) Vessel type identification.}
+\item{vessel_type}{Object of class {\link[base]{character}} expected. Vessel type identification.}
 }
 \description{
 Check if the item "vessel_type" have one unique class identified as character.

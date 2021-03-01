@@ -2,7 +2,7 @@
 % Please edit documentation in R/activities.R
 \name{activities}
 \alias{activities}
-\title{R6 class activities creation}
+\title{R6 class activities}
 \description{
 Create R6 reference object class activities
 }

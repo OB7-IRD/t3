@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_well_global_weigth}
 \alias{check_well_global_weigth}
-\title{Attribut "well_global_weigth" verification}
+\title{Attribute "well_global_weigth" verification}
 \usage{
 check_well_global_weigth(well_global_weigth)
 }
 \arguments{
-\item{well_global_weigth}{(integer) Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
+\item{well_global_weigth}{Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
 }
 \description{
 Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0.

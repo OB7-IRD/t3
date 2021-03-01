@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_trip_id}
 \alias{check_trip_id}
-\title{Attribut "trip_id" verification}
+\title{Attribute "trip_id" verification}
 \usage{
 check_trip_id(trip_id)
 }
 \arguments{
-\item{trip_id}{(character) Trip identification.}
+\item{trip_id}{Object of class {\link[base]{character}} expected. Trip identification.}
 }
 \description{
 Check if the item "trip_id" have one unique class identified as character.

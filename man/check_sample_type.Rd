@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_type}
 \alias{check_sample_type}
-\title{Attribut "sample_type" verification}
+\title{Attribute "sample_type" verification}
 \usage{
 check_sample_type(sample_type)
 }
 \arguments{
-\item{sample_type}{(integer) Sample type identification.}
+\item{sample_type}{Object of class {\link[base]{integer}} expected. Sample type identification.}
 }
 \description{
 Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11.

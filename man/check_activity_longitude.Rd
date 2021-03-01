@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_activity_longitude}
 \alias{check_activity_longitude}
-\title{Attribut "activity_longitude" verification}
+\title{Attribute "activity_longitude" verification}
 \usage{
 check_activity_longitude(activity_longitude)
 }
 \arguments{
-\item{activity_longitude}{(numeric) Longitude, in decimal degree, of the activity.}
+\item{activity_longitude}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
 }
 \description{
 Check if the item "activity_longitude" have one unique class identified as numeric.

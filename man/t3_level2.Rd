@@ -5,26 +5,35 @@
 \title{T3 process level 2}
 \usage{
 t3_level2(
-  length_step,
-  sample_set,
-  length_weight_relationship_data,
+  maximum_lf_class = as.integer(500),
+  threshold_rf_minus10 = as.integer(500),
+  threshold_rf_plus10 = as.integer(500),
+  threshold_frequency_rf_minus10 = as.integer(75),
+  threshold_frequency_rf_plus10 = as.integer(75),
+  threshold_rf_total = as.integer(250),
   log_file = FALSE,
   log_path = NULL,
   log_name = "t3_level2"
 )
 }
 \arguments{
-\item{length_step}{(data.frame) Data frame object with length ratio between ld1 and lf class.}
+\item{maximum_lf_class}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 
-\item{sample_set}{(data.frame) Data frame object with weighted weigth of each set sampled.}
+\item{threshold_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.}
 
-\item{length_weight_relationship_data}{(data.frame) Data frame object with parameters for length weight relationship.}
+\item{threshold_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.}
 
-\item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
+\item{threshold_frequency_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
 
-\item{log_path}{(character) Path of the log file directory. By default NULL.}
+\item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
 
-\item{log_name}{(character) Name of the log file. By default "t3_level2".}
+\item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
+
+\item{log_file}{Object of type \code{\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
+
+\item{log_path}{Object of type \code{\link[base]{character}} expected. Path of the log file directory. By default NULL.}
+
+\item{log_name}{Object of type \code{\link[base]{character}} expected. Name of the log file. By default "t3_level2".}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

@@ -2,7 +2,7 @@
 % Please edit documentation in R/trips.R
 \name{trips}
 \alias{trips}
-\title{R6 class trips creation}
+\title{R6 class trips}
 \description{
 Create R6 reference object class trips
 }

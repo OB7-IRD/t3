@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_well_plus10_weigth}
 \alias{check_well_plus10_weigth}
-\title{Attribut "well_plus10_weigth" verification}
+\title{Attribute "well_plus10_weigth" verification}
 \usage{
 check_well_plus10_weigth(well_plus10_weigth)
 }
 \arguments{
-\item{well_plus10_weigth}{(integer) Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
+\item{well_plus10_weigth}{Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
 }
 \description{
 Check if the item "well_plus10_weigth" have one unique class identified as integer and if value are >= 0.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/object_model_data.R
 \name{object_model_data}
 \alias{object_model_data}
-\title{R6 class object_model_data creation}
+\title{R6 class object_model_data}
 \description{
 Create R6 reference object class object_model_data
 }
@@ -42,15 +42,15 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db", "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db", "avdth_db" and "sql_query".}
 
-\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.}
 
-\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.}
 
-\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
+\item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 
@@ -185,7 +185,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \if{html}{\out{<a id="method-wells_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-wells_object_creation}{}}}
 \subsection{Method \code{wells_object_creation()}}{
-Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset and samples.
+Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(
   data_source = "t3_db",
@@ -214,7 +214,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 
 \item{\code{oceans}}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.}
 
-\item{\code{sample_type}}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
+\item{\code{sample_type}}{Object of class {\link[base]{integer}} expected. Sample type identification (landing, observer, ...). By default NULL.}
 
 \item{\code{trips_selected}}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 

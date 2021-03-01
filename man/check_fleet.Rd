@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_fleet}
 \alias{check_fleet}
-\title{Attribut "fleet" verification}
+\title{Attribute "fleet" verification}
 \usage{
 check_fleet(fleet)
 }
 \arguments{
-\item{fleet}{(character) Fleet identification.}
+\item{fleet}{Object of class {\link[base]{character}} expected. Fleet identification.}
 }
 \description{
 Check if the item "fleet" have one unique class identified as character.

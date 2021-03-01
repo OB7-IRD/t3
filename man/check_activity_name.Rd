@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_activity_name}
 \alias{check_activity_name}
-\title{Attribut "activity_name" verification}
+\title{Attribute "activity_name" verification}
 \usage{
 check_activity_name(check_activity_name)
 }
 \arguments{
-\item{activity_name}{(character) Activity identification.}
+\item{activity_name}{Object of class {\link[base]{character}} expected. Activity identification.}
 }
 \description{
 Check if the item "check_activity_name" have one unique class identified as character.

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_specie_code}
 \alias{check_specie_code}
-\title{Attribut "specie_code" verification}
+\title{Attribute "specie_code" verification}
 \usage{
 check_specie_code(specie_code)
 }
 \arguments{
-\item{specie_code}{(integer) Specie code identification.}
+\item{specie_code}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 }
 \description{
 Check if the item "specie_code" have one unique class identified as integer and superior to zero.

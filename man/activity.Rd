@@ -2,7 +2,7 @@
 % Please edit documentation in R/activity.R
 \name{activity}
 \alias{activity}
-\title{R6 class activity creation}
+\title{R6 class activity}
 \description{
 Create R6 reference object class activity
 }
@@ -38,29 +38,29 @@ Initialize function for R6 activities class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{activity_id}}{(character) Activity identification.}
+\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{ocean}}{(integer) Ocean identification.}
+\item{\code{ocean}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
 
-\item{\code{activity_date}}{(date) Activity date in format year month day.}
+\item{\code{activity_date}}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
 
-\item{\code{activity_number}}{(integer) Activity number.}
+\item{\code{activity_number}}{Object of class {\link[base]{integer}} expected. Activity number.}
 
-\item{\code{activity_latitude}}{(numeric) Latitude, in decimal degree, of the activity.}
+\item{\code{activity_latitude}}{Object of class {\link[base]{numeric}} expected. Latitude, in decimal degree, of the activity.}
 
-\item{\code{activity_longitude}}{(numeric) Longitude, in decimal degree, of the activity.}
+\item{\code{activity_longitude}}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
 
-\item{\code{set_count}}{(integer) Number of set associated to the activity.}
+\item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
 
-\item{\code{school_type}}{(integer) School type identification.}
+\item{\code{school_type}}{Object of class {\link[base]{integer}} expected. School type identification.}
 
-\item{\code{activity_code}}{(integer) Activity code identification.}
+\item{\code{activity_code}}{Object of class {\link[base]{integer}} expected. Activity code identification.}
 
-\item{\code{activity_name}}{(character) Activity identification.}
+\item{\code{activity_name}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{time_at_sea}}{(integer) Time at sea in hours.}
+\item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
 }
 \if{html}{\out{</div>}}
 }

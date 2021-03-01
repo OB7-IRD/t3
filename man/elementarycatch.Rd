@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarycatch.R
 \name{elementarycatch}
 \alias{elementarycatch}
-\title{R6 class elementarycatch creation}
+\title{R6 class elementarycatch}
 \description{
 Create R6 reference object class elementarycatch
 }
@@ -35,23 +35,23 @@ Initialize function for R6 activities class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{activity_id}}{(character) Activity identification.}
+\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{elementarycatch_id}}{(character) Elementary catch identification.}
+\item{\code{elementarycatch_id}}{Object of class {\link[base]{character}} expected. Elementary catch identification.}
 
-\item{\code{ocean}}{(integer) Ocean identification.}
+\item{\code{ocean}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
 
-\item{\code{school_type}}{(integer) School type identification.}
+\item{\code{school_type}}{Object of class {\link[base]{integer}} expected. School type identification.}
 
-\item{\code{logbook_category}}{(integer) Logbook weight category.}
+\item{\code{logbook_category}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
 
-\item{\code{logbook_category_name}}{(character) Logbook category name identification.}
+\item{\code{logbook_category_name}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
 
-\item{\code{specie_code}}{(integer) Specie code identification.}
+\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
-\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
-\item{\code{catch_weight}}{(numeric) Catch weight in tonnes.}
+\item{\code{catch_weight}}{Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.}
 }
 \if{html}{\out{</div>}}
 }

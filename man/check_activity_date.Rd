@@ -2,12 +2,14 @@
 % Please edit documentation in R/checks.R
 \name{check_activity_date}
 \alias{check_activity_date}
-\title{Attribut "activity_date" verification}
+\title{Attribute "activity_date" verification}
 \usage{
 check_activity_date(activity_date, landing_date = NULL)
 }
 \arguments{
-\item{activity_date}{(date) Activity date in format year month day.}
+\item{activity_date}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
+
+\item{landing_date}{Object of class {\link[base]{character}} expected. Landing date in format year month day hour minute second UTC. By default NULL.}
 }
 \description{
 Check if the item "activity_date" is in date format year month day, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
