@@ -37,7 +37,6 @@ Imports:
     rfUtilities (>= 2.1.5),
     gstat (>= 2.0.6),
     tools (>= 4.0.3),
-    rJava (== 0.9.10),
     furdeb
 Suggests: 
     testthat (>= 2.1.0)
