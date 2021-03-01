@@ -1,9 +1,7 @@
 on:
   push:
     branches:
-    - master
     - doc-test-level-1
-    - development
 
 name: Test
 
@@ -21,7 +19,6 @@ jobs:
 
           - name: Install java and configurate on R
             run: |
-              sudo apt-get install default-jre
               sudo apt-get install default-jdk
               sudo R CMD javareconf
           - uses: r-lib/actions/setup-r@v1
