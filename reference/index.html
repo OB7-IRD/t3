@@ -8,19 +8,12 @@
 
 <title>Function reference • t3</title>
 
-<!-- favicons -->
-<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -44,16 +37,9 @@
 <script src="../pkgdown.js"></script>
 
 
-<!-- docsearch -->
-<script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
-<link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
-
 
 
 <meta property="og:title" content="Function reference" />
-<meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png" />
 
 
 
@@ -85,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -100,24 +86,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
-    </li>
-    <li>
-      <a href="../articles/level_1.html">Level 1 process</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -127,12 +95,6 @@
   </a>
 </li>
       </ul>
-      
-      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
-        </div>
-      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -159,82 +121,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-shortcut-functions" class="hasAnchor"><a href="#section-shortcut-functions" class="anchor"></a>Shortcut functions</h2>
-          <p class="section-desc"><p>Functions for run all or several parts of the t3 process.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="t3_process.html">t3_process()</a></code> </p>
-        </td>
-        <td><p>T3 process compilation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="data_model_initialisation.html">data_model_initialisation()</a></code> </p>
-        </td>
-        <td><p>Data model initialisation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="t3_level1.html">t3_level1()</a></code> </p>
-        </td>
-        <td><p>T3 process level 1</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="t3_level2.html">t3_level2()</a></code> </p>
-        </td>
-        <td><p>T3 process level 2</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-level-tools" class="hasAnchor"><a href="#section-level-tools" class="anchor"></a>Level 3 tools</h2>
-          <p class="section-desc"><p>Functions used in the process level 3.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="catch_ci_calculator.html">catch_ci_calculator()</a></code> </p>
-        </td>
-        <td><p>Compute final confidence interval</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="df2boot.html">df2boot()</a></code> </p>
-        </td>
-        <td><p>Translate Data frame to boot class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tunaboot.html">tunaboot()</a></code> </p>
-        </td>
-        <td><p>Boostrap for Model Predictions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tunapredict.html">tunapredict()</a></code> </p>
-        </td>
-        <td><p>Model Predictions</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-r-class" class="hasAnchor"><a href="#section-r-class" class="anchor"></a>R6 class</h2>
-          <p class="section-desc"><p>Link to the function for R6 class creations. Methods and processes associated are encapsulate in each class.</p></p>
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
         </th>
       </tr>
       
@@ -247,459 +135,481 @@
         <td>
           <p><code><a href="activities.html">activities</a></code> </p>
         </td>
-        <td><p>R6 class activities</p></td>
+        <td><p>R6 class activities creation</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="activity.html">activity</a></code> </p>
         </td>
-        <td><p>R6 class activity</p></td>
+        <td><p>R6 class activity creation</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="elementarycatch.html">elementarycatch</a></code> </p>
+          <p><code><a href="catch_ci_calculator.html">catch_ci_calculator()</a></code> </p>
         </td>
-        <td><p>R6 class elementarycatch</p></td>
+        <td><p>Compute final confidence interval</p></td>
       </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarycatches.html">elementarycatches</a></code> </p>
-        </td>
-        <td><p>R6 class elementarycatches</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarylanding.html">elementarylanding</a></code> </p>
-        </td>
-        <td><p>R6 class elementarylanding</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarylandings.html">elementarylandings</a></code> </p>
-        </td>
-        <td><p>R6 class elementarylandings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarysample.html">elementarysample</a></code> </p>
-        </td>
-        <td><p>R6 class trip</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarysampleraw.html">elementarysampleraw</a></code> </p>
-        </td>
-        <td><p>R6 class trip</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="elementarywellplan.html">elementarywellplan</a></code> </p>
-        </td>
-        <td><p>R6 class elementarywellplan</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="full_trips.html">full_trips</a></code> </p>
-        </td>
-        <td><p>R6 class full_trips</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="list_t3.html">list_t3</a></code> </p>
-        </td>
-        <td><p>R6 class list_t3</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="object_model_data.html">object_model_data</a></code> </p>
-        </td>
-        <td><p>R6 class object_model_data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="samples.html">samples</a></code> </p>
-        </td>
-        <td><p>R6 class samples</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="standardisedsample.html">standardisedsample</a></code> </p>
-        </td>
-        <td><p>R6 class standardisedsample</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="standardisedsampleset.html">standardisedsampleset</a></code> </p>
-        </td>
-        <td><p>R6 class standardisedsampleset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="trip.html">trip</a></code> </p>
-        </td>
-        <td><p>R6 class trip</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="trips.html">trips</a></code> </p>
-        </td>
-        <td><p>R6 class trips</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="well.html">well</a></code> </p>
-        </td>
-        <td><p>R6 class well</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="wells.html">wells</a></code> </p>
-        </td>
-        <td><p>R6 class wells</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="wellset.html">wellset</a></code> </p>
-        </td>
-        <td><p>R6 class wellset</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-typing-verification" class="hasAnchor"><a href="#section-typing-verification" class="anchor"></a>Typing verification</h2>
-          <p class="section-desc"><p>Functions for typing verification. Used before class creations for checking attributes consistency.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
         
         <td>
           <p><code><a href="check_activity_code.html">check_activity_code()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_code" verification</p></td>
+        <td><p>Attribut "activity_code" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_date.html">check_activity_date()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_date" verification</p></td>
+        <td><p>Attribut "activity_date" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_id.html">check_activity_id()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_id" verification</p></td>
+        <td><p>Attribut "activity_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_latitude.html">check_activity_latitude()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_latitude" verification</p></td>
+        <td><p>Attribut "activity_latitude" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_longitude.html">check_activity_longitude()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_longitude" verification</p></td>
+        <td><p>Attribut "activity_longitude" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_name.html">check_activity_name()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_name" verification</p></td>
+        <td><p>Attribut "activity_name" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_activity_number.html">check_activity_number()</a></code> </p>
         </td>
-        <td><p>Attribute "activity_number" verification</p></td>
+        <td><p>Attribut "activity_number" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_catch_weight.html">check_catch_weight()</a></code> </p>
         </td>
-        <td><p>Attribute "catch_weight" verification</p></td>
+        <td><p>Attribut "catch_weight" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_departure_date.html">check_departure_date()</a></code> </p>
         </td>
-        <td><p>Attribute "departure_date" verification</p></td>
+        <td><p>Attribut "departure_date" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_elementarycatch_id.html">check_elementarycatch_id()</a></code> </p>
         </td>
-        <td><p>Attribute "elementarycatch_id" verification</p></td>
+        <td><p>Attribut "elementarycatch_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_elementarylanding_id.html">check_elementarylanding_id()</a></code> </p>
         </td>
-        <td><p>Attribute "elementarylanding_id" verification</p></td>
+        <td><p>Attribut "elementarylanding_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_fish_hold_empty.html">check_fish_hold_empty()</a></code> </p>
         </td>
-        <td><p>Attribute "fish_hold_empty" verification</p></td>
+        <td><p>Attribut "fish_hold_empty" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_fleet.html">check_fleet()</a></code> </p>
         </td>
-        <td><p>Attribute "fleet" verification</p></td>
+        <td><p>Attribut "fleet" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_landing_category.html">check_landing_category()</a></code> </p>
         </td>
-        <td><p>Attribute "landing_category" verification</p></td>
+        <td><p>Attribut "landing_category" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_landing_category_name.html">check_landing_category_name()</a></code> </p>
         </td>
-        <td><p>Attribute "landing_category_name" verification</p></td>
+        <td><p>Attribut "landing_category_name" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_landing_date.html">check_landing_date()</a></code> </p>
         </td>
-        <td><p>Attribute "landing_date" verification</p></td>
+        <td><p>Attribut "landing_date" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_landing_weight.html">check_landing_weight()</a></code> </p>
         </td>
-        <td><p>Attribute "landing_weight" verification</p></td>
+        <td><p>Attribut "landing_weight" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_length_type.html">check_length_type()</a></code> </p>
         </td>
-        <td><p>Attribute "length_type" verification</p></td>
+        <td><p>Attribut "length_type" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_logbook_availability.html">check_logbook_availability()</a></code> </p>
         </td>
-        <td><p>Attribute "logbook_availability" verification</p></td>
+        <td><p>Attribut "logbook_availability" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_logbook_category.html">check_logbook_category()</a></code> </p>
         </td>
-        <td><p>Attribute "logbook_category" verification</p></td>
+        <td><p>Attribut "logbook_category" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_logbook_category_name.html">check_logbook_category_name()</a></code> </p>
         </td>
-        <td><p>Attribute "logbook_category_name" verification</p></td>
+        <td><p>Attribut "logbook_category_name" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_ocean.html">check_ocean()</a></code> </p>
         </td>
-        <td><p>Attribute "ocean" verification</p></td>
+        <td><p>Attribut "ocean" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_id.html">check_sample_id()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_id" verification</p></td>
+        <td><p>Attribut "sample_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_length_class.html">check_sample_length_class()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_length_class" verification</p></td>
+        <td><p>Attribut "sample_length_class" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_number_measured.html">check_sample_number_measured()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_number_measured" verification</p></td>
+        <td><p>Attribut "sample_number_measured" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_number_measured_extrapolated_lf.html">check_sample_number_measured_extrapolated_lf()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_number_measured_extrapolated_lf" verification</p></td>
+        <td><p>Attribut "sample_number_measured_extrapolated_lf" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_number_weighted.html">check_sample_number_weighted()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_number_weighted" verification</p></td>
+        <td><p>Attribut "sample_number_weighted" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_quality.html">check_sample_quality()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_quality" verification</p></td>
+        <td><p>Attribut "sample_quality" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_standardised_length_class_lf.html">check_sample_standardised_length_class_lf()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_standardised_length_class_lf" verification</p></td>
+        <td><p>Attribut "sample_standardised_length_class_lf" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_total_count.html">check_sample_total_count()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_total_count" verification</p></td>
+        <td><p>Attribut "sample_total_count" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sample_type.html">check_sample_type()</a></code> </p>
         </td>
-        <td><p>Attribute "sample_type" verification</p></td>
+        <td><p>Attribut "sample_type" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_school_type.html">check_school_type()</a></code> </p>
         </td>
-        <td><p>Attribute "school_type" verification</p></td>
+        <td><p>Attribut "school_type" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_set_count.html">check_set_count()</a></code> </p>
         </td>
-        <td><p>Attribute "set_count" verification</p></td>
+        <td><p>Attribut "set_count" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_specie_code.html">check_specie_code()</a></code> </p>
         </td>
-        <td><p>Attribute "specie_code" verification</p></td>
+        <td><p>Attribut "specie_code" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_specie_code3l.html">check_specie_code3l()</a></code> </p>
         </td>
-        <td><p>Attribute "specie_code3l" verification</p></td>
+        <td><p>Attribut "specie_code3l" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_sub_sample_id.html">check_sub_sample_id()</a></code> </p>
         </td>
-        <td><p>Attribute "sub_sample_id" verification</p></td>
+        <td><p>Attribut "sub_sample_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_time_at_sea.html">check_time_at_sea()</a></code> </p>
         </td>
-        <td><p>Attribute "time_at_sea" verification</p></td>
+        <td><p>Attribut "time_at_sea" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_trip_id.html">check_trip_id()</a></code> </p>
         </td>
-        <td><p>Attribute "trip_id" verification</p></td>
+        <td><p>Attribut "trip_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_vessel_id.html">check_vessel_id()</a></code> </p>
         </td>
-        <td><p>Attribute "vessel_id" verification</p></td>
+        <td><p>Attribut "vessel_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_vessel_type.html">check_vessel_type()</a></code> </p>
         </td>
-        <td><p>Attribute "vessel_type" verification</p></td>
+        <td><p>Attribut "vessel_type" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_weighted_weight.html">check_weighted_weight()</a></code> </p>
         </td>
-        <td><p>Attribute "weighted_weight" verification</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_wellplan_id.html">check_wellplan_id()</a></code> </p>
-        </td>
-        <td><p>Attribute "wellplan_id" verification</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_wellplan_number.html">check_wellplan_number()</a></code> </p>
-        </td>
-        <td><p>Attribute "wellplan_number" verification</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_wellplan_weight.html">check_wellplan_weight()</a></code> </p>
-        </td>
-        <td><p>Attribute "wellplan_weight" verification</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_wellplan_weigth_category_code.html">check_wellplan_weigth_category_code()</a></code> </p>
-        </td>
-        <td><p>Attribute "wellplan_weigth_category_code" verification</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_wellplan_weigth_category_label.html">check_wellplan_weigth_category_label()</a></code> </p>
-        </td>
-        <td><p>Attribute "wellplan_weigth_category_label" verification</p></td>
+        <td><p>Attribut "weighted_weight" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_well_global_weigth.html">check_well_global_weigth()</a></code> </p>
         </td>
-        <td><p>Attribute "well_global_weigth" verification</p></td>
+        <td><p>Attribut "well_global_weigth" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_well_id.html">check_well_id()</a></code> </p>
         </td>
-        <td><p>Attribute "well_id" verification</p></td>
+        <td><p>Attribut "well_id" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_well_minus10_weigth.html">check_well_minus10_weigth()</a></code> </p>
         </td>
-        <td><p>Attribute "well_minus10_weigth" verification</p></td>
+        <td><p>Attribut "well_minus10_weigth" verification</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="check_well_plus10_weigth.html">check_well_plus10_weigth()</a></code> </p>
         </td>
-        <td><p>Attribute "well_plus10_weigth" verification</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-diverse" class="hasAnchor"><a href="#section-diverse" class="anchor"></a>Diverse</h2>
-          <p class="section-desc"><p>Diverse functions and tools.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
+        <td><p>Attribut "well_plus10_weigth" verification</p></td>
+      </tr><tr>
         
         <td>
-          <p><code><a href="object_r6.html">object_r6()</a></code> </p>
+          <p><code><a href="check_wellplan_id.html">check_wellplan_id()</a></code> </p>
         </td>
-        <td><p>R6 object</p></td>
+        <td><p>Attribut "wellplan_id" verification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_wellplan_number.html">check_wellplan_number()</a></code> </p>
+        </td>
+        <td><p>Attribut "wellplan_number" verification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_wellplan_weight.html">check_wellplan_weight()</a></code> </p>
+        </td>
+        <td><p>Attribut "wellplan_weight" verification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_wellplan_weigth_category_code.html">check_wellplan_weigth_category_code()</a></code> </p>
+        </td>
+        <td><p>Attribut "wellplan_weigth_category_code" verification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_wellplan_weigth_category_label.html">check_wellplan_weigth_category_label()</a></code> </p>
+        </td>
+        <td><p>Attribut "wellplan_weigth_category_label" verification</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="data_model_initialisation.html">data_model_initialisation()</a></code> </p>
+        </td>
+        <td><p>Data model initialisation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="df2boot.html">df2boot()</a></code> </p>
+        </td>
+        <td><p>Translate Data frame to boot class</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarycatch.html">elementarycatch</a></code> </p>
+        </td>
+        <td><p>R6 class elementarycatch creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarycatches.html">elementarycatches</a></code> </p>
+        </td>
+        <td><p>R6 class elementarycatches creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarylanding.html">elementarylanding</a></code> </p>
+        </td>
+        <td><p>R6 class elementarylanding creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarylandings.html">elementarylandings</a></code> </p>
+        </td>
+        <td><p>R6 class elementarylandings creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarysample.html">elementarysample</a></code> </p>
+        </td>
+        <td><p>R6 class trip creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarysampleraw.html">elementarysampleraw</a></code> </p>
+        </td>
+        <td><p>R6 class trip creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="elementarywellplan.html">elementarywellplan</a></code> </p>
+        </td>
+        <td><p>R6 class elementarywellplan creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="full_trips.html">full_trips</a></code> </p>
+        </td>
+        <td><p>R6 class full_trips creation</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="initiate_log_file.html">initiate_log_file()</a></code> </p>
         </td>
         <td><p>Log file creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="list_t3.html">list_t3</a></code> </p>
+        </td>
+        <td><p>R6 class list_t3 creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="object_model_data.html">object_model_data</a></code> </p>
+        </td>
+        <td><p>R6 class object_model_data creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="object_r6.html">object_r6()</a></code> </p>
+        </td>
+        <td><p>R6 object creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="samples.html">samples</a></code> </p>
+        </td>
+        <td><p>R6 class samples creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="standardisedsample.html">standardisedsample</a></code> </p>
+        </td>
+        <td><p>R6 class standardisedsample creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="standardisedsampleset.html">standardisedsampleset</a></code> </p>
+        </td>
+        <td><p>R6 class standardisedsampleset creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="t3_level1.html">t3_level1()</a></code> </p>
+        </td>
+        <td><p>T3 process level 1</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="t3_level2.html">t3_level2()</a></code> </p>
+        </td>
+        <td><p>T3 process level 2</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="t3_process.html">t3_process()</a></code> </p>
+        </td>
+        <td><p>T3 process compilation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="trip.html">trip</a></code> </p>
+        </td>
+        <td><p>R6 class trip creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="trips.html">trips</a></code> </p>
+        </td>
+        <td><p>R6 class trips creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tunaboot.html">tunaboot()</a></code> </p>
+        </td>
+        <td><p>Boostrap for Model Predictions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tunapredict.html">tunapredict()</a></code> </p>
+        </td>
+        <td><p>Model Predictions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="well.html">well</a></code> </p>
+        </td>
+        <td><p>R6 class well creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="wells.html">wells</a></code> </p>
+        </td>
+        <td><p>R6 class wells creation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="wellset.html">wellset</a></code> </p>
+        </td>
+        <td><p>R6 class wellset creation</p></td>
       </tr>
     </tbody>
     </table>
@@ -719,30 +629,13 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
-<script>
-  docsearch({
-    
-    
-    apiKey: 'b232a295f4339cb13abbd7adee1da479',
-    indexName: 'ob7-ird',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-
 
 
   </body>
