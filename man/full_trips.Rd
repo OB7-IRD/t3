@@ -518,7 +518,12 @@ Modelling proportions in sets througth random forest models.
 \subsection{Method \code{models_checking()}}{
 Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(outputs_level3_process2, outputs_path)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(
+  outputs_level3_process2,
+  outputs_path,
+  plot_sample = F,
+  avdth_patch_coord = F
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -527,6 +532,10 @@ Load each full model and compute figures and tables to check the model quality. 
 \item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
 
 \item{\code{outputs_path}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+
+\item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+
+\item{\code{avdth_patch_coord}}{paramter wiating for coordinate conversion patch from avdth database}
 }
 \if{html}{\out{</div>}}
 }

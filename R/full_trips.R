@@ -3757,8 +3757,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
                             #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
                             #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
+                            #' @param avdth_patch_coord paramter wiating for coordinate conversion patch from avdth database
                             models_checking = function(outputs_level3_process2,
-                                                       outputs_path) {
+                                                       outputs_path,
+                                                       plot_sample = F,
+                                                       avdth_patch_coord = F) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.3: models checking.\n",
                                   sep = "")
@@ -4013,7 +4017,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 units = c("cm"))
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("reporting_vs_sampling" = reporting_vs_sampling))
+
                                 # map of the data used for modelling
+                                if(plot_sample == T){
                                 current_data_map <- current_model_data
                                 sp::coordinates(obj = current_data_map) <- ~ lon + lat
                                 ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
@@ -4081,6 +4087,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 pointsize = 10)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("set_sampled_map" = set_sampled_map))
+                                }
                                 # model checking
                                 # compute model residuals
                                 resrf <- current_model_data$resp - ranger::predictions(current_model_outputs[[3]])
@@ -4130,6 +4137,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("variables_importance" = variables_importance))
                                 # test for spatial and temporal correlation on residuals
+                                if(avdth_patch_coord == T){
                                 current_model_data_map <- current_model_data
                                 sp::coordinates(current_model_data_map) <- ~ lon+lat
                                 sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
@@ -4267,6 +4275,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 dpi = 300)
                                 current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
                                                                                list("spatio_temporal_checking" = spatio_temporal_checking))
+                                }
                                 # model validity
                                 model_validation_density_res <- ggplot2::ggplot(current_model_data,
                                                                                 ggplot2::aes(x = res_ST)) +
