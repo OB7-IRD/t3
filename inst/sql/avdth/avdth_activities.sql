@@ -16,8 +16,12 @@ SELECT
 	,a.C_OCEA AS ocean
 	,a.D_ACT AS activity_date
 	,a.N_ACT AS activity_number
-	,a.V_LON AS activity_longitude
-	,a.V_LAT AS activity_latitude
+	,IIf(a.Q_ACT IN (1, 2),
+		Int(a.V_LON * POWER(10, -2)) + ((a.V_LON * POWER(10, -2) - Int(a.V_LON * POWER(10, -2))) / 60 * 100),
+		-(Int(a.V_LON * POWER(10, -2)) + ((a.V_LON * POWER(10, -2) - Int(a.V_LON * POWER(10, -2))) / 60 * 100))) AS activity_longitude
+	,IIf(a.Q_ACT IN (1, 4),
+		Int(a.V_LAT * POWER(10, -2)) + ((a.V_LAT * POWER(10, -2) - Int(a.V_LAT * POWER(10, -2))) / 60 * 100),
+		-(Int(a.V_LAT * POWER(10, -2)) + ((a.V_LAT * POWER(10, -2) - Int(a.V_LAT * POWER(10, -2))) / 60 * 100))) AS activity_latitude
 	,IIf(a.C_OPERA IN (0,1,2,14),
 		a.V_NB_OP,
 		0) AS set_count
