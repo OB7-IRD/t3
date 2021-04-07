@@ -3,6 +3,8 @@ on:
     branches:
       - main
       - master
+      - doc-test-level-1
+      - development
 
 name: pkgdown
 
