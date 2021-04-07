@@ -136,6 +136,18 @@
     <loc>https://ob7-ird.github.io/t3/reference/check_weighted_weight.html</loc>
   </url>
   <url>
+    <loc>https://ob7-ird.github.io/t3/reference/check_well_global_weigth.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/reference/check_well_id.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/reference/check_well_minus10_weigth.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/reference/check_well_plus10_weigth.html</loc>
+  </url>
+  <url>
     <loc>https://ob7-ird.github.io/t3/reference/check_wellplan_id.html</loc>
   </url>
   <url>
@@ -149,18 +161,6 @@
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/check_wellplan_weigth_category_label.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/check_well_global_weigth.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/check_well_id.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/check_well_minus10_weigth.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/check_well_plus10_weigth.html</loc>
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/data_model_initialisation.html</loc>
