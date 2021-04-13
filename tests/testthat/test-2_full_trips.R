@@ -24,13 +24,13 @@ capture.output(object_full_trips$add_elementarylandings(object_elementarylanding
 # add well(s) and sample(s) to trip(s) selected
 capture.output(object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_env__$private$wells),
                file = "NUL")
-
+# level 1 process ----
 # level 1.1: rf1
 species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11))
 capture.output(object_full_trips$rf1(species_rf1 = species_rf1),
                file = "NUL")
 
-# level 1.2: rf2 ----
+# level 1.2: rf2
 capture.output(object_full_trips$rf2(),
                file = "NUL")
 

@@ -1057,6 +1057,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                               }
                                             }
+                                            #have to assign here corrected_logbook_category <- category_5
                                           }
                                         }
                                       }
