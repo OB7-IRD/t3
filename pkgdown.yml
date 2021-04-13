@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   level_1: level_1.html
   model_initialisation: model_initialisation.html
-last_built: 2021-04-07T11:19Z
+last_built: 2021-04-13T14:01Z
 urls:
   reference: https://ob7-ird.github.io/t3/reference
   article: https://ob7-ird.github.io/t3/articles
