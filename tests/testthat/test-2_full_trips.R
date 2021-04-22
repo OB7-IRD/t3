@@ -39,12 +39,16 @@ capture.output(object_full_trips$conversion_weigth_category(),
                file = "NUL")
 
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
-  current_trips <- object_full_trips$.__enclos_env__$private$data_selected[[a]]
+  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                 file = "NUL")
+  capture.output(current_trips$add(object_full_trips$.__enclos_env__$private$data_selected[[a]]),
+                 file = "NUL")
   current_sum_elementarycatches_rf1 <- 0
   current_sum_elementarycatches_rf2 <- 0
   current_sum_elementarylandings <- 0
-  for (b in seq_len(length.out = length(x = current_trips))) {
-    current_trip <- current_trips[[b]]
+  current_sum_catch_weight_category_corrected <- 0
+  for (b in seq_len(length.out = current_trips$count())) {
+    current_trip <- current_trips$extract(id = b)[[1]]
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
     current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
     current_rf1 <- current_trip$.__enclos_env__$private$rf1
@@ -61,29 +65,56 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2)))
                           testthat::expect_true(object = is.numeric(current_rf2))
                         })
-    current_activities <- current_trip$.__enclos_env__$private$activities
-    current_elementarylandings <- current_trip$.__enclos_env__$private$elementarylandings
-    if (length(x = current_activities) != 0) {
-      for (c in seq_len(length.out = length(x = current_activities))) {
-        current_activity <- current_activities[[c]]
-        if (! is.null(current_activity$.__enclos_env__$private$elementarycatches)) {
-          current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-          for (d in seq_len(length.out = length(current_elementarycatches))) {
-            if (current_elementarycatches[[d]]$.__enclos_env__$private$specie_code %in% species_rf1
-                && ! is.null(current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf1)) {
-              current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf1
-              current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + current_elementarycatches[[d]]$.__enclos_env__$private$catch_weight_rf2
+    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                   file = "NUL")
+    capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                   file = "NUL")
+    capture.output(current_elementarylandings <- t3::object_r6(class_name = "elementarylandings"),
+                   file = "NUL")
+    capture.output(current_elementarylandings$add(new_item = current_trip$.__enclos_env__$private$elementarylandings),
+                   file = "NUL")
+    if (current_activities$count() != 0) {
+      for (c in seq_len(length.out = current_activities$count())) {
+        current_activity <- current_activities$extract(id = c)[[1]]
+        if (! is.null(current_activity$.__enclos_env__$private$elementarycatches)
+            & length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
+          capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                         file = "NUL")
+          capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
+                         file = "NUL")
+          elementarycatches_ids <- unique(unlist(current_elementarycatches$extract_l1_element_value(element = "elementarycatch_id")))
+          current_sum_catch_weight_category_corrected <- current_sum_catch_weight_category_corrected + sum(unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_corrected")))
+          for (d in seq_len(length.out = length(elementarycatches_ids))) {
+            elementarycatches_id <- elementarycatches_ids[d]
+            capture.output(current_elementarycatches_by_id <- t3::object_r6(class_name = "elementarycatches"),
+                           file = "NUL")
+            capture.output(current_elementarycatches_by_id$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$elementarycatch_id == \"",
+                                                                                                                              elementarycatches_id,
+                                                                                                                              "\""))),
+                           file = "NUL")
+            if (unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "specie_code"))) %in% species_rf1) {
+              current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf1")))
+              current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
             }
+            current_corrected_logbook_category <- unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "corrected_logbook_category")))
+            # 205 - Checking if variable "corrected_logbook_category" is equal to "<10kg", ">30kg", ">10kg" or "unknown" ----
+            testthat::test_that(desc = "205 - Checking if variable \"corrected_logbook_category\" is equal to \"<10kg\", \">30kg\", \">10kg\" or \"unknown\"",
+                                code = {
+                                  testthat::expect_true(object = current_corrected_logbook_category %in% c("<10kg", "10-30kg", ">30kg", ">10kg", "unknown"),
+                                                        label = current_corrected_logbook_category)
+                                })
           }
         }
       }
     }
-    if (length(x = current_elementarylandings) != 0) {
-      for (e in seq_len(length.out = length(current_elementarylandings))) {
-        if (current_elementarylandings[[e]]$.__enclos_env__$private$specie_code %in% species_rf1) {
-          current_sum_elementarylandings <- current_sum_elementarylandings + current_elementarylandings[[e]]$.__enclos_env__$private$landing_weight
-        }
-      }
+    if (current_elementarylandings$count() != 0) {
+      capture.output(current_elementarylandings_rf1 <- t3::object_r6(class_name = "elementarylandings"),
+                     file = "NUL")
+      capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$specie_code %in% c(",
+                                                                                                                                                  paste0(species_rf1, collapse = ", "),
+                                                                                                                                                  ")"))),
+                     file = "NUL")
+      current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))
     }
   }
   # 202 - Checking if sum elementary catches corrected by rf1 is equal to sum elementary landings ----
@@ -96,6 +127,12 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
   testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
                       code = {
                         testthat::expect_equal(object = current_sum_elementarylandings,
+                                               expected = current_sum_elementarycatches_rf2)
+                      })
+  # 206 - Checking if sum catch weight category corrected (process 1.3) is equal to sum elementary catches corrected by rf2 ----
+  testthat::test_that(desc = "206 - Checking if sum catch weight category corrected (process 1.3) is equal to sum elementary catches corrected by rf2",
+                      code = {
+                        testthat::expect_equal(object = current_sum_catch_weight_category_corrected,
                                                expected = current_sum_elementarycatches_rf2)
                       })
 }

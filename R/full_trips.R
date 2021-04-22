@@ -972,7 +972,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           other_category <- FALSE
                                           names(other_category) <- 0
                                           for (n in seq_len(length.out = length(current_elementarycatches))) {
-                                            if (current_elementarycatches[[n]]$.__enclos_env__$private$logbook_category == 9 & current_elementarycatches[[n]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB", "SKJ")) {
+                                            if (current_elementarycatches[[n]]$.__enclos_env__$private$logbook_category == 9
+                                                & current_elementarycatches[[n]]$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB", "SKJ")) {
                                               category_9 <- append(category_9, TRUE)
                                               names(category_9)[length(category_9)] <- n
                                             } else {
@@ -1057,7 +1058,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                               }
                                             }
-                                            #have to assign here corrected_logbook_category <- category_5
                                           }
                                         }
                                       }

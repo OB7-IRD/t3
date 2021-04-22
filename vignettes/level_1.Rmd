@@ -84,6 +84,8 @@ This process is useful for historical data, especially when logbooks trips were 
 
 ### Process 1.3: Logbook weigth categories conversion
 
-
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_1.3.png'/>
+ 
+### Process 1.4: postive sets count
     
 </div>
