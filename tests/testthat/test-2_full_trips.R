@@ -42,6 +42,10 @@ capture.output(object_full_trips$conversion_weigth_category(),
 capture.output(object_full_trips$set_count(),
                file = "NUL")
 
+# level 1.5: set duration ----
+capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs),
+               file = "NUL")
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")

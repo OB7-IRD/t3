@@ -1216,31 +1216,37 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
                                       current_trip <- private$data_selected[[i]][[j]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        for (k in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
+                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
+                                        for (k in seq_len(length.out = current_activities$count())) {
+                                          current_activity <- current_activities$extract(id = k)[[1]]
+                                          # for activity declared as null set (0), positive set (1), unknown set (2) or pocket capsizing (14)
                                           if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
-                                            current_activity <- current_trip$.__enclos_env__$private$activities[[k]]
-                                            if (current_activity$.__enclos_env__$private$activity_code %in% c(0, 2, 14)) {
-                                              # for a set declared as null set (0), unknown set (2) or pocket capsizing (14)
-                                              current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                              if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                       & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                       & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
-                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
-                                                    "No correspondance with activity parameters (ocean and/or school type).\n",
-                                                    "[trip: ",
-                                                    current_trip$.__enclos_env__$private$trip_id,
-                                                    ", activity: ",
-                                                    current_activity$.__enclos_env__$private$activity_id,
-                                                    "]\n",
-                                                    sep = "")
-                                                stop()
-                                              }
-                                              if (length(current_elementarycatches) != 0) {
-                                                catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = length(current_elementarycatches)),
+                                            if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                     & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                                     & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                     & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
+                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: invalid \"set_duration_ref\" argument.\n",
+                                                  "No correspondance with activity parameters (ocean and/or school type).\n",
+                                                  "[trip: ",
+                                                  current_trip$.__enclos_env__$private$trip_id,
+                                                  ", activity: ",
+                                                  current_activity$.__enclos_env__$private$activity_id,
+                                                  "]\n",
+                                                  sep = "")
+                                              stop()
+                                            } else {
+                                              if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
+                                                capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                               file = "NUL")
+                                                capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
+                                                               file = "NUL")
+                                                catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
                                                                                               FUN = function(l) {
-                                                                                                if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
+                                                                                                if (is.null(current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                                       " - Error: argument \"catch_weight_category_corrected\" is null.\n",
                                                                                                       "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
@@ -1254,7 +1260,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                       sep = "")
                                                                                                   stop()
                                                                                                 } else {
-                                                                                                  current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                                  current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected
                                                                                                 }
                                                                                               }))
                                                 parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
@@ -1267,59 +1273,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
-                                                current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                                                          & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                                                          & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                                                          & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "null_set_value"]
-                                              }
-                                            } else if (current_activity$.__enclos_env__$private$activity_code == 1) {
-                                              # for a set declared as positive (1)
-                                              current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                              if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                       & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                       & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                       & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
-                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
-                                                    "No correspondance with activity parameters (ocean and/or school type).\n",
-                                                    "[trip: ",
-                                                    current_trip$.__enclos_env__$private$trip_id,
-                                                    ", activity: ",
-                                                    current_activity$.__enclos_env__$private$activity_id,
-                                                    "]\n",
-                                                    sep = "")
-                                                stop()
-                                              } else {
-                                                if (length(current_elementarycatches) != 0) {
-                                                  catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = length(current_elementarycatches)),
-                                                                                                FUN = function(l) {
-                                                                                                  if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
-                                                                                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                        " - Error: argument \"catch_weight_category_corrected\" is null.\n",
-                                                                                                        "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
-                                                                                                        "\n[trip: ",
-                                                                                                        current_activity$.__enclos_env__$private$trip_id,
-                                                                                                        ", activity: ",
-                                                                                                        current_activity$.__enclos_env__$private$activity_id,
-                                                                                                        ", elementarycatch: ",
-                                                                                                        current_elementarycatches[[l]]$.__enclos_env__$private$elementarycatch_id,
-                                                                                                        "]\n",
-                                                                                                        sep = "")
-                                                                                                    stop()
-                                                                                                  } else {
-                                                                                                    current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
-                                                                                                  }
-                                                                                                }))
-                                                  parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                  & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                  & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_a"]
-                                                  parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                  & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
-                                                                                  & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                  & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_b"]
-                                                  current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
-                                                } else {
+                                                if (current_activity$.__enclos_env__$private$activity_code == 1) {
                                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                       " - Error: set declared as positive but without elementary catch.",
                                                       "\n[trip: ",
@@ -1329,21 +1283,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       "]\n",
                                                       sep = "")
                                                   stop()
+                                                } else {
+                                                  current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                                                            & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
+                                                                                                                            & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
+                                                                                                                            & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "null_set_value"]
                                                 }
                                               }
-                                            } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: algorithms not developed yet for the activity code ",
-                                                  current_activity$.__enclos_env__$private$activity_code,
-                                                  ".\n",
-                                                  "[trip: ",
-                                                  current_trip$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_activity$.__enclos_env__$private$activity_id,
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
                                             }
+                                          } else {
+                                            current_activity$.__enclos_env__$private$set_duration <- NA
                                           }
                                         }
                                       }
