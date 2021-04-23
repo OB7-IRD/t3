@@ -1115,13 +1115,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_trip <- private$data_selected[[i]][[j]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                         for (k in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
+                                          current_activity <- current_trip$.__enclos_env__$private$activities[[k]]
                                           if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
-                                            current_activity <- current_trip$.__enclos_env__$private$activities[[k]]
-                                            current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                            if (length(current_elementarycatches) != 0) {
-                                              catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = length(current_elementarycatches)),
+                                            capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                           file = "NUL")
+                                            if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
+                                              capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
+                                                             file = "NUL")
+                                              catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
                                                                                             FUN = function(l) {
-                                                                                              if (is.null(current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected)) {
+                                                                                              if (is.null(current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected)) {
                                                                                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                                     " - Error: argument \"catch_weight_category_corrected\" is null.\n",
                                                                                                     "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
@@ -1133,7 +1136,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                     sep = "")
                                                                                                 stop()
                                                                                               } else {
-                                                                                                current_elementarycatches[[l]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                                current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected
                                                                                               }
                                                                                             }))
                                               if (catch_weight_category_corrected == 0) {
@@ -1144,6 +1147,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             } else {
                                               current_activity$.__enclos_env__$private$positive_set_count <- 0
                                             }
+                                          } else {
+                                            current_activity$.__enclos_env__$private$positive_set_count <- NA
                                           }
                                         }
                                       }
