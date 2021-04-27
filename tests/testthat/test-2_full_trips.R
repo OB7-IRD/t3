@@ -46,6 +46,10 @@ capture.output(object_full_trips$set_count(),
 capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs),
                file = "NUL")
 
+# level 1.6: time at sea ----
+capture.output(object_full_trips$time_at_sea(),
+               file = "NUL")
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -58,6 +62,15 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
   current_sum_catch_weight_category_corrected <- 0
   for (b in seq_len(length.out = current_trips$count())) {
     current_trip <- current_trips$extract(id = b)[[1]]
+    current_time_at_sea <- current_trip$.__enclos_env__$private$time_at_sea
+    # 209 - Checking if variable "time_at_sea" is filled and in the correct format according the process 1.6 ----
+    testthat::test_that(desc = "209 - Checking if variable \"time_at_sea\" is filled and in the correct format according the process 1.6",
+                        code = {
+                          testthat::expect_true(object = (is.numeric(current_time_at_sea)
+                                                          && current_time_at_sea > 0),
+                                                label = paste0("issue with the full trip ", a,
+                                                               " and the partial trip ", b))
+                        })
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
     current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
     current_rf1 <- current_trip$.__enclos_env__$private$rf1

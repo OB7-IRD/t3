@@ -88,10 +88,14 @@ This process is useful for historical data, especially when logbooks trips were 
  
 ### Process 1.4: postive sets count
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_1.4.png'/>
 
 ### Process 1.5: Set duration calculation process
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.5.png'/>
+
+### Process 1.6: Time at sea estimation process
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.6.png'/>
     
 </div>

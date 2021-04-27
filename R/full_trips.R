@@ -1352,33 +1352,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     landing_date <- current_trip$.__enclos_env__$private$landing_date
                                     time_departure_date <- lubridate::hms(format(departure_date, format = "%H:%M:%S"))
                                     time_landing_date <- lubridate::hms(format(landing_date, format = "%H:%M:%S"))
-                                    if (time_departure_date > lubridate::dseconds(x = 0) & time_landing_date > lubridate::dseconds(x = 0)) {
+                                    if (time_departure_date > lubridate::dseconds(x = 0)
+                                        & time_landing_date > lubridate::dseconds(x = 0)) {
                                       # we have time for departure_date and landing_date
-                                      time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date, end = landing_date)) / 3600
+                                      time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
+                                                                                               end = landing_date)) / 3600
                                     } else {
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        current_activities_departure_date <- vector(mode = "list")
-                                        current_activities_landing_date <- vector(mode = "list")
-                                        for (k in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                          if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date == departure_date) {
-                                            current_activities_departure_date <- append(current_activities_departure_date,
-                                                                                        current_trip$.__enclos_env__$private$activities[[k]])
-                                          } else if (current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date == landing_date) {
-                                            current_activities_landing_date <- append(current_activities_landing_date,
-                                                                                      current_trip$.__enclos_env__$private$activities[[k]])
-                                          }
+                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
+                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                departure_date,
+                                                                                                "\""))) != 0) {
+                                          capture.output(current_activities_departure_date <- t3::object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                                                                       departure_date,
+                                                                                                                                                       "\""))),
+                                                         file = "NUL")
+                                          current_activities_departure_date_time_at_sea <- sum(unlist(current_activities_departure_date$extract_l1_element_value(element = "time_at_sea")))
+                                        } else {
+                                          current_activities_departure_date_time_at_sea <- 0
                                         }
-                                        current_activities_departure_date_time_at_sea <- 0
-                                        current_activities_landing_date_time_at_sea <- 0
-                                        if (length(current_activities_departure_date) != 0) {
-                                          for (l in seq_len(length.out = length(current_activities_departure_date))) {
-                                            current_activities_departure_date_time_at_sea <- current_activities_departure_date_time_at_sea + current_activities_departure_date[[l]]$.__enclos_env__$private$time_at_sea
-                                          }
-                                        }
-                                        if (length(current_activities_landing_date) != 0) {
-                                          for (m in seq_len(length.out = length(current_activities_landing_date))) {
-                                            current_activities_landing_date_time_at_sea <- current_activities_landing_date_time_at_sea + current_activities_landing_date[[m]]$.__enclos_env__$private$time_at_sea
-                                          }
+                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                landing_date,
+                                                                                                "\""))) != 0) {
+                                          capture.output(current_activities_landing_date <- t3::object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_landing_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                                                                     landing_date,
+                                                                                                                                                     "\""))),
+                                                         file = "NUL")
+                                          current_activities_landing_date_time_at_sea <- sum(unlist(current_activities_landing_date$extract_l1_element_value(element = "time_at_sea")))
+                                        } else {
+                                          current_activities_landing_date_time_at_sea <- 0
                                         }
                                         time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
                                                                                                  end = landing_date - lubridate::days(x = 1))
