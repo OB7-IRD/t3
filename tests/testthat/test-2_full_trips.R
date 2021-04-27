@@ -68,7 +68,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.numeric(current_rf1)
                                                           & (current_trip$.__enclos_env__$private$statut_rf1 %in% c(1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4))),
                                                 label = paste0("issue with the full trip ", a,
-                                                               "and the partial trip ", b))
+                                                               " and the partial trip ", b))
                         })
     # 203 - Checking if rf2 process was applied on all trips ----
     testthat::test_that(desc = "203 - Checking if rf2 process was applied on all trips",
@@ -76,12 +76,22 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.numeric(current_rf2)
                                                           & (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2))),
                                                 label = paste0("issue with the full trip ", a,
-                                                               "and the partial trip ", b))
+                                                               " and the partial trip ", b))
                         })
     capture.output(current_activities <- t3::object_r6(class_name = "activities"),
                    file = "NUL")
     capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                    file = "NUL")
+    current_activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
+    # 208 - Checking if variable "set_duration" is filled and in the correct format according the process 1.5 ----
+    testthat::test_that(desc = "208 - Checking if variable \"set_duration\" is filled and in the correct format according the process 1.5",
+                        code = {
+                          testthat::expect_true(object = all(is.numeric(current_activities_set_duration)
+                                                             & (current_activities_set_duration >= 0
+                                                                | is.na(current_activities_set_duration))),
+                                                label = paste0("issue with the full trip ", a,
+                                                               " and the partial trip ", b))
+                        })
     current_activities_set_count <- unlist(current_activities$extract_l1_element_value(element = "positive_set_count"))
     # 207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4 ----
     testthat::test_that(desc = "207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4",
@@ -90,7 +100,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                                              & (current_activities_set_count >= 0
                                                                 | is.na(current_activities_set_count))),
                                                 label = paste0("issue with the full trip ", a,
-                                                               "and the partial trip ", b))
+                                                               " and the partial trip ", b))
                         })
     capture.output(current_elementarylandings <- t3::object_r6(class_name = "elementarylandings"),
                    file = "NUL")
@@ -129,7 +139,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                                         label = paste0("issue with the full trip ", a,
                                                                        ", the partial trip ", b,
                                                                        ", the activity ", c,
-                                                                       "and the elementarycatch ", d))
+                                                                       " and the elementarycatch ", d))
                                 })
           }
         }
