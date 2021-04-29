@@ -1563,26 +1563,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
                                       current_trip <- private$data_selected[[i]][[j]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        activities_set_duration <- sum(sapply(X = seq_len(length.out = length(current_trip$.__enclos_env__$private$activities)),
-                                                                              FUN = function(k) {
-                                                                                if (! is.null(current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration)) {
-                                                                                  current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$set_duration
-                                                                                } else {
-                                                                                  0
-                                                                                }
-                                                                              })) / 60
+                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
+                                        activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
+                                        if (any(is.null(activities_set_duration))) {
+                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                              " - Error: run process 1. 5 (set duration calculation) before this process.\n",
+                                              sep = "")
+                                          stop()
+                                        } else {
+                                          sum_activities_set_duration <- sum(activities_set_duration,
+                                                                             na.rm = TRUE)
+                                        }
                                         if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                               " - Error: run process 1. 7 (fishing time calculation) before this process.\n",
                                               sep = "")
                                           stop()
                                         } else {
-                                          searching_time <- current_trip$.__enclos_env__$private$fishing_time - activities_set_duration
+                                          current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
+                                          searching_time <- lubridate::dhours(x = current_fishing_time) - lubridate::dminutes(x = sum_activities_set_duration)
+                                          searching_time <- searching_time@.Data
                                         }
                                       } else {
                                         searching_time <- 0
                                       }
-                                      current_trip$.__enclos_env__$private$searching_time <- searching_time
+                                      current_trip$.__enclos_env__$private$searching_time <- searching_time / 3600
                                     }
                                   }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

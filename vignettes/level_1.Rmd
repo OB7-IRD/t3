@@ -90,16 +90,20 @@ This process is useful for historical data, especially when logbooks trips were 
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.4.png'/>
 
-### Process 1.5: Set duration calculation process
+### Process 1.5: Set duration calculation
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.5.png'/>
 
-### Process 1.6: Time at sea estimation process
+### Process 1.6: Time at sea estimation
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.6.png'/>
 
 # level 1.7: Fishing time determination ----
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.7.png'/>
-    
+
+# level 1.8: Searching time process ----
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.8.png'/>
+        
 </div>

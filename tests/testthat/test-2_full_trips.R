@@ -54,6 +54,10 @@ capture.output(object_full_trips$time_at_sea(),
 capture.output(object_full_trips$fishing_time(),
                file = "NUL")
 
+# level 1.8: searching time ----
+capture.output(object_full_trips$searching_time(),
+               file = "NUL")
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -67,8 +71,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
   for (b in seq_len(length.out = current_trips$count())) {
     current_trip <- current_trips$extract(id = b)[[1]]
     current_time_at_sea <- current_trip$.__enclos_env__$private$time_at_sea
-    # 209 - Checking if variable "time_at_sea" is filled and in the correct format according the process 1.6 ----
-    testthat::test_that(desc = "209 - Checking if variable \"time_at_sea\" is filled and in the correct format according the process 1.6",
+    # 209 - Checking if variable "time_at_sea" is filled and in the correct format according to the process 1.6 ----
+    testthat::test_that(desc = "209 - Checking if variable \"time_at_sea\" is filled and in the correct format according to the process 1.6",
                         code = {
                           testthat::expect_true(object = (is.numeric(current_time_at_sea)
                                                           && current_time_at_sea > 0),
@@ -76,11 +80,20 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                                                " and the partial trip ", b))
                         })
     current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
-    # 210 - Checking if variable "fishing_time" is filled and in the correct format according the process 1.7 ----
-    testthat::test_that(desc = "210 - Checking if variable \"fishing_time\" is filled and in the correct format according the process 1.7",
+    # 210 - Checking if variable "fishing_time" is filled and in the correct format according to the process 1.7 ----
+    testthat::test_that(desc = "210 - Checking if variable \"fishing_time\" is filled and in the correct format according to the process 1.7",
                         code = {
                           testthat::expect_true(object = (is.numeric(current_fishing_time)
                                                           && current_fishing_time > 0),
+                                                label = paste0("issue with the full trip ", a,
+                                                               " and the partial trip ", b))
+                        })
+    current_searching_time <- current_trip$.__enclos_env__$private$searching_time
+    # 211 - Checking if variable "searching_time" is filled and in the correct format according to the process 1.8 ----
+    testthat::test_that(desc = "211 - Checking if variable \"searching_time\" is filled and in the correct format according to the process 1.8",
+                        code = {
+                          testthat::expect_true(object = (is.numeric(current_searching_time)
+                                                          && current_searching_time > 0),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
