@@ -1389,17 +1389,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         } else {
                                           current_activities_landing_date_time_at_sea <- 0
                                         }
-                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                 end = landing_date - lubridate::days(x = 1))
-                                        ) / 3600
-                                        time_at_sea <- time_at_sea + current_activities_departure_date_time_at_sea + current_activities_landing_date_time_at_sea
+                                        time_at_sea_tmp <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                 end = landing_date - lubridate::days(x = 1)))
+                                        time_at_sea <- (time_at_sea_tmp
+                                                        + lubridate::dhours(x = current_activities_departure_date_time_at_sea)
+                                                        + lubridate::dhours(x = current_activities_landing_date_time_at_sea))
+                                        time_at_sea <- time_at_sea@.Data
                                       } else {
                                         time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                 end = landing_date - lubridate::days(x = 1))
-                                        ) / 3600
+                                                                                                 end = landing_date - lubridate::days(x = 1)))
                                       }
                                     }
-                                    current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
+                                    current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea / 3600
                                   }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1474,59 +1475,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_trip <- private$data_selected[[i]][[j]]
                                       fishing_time <- 0
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        activities_dates <- NULL
-                                        for (k in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                          current_activity_date <- current_trip$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_date
-                                          activities_dates <- append(activities_dates,
-                                                                     current_activity_date)
-                                        }
-                                        activities_dates <- sort(x = unique(lubridate::date(activities_dates)))
-                                        for (l in activities_dates) {
-                                          fishing_time_tmp <- 0
-                                          current_activities_code <- unique(sapply(X = seq_len(length.out = length(current_trip$.__enclos_env__$private$activities)),
-                                                                                   FUN = function(m) {
-                                                                                     if (current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_date == l) {
-                                                                                       current_trip$.__enclos_env__$private$activities[[m]]$.__enclos_env__$private$activity_code
-                                                                                     } else {
-                                                                                       NA
-                                                                                     }
-                                                                                   }))
-                                          current_activities_code <- current_activities_code[!is.na(current_activities_code)]
+                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
+                                        activities_dates <- current_activities$extract_l1_element_value(element = "activity_date")
+                                        activities_dates <- unique(do.call(what = "c",
+                                                                           args = activities_dates))
+                                        activities_dates <- sort(x = activities_dates)
+                                        for (l in seq_len(length.out = length(activities_dates))) {
+                                          activities_date <- activities_dates[[l]]
+                                          capture.output(current_activities_date <- t3::object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                                                             activities_date,
+                                                                                                                                             "\""))),
+                                                         file = "NUL")
+                                          current_activities_code <- unique(unlist(current_activities_date$extract_l1_element_value(element = "activity_code")))
                                           if (any(! current_activities_code %in% c(4, 7, 10, 15, 100))) {
-                                            current_activities_location <- unique(sapply(X = seq_len(length.out = length(current_trip$.__enclos_env__$private$activities)),
-                                                                                         FUN = function(n) {
-                                                                                           if (current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_date == l) {
-                                                                                             paste(current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_latitude,
-                                                                                                   current_trip$.__enclos_env__$private$activities[[n]]$.__enclos_env__$private$activity_longitude,
-                                                                                                   sep = "_")
-                                                                                           } else {
-                                                                                             NA
-                                                                                           }
-                                                                                         }))
-                                            current_activities_location <- current_activities_location[!is.na(current_activities_location)]
-                                            latitude_mean <- mean(sapply(X = seq_len(length.out = length(current_activities_location)),
-                                                                         FUN = function(o) {
-                                                                           as.numeric(unlist(strsplit(current_activities_location[o],
-                                                                                                      "_"))[1])
-                                                                         }))
-                                            longitude_mean <- mean(sapply(X = seq_len(length.out = length(current_activities_location)),
-                                                                          FUN = function(o) {
-                                                                            as.numeric(unlist(strsplit(current_activities_location[o],
-                                                                                                       "_"))[2])
-                                                                          }))
-                                            current_sunrise <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                            current_activities_latitudes <- unlist(current_activities_date$extract_l1_element_value(element = "activity_latitude"))
+                                            current_activities_longitudes <- unlist(current_activities_date$extract_l1_element_value(element = "activity_longitude"))
+                                            latitude_mean <- mean(x = current_activities_latitudes)
+                                            longitude_mean <- mean(x = current_activities_longitudes)
+                                            current_sunrise <- suncalc::getSunlightTimes(date = activities_date,
                                                                                          lat = latitude_mean,
                                                                                          lon = longitude_mean)[[sunrise_schema]]
-                                            current_sunset <- suncalc::getSunlightTimes(date = lubridate::as_date(l),
+                                            current_sunset <- suncalc::getSunlightTimes(date = activities_date,
                                                                                         lat = latitude_mean,
                                                                                         lon = longitude_mean)[[sunset_schema]]
                                             fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
-                                                                                                          end = current_sunset)) / 3600
+                                                                                                          end = current_sunset))
                                             fishing_time <- fishing_time + fishing_time_tmp
                                           }
                                         }
                                       }
-                                      current_trip$.__enclos_env__$private$fishing_time <- fishing_time
+                                      current_trip$.__enclos_env__$private$fishing_time <- fishing_time / 3600
                                     }
                                   }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

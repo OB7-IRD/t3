@@ -50,6 +50,10 @@ capture.output(object_full_trips$set_duration(set_duration_ref = object_model_da
 capture.output(object_full_trips$time_at_sea(),
                file = "NUL")
 
+# level 1.7: fishing time ----
+capture.output(object_full_trips$fishing_time(),
+               file = "NUL")
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -68,6 +72,15 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                         code = {
                           testthat::expect_true(object = (is.numeric(current_time_at_sea)
                                                           && current_time_at_sea > 0),
+                                                label = paste0("issue with the full trip ", a,
+                                                               " and the partial trip ", b))
+                        })
+    current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
+    # 210 - Checking if variable "fishing_time" is filled and in the correct format according the process 1.7 ----
+    testthat::test_that(desc = "210 - Checking if variable \"fishing_time\" is filled and in the correct format according the process 1.7",
+                        code = {
+                          testthat::expect_true(object = (is.numeric(current_fishing_time)
+                                                          && current_fishing_time > 0),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
