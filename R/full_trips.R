@@ -127,10 +127,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             collapse = ", "),
                                       "]\n",
                                       sep = "")
-                                  private$id_not_full_trip_retained <- intersect(
-                                    private$id_not_full_trip,
-                                    private$data_selected
-                                  )
+                                  private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of full trips filtering.\n",
@@ -356,7 +353,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 sep = "")
                                             for (l in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                               current_trip <- private$data_selected[[i]][[l]]
-                                              current_trip$.__enclos_env__$private$rf1 <- 1
+                                              current_trip$.__enclos_env__$private$rf1 <- NA
                                               current_trip$.__enclos_env__$private$statut_rf1 <- 1.1
                                             }
                                             stop <- 1
@@ -381,7 +378,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           # trips with no catches (for example route or support) in not complete full trip item
                                           for (n in seq_len(length.out = length(private$data_selected[[i]]))) {
                                             current_trip <- private$data_selected[[i]][[n]]
-                                            current_trip$.__enclos_env__$private$rf1 <- 1
+                                            current_trip$.__enclos_env__$private$rf1 <- NA
                                             current_trip$.__enclos_env__$private$statut_rf1 <- 1.2
                                           }
                                         } else {
@@ -416,7 +413,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   sep = "")
                                               for (q in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                                 current_trip <- private$data_selected[[i]][[q]]
-                                                current_trip$.__enclos_env__$private$rf1 <- 1
+                                              current_trip$.__enclos_env__$private$rf1 <- NA
                                                 current_trip$.__enclos_env__$private$statut_rf1 <- 1.3
                                               }
                                             } else {
@@ -424,7 +421,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # almost rocks dude ! (not complete full trip item)
                                               for (s in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                                 current_trip <- private$data_selected[[i]][[s]]
-                                                current_trip$.__enclos_env__$private$rf1 <- 1
+                                                current_trip$.__enclos_env__$private$rf1 <- NA
                                                 current_trip$.__enclos_env__$private$statut_rf1 <- 1.4
                                               }
                                             }
@@ -588,16 +585,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sep = "")
                                   }
                                   if (is.null(x = private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1)) {
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Argument \"statut_rf1\" is null for the trip element \"",
-                                        names(x = private$data_selected)[i],
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        " - Error: rf1 is null for the item \"",
+                                        names(private$data_selected)[i],
                                         "\".\n",
-                                        "Process 1.2 inapplicable before process 1.1, switch to next element.\n",
+                                        "Check if the process 1.1 (raising factor level 1) was successfully applied.\n",
                                         "[trip: ",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
+                                    stop()
                                   } else {
                                     if (private$data_selected[[i]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
                                       # case 1 ----
@@ -635,7 +632,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (l in seq_len(length.out = length(x = private$data_selected[[i]]))) {
                                           current_trip <- private$data_selected[[i]][[l]]
                                           current_rf2 <- 1
-                                          current_trip$.__enclos_env__$private$rf2 <- current_rf2
+                                          current_trip$.__enclos_env__$private$rf2 <- NA
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 3
                                           current_elementarycatches <- NULL
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
@@ -689,7 +686,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                   file = "NUL")
+                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                   file = "NUL")
+                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                   file = "NUL")
+                                    capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                   file = "NUL")
+                                    capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                   file = "NUL")
+                                    current_elementarycatches$modification_l1(modification = "$path$corrected_logbook_category <- NA")
+                                    current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_corrected <- NA")
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.3 on item \"",
@@ -705,11 +715,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           names(private$data_selected)[i],
                                           "\".\n",
                                           "Check if the process 1.2 (raising factor level 2) was successfully applied.\n",
-                                          "Switch to next element.\n",
                                           "[trip: ",
                                           private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
                                           sep = "")
+                                      stop()
                                     } else {
                                       # first stage: conversion of all categories except for unknown (category 9)
                                       for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
@@ -1101,7 +1111,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                   file = "NUL")
+                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                   file = "NUL")
+                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                   file = "NUL")
+                                    current_activities$modification_l1(modification = "$path$positive_set_count <- NA")
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.4 on item \"",
@@ -1203,7 +1221,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                   file = "NUL")
+                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                   file = "NUL")
+                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                   file = "NUL")
+                                    current_activities$modification_l1(modification = "$path$set_duration <- NA")
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.5 on item \"",
@@ -1336,7 +1362,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  next()
+                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                 file = "NUL")
+                                  current_trips$modification_l1(modification = "$path$time_at_sea <- NA")
                                 } else {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Ongoing process 1.6 on item \"",
@@ -1461,7 +1491,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                   file = "NUL")
+                                    current_trips$modification_l1(modification = "$path$fishing_time <- NA")
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.7 on item \"",
@@ -1550,7 +1584,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[i]]),
+                                                   file = "NUL")
+                                    current_trips$modification_l1(modification = "$path$searching_time <- NA")
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.8 on item \"",

@@ -74,8 +74,9 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 209 - Checking if variable "time_at_sea" is filled and in the correct format according to the process 1.6 ----
     testthat::test_that(desc = "209 - Checking if variable \"time_at_sea\" is filled and in the correct format according to the process 1.6",
                         code = {
-                          testthat::expect_true(object = (is.numeric(current_time_at_sea)
-                                                          && current_time_at_sea > 0),
+                          testthat::expect_true(object = (is.na(current_time_at_sea)
+                                                          || (is.numeric(current_time_at_sea)
+                                                              & current_time_at_sea > 0)),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -83,8 +84,9 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 210 - Checking if variable "fishing_time" is filled and in the correct format according to the process 1.7 ----
     testthat::test_that(desc = "210 - Checking if variable \"fishing_time\" is filled and in the correct format according to the process 1.7",
                         code = {
-                          testthat::expect_true(object = (is.numeric(current_fishing_time)
-                                                          && current_fishing_time > 0),
+                          testthat::expect_true(object = (is.na(current_time_at_sea)
+                                                          || (is.numeric(current_fishing_time)
+                                                              & current_fishing_time > 0)),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -92,8 +94,9 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 211 - Checking if variable "searching_time" is filled and in the correct format according to the process 1.8 ----
     testthat::test_that(desc = "211 - Checking if variable \"searching_time\" is filled and in the correct format according to the process 1.8",
                         code = {
-                          testthat::expect_true(object = (is.numeric(current_searching_time)
-                                                          && current_searching_time > 0),
+                          testthat::expect_true(object = (is.na(current_time_at_sea)
+                                                          || (is.numeric(current_searching_time)
+                                                              & current_searching_time > 0)),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -104,16 +107,18 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 201 - Checking if rf1 process was applied on all trips ----
     testthat::test_that(desc = "202 - Checking if rf1 process was applied on all trips",
                         code = {
-                          testthat::expect_true(object = (is.numeric(current_rf1)
-                                                          & (current_trip$.__enclos_env__$private$statut_rf1 %in% c(1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4))),
+                          testthat::expect_true(object = (is.na(current_rf1)
+                                                          || (is.numeric(current_rf1)
+                                                              & (current_trip$.__enclos_env__$private$statut_rf1 %in% c(1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4)))),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
     # 203 - Checking if rf2 process was applied on all trips ----
     testthat::test_that(desc = "203 - Checking if rf2 process was applied on all trips",
                         code = {
-                          testthat::expect_true(object = (is.numeric(current_rf2)
-                                                          & (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2))),
+                          testthat::expect_true(object = (is.na(current_rf2)
+                                                          || (is.numeric(current_rf2)
+                                                              & (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2, 3)))),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -125,9 +130,9 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 208 - Checking if variable "set_duration" is filled and in the correct format according the process 1.5 ----
     testthat::test_that(desc = "208 - Checking if variable \"set_duration\" is filled and in the correct format according the process 1.5",
                         code = {
-                          testthat::expect_true(object = all(is.numeric(current_activities_set_duration)
-                                                             & (current_activities_set_duration >= 0
-                                                                | is.na(current_activities_set_duration))),
+                          testthat::expect_true(object = all(is.na(current_activities_set_duration)
+                                                             || (is.numeric(current_activities_set_duration)
+                                                                 & current_activities_set_duration >= 0)),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -135,9 +140,9 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
     # 207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4 ----
     testthat::test_that(desc = "207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4",
                         code = {
-                          testthat::expect_true(object = all(is.numeric(current_activities_set_count)
-                                                             & (current_activities_set_count >= 0
-                                                                | is.na(current_activities_set_count))),
+                          testthat::expect_true(object = all(is.na(current_activities_set_count)
+                                                             || (is.numeric(current_activities_set_count)
+                                                                 & current_activities_set_count >= 0)),
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
@@ -164,7 +169,6 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                                                                                                               elementarycatches_id,
                                                                                                                               "\""))),
                            file = "NUL")
-            # %in% species_rf1
             if (unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "specie_code"))) %in% species_rf1) {
               current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf1")))
               current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
@@ -174,7 +178,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
             # 205 - Checking if variable "corrected_logbook_category" is equal to "<10kg", ">30kg", ">10kg" or "unknown" ----
             testthat::test_that(desc = "205 - Checking if variable \"corrected_logbook_category\" is equal to \"<10kg\", \">30kg\", \">10kg\" or \"unknown\"",
                                 code = {
-                                  testthat::expect_true(object = all(current_corrected_logbook_category %in% c("<10kg", "10-30kg", ">30kg", ">10kg", "unknown")),
+                                  testthat::expect_true(object = all(is.na(current_corrected_logbook_category)
+                                                                     || current_corrected_logbook_category %in% c("<10kg", "10-30kg", ">30kg", ">10kg", "unknown")),
                                                         label = paste0("issue with the full trip ", a,
                                                                        ", the partial trip ", b,
                                                                        ", the activity ", c,
@@ -194,25 +199,31 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))
     }
   }
-  # 202 - Checking if sum elementary catches corrected by rf1 is equal to sum elementary landings ----
-  testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
-                      code = {
-                        testthat::expect_equal(object = current_sum_elementarylandings,
-                                               expected = current_sum_elementarycatches_rf1,
-                                               label = paste0("issue with full trip ", a, ","))
-                      })
-  # 204 - Checking if sum elementary catches corrected by rf2 is equal to sum elementary landings ----
-  testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
-                      code = {
-                        testthat::expect_equal(object = current_sum_elementarylandings,
-                                               expected = current_sum_elementarycatches_rf2,
-                                               label = paste0("issue with the full trip ", a, ","))
-                      })
-  # 206 - Checking if sum catch weight category corrected (process 1.3) is equal to all sum elementary catches corrected by rf2 ----
-  testthat::test_that(desc = "206 - Checking if sum catch weight category corrected (process 1.3) is equal to all sum elementary catches corrected by rf2",
-                      code = {
-                        testthat::expect_equal(object = current_sum_catch_weight_category_corrected,
-                                               expected = current_sum_elementarycatches_rf2_all,
-                                               label = paste0("issue with the full trip ", a, ","))
-                      })
+  if (! is.na(current_sum_elementarycatches_rf1)) {
+    # 201 - Checking if sum elementary catches corrected by rf1 is equal to sum elementary landings ----
+    testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
+                        code = {
+                          testthat::expect_equal(object = current_sum_elementarylandings,
+                                                 expected = current_sum_elementarycatches_rf1,
+                                                 label = paste0("issue with full trip ", a, ","))
+                        })
+  }
+  if (! is.na(current_sum_elementarycatches_rf2)) {
+    # 204 - Checking if sum elementary catches corrected by rf2 is equal to sum elementary landings ----
+    testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
+                        code = {
+                          testthat::expect_equal(object = current_sum_elementarylandings,
+                                                 expected = current_sum_elementarycatches_rf2,
+                                                 label = paste0("issue with the full trip ", a, ","))
+                        })
+  }
+  if (!(is.na(current_sum_catch_weight_category_corrected) & is.na(current_sum_elementarycatches_rf2_all))) {
+    # 206 - Checking if sum catch weight category corrected (process 1.3) is equal to all sum elementary catches corrected by rf2 ----
+    testthat::test_that(desc = "206 - Checking if sum catch weight category corrected (process 1.3) is equal to all sum elementary catches corrected by rf2",
+                        code = {
+                          testthat::expect_equal(object = current_sum_catch_weight_category_corrected,
+                                                 expected = current_sum_elementarycatches_rf2_all,
+                                                 label = paste0("issue with the full trip ", a, ","))
+                        })
+  }
 }

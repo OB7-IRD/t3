@@ -416,7 +416,6 @@ list_t3 <- R6Class(
                                          )
                                          stop()
                                        }
-
                                      )
                                    }))
         return(tmp_final)
@@ -465,6 +464,57 @@ list_t3 <- R6Class(
                               )
                             })
         return(tmp_final)
+      }
+    },
+    # modify element of data level 1 ----
+    #' @description Function for modification item(s).
+    #' @param attribut_l1 Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".
+    #' @param modification Object of type \code{\link[base]{character}} expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"
+    #' @param silent Object of type \code{\link[base]{logical}} expected. Display outputs of modificated values.
+    modification_l1 = function(attribut_l1 = "data",
+                               modification,
+                               silent = TRUE) {
+      if (length(class(attribut_l1)) != 1
+          || class(attribut_l1) != "character") {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
+          sep = ""
+        )
+        stop()
+      } else if (!attribut_l1 %in% names(private)) {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+          sep = ""
+        )
+        stop()
+      } else {
+        tmp1 <- private[[attribut_l1]]
+        final_modification <- gsub(pattern = "$path$",
+                                   replacement = "tmp2$.__enclos_env__$private$",
+                                   x = modification,
+                                   fixed = TRUE)
+        final_modification = parse(text = final_modification)
+        lapply(X = seq_len(length.out = length(tmp1)),
+               FUN = function(a) {
+                 tmp2 <- tmp1[[a]]
+                 tryCatch(
+                   expr = eval(final_modification),
+                   error = function(err) {
+                     cat(
+                       format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                       " - Error: invalid \"modification\" argument\n",
+                       sep = ""
+                     )
+                     stop()
+                   }
+                 )
+               })
+        if (silent == TRUE) {
+          capture.output(return(),
+                         file = "NUL")
+        }
       }
     }
   ),
