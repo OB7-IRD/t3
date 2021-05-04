@@ -72,7 +72,7 @@ In addition, if logbook(s) are missing we can't apply the process. In that case,
 
 By the way, there are several cases when the rf1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_1.1.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.1.png'/>
 
 ### Process 1.2: Raising Factor level 2
 
@@ -80,7 +80,7 @@ This process is useful for historical data, especially when logbooks trips were 
 
 #### Information: due to time constraints, this process is partially implemented in the source code. The figure below, after the methodology explication, display what is currently operational.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.2.png'/>
 
 ### Process 1.3: Logbook weigth categories conversion
 
@@ -104,6 +104,6 @@ This process is useful for historical data, especially when logbooks trips were 
 
 # level 1.8: Searching time process
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_1.8.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.8.png'/>
         
 </div>
