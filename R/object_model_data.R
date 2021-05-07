@@ -2308,46 +2308,24 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            tmp_well <- dplyr::filter(.data = tmp_trip, well_id == well)
                                          }
-                                         if (length(x = unique(x = tmp_well$well_minus10_weigth)) != 1) {
+                                         if (length(unique(x = tmp_well$well_minus10_weigth)) != 1
+                                             | length(unique(x = tmp_well$well_plus10_weigth)) != 1
+                                             | length(unique(x = tmp_well$well_global_weigth)) != 1) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_minus10_weigth\" argument. Well data avoided and not imported.\n",
+                                               " - Warning: at least one well data (\"well_minus10_weigth\", \"well_plus10_weigth\" and \"well_global_weigth\") is different between well samples. Only the first element will use.\n",
                                                "[trip: ",
                                                trip,
                                                ", well: ",
                                                well,
                                                "]\n",
                                                sep = "")
-                                           next()
-                                         } else if (length(x = unique(x = tmp_well$well_plus10_weigth)) != 1) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_plus10_weigth\" argument. Well data avoided and not imported.\n",
-                                               "[trip: ",
-                                               trip,
-                                               ", well: ",
-                                               well,
-                                               "]\n",
-                                               sep = "")
-                                           next()
-                                         } else if (length(x = unique(x = tmp_well$well_global_weigth)) != 1) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_global_weigth\" argument. Well data avoided and not imported.\n",
-                                               "[trip: ",
-                                               trip,
-                                               ", well: ",
-                                               well,
-                                               "]\n",
-                                               sep = "")
-                                           next()
-                                         } else {
-                                           object_well <- t3:::well$new(trip_id = trip,
-                                                                        well_id = well,
-                                                                        well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth),
-                                                                        well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth),
-                                                                        well_global_weigth = unique(x = tmp_well$well_global_weigth))
                                          }
+                                         object_well <- t3:::well$new(trip_id = trip,
+                                                                      well_id = well,
+                                                                      well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth)[[1]],
+                                                                      well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
+                                                                      well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
                                          for (sample in unique(x = tmp_well$sample_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),

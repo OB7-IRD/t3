@@ -58,6 +58,10 @@ capture.output(object_full_trips$fishing_time(),
 capture.output(object_full_trips$searching_time(),
                file = "NUL")
 
+# level 2.1: sample length class ld1 to lf conversion ----
+object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps)
+
+
 for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
