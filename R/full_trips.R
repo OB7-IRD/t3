@@ -1724,7 +1724,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          file = "NUL")
                                           capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                          file = "NUL")
-                                          if (length(unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
+                                          if (length(x = current_activities$filter_l1(filter = "length($path$elementarycatches) != 0")) != 0) {
                                             capture.output(current_activities_with_elementarycatches <- t3::object_r6(class_name = "activities"),
                                                            file = "NUL")
                                             capture.output(current_activities_with_elementarycatches$add(new_item = current_activities$filter_l1(filter = "length($path$elementarycatches) != 0")),
@@ -1772,6 +1772,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     capture.output(current_sample_length_type_2$add(new_item = current_sample$filter_l1(filter = "$path$length_type == 2")),
                                                                    file = "NUL")
                                                     current_sample_length_type_2$modification_l1(modification = "$path$sample_length_class_lf = $path$sample_length_class")
+                                                    current_sample_length_type_2$modification_l1(modification = "$path$sample_number_measured_lf = $path$sample_number_measured")
                                                   }
                                                   if (length(current_sample$filter_l1(filter = "$path$length_type != 2")) != 0) {
                                                     capture.output(current_sample_length_other_types <- t3::object_r6(class_name = "elementarysamplesraw"),
@@ -1868,6 +1869,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                               }
                                             }
+                                          } else {
+                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: ",
+                                                " Well(s) detected with no elementary catch associated to the trip.\n",
+                                                "[trip_id: ",
+                                                current_trip$.__enclos_env__$private$trip_id,
+                                                ", well_id(s): ",
+                                                paste(unlist(current_wells$extract_l1_element_value(element = "well_id")), collapse = ", "),
+                                                "]\n",
+                                                sep = "")
                                           }
                                         }
                                       } else {
