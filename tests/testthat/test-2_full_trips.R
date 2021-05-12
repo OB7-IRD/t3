@@ -126,6 +126,59 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                                 label = paste0("issue with the full trip ", a,
                                                                " and the partial trip ", b))
                         })
+    if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                     file = "NUL")
+      capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                     file = "NUL")
+      for (d in seq_len(length.out = current_wells$count())) {
+        current_well <- current_wells$extract(id = d)[[1]]
+        if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
+          capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
+                         file = "NUL")
+          capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
+                         file = "NUL")
+          current_sample_length_class_lf <- unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_length_class_lf"))
+          current_sample_number_measured_lf <- unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_number_measured_lf"))
+          # 212 - Checking if process 2.1 run on all data ----
+          testthat::test_that(desc = "212 - Checking if process 2.1 run on all data",
+                              code = {
+                                testthat::expect_true(object = (all(is.na(x = current_sample_length_class_lf)
+                                                                   || is.numeric(x = current_sample_length_class_lf))
+                                                                & (all(is.na(x = current_sample_number_measured_lf)
+                                                                       || is.numeric(x = current_sample_number_measured_lf)))),
+                                                      label = paste0("issue with the full trip ", a,
+                                                                     ", partial trip ", b,
+                                                                     " and the well ", d))
+                              })
+          current_elementarysampleraw_id <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "elementarysampleraw_id")))
+          for (e in current_elementarysampleraw_id) {
+            capture.output(current_elementarysamplesraw_id <- t3::object_r6(class_name = "elementarysamplesraw"),
+                           file = "NUL")
+            capture.output(current_elementarysamplesraw_id$add(new_item = unlist(current_elementarysamplesraw$filter_l1(filter = paste0("$path$elementarysampleraw_id == \"",
+                                                                                                                                        e,
+                                                                                                                                        "\"")))),
+                           file = "NUL")
+            sum_sample_number_measured_lf <- sum(unlist(current_elementarysamplesraw_id$extract_l1_element_value(element = "sample_number_measured_lf")))
+            sample_number_measured <- unique(unlist(current_elementarysamplesraw_id$extract_l1_element_value(element = "sample_number_measured")))
+            if (! is.na(sum_sample_number_measured_lf)) {
+              # 213 - Checking if sum "sample_number_measured_lf" is equal to "sample_number_measured" ----
+              testthat::test_that(desc = "213 - Checking if sum \"sample_number_measured_lf\" is equal to \"sample_number_measured\"",
+                                  code = {
+                                    testthat::expect_equal(object = sum_sample_number_measured_lf,
+                                                           expected = sample_number_measured,
+                                                           label = paste0("issue with the full trip ", a,
+                                                                         ", partial trip ", b,
+                                                                         ", well ", d,
+                                                                         " and the elementary sample raw ", e))
+                                  })
+            }
+          }
+        }
+      }
+      current_well <- current_wells$extract(id = 1)[[1]]
+      current_well$.__enclos_env__$private$elementarysampleraw
+    }
     capture.output(current_activities <- t3::object_r6(class_name = "activities"),
                    file = "NUL")
     capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),

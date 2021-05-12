@@ -43,6 +43,21 @@ check_sample_id <- function(sample_id) {
   }
 }
 
+#' @name check_elementarysampleraw_id
+#' @title Attribute "elementarysampleraw_id" verification
+#' @param elementarysampleraw_id Object of class {\link[base]{character}} expected. Elementary sample raw identification.
+#' @description Check if the item "elementarysampleraw_id" have one unique class identified as character.
+check_elementarysampleraw_id <- function(elementarysampleraw_id) {
+  if (length(x = class(x = elementarysampleraw_id)) != 1
+      || class(x = elementarysampleraw_id) != "character") {
+    cat(format(x = Sys.time(),
+               format = "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"elementarysampleraw_id\" argument, class character expected.\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_well_id
 #' @title Attribute "well_id" verification
 #' @param well_id Object of class {\link[base]{character}} expected. Well identification.

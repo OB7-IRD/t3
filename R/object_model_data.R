@@ -1899,6 +1899,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          samples_data$well_global_weigth <- as.integer(samples_data$well_global_weigth)
                                          samples_data$sample_id <- as.character(samples_data$sample_id)
                                          samples_data$sub_sample_id <- as.integer(samples_data$sub_sample_id)
+                                         samples_data$elementarysampleraw_id <- as.integer(samples_data$elementarysampleraw_id)
                                          samples_data$sample_quality <- as.integer(samples_data$sample_quality)
                                          samples_data$sample_type <- as.integer(samples_data$sample_type)
                                          samples_data$specie_code <- as.integer(samples_data$specie_code)
@@ -2345,14 +2346,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                         well_id = well,
                                                                                                                                                         sample_id = sample,
                                                                                                                                                         sub_sample_id = tmp_sample[[7]][i],
-                                                                                                                                                        sample_quality = tmp_sample[[8]][i],
-                                                                                                                                                        sample_type = tmp_sample[[9]][i],
-                                                                                                                                                        specie_code = tmp_sample[[10]][i],
-                                                                                                                                                        specie_code3l = tmp_sample[[11]][i],
-                                                                                                                                                        length_type = tmp_sample[[12]][i],
-                                                                                                                                                        sample_total_count = tmp_sample[[13]][i],
-                                                                                                                                                        sample_number_measured = tmp_sample[[14]][i],
-                                                                                                                                                        sample_length_class = tmp_sample[[15]][i])
+                                                                                                                                                        elementarysampleraw_id = tmp_sample[[8]][i],
+                                                                                                                                                        sample_quality = tmp_sample[[9]][i],
+                                                                                                                                                        sample_type = tmp_sample[[10]][i],
+                                                                                                                                                        specie_code = tmp_sample[[11]][i],
+                                                                                                                                                        specie_code3l = tmp_sample[[12]][i],
+                                                                                                                                                        length_type = tmp_sample[[13]][i],
+                                                                                                                                                        sample_total_count = tmp_sample[[14]][i],
+                                                                                                                                                        sample_number_measured = tmp_sample[[15]][i],
+                                                                                                                                                        sample_length_class = tmp_sample[[16]][i])
                                                                                                                          })))
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),

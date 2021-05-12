@@ -23,6 +23,7 @@ SELECT
 	,s.globalweight::integer AS well_global_weigth
 	,s.topiaid::text AS sample_id
 	,ss.subsamplenumber::integer AS sub_sample_id
+	,ssf.topiaid::text AS elementarysampleraw_id
 	,sq.code::integer AS sample_quality
 	,st.code::integer AS sample_type
 	,sp.code::integer AS specie_code
