@@ -1892,22 +1892,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat("[", samples_sql_final, "]\n", sep = "")
                                          samples_data <- DBI::dbGetQuery(conn = db_con,
                                                                          statement = samples_sql_final)
-                                         samples_data$trip_id <- as.character(samples_data$trip_id)
-                                         samples_data$well_id <- as.character(samples_data$well_id)
-                                         samples_data$well_minus10_weigth <- as.integer(samples_data$well_minus10_weigth)
-                                         samples_data$well_plus10_weigth <- as.integer(samples_data$well_plus10_weigth)
-                                         samples_data$well_global_weigth <- as.integer(samples_data$well_global_weigth)
-                                         samples_data$sample_id <- as.character(samples_data$sample_id)
-                                         samples_data$sub_sample_id <- as.integer(samples_data$sub_sample_id)
-                                         samples_data$elementarysampleraw_id <- as.integer(samples_data$elementarysampleraw_id)
-                                         samples_data$sample_quality <- as.integer(samples_data$sample_quality)
-                                         samples_data$sample_type <- as.integer(samples_data$sample_type)
-                                         samples_data$specie_code <- as.integer(samples_data$specie_code)
-                                         samples_data$specie_code3l <- as.character(samples_data$specie_code3l)
-                                         samples_data$length_type <- as.integer(samples_data$length_type)
-                                         samples_data$sample_total_count <- as.integer(samples_data$sample_total_count)
-                                         samples_data$sample_number_measured <- as.integer(samples_data$sample_number_measured)
-                                         samples_data$sample_length_class <- as.integer(samples_data$sample_length_class)
+                                         samples_data <- samples_data %>%
+                                           dplyr::mutate(trip_id = as.character(samples_data$trip_id),
+                                                         well_id = as.character(samples_data$well_id),
+                                                         well_minus10_weigth = as.integer(samples_data$well_minus10_weigth),
+                                                         well_plus10_weigth = as.integer(samples_data$well_plus10_weigth),
+                                                         well_global_weigth = as.integer(samples_data$well_global_weigth),
+                                                         sample_id = as.character(samples_data$sample_id),
+                                                         sub_sample_id = as.integer(samples_data$sub_sample_id),
+                                                         elementarysampleraw_id = as.character(paste0(elementarysampleraw_id,
+                                                                                                      ".",
+                                                                                                      dplyr::row_number())),
+                                                         specie_code = as.integer(samples_data$specie_code),
+                                                         specie_code3l = as.character(samples_data$specie_code3l),
+                                                         length_type = as.integer(samples_data$length_type),
+                                                         sample_total_count = as.integer(samples_data$sample_total_count),
+                                                         sample_number_measured = as.integer(samples_data$sample_number_measured),
+                                                         sample_length_class = as.integer(samples_data$sample_length_class))
                                          if (nrow(x = samples_data) == 0) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
