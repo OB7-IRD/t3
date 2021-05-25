@@ -3758,7 +3758,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
                             #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
-                            #' @param avdth_patch_coord paramter wiating for coordinate conversion patch from avdth database
+                            #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
                             models_checking = function(outputs_level3_process2,
                                                        outputs_path,
                                                        plot_sample = F,
@@ -4482,10 +4482,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.4: data formatting for predictions ----
                             #' @description Formatting data for model predictions.
-                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).
+                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).
                             #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
-                            #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimaton and prediction.
-                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.
+                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        outputs_level3_process1,
                                                                        target_year,
@@ -4528,8 +4528,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
-                              # reduce data to the period considered in the modeling
+                              # reduce data to the period considered in the modeling and check data availability
                               act_chr <- act_chr[act_chr$yr %in% target_year, ]
+                              if (nrow(act_chr) == 0) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: NO data available for the selected target_year.\n",
+                                    sep = "")
+                                stop()
+                              }
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
                               catch_set_lb$yr <- lubridate::year(x = catch_set_lb$date)
                               catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date)
@@ -4637,13 +4643,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
+                            #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
                                                          outputs_path,
                                                          ci = FALSE,
-                                                         Nboot = 10,
+                                                         ci_type = "all",
+                                                         Nboot = 50,
                                                          plot_predict = FALSE) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
@@ -4682,6 +4690,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                crs = raster::crs(x = "+init=epsg:4326"),
                                                vals = NA)
                               }
+                              # Compute estimates for SKJ and YFT ----
                               outputs_level3_process5 <- vector(mode = "list",
                                                                 length = 5)
                               names(outputs_level3_process5) <- c("Estimated_catch",
@@ -4754,7 +4763,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
 
-                              # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch
+                              # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
@@ -4787,7 +4796,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
 
                               # bootstrap CI
-                              # bootstrap step 1 - bootstrap on models and predicts
+                              # bootstrap step 1 - bootstrap on models and predicts ----
 
                               if (ci == TRUE){
 
@@ -4856,8 +4865,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
 
-
-                              # bootrstap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch #
+                              # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                               for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
@@ -4899,9 +4907,43 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                    ocean,
                                                                                                                    sep = "_")
                               }
+                              # bootstrap step 3 - compute confident intervals ----
+                              # Compute CI by set - export catch by set
+                              set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
 
+                              if(ci == TRUE & (ci_type == "all" | "set" %in% ci_type )){
+                              set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
+                                set_all_boot_tmp <- dplyr::bind_rows(x)
+                                set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp)/Nboot)
+                                return(set_all_boot_tmp)
+                              })
+                              # compute final CI
+                              set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
+                              names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
 
-                              # bootstrap step 3 - compute confident intervals
+                              for (o in names(outputs_level3_process5$Estimated_catch_ST)){
+                                set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
+                                                                                                boot_data = set_all_boot[[o]])
+                              }
+
+                              set_all_final_ocean <- do.call(rbind, set_all_final_ocean_list)
+                              set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
+                                                                                    "ci_inf",
+                                                                                    "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                        digits = 2)
+                              set_all <- set_all_final_ocean
+                              }
+                              write.csv2(x = set_all,
+                                         file = file.path(tables_directory,
+                                                          paste("set_all_ocean_",
+                                                                paste(unique(set_all_final_ocean$yr),
+                                                                      collapse = "-"),
+                                                                "_",
+                                                                paste(unique(set_all_final_ocean$ocean),
+                                                                      collapse = "-"),
+                                                                ".csv",
+                                                                sep = "")),
+                                         row.names = FALSE)
                               # nominal catch by species (task 1)
                               t1_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST,
                                                              function(x){
@@ -4910,8 +4952,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                           FUN = sum)
                                                                return(t1_tmp_element)
                                                              }))
-
-                              t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                              # compute final CI
+                              if(ci == TRUE & (ci_type == "all" | "t1" %in% ci_type )){
+                                t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                   function(x){
                                                                     boot_tmp_element <-do.call(rbind,
                                                                                                lapply(seq.int(1:length(x)),
@@ -4923,9 +4966,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                       }))
                                                                     return(boot_tmp_element)
                                                                   }))
-
-
-                              # compute final CI
                               t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
 
                               for (o in levels(t1_all$ocean)){
@@ -4941,7 +4981,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_all_final_ocean))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
-                              write.csv2(x = t1_all_final_ocean,
+                              t1_all <- t1_all_final_ocean
+                              }
+                              write.csv2(x = t1_all,
                                          file = file.path(tables_directory,
                                                           paste("t1_all_ocean_",
                                                                 paste(unique(t1_all_final_ocean$yr),
@@ -4952,15 +4994,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
-
                               # nominal catch by species and fishing mode (task 1 by fishing mode)
                               t1_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x, sum)
                                 return(boot_tmp_subelement)
-
                               }))
 
                               # bootstrap distribution
+                              if(ci == TRUE & (ci_type == "all" | "t1-fmod" %in% ci_type )){
                               t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
                                                                      boot_tmp_element <-do.call(rbind,
@@ -4974,7 +5015,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                        }))
                                                                      return(boot_tmp_element)
                                                                    }))
-
                               # compute final CI
                               t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
 
@@ -4992,7 +5032,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_fmod_final_ocean))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
-                              write.csv2(x = t1_fmod_final_ocean,
+                              t1_fmod <- t1_fmod_final_ocean
+                              }
+                              write.csv2(x = t1_fmod,
                                          file = file.path(tables_directory,
                                                           paste("t1_fmod_ocean",
                                                                 paste(unique(t1_all_final_ocean$yr),
@@ -5003,7 +5045,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
-
                               ## catch effort (task2)
                               # function for rounding, rounding up and down to a specific base
                               mtrunc <- function(x,base){
@@ -5015,16 +5056,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 base*(x%/%base + as.logical(x%%base))
                               }
 
-                              # assign coordinates to cwp witt a specific base
+                              # assign coordinates to cwp with a specific base
                               latlon2cwp<-function(lat,lon,base){
-                                quad<-ifelse(lon>0,ifelse(lat>0,1,2),ifelse(lat>0,4,3)) # define quadrant
+                                quad<-ifelse(lon>=0,ifelse(lat>=0,1,2),ifelse(lat>=0,4,3)) # define quadrant
                                 lat_tmp<-ifelse(quad %in% c(1,4),sprintf("%02d",abs(mtrunc(lat,base))),sprintf("%02d",abs(mroundup(lat,base))))
                                 lon_tmp<-ifelse(quad %in% c(1,2),sprintf("%03d",abs(mtrunc(lon,base))),sprintf("%03d",abs(mroundup(lon,base))))
                                 return(paste(quad,lat_tmp,lon_tmp,sep=""))
 
                               }
 
-                              t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                              # nominal catch by species and cwp (task 2 - catch Effort)
+                              t2_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
                                                     base = 1)
@@ -5034,20 +5076,107 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                         input_degree_format = "decimal_degree",
                                 #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
-                                  group_by(yr, fmod, sp, ocean, cwp) %>%
+                                  group_by(yr, mon, sp, ocean, cwp) %>%
                                   summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
 
-                              t2_fmod_final_ocean <- t2_fmod
+                              # bootstrap distribution
+                              if(ci == TRUE & (ci_type == "all" | "t2" %in% ci_type )){
+                              t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                                   FUN = function(x){
+                                                                     boot_tmp_element <-do.call(rbind,
+                                                                                                lapply(seq.int(1:length(x)),
+                                                                                                       function(i){
+                                                                                                         x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
+                                                                                                                                  lon = x[[i]]$lon,
+                                                                                                                                  base = 1)
+                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + mon + sp + cwp + ocean,
+                                                                                                                                          data=x[[i]],
+                                                                                                                                          FUN = sum)
+                                                                                                         boot_tmp_subelement$loop <- i
+                                                                                                         return(boot_tmp_subelement)
+                                                                                                       }))
+                                                                     return(boot_tmp_element)
+                                                                   }))
+                              # compute final CI
+                              t2_all_final_ocean_list <- vector("list", length = length(levels(t2_all$ocean)))
 
-                              write.csv2(x = t2_fmod_final_ocean,
+                              for (o in as.numeric(levels(t2_all$ocean))){
+                                t2_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_all[t2_all$ocean == o,],
+                                                                                     boot_data = t2_all_boot[t2_all_boot$ocean == o,])
+                              }
+                              t2_all_final_ocean <- do.call(rbind, t2_all_final_ocean_list)
+                              t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit",
+                                                                                      "ci_inf",
+                                                                                      "ci_sup")] <- round(t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                          digits = 2)
+                              t2_all <- t2_all_final_ocean
+                              }
+                              write.csv2(x = t2_all,
                                          file = file.path(tables_directory,
-                                                          paste("t2_fmod_ocean",
-                                                                paste(unique(t1_all_final_ocean$yr),
+                                                          paste("t2_all_ocean",
+                                                                paste(unique(t2_all$yr),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                paste(unique(t2_all$ocean),
+                                                                      collapse = "-"),
+                                                                ".csv",
+                                                                sep = "")),
+                                         row.names = FALSE)
+                              # nominal catch by species and cwp and fishing mode (task 2 by fishing mode)
+                               t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                                x$cwp <- latlon2cwp(lat = x$lat,
+                                                    lon = x$lon,
+                                                    base = 1)
+                                # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
+                                #                                         data_longitude = as.character(x$lon),
+                                #                                         data_latitude = as.character(x$lat),
+                                #                                         input_degree_format = "decimal_degree",
+                                #                                         cwp_resolution = "1deg_x_1deg")
+                                boot_tmp_subelement <- x %>%
+                                  group_by(yr, mon, fmod, sp, ocean, cwp) %>%
+                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                return(boot_tmp_subelement)
+                              }))
+                              # bootstrap distribution
+                              if(ci == TRUE & (ci_type == "all" | "set" %in% ci_type )){
+                              t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                                   FUN = function(x){
+                                                                     boot_tmp_element <-do.call(rbind,
+                                                                                                lapply(seq.int(1:length(x)),
+                                                                                                       function(i){
+                                                                                                         x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
+                                                                                                                             lon = x[[i]]$lon,
+                                                                                                                             base = 1)
+                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + mon + fmod + sp + cwp + ocean,
+                                                                                                                                          data=x[[i]],
+                                                                                                                                          FUN = sum)
+                                                                                                         boot_tmp_subelement$loop <- i
+                                                                                                         return(boot_tmp_subelement)
+                                                                                                       }))
+                                                                     return(boot_tmp_element)
+                                                                   }))
+                              # compute final CI
+                              t2_fmod_final_ocean_list <- vector("list", length = length(levels(t2_fmod$ocean)))
+                              for (o in as.numeric(levels(t2_fmod$ocean))){
+                                t2_fmod_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_fmod[t2_fmod$ocean == o,],
+                                                                                                 boot_data = t2_fmod_boot[t2_fmod_boot$ocean == o,])
+                              }
+                              t2_fmod_final_ocean <- do.call(rbind, t2_fmod_final_ocean_list)
+                              t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit",
+                                                                                      "ci_inf",
+                                                                                      "ci_sup")] <- round(t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                          digits = 2)
+                              t2_fmod <- t2_fmod_final_ocean
+                              }
+                              write.csv2(x = t2_fmod,
+                                         file = file.path(tables_directory,
+                                                          paste("t2_fmod_ocean",
+                                                                paste(unique(t2_fmod$yr),
+                                                                      collapse = "-"),
+                                                                "_",
+                                                                paste(unique(t2_fmod$ocean),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),

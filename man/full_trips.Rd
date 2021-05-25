@@ -535,7 +535,7 @@ Load each full model and compute figures and tables to check the model quality. 
 
 \item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
 
-\item{\code{avdth_patch_coord}}{paramter wiating for coordinate conversion patch from avdth database}
+\item{\code{avdth_patch_coord}}{parameter waiting for coordinate conversion patch from avdth database}
 }
 \if{html}{\out{</div>}}
 }
@@ -557,13 +557,13 @@ Formatting data for model predictions.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).}
+\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
 
 \item{\code{outputs_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
 
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimaton and prediction.}
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
-\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -579,7 +579,8 @@ Model predictions for the species composition and computing of catches.
   outputs_level3_process4,
   outputs_path,
   ci = FALSE,
-  Nboot = 10,
+  ci_type = "all",
+  Nboot = 50,
   plot_predict = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -594,6 +595,8 @@ Model predictions for the species composition and computing of catches.
 \item{\code{outputs_path}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
+
+\item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
 
 \item{\code{Nboot}}{Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.}
 
