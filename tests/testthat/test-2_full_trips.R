@@ -202,17 +202,20 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
               current_elementarysampleraw <- current_elementarysamplesraw_id$extract(id = sub_elementarysampleraw_id)[[1]]
               current_sample_number_measured_extrapolated_lf <- current_elementarysampleraw$.__enclos_env__$private$sample_number_measured_extrapolated_lf
               calculate_sample_number_measured_extrapolated_lf <- current_elementarysampleraw$.__enclos_env__$private$rf4 * current_elementarysampleraw$.__enclos_env__$private$sample_number_measured_lf
-              # 215 - Checking if "sample_number_measured_extrapolated_lf" equal "sample_number_measured_lf" multiply by "rf4" ----
-              testthat::test_that(desc = "215 - Checking if \"sample_number_measured_extrapolated_lf\" equal \"sample_number_measured_lf\" multiply by \"rf4\"",
-                                  code = {
-                                    testthat::expect_equal(object = current_sample_number_measured_extrapolated_lf,
-                                                           expected = calculate_sample_number_measured_extrapolated_lf,
-                                                           label = paste0("issue with the full trip ", full_trip_id,
-                                                                          ", partial trip ", partial_trip_id,
-                                                                          ", well ", well_id,
-                                                                          ", elementary sample raw ", elementarysampleraw_id,
-                                                                          " and sub elementary sample raw ", sub_elementarysampleraw_id))
-                                  })
+              if (! is.na(current_sample_number_measured_extrapolated_lf)
+                  && ! is.na(calculate_sample_number_measured_extrapolated_lf)) {
+                # 215 - Checking if "sample_number_measured_extrapolated_lf" equal "sample_number_measured_lf" multiply by "rf4" ----
+                testthat::test_that(desc = "215 - Checking if \"sample_number_measured_extrapolated_lf\" equal \"sample_number_measured_lf\" multiply by \"rf4\"",
+                                    code = {
+                                      testthat::expect_equal(object = current_sample_number_measured_extrapolated_lf,
+                                                             expected = calculate_sample_number_measured_extrapolated_lf,
+                                                             label = paste0("issue with the full trip ", full_trip_id,
+                                                                            ", partial trip ", partial_trip_id,
+                                                                            ", well ", well_id,
+                                                                            ", elementary sample raw ", elementarysampleraw_id,
+                                                                            " and sub elementary sample raw ", sub_elementarysampleraw_id))
+                                    })
+              }
             }
           }
         }
