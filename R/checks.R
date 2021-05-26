@@ -133,6 +133,21 @@ check_sub_sample_id <- function(sub_sample_id) {
   }
 }
 
+#' @name check_sub_sample_id_total_count
+#' @title Attribute "sub_sample_id_total_count" verification
+#' @param sub_sample_id_total_count Object of class {\link[base]{character}} expected. Sub sample identification bis in relation with the fish total count.
+#' @description Check if the item "sub_sample_id_total_count" have one unique class identified as character.
+check_sub_sample_id_total_count <- function(sub_sample_id_total_count) {
+  if (length(x = class(x = sub_sample_id_total_count)) != 1
+      || class(x = sub_sample_id_total_count) != "character") {
+    cat(format(x = Sys.time(),
+               format = "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sub_sample_id_total_count\" argument, class character expected.\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_landing_category
 #' @title Attribute "landing_category" verification
 #' @param landing_category Object of class {\link[base]{character}} expected. Landing category identification.

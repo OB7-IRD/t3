@@ -37,7 +37,9 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.1.png'/>
 
-### Process 2.2: sample number measured extrapolation 
+### Process 2.2: sample number measured extrapolation
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.2.png'/>
 
 ### Process 2.3: sample step length class standardisation
 

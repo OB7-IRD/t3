@@ -17,6 +17,9 @@ Create R6 reference object class list_t3.
 \item \href{#method-count}{\code{list_t3$count()}}
 \item \href{#method-extract}{\code{list_t3$extract()}}
 \item \href{#method-filter}{\code{list_t3$filter()}}
+\item \href{#method-filter_l1}{\code{list_t3$filter_l1()}}
+\item \href{#method-extract_l1_element_value}{\code{list_t3$extract_l1_element_value()}}
+\item \href{#method-modification_l1}{\code{list_t3$modification_l1()}}
 \item \href{#method-clone}{\code{list_t3$clone()}}
 }
 }
@@ -157,6 +160,65 @@ Function for select attribut's element(s) by specific filter.
 \item{\code{attribut_l1}}{(character) First strate attribut's name. By default "data".}
 
 \item{\code{filter}}{(character) Filter by a specific filter.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-filter_l1"></a>}}
+\if{latex}{\out{\hypertarget{method-filter_l1}{}}}
+\subsection{Method \code{filter_l1()}}{
+Function for select item(s) by specific selection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{list_t3$filter_l1(attribut_l1 = "data", filter)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+
+\item{\code{filter}}{Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-extract_l1_element_value"></a>}}
+\if{latex}{\out{\hypertarget{method-extract_l1_element_value}{}}}
+\subsection{Method \code{extract_l1_element_value()}}{
+Function for extract element(s) of a specific attribut.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{list_t3$extract_l1_element_value(attribut_l1 = "data", element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+
+\item{\code{element}}{Object of type \code{\link[base]{character}} expected. Name of the element.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-modification_l1"></a>}}
+\if{latex}{\out{\hypertarget{method-modification_l1}{}}}
+\subsection{Method \code{modification_l1()}}{
+Function for modification item(s).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{list_t3$modification_l1(attribut_l1 = "data", modification, silent = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
+
+\item{\code{modification}}{Object of type \code{\link[base]{character}} expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"}
+
+\item{\code{silent}}{Object of type \code{\link[base]{logical}} expected. Display outputs of modificated values.}
 }
 \if{html}{\out{</div>}}
 }

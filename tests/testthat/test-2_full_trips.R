@@ -62,18 +62,22 @@ capture.output(object_full_trips$searching_time(),
 capture.output(object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps),
                file = "NUL")
 
-for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
+# level 2.2: sample number measured extrapolation ----
+capture.output(object_full_trips$sample_number_measured_extrapolation(),
+               file = "NUL")
+
+for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
-  capture.output(current_trips$add(object_full_trips$.__enclos_env__$private$data_selected[[a]]),
+  capture.output(current_trips$add(object_full_trips$.__enclos_env__$private$data_selected[[full_trip_id]]),
                  file = "NUL")
   current_sum_elementarycatches_rf1 <- 0
   current_sum_elementarycatches_rf2 <- 0
   current_sum_elementarycatches_rf2_all <- 0
   current_sum_elementarylandings <- 0
   current_sum_catch_weight_category_corrected <- 0
-  for (b in seq_len(length.out = current_trips$count())) {
-    current_trip <- current_trips$extract(id = b)[[1]]
+  for (partial_trip_id in seq_len(length.out = current_trips$count())) {
+    current_trip <- current_trips$extract(id = partial_trip_id)[[1]]
     current_time_at_sea <- current_trip$.__enclos_env__$private$time_at_sea
     # 209 - Checking if variable "time_at_sea" is filled and in the correct format according to the process 1.6 ----
     testthat::test_that(desc = "209 - Checking if variable \"time_at_sea\" is filled and in the correct format according to the process 1.6",
@@ -81,8 +85,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.na(current_time_at_sea)
                                                           || (is.numeric(current_time_at_sea)
                                                               & current_time_at_sea > 0)),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
     # 210 - Checking if variable "fishing_time" is filled and in the correct format according to the process 1.7 ----
@@ -91,8 +95,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.na(current_time_at_sea)
                                                           || (is.numeric(current_fishing_time)
                                                               & current_fishing_time > 0)),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     current_searching_time <- current_trip$.__enclos_env__$private$searching_time
     # 211 - Checking if variable "searching_time" is filled and in the correct format according to the process 1.8 ----
@@ -101,8 +105,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.na(current_time_at_sea)
                                                           || (is.numeric(current_searching_time)
                                                               & current_searching_time > 0)),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
     current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
@@ -114,8 +118,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.na(current_rf1)
                                                           || (is.numeric(current_rf1)
                                                               & (current_trip$.__enclos_env__$private$statut_rf1 %in% c(1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4)))),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     # 203 - Checking if rf2 process was applied on all trips ----
     testthat::test_that(desc = "203 - Checking if rf2 process was applied on all trips",
@@ -123,40 +127,61 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                           testthat::expect_true(object = (is.na(current_rf2)
                                                           || (is.numeric(current_rf2)
                                                               & (current_trip$.__enclos_env__$private$statut_rf2 %in% c(1, 2, 3)))),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     if (length(current_trip$.__enclos_env__$private$wells) != 0) {
       capture.output(current_wells <- t3::object_r6(class_name = "wells"),
                      file = "NUL")
       capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                      file = "NUL")
-      for (d in seq_len(length.out = current_wells$count())) {
-        current_well <- current_wells$extract(id = d)[[1]]
+      for (well_id in seq_len(length.out = current_wells$count())) {
+        current_well <- current_wells$extract(id = well_id)[[1]]
         if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
           capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
                          file = "NUL")
           capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
                          file = "NUL")
-          current_sample_length_class_lf <- unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_length_class_lf"))
-          current_sample_number_measured_lf <- unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_number_measured_lf"))
+          current_sample_length_class_lf <- current_elementarysamplesraw$extract_l1_element_value(element = "sample_length_class_lf")
+          current_sample_number_measured_lf <- current_elementarysamplesraw$extract_l1_element_value(element = "sample_number_measured_lf")
           # 212 - Checking if process 2.1 run on all data ----
           testthat::test_that(desc = "212 - Checking if process 2.1 run on all data",
                               code = {
-                                testthat::expect_true(object = (all(is.na(x = current_sample_length_class_lf)
-                                                                   || is.numeric(x = current_sample_length_class_lf))
-                                                                & (all(is.na(x = current_sample_number_measured_lf)
-                                                                       || is.numeric(x = current_sample_number_measured_lf)))),
-                                                      label = paste0("issue with the full trip ", a,
-                                                                     ", partial trip ", b,
-                                                                     " and the well ", d))
+                                testthat::expect_true(object = (all(unlist(lapply(X = current_sample_length_class_lf,
+                                                                                 FUN = function(x) (! is.null(x)
+                                                                                                    && ((is.na(x)
+                                                                                                         || is.numeric(x))))))))
+                                                      & (all(unlist(lapply(X = current_sample_number_measured_lf,
+                                                                           FUN = function(x) (! is.null(x)
+                                                                                              && ((is.na(x)
+                                                                                                   || is.numeric(x)))))))),
+                                                      label = paste0("issue with the full trip ", full_trip_id,
+                                                                     ", partial trip ", partial_trip_id,
+                                                                     " and the well ", well_id))
+                              })
+          current_sample_rf4 <- current_elementarysamplesraw$extract_l1_element_value(element = "rf4")
+          current_sample_sample_number_measured_extrapolated_lf <- current_elementarysamplesraw$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")
+          # 214 - Checking if variables "rf4" and "sample_number_measured_extrapolated_lf" are filled and in the correct format according to the process 2.2 ----
+          testthat::test_that(desc = "214 - Checking if variables \"rf4\" and \"sample_number_measured_extrapolated_lf\" are filled and in the correct format according to the process 2.2",
+                              code = {
+                                testthat::expect_true(object = (all(unlist(lapply(X = current_sample_rf4,
+                                                                                   FUN = function(x) (! is.null(x)
+                                                                                                      && ((is.na(x)
+                                                                                                           || is.numeric(x))))))))
+                                                       & (all(unlist(lapply(X = current_sample_sample_number_measured_extrapolated_lf,
+                                                                            FUN = function(x) (! is.null(x)
+                                                                                               && ((is.na(x)
+                                                                                                    || is.numeric(x)))))))),
+                                                      label = paste0("issue with the full trip ", full_trip_id,
+                                                                     ", partial trip ", partial_trip_id,
+                                                                                   " and the well ", well_id))
                               })
           current_elementarysampleraw_id <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "elementarysampleraw_id")))
-          for (e in current_elementarysampleraw_id) {
+          for (elementarysampleraw_id in current_elementarysampleraw_id) {
             capture.output(current_elementarysamplesraw_id <- t3::object_r6(class_name = "elementarysamplesraw"),
                            file = "NUL")
             capture.output(current_elementarysamplesraw_id$add(new_item = unlist(current_elementarysamplesraw$filter_l1(filter = paste0("$path$elementarysampleraw_id == \"",
-                                                                                                                                        e,
+                                                                                                                                        elementarysampleraw_id,
                                                                                                                                         "\"")))),
                            file = "NUL")
             sum_sample_number_measured_lf <- sum(unlist(current_elementarysamplesraw_id$extract_l1_element_value(element = "sample_number_measured_lf")))
@@ -167,10 +192,26 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                                   code = {
                                     testthat::expect_equal(object = sum_sample_number_measured_lf,
                                                            expected = sample_number_measured,
-                                                           label = paste0("issue with the full trip ", a,
-                                                                         ", partial trip ", b,
-                                                                         ", well ", d,
-                                                                         " and the elementary sample raw ", e))
+                                                           label = paste0("issue with the full trip ", full_trip_id,
+                                                                         ", partial trip ", partial_trip_id,
+                                                                         ", well ", well_id,
+                                                                         " and the elementary sample raw ", elementarysampleraw_id))
+                                  })
+            }
+            for (sub_elementarysampleraw_id in seq_len(length.out = current_elementarysamplesraw_id$count())) {
+              current_elementarysampleraw <- current_elementarysamplesraw_id$extract(id = sub_elementarysampleraw_id)[[1]]
+              current_sample_number_measured_extrapolated_lf <- current_elementarysampleraw$.__enclos_env__$private$sample_number_measured_extrapolated_lf
+              calculate_sample_number_measured_extrapolated_lf <- current_elementarysampleraw$.__enclos_env__$private$rf4 * current_elementarysampleraw$.__enclos_env__$private$sample_number_measured_lf
+              # 215 - Checking if "sample_number_measured_extrapolated_lf" equal "sample_number_measured_lf" multiply by "rf4" ----
+              testthat::test_that(desc = "215 - Checking if \"sample_number_measured_extrapolated_lf\" equal \"sample_number_measured_lf\" multiply by \"rf4\"",
+                                  code = {
+                                    testthat::expect_equal(object = current_sample_number_measured_extrapolated_lf,
+                                                           expected = calculate_sample_number_measured_extrapolated_lf,
+                                                           label = paste0("issue with the full trip ", full_trip_id,
+                                                                          ", partial trip ", partial_trip_id,
+                                                                          ", well ", well_id,
+                                                                          ", elementary sample raw ", elementarysampleraw_id,
+                                                                          " and sub elementary sample raw ", sub_elementarysampleraw_id))
                                   })
             }
           }
@@ -183,33 +224,37 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                    file = "NUL")
     capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                    file = "NUL")
-    current_activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
+    current_activities_set_duration <- current_activities$extract_l1_element_value(element = "set_duration")
     # 208 - Checking if variable "set_duration" is filled and in the correct format according the process 1.5 ----
     testthat::test_that(desc = "208 - Checking if variable \"set_duration\" is filled and in the correct format according the process 1.5",
                         code = {
-                          testthat::expect_true(object = all(is.na(current_activities_set_duration)
-                                                             || (is.numeric(current_activities_set_duration)
-                                                                 & current_activities_set_duration >= 0)),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                          testthat::expect_true(object = (all(unlist(lapply(X = current_activities_set_duration,
+                                                                            FUN = function(x) (! is.null(x)
+                                                                                               && ((is.na(x)
+                                                                                                    || (is.numeric(x)
+                                                                                                        & x >= 0)))))))),
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     current_activities_set_count <- unlist(current_activities$extract_l1_element_value(element = "positive_set_count"))
     # 207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4 ----
     testthat::test_that(desc = "207 - Checking if variable positive_set_count is filled and in the correct format according to the process 1.4",
                         code = {
-                          testthat::expect_true(object = all(is.na(current_activities_set_count)
-                                                             || (is.numeric(current_activities_set_count)
-                                                                 & current_activities_set_count >= 0)),
-                                                label = paste0("issue with the full trip ", a,
-                                                               " and the partial trip ", b))
+                          testthat::expect_true(object = (all(unlist(lapply(X = current_activities_set_count,
+                                                                            FUN = function(x) (! is.null(x)
+                                                                                               && ((is.na(x)
+                                                                                                    || (is.numeric(x)
+                                                                                                        & x >= 0)))))))),
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
                         })
     capture.output(current_elementarylandings <- t3::object_r6(class_name = "elementarylandings"),
                    file = "NUL")
     capture.output(current_elementarylandings$add(new_item = current_trip$.__enclos_env__$private$elementarylandings),
                    file = "NUL")
     if (current_activities$count() != 0) {
-      for (c in seq_len(length.out = current_activities$count())) {
-        current_activity <- current_activities$extract(id = c)[[1]]
+      for (activity_id in seq_len(length.out = current_activities$count())) {
+        current_activity <- current_activities$extract(id = activity_id)[[1]]
         if (! is.null(current_activity$.__enclos_env__$private$elementarycatches)
             & length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
           capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
@@ -218,8 +263,8 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                          file = "NUL")
           elementarycatches_ids <- unique(unlist(current_elementarycatches$extract_l1_element_value(element = "elementarycatch_id")))
           current_sum_catch_weight_category_corrected <- current_sum_catch_weight_category_corrected + sum(unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_corrected")))
-          for (d in seq_len(length.out = length(elementarycatches_ids))) {
-            elementarycatches_id <- elementarycatches_ids[d]
+          for (elementarycatches_id in seq_len(length.out = length(elementarycatches_ids))) {
+            elementarycatches_id <- elementarycatches_ids[elementarycatches_id]
             capture.output(current_elementarycatches_by_id <- t3::object_r6(class_name = "elementarycatches"),
                            file = "NUL")
             capture.output(current_elementarycatches_by_id$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$elementarycatch_id == \"",
@@ -231,16 +276,22 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
               current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
             }
             current_sum_elementarycatches_rf2_all <- current_sum_elementarycatches_rf2_all + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
-            current_corrected_logbook_category <- unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "corrected_logbook_category")))
+            current_corrected_logbook_category <- current_elementarycatches_by_id$extract_l1_element_value(element = "corrected_logbook_category")
             # 205 - Checking if variable "corrected_logbook_category" is equal to "<10kg", ">30kg", ">10kg" or "unknown" ----
             testthat::test_that(desc = "205 - Checking if variable \"corrected_logbook_category\" is equal to \"<10kg\", \">30kg\", \">10kg\" or \"unknown\"",
                                 code = {
-                                  testthat::expect_true(object = all(is.na(current_corrected_logbook_category)
-                                                                     || current_corrected_logbook_category %in% c("<10kg", "10-30kg", ">30kg", ">10kg", "unknown")),
-                                                        label = paste0("issue with the full trip ", a,
-                                                                       ", the partial trip ", b,
-                                                                       ", the activity ", c,
-                                                                       " and the elementarycatch ", d))
+                                  testthat::expect_true(object = (all(unlist(lapply(X = current_corrected_logbook_category,
+                                                                                    FUN = function(x) (! is.null(x)
+                                                                                                       && ((is.na(x)
+                                                                                                            || (x %in% c("<10kg",
+                                                                                                                        "10-30kg",
+                                                                                                                        ">30kg",
+                                                                                                                        ">10kg",
+                                                                                                                        "unknown"))))))))),
+                                                        label = paste0("issue with the full trip ", full_trip_id,
+                                                                       ", the partial trip ", partial_trip_id,
+                                                                       ", the activity ", activity_id,
+                                                                       " and the elementarycatch ", elementarycatches_id))
                                 })
           }
         }
@@ -262,7 +313,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                         code = {
                           testthat::expect_equal(object = current_sum_elementarylandings,
                                                  expected = current_sum_elementarycatches_rf1,
-                                                 label = paste0("issue with full trip ", a, ","))
+                                                 label = paste0("issue with full trip ", full_trip_id))
                         })
   }
   if (! is.na(current_sum_elementarycatches_rf2)) {
@@ -271,7 +322,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                         code = {
                           testthat::expect_equal(object = current_sum_elementarylandings,
                                                  expected = current_sum_elementarycatches_rf2,
-                                                 label = paste0("issue with the full trip ", a, ","))
+                                                 label = paste0("issue with the full trip ", full_trip_id))
                         })
   }
   if (!(is.na(current_sum_catch_weight_category_corrected) & is.na(current_sum_elementarycatches_rf2_all))) {
@@ -280,7 +331,7 @@ for (a in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$priv
                         code = {
                           testthat::expect_equal(object = current_sum_catch_weight_category_corrected,
                                                  expected = current_sum_elementarycatches_rf2_all,
-                                                 label = paste0("issue with the full trip ", a, ","))
+                                                 label = paste0("issue with the full trip ", full_trip_id))
                         })
   }
 }

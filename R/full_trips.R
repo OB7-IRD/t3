@@ -1647,7 +1647,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # process 2.1: sample_length_class_ld1_to_lf ----
+                            # process 2.1: sample length class conversion ld1 to lf ----
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
                             #' @param length_step Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.
                             sample_length_class_ld1_to_lf =  function(length_step) {
@@ -1916,7 +1916,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                             },
-                            # process 2.2: sample_number_measured_extrapolation ----
+                            # process 2.2: sample number measured extrapolation ----
                             #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
                             sample_number_measured_extrapolation = function() {
                               if (is.null(private$data_selected)) {
@@ -1938,11 +1938,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
+                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                     file = "NUL")
+                                      capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
+                                                     file = "NUL")
+                                      if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
+                                        capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                       file = "NUL")
+                                        capture.output(current_elementarysamplesraw$add(new_item = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                       file = "NUL")
+                                        current_elementarysamplesraw$modification_l1(modification = "$path$rf4 <- NA")
+                                        current_elementarysamplesraw$modification_l1(modification = "$path$sample_number_measured_extrapolated_lf <- NA")
+                                      }
+                                    }
                                   } else {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.2 on item \"",
-                                        names(private$data_selected)[i],
+                                        names(private$data_selected)[full_trip_id],
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
@@ -1967,18 +1984,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              file = "NUL")
                                               capture.output(current_sample$add(new_item = current_samples$extract(id = sample_id)),
                                                              file = "NUL")
-
-
-
-                                              sub_sample_ids <- unique(unlist(current_sample$extract_l1_element_value(element = "sub_sample_id")))
-                                              for (sub_sample_id in sub_sample_ids) {
+                                              if (any(unlist(x = lapply(X = current_sample$extract_l1_element_value(element = "sample_number_measured_lf"),
+                                                                        FUN = is.null)))) {
+                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                    " - Error: run process 2.1 (sample length class conversion ld1 to lf) before this process.\n",
+                                                    sep = "")
+                                                stop()
+                                              }
+                                              for (sub_sample_id in unique(unlist(current_sample$extract_l1_element_value(element = "sub_sample_id")))) {
                                                 capture.output(current_sub_sample <- t3::object_r6(class_name = "elementarysamplesraw"),
                                                                file = "NUL")
                                                 capture.output(current_sub_sample$add(new_item = current_sample$filter_l1(filter = paste0("$path$sub_sample_id == ",
                                                                                                                                           sub_sample_id))),
                                                                file = "NUL")
-                                                sample_species <- unique(unlist(current_sub_sample$extract_l1_element_value(element = "specie_code")))
-                                                for (sample_specie_id in sample_species) {
+                                                for (sample_specie_id in unique(unlist(current_sub_sample$extract_l1_element_value(element = "specie_code")))) {
                                                   capture.output(current_sub_sample_specie <- t3::object_r6(class_name = "elementarysamplesraw"),
                                                                  file = "NUL")
                                                   capture.output(current_sub_sample_specie$add(new_item = current_sub_sample$filter_l1(filter = paste0("$path$specie_code == ",
@@ -1986,62 +2005,57 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   sum_sub_sample_specie_number_measured_lf <- sum(unlist(current_sub_sample_specie$extract_l1_element_value(element = "sample_number_measured_lf")),
                                                                                                   na.rm = TRUE)
-
-                                                  unique(unlist(current_sub_sample_specie$extract_l1_element_value(element = "sample_total_count")))
-
-                                                  current_sub_sample_specie$extract_l1_element_value(element = "sample_total_count")
-
-                                                  sum_sub_sample_number_measured <- 0
-                                                  sub_sample_total_count_tmp <- vector(mode = "character")
-                                                  current_sub_sample_tmp <- vector(mode = "list")
-                                                  for (n in seq_len(length.out = length(current_sub_sample))) {
-                                                    if (current_sub_sample[[n]]$.__enclos_env__$private$specie_code == m) {
-                                                      sum_sub_sample_number_measured <- sum_sub_sample_number_measured + current_sub_sample[[n]]$.__enclos_env__$private$sample_number_measured_lf
-                                                      sub_sample_total_count_tmp <- append(sub_sample_total_count_tmp,
-                                                                                           paste(current_sub_sample[[n]]$.__enclos_env__$private$sub_sample_id,
-                                                                                                 current_sub_sample[[n]]$.__enclos_env__$private$length_type,
-                                                                                                 current_sub_sample[[n]]$.__enclos_env__$private$sample_total_count,
-                                                                                                 sep = "_"))
-                                                      current_sub_sample_tmp <- append(current_sub_sample_tmp,
-                                                                                       current_sub_sample[[n]])
-                                                    }
+                                                  sum_sub_sample_specie_total_count <- 0
+                                                  for (sub_sample_id_total_count in unique(unlist(current_sub_sample_specie$extract_l1_element_value(element = "sub_sample_id_total_count")))) {
+                                                    capture.output(current_sub_sample_specie_total_count <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                                   file = "NUL")
+                                                    capture.output(current_sub_sample_specie_total_count$add(new_item = current_sub_sample_specie$filter_l1(filter = paste0("$path$sub_sample_id_total_count == \"",
+                                                                                                                                                                            sub_sample_id_total_count,
+                                                                                                                                                                            "\""))),
+                                                                   file = "NUL")
+                                                    sum_sub_sample_specie_total_count <- sum_sub_sample_specie_total_count + unique(unlist(current_sub_sample_specie_total_count$extract_l1_element_value(element = "sample_total_count")))
                                                   }
-                                                  sub_sample_total_count_tmp <- unique(sub_sample_total_count_tmp)
-                                                  sum_sample_total_count <- as.integer(sum(sapply(X = seq_len(length.out = length(sub_sample_total_count_tmp)),
-                                                                                                  FUN = function(o) {
-                                                                                                    as.numeric(unlist(strsplit(sub_sample_total_count_tmp[o],
-                                                                                                                               "_"))[3])
-                                                                                                  })))
-                                                  rf4 <- sum_sample_total_count / sum_sub_sample_number_measured
-                                                  # rf4 verification ----
-                                                  if (rf4 < 0.99 & (! m %in% c(2))) {
+                                                  rf4 <- sum_sub_sample_specie_total_count / sum_sub_sample_specie_number_measured_lf
+                                                  # rf4 verification
+                                                  if (rf4 != 1 & sample_specie_id != 2) {
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Warning: rf4 not egal to 1 (",
                                                         rf4,
                                                         ") for sampled specie different from SKJ.\n",
                                                         "[trip: ",
-                                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", well: ",
+                                                        current_well$.__enclos_env__$private$well_id,
                                                         ", sample: ",
-                                                        current_sub_sample[[1]]$.__enclos_env__$private$sample_id,
+                                                        current_sample$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                        ", sub sample: ",
+                                                        current_sub_sample$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                        ", specie: ",
+                                                        current_sub_sample_specie$extract(id = 1)[[1]]$.__enclos_env__$private$specie_code3l,
                                                         "]\n",
                                                         sep = "")
-                                                  }
-                                                  if (rf4 < 0.99) {
+                                                  } else if (rf4 < 1) {
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Warning: rf4 inferior to 1 (",
                                                         rf4,
                                                         ").\n",
                                                         "[trip: ",
-                                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", well: ",
+                                                        current_well$.__enclos_env__$private$well_id,
                                                         ", sample: ",
-                                                        current_sub_sample[[1]]$.__enclos_env__$private$sample_id,
+                                                        current_sample$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                        ", sub sample: ",
+                                                        current_sub_sample$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                        ", specie: ",
+                                                        current_sub_sample_specie$extract(id = 1)[[1]]$.__enclos_env__$private$specie_code3l,
                                                         "]\n",
                                                         sep = "")
                                                   }
-                                                  for (p in seq_len(length.out = length(current_sub_sample_tmp))) {
-                                                    current_sub_sample_tmp[[p]]$.__enclos_env__$private$rf4 <- rf4
-                                                    current_sub_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf <- current_sub_sample_tmp[[p]]$.__enclos_env__$private$sample_number_measured_lf * rf4
-                                                  }
+                                                  current_sub_sample_specie$modification_l1(modification = paste0("$path$rf4 <- ",
+                                                                                                                  rf4))
+                                                  current_sub_sample_specie$modification_l1(modification = paste0("$path$sample_number_measured_extrapolated_lf <- $path$sample_number_measured_lf * ",
+                                                                                                                  rf4))
                                                 }
                                               }
                                             }
@@ -2052,13 +2066,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.2 successfull on item \"",
-                                      names(private$data_selected)[i],
+                                      names(private$data_selected)[full_trip_id],
                                       "\".\n",
                                       "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (i == length(private$data_selected)) {
+                                  if (full_trip_id == length(private$data_selected)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - End process 2.2: sample number measured extrapolation.\n",
                                         sep = "")
