@@ -177,6 +177,9 @@
 <li><p><a href='#method-count'><code>list_t3$count()</code></a></p></li>
 <li><p><a href='#method-extract'><code>list_t3$extract()</code></a></p></li>
 <li><p><a href='#method-filter'><code>list_t3$filter()</code></a></p></li>
+<li><p><a href='#method-filter_l1'><code>list_t3$filter_l1()</code></a></p></li>
+<li><p><a href='#method-extract_l1_element_value'><code>list_t3$extract_l1_element_value()</code></a></p></li>
+<li><p><a href='#method-modification_l1'><code>list_t3$modification_l1()</code></a></p></li>
 <li><p><a href='#method-clone'><code>list_t3$clone()</code></a></p></li>
 </ul>
 <p><hr>
@@ -264,6 +267,44 @@
 <dt><code>attribut_l1</code></dt><dd><p>(character) First strate attribut's name. By default "data".</p></dd>
 
 <dt><code>filter</code></dt><dd><p>(character) Filter by a specific filter.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-filter_l1"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>filter_l1()</code></h3>
+<p>Function for select item(s) by specific selection.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>list_t3</span><span class='op'>$</span><span class='fu'>filter_l1</span><span class='op'>(</span>attribut_l1 <span class='op'>=</span> <span class='st'>"data"</span>, <span class='va'>filter</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>attribut_l1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
+
+<dt><code>filter</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" &amp; $path$activity_id == "activity168""</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-extract_l1_element_value"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>extract_l1_element_value()</code></h3>
+<p>Function for extract element(s) of a specific attribut.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>list_t3</span><span class='op'>$</span><span class='fu'>extract_l1_element_value</span><span class='op'>(</span>attribut_l1 <span class='op'>=</span> <span class='st'>"data"</span>, <span class='va'>element</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>attribut_l1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
+
+<dt><code>element</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Name of the element.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-modification_l1"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>modification_l1()</code></h3>
+<p>Function for modification item(s).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>list_t3</span><span class='op'>$</span><span class='fu'>modification_l1</span><span class='op'>(</span>attribut_l1 <span class='op'>=</span> <span class='st'>"data"</span>, <span class='va'>modification</span>, silent <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>attribut_l1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. First strate attribut's name. By default "data".</p></dd>
+
+<dt><code>modification</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"</p></dd>
+
+<dt><code>silent</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Display outputs of modificated values.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
