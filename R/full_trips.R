@@ -3572,6 +3572,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              key = "sp_cat",
                                                              value = "prop_lb",
                                                              -"code_act_type")
+                                lb_set_long <- dplyr::left_join(lb_set_long, catch_set_lb)
+                                lb_set_long$w_lb_t3[is.na(lb_set_long$w_lb_t3)] <- 0
                                 data <- dplyr::inner_join(x = lb_set_long,
                                                           y = samp_t3,
                                                           by = c("id_act", "sp_cat"))
@@ -3639,7 +3641,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           col = sp_cat,
                                                           into = c("sp","wcat"),
                                                           sep = "_")
-                              data4mod <- aggregate(formula = cbind(prop_lb, prop_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
+                              data4mod <- aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
                                                     data = data4mod,
                                                     FUN = sum)
                               outputs_level3_process2 <- list()
@@ -4767,26 +4769,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
-                                boot_tmp_element <- do.call(what = rbind,
-                                                            args = outputs_level3_process5_ocean)
-                                boot_tmp_element <- tidyr::spread(data = boot_tmp_element,
+                                boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
+                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","data_source","year","resp")],
                                                                   key = "sp",
                                                                   value = fit_prop)
-                                boot_tmp_element$S <- boot_tmp_element$SKJ + boot_tmp_element$YFT
-                                boot_tmp_element$SKJ <- base::ifelse(test = boot_tmp_element$S > 1,
-                                                                     yes = boot_tmp_element$SKJ/boot_tmp_element$S,
-                                                                     no = boot_tmp_element$SKJ)
-                                boot_tmp_element$YFT <- base::ifelse(test = boot_tmp_element$S > 1,
-                                                                     yes = boot_tmp_element$YFT/boot_tmp_element$S,
-                                                                     no = boot_tmp_element$YFT)
-                                boot_tmp_element$BET <- 1 - (boot_tmp_element$SKJ + boot_tmp_element$YFT)
+                                boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
+                                boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                     yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                     no = boot_tmp_element_wide$SKJ)
+                                boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                     yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                     no = boot_tmp_element_wide$YFT)
+                                boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
 
-                                boot_tmp_element <- tidyr::gather(data = boot_tmp_element,
+                                boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
                                                                   key = "sp",
                                                                   value = "fit_prop_t3_ST",
                                                                   "BET", "SKJ", "YFT")
+                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element)
 
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
 
                                 outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
                                                                        list(boot_tmp_element))
@@ -4797,7 +4800,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
-
                               if (ci == TRUE){
 
                                 for (ocean in ocean_level) {
@@ -4876,31 +4878,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for(element in (seq.int(from = 1,
                                                         to = length(outputs_level3_process5_ocean[[1]])))){
                                   boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
-                                  boot_tmp_element <- do.call(what = rbind,
-                                                              args = boot_tmp_element)
+                                  boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
+                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","data_source","year","resp")],
+                                                                         key = "sp",
+                                                                         value = fit_prop)
+                                  boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
+                                  boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                            yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                            no = boot_tmp_element_wide$SKJ)
+                                  boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                            yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                            no = boot_tmp_element_wide$YFT)
+                                  boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
 
-                                  boot_tmp_element <- tidyr::spread(boot_tmp_element,
-                                                                    key = "sp",
-                                                                    value = fit_prop)
-                                  boot_tmp_element$S <- boot_tmp_element$SKJ + boot_tmp_element$YFT
-                                  boot_tmp_element$SKJ <- base::ifelse(boot_tmp_element$S > 1,
-                                                                       boot_tmp_element$SKJ/boot_tmp_element$S,
-                                                                       boot_tmp_element$SKJ)
-                                  boot_tmp_element$YFT <- base::ifelse(boot_tmp_element$S > 1,
-                                                                       boot_tmp_element$YFT/boot_tmp_element$S,
-                                                                       boot_tmp_element$YFT)
-                                  boot_tmp_element$BET <- 1 - (boot_tmp_element$SKJ + boot_tmp_element$YFT)
+                                  boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
+                                                                         key = "sp",
+                                                                         value = "fit_prop_t3_ST",
+                                                                         "BET", "SKJ", "YFT")
+                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element)
 
-                                  boot_tmp_element <- tidyr::gather(boot_tmp_element,
-                                                                    key = "sp",
-                                                                    value = "fit_prop_t3_ST","BET", "SKJ", "YFT")
+                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                  boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
 
                                   boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
 
                                   list_boot_ST_ocean[[element]] <- boot_tmp_element
 
                                 }
-
                                 outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
                                                                        list(list_boot_ST_ocean))
                                 names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
@@ -4909,6 +4913,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # bootstrap step 3 - compute confident intervals ----
                               # Compute CI by set - export catch by set
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: set catch estimations.\n",
+                                  sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
 
                               if(ci == TRUE & (ci_type == "all" | "set" %in% ci_type )){
@@ -4936,15 +4943,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = set_all,
                                          file = file.path(tables_directory,
                                                           paste("set_all_ocean_",
-                                                                paste(unique(set_all_final_ocean$yr),
+                                                                paste(unique(set_all$yr),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(set_all_final_ocean$ocean),
+                                                                paste(unique(set_all$ocean),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: set catch estimations.\n",
+                                  sep = "")
                               # nominal catch by species (task 1)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: t1 catch estimations.\n",
+                                  sep = "")
                               t1_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST,
                                                              function(x){
                                                                t1_tmp_element <-aggregate(cbind(catch_set_fit) ~ yr + sp + ocean ,
@@ -4986,15 +4999,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = t1_all,
                                          file = file.path(tables_directory,
                                                           paste("t1_all_ocean_",
-                                                                paste(unique(t1_all_final_ocean$yr),
+                                                                paste(unique(t1_all$yr),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                paste(unique(t1_all$ocean),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: t1 catch estimations.\n",
+                                  sep = "")
                               # nominal catch by species and fishing mode (task 1 by fishing mode)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: t1-fmod catch estimations.\n",
+                                  sep = "")
                               t1_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x, sum)
                                 return(boot_tmp_subelement)
@@ -5037,14 +5056,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = t1_fmod,
                                          file = file.path(tables_directory,
                                                           paste("t1_fmod_ocean",
-                                                                paste(unique(t1_all_final_ocean$yr),
+                                                                paste(unique(t1_fmod$yr),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t1_all_final_ocean$ocean),
+                                                                paste(unique(t1_fmod$ocean),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: t1-fmod catch estimations.\n",
+                                  sep = "")
                               ## catch effort (task2)
                               # function for rounding, rounding up and down to a specific base
                               mtrunc <- function(x,base){
@@ -5066,6 +5088,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
 
                               # nominal catch by species and cwp (task 2 - catch Effort)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: t2 catch estimations.\n",
+                                  sep = "")
                               t2_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
@@ -5124,7 +5149,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: t2 catch estimations.\n",
+                                  sep = "")
                               # nominal catch by species and cwp and fishing mode (task 2 by fishing mode)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - Start process 3.5: t2-fmod catch estimations.\n",
+                                  sep = "")
                                t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
@@ -5140,7 +5171,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
-                              if(ci == TRUE & (ci_type == "all" | "set" %in% ci_type )){
+                              if(ci == TRUE & (ci_type == "all" | "t2-fmod" %in% ci_type )){
                               t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
                                                                      boot_tmp_element <-do.call(rbind,
@@ -5181,6 +5212,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 ".csv",
                                                                 sep = "")),
                                          row.names = FALSE)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 3.5: t2-fmod catch estimations.\n",
+                                  sep = "")
 
                               # tmp <- catch_set_t3_long
                               # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",

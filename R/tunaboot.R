@@ -55,6 +55,8 @@ tunaboot <- function(sample_data,
   sub$mon <- factor(sub$mon)
   sub$vessel <- factor(sub$vessel)
   sub <- droplevels(sub)
+  sub$ocean <- factor(sub$ocean)
+  sub$fmod <- factor(sub$fmod)
 
   #### bootstrap
 
@@ -177,7 +179,8 @@ tunaboot <- function(sample_data,
     # compute catch by species by set
     sampled_set <- unique(newsample[newsample$yr %in% target_period,])
     # add sample not corrected catch by species
-    sampled_set$data_source <- "sample" # add flag
+    if(nrow(sampled_set) > 0){
+    sampled_set$data_source <- "sample"} # add flag
     sampled_set <- dplyr::rename(sampled_set,
                                  fit_prop = prop_t3)
     # output
@@ -193,10 +196,13 @@ tunaboot <- function(sample_data,
                      "mon",
                      "fit_prop",
                      "wtot_lb_t3",
+                     "w_lb_t3",
                      "data_source")
-    all_set <- rbind(newd[, names(newd) %in% column_keep],
-                     new_wtv[, names(new_wtv) %in% column_keep],
-                     new_0[, names(new_0) %in% column_keep], sampled_set[, names(sampled_set) %in% column_keep])
+    # remove set with no data
+    all_set <- list(newd,new_wtv,new_0, sampled_set,new_0)
+    all_set <- all_set[which(unlist(lapply(all_set, nrow)) >0)]
+    all_set <- dplyr::bind_rows(all_set)
+
     boot_output_list[[i]] <- all_set
   }
   return(boot_output_list)

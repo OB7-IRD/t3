@@ -11,7 +11,8 @@
 catch_ci_calculator <- function(fit_data,
                                 boot_data){
   # set catch
-  if(!is.null(fit_data$id_act)){
+  # if(!is.null(fit_data$id_act)){
+    if("id_act" %in% colnames(fit_data)){
     output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
       tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
                           t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
@@ -30,9 +31,10 @@ catch_ci_calculator <- function(fit_data,
     }))
   } else {
     # nominal catch or catch effort
-    if(is.null(fit_data$cwp)){
+    # if(is.null(fit_data$cwp)){
+      if(!("cwp" %in% colnames(fit_data))){
       # by fishing mode or not
-      ifelse(is.null(fit_data$fmod),
+      ifelse(!("fmod" %in% colnames(fit_data)), #is.null(fit_data$fmod),
              # nominal catch total
              output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
                tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
@@ -68,7 +70,7 @@ catch_ci_calculator <- function(fit_data,
              }))
              )
     } else {
-      ifelse(is.null(fit_data$fmod),
+      ifelse(!("fmod" %in% colnames(fit_data)), #is.null(fit_data$fmod),
              # nominal catch total by CWP
              output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
                tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
