@@ -4786,7 +4786,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   key = "sp",
                                                                   value = "fit_prop_t3_ST",
                                                                   "BET", "SKJ", "YFT")
-                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element)
+                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp"))
 
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
                                 boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
@@ -4895,7 +4895,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                          key = "sp",
                                                                          value = "fit_prop_t3_ST",
                                                                          "BET", "SKJ", "YFT")
-                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element)
+                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp"))
 
                                   boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
                                   boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
@@ -4918,7 +4918,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
 
-                              if(ci == TRUE & (ci_type == "all" | "set" %in% ci_type )){
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )){
                               set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
                                 set_all_boot_tmp <- dplyr::bind_rows(x)
                                 set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp)/Nboot)
@@ -4966,7 +4966,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                return(t1_tmp_element)
                                                              }))
                               # compute final CI
-                              if(ci == TRUE & (ci_type == "all" | "t1" %in% ci_type )){
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1")) > 0 )){
                                 t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                   function(x){
                                                                     boot_tmp_element <-do.call(rbind,
@@ -5020,8 +5020,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }))
 
                               # bootstrap distribution
-                              if(ci == TRUE & (ci_type == "all" | "t1-fmod" %in% ci_type )){
-                              t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1-fmod")) > 0 )){
+                                t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
                                                                      boot_tmp_element <-do.call(rbind,
                                                                                                 lapply(seq.int(1:length(x)),
@@ -5107,8 +5107,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }))
 
                               # bootstrap distribution
-                              if(ci == TRUE & (ci_type == "all" | "t2" %in% ci_type )){
-                              t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2")) > 0 )){
+                                t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
                                                                      boot_tmp_element <-do.call(rbind,
                                                                                                 lapply(seq.int(1:length(x)),
@@ -5171,8 +5171,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
-                              if(ci == TRUE & (ci_type == "all" | "t2-fmod" %in% ci_type )){
-                              t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2-fmod")) > 0 )){
+                                 t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                    FUN = function(x){
                                                                      boot_tmp_element <-do.call(rbind,
                                                                                                 lapply(seq.int(1:length(x)),
