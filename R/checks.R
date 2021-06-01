@@ -43,6 +43,21 @@ check_sample_id <- function(sample_id) {
   }
 }
 
+#' @name check_elementarysampleraw_id
+#' @title Attribute "elementarysampleraw_id" verification
+#' @param elementarysampleraw_id Object of class {\link[base]{character}} expected. Elementary sample raw identification.
+#' @description Check if the item "elementarysampleraw_id" have one unique class identified as character.
+check_elementarysampleraw_id <- function(elementarysampleraw_id) {
+  if (length(x = class(x = elementarysampleraw_id)) != 1
+      || class(x = elementarysampleraw_id) != "character") {
+    cat(format(x = Sys.time(),
+               format = "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"elementarysampleraw_id\" argument, class character expected.\n",
+        sep = "")
+    stop()
+  }
+}
+
 #' @name check_well_id
 #' @title Attribute "well_id" verification
 #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
@@ -113,6 +128,21 @@ check_sub_sample_id <- function(sub_sample_id) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sub_sample_id\" argument, class integer expected.\n",
+        sep = "")
+    stop()
+  }
+}
+
+#' @name check_sub_sample_id_total_count
+#' @title Attribute "sub_sample_id_total_count" verification
+#' @param sub_sample_id_total_count Object of class {\link[base]{character}} expected. Sub sample identification bis in relation with the fish total count.
+#' @description Check if the item "sub_sample_id_total_count" have one unique class identified as character.
+check_sub_sample_id_total_count <- function(sub_sample_id_total_count) {
+  if (length(x = class(x = sub_sample_id_total_count)) != 1
+      || class(x = sub_sample_id_total_count) != "character") {
+    cat(format(x = Sys.time(),
+               format = "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalide \"sub_sample_id_total_count\" argument, class character expected.\n",
         sep = "")
     stop()
   }

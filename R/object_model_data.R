@@ -1892,21 +1892,24 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat("[", samples_sql_final, "]\n", sep = "")
                                          samples_data <- DBI::dbGetQuery(conn = db_con,
                                                                          statement = samples_sql_final)
-                                         samples_data$trip_id <- as.character(samples_data$trip_id)
-                                         samples_data$well_id <- as.character(samples_data$well_id)
-                                         samples_data$well_minus10_weigth <- as.integer(samples_data$well_minus10_weigth)
-                                         samples_data$well_plus10_weigth <- as.integer(samples_data$well_plus10_weigth)
-                                         samples_data$well_global_weigth <- as.integer(samples_data$well_global_weigth)
-                                         samples_data$sample_id <- as.character(samples_data$sample_id)
-                                         samples_data$sub_sample_id <- as.integer(samples_data$sub_sample_id)
-                                         samples_data$sample_quality <- as.integer(samples_data$sample_quality)
-                                         samples_data$sample_type <- as.integer(samples_data$sample_type)
-                                         samples_data$specie_code <- as.integer(samples_data$specie_code)
-                                         samples_data$specie_code3l <- as.character(samples_data$specie_code3l)
-                                         samples_data$length_type <- as.integer(samples_data$length_type)
-                                         samples_data$sample_total_count <- as.integer(samples_data$sample_total_count)
-                                         samples_data$sample_number_measured <- as.integer(samples_data$sample_number_measured)
-                                         samples_data$sample_length_class <- as.integer(samples_data$sample_length_class)
+                                         samples_data <- samples_data %>%
+                                           dplyr::mutate(trip_id = as.character(trip_id),
+                                                         well_id = as.character(well_id),
+                                                         well_minus10_weigth = as.integer(well_minus10_weigth),
+                                                         well_plus10_weigth = as.integer(well_plus10_weigth),
+                                                         well_global_weigth = as.integer(well_global_weigth),
+                                                         sample_id = as.character(sample_id),
+                                                         sub_sample_id = as.integer(sub_sample_id),
+                                                         sub_sample_id_total_count = as.character(sub_sample_id_total_count),
+                                                         elementarysampleraw_id = as.character(paste0(elementarysampleraw_id,
+                                                                                                      ".",
+                                                                                                      dplyr::row_number())),
+                                                         specie_code = as.integer(specie_code),
+                                                         specie_code3l = as.character(specie_code3l),
+                                                         length_type = as.integer(length_type),
+                                                         sample_total_count = as.integer(sample_total_count),
+                                                         sample_number_measured = as.integer(sample_number_measured),
+                                                         sample_length_class = as.integer(sample_length_class))
                                          if (nrow(x = samples_data) == 0) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2308,46 +2311,24 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            tmp_well <- dplyr::filter(.data = tmp_trip, well_id == well)
                                          }
-                                         if (length(x = unique(x = tmp_well$well_minus10_weigth)) != 1) {
+                                         if (length(unique(x = tmp_well$well_minus10_weigth)) != 1
+                                             | length(unique(x = tmp_well$well_plus10_weigth)) != 1
+                                             | length(unique(x = tmp_well$well_global_weigth)) != 1) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_minus10_weigth\" argument. Well data avoided and not imported.\n",
+                                               " - Warning: at least one well data (\"well_minus10_weigth\", \"well_plus10_weigth\" and \"well_global_weigth\") is different between well samples. Only the first element will use.\n",
                                                "[trip: ",
                                                trip,
                                                ", well: ",
                                                well,
                                                "]\n",
                                                sep = "")
-                                           next()
-                                         } else if (length(x = unique(x = tmp_well$well_plus10_weigth)) != 1) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_plus10_weigth\" argument. Well data avoided and not imported.\n",
-                                               "[trip: ",
-                                               trip,
-                                               ", well: ",
-                                               well,
-                                               "]\n",
-                                               sep = "")
-                                           next()
-                                         } else if (length(x = unique(x = tmp_well$well_global_weigth)) != 1) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: invalid \"well_global_weigth\" argument. Well data avoided and not imported.\n",
-                                               "[trip: ",
-                                               trip,
-                                               ", well: ",
-                                               well,
-                                               "]\n",
-                                               sep = "")
-                                           next()
-                                         } else {
-                                           object_well <- t3:::well$new(trip_id = trip,
-                                                                        well_id = well,
-                                                                        well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth),
-                                                                        well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth),
-                                                                        well_global_weigth = unique(x = tmp_well$well_global_weigth))
                                          }
+                                         object_well <- t3:::well$new(trip_id = trip,
+                                                                      well_id = well,
+                                                                      well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth)[[1]],
+                                                                      well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
+                                                                      well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
                                          for (sample in unique(x = tmp_well$sample_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2367,14 +2348,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                         well_id = well,
                                                                                                                                                         sample_id = sample,
                                                                                                                                                         sub_sample_id = tmp_sample[[7]][i],
-                                                                                                                                                        sample_quality = tmp_sample[[8]][i],
-                                                                                                                                                        sample_type = tmp_sample[[9]][i],
-                                                                                                                                                        specie_code = tmp_sample[[10]][i],
-                                                                                                                                                        specie_code3l = tmp_sample[[11]][i],
-                                                                                                                                                        length_type = tmp_sample[[12]][i],
-                                                                                                                                                        sample_total_count = tmp_sample[[13]][i],
-                                                                                                                                                        sample_number_measured = tmp_sample[[14]][i],
-                                                                                                                                                        sample_length_class = tmp_sample[[15]][i])
+                                                                                                                                                        sub_sample_id_total_count = tmp_sample[[8]][i],
+                                                                                                                                                        elementarysampleraw_id = tmp_sample[[9]][i],
+                                                                                                                                                        sample_quality = tmp_sample[[10]][i],
+                                                                                                                                                        sample_type = tmp_sample[[11]][i],
+                                                                                                                                                        specie_code = tmp_sample[[12]][i],
+                                                                                                                                                        specie_code3l = tmp_sample[[13]][i],
+                                                                                                                                                        length_type = tmp_sample[[14]][i],
+                                                                                                                                                        sample_total_count = tmp_sample[[15]][i],
+                                                                                                                                                        sample_number_measured = tmp_sample[[16]][i],
+                                                                                                                                                        sample_length_class = tmp_sample[[17]][i])
                                                                                                                          })))
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),

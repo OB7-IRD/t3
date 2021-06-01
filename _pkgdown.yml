@@ -71,6 +71,8 @@ articles:
   contents:
   - model_initialisation
   - level_1
+  - level_2
+  - level_3
 
 development:
   mode: auto

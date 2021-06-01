@@ -29,6 +29,31 @@ SELECT
 		& '.'
 		& e.N_ECH AS sample_id
 	,e.F_S_ECH AS sub_sample_id
+	,'fr.ird.t3.entities.data.SampleSpecies#'
+		& format(e.c_bat, '0000')
+		& '#'
+		& YEAR(e.D_DBQ)
+		& format(MONTH(e.D_DBQ), '00')
+		& format(DAY(e.D_DBQ), '00')
+		& '.'
+		& e.N_ECH 
+		& '.'
+		& e.N_S_ECH
+		& '.'
+		& e.C_ESP
+		& '.'
+		& e.F_LDLF AS sub_sample_id_total_count
+	,'fr.ird.t3.entities.data.SampleSpeciesFrequency#'
+		& format(e.c_bat, '0000')
+		& '#'
+		& YEAR(e.D_DBQ)
+		& format(MONTH(e.D_DBQ), '00')
+		& format(DAY(e.D_DBQ), '00')
+		& '.'
+		& e.N_CUVE
+		& e.F_POS_CUVE
+		& '.'
+		& e.N_ECH AS elementarysampleraw_id
 	,e.C_QUAL_ECH AS sample_quality
 	,e.C_TYP_ECH AS sample_type
 	,ee.C_ESP AS specie_code

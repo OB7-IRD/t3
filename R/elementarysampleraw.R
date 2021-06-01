@@ -12,6 +12,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                      #' @param sample_quality Object of class {\link[base]{integer}} expected. Sample quality identification.
                                      #' @param sub_sample_id Object of class {\link[base]{integer}} expected. Sub sample identification.
+                                     #' @param sub_sample_id_total_count Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.
+                                     #' @param elementarysampleraw_id Object of class {\link[base]{character}} expected. Elementary sample raw identification.
                                      #' @param sample_type Object of class {\link[base]{integer}} expected. Sample type identification.
                                      #' @param specie_code Object of class {\link[base]{integer}} expected. Specie code identification.
                                      #' @param specie_code3l Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
@@ -23,6 +25,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                            well_id,
                                                            sample_id,
                                                            sub_sample_id,
+                                                           sub_sample_id_total_count,
+                                                           elementarysampleraw_id,
                                                            sample_quality,
                                                            sample_type,
                                                            specie_code,
@@ -39,6 +43,10 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        t3:::check_sample_id(sample_id)
                                        # attribute "sub_sample_id" verification
                                        t3:::check_sub_sample_id(sub_sample_id)
+                                       # attribute "sub_sample_id_total_count" verification
+                                       t3:::check_sub_sample_id_total_count(sub_sample_id_total_count)
+                                       # attribute "elementarysampleraw_id" verification
+                                       t3:::check_elementarysampleraw_id(elementarysampleraw_id)
                                        # attribute "sample_quality" verification
                                        t3:::check_sample_quality(sample_quality)
                                        # attribute "sample_type" verification
@@ -60,6 +68,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        private$well_id <- well_id
                                        private$sample_id <- sample_id
                                        private$sub_sample_id <- sub_sample_id
+                                       private$sub_sample_id_total_count <- sub_sample_id_total_count
+                                       private$elementarysampleraw_id <- elementarysampleraw_id
                                        private$sample_quality <- sample_quality
                                        private$sample_type <- sample_type
                                        private$specie_code <- specie_code
@@ -74,6 +84,8 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      well_id = NULL,
                                      sample_id = NULL,
                                      sub_sample_id = NULL,
+                                     sub_sample_id_total_count = NULL,
+                                     elementarysampleraw_id = NULL,
                                      sample_quality = NULL,
                                      sample_type = NULL,
                                      specie_code = NULL,

@@ -280,7 +280,8 @@ list_t3 <- R6Class(
     #' @description Function for select attribut's element(s) by specific filter.
     #' @param attribut_l1 (character) First strate attribut's name. By default "data".
     #' @param filter (character) Filter by a specific filter.
-    filter = function(attribut_l1 = "data", filter) {
+    filter = function(attribut_l1 = "data",
+                      filter) {
       if (length(class(attribut_l1)) != 1 ||
           class(attribut_l1) != "character") {
         cat(
@@ -369,6 +370,151 @@ list_t3 <- R6Class(
           }
         }
         return(data)
+      }
+    },
+    # filter element of data level 1 ----
+    #' @description Function for select item(s) by specific selection.
+    #' @param attribut_l1 Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".
+    #' @param filter Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""
+    filter_l1 = function(attribut_l1 = "data",
+                         filter) {
+      if (length(class(attribut_l1)) != 1
+          || class(attribut_l1) != "character") {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
+          sep = ""
+        )
+        stop()
+      } else if (!attribut_l1 %in% names(private)) {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+          sep = ""
+        )
+        stop()
+      } else {
+        tmp1 <- private[[attribut_l1]]
+        final_filter <- gsub(pattern = "$path$",
+                             replacement = "tmp2$.__enclos_env__$private$",
+                             x = filter,
+                             fixed = TRUE)
+        final_filter = parse(text = final_filter)
+        tmp_final <- Filter(Negate(is.null),
+                            lapply(X = seq_len(length.out = length(tmp1)),
+                                   FUN = function(a) {
+                                     tmp2 <- tmp1[[a]]
+                                     tryCatch(
+                                       expr = if (eval(final_filter)) {
+                                         tmp2
+                                       },
+                                       error = function(err) {
+                                         cat(
+                                           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                           " - Error: invalid \"filter\" argument\n",
+                                           sep = ""
+                                         )
+                                         stop()
+                                       }
+                                     )
+                                   }))
+        return(tmp_final)
+      }
+    },
+    # extract elements ----
+    #' @description Function for extract element(s) of a specific attribut.
+    #' @param attribut_l1 Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".
+    #' @param element Object of type \code{\link[base]{character}} expected. Name of the element.
+    extract_l1_element_value = function(attribut_l1 = "data",
+                                        element) {
+      if (length(class(attribut_l1)) != 1
+          || class(attribut_l1) != "character") {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
+          sep = ""
+        )
+        stop()
+      } else if (!attribut_l1 %in% names(private)) {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+          sep = ""
+        )
+        stop()
+      } else {
+        tmp1 <- private[[attribut_l1]]
+        element_final <- parse(text = paste0("tmp2$.__enclos_env__$private$",
+                                             element))
+        tmp_final <- lapply(X = seq_len(length.out = length(tmp1)),
+                            FUN = function(a) {
+                              tmp2 <- tmp1[[a]]
+                              tryCatch(
+                                expr = eval(element_final),
+                                error = function(err) {
+                                  cat(
+                                    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"element\" argument in the item ",
+                                    a,
+                                    "\n",
+                                    sep = ""
+                                  )
+                                  stop()
+                                }
+                              )
+                            })
+        return(tmp_final)
+      }
+    },
+    # modify element of data level 1 ----
+    #' @description Function for modification item(s).
+    #' @param attribut_l1 Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".
+    #' @param modification Object of type \code{\link[base]{character}} expected. Attribute to modify. Use the pattern $path$ for specify path of attribute in the R6 object. For example: "$path$activity_code = 1"
+    #' @param silent Object of type \code{\link[base]{logical}} expected. Display outputs of modificated values.
+    modification_l1 = function(attribut_l1 = "data",
+                               modification,
+                               silent = TRUE) {
+      if (length(class(attribut_l1)) != 1
+          || class(attribut_l1) != "character") {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
+          sep = ""
+        )
+        stop()
+      } else if (!attribut_l1 %in% names(private)) {
+        cat(
+          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+          sep = ""
+        )
+        stop()
+      } else {
+        tmp1 <- private[[attribut_l1]]
+        final_modification <- gsub(pattern = "$path$",
+                                   replacement = "tmp2$.__enclos_env__$private$",
+                                   x = modification,
+                                   fixed = TRUE)
+        final_modification = parse(text = final_modification)
+        lapply(X = seq_len(length.out = length(tmp1)),
+               FUN = function(a) {
+                 tmp2 <- tmp1[[a]]
+                 tryCatch(
+                   expr = eval(final_modification),
+                   error = function(err) {
+                     cat(
+                       format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                       " - Error: invalid \"modification\" argument\n",
+                       sep = ""
+                     )
+                     stop()
+                   }
+                 )
+               })
+        if (silent == TRUE) {
+          capture.output(return(),
+                         file = "NUL")
+        }
       }
     }
   ),
