@@ -518,13 +518,22 @@
 <p><hr>
 <a id="method-models_checking"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>models_checking()</code></h3>
 <p>Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>models_checking</span><span class='op'>(</span><span class='va'>outputs_level3_process2</span>, <span class='va'>outputs_path</span><span class='op'>)</span></pre><p></div></p>
+<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>models_checking</span><span class='op'>(</span>
+  <span class='va'>outputs_level3_process2</span>,
+  <span class='va'>outputs_path</span>,
+  plot_sample <span class='op'>=</span> <span class='cn'>F</span>,
+  avdth_patch_coord <span class='op'>=</span> <span class='cn'>F</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>outputs_level3_process2</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> expected. Outputs models and data from process 3.2.</p></dd>
 
 <dt><code>outputs_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Outputs directory path.</p></dd>
+
+<dt><code>plot_sample</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code>. Whether the sample figure is computed. Default value = F</p></dd>
+
+<dt><code>avdth_patch_coord</code></dt><dd><p>paramter wiating for coordinate conversion patch from avdth database</p></dd>
 
 </dl><p></div></p>
 <p><hr>
