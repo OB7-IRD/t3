@@ -492,7 +492,8 @@ Modelling proportions in sets througth random forest models.
   num.trees = 1000L,
   mtry = 2L,
   min.node.size = 5,
-  seed_number = 7L
+  seed_number = 7L,
+  small_fish_only = F
 )}\if{html}{\out{</div>}}
 }
 
@@ -508,6 +509,8 @@ Modelling proportions in sets througth random forest models.
 \item{\code{min.node.size}}{Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
 
 \item{\code{seed_number}}{Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.}
+
+\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
 \if{html}{\out{</div>}}
 }
@@ -550,7 +553,8 @@ Formatting data for model predictions.
   inputs_level3,
   outputs_level3_process1,
   target_year,
-  vessel_id_ignored = NULL
+  vessel_id_ignored = NULL,
+  small_fish_only = F
 )}\if{html}{\out{</div>}}
 }
 
@@ -564,6 +568,8 @@ Formatting data for model predictions.
 \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
+
+\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
 \if{html}{\out{</div>}}
 }

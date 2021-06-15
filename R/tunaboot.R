@@ -62,15 +62,8 @@ tunaboot <- function(sample_data,
 
   # select sample and data to predict
 
-  for (i in seq.int(from = 1, to = Nboot)){
-    print(i)
-    set.seed(i)
-    newsample <- dplyr::sample_n(tbl = sub,
-                                 size = nrow(sub),
-                                 replace = TRUE)
-
     ### remove set used to train models from data to predict
-    no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(newsample$id_act)),])
+    no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
     no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
 
     ## Prepare data
@@ -101,7 +94,7 @@ tunaboot <- function(sample_data,
 
     # not sampled vessel list
     vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),
-                                      levels(newsample$vessel))
+                                      levels(sub$vessel))
 
     # dataset with all information
     newd <- (no_sampled_set[!no_sampled_set$vessel %in% vessel_not_train, ])
@@ -112,6 +105,39 @@ tunaboot <- function(sample_data,
 
     # dataset with no logbook
     new_0 <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & is.na(no_sampled_set$prop_lb), ]
+    new_0$data_source <- as.character(new_0$data_source)
+
+
+    # compute catch by species by set
+    sampled_set <- unique(sub[sub$yr %in% target_period,])
+    # add sample not corrected catch by species
+    if(nrow(sampled_set) > 0){
+      sampled_set$data_source <- "sample"
+    } # add flag
+    sampled_set <- dplyr::rename(sampled_set,
+                                 fit_prop = prop_t3)
+    # output columns
+    column_keep <- c("id_act",
+                     "fmod",
+                     "sp",
+                     "lat",
+                     "lon",
+                     "date_act",
+                     "vessel",
+                     "ocean",
+                     "yr",
+                     "mon",
+                     "fit_prop",
+                     "wtot_lb_t3",
+                     "w_lb_t3",
+                     "data_source")
+
+    for (i in seq.int(from = 1, to = Nboot)){
+      print(i)
+      set.seed(i)
+      newsample <- dplyr::sample_n(tbl = sub,
+                                   size = nrow(sub),
+                                   replace = TRUE)
 
     #-----------------------#
     ## models and predicts ##
@@ -176,31 +202,9 @@ tunaboot <- function(sample_data,
       new_0$data_source <- "simple_model" # add flag
     }
 
-    # compute catch by species by set
-    sampled_set <- unique(newsample[newsample$yr %in% target_period,])
-    # add sample not corrected catch by species
-    if(nrow(sampled_set) > 0){
-    sampled_set$data_source <- "sample"} # add flag
-    sampled_set <- dplyr::rename(sampled_set,
-                                 fit_prop = prop_t3)
-    # output
-    column_keep <- c("id_act",
-                     "fmod",
-                     "sp",
-                     "lat",
-                     "lon",
-                     "date_act",
-                     "vessel",
-                     "ocean",
-                     "yr",
-                     "mon",
-                     "fit_prop",
-                     "wtot_lb_t3",
-                     "w_lb_t3",
-                     "data_source")
-    # remove set with no data
-    all_set <- list(newd,new_wtv,new_0, sampled_set,new_0)
-    all_set <- all_set[which(unlist(lapply(all_set, nrow)) >0)]
+    # remove set with no data and combine all catch
+    all_set <- list(newd,new_wtv,new_0, sampled_set)
+    all_set <- all_set[which(unlist(lapply(all_set, nrow)) > 0)]
     all_set <- dplyr::bind_rows(all_set)
 
     boot_output_list[[i]] <- all_set

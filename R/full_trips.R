@@ -3624,11 +3624,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param mtry Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.
                             #' @param min.node.size Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
                             #' @param seed_number Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.
+                            #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
                             random_forest_models = function(outputs_level3_process1,
                                                             num.trees = 1000L,
                                                             mtry = 2L,
                                                             min.node.size = 5,
-                                                            seed_number = 7L) {
+                                                            seed_number = 7L,
+                                                            small_fish_only = F) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.2: random forest models.\n",
                                   sep = "")
@@ -3641,9 +3643,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           col = sp_cat,
                                                           into = c("sp","wcat"),
                                                           sep = "_")
-                              data4mod <- aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
-                                                    data = data4mod,
-                                                    FUN = sum)
+                              # select for small fish catch only if parameter = T
+                              if(small_fish_only == F){
+                                data4mod <- data4mod %>% dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::summarise(prop_lb = sum(prop_lb), prop_t3 = sum(prop_t3), w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+
+                                # aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
+                                #                     data = data4mod,
+                                # FUN = sum)
+                              } else {
+                                data4mod <- data4mod %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0),
+                                                                       prop_t3 = replace (prop_t3, wcat == "p10", value = 0)) %>%
+                                  dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::summarise(prop_lb = sum(prop_lb), prop_t3 = sum(prop_t3), w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+                              }
                               outputs_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
                                 data4mod_ocean <- data4mod[data4mod$ocean == ocean, ]
@@ -3833,7 +3846,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sep = "")
                                   }
                                 }
-                                # check data subset for modelling ----
+                                # check data subset for modeling ----
                                 current_model_data <- current_model_outputs[[1]]
                                 period <- paste0("period: ",
                                                  min(as.numeric(as.character(current_model_data$year))),
@@ -4488,10 +4501,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
+                            #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
+
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        outputs_level3_process1,
                                                                        target_year,
-                                                                       vessel_id_ignored = NULL) {
+                                                                       vessel_id_ignored = NULL,
+                                                                       small_fish_only = F) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.4: data formatting for predictions.\n",
                                   sep = "")
@@ -4544,13 +4560,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
                               catch_set_lb <- droplevels(catch_set_lb)
                               # format data
-                              # sum catches categories of sets
-                              agg <- catch_set_lb %>%
-                                dplyr::group_by(id_act, sp) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3))
+                              if(small_fish_only == F){
+                                # sum catches categories of sets
+                                agg <- catch_set_lb %>%
+                                  dplyr::group_by(id_act, sp) %>%
+                                  dplyr::summarise(w_lb_t3 = sum(w_lb_t3))
+                              } else {
+                                # keep only small fish catch
+                                agg <- catch_set_lb %>% dplyr::mutate(w_lb_t3_tmp = replace(w_lb_t3,
+                                                                                            wcat == "p10",
+                                                                                            values = 0)) %>%
+                                  dplyr::group_by(id_act, sp) %>%
+                                  dplyr::summarise(w_lb_t3 = sum(w_lb_t3_tmp)) %>% ungroup()
+                              }
                               sets <- dplyr::inner_join(act_chr,
                                                         agg,
-                                                        by = "id_act")
+                                                        by = c("id_act"))
                               # catches keep onboard only = set
                               sets <- sets[sets$code_act_type %in% c(0,1,2), ]
                               sets$sp <- factor(sets$sp)
@@ -4706,25 +4731,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                             split = "_"))[,1])
                               for (ocean in ocean_level) {
                                 sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
-                                for (specie in unique(sets_long_ocean$sp)) {
-                                  if (! specie %in% c("SKJ","YFT")) {
+                                for (species in unique(sets_long_ocean$sp)) {
+                                  if (! species %in% c("SKJ","YFT")) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: process 3.5 not developed yet for the specie \"",
-                                        specie,
+                                        " - Warning: process 3.5 not developed yet for the species \"",
+                                        species,
                                         "\" in the ocean \"",
                                         ocean,
                                         "\".\n",
                                         "Data associated not used for this process.\n",
                                         sep = "")
                                   } else {
-                                    sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == specie, ]
+                                    sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == species, ]
                                     for (fishing_mode in unique(sets_long_specie$fmod)) {
                                       sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Ongoing process 3.5 (Predictions step) for ocean \"",
                                           ocean,
-                                          "\", specie \"",
-                                          specie,
+                                          "\", species \"",
+                                          species,
                                           "\" and fishing mode \"",
                                           fishing_mode,
                                           "\"",
@@ -4733,7 +4758,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       if(nrow(sets_long_fishing_mode) > 0){
                                         # models
                                         current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                          specie,
+                                                                                                          species,
                                                                                                           fishing_mode,
                                                                                                           sep = "_")]]
                                         res <- t3:::tunapredict(sample_data = current_outputs_level3_process2[[1]],
@@ -4745,14 +4770,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
                                                                                list(res))
                                         names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
-                                                                                                                           specie,
+                                                                                                                           species,
                                                                                                                            fishing_mode,
                                                                                                                            sep = "_")
                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                             " - Process 3.5 (Predictions step) successfull for ocean \"",
                                             ocean,
-                                            "\", specie \"",
-                                            specie,
+                                            "\", species \"",
+                                            species,
                                             "\" and fishing mode \"",
                                             fishing_mode,
                                             "\"",
@@ -4770,7 +4795,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
-                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","data_source","year","resp")],
+                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","year","resp")],
                                                                   key = "sp",
                                                                   value = fit_prop)
                                 boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
@@ -4786,10 +4811,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   key = "sp",
                                                                   value = "fit_prop_t3_ST",
                                                                   "BET", "SKJ", "YFT")
-                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp"))
+                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-                                boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
 
                                 outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
                                                                        list(boot_tmp_element))
@@ -4804,25 +4828,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 for (ocean in ocean_level) {
                                   sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
-                                  for (specie in unique(sets_long_ocean$sp)) {
-                                    if (! specie %in% c("SKJ","YFT")) {
+                                  for (species in unique(sets_long_ocean$sp)) {
+                                    if (! species %in% c("SKJ","YFT")) {
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: process 3.5 not developed yet for the specie \"",
-                                          specie,
+                                          " - Warning: process 3.5 not developed yet for the species \"",
+                                          species,
                                           "\" in the ocean \"",
                                           ocean,
                                           "\".\n",
                                           "Data associated not used for this process.\n",
                                           sep = "")
                                     } else {
-                                      sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == specie, ]
-                                      for (fishing_mode in unique(sets_long_specie$fmod)) {
-                                        sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
+                                      sets_long_species <- sets_long_ocean[sets_long_ocean$sp == species, ]
+                                      for (fishing_mode in unique(sets_long_species$fmod)) {
+                                        sets_long_fishing_mode <- sets_long_species[sets_long_species$fmod == fishing_mode, ]
                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                             " - Ongoing process 3.5 (Bootstrap step) for ocean \"",
                                             ocean,
-                                            "\", specie \"",
-                                            specie,
+                                            "\", species \"",
+                                            species,
                                             "\" and fishing mode \"",
                                             fishing_mode,
                                             "\"",
@@ -4830,7 +4854,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             sep = "")
                                         if(nrow(sets_long_fishing_mode) > 0){
                                           current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                            specie,
+                                                                                                            species,
                                                                                                             fishing_mode,
                                                                                                             sep = "_")]]
                                           boot_output <- tunaboot(sample_data = current_outputs_level3_process2[[1]],
@@ -4846,14 +4870,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
                                                                                  list(boot_output))
                                           names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
-                                                                                                                             specie,
+                                                                                                                             species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                               " - Process 3.5 (Bootstrap step) successfull for ocean \"",
                                               ocean,
-                                              "\", specie \"",
-                                              specie,
+                                              "\", species \"",
+                                              species,
                                               "\" and fishing mode \"",
                                               fishing_mode,
                                               "\"",
@@ -4879,7 +4903,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         to = length(outputs_level3_process5_ocean[[1]])))){
                                   boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
                                   boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
-                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","data_source","year","resp")],
+                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","year","resp")],
                                                                          key = "sp",
                                                                          value = fit_prop)
                                   boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
@@ -4895,15 +4919,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                          key = "sp",
                                                                          value = "fit_prop_t3_ST",
                                                                          "BET", "SKJ", "YFT")
-                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp"))
+                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp", "data_source"))
 
                                   boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-                                  boot_tmp_element$data_source[boot_tmp_element$sp =="BET"] <- "computed"
-
-                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-
                                   list_boot_ST_ocean[[element]] <- boot_tmp_element
-
                                 }
                                 outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
                                                                        list(list_boot_ST_ocean))
@@ -4917,7 +4936,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
-
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )){
                               set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
                                 set_all_boot_tmp <- dplyr::bind_rows(x)

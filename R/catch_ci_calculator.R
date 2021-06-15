@@ -14,6 +14,13 @@ catch_ci_calculator <- function(fit_data,
   # if(!is.null(fit_data$id_act)){
     if("id_act" %in% colnames(fit_data)){
     output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
+      print(fit_data$id_act[x])
+      # sample ci are zero
+      if(fit_data$data_source[x] == "sample"){
+        output_ci <- cbind (fit_data[x,],
+                            data.frame(ci_inf = fit_data$catch_set_fit[x],
+                                       ci_sup = fit_data$catch_set_fit[x]))
+      } else {
       tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
                           t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
                                                                   boot_data$id_act == fit_data$id_act[x]]), # bootstrap values)
@@ -26,7 +33,7 @@ catch_ci_calculator <- function(fit_data,
       output_ci <- cbind (fit_data[x,],
                           data.frame(ci_inf = ci$percent[,c(4)],
                                      ci_sup = ci$percent[,c(5)]))
-
+      }
       return(output_ci)
     }))
   } else {
