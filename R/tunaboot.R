@@ -74,7 +74,7 @@ tunaboot <- function(sample_data,
     no_sampled_set$vessel <- factor(no_sampled_set$vessel)
 
     ### split dataframe for different treatment if needed
-    no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
+    # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
 
     no_sampled_set$data_source <- NA # assign source later
     no_sampled_set$fit_prop <- NA # stock final proportion
@@ -129,7 +129,7 @@ tunaboot <- function(sample_data,
                      "mon",
                      "fit_prop",
                      "wtot_lb_t3",
-                     "w_lb_t3",
+                     # "w_lb_t3",
                      "data_source")
 
     for (i in seq.int(from = 1, to = Nboot)){

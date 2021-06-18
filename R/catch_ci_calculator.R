@@ -14,7 +14,7 @@ catch_ci_calculator <- function(fit_data,
   # if(!is.null(fit_data$id_act)){
     if("id_act" %in% colnames(fit_data)){
     output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
-      print(fit_data$id_act[x])
+      # print(fit_data$id_act[x])
       # sample ci are zero
       if(fit_data$data_source[x] == "sample"){
         output_ci <- cbind (fit_data[x,],
@@ -38,7 +38,6 @@ catch_ci_calculator <- function(fit_data,
     }))
   } else {
     # nominal catch or catch effort
-    # if(is.null(fit_data$cwp)){
       if(!("cwp" %in% colnames(fit_data))){
       # by fishing mode or not
       ifelse(!("fmod" %in% colnames(fit_data)), #is.null(fit_data$fmod),
@@ -77,13 +76,19 @@ catch_ci_calculator <- function(fit_data,
              }))
              )
     } else {
-      ifelse(!("fmod" %in% colnames(fit_data)), #is.null(fit_data$fmod),
+      ifelse(!("fmod" %in% colnames(fit_data)),
              # nominal catch total by CWP
              output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
+              t <-  as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
+                                                   boot_data$cwp == fit_data$cwp[x] &
+                                                   boot_data$mon == fit_data$mon[x]]) # bootstrap values)
+               if(diff(range(t)) == 0){
+                 output_ci <- cbind (fit_data[x,],
+                                     data.frame(ci_inf = fit_data$catch_set_fit[x],
+                                                ci_sup = fit_data$catch_set_fit[x]))
+               } else {
                tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
-                                   t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
-                                                                           boot_data$cwp == fit_data$cwp[x] &
-                                                                           boot_data$mon == fit_data$mon[x]]), # bootstrap values)
+                                   t = t,
                                    R = max(boot_data$loop) # number of loop
                )
                ci <- boot::boot.ci(tmp,
@@ -93,16 +98,22 @@ catch_ci_calculator <- function(fit_data,
                output_ci <- cbind (fit_data[x,],
                                    data.frame(ci_inf = ci$percent[,c(4)],
                                               ci_sup = ci$percent[,c(5)]))
-
+               }
                return(output_ci)
              })),
              # nominal catch total by CWP and fishing mode
              output <- do.call(rbind,lapply(seq.int(1, nrow(fit_data)), function (x){
+               t <- as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
+                                                       boot_data$fmod == fit_data$fmod[x] &
+                                                       boot_data$cwp == fit_data$cwp[x] &
+                                                       boot_data$mon == fit_data$mon[x]]) # bootstrap values)
+               if(diff(range(t)) == 0){
+                 output_ci <- cbind (fit_data[x,],
+                                     data.frame(ci_inf = fit_data$catch_set_fit[x],
+                                                ci_sup = fit_data$catch_set_fit[x]))
+               } else {
                tmp <- t3:::df2boot(t0 = fit_data$catch_set_fit[x] ,
-                                   t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x] &
-                                                                           boot_data$fmod == fit_data$fmod[x] &
-                                                                           boot_data$cwp == fit_data$cwp[x] &
-                                                                           boot_data$mon == fit_data$mon[x]]), # bootstrap values)
+                                   t =t,
                                    R = max(boot_data$loop) # number of loop
                )
                ci <- boot::boot.ci(tmp,
@@ -112,7 +123,7 @@ catch_ci_calculator <- function(fit_data,
                output_ci <- cbind (fit_data[x,],
                                    data.frame(ci_inf = ci$percent[,c(4)],
                                               ci_sup = ci$percent[,c(5)]))
-
+               }
                return(output_ci)
              }))
       )

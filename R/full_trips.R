@@ -3646,7 +3646,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # select for small fish catch only if parameter = T
                               if(small_fish_only == F){
                                 data4mod <- data4mod %>% dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
-                                  dplyr::summarise(prop_lb = sum(prop_lb), prop_t3 = sum(prop_t3), w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+                                  dplyr::summarise(prop_lb = sum(prop_lb),
+                                                   prop_t3 = sum(prop_t3),
+                                                   w_lb_t3 = sum(w_lb_t3)) %>%
+                                  ungroup()
 
                                 # aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
                                 #                     data = data4mod,
@@ -3655,7 +3658,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 data4mod <- data4mod %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0),
                                                                        prop_t3 = replace (prop_t3, wcat == "p10", value = 0)) %>%
                                   dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
-                                  dplyr::summarise(prop_lb = sum(prop_lb), prop_t3 = sum(prop_t3), w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+                                  dplyr::summarise(prop_lb = sum(prop_lb),
+                                                   prop_t3 = sum(prop_t3),
+                                                   w_lb_t3 = sum(w_lb_t3)) %>%
+                                  ungroup()
                               }
                               outputs_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
@@ -4526,6 +4532,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sset <- inputs_level3[[4]]
                               # well plan
                               wp <- inputs_level3[[5]]
+
+                              # catches keep onboard only = set
+                              catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
+                              catch_set_lb <- droplevels(catch_set_lb)
+
                               # standardize weight category
                               catch_set_lb$wcat <- gsub("kg",
                                                         "",
@@ -4535,6 +4546,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           "p10")
                               # only one category (called less 10) use for SKJ
                               catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
+
+                              # sum duplicated
+                              catch_set_lb <- catch_set_lb %>%
+                                dplyr::group_by(id_act, date_act, sp, wcat, code_act_type) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+
                               # set use for modeling to remove for prediction
                               data4mod <- outputs_level3_process1
                               sampleset <- unique(data4mod[, c("id_act",
@@ -4555,66 +4572,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop()
                               }
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
-                              catch_set_lb$yr <- lubridate::year(x = catch_set_lb$date)
-                              catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date)
-                              catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
-                              catch_set_lb <- droplevels(catch_set_lb)
-                              # format data
-                              if(small_fish_only == F){
-                                # sum catches categories of sets
-                                agg <- catch_set_lb %>%
-                                  dplyr::group_by(id_act, sp) %>%
-                                  dplyr::summarise(w_lb_t3 = sum(w_lb_t3))
-                              } else {
-                                # keep only small fish catch
-                                agg <- catch_set_lb %>% dplyr::mutate(w_lb_t3_tmp = replace(w_lb_t3,
-                                                                                            wcat == "p10",
-                                                                                            values = 0)) %>%
-                                  dplyr::group_by(id_act, sp) %>%
-                                  dplyr::summarise(w_lb_t3 = sum(w_lb_t3_tmp)) %>% ungroup()
-                              }
                               sets <- dplyr::inner_join(act_chr,
-                                                        agg,
-                                                        by = c("id_act"))
+                                                        catch_set_lb,
+                                                        by = c("id_act", "date_act", "code_act_type"))
                               # catches keep onboard only = set
                               sets <- sets[sets$code_act_type %in% c(0,1,2), ]
                               sets$sp <- factor(sets$sp)
                               sets$ocean <- factor(sets$ocean)
                               sets <- sets[! sets$vessel %in% vessel_id_ignored, ]
-                              # calculate proportion of weight from t3 level 1
+                              sets$sp_cat <- factor(paste(sets$sp,
+                                                          sets$wcat,
+                                                          sep = "_"))
+                              sets$sp <- NULL
+                              sets$wcat <- NULL
+
+                               # calculate proportion of weight from t3 level 1
                               sets_wide <- tidyr::spread(data = sets,
-                                                         key = sp,
+                                                         key = sp_cat,
                                                          value = w_lb_t3,
                                                          fill = 0)
-                              sets_wide$w_tuna <- rowSums(sets_wide[, c("BET","SKJ","YFT")])
+                              sets_wide$wtot_lb_t3 <- rowSums(sets_wide[, c("YFT_p10", "BET_p10", "SKJ_m10", "YFT_m10", "BET_m10")])
                               # remove activity with no catch
-                              sets_wide <- sets_wide[sets_wide$w_tuna > 0, ]
-                              tmp <- sets_wide[, names(sets_wide) %in% c("id_act", as.character(unique(sets$sp)))]
-                              tmp[is.na(tmp)] <- 0
-                              tmp[as.character(unique(sets$sp))] <- prop.table(as.matrix(tmp[, as.character(unique(sets$sp))]), 1)
-                              tmp2 <- tidyr::gather(as.data.frame(tmp),
-                                                    key = "sp",
-                                                    value = "prop_lb",
-                                                    as.character(unique(sets$sp)))
-                              colnames(tmp) <- c("id_act", paste("p_",
-                                                                 levels(sets$sp),
-                                                                 sep = ""))
-                              sets_wide <- dplyr::inner_join(sets_wide,
-                                                             tmp,
-                                                             by = "id_act",
-                                                             sort = FALSE)
-                              sets_long <- tidyr::gather(sets_wide[, ! names(sets_wide) %in% c("p_BET", "p_SKJ", "p_YFT")],
-                                                         key = "sp",
-                                                         value = w_lb_t3,
-                                                         BET,
-                                                         SKJ,
-                                                         YFT,
-                                                         factor_key = TRUE)
-                              sets_long$sp <- as.character(sets_long$sp)
-                              sets_long <- dplyr::inner_join(sets_long,
-                                                             tmp2,
-                                                             by = c("id_act", "sp"),
-                                                             sort = FALSE)
+                              sets_wide <- sets_wide[sets_wide$wtot_lb_t3 > 0, ]
+
+                              tmp <- sets_wide[, names(sets_wide) %in% levels(sets$sp_cat)]
+                              tmp <- prop.table(as.matrix(tmp), 1)
+                              sets_wide_tmp <- sets_wide
+                              sets_wide_tmp[, names(sets_wide_tmp) %in% colnames(tmp)] <- tmp
+                              sets_long <- tidyr::gather(data = sets_wide_tmp,
+                                                       key = "sp_cat",
+                                                       value = "prop_lb",
+                                                       "BET_m10",
+                                                       "BET_p10",
+                                                       "SKJ_m10",
+                                                       "YFT_m10",
+                                                       "YFT_p10")
                               # Assign fishing mode to unknown
                               sets_wide$fmod <- factor(sets_wide$fmod)
                               sets_long$fmod <- factor(sets_long$fmod)
@@ -4642,6 +4634,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp$fmod2 <- NULL
                                 sets_long <- droplevels(tmp)
                               }
+                              sets_long <- tidyr::separate(data = sets_long,
+                                                          col = sp_cat,
+                                                          into = c("sp","wcat"),
+                                                          sep = "_")
+                              # filter data for small fish catch estimation only
+                                if(small_fish_only == F){
+                                  sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                    dplyr::summarise(prop_lb = sum(prop_lb)) %>%
+                                    ungroup()
+
+                                } else {
+                                  sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
+                                    dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                    dplyr::summarise(prop_lb = sum(prop_lb)) %>%
+                                    ungroup()
+                                }
+                              # test unitaire total catch equal
+                              # sets_long %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
+                              #   dplyr::summarise(tot = sum(wtot_lb_t3))
+                              # tmp %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
+                              # tmp2 %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
+
+
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
@@ -4789,13 +4804,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-
                               # Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               for (ocean in ocean_level) {
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
-                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","year","resp")],
+                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
                                                                   key = "sp",
                                                                   value = fit_prop)
                                 boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
@@ -4811,7 +4825,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   key = "sp",
                                                                   value = "fit_prop_t3_ST",
                                                                   "BET", "SKJ", "YFT")
-                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
+                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
 
@@ -4890,7 +4904,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-
                               # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                               for (ocean in ocean_level) {
@@ -4903,7 +4916,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         to = length(outputs_level3_process5_ocean[[1]])))){
                                   boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
                                   boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
-                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_tuna", "w_lb_t3","prop_lb","tlb","year","resp")],
+                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
                                                                          key = "sp",
                                                                          value = fit_prop)
                                   boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
@@ -4919,7 +4932,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                          key = "sp",
                                                                          value = "fit_prop_t3_ST",
                                                                          "BET", "SKJ", "YFT")
-                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "lat", "lon", "fmod", "date_act", "vessel", "id_trip", "landingdate", "ocean", "code_act_type", "yr", "mon", "wtot_lb_t3", "sp", "data_source"))
+                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
                                   boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
                                   list_boot_ST_ocean[[element]] <- boot_tmp_element
@@ -4961,10 +4974,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = set_all,
                                          file = file.path(tables_directory,
                                                           paste("set_all_ocean_",
-                                                                paste(unique(set_all$yr),
+                                                                paste(unique(set_all$ocean),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(set_all$ocean),
+                                                                paste(unique(set_all$yr),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
@@ -5017,10 +5030,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               write.csv2(x = t1_all,
                                          file = file.path(tables_directory,
                                                           paste("t1_all_ocean_",
-                                                                paste(unique(t1_all$yr),
+                                                                paste(unique(t1_all$ocean),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t1_all$ocean),
+                                                                paste(unique(t1_all$yr),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
@@ -5073,11 +5086,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               write.csv2(x = t1_fmod,
                                          file = file.path(tables_directory,
-                                                          paste("t1_fmod_ocean",
-                                                                paste(unique(t1_fmod$yr),
+                                                          paste("t1_fmod_ocean_",
+                                                                paste(unique(t1_fmod$ocean),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t1_fmod$ocean),
+                                                                paste(unique(t1_fmod$yr),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
@@ -5134,9 +5147,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
                                                                                                                                   lon = x[[i]]$lon,
                                                                                                                                   base = 1)
-                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + mon + sp + cwp + ocean,
-                                                                                                                                          data=x[[i]],
-                                                                                                                                          FUN = sum)
+                                                                                                         boot_tmp_subelement <- x[[i]] %>%
+                                                                                                           group_by(yr, mon, sp, cwp, ocean) %>%
+                                                                                                           summarise(catch_set_fit = sum(catch_set_fit))
                                                                                                          boot_tmp_subelement$loop <- i
                                                                                                          return(boot_tmp_subelement)
                                                                                                        }))
@@ -5158,11 +5171,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               write.csv2(x = t2_all,
                                          file = file.path(tables_directory,
-                                                          paste("t2_all_ocean",
-                                                                paste(unique(t2_all$yr),
+                                                          paste("t2_all_ocean_",
+                                                                paste(unique(t2_all$ocean),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t2_all$ocean),
+                                                                paste(unique(t2_all$yr),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
@@ -5221,11 +5234,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               write.csv2(x = t2_fmod,
                                          file = file.path(tables_directory,
-                                                          paste("t2_fmod_ocean",
-                                                                paste(unique(t2_fmod$yr),
+                                                          paste("t2_fmod_ocean_",
+                                                                paste(unique(t2_fmod$ocean),
                                                                       collapse = "-"),
                                                                 "_",
-                                                                paste(unique(t2_fmod$ocean),
+                                                                paste(unique(t2_fmod$yr),
                                                                       collapse = "-"),
                                                                 ".csv",
                                                                 sep = "")),
