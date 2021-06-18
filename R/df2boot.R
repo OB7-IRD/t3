@@ -16,7 +16,7 @@ df2boot <- function(t0,
   # if (missing(sample_data)) {
     sample_data <- rnorm(100,
                          mean = t0,
-                         sd = 1*t0)
+                         sd = 1*abs(t0))
     # }
    # if (missing(strata)) {
     strata <- rep(1,
