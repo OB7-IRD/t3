@@ -1608,7 +1608,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
                                         if (any(is.null(activities_set_duration))) {
                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: run process 1. 5 (set duration calculation) before this process.\n",
+                                              " - Error: run process 1.5 (set duration calculation) before this process.\n",
                                               sep = "")
                                           stop()
                                         } else {
@@ -1617,7 +1617,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                         if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: run process 1. 7 (fishing time calculation) before this process.\n",
+                                              " - Error: run process 1.7 (fishing time calculation) before this process.\n",
                                               sep = "")
                                           stop()
                                         } else {
