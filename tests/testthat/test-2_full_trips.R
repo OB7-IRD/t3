@@ -66,6 +66,10 @@ capture.output(object_full_trips$sample_length_class_ld1_to_lf(length_step = obj
 capture.output(object_full_trips$sample_number_measured_extrapolation(),
                file = "NUL")
 
+# level 2.3: sample step length class standardisation ----
+capture.output(object_full_trips$sample_length_class_step_standardisation(),
+               file = "NUL")
+
 for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -137,11 +141,51 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                      file = "NUL")
       for (well_id in seq_len(length.out = current_wells$count())) {
         current_well <- current_wells$extract(id = well_id)[[1]]
+        # 216 - Checking if process 2.3 run on all data ----
+        testthat::test_that(desc = "216 - Checking if process 2.3 run on all data",
+                            code = {
+                              testthat::expect_true(object = (is.na(current_well$.__enclos_env__$private$elementarysample)
+                                                              || (class(current_well$.__enclos_env__$private$elementarysample) == "list"
+                                                                  & length(current_well$.__enclos_env__$private$elementarysample) == length(current_well$.__enclos_env__$private$elementarysampleraw))),
+                                                    label = paste0("issue with the full trip ", full_trip_id,
+                                                                   ", the partial trip ", partial_trip_id,
+                                                                   " and the well ", well_id))
+                            })
         if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
           capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
                          file = "NUL")
           capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
                          file = "NUL")
+          if (class(current_well$.__enclos_env__$private$elementarysample) == "list") {
+            capture.output(current_elementarysamples <- t3::object_r6(class_name = "elementarysamples"),
+                           file = "NUL")
+            capture.output(current_elementarysamples$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysample)),
+                           file = "NUL")
+            current_elementarysamplesraw_species <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "specie_code")))
+            for (specie in current_elementarysamplesraw_species) {
+              capture.output(current_elementarysamplesraw_species <- t3::object_r6(class_name = "elementarysamplesraw"),
+                             file = "NUL")
+              capture.output(current_elementarysamplesraw_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$specie_code == ",
+                                                                                                                                        specie))),
+                             file = "NUL")
+              capture.output(current_elementarysamples_species <- t3::object_r6(class_name = "elementarysamples"),
+                             file = "NUL")
+              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$specie_code == ",
+                                                                                                                                     specie))),
+                             file = "NUL")
+              # 217 - Checking if sum "sample_number_measured_extrapolated_lf" in object "elementarysamplesraw" is equal to "sample_number_measured" in object "elementarysamples" ----
+              testthat::test_that(desc = "217 - Checking if sum \"sample_number_measured_extrapolated_lf\" in object \"elementarysamplesraw\" is equal to \"sample_number_measured\" in object \"elementarysamples\"",
+                                  code = {
+                                    testthat::expect_equal(object = sum(unlist(current_elementarysamplesraw_species$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
+                                                           expected = sum(unlist(current_elementarysamples_species$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
+                                                           label = paste0("issue with the full trip ", full_trip_id,
+                                                                          ", the partial trip ", partial_trip_id,
+                                                                          ", the well ", well_id,
+                                                                          " and the specie ", specie))
+                                  })
+
+            }
+          }
           current_sample_length_class_lf <- current_elementarysamplesraw$extract_l1_element_value(element = "sample_length_class_lf")
           current_sample_number_measured_lf <- current_elementarysamplesraw$extract_l1_element_value(element = "sample_number_measured_lf")
           # 212 - Checking if process 2.1 run on all data ----
