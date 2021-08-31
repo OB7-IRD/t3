@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attribute "activity_name" verification — check_activity_name • t3</title>
+<title>R6 class elementarysamples — elementarysamples • t3</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Attribute "activity_name" verification — check_activity_name" />
-<meta property="og:description" content="Check if the item &quot;check_activity_name&quot; have one unique class identified as character." />
+<meta property="og:title" content="R6 class elementarysamples — elementarysamples" />
+<meta property="og:description" content="Create R6 reference object class elementarysamples" />
 <meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png" />
 
 
@@ -152,25 +152,86 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Attribute "activity_name" verification</h1>
-    <small class="dont-index">Source: <a href='https://github.com/OB7-IRD/t3/blob/master/R/checks.R'><code>R/checks.R</code></a></small>
-    <div class="hidden name"><code>check_activity_name.Rd</code></div>
+    <h1>R6 class elementarysamples</h1>
+    <small class="dont-index">Source: <a href='https://github.com/OB7-IRD/t3/blob/master/R/elementarysamples.R'><code>R/elementarysamples.R</code></a></small>
+    <div class="hidden name"><code>elementarysamples.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Check if the item "check_activity_name" have one unique class identified as character.</p>
+    <p>Create R6 reference object class elementarysamples</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_activity_name</span><span class='op'>(</span><span class='va'>activity_name</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>activity_name</th>
-      <td><p>Object of class <a href='https://rdrr.io/r/base/character.html'>character</a> expected. Activity identification.</p></td>
-    </tr>
-    </table>
+
+    <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
+
+    <p><code><a href='list_t3.html'>t3::list_t3</a></code> -&gt; <code>elementarysamples</code></p>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-new'><code>elementarysamples$new()</code></a></p></li>
+<li><p><a href='#method-add'><code>elementarysamples$add()</code></a></p></li>
+<li><p><a href='#method-filter_by_trip'><code>elementarysamples$filter_by_trip()</code></a></p></li>
+<li><p><a href='#method-clone'><code>elementarysamples$clone()</code></a></p></li>
+</ul>
+<p><details ><summary>Inherited methods</summary>
+<ul>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-count'><code>t3::list_t3$count()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-extract'><code>t3::list_t3$extract()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-filter'><code>t3::list_t3$filter()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-filter_l1'><code>t3::list_t3$filter_l1()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-modification_l1'><code>t3::list_t3$modification_l1()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-name'><code>t3::list_t3$name()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-remove'><code>t3::list_t3$remove()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-view'><code>t3::list_t3$view()</code></a></span></p></li>
+</ul>
+</details>
+
+<hr>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Initialize function for R6 elementarysamples class.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>elementarysamples</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>...</code></dt><dd><p>(empty, list or R6-elementarysample classes) Nothing, a list of object R6-elementarysample classes or one object R6-elementarysample classes.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-add"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add()</code></h3>
+<p>Function for add a new elementarysample in the object elementarysamples.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>elementarysamples</span><span class='op'>$</span><span class='fu'>add</span><span class='op'>(</span><span class='va'>new_item</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>new_item</code></dt><dd><p>(list or R6-elementarysample classes) A list of object R6-elementarysample classes or one object R6-elementarysample classes.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-filter_by_trip"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>filter_by_trip()</code></h3>
+<p>Function for filter elementarysamples by trip identification.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>elementarysamples</span><span class='op'>$</span><span class='fu'>filter_by_trip</span><span class='op'>(</span><span class='va'>trip_id</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>trip_id</code></dt><dd><p>(character) Trip identification.</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>elementarysamples</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
 
 
   </div>
