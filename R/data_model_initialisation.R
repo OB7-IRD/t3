@@ -114,7 +114,7 @@ data_model_initialisation <- function(data_source = "t3_db",
                                                      data_path = system.file("t3_lengthweightrelationships.csv",
                                                                              package = "t3"))
   } else {
-    object_model_data$lengthweightrelationships_data(db_con = t3_con)
+    object_model_data$lengthweightrelationships_data(db_con = db_con)
   }
   # model creation: initialisation object for full trips class ----
   object_full_trips <- t3:::full_trips$new()

@@ -528,12 +528,12 @@ check_specie_code <- function(specie_code) {
 #' @title Attribute "activity_name" verification
 #' @param activity_name Object of class {\link[base]{character}} expected. Activity identification.
 #' @description Check if the item "check_activity_name" have one unique class identified as character.
-check_activity_name <- function(check_activity_name) {
-  if (length(x = class(x = check_activity_name)) != 1
-      || class(x = check_activity_name) != "character") {
+check_activity_name <- function(activity_name) {
+  if (length(x = class(x = activity_name)) != 1
+      || class(x = activity_name) != "character") {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"check_activity_name\" argument, class character expected.\n",
+        " - Error: invalide \"activity_name\" argument, class character expected.\n",
         sep = "")
     stop()
   }

@@ -70,8 +70,6 @@ t3_process(
 \item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
 
 \item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
-
-\item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".}
 }
 \description{
 Run the t3 process, with the possibility to run all the process or stop.

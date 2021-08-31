@@ -24,6 +24,7 @@ Initialize function for R6 elementarysampleraw class.
   well_id,
   sample_id,
   sub_sample_id,
+  sub_sample_id_total_count,
   elementarysampleraw_id,
   sample_quality,
   sample_type,
@@ -46,6 +47,8 @@ Initialize function for R6 elementarysampleraw class.
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
 \item{\code{sub_sample_id}}{Object of class {\link[base]{integer}} expected. Sub sample identification.}
+
+\item{\code{sub_sample_id_total_count}}{Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.}
 
 \item{\code{elementarysampleraw_id}}{Object of class {\link[base]{character}} expected. Elementary sample raw identification.}
 
