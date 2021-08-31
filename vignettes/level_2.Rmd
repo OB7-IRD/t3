@@ -47,7 +47,7 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 ### Process 2.4: well set weight categories
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_2.4.png'/>
 
 ### Process 2.5: standardised sample creation
 

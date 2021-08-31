@@ -16,7 +16,7 @@ Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosyste
     person("Emmanuel", "Chassot", email = "emmanuel.Chassot@fao.org", role = c("ctb")))
 Description: The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics.
     The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Depends: R (>= 4.0.0)
 Encoding: UTF-8
 LazyData: true
@@ -36,8 +36,9 @@ Imports:
     spdep (>= 1.1.5),
     rfUtilities (>= 2.1.5),
     gstat (>= 2.0.6),
-    tools (>= 4.0.3)
+    tools (>= 4.0.3),
+    furdeb (>= 0.5.0)
 Suggests: 
     testthat (>= 2.1.0)
 Remotes:
-    github::OB7-IRD/furdeb
+    OB7-IRD/furdeb
