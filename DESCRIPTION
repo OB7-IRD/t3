@@ -41,4 +41,4 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0)
 Remotes:
-    OB7-IRD/furdeb
+    github::OB7-IRD/furdeb
