@@ -74,6 +74,10 @@ capture.output(object_full_trips$sample_length_class_step_standardisation(),
 capture.output(object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets),
                file = "NUL")
 
+# level 2.5: standardised sample creation ----
+capture.output(object_full_trips$standardised_sample_creation(),
+               file = "NUL")
+
 for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -145,8 +149,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                      file = "NUL")
       for (well_id in seq_len(length.out = current_wells$count())) {
         current_well <- current_wells$extract(id = well_id)[[1]]
-        # 216 - Checking if process 2.3 run on all data ----
-        testthat::test_that(desc = "216 - Checking if process 2.3 run on all data",
+        # 216 - Checking if process 2.3 ran correctly ----
+        testthat::test_that(desc = "216 - Checking if process 2.3 ran correctly",
                             code = {
                               testthat::expect_true(object = (is.na(current_well$.__enclos_env__$private$elementarysample)
                                                               || (class(current_well$.__enclos_env__$private$elementarysample) == "list"
@@ -156,8 +160,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                                    " and the well ", well_id))
                             })
         current_wellsets <- current_well$.__enclos_env__$private$wellsets
-        # 218 - Checking if process 2.4 run on all data ----
-        testthat::test_that(desc = "218 - Checking if process 2.4 run on all data",
+        # 218 - Checking if process 2.4 ran correctly ----
+        testthat::test_that(desc = "218 - Checking if process 2.4 ran correctly",
                             code = {
                               testthat::expect_true(object = (all(class(current_wellsets) == c("wellsets", "list_t3", "R6" ))
                                                               || (class(current_wellsets) == "logical"
@@ -177,6 +181,17 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                                       "and well ", well_id))
                               })
         }
+        current_standardisedsample <- current_well$.__enclos_env__$private$standardisedsample
+        # 220 - Checking if process 2.5 ran correctly ----
+        testthat::test_that(desc = "220 - Checking if process 2.5 ran correctly",
+                            code = {
+                              testthat::expect_true(object = (all(class(current_standardisedsample) == c("standardisedsamples", "list_t3", "R6" ))
+                                                              || (class(current_standardisedsample) == "logical"
+                                                                  && is.na(current_wellsets))),
+                                                    label = paste0("issue with the full trip ", full_trip_id,
+                                                                   ", the partial trip ", partial_trip_id,
+                                                                   " and the well ", well_id))
+                            })
         if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
           capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
                          file = "NUL")
