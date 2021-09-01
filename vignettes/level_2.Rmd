@@ -35,23 +35,23 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 ### Process 2.1: sample length class ld1 to lf conversion
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='man/figures/process_2.1.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.1.png'/>
 
 ### Process 2.2: sample number measured extrapolation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='man/figures/process_2.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.2.png'/>
 
 ### Process 2.3: sample step length class standardisation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='man/figures/process_2.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.3.png'/>
 
 ### Process 2.4: well set weight categories
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='man/figures/process_2.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.4.png'/>
 
 ### Process 2.5: standardised sample creation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='man/figures/process_2.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.5.png'/>
 
 ### Process 2.6: sample number standardisation 
 
