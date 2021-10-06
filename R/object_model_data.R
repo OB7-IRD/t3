@@ -4,7 +4,6 @@
 #' @importFrom R6 R6Class
 #' @importFrom DBI sqlInterpolate SQL dbGetQuery
 #' @importFrom dplyr first last filter
-#' @importFrom rlang global_env current_env
 #' @importFrom tools file_ext
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(

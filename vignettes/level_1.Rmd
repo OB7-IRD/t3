@@ -5,7 +5,7 @@ description: |
   Description of the t3 level 1 and how initialise it.
 vignette: |
   %\VignetteIndexEntry{Level 1 process}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

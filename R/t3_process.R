@@ -6,7 +6,6 @@
 #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
-#' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".
 #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.
 #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.
 #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.

@@ -4,7 +4,7 @@
 \alias{check_activity_name}
 \title{Attribute "activity_name" verification}
 \usage{
-check_activity_name(check_activity_name)
+check_activity_name(activity_name)
 }
 \arguments{
 \item{activity_name}{Object of class {\link[base]{character}} expected. Activity identification.}

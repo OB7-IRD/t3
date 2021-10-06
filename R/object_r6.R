@@ -11,7 +11,8 @@ object_r6 <- function(class_name, ...) {
       class_name,
       "\"\n",
       sep = "")
-  if (length(class(class_name)) != 1 || class(class_name) != "character") {
+  if (length(class(class_name)) != 1
+      || class(class_name) != "character") {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalid \"class_name\" argument\nclass character expected\n",
         sep = "")
