@@ -174,7 +174,9 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                                    ", the partial trip ", partial_trip_id,
                                                                    " and the well ", well_id))
                             })
-        if (all(class(current_wellsets) == c("wellsets", "list_t3", "R6" ))) {
+        if (all(class(current_wellsets) == c("wellsets",
+                                             "list_t3",
+                                             "R6" ))) {
           # 219 - Checking if sum "prop_weighted_weight" is equal to 1 ----
           testthat::test_that(desc = "219 - Checking if sum \"prop_weighted_weight\" is equal to 1",
                               code = {
@@ -200,17 +202,15 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
         # 221 - Checking if process 2.6 ran correctly ----
         testthat::test_that(desc = "221 - Checking if process 2.6 ran correctly",
                             code = {
-                              testthat::expect_true(object = (all(class(current_standardisedsampleset) == c("standardisedsamplesets", "list_t3", "R6" ))
+                              testthat::expect_true(object = (all(class(current_standardisedsampleset) == c("standardisedsamplesets",
+                                                                                                            "list_t3",
+                                                                                                            "R6" ))
                                                               || (class(current_standardisedsampleset) == "logical"
                                                                   && is.na(current_standardisedsampleset))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
                                                                    ", the partial trip ", partial_trip_id,
                                                                    " and the well ", well_id))
                             })
-        if (all(class(current_standardisedsample) == c("standardisedsamples", "list_t3", "R6"))
-            & all(class(current_standardisedsampleset) == c("standardisedsamplesets", "list_t3", "R6"))) {
-
-        }
         if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
           capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
                          file = "NUL")
