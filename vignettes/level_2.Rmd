@@ -57,6 +57,8 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.6.png'/>
 
-### Process 2.7: raised factors determination 
+### Process 2.7: raised factors determination
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
 
 ### Process 2.8: samples number standardisation at set scale
