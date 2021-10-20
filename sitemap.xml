@@ -202,6 +202,9 @@
     <loc>https://ob7-ird.github.io/t3/reference/elementarywellplan.html</loc>
   </url>
   <url>
+    <loc>https://ob7-ird.github.io/t3/reference/elementarywellplans.html</loc>
+  </url>
+  <url>
     <loc>https://ob7-ird.github.io/t3/reference/full_trips.html</loc>
   </url>
   <url>
@@ -226,7 +229,13 @@
     <loc>https://ob7-ird.github.io/t3/reference/standardisedsample.html</loc>
   </url>
   <url>
+    <loc>https://ob7-ird.github.io/t3/reference/standardisedsamples.html</loc>
+  </url>
+  <url>
     <loc>https://ob7-ird.github.io/t3/reference/standardisedsampleset.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/reference/standardisedsamplesets.html</loc>
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/t3-package.html</loc>
@@ -260,6 +269,9 @@
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/wellset.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/reference/wellsets.html</loc>
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/articles/level_1.html</loc>
