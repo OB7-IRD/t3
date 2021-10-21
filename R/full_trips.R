@@ -3117,128 +3117,161 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Application of process 2.8 raised factors on standardised sample set.
                             raised_standardised_sample_set = function() {
                               if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
                                     " - Process 2.8 (raised standardised sample set) cancelled.\n",
                                     sep = "")
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Start process 2.8: raised standardised sample set.\n",
                                         sep = "")
                                   }
-                                  if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
+                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                     file = "NUL")
+                                      capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
+                                                     file = "NUL")
+                                      if (length(x = current_wells$filter_l1(filter = "all(class($path$standardisedsampleset) == c(\"standardisedsamplesets\", \"list_t3\", \"R6\"))")) != 0) {
+                                        capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets$add(new_item = current_wells$extract_l1_element_value(element = "standardisedsampleset")),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_bis <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_bis$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
+                                                       file = "NUL")
+                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
+                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                      }
+                                    }
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.8 on item \"",
-                                        names(private$data_selected)[i],
+                                        names(private$data_selected)[full_trip_id],
                                         "\".\n",
                                         "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                      current_trip <- private$data_selected[[i]][[j]]
-                                      current_wells <- current_trip$.__enclos_env__$private$wells
-                                      if (length(current_wells) != 0) {
-                                        for (k in seq_len(length.out = length(current_wells))) {
-                                          current_well <- current_wells[[k]]
+                                    for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                      current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                      if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                       file = "NUL")
+                                        capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                       file = "NUL")
+                                        for (well_id in seq_len(length.out = current_wells$count())) {
+                                          current_well <- current_wells$extract(id = well_id)[[1]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
-                                          if (is.null(current_wells_sets)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
-                                                "[trip_id: ",
-                                                current_well$.__enclos_env__$private$trip_id,
-                                                ", well_id: ",
-                                                current_well$.__enclos_env__$private$well_id,
-                                                "]\n",
-                                                sep = "")
-                                            stop()
-                                          }
-                                          for (l in seq_len(length.out = length(current_wells_sets))) {
-                                            current_well_sets <- current_wells_sets[[l]]
-                                            current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
-                                            if (is.null(current_well_standardisedsampleset)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: the object wellsets is NULL, please run process 2.1 to 2.7 before this one.\n",
-                                                  "[trip_id: ",
-                                                  current_well$.__enclos_env__$private$trip_id,
-                                                  ", well_id: ",
-                                                  current_well$.__enclos_env__$private$well_id,
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
-                                            }
-                                            if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(1, 2)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: raised factors not available for this well-set.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                            } else if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(3, 4)) {
-                                              current_rf_total <- current_well_sets$.__enclos_env__$private$rf_total
-                                              for (m in seq_len(length.out = length(current_well_standardisedsampleset))) {
-                                                current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted * current_rf_total
-                                                current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set / 1000
-                                              }
-                                            } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
-                                              current_rf_minus10 <- current_well_sets$.__enclos_env__$private$rf_minus10
-                                              current_rf_plus10 <- current_well_sets$.__enclos_env__$private$rf_plus10
-                                              for (n in seq_len(length.out = length(current_well_standardisedsampleset))) {
-                                                if (current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit <= 10) {
-                                                  current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_minus10
+                                          if (all(class(current_wells_sets) == c("wellsets",
+                                                                                 "list_t3",
+                                                                                 "R6"))) {
+                                            for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
+                                              current_well_set <- current_wells_sets$extract(id = well_set_id)[[1]]
+                                              if (all(class(current_well$.__enclos_env__$private$standardisedsampleset) == c("standardisedsamplesets",
+                                                                                                                             "list_t3",
+                                                                                                                             "R6"))
+                                                  && length(current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                 current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                 "\""))) != 0) {
+                                                capture.output(current_standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                               file = "NUL")
+                                                capture.output(current_standardised_samples_sets$add(new_item = current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                                                     current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                                                                     "\""))),
+                                                               file = "NUL")
+                                                if (current_well_set$.__enclos_env__$private$rf_validation %in% c(1, 2)
+                                                    | is.na(current_well_set$.__enclos_env__$private$rf_validation)) {
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Warning: raised factors not available for this well-set.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                                } else if (current_well_set$.__enclos_env__$private$rf_validation %in% c(3, 4)) {
+                                                  current_rf_total <- current_well_set$.__enclos_env__$private$rf_total
+                                                  current_standardised_samples_sets$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                          current_rf_total))
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
+                                                } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
+                                                  current_rf_minus10 <- current_well_set$.__enclos_env__$private$rf_minus10
+                                                  current_rf_plus10 <- current_well_set$.__enclos_env__$private$rf_plus10
+                                                  capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
+                                                                 file = "NUL")
+                                                  current_standardised_samples_sets_minus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                                  current_rf_minus10))
+                                                  capture.output(current_standardised_samples_sets_plus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
+                                                                 file = "NUL")
+                                                  current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                                  current_rf_plus10))
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                                 } else {
-                                                  current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_plus10
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Error: raised factors verifications is not valide.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                  stop()
                                                 }
-                                                current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set / 1000
                                               }
-                                            } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: raised factors verifications is not valide. Run process 2.7 before this one.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
                                             }
                                           }
                                         }
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.8 successfull on item \"",
-                                      names(private$data_selected)[i],
+                                      names(private$data_selected)[full_trip_id],
                                       "\".\n",
                                       "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (i == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (full_trip_id == length(private$data_selected)) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - End 2.8 process: raised standardised sample set.\n",
                                         sep = "")
                                   }

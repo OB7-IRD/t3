@@ -62,3 +62,5 @@ The second level of the t3 process aim to standardize samples data. These standa
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
 
 ### Process 2.8: samples number standardisation at set scale
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.8.png'/>
