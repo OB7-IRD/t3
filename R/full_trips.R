@@ -2289,6 +2289,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           " - Start process 2.4: well-set weight categories definition.\n",
                                           sep = "")
                                     }
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Ongoing process 2.4 on item \"",
+                                        names(private$data_selected)[full_trip_id],
+                                        "\".\n",
+                                        "[trip: ",
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                        "]\n",
+                                        sep = "")
                                     if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                       cat(format(Sys.time(),
                                                  "%Y-%m-%d %H:%M:%S"),
@@ -2309,15 +2318,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         current_wells$modification_l1(modification = "$path$wellsets <- NA")
                                       }
                                     } else {
-                                      cat(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Ongoing process 2.4 on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]\n",
-                                          sep = "")
                                       for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                         if (current_trip$.__enclos_env__$private$vessel_type == "Senneur") {
@@ -2494,7 +2494,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
                                                 }
                                                 current_well$.__enclos_env__$private$wellsets <- current_well_sets
-                                                sum_weighted_weight <- sum(unique(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight"))))
+                                                sum_weighted_weight <- sum(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight")))
                                                 current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
                                                                                                         sum_weighted_weight))
                                               } else {
@@ -2739,6 +2739,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start process 2.6: standardised sample set creation.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.6 on item \"",
+                                      names(private$data_selected)[full_trip_id],
+                                      "\".\n",
+                                      "[trip: ",
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
                                   if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
@@ -2758,14 +2766,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_wells$modification_l1(modification = "$path$standardisedsampleset <- NA")
                                     }
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process 2.6 on item \"",
-                                        names(private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       capture.output(current_activities <- t3::object_r6(class_name = "activities"),
@@ -2781,29 +2781,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_well <- current_wells$extract(id = well_id)[[1]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
                                           current_standardised_samples <- current_well$.__enclos_env__$private$standardisedsample
-                                          if (is.null(current_wells_sets)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
-                                                "[trip_id: ",
-                                                current_well$.__enclos_env__$private$trip_id,
-                                                ", well_id: ",
-                                                current_well$.__enclos_env__$private$well_id,
-                                                "]\n",
-                                                sep = "")
-                                            stop()
-                                          } else if (is.null(current_standardised_samples)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: the object wellsets is NULL, please run processes 2.1 to 2.5 before this one.\n",
-                                                "[trip_id: ",
-                                                current_well$.__enclos_env__$private$trip_id,
-                                                ", well_id: ",
-                                                current_well$.__enclos_env__$private$well_id,
-                                                "]\n",
-                                                sep = "")
-                                            stop()
-                                          }
-                                          if (all(class(current_wells_sets) == c("wellsets", "list_t3", "R6"))
-                                              && all(class(current_standardised_samples) == c("standardisedsamples", "list_t3", "R6"))) {
+                                          if (all(class(current_wells_sets) == c("wellsets",
+                                                                                 "list_t3",
+                                                                                 "R6"))
+                                              && all(class(current_standardised_samples) == c("standardisedsamples",
+                                                                                              "list_t3",
+                                                                                              "R6"))) {
                                             capture.output(standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
                                                            file = "NUL")
                                             for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
@@ -2832,10 +2815,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 if (nrow(current_length_weight_relationship) == 1) {
                                                   coef_a <- current_length_weight_relationship[1, 1]
                                                   coef_b <- current_length_weight_relationship[1, 2]
-                                                  if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("SKJ", "LTA", "FRI")) {
+                                                  if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("SKJ",
+                                                                                                                               "LTA",
+                                                                                                                               "FRI")) {
                                                     # step of 1 cm
                                                     length_class_lf <- current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf + 0.5
-                                                  } else if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("YFT", "BET", "ALB")) {
+                                                  } else if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("YFT",
+                                                                                                                                      "BET",
+                                                                                                                                      "ALB")) {
                                                     # step of 2 cm
                                                     length_class_lf <- current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf + 1
                                                   } else {
@@ -2884,7 +2871,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.6 successfull on item \"",
                                       names(private$data_selected)[full_trip_id],
                                       "\".\n",
@@ -2893,7 +2881,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "]\n",
                                       sep = "")
                                   if (full_trip_id == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - End process 2.6: standardised sample set creation.\n",
                                         sep = "")
                                   }
@@ -2913,183 +2902,211 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250)) {
                               if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
                                     " - Process 2.7 (raised factors determination) cancelled.\n",
                                     sep = "")
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Start process 2.7: raised factors determination.\n",
                                         sep = "")
                                   }
-                                  if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process 2.7 on item \"",
+                                      names(private$data_selected)[full_trip_id],
+                                      "\".\n",
+                                      "[trip: ",
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                      "]\n",
+                                      sep = "")
+                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
+                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                     file = "NUL")
+                                      capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
+                                                     file = "NUL")
+                                      if (length(x = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")) != 0) {
+                                        capture.output(current_wells_bis <- t3::object_r6(class_name = "wells"),
+                                                       file = "NUL")
+                                        capture.output(current_wells_bis$add(new_item = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")),
+                                                       file = "NUL")
+                                        capture.output(current_wellsets <- t3::object_r6(class_name = "wellsets"),
+                                                       file = "NUL")
+                                        capture.output(current_wellsets$add(new_item = current_wells_bis$extract_l1_element_value(element = "wellsets")),
+                                                       file = "NUL")
+                                        capture.output(current_wellsets_bis <- t3::object_r6(class_name = "wellsets"),
+                                                       file = "NUL")
+                                        capture.output(current_wellsets_bis$add(new_item = unlist(current_wellsets$extract_l1_element_value(element = "data"))),
+                                                       file = "NUL")
+                                        current_wellsets_bis$modification_l1(modification = "$path$rf_validation <- NA")
+                                      }
+                                    }
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process 2.7 on item \"",
-                                        names(private$data_selected)[i],
-                                        "\".\n",
-                                        "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
-                                    for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                      current_trip <- private$data_selected[[i]][[j]]
-                                      current_wells <- current_trip$.__enclos_env__$private$wells
-                                      if (length(current_wells) != 0) {
-                                        for (k in seq_len(length.out = length(current_wells))) {
-                                          current_well <- current_wells[[k]]
+                                    for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                      current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                      if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                       file = "NUL")
+                                        capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                       file = "NUL")
+                                        for (well_id in seq_len(length.out = current_wells$count())) {
+                                          current_well <- current_wells$extract(id = well_id)[[1]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
-                                          if (is.null(current_wells_sets)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
-                                                "[trip_id: ",
-                                                current_well$.__enclos_env__$private$trip_id,
-                                                ", well_id: ",
-                                                current_well$.__enclos_env__$private$well_id,
-                                                "]\n",
-                                                sep = "")
-                                            stop()
-                                          }
-                                          for (l in seq_len(length.out = length(current_wells_sets))) {
-                                            current_well_sets <- current_wells_sets[[l]]
-                                            current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
-                                            if (is.null(current_well_standardisedsampleset)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: the object wellsets is NULL, please run process 2.1 to 2.6 before this one.\n",
-                                                  "[trip_id: ",
-                                                  current_well$.__enclos_env__$private$trip_id,
-                                                  ", well_id: ",
-                                                  current_well$.__enclos_env__$private$well_id,
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
-                                            }
-                                            current_well_sets$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(lapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
-                                                                                                                                    FUN = function(m) {
-                                                                                                                                      if (current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit <= 10) {
-                                                                                                                                        current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth
-                                                                                                                                      }
-                                                                                                                                    }))) / 1000
-                                            current_well_sets$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(lapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
-                                                                                                                                   FUN = function(n) {
-                                                                                                                                     if (current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit > 10) {
-                                                                                                                                       current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth
-                                                                                                                                     }
-                                                                                                                                   }))) / 1000
-                                            current_well_sets$.__enclos_env__$private$weighted_samples_total <- sum(unlist(lapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
-                                                                                                                                  FUN = function(o) {
-                                                                                                                                    current_well_standardisedsampleset[[o]]$.__enclos_env__$private$sample_weigth
-                                                                                                                                  }))) / 1000
-                                            if (current_well_sets$.__enclos_env__$private$weighted_samples_total <= 0) {
-                                              # scenario 1
-                                              current_well_sets$.__enclos_env__$private$rf_validation <- 1
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: well-set avoided because weighted samples total value egal to zero.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                            } else if (is.null(current_well_sets$.__enclos_env__$private$weighted_weight)
-                                                       || is.na(current_well_sets$.__enclos_env__$private$weighted_weight)
-                                                       || current_well_sets$.__enclos_env__$private$weighted_weight <= 0) {
-                                              # scenario 2
-                                              current_well_sets$.__enclos_env__$private$rf_validation <- 2
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: well-set avoided because invalid weighted weigth.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                            } else {
-                                              if (current_well_sets$.__enclos_env__$private$weighted_samples_minus10 == 0
-                                                  || current_well_sets$.__enclos_env__$private$weighted_samples_plus10 == 0
-                                                  || is.na(current_well_sets$.__enclos_env__$private$weighted_weight_minus10)
-                                                  || is.na(current_well_sets$.__enclos_env__$private$weighted_weight_plus10)) {
-                                                # scenario 3
-                                                current_well_sets$.__enclos_env__$private$rf_validation <- 3
-                                                current_well_sets$.__enclos_env__$private$rf_total <- current_well_sets$.__enclos_env__$private$weighted_weight / current_well_sets$.__enclos_env__$private$weighted_samples_total
-                                              } else {
-                                                current_well_sets$.__enclos_env__$private$rf_minus10 <- current_well_sets$.__enclos_env__$private$weighted_weight_minus10 / current_well_sets$.__enclos_env__$private$weighted_samples_minus10
-                                                current_well_sets$.__enclos_env__$private$rf_plus10 <- current_well_sets$.__enclos_env__$private$weighted_weight_plus10 / current_well_sets$.__enclos_env__$private$weighted_samples_plus10
-                                                if (current_well_sets$.__enclos_env__$private$rf_minus10 > threshold_rf_minus10
-                                                    || current_well_sets$.__enclos_env__$private$rf_plus10 > threshold_rf_plus10
-                                                    || sum(unlist(sapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
-                                                                         FUN = function(p) {
-                                                                           if (current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_weight_unit <= 10) {
-                                                                             current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_number_weighted
-                                                                           }
-                                                                         }))) > threshold_frequency_rf_minus10
-                                                    || sum(unlist(sapply(X = seq_len(length.out = length(current_well_standardisedsampleset)),
-                                                                         FUN = function(p) {
-                                                                           if (current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_weight_unit > 10) {
-                                                                             current_well_standardisedsampleset[[p]]$.__enclos_env__$private$sample_number_weighted
-                                                                           }
-                                                                         }))) > threshold_frequency_rf_plus10) {
-                                                  # scenario 4
-                                                  current_well_sets$.__enclos_env__$private$rf_validation <- 4
-                                                  current_well_sets$.__enclos_env__$private$rf_total <- current_well_sets$.__enclos_env__$private$weighted_weight / current_well_sets$.__enclos_env__$private$weighted_samples_total
+                                          if (all(class(current_wells_sets) == c("wellsets",
+                                                                                 "list_t3",
+                                                                                 "R6"))) {
+                                            for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
+                                              current_well_set <- current_wells_sets$extract(id = well_set_id)[[1]]
+                                              if (all(class(current_well$.__enclos_env__$private$standardisedsampleset) == c("standardisedsamplesets",
+                                                                                                                             "list_t3",
+                                                                                                                             "R6"))
+                                                  && length(current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                 current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                 "\""))) != 0) {
+                                                capture.output(current_standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                               file = "NUL")
+                                                capture.output(current_standardised_samples_sets$add(new_item = current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                                                     current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                                                                     "\""))),
+                                                               file = "NUL")
+                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")) != 0) {
+                                                  capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
+                                                                 file = "NUL")
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                  current_standardised_samples_sets_minus10_nb <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_number_weighted")))
                                                 } else {
-                                                  # scenario 5
-                                                  current_well_sets$.__enclos_env__$private$rf_validation <- 5
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- 0
+                                                  current_standardised_samples_sets_minus10_nb <- 0
                                                 }
+                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")) != 0) {
+                                                  capture.output(current_standardised_samples_sets_plus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
+                                                                 file = "NUL")
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                  current_standardised_samples_sets_plus10_nb <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_number_weighted")))
+                                                } else {
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- 0
+                                                  current_standardised_samples_sets_plus10_nb <- 0
+                                                }
+                                                current_well_set$.__enclos_env__$private$weighted_samples_total <- sum(unlist(current_standardised_samples_sets$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                if (current_well_set$.__enclos_env__$private$weighted_samples_total == 0) {
+                                                  # scenario 1
+                                                  current_well_set$.__enclos_env__$private$rf_validation <- 1
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Warning: well-set avoided because weighted samples total value egal to zero.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                } else if (is.na(current_well_set$.__enclos_env__$private$weighted_weight)
+                                                           || current_well_set$.__enclos_env__$private$weighted_weight == 0) {
+                                                  # scenario 2
+                                                  current_well_set$.__enclos_env__$private$rf_validation <- 2
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Warning: well-set avoided because invalid weighted weigth.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                } else {
+                                                  if (current_well_set$.__enclos_env__$private$weighted_samples_minus10 == 0
+                                                      || current_well_set$.__enclos_env__$private$weighted_samples_plus10 == 0) {
+                                                    # scenario 3
+                                                    current_well_set$.__enclos_env__$private$rf_validation <- 3
+                                                    current_well_set$.__enclos_env__$private$rf_total <- current_well_set$.__enclos_env__$private$weighted_weight / current_well_set$.__enclos_env__$private$weighted_samples_total
+                                                  } else {
+                                                    current_well_set$.__enclos_env__$private$rf_minus10 <- current_well_set$.__enclos_env__$private$weighted_weight_minus10 / current_well_set$.__enclos_env__$private$weighted_samples_minus10
+                                                    current_well_set$.__enclos_env__$private$rf_plus10 <- current_well_set$.__enclos_env__$private$weighted_weight_plus10 / current_well_set$.__enclos_env__$private$weighted_samples_plus10
+                                                    if (is.na(current_well_set$.__enclos_env__$private$rf_minus10)
+                                                        || is.na(current_well_set$.__enclos_env__$private$rf_plus10)
+                                                        || current_well_set$.__enclos_env__$private$rf_minus10 > threshold_rf_minus10
+                                                        || current_well_set$.__enclos_env__$private$rf_plus10 > threshold_rf_plus10
+                                                        || current_standardised_samples_sets_minus10_nb > threshold_frequency_rf_minus10
+                                                        || current_standardised_samples_sets_plus10_nb > threshold_frequency_rf_plus10) {
+                                                      # scenario 4
+                                                      current_well_set$.__enclos_env__$private$rf_validation <- 4
+                                                      current_well_set$.__enclos_env__$private$rf_total <- current_well_set$.__enclos_env__$private$weighted_weight / current_well_set$.__enclos_env__$private$weighted_samples_total
+                                                    } else {
+                                                      # scenario 5
+                                                      current_well_set$.__enclos_env__$private$rf_validation <- 5
+                                                    }
+                                                  }
+                                                }
+                                                if (current_well_set$.__enclos_env__$private$rf_validation %in% c(4, 3)
+                                                    && current_well_set$.__enclos_env__$private$rf_total > threshold_rf_total) {
+                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                      " - Warning: well-set \"rf_total\" argument superior to ",
+                                                      threshold_rf_total,
+                                                      ".\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                }
+                                              } else {
+                                                current_well_set$.__enclos_env__$private$rf_validation <- NA
                                               }
-                                            }
-                                            if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(4, 3)
-                                                && current_well_sets$.__enclos_env__$private$rf_total > threshold_rf_total) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: well-set \"rf_total\" argument superior to ",
-                                                  threshold_rf_total,
-                                                  ".\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
                                             }
                                           }
                                         }
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.7 successfull on item \"",
-                                      names(private$data_selected)[i],
+                                      names(private$data_selected)[full_trip_id],
                                       "\".\n",
                                       "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (i == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (full_trip_id == length(private$data_selected)) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - End process 2.7: raised factors determination.\n",
                                         sep = "")
                                   }
@@ -3100,128 +3117,161 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Application of process 2.8 raised factors on standardised sample set.
                             raised_standardised_sample_set = function() {
                               if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
                                     " - Process 2.8 (raised standardised sample set) cancelled.\n",
                                     sep = "")
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Start process 2.8: raised standardised sample set.\n",
                                         sep = "")
                                   }
-                                  if (names(private$data_selected)[i] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    next()
+                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
+                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                     file = "NUL")
+                                      capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
+                                                     file = "NUL")
+                                      if (length(x = current_wells$filter_l1(filter = "all(class($path$standardisedsampleset) == c(\"standardisedsamplesets\", \"list_t3\", \"R6\"))")) != 0) {
+                                        capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets$add(new_item = current_wells$extract_l1_element_value(element = "standardisedsampleset")),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_bis <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_bis$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
+                                                       file = "NUL")
+                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
+                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                      }
+                                    }
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 2.8 on item \"",
-                                        names(private$data_selected)[i],
+                                        names(private$data_selected)[full_trip_id],
                                         "\".\n",
                                         "[trip: ",
-                                        private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                      current_trip <- private$data_selected[[i]][[j]]
-                                      current_wells <- current_trip$.__enclos_env__$private$wells
-                                      if (length(current_wells) != 0) {
-                                        for (k in seq_len(length.out = length(current_wells))) {
-                                          current_well <- current_wells[[k]]
+                                    for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                      current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                      if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                       file = "NUL")
+                                        capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                       file = "NUL")
+                                        for (well_id in seq_len(length.out = current_wells$count())) {
+                                          current_well <- current_wells$extract(id = well_id)[[1]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
-                                          if (is.null(current_wells_sets)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: the object wellsets is NULL, please run process 2.4 before this one.\n",
-                                                "[trip_id: ",
-                                                current_well$.__enclos_env__$private$trip_id,
-                                                ", well_id: ",
-                                                current_well$.__enclos_env__$private$well_id,
-                                                "]\n",
-                                                sep = "")
-                                            stop()
-                                          }
-                                          for (l in seq_len(length.out = length(current_wells_sets))) {
-                                            current_well_sets <- current_wells_sets[[l]]
-                                            current_well_standardisedsampleset <- current_well$.__enclos_env__$private$standardisedsampleset[[l]]
-                                            if (is.null(current_well_standardisedsampleset)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: the object wellsets is NULL, please run process 2.1 to 2.7 before this one.\n",
-                                                  "[trip_id: ",
-                                                  current_well$.__enclos_env__$private$trip_id,
-                                                  ", well_id: ",
-                                                  current_well$.__enclos_env__$private$well_id,
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
-                                            }
-                                            if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(1, 2)) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: raised factors not available for this well-set.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                            } else if (current_well_sets$.__enclos_env__$private$rf_validation %in% c(3, 4)) {
-                                              current_rf_total <- current_well_sets$.__enclos_env__$private$rf_total
-                                              for (m in seq_len(length.out = length(current_well_standardisedsampleset))) {
-                                                current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted * current_rf_total
-                                                current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[m]]$.__enclos_env__$private$sample_number_weighted_set / 1000
-                                              }
-                                            } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
-                                              current_rf_minus10 <- current_well_sets$.__enclos_env__$private$rf_minus10
-                                              current_rf_plus10 <- current_well_sets$.__enclos_env__$private$rf_plus10
-                                              for (n in seq_len(length.out = length(current_well_standardisedsampleset))) {
-                                                if (current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit <= 10) {
-                                                  current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_minus10
+                                          if (all(class(current_wells_sets) == c("wellsets",
+                                                                                 "list_t3",
+                                                                                 "R6"))) {
+                                            for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
+                                              current_well_set <- current_wells_sets$extract(id = well_set_id)[[1]]
+                                              if (all(class(current_well$.__enclos_env__$private$standardisedsampleset) == c("standardisedsamplesets",
+                                                                                                                             "list_t3",
+                                                                                                                             "R6"))
+                                                  && length(current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                 current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                 "\""))) != 0) {
+                                                capture.output(current_standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                               file = "NUL")
+                                                capture.output(current_standardised_samples_sets$add(new_item = current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                                                     current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                                                                                                                     "\""))),
+                                                               file = "NUL")
+                                                if (current_well_set$.__enclos_env__$private$rf_validation %in% c(1, 2)
+                                                    | is.na(current_well_set$.__enclos_env__$private$rf_validation)) {
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Warning: raised factors not available for this well-set.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                                } else if (current_well_set$.__enclos_env__$private$rf_validation %in% c(3, 4)) {
+                                                  current_rf_total <- current_well_set$.__enclos_env__$private$rf_total
+                                                  current_standardised_samples_sets$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                          current_rf_total))
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
+                                                } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
+                                                  current_rf_minus10 <- current_well_set$.__enclos_env__$private$rf_minus10
+                                                  current_rf_plus10 <- current_well_set$.__enclos_env__$private$rf_plus10
+                                                  capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
+                                                                 file = "NUL")
+                                                  current_standardised_samples_sets_minus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                                  current_rf_minus10))
+                                                  capture.output(current_standardised_samples_sets_plus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                                 file = "NUL")
+                                                  capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
+                                                                 file = "NUL")
+                                                  current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
+                                                                                                                                  current_rf_plus10))
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                                 } else {
-                                                  current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted * current_rf_plus10
+                                                  cat(format(Sys.time(),
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - Error: raised factors verifications is not valide.\n",
+                                                      "[trip: ,",
+                                                      current_well_set$.__enclos_env__$private$trip_id,
+                                                      ", activity: ",
+                                                      current_well_set$.__enclos_env__$private$activity_id,
+                                                      ", well: ",
+                                                      current_well_set$.__enclos_env__$private$well_id,
+                                                      ", sample(s): ",
+                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                             collapse = " - "),
+                                                      "]\n",
+                                                      sep = "")
+                                                  stop()
                                                 }
-                                                current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weigth_set <- current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_weight_unit * current_well_standardisedsampleset[[n]]$.__enclos_env__$private$sample_number_weighted_set / 1000
                                               }
-                                            } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: raised factors verifications is not valide. Run process 2.7 before this one.\n",
-                                                  "[trip: ,",
-                                                  current_well_sets$.__enclos_env__$private$trip_id,
-                                                  ", activity: ",
-                                                  current_well_sets$.__enclos_env__$private$activity_id,
-                                                  ", well: ",
-                                                  current_well_sets$.__enclos_env__$private$well_id,
-                                                  ", sample(s): ",
-                                                  paste0(current_well_sets$.__enclos_env__$private$sample_id,
-                                                         collapse = " - "),
-                                                  "]\n",
-                                                  sep = "")
-                                              stop()
                                             }
                                           }
                                         }
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Process 2.8 successfull on item \"",
-                                      names(private$data_selected)[i],
+                                      names(private$data_selected)[full_trip_id],
                                       "\".\n",
                                       "[trip: ",
-                                      private$data_selected[[i]][[1]]$.__enclos_env__$private$trip_id,
+                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (i == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (full_trip_id == length(private$data_selected)) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - End 2.8 process: raised standardised sample set.\n",
                                         sep = "")
                                   }
@@ -3231,105 +3281,180 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # path to level 3 ----
                             #' @description Temporary link to the R object model with Antoine D. modelisation process.
                             path_to_level3 = function() {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- list()
                               raw_inputs_level3 <- vector(mode = "list",
                                                           length = 5)
-                              names(raw_inputs_level3) <- c("act", "act3", "samw", "sset", "wp")
-                              act <- data.frame(stringsAsFactors = FALSE)
-                              act3 <- data.frame(stringsAsFactors = FALSE)
-                              samw <- data.frame(stringsAsFactors = FALSE)
-                              sset <- data.frame(stringsAsFactors = FALSE)
-                              wp <- data.frame(stringsAsFactors = FALSE)
-                              for (i in seq_len(length.out = length(private$data_selected))) {
-                                for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                  current_trip <- private$data_selected[[i]][[j]]
-                                  current_activities <- current_trip$.__enclos_env__$private$activities
-                                  current_wells <- current_trip$.__enclos_env__$private$wells
-                                  if (length(current_activities) != 0) {
-                                    for (k in seq_len(length.out = length(current_activities))) {
-                                      current_activity <- current_activities[[k]]
-                                      tmp_activity <- data.frame("id_act" = current_activity$.__enclos_env__$private$activity_id,
-                                                                 "lat" = current_activity$.__enclos_env__$private$activity_latitude,
-                                                                 "lon" = current_activity$.__enclos_env__$private$activity_longitude,
-                                                                 "fmod" = current_activity$.__enclos_env__$private$school_type,
-                                                                 "date_act" = current_activity$.__enclos_env__$private$activity_date,
-                                                                 "vessel" = current_trip$.__enclos_env__$private$vessel_id,
-                                                                 "id_trip" = current_activity$.__enclos_env__$private$trip_id,
-                                                                 "landingdate" = current_trip$.__enclos_env__$private$landing_date,
-                                                                 "ocean" = current_activity$.__enclos_env__$private$ocean,
-                                                                 "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
-                                                                 stringsAsFactors = FALSE)
-                                      act <- rbind(act, tmp_activity)
-                                      current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                      if (! is.null(current_elementarycatches) && length(current_elementarycatches) != 0) {
-                                        for (l in seq_len(length.out = length(current_elementarycatches))) {
-                                          current_elementarycatch <- current_elementarycatches[[l]]
-                                          tmp_elementarycatch <- data.frame("id_act" = current_elementarycatch$.__enclos_env__$private$activity_id,
-                                                                            "w_lb_t3" = current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected,
-                                                                            "date_act" = current_activity$.__enclos_env__$private$activity_date,
-                                                                            "sp_code" = current_elementarycatch$.__enclos_env__$private$specie_code,
-                                                                            "sp" = current_elementarycatch$.__enclos_env__$private$specie_code3l,
-                                                                            "wcat" = current_elementarycatch$.__enclos_env__$private$corrected_logbook_category,
-                                                                            "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
-                                                                            stringsAsFactors = FALSE)
-                                          act3 <- rbind(act3, tmp_elementarycatch)
-                                        }
-                                      }
+                              names(raw_inputs_level3) <- c("act",
+                                                            "act3",
+                                                            "samw",
+                                                            "sset",
+                                                            "wp")
+                              act <- dplyr::tibble()
+                              act3 <- dplyr::tibble()
+                              samw <- dplyr::tibble()
+                              sset <- dplyr::tibble()
+                              wp <- dplyr::tibble()
+                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                               file = "NUL")
+                                for (partial_trip_id in seq_len(length.out = current_trips$count())) {
+                                  current_trip <- current_trips$extract(id = partial_trip_id)[[1]]
+                                  if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                   file = "NUL")
+                                    capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                   file = "NUL")
+                                    tmp_activity <- list(id_act = unlist(current_activities$extract_l1_element_value(element = "activity_id")),
+                                                         lat = unlist(current_activities$extract_l1_element_value(element = "activity_latitude")),
+                                                         lon = unlist(current_activities$extract_l1_element_value(element = "activity_longitude")),
+                                                         fmod = unlist(current_activities$extract_l1_element_value(element = "school_type")),
+                                                         date_act = unlist(current_activities$extract_l1_element_value(element = "activity_date")),
+                                                         vessel = rep(x = current_trip$.__enclos_env__$private$vessel_id,
+                                                                      current_activities$count()),
+                                                         id_trip = unlist(current_activities$extract_l1_element_value(element = "trip_id")),
+                                                         landingdate = unlist(current_activities$extract_l1_element_value(element = "landing_date")),
+                                                         ocean = unlist(current_activities$extract_l1_element_value(element = "ocean")),
+                                                         code_act_type = unlist(current_activities$extract_l1_element_value(element = "activity_code")))
+                                    tmp_activity <- dplyr::bind_rows(tmp_activity)
+                                    act <- rbind(act,
+                                                 tmp_activity)
+                                    if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                      capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                     file = "NUL")
+                                      capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                     file = "NUL")
+                                      tmp_elementarycatch <- list(id_act = unlist(current_elementarycatches$extract_l1_element_value(element = "activity_id")),
+                                                                  w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_corrected")),
+                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code")),
+                                                                  sp = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                  wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "corrected_logbook_category")))
+                                      tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
+                                                                             date_act = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
+                                                                                                            FUN = function(a) {
+                                                                                                              current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                           a,
+                                                                                                                                                           "\""))[[1]]$.__enclos_env__$private$activity_date
+                                                                                                            })),
+                                                                             code_act_type = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
+                                                                                                                 FUN = function(a) {
+                                                                                                                   current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                a,
+                                                                                                                                                                "\""))[[1]]$.__enclos_env__$private$activity_code
+                                                                                                                 })))
+                                      tmp_elementarycatch_final <- dplyr::bind_rows(tmp_elementarycatch) %>%
+                                        dplyr::left_join(dplyr::bind_rows(tmp_elementarycatch_activities),
+                                                         by = "id_act")
+                                      act3 <- rbind(act3,
+                                                    tmp_elementarycatch_final)
                                     }
                                   }
-                                  if (length(current_wells) != 0) {
-                                    for (m in seq_len(length.out = length(current_wells))) {
-                                      current_well <- current_wells[[m]]
-                                      current_standardisedsamplesets <- unlist(current_well$.__enclos_env__$private$standardisedsampleset)
-                                      current_wellplan <- current_well$.__enclos_env__$private$wellplan
-                                      if (! is.null(current_standardisedsamplesets)) {
-                                        for (n in seq_len(length.out = length(current_standardisedsamplesets))) {
-                                          current_standardisedsampleset <- current_standardisedsamplesets[[n]]
-                                          tmp_standardisedsampleset <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
-                                                                                  "sp_code" = current_standardisedsampleset$.__enclos_env__$private$specie_code,
-                                                                                  "sp" = current_standardisedsampleset$.__enclos_env__$private$specie_code3l,
-                                                                                  "wcat" = current_standardisedsampleset$.__enclos_env__$private$sample_category,
-                                                                                  "w_fit_t3" = current_standardisedsampleset$.__enclos_env__$private$sample_weigth_set,
-                                                                                  stringsAsFactors = FALSE)
-                                          samw <- rbind(samw, tmp_standardisedsampleset)
-                                          tmp_standardisedsampleset_qt <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
-                                                                                     "id_sample" = current_standardisedsampleset$.__enclos_env__$private$sample_id,
-                                                                                     "quality" = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
-                                                                                     "type" = current_standardisedsampleset$.__enclos_env__$private$sample_type,
-                                                                                     stringsAsFactors = FALSE)
-                                          sset <- rbind(sset, tmp_standardisedsampleset_qt)
-                                        }
+                                  if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
+                                    capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                   file = "NUL")
+                                    capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                   file = "NUL")
+                                    if (any(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))) {
+                                      standardisedsampleset_not_na <- which(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))
+                                      capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "list_t3"),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets$add(new_item = lapply(X = standardisedsampleset_not_na,
+                                                                                                          FUN = function(a) {
+                                                                                                            current_wells$extract_l1_element_value(element = "standardisedsampleset")[[a]]
+                                                                                                          })),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets_data <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets_data$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
+                                                     file = "NUL")
+                                      tmp_standardisedsampleset <- list(id_act = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "activity_id")),
+                                                                        sp_code = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code")),
+                                                                        sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code3l")),
+                                                                        wcat = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_category")),
+                                                                        w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weigth_set")))
+                                      tmp_standardisedsampleset <- dplyr::bind_rows(tmp_standardisedsampleset)
+                                      samw <- rbind(samw,
+                                                    tmp_standardisedsampleset)
+                                      if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")) != 0) {
+                                        capture.output(current_standardisedsamplesets_data_one_sample <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_data_one_sample$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")),
+                                                       file = "NUL")
+                                        tmp_standardisedsampleset_one_sample_qt <- list(id_act = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "activity_id")),
+                                                                                        id_sample = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_id")),
+                                                                                        quality = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_quality")),
+                                                                                        type = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_type")))
                                       }
-                                      if (! is.null(current_wellplan)) {
-                                        for (o in seq_len(length.out = length(current_wellplan))) {
-                                          current_elementarywellplan <- current_wellplan[[o]]
-                                          tmp_elementarywellplan <- data.frame("id_well" = current_elementarywellplan$.__enclos_env__$private$well_id,
-                                                                               "id_act" = current_elementarywellplan$.__enclos_env__$private$activity_id,
-                                                                               "id_sample" = current_elementarywellplan$.__enclos_env__$private$sample_id,
-                                                                               "sp_code" = current_elementarywellplan$.__enclos_env__$private$specie_code,
-                                                                               "code3l" = current_elementarywellplan$.__enclos_env__$private$specie_code3l,
-                                                                               "weight" = current_elementarywellplan$.__enclos_env__$private$wellplan_weight,
-                                                                               "wcat_well" = current_elementarywellplan$.__enclos_env__$private$wellplan_weigth_category_label,
-                                                                               stringsAsFactors = FALSE)
-                                          wp <- rbind(wp, tmp_elementarywellplan)
-                                        }
+                                      if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")) != 0) {
+                                        capture.output(current_standardisedsamplesets_data_multi_samples <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_data_multi_samples$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")),
+                                                       file = "NUL")
+                                        tmp_standardisedsampleset_multi_samples_qt_final <- lapply(X = seq_len(length.out = current_standardisedsamplesets_data_multi_samples$count()),
+                                                                                                   FUN = function(a) {
+                                                                                                     current_standardisedsampleset <- current_standardisedsamplesets_data_multi_samples$extract(id = a)[[1]]
+                                                                                                     current_number_samples <- length(x = current_standardisedsampleset$.__enclos_env__$private$sample_id)
+                                                                                                     tmp_standardisedsampleset_multi_samples_qt <- list(id_act = rep(x = current_standardisedsampleset$.__enclos_env__$private$activity_id,
+                                                                                                                                                                     current_number_samples),
+                                                                                                                                                        id_sample = current_standardisedsampleset$.__enclos_env__$private$sample_id,
+                                                                                                                                                        quality = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
+                                                                                                                                                                      current_number_samples),
+                                                                                                                                                        type = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_type,
+                                                                                                                                                                   current_number_samples))
+                                                                                                   })
                                       }
+                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble()
+                                      if (exists(x = "tmp_standardisedsampleset_one_sample_qt")) {
+                                        tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
+                                          dplyr::bind_rows(tmp_standardisedsampleset_one_sample_qt)
+                                        rm(tmp_standardisedsampleset_one_sample_qt)
+                                      }
+                                      if (exists(x = "tmp_standardisedsampleset_multi_samples_qt_final")) {
+                                        tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
+                                          dplyr::bind_rows(tmp_standardisedsampleset_multi_samples_qt_final)
+                                        rm(tmp_standardisedsampleset_multi_samples_qt_final)
+                                      }
+                                      tmp_standardisedsampleset_qt <- unique(tmp_standardisedsampleset_qt)
+                                      sset <- rbind(sset,
+                                                    tmp_standardisedsampleset_qt)
+                                    }
+                                    if (length(x = unlist(current_wells$extract_l1_element_value(element = "wellplan"))) != 0) {
+                                      capture.output(current_wellplans <- t3::object_r6(class_name = "elementarywellplans"),
+                                                     file = "NUL")
+                                      capture.output(current_wellplans$add(new_item = unlist(current_wells$extract_l1_element_value(element = "wellplan"))),
+                                                     file = "NUL")
+                                      tmp_elementarywellplan <- list(id_well = unlist(current_wellplans$extract_l1_element_value(element = "well_id")),
+                                                                     id_act = unlist(current_wellplans$extract_l1_element_value(element = "activity_id")),
+                                                                     id_sample = unlist(current_wellplans$extract_l1_element_value(element = "sample_id")),
+                                                                     sp_code = unlist(current_wellplans$extract_l1_element_value(element = "specie_code")),
+                                                                     code3l = unlist(current_wellplans$extract_l1_element_value(element = "specie_code3l")),
+                                                                     weight = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weight")),
+                                                                     wcat_well = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weigth_category_label")))
+                                      tmp_elementarywellplan <- dplyr::bind_rows(tmp_elementarywellplan)
+                                      wp <- rbind(wp,
+                                                  tmp_elementarywellplan)
                                     }
                                   }
                                 }
                               }
                               raw_inputs_level3[[1]] <- act
                               raw_inputs_level3[[2]] <- act3
-                              raw_inputs_level3[[3]] <- data.frame(dplyr::group_by(.data = samw,
-                                                                                   id_act, sp_code, sp, wcat) %>%
-                                                                     dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
-                                                                     dplyr::ungroup())
-                              raw_inputs_level3[[4]] <- unique(sset)
+                              raw_inputs_level3[[3]] <- dplyr::tibble(dplyr::group_by(.data = samw,
+                                                                                      id_act,
+                                                                                      sp_code,
+                                                                                      sp,
+                                                                                      wcat) %>%
+                                                                        dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
+                                                                        dplyr::ungroup())
+                              raw_inputs_level3[[4]] <- sset
                               raw_inputs_level3[[5]] <- wp
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- append(data_level3,
