@@ -499,7 +499,8 @@
   num.trees <span class='op'>=</span> <span class='fl'>1000L</span>,
   mtry <span class='op'>=</span> <span class='fl'>2L</span>,
   min.node.size <span class='op'>=</span> <span class='fl'>5</span>,
-  seed_number <span class='op'>=</span> <span class='fl'>7L</span>
+  seed_number <span class='op'>=</span> <span class='fl'>7L</span>,
+  small_fish_only <span class='op'>=</span> <span class='cn'>F</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -514,17 +515,28 @@
 
 <dt><code>seed_number</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Set the initial seed for the modelling. The default value is 7.</p></dd>
 
+<dt><code>small_fish_only</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Whether the model estimate proportion for small fish only (&lt; 10 kg).</p></dd>
+
 </dl><p></div></p>
 <p><hr>
 <a id="method-models_checking"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>models_checking()</code></h3>
 <p>Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>models_checking</span><span class='op'>(</span><span class='va'>outputs_level3_process2</span>, <span class='va'>outputs_path</span><span class='op'>)</span></pre><p></div></p>
+<p><div class="r"></p><pre><span class='va'>full_trips</span><span class='op'>$</span><span class='fu'>models_checking</span><span class='op'>(</span>
+  <span class='va'>outputs_level3_process2</span>,
+  <span class='va'>outputs_path</span>,
+  plot_sample <span class='op'>=</span> <span class='cn'>F</span>,
+  avdth_patch_coord <span class='op'>=</span> <span class='cn'>F</span>
+<span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>outputs_level3_process2</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> expected. Outputs models and data from process 3.2.</p></dd>
 
 <dt><code>outputs_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Outputs directory path.</p></dd>
+
+<dt><code>plot_sample</code></dt><dd><p><code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code>. Whether the sample figure is computed. Default value = F</p></dd>
+
+<dt><code>avdth_patch_coord</code></dt><dd><p>parameter waiting for coordinate conversion patch from avdth database</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -534,18 +546,21 @@
   <span class='va'>inputs_level3</span>,
   <span class='va'>outputs_level3_process1</span>,
   <span class='va'>target_year</span>,
-  vessel_id_ignored <span class='op'>=</span> <span class='cn'>NULL</span>
+  vessel_id_ignored <span class='op'>=</span> <span class='cn'>NULL</span>,
+  small_fish_only <span class='op'>=</span> <span class='cn'>F</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>inputs_level3</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Imputs of levels 3 (see function path to level 3).</p></dd>
+<dt><code>inputs_level3</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Inputs of levels 3 (see function path to level 3).</p></dd>
 
 <dt><code>outputs_level3_process1</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
-<dt><code>target_year</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. The year of interest for the model estimaton and prediction.</p></dd>
+<dt><code>target_year</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. The year of interest for the model estimation and prediction.</p></dd>
 
-<dt><code>vessel_id_ignored</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
+<dt><code>vessel_id_ignored</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/integer.html'>integer</a></code> expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.</p></dd>
+
+<dt><code>small_fish_only</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Whether the model estimate proportion for small fish only (&lt; 10 kg).</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -556,7 +571,8 @@
   <span class='va'>outputs_level3_process4</span>,
   <span class='va'>outputs_path</span>,
   ci <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  Nboot <span class='op'>=</span> <span class='fl'>10</span>,
+  ci_type <span class='op'>=</span> <span class='st'>"all"</span>,
+  Nboot <span class='op'>=</span> <span class='fl'>50</span>,
   plot_predict <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre><p></div></p>
 
@@ -569,6 +585,8 @@
 <dt><code>outputs_path</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/character.html'>character</a></code> expected. Outputs directory path.</p></dd>
 
 <dt><code>ci</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/logical.html'>logical</a></code> expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.</p></dd>
+
+<dt><code>ci_type</code></dt><dd><p>Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.</p></dd>
 
 <dt><code>Nboot</code></dt><dd><p>Object of type <code><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></code> expected. The number of bootstrap samples desired for the ci computation. The default value is 10.</p></dd>
 
