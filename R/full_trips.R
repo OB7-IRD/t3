@@ -3281,105 +3281,180 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # path to level 3 ----
                             #' @description Temporary link to the R object model with Antoine D. modelisation process.
                             path_to_level3 = function() {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- list()
                               raw_inputs_level3 <- vector(mode = "list",
                                                           length = 5)
-                              names(raw_inputs_level3) <- c("act", "act3", "samw", "sset", "wp")
-                              act <- data.frame(stringsAsFactors = FALSE)
-                              act3 <- data.frame(stringsAsFactors = FALSE)
-                              samw <- data.frame(stringsAsFactors = FALSE)
-                              sset <- data.frame(stringsAsFactors = FALSE)
-                              wp <- data.frame(stringsAsFactors = FALSE)
-                              for (i in seq_len(length.out = length(private$data_selected))) {
-                                for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                  current_trip <- private$data_selected[[i]][[j]]
-                                  current_activities <- current_trip$.__enclos_env__$private$activities
-                                  current_wells <- current_trip$.__enclos_env__$private$wells
-                                  if (length(current_activities) != 0) {
-                                    for (k in seq_len(length.out = length(current_activities))) {
-                                      current_activity <- current_activities[[k]]
-                                      tmp_activity <- data.frame("id_act" = current_activity$.__enclos_env__$private$activity_id,
-                                                                 "lat" = current_activity$.__enclos_env__$private$activity_latitude,
-                                                                 "lon" = current_activity$.__enclos_env__$private$activity_longitude,
-                                                                 "fmod" = current_activity$.__enclos_env__$private$school_type,
-                                                                 "date_act" = current_activity$.__enclos_env__$private$activity_date,
-                                                                 "vessel" = current_trip$.__enclos_env__$private$vessel_id,
-                                                                 "id_trip" = current_activity$.__enclos_env__$private$trip_id,
-                                                                 "landingdate" = current_trip$.__enclos_env__$private$landing_date,
-                                                                 "ocean" = current_activity$.__enclos_env__$private$ocean,
-                                                                 "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
-                                                                 stringsAsFactors = FALSE)
-                                      act <- rbind(act, tmp_activity)
-                                      current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches
-                                      if (! is.null(current_elementarycatches) && length(current_elementarycatches) != 0) {
-                                        for (l in seq_len(length.out = length(current_elementarycatches))) {
-                                          current_elementarycatch <- current_elementarycatches[[l]]
-                                          tmp_elementarycatch <- data.frame("id_act" = current_elementarycatch$.__enclos_env__$private$activity_id,
-                                                                            "w_lb_t3" = current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected,
-                                                                            "date_act" = current_activity$.__enclos_env__$private$activity_date,
-                                                                            "sp_code" = current_elementarycatch$.__enclos_env__$private$specie_code,
-                                                                            "sp" = current_elementarycatch$.__enclos_env__$private$specie_code3l,
-                                                                            "wcat" = current_elementarycatch$.__enclos_env__$private$corrected_logbook_category,
-                                                                            "code_act_type" = current_activity$.__enclos_env__$private$activity_code,
-                                                                            stringsAsFactors = FALSE)
-                                          act3 <- rbind(act3, tmp_elementarycatch)
-                                        }
-                                      }
+                              names(raw_inputs_level3) <- c("act",
+                                                            "act3",
+                                                            "samw",
+                                                            "sset",
+                                                            "wp")
+                              act <- dplyr::tibble()
+                              act3 <- dplyr::tibble()
+                              samw <- dplyr::tibble()
+                              sset <- dplyr::tibble()
+                              wp <- dplyr::tibble()
+                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                               file = "NUL")
+                                for (partial_trip_id in seq_len(length.out = current_trips$count())) {
+                                  current_trip <- current_trips$extract(id = partial_trip_id)[[1]]
+                                  if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                   file = "NUL")
+                                    capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                   file = "NUL")
+                                    tmp_activity <- list(id_act = unlist(current_activities$extract_l1_element_value(element = "activity_id")),
+                                                         lat = unlist(current_activities$extract_l1_element_value(element = "activity_latitude")),
+                                                         lon = unlist(current_activities$extract_l1_element_value(element = "activity_longitude")),
+                                                         fmod = unlist(current_activities$extract_l1_element_value(element = "school_type")),
+                                                         date_act = unlist(current_activities$extract_l1_element_value(element = "activity_date")),
+                                                         vessel = rep(x = current_trip$.__enclos_env__$private$vessel_id,
+                                                                      current_activities$count()),
+                                                         id_trip = unlist(current_activities$extract_l1_element_value(element = "trip_id")),
+                                                         landingdate = unlist(current_activities$extract_l1_element_value(element = "landing_date")),
+                                                         ocean = unlist(current_activities$extract_l1_element_value(element = "ocean")),
+                                                         code_act_type = unlist(current_activities$extract_l1_element_value(element = "activity_code")))
+                                    tmp_activity <- dplyr::bind_rows(tmp_activity)
+                                    act <- rbind(act,
+                                                 tmp_activity)
+                                    if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                      capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                     file = "NUL")
+                                      capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                     file = "NUL")
+                                      tmp_elementarycatch <- list(id_act = unlist(current_elementarycatches$extract_l1_element_value(element = "activity_id")),
+                                                                  w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_corrected")),
+                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code")),
+                                                                  sp = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                  wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "corrected_logbook_category")))
+                                      tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
+                                                                             date_act = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
+                                                                                                            FUN = function(a) {
+                                                                                                              current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                           a,
+                                                                                                                                                           "\""))[[1]]$.__enclos_env__$private$activity_date
+                                                                                                            })),
+                                                                             code_act_type = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
+                                                                                                                 FUN = function(a) {
+                                                                                                                   current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                a,
+                                                                                                                                                                "\""))[[1]]$.__enclos_env__$private$activity_code
+                                                                                                                 })))
+                                      tmp_elementarycatch_final <- dplyr::bind_rows(tmp_elementarycatch) %>%
+                                        dplyr::left_join(dplyr::bind_rows(tmp_elementarycatch_activities),
+                                                         by = "id_act")
+                                      act3 <- rbind(act3,
+                                                    tmp_elementarycatch_final)
                                     }
                                   }
-                                  if (length(current_wells) != 0) {
-                                    for (m in seq_len(length.out = length(current_wells))) {
-                                      current_well <- current_wells[[m]]
-                                      current_standardisedsamplesets <- unlist(current_well$.__enclos_env__$private$standardisedsampleset)
-                                      current_wellplan <- current_well$.__enclos_env__$private$wellplan
-                                      if (! is.null(current_standardisedsamplesets)) {
-                                        for (n in seq_len(length.out = length(current_standardisedsamplesets))) {
-                                          current_standardisedsampleset <- current_standardisedsamplesets[[n]]
-                                          tmp_standardisedsampleset <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
-                                                                                  "sp_code" = current_standardisedsampleset$.__enclos_env__$private$specie_code,
-                                                                                  "sp" = current_standardisedsampleset$.__enclos_env__$private$specie_code3l,
-                                                                                  "wcat" = current_standardisedsampleset$.__enclos_env__$private$sample_category,
-                                                                                  "w_fit_t3" = current_standardisedsampleset$.__enclos_env__$private$sample_weigth_set,
-                                                                                  stringsAsFactors = FALSE)
-                                          samw <- rbind(samw, tmp_standardisedsampleset)
-                                          tmp_standardisedsampleset_qt <- data.frame("id_act" = current_standardisedsampleset$.__enclos_env__$private$activity_id,
-                                                                                     "id_sample" = current_standardisedsampleset$.__enclos_env__$private$sample_id,
-                                                                                     "quality" = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
-                                                                                     "type" = current_standardisedsampleset$.__enclos_env__$private$sample_type,
-                                                                                     stringsAsFactors = FALSE)
-                                          sset <- rbind(sset, tmp_standardisedsampleset_qt)
-                                        }
+                                  if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
+                                    capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                                   file = "NUL")
+                                    capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                   file = "NUL")
+                                    if (any(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))) {
+                                      standardisedsampleset_not_na <- which(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))
+                                      capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "list_t3"),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets$add(new_item = lapply(X = standardisedsampleset_not_na,
+                                                                                                          FUN = function(a) {
+                                                                                                            current_wells$extract_l1_element_value(element = "standardisedsampleset")[[a]]
+                                                                                                          })),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets_data <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                     file = "NUL")
+                                      capture.output(current_standardisedsamplesets_data$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
+                                                     file = "NUL")
+                                      tmp_standardisedsampleset <- list(id_act = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "activity_id")),
+                                                                        sp_code = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code")),
+                                                                        sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code3l")),
+                                                                        wcat = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_category")),
+                                                                        w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weigth_set")))
+                                      tmp_standardisedsampleset <- dplyr::bind_rows(tmp_standardisedsampleset)
+                                      samw <- rbind(samw,
+                                                    tmp_standardisedsampleset)
+                                      if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")) != 0) {
+                                        capture.output(current_standardisedsamplesets_data_one_sample <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_data_one_sample$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")),
+                                                       file = "NUL")
+                                        tmp_standardisedsampleset_one_sample_qt <- list(id_act = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "activity_id")),
+                                                                                        id_sample = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_id")),
+                                                                                        quality = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_quality")),
+                                                                                        type = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_type")))
                                       }
-                                      if (! is.null(current_wellplan)) {
-                                        for (o in seq_len(length.out = length(current_wellplan))) {
-                                          current_elementarywellplan <- current_wellplan[[o]]
-                                          tmp_elementarywellplan <- data.frame("id_well" = current_elementarywellplan$.__enclos_env__$private$well_id,
-                                                                               "id_act" = current_elementarywellplan$.__enclos_env__$private$activity_id,
-                                                                               "id_sample" = current_elementarywellplan$.__enclos_env__$private$sample_id,
-                                                                               "sp_code" = current_elementarywellplan$.__enclos_env__$private$specie_code,
-                                                                               "code3l" = current_elementarywellplan$.__enclos_env__$private$specie_code3l,
-                                                                               "weight" = current_elementarywellplan$.__enclos_env__$private$wellplan_weight,
-                                                                               "wcat_well" = current_elementarywellplan$.__enclos_env__$private$wellplan_weigth_category_label,
-                                                                               stringsAsFactors = FALSE)
-                                          wp <- rbind(wp, tmp_elementarywellplan)
-                                        }
+                                      if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")) != 0) {
+                                        capture.output(current_standardisedsamplesets_data_multi_samples <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                       file = "NUL")
+                                        capture.output(current_standardisedsamplesets_data_multi_samples$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")),
+                                                       file = "NUL")
+                                        tmp_standardisedsampleset_multi_samples_qt_final <- lapply(X = seq_len(length.out = current_standardisedsamplesets_data_multi_samples$count()),
+                                                                                                   FUN = function(a) {
+                                                                                                     current_standardisedsampleset <- current_standardisedsamplesets_data_multi_samples$extract(id = a)[[1]]
+                                                                                                     current_number_samples <- length(x = current_standardisedsampleset$.__enclos_env__$private$sample_id)
+                                                                                                     tmp_standardisedsampleset_multi_samples_qt <- list(id_act = rep(x = current_standardisedsampleset$.__enclos_env__$private$activity_id,
+                                                                                                                                                                     current_number_samples),
+                                                                                                                                                        id_sample = current_standardisedsampleset$.__enclos_env__$private$sample_id,
+                                                                                                                                                        quality = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
+                                                                                                                                                                      current_number_samples),
+                                                                                                                                                        type = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_type,
+                                                                                                                                                                   current_number_samples))
+                                                                                                   })
                                       }
+                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble()
+                                      if (exists(x = "tmp_standardisedsampleset_one_sample_qt")) {
+                                        tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
+                                          dplyr::bind_rows(tmp_standardisedsampleset_one_sample_qt)
+                                        rm(tmp_standardisedsampleset_one_sample_qt)
+                                      }
+                                      if (exists(x = "tmp_standardisedsampleset_multi_samples_qt_final")) {
+                                        tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
+                                          dplyr::bind_rows(tmp_standardisedsampleset_multi_samples_qt_final)
+                                        rm(tmp_standardisedsampleset_multi_samples_qt_final)
+                                      }
+                                      tmp_standardisedsampleset_qt <- unique(tmp_standardisedsampleset_qt)
+                                      sset <- rbind(sset,
+                                                    tmp_standardisedsampleset_qt)
+                                    }
+                                    if (length(x = unlist(current_wells$extract_l1_element_value(element = "wellplan"))) != 0) {
+                                      capture.output(current_wellplans <- t3::object_r6(class_name = "elementarywellplans"),
+                                                     file = "NUL")
+                                      capture.output(current_wellplans$add(new_item = unlist(current_wells$extract_l1_element_value(element = "wellplan"))),
+                                                     file = "NUL")
+                                      tmp_elementarywellplan <- list(id_well = unlist(current_wellplans$extract_l1_element_value(element = "well_id")),
+                                                                     id_act = unlist(current_wellplans$extract_l1_element_value(element = "activity_id")),
+                                                                     id_sample = unlist(current_wellplans$extract_l1_element_value(element = "sample_id")),
+                                                                     sp_code = unlist(current_wellplans$extract_l1_element_value(element = "specie_code")),
+                                                                     code3l = unlist(current_wellplans$extract_l1_element_value(element = "specie_code3l")),
+                                                                     weight = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weight")),
+                                                                     wcat_well = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weigth_category_label")))
+                                      tmp_elementarywellplan <- dplyr::bind_rows(tmp_elementarywellplan)
+                                      wp <- rbind(wp,
+                                                  tmp_elementarywellplan)
                                     }
                                   }
                                 }
                               }
                               raw_inputs_level3[[1]] <- act
                               raw_inputs_level3[[2]] <- act3
-                              raw_inputs_level3[[3]] <- data.frame(dplyr::group_by(.data = samw,
-                                                                                   id_act, sp_code, sp, wcat) %>%
-                                                                     dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
-                                                                     dplyr::ungroup())
-                              raw_inputs_level3[[4]] <- unique(sset)
+                              raw_inputs_level3[[3]] <- dplyr::tibble(dplyr::group_by(.data = samw,
+                                                                                      id_act,
+                                                                                      sp_code,
+                                                                                      sp,
+                                                                                      wcat) %>%
+                                                                        dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
+                                                                        dplyr::ungroup())
+                              raw_inputs_level3[[4]] <- sset
                               raw_inputs_level3[[5]] <- wp
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End path creation for level 3.\n",
                                   sep = "")
                               data_level3 <- append(data_level3,

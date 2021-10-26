@@ -39,11 +39,11 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 ### Process 2.2: sample number measured extrapolation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.2.png'/>
 
 ### Process 2.3: sample step length class standardisation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.3.png'/>
 
 ### Process 2.4: well set weight categories
 
@@ -51,11 +51,11 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 ### Process 2.5: standardised sample creation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
 
 ### Process 2.6: sample number standardisation
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.6.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.6.png'/>
 
 ### Process 2.7: raised factors determination
 
@@ -63,4 +63,4 @@ The second level of the t3 process aim to standardize samples data. These standa
 
 ### Process 2.8: samples number standardisation at set scale
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.8.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>

@@ -90,6 +90,10 @@ capture.output(object_full_trips$raised_factors_determination(),
 capture.output(object_full_trips$raised_standardised_sample_set(),
                file = "NUL")
 
+# path to level 3 ----
+capture.output(object_full_trips$path_to_level3(),
+               file = "NUL")
+
 for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
