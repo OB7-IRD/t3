@@ -2957,15 +2957,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        stop()
                                      }
-                                     cat("Be careful! Manual values for BET of LD1 of 55 cm added (related to data in 2018), don't forget to remove it after updating reference table in the database.\n")
-                                     lengthsteps_data_tmp <- data.frame(ocean = 2,
-                                                                        specie_code = 3,
-                                                                        specie_code3l = "BET",
-                                                                        ld1_class = 55,
-                                                                        lf_class = ((55 + 21.45108)^2 / (5.28756^2)),
-                                                                        ratio = 100)
-                                     lengthsteps_data <- rbind(lengthsteps_data_tmp,
-                                                               lengthsteps_data)
                                      private$lengthsteps <- lengthsteps_data
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
