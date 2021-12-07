@@ -168,9 +168,10 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
         # 216 - Checking if process 2.3 ran correctly ----
         testthat::test_that(desc = "216 - Checking if process 2.3 ran correctly",
                             code = {
-                              testthat::expect_true(object = (is.na(current_well$.__enclos_env__$private$elementarysample)
-                                                              || (class(current_well$.__enclos_env__$private$elementarysample) == "list"
-                                                                  & length(current_well$.__enclos_env__$private$elementarysample) == length(current_well$.__enclos_env__$private$elementarysampleraw))),
+                              testthat::expect_true(object = ((paste0(class(x = current_well$.__enclos_env__$private$elementarysample),
+                                                                      collapse = "_") == "elementarysamples_list_t3_R6")
+                                                              || (class(x = current_well$.__enclos_env__$private$elementarysample) == "logical"
+                                                                  && is.na(x = current_well$.__enclos_env__$private$elementarysample))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
                                                                    ", the partial trip ", partial_trip_id,
                                                                    " and the well ", well_id))
@@ -179,9 +180,11 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
         # 218 - Checking if process 2.4 ran correctly ----
         testthat::test_that(desc = "218 - Checking if process 2.4 ran correctly",
                             code = {
-                              testthat::expect_true(object = (all(class(current_wellsets) == c("wellsets", "list_t3", "R6" ))
-                                                              || (class(current_wellsets) == "logical"
-                                                                  && is.na(current_wellsets))),
+                              testthat::expect_true(object = (all(class(x = current_wellsets) == c("wellsets",
+                                                                                                   "list_t3",
+                                                                                                   "R6" ))
+                                                              || (class(x = current_wellsets) == "logical"
+                                                                  && is.na(x = current_wellsets))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
                                                                    ", the partial trip ", partial_trip_id,
                                                                    " and the well ", well_id))
@@ -228,7 +231,9 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
         # 220 - Checking if process 2.5 ran correctly ----
         testthat::test_that(desc = "220 - Checking if process 2.5 ran correctly",
                             code = {
-                              testthat::expect_true(object = (all(class(current_standardisedsample) == c("standardisedsamples", "list_t3", "R6" ))
+                              testthat::expect_true(object = (all(class(current_standardisedsample) == c("standardisedsamples",
+                                                                                                         "list_t3",
+                                                                                                         "R6" ))
                                                               || (class(current_standardisedsample) == "logical"
                                                                   && is.na(current_wellsets))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
@@ -268,10 +273,11 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                          file = "NUL")
           capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
                          file = "NUL")
-          if (class(current_well$.__enclos_env__$private$elementarysample) == "list") {
+          if (paste0(class(x = current_well$.__enclos_env__$private$elementarysample),
+                     collapse = "_") == "elementarysamples_list_t3_R6") {
             capture.output(current_elementarysamples <- t3::object_r6(class_name = "elementarysamples"),
                            file = "NUL")
-            capture.output(current_elementarysamples$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysample)),
+            capture.output(current_elementarysamples$add(new_item = current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data),
                            file = "NUL")
             current_elementarysamplesraw_species <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "specie_code")))
             for (specie in current_elementarysamplesraw_species) {
