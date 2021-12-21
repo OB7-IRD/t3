@@ -1,12 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   level_1: level_1.html
   level_2: level_2.html
   level_3: level_3.html
   model_initialisation: model_initialisation.html
-last_built: 2021-11-23T13:51Z
+last_built: 2021-12-21T11:22Z
 urls:
   reference: https://ob7-ird.github.io/t3/reference
   article: https://ob7-ird.github.io/t3/articles

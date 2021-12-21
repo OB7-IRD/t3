@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://ob7-ird.github.io/t3/404.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/articles/level_1.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/articles/level_2.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/articles/level_3.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/articles/model_initialisation.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/authors.html</loc>
+  </url>
+  <url>
     <loc>https://ob7-ird.github.io/t3/index.html</loc>
+  </url>
+  <url>
+    <loc>https://ob7-ird.github.io/t3/news/index.html</loc>
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/activities.html</loc>
@@ -208,6 +235,9 @@
     <loc>https://ob7-ird.github.io/t3/reference/full_trips.html</loc>
   </url>
   <url>
+    <loc>https://ob7-ird.github.io/t3/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://ob7-ird.github.io/t3/reference/initiate_log_file.html</loc>
   </url>
   <url>
@@ -272,17 +302,5 @@
   </url>
   <url>
     <loc>https://ob7-ird.github.io/t3/reference/wellsets.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_1.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_2.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_3.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/model_initialisation.html</loc>
   </url>
 </urlset>
