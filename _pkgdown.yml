@@ -33,19 +33,25 @@ reference:
   - elementarylanding
   - elementarylandings
   - elementarysample
+  - elementarysamples
   - elementarysampleraw
+  - elementarysamplesraw
   - elementarywellplan
+  - elementarywellplans
   - full_trips
   - list_t3
   - object_model_data
   - samples
   - standardisedsample
+  - standardisedsamples
   - standardisedsampleset
+  - standardisedsamplesets
   - trip
   - trips
   - well
   - wells
   - wellset
+  - wellsets
 - title: "Typing verification"
   desc: >
     Functions for typing verification. Used before class creations for checking attributes consistency.
