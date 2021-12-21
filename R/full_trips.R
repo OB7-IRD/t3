@@ -12,7 +12,7 @@
 #' @importFrom rfUtilities multi.collinear
 #' @importFrom gstat variogram
 full_trips <- R6::R6Class(classname = "full_trips",
-                          inherit = t3:::list_t3,
+                          inherit = list_t3,
                           public = list(
                             # full trips creation ----
                             #' @description Creation of full trip item from trips.
@@ -2412,13 +2412,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               0
                                                                                             }
                                                                                           }))
-                                                    capture.output(current_well_sets$add(new_item = t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                     activity_id = activity_id,
-                                                                                                                     well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                                     sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
-                                                                                                                     weighted_weight = current_weighted_weight,
-                                                                                                                     weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                     weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                                activity_id = activity_id,
+                                                                                                                well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                                sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                                weighted_weight = current_weighted_weight,
+                                                                                                                weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
                                                                    file = "NUL")
                                                   }
                                                 } else {
@@ -2482,13 +2482,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               }
                                                                                             }))
                                                     }
-                                                    capture.output(current_well_sets$add(new_item = t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                     activity_id = current_well_activitie_id,
-                                                                                                                     well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                                     sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
-                                                                                                                     weighted_weight = current_weighted_weight,
-                                                                                                                     weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                     weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                                activity_id = current_well_activitie_id,
+                                                                                                                well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                                sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                                weighted_weight = current_weighted_weight,
+                                                                                                                weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
                                                                    file = "NUL")
                                                   }
                                                 }
@@ -2533,13 +2533,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   capture.output(current_well_sets <- t3::object_r6(class_name = "wellsets"),
                                                                  file = "NUL")
                                                   for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
-                                                    capture.output(current_well_sets$add(new_item = t3:::wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                     activity_id = sample_set_well[sample_set_well_id, "activity_id"],
-                                                                                                                     well_id = sample_set_well[sample_set_well_id, "well_id"],
-                                                                                                                     sample_id = sample_set_well[sample_set_well_id, "sample_id"],
-                                                                                                                     weighted_weight = sample_set_well[sample_set_well_id, "well_set_weighted_weight"],
-                                                                                                                     weighted_weight_minus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                     weighted_weight_plus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                                activity_id = sample_set_well[sample_set_well_id, "activity_id"],
+                                                                                                                well_id = sample_set_well[sample_set_well_id, "well_id"],
+                                                                                                                sample_id = sample_set_well[sample_set_well_id, "sample_id"],
+                                                                                                                weighted_weight = sample_set_well[sample_set_well_id, "well_set_weighted_weight"],
+                                                                                                                weighted_weight_minus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                weighted_weight_plus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
                                                                    file = "NUL")
                                                   }
                                                   current_well$.__enclos_env__$private$wellsets <- current_well_sets
@@ -2681,17 +2681,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     capture.output(current_elementarysamples_sample_quality$add(new_item = current_elementarysamples_sample_type$filter_l1(filter = paste0("$path$sample_quality == ",
                                                                                                                                                                                            current_elementarysamples_sample_quality_id))),
                                                                    file = "NUL")
-                                                    current_standardisedsample <- t3:::standardisedsample$new(trip_id = current_well$.__enclos_env__$private$trip_id,
-                                                                                                              well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                              sample_id = unique(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_id"))),
-                                                                                                              sample_quality = as.integer(current_elementarysamples_sample_quality_id),
-                                                                                                              sample_type = as.integer(current_elementarysamples_sample_type_id),
-                                                                                                              specie_code = as.integer(unlist(strsplit(elementarysamples_species_id, "_"))[1]),
-                                                                                                              specie_code3l = unlist(strsplit(elementarysamples_species_id, "_"))[2],
-                                                                                                              sample_standardised_length_class_lf = as.integer(current_elementarysamples_specie_class_id),
-                                                                                                              sample_number_measured_extrapolated_lf = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
-                                                                                                              sample_total_count = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_total_count"))),
-                                                                                                              elementarysample = current_elementarysamples_sample_quality)
+                                                    current_standardisedsample <- standardisedsample$new(trip_id = current_well$.__enclos_env__$private$trip_id,
+                                                                                                         well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                         sample_id = unique(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_id"))),
+                                                                                                         sample_quality = as.integer(current_elementarysamples_sample_quality_id),
+                                                                                                         sample_type = as.integer(current_elementarysamples_sample_type_id),
+                                                                                                         specie_code = as.integer(unlist(strsplit(elementarysamples_species_id, "_"))[1]),
+                                                                                                         specie_code3l = unlist(strsplit(elementarysamples_species_id, "_"))[2],
+                                                                                                         sample_standardised_length_class_lf = as.integer(current_elementarysamples_specie_class_id),
+                                                                                                         sample_number_measured_extrapolated_lf = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
+                                                                                                         sample_total_count = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_total_count"))),
+                                                                                                         elementarysample = current_elementarysamples_sample_quality)
                                                     capture.output(current_standardisedsamples$add(new_item = current_standardisedsample),
                                                                    file = "NUL")
                                                   }
@@ -2810,7 +2810,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_standardised_sample <- current_standardised_samples$extract(id = standardisedsample_id)[[1]]
                                                 current_length_weight_relationship <- dplyr::filter(.data = length_weight_relationship_data,
                                                                                                     (ocean == current_ocean
-                                                                                                    & specie_code3l == current_standardised_sample$.__enclos_env__$private$specie_code3l))[4:5]
+                                                                                                     & specie_code3l == current_standardised_sample$.__enclos_env__$private$specie_code3l))[4:5]
                                                 if (nrow(current_length_weight_relationship) == 1) {
                                                   coef_a <- current_length_weight_relationship[1, 1]
                                                   coef_b <- current_length_weight_relationship[1, 2]
@@ -2842,22 +2842,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       "]\n",
                                                       sep = "")
                                                 }
-                                                current_standardised_samples_sets <- t3:::standardisedsampleset$new(trip_id = current_well_set$.__enclos_env__$private$trip_id,
-                                                                                                                    activity_id = current_well_set$.__enclos_env__$private$activity_id,
-                                                                                                                    well_id = current_well_set$.__enclos_env__$private$well_id,
-                                                                                                                    sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
-                                                                                                                    sample_quality = current_standardised_sample$.__enclos_env__$private$sample_quality,
-                                                                                                                    sample_type = current_standardised_sample$.__enclos_env__$private$sample_type,
-                                                                                                                    specie_code = current_standardised_sample$.__enclos_env__$private$specie_code,
-                                                                                                                    specie_code3l = current_standardised_sample$.__enclos_env__$private$specie_code3l,
-                                                                                                                    sample_standardised_length_class_lf = current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf,
-                                                                                                                    sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
-                                                                                                                    sample_weigth = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
-                                                                                                                    sample_weight_unit = lwr,
-                                                                                                                    sample_category = ifelse(lwr <= 10,
-                                                                                                                                             "- 10kg",
-                                                                                                                                             "+ 10kg"),
-                                                                                                                    standardisedsample = current_standardised_sample)
+                                                current_standardised_samples_sets <- standardisedsampleset$new(trip_id = current_well_set$.__enclos_env__$private$trip_id,
+                                                                                                               activity_id = current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                               well_id = current_well_set$.__enclos_env__$private$well_id,
+                                                                                                               sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
+                                                                                                               sample_quality = current_standardised_sample$.__enclos_env__$private$sample_quality,
+                                                                                                               sample_type = current_standardised_sample$.__enclos_env__$private$sample_type,
+                                                                                                               specie_code = current_standardised_sample$.__enclos_env__$private$specie_code,
+                                                                                                               specie_code3l = current_standardised_sample$.__enclos_env__$private$specie_code3l,
+                                                                                                               sample_standardised_length_class_lf = current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf,
+                                                                                                               sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
+                                                                                                               sample_weigth = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
+                                                                                                               sample_weight_unit = lwr,
+                                                                                                               sample_category = ifelse(lwr <= 10,
+                                                                                                                                        "- 10kg",
+                                                                                                                                        "+ 10kg"),
+                                                                                                               standardisedsample = current_standardised_sample)
                                                 capture.output(standardised_samples_sets$add(new_item = current_standardised_samples_sets),
                                                                file = "NUL")
                                               }
@@ -3219,7 +3219,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_standardised_samples_sets$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
                                                                                                                           current_rf_total))
                                                   current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
-                                                } else if (current_well_sets$.__enclos_env__$private$rf_validation == 5) {
+                                                } else if (current_well_set$.__enclos_env__$private$rf_validation == 5) {
                                                   current_rf_minus10 <- current_well_set$.__enclos_env__$private$rf_minus10
                                                   current_rf_plus10 <- current_well_set$.__enclos_env__$private$rf_plus10
                                                   capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
@@ -3233,7 +3233,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
                                                                  file = "NUL")
                                                   current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
-                                                                                                                                  current_rf_plus10))
+                                                                                                                                 current_rf_plus10))
                                                   current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                                 } else {
                                                   cat(format(Sys.time(),
@@ -3313,7 +3313,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          lat = unlist(current_activities$extract_l1_element_value(element = "activity_latitude")),
                                                          lon = unlist(current_activities$extract_l1_element_value(element = "activity_longitude")),
                                                          fmod = unlist(current_activities$extract_l1_element_value(element = "school_type")),
-                                                         date_act = unlist(current_activities$extract_l1_element_value(element = "activity_date")),
+                                                         date_act = do.call("c", current_activities$extract_l1_element_value(element = "activity_date")),
                                                          vessel = rep(x = current_trip$.__enclos_env__$private$vessel_id,
                                                                       current_activities$count()),
                                                          id_trip = unlist(current_activities$extract_l1_element_value(element = "trip_id")),
@@ -3459,9 +3459,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               data_level3 <- append(data_level3,
                                                     list(raw_inputs_level3))
                               names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              return(data_level3)
                             },
                             # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
@@ -3492,42 +3490,52 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Error: invalid \"outputs_directory\" argument, class character expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(target_year) != "integer" || length(target_year) != 1 || nchar(target_year) != 4) {
+                              } else if (class(target_year) != "integer"
+                                         || length(target_year) != 1
+                                         || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(period_duration) != "integer" || length(period_duration) != 1 || period_duration > 99) {
+                              } else if (class(period_duration) != "integer"
+                                         || length(period_duration) != 1
+                                         || period_duration > 99) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"period_duration\" argument, one value of class integer expected with  maximum value 99.\n",
                                     sep = "")
                                 stop()
-                              } else if (!is.null(periode_reference) && class(periode_reference) != "integer") {
+                              } else if (!is.null(periode_reference)
+                                         && class(periode_reference) != "integer") {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(distance_maximum) != "integer" || length(distance_maximum) != 1) {
+                              } else if (class(distance_maximum) != "integer"
+                                         || length(distance_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"distance_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(number_sets_maximum) != "integer" || length(number_sets_maximum) != 1) {
+                              } else if (class(number_sets_maximum) != "integer"
+                                         || length(number_sets_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"number_sets_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(set_weight_minimum) != "integer" || length(set_weight_minimum) != 1) {
+                              } else if (class(set_weight_minimum) != "integer"
+                                         || length(set_weight_minimum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"set_weight_minimum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(minimum_set_frequency) != "numeric" || length(minimum_set_frequency) != 1) {
+                              } else if (class(minimum_set_frequency) != "numeric"
+                                         || length(minimum_set_frequency) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"minimum_set_frequency\" argument, one value of class numeric expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (! class(vessel_id_ignored) %in% c("NULL", "integer")) {
+                              } else if (! class(vessel_id_ignored) %in% c("NULL",
+                                                                           "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"vessel_id_ignored\" argument, class NULL of value(s) of class integer expected.\n",
                                     sep = "")
@@ -3536,10 +3544,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Start process 3.1: data preparatory.\n",
                                     sep = "")
-                                outputs_directory_name <- format(Sys.time(), "%Y%m%d_%H%M%S_t3_level3_outputs")
+                                outputs_directory_name <- format(Sys.time(),
+                                                                 "%Y%m%d_%H%M%S_t3_level3_outputs")
                                 dir.create(path = file.path(outputs_directory,
                                                             outputs_directory_name))
-                                for (directory in c("data", "figures", "tables", "functions", "outputs")) {
+                                for (directory in c("data",
+                                                    "figures",
+                                                    "tables",
+                                                    "functions",
+                                                    "outputs")) {
                                   dir.create(path = file.path(outputs_directory,
                                                               outputs_directory_name,
                                                               directory))
@@ -3548,7 +3561,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   periode_reference <- seq.int(from = target_year,
                                                                to = target_year - period_duration)
                                 }
-                                if (!is.null(inputs_level3_path)) {
+                                if (! is.null(inputs_level3_path)) {
                                   # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
                                   file_available <- list.files(path = inputs_level3_path,
                                                                pattern = "inputs_level3_")
@@ -3808,7 +3821,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              key = "sp_cat",
                                                              value = "prop_lb",
                                                              -"code_act_type")
-                                lb_set_long <- dplyr::left_join(lb_set_long, catch_set_lb)
+                                lb_set_long <- dplyr::left_join(lb_set_long,
+                                                                catch_set_lb,
+                                                                by = c("id_act",
+                                                                       "date_act",
+                                                                       "code_act_type",
+                                                                       "year",
+                                                                       "mon",
+                                                                       "wtot_lb_t3",
+                                                                       "sp_cat"))
                                 lb_set_long$w_lb_t3[is.na(lb_set_long$w_lb_t3)] <- 0
                                 data <- dplyr::inner_join(x = lb_set_long,
                                                           y = samp_t3,
@@ -3829,28 +3850,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 data_selected = data_selected,
                                                                 data_sample_extract = data_sample_extract,
                                                                 data_lb_sample_screened = data_lb_sample_screened)
-                                if (exists(x = "data_level3",
-                                           envir = .GlobalEnv)) {
-                                  data_level3 <- get(x = "data_level3",
-                                                     envir = .GlobalEnv)
-                                  data_level3 <- append(data_level3,
-                                                        c(file.path(outputs_directory,
-                                                                    outputs_directory_name),
-                                                          list(outputs_level3_process1)))
-                                  names(data_level3)[length(data_level3) - 1] <- "outputs_directory"
-                                  names(data_level3)[length(data_level3)] <- "outputs_level3_process1"
-                                } else {
-                                  data_level3 <- list("raw_inputs_level3" = inputs_level3,
-                                                      'outputs_directory' = file.path(outputs_directory,
-                                                                                      outputs_directory_name),
-                                                      "outputs_level3_process1" = outputs_level3_process1)
-                                }
-                                assign(x = "data_level3",
-                                       value = data_level3,
-                                       envir = .GlobalEnv)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End process 3.1: data preparatory.\n",
                                     sep = "")
+                                return(list("raw_inputs_level3" = inputs_level3,
+                                            'outputs_directory' = file.path(outputs_directory,
+                                                                            outputs_directory_name),
+                                            "outputs_level3_process1" = outputs_level3_process1))
                               }
                             },
                             # process 3.2: random forest models ----
@@ -4277,73 +4283,73 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 # map of the data used for modelling
                                 if(plot_sample == T){
-                                current_data_map <- current_model_data
-                                sp::coordinates(obj = current_data_map) <- ~ lon + lat
-                                ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
-                                                              grid = 500)
-                                ker2 <- adehabitatHR::getvolumeUD(x = ker)
-                                grid <- as(object = ker2,
-                                           Class = "SpatialPixelsDataFrame")
-                                newgrid <- grid
-                                sp::fullgrid(obj = newgrid) <- FALSE
-                                sp::gridded(obj = newgrid) <- FALSE
-                                newgrid[newgrid$n > 99] <- NA
-                                newgrid <- newgrid[ !is.na(newgrid$n), ]
-                                krig <- automap::autoKrige(formula = resp ~ 1,
-                                                           input_data = current_data_map,
-                                                           new_data = newgrid)
-                                interp_data <- as.data.frame(krig$krige_output)
-                                colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
-                                # correct for abnormal fitted value with kriging
-                                interp_data$fit[interp_data$fit > 1] <- 1
-                                wrld_sf <- data("wrld_simpl",
-                                                package = "maptools")
-                                wrld_sf <- sf::st_as_sf(wrld_simpl)
-                                set_sampled_map <- ggplot2::ggplot() +
-                                  ggplot2::geom_tile(data = interp_data,
-                                                     ggplot2::aes(x = lon,
-                                                                  y = lat,
-                                                                  fill = fit),
-                                                     color = NA) +
-                                  ggplot2::scale_fill_gradient2(low = "blue",
-                                                                mid = "white",
-                                                                high = "red",
-                                                                midpoint = mean(interp_data$fit),
-                                                                name = "Proportion") +
-                                  ggplot2::geom_point(data = current_model_data,
-                                                      ggplot2::aes(x = lon,
-                                                                   y = lat),
-                                                      color = "black",
-                                                      size = 0.3) +
-                                  ggplot2::geom_sf(data = wrld_sf) +
-                                  ggplot2::coord_sf(xlim = c(min(interp_data$lon),
-                                                             max(interp_data$lon)),
-                                                    ylim = c(min(interp_data$lat),
-                                                             max(interp_data$lat))) +
-                                  ggplot2::labs(x = NULL,
-                                                y = NULL,
-                                                subtitle = paste(specie,
-                                                                 ocean,
-                                                                 fishing_mode,
-                                                                 period,
-                                                                 sep = "_")) +
-                                  ggplot2::theme_classic()
-                                ggplot2::ggsave(plot = set_sampled_map,
-                                                file = file.path(figures_directory,
-                                                                 paste("set_sampled_map_",
-                                                                       ocean,
-                                                                       "_",
-                                                                       specie,
-                                                                       "_",
-                                                                       fishing_mode,
-                                                                       ".jpeg",
-                                                                       sep = "")),
-                                                width = 18,
-                                                height = 10,
-                                                units = c("cm"),
-                                                pointsize = 10)
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("set_sampled_map" = set_sampled_map))
+                                  current_data_map <- current_model_data
+                                  sp::coordinates(obj = current_data_map) <- ~ lon + lat
+                                  ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
+                                                                grid = 500)
+                                  ker2 <- adehabitatHR::getvolumeUD(x = ker)
+                                  grid <- as(object = ker2,
+                                             Class = "SpatialPixelsDataFrame")
+                                  newgrid <- grid
+                                  sp::fullgrid(obj = newgrid) <- FALSE
+                                  sp::gridded(obj = newgrid) <- FALSE
+                                  newgrid[newgrid$n > 99] <- NA
+                                  newgrid <- newgrid[ !is.na(newgrid$n), ]
+                                  krig <- automap::autoKrige(formula = resp ~ 1,
+                                                             input_data = current_data_map,
+                                                             new_data = newgrid)
+                                  interp_data <- as.data.frame(krig$krige_output)
+                                  colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
+                                  # correct for abnormal fitted value with kriging
+                                  interp_data$fit[interp_data$fit > 1] <- 1
+                                  load(file = system.file("wrld_simpl.RData",
+                                                          package = "t3"))
+                                  wrld_sf <- sf::st_as_sf(wrld_simpl)
+                                  set_sampled_map <- ggplot2::ggplot() +
+                                    ggplot2::geom_tile(data = interp_data,
+                                                       ggplot2::aes(x = lon,
+                                                                    y = lat,
+                                                                    fill = fit),
+                                                       color = NA) +
+                                    ggplot2::scale_fill_gradient2(low = "blue",
+                                                                  mid = "white",
+                                                                  high = "red",
+                                                                  midpoint = mean(interp_data$fit),
+                                                                  name = "Proportion") +
+                                    ggplot2::geom_point(data = current_model_data,
+                                                        ggplot2::aes(x = lon,
+                                                                     y = lat),
+                                                        color = "black",
+                                                        size = 0.3) +
+                                    ggplot2::geom_sf(data = wrld_sf) +
+                                    ggplot2::coord_sf(xlim = c(min(interp_data$lon),
+                                                               max(interp_data$lon)),
+                                                      ylim = c(min(interp_data$lat),
+                                                               max(interp_data$lat))) +
+                                    ggplot2::labs(x = NULL,
+                                                  y = NULL,
+                                                  subtitle = paste(specie,
+                                                                   ocean,
+                                                                   fishing_mode,
+                                                                   period,
+                                                                   sep = "_")) +
+                                    ggplot2::theme_classic()
+                                  ggplot2::ggsave(plot = set_sampled_map,
+                                                  file = file.path(figures_directory,
+                                                                   paste("set_sampled_map_",
+                                                                         ocean,
+                                                                         "_",
+                                                                         specie,
+                                                                         "_",
+                                                                         fishing_mode,
+                                                                         ".jpeg",
+                                                                         sep = "")),
+                                                  width = 18,
+                                                  height = 10,
+                                                  units = c("cm"),
+                                                  pointsize = 10)
+                                  current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                                 list("set_sampled_map" = set_sampled_map))
                                 }
                                 # model checking
                                 # compute model residuals
@@ -4395,143 +4401,143 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                list("variables_importance" = variables_importance))
                                 # test for spatial and temporal correlation on residuals
                                 if(avdth_patch_coord == T){
-                                current_model_data_map <- current_model_data
-                                sp::coordinates(current_model_data_map) <- ~ lon+lat
-                                sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
-                                current_model_data_map <- sp::spTransform(current_model_data_map,
-                                                                          sp::CRS("+init=epsg:3395"))
-                                # variogram
-                                variogram_resp_data <- gstat::variogram(object = resp ~ 1,
-                                                                        data = current_model_data_map,
-                                                                        cutoff = 4000000,
-                                                                        width = 100000)
-                                variogram_resp_data$label <- "Observed data"
-                                variogram_res_data <- gstat::variogram(object = res ~ 1,
-                                                                       data = current_model_data_map,
-                                                                       cutoff = 4000000,
-                                                                       width = 100000)
-                                variogram_res_data$label <- "Residuals"
-                                variogram_data <- dplyr::bind_rows(variogram_resp_data,
-                                                                   variogram_res_data)
-                                variogram <- ggplot2::ggplot(data = variogram_data,
-                                                             ggplot2::aes(x = dist,
-                                                                          y = gamma,
-                                                                          group = label,
-                                                                          color = label)) +
-                                  ggplot2::scale_color_manual(values = c("black", "red")) +
-                                  ggplot2::geom_line() +
-                                  ggplot2::theme(legend.position = c(0,1),
-                                                 legend.justification = c(0,1),
-                                                 legend.direction="horizontal",
-                                                 legend.title = ggplot2::element_blank()) +
-                                  ggplot2::xlab("Distance (m)") +
-                                  ggplot2::ylab("Semivariance")
-
-
-                                # moran index on residual
-                                mil <- vector("list",
-                                              length = 10)
-                                mil2 <- vector("list",
-                                               length = 10)
-                                for (c in seq_len(10)){
-                                  nb <- spdep::dnearneigh(as.matrix(current_model_data[, c("lon", "lat")]),
-                                                          d1 = 0,
-                                                          d2 = c * 100,
-                                                          longlat = TRUE)
-                                  listw <- spdep::nb2listw(neighbours = nb,
-                                                           zero.policy = TRUE)
-                                  mil[[c]] <- spdep::moran.mc(x = current_model_data$res,
-                                                              listw = listw,
-                                                              zero.policy = TRUE,
-                                                              nsim = 999,
-                                                              alternative = "greater")
-                                  mil2[[c]] <- spdep::moran.test(x = current_model_data$res,
-                                                                 listw = listw,
-                                                                 zero.policy = TRUE,
-                                                                 alternative = "two.sided")
-                                }
-                                moran_residual_test <- data.frame(dist = 1:10,
-                                                                  estimate = unlist(lapply(mil2,
-                                                                                           function(d) {
-                                                                                             d$estimate[1]
-                                                                                           })))
-                                moran_residual_test$var <- unlist(lapply(mil2,
-                                                                         function(e) {
-                                                                           e$estimate[3]
-                                                                         }))
-                                moran_residual_test$pvaltest <- unlist(lapply(mil2,
-                                                                              function(f) {
-                                                                                f$p.value
-                                                                              }))
-                                moran_residual_test$pvalmc <- unlist(lapply(mil,
-                                                                            function(g) {
-                                                                              g$p.value
-                                                                            }))
-                                write.csv2(x = moran_residual_test,
-                                           file = file.path(tables_directory,
-                                                            paste("moran_residual_test_",
-                                                                  ocean,
-                                                                  "_",
-                                                                  specie,
-                                                                  "_",
-                                                                  fishing_mode,
-                                                                  ".csv",
-                                                                  sep = "")),
-                                           row.names = FALSE)
-                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
-                                                                               list("moran_residual_test" = moran_residual_test))
-
-                                correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
-                                                                        lag_max = 300)
-                                correlogram_resp_acf <- correlogram_resp[[1]] +
-                                  ggplot2::ggtitle(paste0(correlogram_resp[[1]][["labels"]][["title"]],
-                                                          " (observed data)"))
-                                moran_index <- ggplot2::ggplot(data = moran_residual_test,
+                                  current_model_data_map <- current_model_data
+                                  sp::coordinates(current_model_data_map) <- ~ lon+lat
+                                  sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
+                                  current_model_data_map <- sp::spTransform(current_model_data_map,
+                                                                            sp::CRS("+init=epsg:3395"))
+                                  # variogram
+                                  variogram_resp_data <- gstat::variogram(object = resp ~ 1,
+                                                                          data = current_model_data_map,
+                                                                          cutoff = 4000000,
+                                                                          width = 100000)
+                                  variogram_resp_data$label <- "Observed data"
+                                  variogram_res_data <- gstat::variogram(object = res ~ 1,
+                                                                         data = current_model_data_map,
+                                                                         cutoff = 4000000,
+                                                                         width = 100000)
+                                  variogram_res_data$label <- "Residuals"
+                                  variogram_data <- dplyr::bind_rows(variogram_resp_data,
+                                                                     variogram_res_data)
+                                  variogram <- ggplot2::ggplot(data = variogram_data,
                                                                ggplot2::aes(x = dist,
-                                                                            y = estimate)) +
-                                  ggplot2::geom_line() +
-                                  ggplot2::geom_point() +
-                                  ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                  y = estimate + sqrt(var)),
-                                                     color = "lightskyblue") +
-                                  ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                  y = estimate - sqrt(var)),
-                                                     color = "lightskyblue") +
-                                  ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                  y = 0),
-                                                     color = "red",
-                                                     linetype = 2) +
-                                  ggplot2::ylim(-0.3, 0.4) +
-                                  ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
-                                  ggplot2::xlab("Distance (10^2 km)") +
-                                  ggplot2::ylab("Moran index")
-                                correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
-                                                                       lag_max = 300)
-                                correlogram_res_acf <- correlogram_res[[1]] +
-                                  ggplot2::ggtitle(paste0(correlogram_res[[1]][["labels"]][["title"]],
-                                                          " (residuals)"))
-                                spatio_temporal_checking <- ggpubr::ggarrange(variogram,
-                                                                              correlogram_resp_acf,
-                                                                              moran_index,
-                                                                              correlogram_res_acf,
-                                                                              nrow = 2,
-                                                                              ncol = 2)
-                                ggplot2::ggsave(plot = spatio_temporal_checking,
-                                                file = file.path(figures_directory,
-                                                                 paste("spatio_temporal_checking_",
-                                                                       ocean,
-                                                                       "_",
-                                                                       specie,
-                                                                       "_",
-                                                                       fishing_mode,
-                                                                       ".jpeg",
-                                                                       sep = "")),
-                                                width = 30,
-                                                height = 20,
-                                                units = c("cm"),
-                                                dpi = 300)
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("spatio_temporal_checking" = spatio_temporal_checking))
+                                                                            y = gamma,
+                                                                            group = label,
+                                                                            color = label)) +
+                                    ggplot2::scale_color_manual(values = c("black", "red")) +
+                                    ggplot2::geom_line() +
+                                    ggplot2::theme(legend.position = c(0,1),
+                                                   legend.justification = c(0,1),
+                                                   legend.direction="horizontal",
+                                                   legend.title = ggplot2::element_blank()) +
+                                    ggplot2::xlab("Distance (m)") +
+                                    ggplot2::ylab("Semivariance")
+
+
+                                  # moran index on residual
+                                  mil <- vector("list",
+                                                length = 10)
+                                  mil2 <- vector("list",
+                                                 length = 10)
+                                  for (c in seq_len(10)){
+                                    nb <- spdep::dnearneigh(as.matrix(current_model_data[, c("lon", "lat")]),
+                                                            d1 = 0,
+                                                            d2 = c * 100,
+                                                            longlat = TRUE)
+                                    listw <- spdep::nb2listw(neighbours = nb,
+                                                             zero.policy = TRUE)
+                                    mil[[c]] <- spdep::moran.mc(x = current_model_data$res,
+                                                                listw = listw,
+                                                                zero.policy = TRUE,
+                                                                nsim = 999,
+                                                                alternative = "greater")
+                                    mil2[[c]] <- spdep::moran.test(x = current_model_data$res,
+                                                                   listw = listw,
+                                                                   zero.policy = TRUE,
+                                                                   alternative = "two.sided")
+                                  }
+                                  moran_residual_test <- data.frame(dist = 1:10,
+                                                                    estimate = unlist(lapply(mil2,
+                                                                                             function(d) {
+                                                                                               d$estimate[1]
+                                                                                             })))
+                                  moran_residual_test$var <- unlist(lapply(mil2,
+                                                                           function(e) {
+                                                                             e$estimate[3]
+                                                                           }))
+                                  moran_residual_test$pvaltest <- unlist(lapply(mil2,
+                                                                                function(f) {
+                                                                                  f$p.value
+                                                                                }))
+                                  moran_residual_test$pvalmc <- unlist(lapply(mil,
+                                                                              function(g) {
+                                                                                g$p.value
+                                                                              }))
+                                  write.csv2(x = moran_residual_test,
+                                             file = file.path(tables_directory,
+                                                              paste("moran_residual_test_",
+                                                                    ocean,
+                                                                    "_",
+                                                                    specie,
+                                                                    "_",
+                                                                    fishing_mode,
+                                                                    ".csv",
+                                                                    sep = "")),
+                                             row.names = FALSE)
+                                  current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
+                                                                                 list("moran_residual_test" = moran_residual_test))
+
+                                  correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
+                                                                          lag_max = 300)
+                                  correlogram_resp_acf <- correlogram_resp[[1]] +
+                                    ggplot2::ggtitle(paste0(correlogram_resp[[1]][["labels"]][["title"]],
+                                                            " (observed data)"))
+                                  moran_index <- ggplot2::ggplot(data = moran_residual_test,
+                                                                 ggplot2::aes(x = dist,
+                                                                              y = estimate)) +
+                                    ggplot2::geom_line() +
+                                    ggplot2::geom_point() +
+                                    ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                    y = estimate + sqrt(var)),
+                                                       color = "lightskyblue") +
+                                    ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                    y = estimate - sqrt(var)),
+                                                       color = "lightskyblue") +
+                                    ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                    y = 0),
+                                                       color = "red",
+                                                       linetype = 2) +
+                                    ggplot2::ylim(-0.3, 0.4) +
+                                    ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
+                                    ggplot2::xlab("Distance (10^2 km)") +
+                                    ggplot2::ylab("Moran index")
+                                  correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
+                                                                         lag_max = 300)
+                                  correlogram_res_acf <- correlogram_res[[1]] +
+                                    ggplot2::ggtitle(paste0(correlogram_res[[1]][["labels"]][["title"]],
+                                                            " (residuals)"))
+                                  spatio_temporal_checking <- ggpubr::ggarrange(variogram,
+                                                                                correlogram_resp_acf,
+                                                                                moran_index,
+                                                                                correlogram_res_acf,
+                                                                                nrow = 2,
+                                                                                ncol = 2)
+                                  ggplot2::ggsave(plot = spatio_temporal_checking,
+                                                  file = file.path(figures_directory,
+                                                                   paste("spatio_temporal_checking_",
+                                                                         ocean,
+                                                                         "_",
+                                                                         specie,
+                                                                         "_",
+                                                                         fishing_mode,
+                                                                         ".jpeg",
+                                                                         sep = "")),
+                                                  width = 30,
+                                                  height = 20,
+                                                  units = c("cm"),
+                                                  dpi = 300)
+                                  current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
+                                                                                 list("spatio_temporal_checking" = spatio_temporal_checking))
                                 }
                                 # model validity
                                 model_validation_density_res <- ggplot2::ggplot(current_model_data,
@@ -4822,7 +4828,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sets$sp <- NULL
                               sets$wcat <- NULL
 
-                               # calculate proportion of weight from t3 level 1
+                              # calculate proportion of weight from t3 level 1
                               sets_wide <- tidyr::spread(data = sets,
                                                          key = sp_cat,
                                                          value = w_lb_t3,
@@ -4836,13 +4842,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sets_wide_tmp <- sets_wide
                               sets_wide_tmp[, names(sets_wide_tmp) %in% colnames(tmp)] <- tmp
                               sets_long <- tidyr::gather(data = sets_wide_tmp,
-                                                       key = "sp_cat",
-                                                       value = "prop_lb",
-                                                       "BET_m10",
-                                                       "BET_p10",
-                                                       "SKJ_m10",
-                                                       "YFT_m10",
-                                                       "YFT_p10")
+                                                         key = "sp_cat",
+                                                         value = "prop_lb",
+                                                         "BET_m10",
+                                                         "BET_p10",
+                                                         "SKJ_m10",
+                                                         "YFT_m10",
+                                                         "YFT_p10")
                               # Assign fishing mode to unknown
                               sets_wide$fmod <- factor(sets_wide$fmod)
                               sets_long$fmod <- factor(sets_long$fmod)
@@ -4871,21 +4877,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sets_long <- droplevels(tmp)
                               }
                               sets_long <- tidyr::separate(data = sets_long,
-                                                          col = sp_cat,
-                                                          into = c("sp","wcat"),
-                                                          sep = "_")
+                                                           col = sp_cat,
+                                                           into = c("sp","wcat"),
+                                                           sep = "_")
                               # filter data for small fish catch estimation only
-                                if(small_fish_only == F){
-                                  sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
-                                    dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                    ungroup()
+                              if(small_fish_only == F){
+                                sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::summarise(prop_lb = sum(prop_lb)) %>%
+                                  ungroup()
 
-                                } else {
-                                  sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
-                                    dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
-                                    dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                    ungroup()
-                                }
+                              } else {
+                                sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
+                                  dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::summarise(prop_lb = sum(prop_lb)) %>%
+                                  ungroup()
+                              }
                               # test unitaire total catch equal
                               # sets_long %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               #   dplyr::summarise(tot = sum(wtot_lb_t3))
@@ -4943,8 +4949,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
-                              wrld_sf <- data("wrld_simpl",
-                                              package = "maptools")
+                              load(file = system.file("wrld_simpl.RData",
+                                                      package = "t3"))
                               # function to add empty levels for the prediction with randomforest::predict.randomforest
                               addmissinglevel <- function(df, a){
                                 if (is.factor(df[, a])) {
@@ -5012,11 +5018,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                           species,
                                                                                                           fishing_mode,
                                                                                                           sep = "_")]]
-                                        res <- t3:::tunapredict(sample_data = current_outputs_level3_process2[[1]],
-                                                                allset_data = sets_long_fishing_mode,
-                                                                Ntree = 1000,
-                                                                Nmtry = 2,
-                                                                Nseed = 7)
+                                        res <- tunapredict(sample_data = current_outputs_level3_process2[[1]],
+                                                           allset_data = sets_long_fishing_mode,
+                                                           Ntree = 1000,
+                                                           Nmtry = 2,
+                                                           Nseed = 7)
 
                                         outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
                                                                                list(res))
@@ -5046,21 +5052,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
                                 boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
-                                                                  key = "sp",
-                                                                  value = fit_prop)
+                                                                       key = "sp",
+                                                                       value = fit_prop)
                                 boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
                                 boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                     yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
-                                                                     no = boot_tmp_element_wide$SKJ)
+                                                                          yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$SKJ)
                                 boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                     yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
-                                                                     no = boot_tmp_element_wide$YFT)
+                                                                          yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$YFT)
                                 boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
 
                                 boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
-                                                                  key = "sp",
-                                                                  value = "fit_prop_t3_ST",
-                                                                  "BET", "SKJ", "YFT")
+                                                                       key = "sp",
+                                                                       value = "fit_prop_t3_ST",
+                                                                       "BET", "SKJ", "YFT")
                                 boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
@@ -5186,26 +5192,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )){
-                              set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
-                                set_all_boot_tmp <- dplyr::bind_rows(x)
-                                set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp)/Nboot)
-                                return(set_all_boot_tmp)
-                              })
-                              # compute final CI
-                              set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
-                              names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
+                                set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
+                                  set_all_boot_tmp <- dplyr::bind_rows(x)
+                                  set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp)/Nboot)
+                                  return(set_all_boot_tmp)
+                                })
+                                # compute final CI
+                                set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
+                                names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
 
-                              for (o in names(outputs_level3_process5$Estimated_catch_ST)){
-                                set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
-                                                                                                boot_data = set_all_boot[[o]])
-                              }
+                                for (o in names(outputs_level3_process5$Estimated_catch_ST)){
+                                  set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
+                                                                                       boot_data = set_all_boot[[o]])
+                                }
 
-                              set_all_final_ocean <- do.call(rbind, set_all_final_ocean_list)
-                              set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
-                                                                                    "ci_inf",
-                                                                                    "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                        digits = 2)
-                              set_all <- set_all_final_ocean
+                                set_all_final_ocean <- do.call(rbind, set_all_final_ocean_list)
+                                set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
+                                                                                        "ci_inf",
+                                                                                        "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                            digits = 2)
+                                set_all <- set_all_final_ocean
                               }
                               write.csv2(x = set_all,
                                          file = file.path(tables_directory,
@@ -5235,33 +5241,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # compute final CI
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1")) > 0 )){
                                 t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                  function(x){
-                                                                    boot_tmp_element <-do.call(rbind,
-                                                                                               lapply(seq.int(1:length(x)),
-                                                                                                      function(i){
-                                                                                                        boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
-                                                                                                                                         data=x[[i]], sum)
-                                                                                                        boot_tmp_subelement$loop <- i
-                                                                                                        return(boot_tmp_subelement)
-                                                                                                      }))
-                                                                    return(boot_tmp_element)
-                                                                  }))
-                              t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
+                                                                    function(x){
+                                                                      boot_tmp_element <-do.call(rbind,
+                                                                                                 lapply(seq.int(1:length(x)),
+                                                                                                        function(i){
+                                                                                                          boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
+                                                                                                                                           data=x[[i]], sum)
+                                                                                                          boot_tmp_subelement$loop <- i
+                                                                                                          return(boot_tmp_subelement)
+                                                                                                        }))
+                                                                      return(boot_tmp_element)
+                                                                    }))
+                                t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
 
-                              for (o in levels(t1_all$ocean)){
-                                t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
-                                                                                                boot_data = t1_all_boot[t1_all_boot$ocean == o,])
-                              }
+                                for (o in levels(t1_all$ocean)){
+                                  t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
+                                                                                                  boot_data = t1_all_boot[t1_all_boot$ocean == o,])
+                                }
 
-                              t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
-                              t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
-                                                                                    "ci_inf",
-                                                                                    "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                        digits = 2)
-                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                     list(t1_all_final_ocean))
-                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
-                              t1_all <- t1_all_final_ocean
+                                t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
+                                t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
+                                                                                      "ci_inf",
+                                                                                      "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                          digits = 2)
+                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                       list(t1_all_final_ocean))
+                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
+                                t1_all <- t1_all_final_ocean
                               }
                               write.csv2(x = t1_all,
                                          file = file.path(tables_directory,
@@ -5289,36 +5295,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1-fmod")) > 0 )){
                                 t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                   FUN = function(x){
-                                                                     boot_tmp_element <-do.call(rbind,
-                                                                                                lapply(seq.int(1:length(x)),
-                                                                                                       function(i){
-                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
-                                                                                                                                          data=x[[i]],
-                                                                                                                                          FUN = sum)
-                                                                                                         boot_tmp_subelement$loop <- i
-                                                                                                         return(boot_tmp_subelement)
-                                                                                                       }))
-                                                                     return(boot_tmp_element)
-                                                                   }))
-                              # compute final CI
-                              t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
+                                                                     FUN = function(x){
+                                                                       boot_tmp_element <-do.call(rbind,
+                                                                                                  lapply(seq.int(1:length(x)),
+                                                                                                         function(i){
+                                                                                                           boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
+                                                                                                                                            data=x[[i]],
+                                                                                                                                            FUN = sum)
+                                                                                                           boot_tmp_subelement$loop <- i
+                                                                                                           return(boot_tmp_subelement)
+                                                                                                         }))
+                                                                       return(boot_tmp_element)
+                                                                     }))
+                                # compute final CI
+                                t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
 
-                              for (o in levels(t1_fmod$ocean)){
-                                t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
-                                                                                                 boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
-                              }
+                                for (o in levels(t1_fmod$ocean)){
+                                  t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
+                                                                                                   boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
+                                }
 
-                              t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
+                                t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
 
-                              t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
-                                                                                      "ci_inf",
-                                                                                      "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
-                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                     list(t1_fmod_final_ocean))
-                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
-                              t1_fmod <- t1_fmod_final_ocean
+                                t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
+                                                                                        "ci_inf",
+                                                                                        "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                            digits = 2)
+                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                       list(t1_fmod_final_ocean))
+                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
+                                t1_fmod <- t1_fmod_final_ocean
                               }
                               write.csv2(x = t1_fmod,
                                          file = file.path(tables_directory,
@@ -5376,34 +5382,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2")) > 0 )){
                                 t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                   FUN = function(x){
-                                                                     boot_tmp_element <-do.call(rbind,
-                                                                                                lapply(seq.int(1:length(x)),
-                                                                                                       function(i){
-                                                                                                         x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
-                                                                                                                                  lon = x[[i]]$lon,
-                                                                                                                                  base = 1)
-                                                                                                         boot_tmp_subelement <- x[[i]] %>%
-                                                                                                           group_by(yr, mon, sp, cwp, ocean) %>%
-                                                                                                           summarise(catch_set_fit = sum(catch_set_fit))
-                                                                                                         boot_tmp_subelement$loop <- i
-                                                                                                         return(boot_tmp_subelement)
-                                                                                                       }))
-                                                                     return(boot_tmp_element)
-                                                                   }))
-                              # compute final CI
-                              t2_all_final_ocean_list <- vector("list", length = length(levels(t2_all$ocean)))
+                                                                    FUN = function(x){
+                                                                      boot_tmp_element <-do.call(rbind,
+                                                                                                 lapply(seq.int(1:length(x)),
+                                                                                                        function(i){
+                                                                                                          x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
+                                                                                                                                   lon = x[[i]]$lon,
+                                                                                                                                   base = 1)
+                                                                                                          boot_tmp_subelement <- x[[i]] %>%
+                                                                                                            group_by(yr, mon, sp, cwp, ocean) %>%
+                                                                                                            summarise(catch_set_fit = sum(catch_set_fit))
+                                                                                                          boot_tmp_subelement$loop <- i
+                                                                                                          return(boot_tmp_subelement)
+                                                                                                        }))
+                                                                      return(boot_tmp_element)
+                                                                    }))
+                                # compute final CI
+                                t2_all_final_ocean_list <- vector("list", length = length(levels(t2_all$ocean)))
 
-                              for (o in as.numeric(levels(t2_all$ocean))){
-                                t2_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_all[t2_all$ocean == o,],
-                                                                                     boot_data = t2_all_boot[t2_all_boot$ocean == o,])
-                              }
-                              t2_all_final_ocean <- do.call(rbind, t2_all_final_ocean_list)
-                              t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit",
+                                for (o in as.numeric(levels(t2_all$ocean))){
+                                  t2_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_all[t2_all$ocean == o,],
+                                                                                      boot_data = t2_all_boot[t2_all_boot$ocean == o,])
+                                }
+                                t2_all_final_ocean <- do.call(rbind, t2_all_final_ocean_list)
+                                t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
                                                                                                           digits = 2)
-                              t2_all <- t2_all_final_ocean
+                                t2_all <- t2_all_final_ocean
                               }
                               write.csv2(x = t2_all,
                                          file = file.path(tables_directory,
@@ -5423,7 +5429,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-                               t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                              t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
                                                     base = 1)
@@ -5438,35 +5444,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
-                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2-fmod")) > 0 )){
-                                 t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                   FUN = function(x){
-                                                                     boot_tmp_element <-do.call(rbind,
-                                                                                                lapply(seq.int(1:length(x)),
-                                                                                                       function(i){
-                                                                                                         x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
-                                                                                                                             lon = x[[i]]$lon,
-                                                                                                                             base = 1)
-                                                                                                         boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + mon + fmod + sp + cwp + ocean,
-                                                                                                                                          data=x[[i]],
-                                                                                                                                          FUN = sum)
-                                                                                                         boot_tmp_subelement$loop <- i
-                                                                                                         return(boot_tmp_subelement)
-                                                                                                       }))
-                                                                     return(boot_tmp_element)
-                                                                   }))
-                              # compute final CI
-                              t2_fmod_final_ocean_list <- vector("list", length = length(levels(t2_fmod$ocean)))
-                              for (o in as.numeric(levels(t2_fmod$ocean))){
-                                t2_fmod_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_fmod[t2_fmod$ocean == o,],
-                                                                                                 boot_data = t2_fmod_boot[t2_fmod_boot$ocean == o,])
-                              }
-                              t2_fmod_final_ocean <- do.call(rbind, t2_fmod_final_ocean_list)
-                              t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit",
-                                                                                      "ci_inf",
-                                                                                      "ci_sup")] <- round(t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
-                              t2_fmod <- t2_fmod_final_ocean
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2-fmod")) > 0 )){
+                                t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                                     FUN = function(x){
+                                                                       boot_tmp_element <-do.call(rbind,
+                                                                                                  lapply(seq.int(1:length(x)),
+                                                                                                         function(i){
+                                                                                                           x[[i]]$cwp <- latlon2cwp(lat = x[[i]]$lat,
+                                                                                                                                    lon = x[[i]]$lon,
+                                                                                                                                    base = 1)
+                                                                                                           boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + mon + fmod + sp + cwp + ocean,
+                                                                                                                                            data=x[[i]],
+                                                                                                                                            FUN = sum)
+                                                                                                           boot_tmp_subelement$loop <- i
+                                                                                                           return(boot_tmp_subelement)
+                                                                                                         }))
+                                                                       return(boot_tmp_element)
+                                                                     }))
+                                # compute final CI
+                                t2_fmod_final_ocean_list <- vector("list", length = length(levels(t2_fmod$ocean)))
+                                for (o in as.numeric(levels(t2_fmod$ocean))){
+                                  t2_fmod_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_fmod[t2_fmod$ocean == o,],
+                                                                                       boot_data = t2_fmod_boot[t2_fmod_boot$ocean == o,])
+                                }
+                                t2_fmod_final_ocean <- do.call(rbind, t2_fmod_final_ocean_list)
+                                t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit",
+                                                                                        "ci_inf",
+                                                                                        "ci_sup")] <- round(t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                                                                                            digits = 2)
+                                t2_fmod <- t2_fmod_final_ocean
                               }
                               write.csv2(x = t2_fmod,
                                          file = file.path(tables_directory,

@@ -20,7 +20,7 @@ data_model_initialisation(
 \arguments{
 \item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".}
 
-\item{db_con}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.}
+\item{db_con}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
 
@@ -39,7 +39,7 @@ data_model_initialisation(
 \item{trips_selected}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
 }
 \value{
-The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
+The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 }
 \description{
 Shortcut for initialisation of data's object model from a t3 or a avdth database.

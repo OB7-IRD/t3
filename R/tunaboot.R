@@ -33,7 +33,8 @@ tunaboot <- function(sample_data,
                      target_period
 )
 {
-
+  # local binding global variables ----
+  prop_t3 <- modrf0 <- NULL
   if(missing(Nseed_boot)){Nseed_boot = Nboot}
   if(missing(target_period)){target_period = allset_data$yr[1]}
 

@@ -33,7 +33,7 @@ t3_process(
 
 \item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".}
 
-\item{db_con}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.}
+\item{db_con}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
 

@@ -1,0 +1,61 @@
+---
+title: "Level 2 process"
+output: rmarkdown::html_vignette
+description: |
+  Description of the t3 level 2 and how initialise it.
+vignette: |
+  %\VignetteIndexEntry{Level 2 process}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+<div style="text-align: justify">
+
+## Samples standardisation
+
+The second level of the t3 process aim to standardize samples data. These standardization was divided into 8 steps:
+
+| Process                                                  | Code/method associated                       | Class(es) associated  |   |   |
+|----------------------------------------------------------|----------------------------------------------|-----------------------|---|---|
+| Process 2.1: sample length class ld1 to lf conversion    | `sample_length_class_ld1_to_lf()`            | full_trips            |   |   |
+| Process 2.2: sample number measured extrapolation        | `sample_number_measured_extrapolation()`     | full_trips            |   |   |
+| Process 2.3: sample step length class standardisation    | `sample_length_class_step_standardisation()` | full_trips            |   |   |
+| Process 2.4: well set weight categories                  | `well_set_weigth_categories()`               | full_trips            |   |   |
+| Process 2.5: standardised sample creation                | `standardised_sample_creation()`             | full_trips            |   |   |
+| Process 2.6: sample number standardisation               | `standardised_sample_set_creation()`         | full_trips            |   |   |
+| Process 2.7: raised factors determination                | `raised_factors_determination()`             | full_trips            |   |   |
+| Process 2.8: samples number standardisation at set scale | `raised_standardised_sample_set()`           | full_trips            |   |   |
+
+### Process 2.1: sample length class ld1 to lf conversion
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.1.png'/>
+
+### Process 2.2: sample number measured extrapolation
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.2.png'/>
+
+### Process 2.3: sample step length class standardisation
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.3.png'/>
+
+### Process 2.4: well set weight categories
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_2.4.png'/>
+
+### Process 2.5: standardised sample creation
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
+
+### Process 2.6: sample number standardisation
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.6.png'/>
+
+### Process 2.7: raised factors determination
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
+
+### Process 2.8: samples number standardisation at set scale
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>

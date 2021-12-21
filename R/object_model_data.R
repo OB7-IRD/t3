@@ -9,7 +9,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db", "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db", "avdth_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.
@@ -396,14 +396,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                    trips_data[[1]][i],
                                                                    "]\n",
                                                                    sep = "")
-                                                               trip <- t3:::trip$new(trip_id = trips_data[[1]][i],
-                                                                                     fleet = trips_data[[2]][i],
-                                                                                     departure_date = trips_data[[3]][i],
-                                                                                     landing_date = trips_data[[4]][i],
-                                                                                     logbook_availability = trips_data[[5]][i],
-                                                                                     fish_hold_empty = trips_data[[6]][i],
-                                                                                     vessel_id = trips_data[[7]][i],
-                                                                                     vessel_type = trips_data[[8]][i])
+                                                               trip <- trip$new(trip_id = trips_data[[1]][i],
+                                                                                fleet = trips_data[[2]][i],
+                                                                                departure_date = trips_data[[3]][i],
+                                                                                landing_date = trips_data[[4]][i],
+                                                                                logbook_availability = trips_data[[5]][i],
+                                                                                fish_hold_empty = trips_data[[6]][i],
+                                                                                vessel_id = trips_data[[7]][i],
+                                                                                vessel_type = trips_data[[8]][i])
                                                                cat(format(x = Sys.time(),
                                                                           format = "%Y-%m-%d %H:%M:%S"),
                                                                    " - Successful importation of trip element ",
@@ -416,7 +416,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
@@ -800,18 +800,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                         activities_data[[2]][i],
                                                                         "]\n",
                                                                         sep = "")
-                                                                    activity <- t3:::activity$new(trip_id = activities_data[[1]][i],
-                                                                                                  activity_id = activities_data[[2]][i],
-                                                                                                  ocean = activities_data[[3]][i],
-                                                                                                  activity_date = activities_data[[4]][i],
-                                                                                                  activity_number = activities_data[[5]][i],
-                                                                                                  activity_longitude = activities_data[[6]][i],
-                                                                                                  activity_latitude = activities_data[[7]][i],
-                                                                                                  set_count = activities_data[[8]][i],
-                                                                                                  school_type = activities_data[[9]][i],
-                                                                                                  activity_code = activities_data[[10]][i],
-                                                                                                  activity_name = activities_data[[11]][i],
-                                                                                                  time_at_sea = activities_data[[12]][i])
+                                                                    activity <- activity$new(trip_id = activities_data[[1]][i],
+                                                                                             activity_id = activities_data[[2]][i],
+                                                                                             ocean = activities_data[[3]][i],
+                                                                                             activity_date = activities_data[[4]][i],
+                                                                                             activity_number = activities_data[[5]][i],
+                                                                                             activity_longitude = activities_data[[6]][i],
+                                                                                             activity_latitude = activities_data[[7]][i],
+                                                                                             set_count = activities_data[[8]][i],
+                                                                                             school_type = activities_data[[9]][i],
+                                                                                             activity_code = activities_data[[10]][i],
+                                                                                             activity_name = activities_data[[11]][i],
+                                                                                             time_at_sea = activities_data[[12]][i])
                                                                     cat(format(x = Sys.time(),
                                                                                format = "%Y-%m-%d %H:%M:%S"),
                                                                         " - Successful importation of activity element ",
@@ -824,7 +824,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
@@ -1204,15 +1204,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                elementarycatches_data[[2]][i],
                                                                                "]\n",
                                                                                sep = "")
-                                                                           elementarycatch <- t3:::elementarycatch$new(activity_id = elementarycatches_data[[1]][i],
-                                                                                                                       elementarycatch_id = elementarycatches_data[[2]][i],
-                                                                                                                       ocean = elementarycatches_data[[3]][i],
-                                                                                                                       school_type = elementarycatches_data[[4]][i],
-                                                                                                                       logbook_category = elementarycatches_data[[5]][i],
-                                                                                                                       logbook_category_name = elementarycatches_data[[6]][i],
-                                                                                                                       specie_code = elementarycatches_data[[7]][i],
-                                                                                                                       specie_code3l = elementarycatches_data[[8]][i],
-                                                                                                                       catch_weight = elementarycatches_data[[9]][i])
+                                                                           elementarycatch <- elementarycatch$new(activity_id = elementarycatches_data[[1]][i],
+                                                                                                                  elementarycatch_id = elementarycatches_data[[2]][i],
+                                                                                                                  ocean = elementarycatches_data[[3]][i],
+                                                                                                                  school_type = elementarycatches_data[[4]][i],
+                                                                                                                  logbook_category = elementarycatches_data[[5]][i],
+                                                                                                                  logbook_category_name = elementarycatches_data[[6]][i],
+                                                                                                                  specie_code = elementarycatches_data[[7]][i],
+                                                                                                                  specie_code3l = elementarycatches_data[[8]][i],
+                                                                                                                  catch_weight = elementarycatches_data[[9]][i])
                                                                            cat(format(x = Sys.time(),
                                                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                                                " - Successful importation of elementary catch element ",
@@ -1225,7 +1225,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
@@ -1603,13 +1603,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 elementarylandings_data[[2]][i],
                                                                                 "]\n",
                                                                                 sep = "")
-                                                                            elementarylanding <- t3:::elementarylanding$new(trip_id = elementarylandings_data[[1]][i],
-                                                                                                                            elementarylanding_id = elementarylandings_data[[2]][i],
-                                                                                                                            landing_category = elementarylandings_data[[3]][i],
-                                                                                                                            landing_category_name = elementarylandings_data[[4]][i],
-                                                                                                                            specie_code = elementarylandings_data[[5]][i],
-                                                                                                                            specie_code3l = elementarylandings_data[[6]][i],
-                                                                                                                            landing_weight = elementarylandings_data[[7]][i])
+                                                                            elementarylanding <- elementarylanding$new(trip_id = elementarylandings_data[[1]][i],
+                                                                                                                       elementarylanding_id = elementarylandings_data[[2]][i],
+                                                                                                                       landing_category = elementarylandings_data[[3]][i],
+                                                                                                                       landing_category_name = elementarylandings_data[[4]][i],
+                                                                                                                       specie_code = elementarylandings_data[[5]][i],
+                                                                                                                       specie_code3l = elementarylandings_data[[6]][i],
+                                                                                                                       landing_weight = elementarylandings_data[[7]][i])
                                                                             cat(format(x = Sys.time(),
                                                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Successful importation of elementary landing element ",
@@ -1622,7 +1622,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
@@ -2278,25 +2278,26 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            trip,
                                            "]\n",
                                            sep = "")
-                                       tmp_trip <- dplyr::filter(.data = samples_data, trip_id == trip)
-                                       for (well in unique(x = tmp_trip$well_id)) {
+                                       tmp_trip <- dplyr::filter(.data = samples_data, trip_id == !!trip)
+                                       for (well_id in unique(x = tmp_trip$well_id)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start importation of well data item ",
-                                             which(x = unique(tmp_trip$well_id) == well),
+                                             which(x = unique(tmp_trip$well_id) == well_id),
                                              ".\n",
                                              "[well: ",
-                                             well,
+                                             well_id,
                                              "]\n",
                                              sep = "")
-                                         if (is.na(x = well)) {
+                                         if (is.na(x = well_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Warning: missing \"well_id\" argument in trip number: \"",
                                                trip,
                                                "\".\n",
                                                sep = "")
-                                           tmp_well <- dplyr::filter(.data = tmp_trip, is.na(well_id))
+                                           tmp_well <- dplyr::filter(.data = tmp_trip,
+                                                                     is.na(well_id))
                                            if (length(x = unique(x = tmp_well$sample_id)) != 1) {
                                              cat(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -2308,7 +2309,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              next()
                                            }
                                          } else {
-                                           tmp_well <- dplyr::filter(.data = tmp_trip, well_id == well)
+                                           tmp_well <- dplyr::filter(.data = tmp_trip,
+                                                                     well_id == !!well_id)
                                          }
                                          if (length(unique(x = tmp_well$well_minus10_weigth)) != 1
                                              | length(unique(x = tmp_well$well_plus10_weigth)) != 1
@@ -2319,15 +2321,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                "[trip: ",
                                                trip,
                                                ", well: ",
-                                               well,
+                                               well_id,
                                                "]\n",
                                                sep = "")
                                          }
-                                         object_well <- t3:::well$new(trip_id = trip,
-                                                                      well_id = well,
-                                                                      well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth)[[1]],
-                                                                      well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
-                                                                      well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
+                                         object_well <- well$new(trip_id = trip,
+                                                                 well_id = well_id,
+                                                                 well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth)[[1]],
+                                                                 well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
+                                                                 well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
                                          for (sample in unique(x = tmp_well$sample_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2338,25 +2340,26 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                sample,
                                                "]\n",
                                                sep = "")
-                                           tmp_sample <- dplyr::filter(.data = tmp_well, sample_id == sample)
+                                           tmp_sample <- dplyr::filter(.data = tmp_well,
+                                                                       sample_id == !!sample)
                                            tmp_sample <- unclass(x = tmp_sample)
                                            object_well$.__enclos_env__$private$elementarysampleraw <- append(object_well$.__enclos_env__$private$elementarysampleraw,
                                                                                                              list(lapply(X = seq_len(length.out = length(x = tmp_sample[[1]])),
                                                                                                                          FUN = function(i) {
-                                                                                                                           t3:::elementarysampleraw$new(trip_id = trip,
-                                                                                                                                                        well_id = well,
-                                                                                                                                                        sample_id = sample,
-                                                                                                                                                        sub_sample_id = tmp_sample[[7]][i],
-                                                                                                                                                        sub_sample_id_total_count = tmp_sample[[8]][i],
-                                                                                                                                                        elementarysampleraw_id = tmp_sample[[9]][i],
-                                                                                                                                                        sample_quality = tmp_sample[[10]][i],
-                                                                                                                                                        sample_type = tmp_sample[[11]][i],
-                                                                                                                                                        specie_code = tmp_sample[[12]][i],
-                                                                                                                                                        specie_code3l = tmp_sample[[13]][i],
-                                                                                                                                                        length_type = tmp_sample[[14]][i],
-                                                                                                                                                        sample_total_count = tmp_sample[[15]][i],
-                                                                                                                                                        sample_number_measured = tmp_sample[[16]][i],
-                                                                                                                                                        sample_length_class = tmp_sample[[17]][i])
+                                                                                                                           elementarysampleraw$new(trip_id = trip,
+                                                                                                                                                   well_id = well_id,
+                                                                                                                                                   sample_id = sample,
+                                                                                                                                                   sub_sample_id = tmp_sample[[7]][i],
+                                                                                                                                                   sub_sample_id_total_count = tmp_sample[[8]][i],
+                                                                                                                                                   elementarysampleraw_id = tmp_sample[[9]][i],
+                                                                                                                                                   sample_quality = tmp_sample[[10]][i],
+                                                                                                                                                   sample_type = tmp_sample[[11]][i],
+                                                                                                                                                   specie_code = tmp_sample[[12]][i],
+                                                                                                                                                   specie_code3l = tmp_sample[[13]][i],
+                                                                                                                                                   length_type = tmp_sample[[14]][i],
+                                                                                                                                                   sample_total_count = tmp_sample[[15]][i],
+                                                                                                                                                   sample_number_measured = tmp_sample[[16]][i],
+                                                                                                                                                   sample_length_class = tmp_sample[[17]][i])
                                                                                                                          })))
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2368,38 +2371,39 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                "]\n",
                                                sep = "")
                                          }
-                                         if (well %in% unique(x = wellplan_data$well_id)) {
+                                         if (well_id %in% unique(x = wellplan_data$well_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Start importation of well plan data item ",
-                                               which(x = unique(x = wellplan_data$well_id) == well),
+                                               which(x = unique(x = wellplan_data$well_id) == well_id),
                                                ".\n",
                                                "[well: ",
-                                               well,
+                                               well_id,
                                                "]\n",
                                                sep = "")
-                                           tmp_wellplan <- dplyr::filter(.data = wellplan_data, well_id == well)
+                                           tmp_wellplan <- dplyr::filter(.data = wellplan_data,
+                                                                         well_id == !!well_id)
                                            tmp_wellplan <- unclass(x = tmp_wellplan)
                                            object_well$.__enclos_env__$private$wellplan <- lapply(X = seq_len(length.out = length(x = tmp_wellplan[[1]])),
                                                                                                   FUN = function(j) {
-                                                                                                    t3:::elementarywellplan$new(wellplan_id = tmp_wellplan[[1]][j],
-                                                                                                                                well_id = tmp_wellplan[[2]][j],
-                                                                                                                                activity_id = tmp_wellplan[[3]][j],
-                                                                                                                                sample_id = tmp_wellplan[[4]][j],
-                                                                                                                                specie_code = tmp_wellplan[[5]][j],
-                                                                                                                                specie_code3l = tmp_wellplan[[6]][j],
-                                                                                                                                wellplan_weight = tmp_wellplan[[7]][j],
-                                                                                                                                wellplan_number = tmp_wellplan[[8]][j],
-                                                                                                                                wellplan_weigth_category_code = tmp_wellplan[[9]][j],
-                                                                                                                                wellplan_weigth_category_label = tmp_wellplan[[10]][j])
+                                                                                                    elementarywellplan$new(wellplan_id = tmp_wellplan[[1]][j],
+                                                                                                                           well_id = tmp_wellplan[[2]][j],
+                                                                                                                           activity_id = tmp_wellplan[[3]][j],
+                                                                                                                           sample_id = tmp_wellplan[[4]][j],
+                                                                                                                           specie_code = tmp_wellplan[[5]][j],
+                                                                                                                           specie_code3l = tmp_wellplan[[6]][j],
+                                                                                                                           wellplan_weight = tmp_wellplan[[7]][j],
+                                                                                                                           wellplan_number = tmp_wellplan[[8]][j],
+                                                                                                                           wellplan_weigth_category_code = tmp_wellplan[[9]][j],
+                                                                                                                           wellplan_weigth_category_label = tmp_wellplan[[10]][j])
                                                                                                   })
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Sucessful importation of well plan data item ",
-                                               which(x = unique(x = wellplan_data$well_id) == well),
+                                               which(x = unique(x = wellplan_data$well_id) == well_id),
                                                ".\n",
                                                "[well: ",
-                                               well,
+                                               well_id,
                                                "]\n",
                                                sep = "")
                                          }
@@ -2407,10 +2411,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Successful importation of well data item ",
-                                             which(x = unique(x = tmp_trip$well_id) == well),
+                                             which(x = unique(x = tmp_trip$well_id) == well_id),
                                              ".\n",
                                              "[well: ",
-                                             well,
+                                             well_id,
                                              "]\n",
                                              sep = "")
                                        }
@@ -2428,7 +2432,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with parameters of set duration algorithms.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
@@ -2683,7 +2687,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
                                    lengthsteps_data = function(db_con = NULL,
@@ -2961,7 +2965,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
@@ -3116,22 +3120,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              "avdth_samplesets.sql",
                                                                                              package = "t3")),
                                                                  collapse = "\n")
-                                           samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                       sql = samplesets_sql,
-                                                                                       begin_period = DBI::SQL(paste0("#",
-                                                                                                                      (dplyr::first(periode_reference,
-                                                                                                                           order_by = periode_reference) - 1),
-                                                                                                             "-10-01#")),
-                                                                                       end_period = DBI::SQL(paste0("#",
-                                                                                                                    (dplyr::last(periode_reference,
-                                                                                                                        order_by = periode_reference) + 1),
-                                                                                                           "-03-01#")),
-                                                                                       countries = DBI::SQL(paste0("'",
-                                                                                                                   paste0(countries,
-                                                                                                                          collapse = "', '"),
-                                                                                                                   "'")),
-                                                                                       oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                       collapse = ", "))))
+                                         samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                                                                     sql = samplesets_sql,
+                                                                                     begin_period = DBI::SQL(paste0("#",
+                                                                                                                    (dplyr::first(periode_reference,
+                                                                                                                                  order_by = periode_reference) - 1),
+                                                                                                                    "-10-01#")),
+                                                                                     end_period = DBI::SQL(paste0("#",
+                                                                                                                  (dplyr::last(periode_reference,
+                                                                                                                               order_by = periode_reference) + 1),
+                                                                                                                  "-03-01#")),
+                                                                                     countries = DBI::SQL(paste0("'",
+                                                                                                                 paste0(countries,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
+                                                                                                                     collapse = ", "))))
 
                                          cat("[", samplesets_sql_final, "]\n", sep = "")
                                          samplesets_data <- DBI::dbGetQuery(conn = db_con,
@@ -3329,7 +3333,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    },
                                    #' @description Creation of a data frame object with parameters for length weight relationship.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".
+                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
                                    lengthweightrelationships_data = function(data_source = "t3_db",

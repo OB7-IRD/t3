@@ -5,6 +5,8 @@
 \title{T3 process level 1}
 \usage{
 t3_level1(
+  object_model_data,
+  object_full_trips,
   species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
@@ -16,6 +18,10 @@ t3_level1(
 )
 }
 \arguments{
+\item{object_model_data}{Object of classes \code{\link[t3]{object_model_data}} and \code{\link[R6]{R6}} expected.}
+
+\item{object_full_trips}{Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.}
+
 \item{species_rf1}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
 
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}

@@ -44,7 +44,7 @@ Creation of a R6 reference object class trips which contain one or more R6 refer
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db", "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db" and "avdth_db". By default NULL.}
 
@@ -84,7 +84,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -124,7 +124,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -164,7 +164,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -206,7 +206,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -246,7 +246,7 @@ Creation of a data frame object with parameters of set duration algorithms.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
@@ -278,7 +278,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
@@ -312,7 +312,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
 
@@ -348,7 +348,7 @@ Creation of a data frame object with parameters for length weight relationship.
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database. Necessary argument for data source "t3_db" and "sql_query".}
+\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 

@@ -2,7 +2,7 @@
 #' @title Data model initialisation
 #' @description Shortcut for initialisation of data's object model from a t3 or a avdth database.
 #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".
-#' @param db_con Object of class "database" expected. Check {\link[dbConnect]{dbConnect}}. An R's object which contain connection identifiers for a database.
+#' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".
@@ -11,7 +11,7 @@
 #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.
 #' @param sample_type (integer) Sample type identification (landing, observer, ...). By default NULL.
 #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-#' @return The function return two R6 reference object, one class "object_model_data" and the second class "object_full_trips".
+#' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 #' @export
 data_model_initialisation <- function(data_source = "t3_db",
                                       db_con,
@@ -134,10 +134,6 @@ data_model_initialisation <- function(data_source = "t3_db",
   if (log_file == TRUE) {
     closeAllConnections()
   }
-  assign(x = "object_model_data",
-         value = object_model_data,
-         envir = .GlobalEnv)
-  assign(x = "object_full_trips",
-         value = object_full_trips,
-         envir = .GlobalEnv)
+  return(list("object_model_data" = object_model_data,
+              "object_full_trips" = object_full_trips))
 }

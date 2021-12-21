@@ -14,10 +14,10 @@ df2boot <- function(t0,
                     sample_data,
                     strata) {
   # if (missing(sample_data)) {
-    sample_data <- rnorm(100,
-                         mean = t0,
-                         sd = 1*abs(t0))
-    # }
+  sample_data <- stats::rnorm(100,
+                              mean = t0,
+                              sd = 1*abs(t0))
+  # }
    # if (missing(strata)) {
     strata <- rep(1,
                   times = length(sample_data))

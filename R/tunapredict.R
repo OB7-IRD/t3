@@ -28,6 +28,8 @@ tunapredict <- function(sample_data,
                      target_period
 )
 {
+  # local binding global variables ----
+  modrf0 <- prop_t3 <- NULL
   if(missing(target_period)){target_period = allset_data$yr[1]}
   # subset of all sampled set
   sub <- sample_data
