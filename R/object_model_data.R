@@ -287,7 +287,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                      } else if (data_source == "envir") {
                                        # R environment source ----
-                                       # # specific arguments verification
+                                       # specific arguments verification
                                        if (is.null(x = envir)) {
                                          environment_name <- as.environment(find(what = "trips")[1])
                                        } else {
@@ -378,36 +378,56 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          data_path = NULL,
                                                                          trips_selected = NULL,
                                                                          envir = NULL) {
+                                     # common arguments verification ----
+                                     if (data_source %in% c("t3_db",
+                                                            "avdth_db")) {
+                                       if (paste0(class(x = periode_reference),
+                                                  collapse = " ") != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"periode_reference\" argument.\n",
+                                             sep = "")
+                                         stop()
+                                       } else if (paste0(class(x = countries),
+                                                         collapse = " ") != "character") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"countries\" argument.\n",
+                                             sep = "")
+                                         stop()
+                                       } else if (paste0(class(x = oceans),
+                                                         collapse = " ") != "integer") {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"oceans\" argument.\n",
+                                             sep = "")
+                                       }
+                                     } else if (data_source %in% c("sql_query",
+                                                                   "csv",
+                                                                   "rdata")) {
+                                       if (paste0(class(x = data_path),
+                                                  collapse = " ") != "character"
+                                           || length(x = data_path) != 1
+                                           || (! file.exists(data_path))) {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"data_path\" argument.\n",
+                                             sep = "")
+                                         stop()
+                                       }
+                                     }
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
-                                       if (length(x = class(x = periode_reference)) != 1
-                                           || class(periode_reference) != "integer") {
+                                       # specific arguments verification
+                                       if (paste0(class(x = db_con),
+                                                  collapse = " ") != "PostgreSQLConnection") {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument, ",
-                                             "class \"integer\" expected.\n",
+                                             " - Error: invalid \"db_con\" argument.\n",
                                              sep = "")
-                                       } else if (length(x = class(x = countries)) != 1
-                                                  || class(x = countries) != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument, ",
-                                             "class \"character\" expected.\n",
-                                             sep = "")
-                                       } else if (length(x = class(x = oceans)) != 1
-                                                  || class(x = oceans) != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument, ",
-                                             "class \"integer\" expected.\n",
-                                             sep = "")
-                                       } else if (class(db_con) != "PostgreSQLConnection") {
-                                         cat(format(x = Sys.time(),
-                                                    format =  "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"PostgreSQLConnection\" expected.\n",
-                                             sep = "")
+                                         stop()
                                        } else {
+                                         # process beginning
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from T3 database.\n",
@@ -482,34 +502,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                      } else if (data_source == "avdth_db") {
                                        # avdth db source ----
-                                       if (length(x = class(x = periode_reference)) != 1
-                                           || class(periode_reference) != "integer") {
+                                       # specific arguments verification
+                                       if (paste0(class(x = db_con),
+                                                  collapse = " ") != "JDBCConnection") {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument, ",
-                                             "class \"integer\" expected.\n",
+                                             " - Error: invalid \"db_con\" argument.\n",
                                              sep = "")
-                                       } else if (length(x = class(x = countries)) != 1
-                                                  || class(x = countries) != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument, ",
-                                             "class \"character\" expected.\n",
-                                             sep = "")
-                                       } else if (length(x = class(x = oceans)) != 1
-                                                  || class(x = oceans) != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument, ",
-                                             "class \"integer\" expected.\n",
-                                             sep = "")
-                                       } else if (class(db_con) != "JDBCConnection") {
-                                         cat(format(x = Sys.time(),
-                                                    format =  "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"JDBCConnection\" expected.\n",
-                                             sep = "")
+                                         stop()
                                        } else {
+                                         # process beginning
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from avdth database.\n",
@@ -536,20 +538,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      collapse = ", "))))
 
                                          cat("[", activities_sql_final, "]\n", sep = "")
-                                         activities_data <- DBI::dbGetQuery(conn = db_con,
-                                                                            statement = activities_sql_final)
-                                         activities_data$trip_id <- as.character(activities_data$trip_id)
-                                         activities_data$activity_id <- as.character(activities_data$activity_id)
-                                         activities_data$ocean <- as.integer(activities_data$ocean)
-                                         activities_data$activity_date <- as.Date(activities_data$activity_date)
-                                         activities_data$activity_number <- as.integer(activities_data$activity_number)
-                                         activities_data$activity_longitude <- as.numeric(activities_data$activity_longitude)
-                                         activities_data$activity_latitude <- as.numeric(activities_data$activity_latitude)
-                                         activities_data$set_count <- as.integer(activities_data$set_count)
-                                         activities_data$school_type <- as.integer(activities_data$school_type)
-                                         activities_data$activity_code <- as.integer(activities_data$activity_code)
-                                         activities_data$activity_name <- as.character(activities_data$activity_name)
-                                         activities_data$time_at_sea <- as.integer(activities_data$time_at_sea)
+                                         activities_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
+                                                                                          statement = activities_sql_final)) %>%
+                                           dplyr::mutate(trip_id = as.character(trip_id),
+                                                         activity_id = as.character(activity_id),
+                                                         ocean = as.integer(ocean),
+                                                         activity_date = as.Date(activity_date),
+                                                         activity_number = as.integer(activity_number),
+                                                         activity_longitude = as.numeric(activity_longitude),
+                                                         activity_latitude = as.numeric(activity_latitude),
+                                                         set_count = as.integer(set_count),
+                                                         school_type = as.integer(school_type),
+                                                         activity_code = as.integer(activity_code),
+                                                         activity_name = as.character(activity_name),
+                                                         time_at_sea = as.integer(time_at_sea))
                                          if (nrow(x = activities_data) == 0) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -565,98 +567,58 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                      } else if (data_source == "sql_query") {
                                        # sql queries source ----
-                                       if (class(x = data_path) != "character") {
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start activities data importation from the database.\n",
+                                           sep = "")
+                                       activities_sql <- DBI::SQL(x = paste(readLines(con = data_path),
+                                                                            collapse = "\n"))
+                                       cat("[", activities_sql, "]\n", sep = "")
+                                       activities_data <- DBI::dbGetQuery(conn = db_con,
+                                                                          statement = activities_sql)
+                                       if (nrow(x = activities_data) == 0) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
-                                             "class character expected.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (! file.exists(data_path)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
-                                             "file doesn't exist.\n",
+                                             " - Error: no data imported, check the query.\n",
                                              sep = "")
                                          stop()
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from the database.\n",
+                                             " - Successful activities data importation from the database.\n",
                                              sep = "")
-                                         activities_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                              collapse = "\n"))
-                                         cat("[", activities_sql, "]\n", sep = "")
-                                         activities_data <- DBI::dbGetQuery(conn = db_con,
-                                                                            statement = activities_sql)
-                                         if (nrow(x = activities_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activities data importation from the database.\n",
-                                               sep = "")
-                                         }
                                        }
                                      } else if (data_source == "csv") {
                                        # csv source ----
-                                       if (class(x = data_path) != "character") {
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start activities data importation from csv file.\n",
+                                           sep = "")
+                                       activities_data <- read.csv2(file = data_path,
+                                                                    stringsAsFactors = FALSE)
+                                       if (nrow(x = activities_data) == 0) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
-                                             "class character expected.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (! file.exists(data_path)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument, ",
-                                             "file doesn't exist.\n",
+                                             " - Error: no data imported, check the csv file.\n",
                                              sep = "")
                                          stop()
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from csv file.\n",
+                                             " - Successful activities data importation from csv file.\n",
                                              sep = "")
-                                         activities_data <- read.csv2(file = data_path,
-                                                                      stringsAsFactors = FALSE)
-                                         if (nrow(x = activities_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the csv file.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activities data importation from csv file.\n",
-                                               sep = "")
-                                         }
                                        }
                                      } else if (data_source == "rdata") {
                                        # rdata source ----
-                                       if (class(x = data_path) != "character"
-                                           || length(x = data_path) != 1
-                                           || ! file.exists(data_path)
-                                           || tools::file_ext(x = data_path) != "RData") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid \"data_path\" argument, class character with one value inside linked to a \"RData\" file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from RData.\n",
-                                             sep = "")
-                                         load(file = data_path,
-                                              envir = tmp_envir <- new.env())
-                                       }
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start activities data importation from RData.\n",
+                                           sep = "")
+                                       load(file = data_path,
+                                            envir = tmp_envir <- new.env())
                                        if (exists(x = "activities",
                                                   envir = tmp_envir)) {
                                          activities_data <- get(x = "activities",
@@ -689,11 +651,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                      } else if (data_source == "envir") {
                                        # R environment source ----
+                                       # specific arguments verification
                                        if (is.null(x = envir)) {
                                          environment_name <- as.environment(find(what = "activities")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
+                                       # process beginning
                                        if (exists(x = "activities",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
