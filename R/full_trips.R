@@ -3854,7 +3854,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - End process 3.1: data preparatory.\n",
                                     sep = "")
                                 return(list("raw_inputs_level3" = inputs_level3,
-                                            'outputs_directory' = file.path(outputs_directory,
+                                            "outputs_directory" = file.path(outputs_directory,
                                                                             outputs_directory_name),
                                             "outputs_level3_process1" = outputs_level3_process1))
                               }

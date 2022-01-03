@@ -38,11 +38,11 @@ SELECT
 		& '.'
 		& e.N_ECH 
 		& '.'
-		& e.N_S_ECH
+		& ee.N_S_ECH
 		& '.'
-		& e.C_ESP
+		& ee.C_ESP
 		& '.'
-		& e.F_LDLF AS sub_sample_id_total_count
+		& ee.F_LDLF AS sub_sample_id_total_count
 	,'fr.ird.t3.entities.data.SampleSpeciesFrequency#'
 		& format(e.c_bat, '0000')
 		& '#'
