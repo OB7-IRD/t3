@@ -1657,12 +1657,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Process 2.1 (sample length class conversion ld1 to lf) cancelled.\n",
                                     sep = "")
                               } else {
-                                if (class(length_step) != "data.frame"
+                                if (! paste0(class(length_step),
+                                             collapse = "_") %in% c("data.frame",
+                                                                    "tbl_df_tbl_data.frame")
                                     || ncol(length_step) != 6
                                     || nrow(length_step) == 0) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - invalid \"length_step\" argument, class \"data.frame\" with 6 columns and at least 1 row expected.\n",
+                                      " - invalid \"length_step\" argument, class \"data.frame\" or \"tibble\" with 6 columns and at least 1 row expected.\n",
                                       sep = "")
+                                  stop()
                                 } else {
                                   length_step_count <- length_step %>%
                                     dplyr::group_by(ocean,
@@ -2272,12 +2275,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Process 2.4 (well-set weight categories definition) cancelled.\n",
                                     sep = "")
                               } else {
-                                if (class(sample_set) != "data.frame"
+                                if (! paste0(class(sample_set),
+                                             collapse = "_") %in% c("data.frame",
+                                                                    "tbl_df_tbl_data.frame")
                                     || ncol(sample_set) != 5
                                     || nrow(sample_set) == 0) {
                                   cat(format(Sys.time(),
                                              "%Y-%m-%d %H:%M:%S"),
-                                      " - Error: invalid \"sample_set\" argument, class \"data.frame\" with 5 columns and at least 1 row expected.\n",
+                                      " - Error: invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 5 columns and at least 1 row expected.\n",
                                       sep = "")
                                   stop()
                                 } else {
@@ -2365,7 +2370,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 well_prop_minus10_weigth <- 0
                                                 well_prop_plus10_weigth <- 0
                                                 well_prop_global_weigth <- 0
-                                                if (! "inconnu" %in% current_wellplan_weigth_category) {
+                                                if (! any(current_wellplan_weigth_category %in% c("inconnu",
+                                                                                                  "mélange"))) {
                                                   for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                     current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
                                                     if (current_well_plan$.__enclos_env__$private$wellplan_weigth_category_label == "- 10 kg") {
@@ -2534,12 +2540,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
                                                     capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                activity_id = sample_set_well[sample_set_well_id, "activity_id"],
-                                                                                                                well_id = sample_set_well[sample_set_well_id, "well_id"],
-                                                                                                                sample_id = sample_set_well[sample_set_well_id, "sample_id"],
-                                                                                                                weighted_weight = sample_set_well[sample_set_well_id, "well_set_weighted_weight"],
-                                                                                                                weighted_weight_minus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                weighted_weight_plus10 =  sample_set_well[sample_set_well_id, "well_set_weighted_weight"] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                                                                activity_id = sample_set_well$activity_id[[sample_set_well_id]],
+                                                                                                                well_id = sample_set_well$well_id[[sample_set_well_id]],
+                                                                                                                sample_id = sample_set_well$sample_id[[sample_set_well_id]],
+                                                                                                                weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
+                                                                                                                weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                                weighted_weight_plus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
                                                                    file = "NUL")
                                                   }
                                                   current_well$.__enclos_env__$private$wellsets <- current_well_sets
