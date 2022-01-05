@@ -23,7 +23,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 [![R-CMD-check](https://github.com/OB7-IRD/fishi/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/furdeb/actions)
 <!-- badges: end -->
 
-***t3: Tropical Tunas Treatment***
+***Tropical Tunas Treatment***
 
 ## Warning
 Package and documentation still in construction ! We need few more time to reach 88 miles per hours, be patient.

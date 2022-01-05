@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/OB7-IRD/fishi/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/furdeb/actions)
 <!-- badges: end -->
 
-***t3: Tropical Tunas Treatment***
+***Tropical Tunas Treatment***
 
 ## Warning
 
