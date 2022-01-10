@@ -3,7 +3,7 @@ SELECT
 	,s.code::integer AS specie_code
 	,s.code3l::text AS specie_code3l
 	--careful, ld1 in mm and lf in cm
-	,sls.ld1class::integer * power(10, -1) AS ld1_class
+	,sls.ld1class::numeric * power(10, -1) AS ld1_class
 	,sls.lfclass::integer AS lf_class
 	,sls.ratio::numeric AS ratio
 FROM

@@ -2469,8 +2469,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else if (! data_source %in% c("t3_db",
-                                                                     "avdth_db")) {
+                                     } else if (data_source != "t3_db") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -2527,38 +2526,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              " - Successful length steps data importation from the database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "avdth_db") {
-                                       # avdth db source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from avdth database.\n",
-                                           sep = "")
-                                       lengthstep_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                           "avdth_lengthsteps.sql",
-                                                                                           package = "t3")),
-                                                               collapse = "\n")
-                                       cat("[", lengthstep_sql, "]\n", sep = "")
-                                       lengthsteps_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
-                                                                                         statement = lengthstep_sql)) %>%
-                                         dplyr::mutate(ocean = as.integer(ocean),
-                                                       specie_code = as.integer(specie_code),
-                                                       specie_code3l = as.character(specie_code3l),
-                                                       ld1_class = as.integer(ld1_class),
-                                                       lf_class = as.integer(lf_class),
-                                                       ratio = as.numeric(ratio))
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from avdth database.\n",
-                                             sep = "")
-                                       }
                                      } else if (data_source == "sql_query") {
                                        # sql queries source ----
                                        # process beginning
@@ -2599,6 +2566,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        } else {
+                                         lengthsteps_data <- dplyr::mutate(.data = lengthsteps_data,
+                                                                           ocean = as.integer(x = ocean),
+                                                                           specie_code = as.integer(x = specie_code),
+                                                                           specie_code3l = as.character(x = specie_code3l),
+                                                                           ld1_class = as.numeric(x = ld1_class),
+                                                                           lf_class = as.integer(x = lf_class),
+                                                                           ratio = as.numeric(x = ratio))
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Successful length steps data importation from csv file.\n",

@@ -88,7 +88,7 @@ data_model_initialisation <- function(data_source = "t3_db",
   # model creation: set durations data ----
   if (data_source == "avdth_db") {
     object_model_data$setdurationrefs_data(data_source = "csv",
-                                           data_path = system.file("t3_setdurationrefs.csv",
+                                           data_path = system.file("setdurationrefs.csv",
                                                                    package = "t3"),
                                            periode_reference = periode_reference,
                                            countries = countries)
@@ -99,8 +99,14 @@ data_model_initialisation <- function(data_source = "t3_db",
                                            countries = countries)
   }
   # model creation: length steps data ----
-  object_model_data$lengthsteps_data(data_source = data_source,
-                                     db_con = db_con)
+  if (data_source == "avdth_db") {
+    object_model_data$lengthsteps_data(data_source = "csv",
+                                       data_path = system.file("lengthsteps.csv",
+                                                               package = "t3"))
+  } else {
+    object_model_data$lengthsteps_data(data_source = data_source,
+                                       db_con = db_con)
+  }
   # model creation: sample sets data ----
   object_model_data$samplesets_data(data_source = data_source,
                                     db_con = db_con,
@@ -111,7 +117,7 @@ data_model_initialisation <- function(data_source = "t3_db",
   # model creation: length weight relationships data ----
   if (data_source == "avdth_db") {
     object_model_data$lengthweightrelationships_data(data_source = "csv",
-                                                     data_path = system.file("t3_lengthweightrelationships.csv",
+                                                     data_path = system.file("lengthweightrelationships.csv",
                                                                              package = "t3"))
   } else {
     object_model_data$lengthweightrelationships_data(db_con = db_con)

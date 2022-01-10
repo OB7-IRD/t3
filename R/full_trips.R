@@ -2442,6 +2442,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     if (length(wells_associated) != 0) {
                                                       # yes
                                                       # the well of current well has been sample ?
+                                                      # cover here
+                                                      if (length(current_well_activities_samples[[2]]) != 1) {
+                                                        browser()
+                                                      }
                                                       if (! current_well_activities_samples[[2]] == "well_not_sampled") {
                                                         # yes
                                                         w1 <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
