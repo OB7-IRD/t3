@@ -1738,7 +1738,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              file = "NUL")
                                               capture.output(current_elementary_catches$add(new_item = unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches"))),
                                                              file = "NUL")
-                                              total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_rf2")))
+                                              total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_corrected")))
                                               oceans_activities_weight <- as.numeric()
                                               for (current_ocean_activites in oceans_activities) {
                                                 capture.output(current_elementary_catches_ocean <- t3::object_r6(class_name = "activities"),
@@ -1746,7 +1746,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 capture.output(current_elementary_catches_ocean$add(new_item = current_elementary_catches$filter_l1(filter = paste0("$path$ocean == ",
                                                                                                                                                                     current_ocean_activites))),
                                                                file = "NUL")
-                                                current_oceans_activities_weight <- sum(unlist(current_elementary_catches_ocean$extract_l1_element_value(element = "catch_weight_rf2"))) / total_current_elementary_catches
+                                                current_oceans_activities_weight <- sum(unlist(current_elementary_catches_ocean$extract_l1_element_value(element = "catch_weight_category_corrected"))) / total_current_elementary_catches
                                                 oceans_activities_weight <- append(oceans_activities_weight,
                                                                                    current_oceans_activities_weight)
                                                 names(oceans_activities_weight)[length(oceans_activities_weight)] <- current_ocean_activites
@@ -2442,11 +2442,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     if (length(wells_associated) != 0) {
                                                       # yes
                                                       # the well of current well has been sample ?
-                                                      # cover here
-                                                      if (length(current_well_activities_samples[[2]]) != 1) {
-                                                        browser()
-                                                      }
-                                                      if (! current_well_activities_samples[[2]] == "well_not_sampled") {
+                                                      if (! current_well_activities_samples[[2]][1] == "well_not_sampled") {
                                                         # yes
                                                         w1 <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
                                                                          FUN = function(x) {
@@ -2461,7 +2457,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         for (well_associated_id in wells_associated) {
                                                           current_well_activities_samples_tmp <- wells_activities_samples_id[[well_associated_id]]
                                                           current_well_plan_tmp <- current_wells$extract(id = well_associated_id)[[1]]$.__enclos_env__$private$wellplan
-                                                          if (current_well_activities_samples_tmp[[2]] == "well_not_sampled") {
+                                                          if (current_well_activities_samples_tmp[[2]][1] == "well_not_sampled") {
                                                             for (elementarywellplan_id in seq_len(length.out = length(current_well_plan_tmp))) {
                                                               if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
                                                                 wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight

@@ -42,11 +42,8 @@ science:
 ## Installation
 
 ``` r
-# devtools package is necessary for t3 package compilation
-install.packages("devtools")
-# download the last package release stable from GitHub 
 devtools::install_github("https://github.com/OB7-IRD/t3",
-                         ref = "0.9.1")
+                         INSTALL_opts=c("--no-multiarch"))
 ```
 
 ### Development version
@@ -55,8 +52,9 @@ To get a bug fix or to use a feature from the development version, you
 can install the development version of t3 from GitHub.
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("https://github.com/OB7-IRD/t3/tree/development")
+devtools::install_github("https://github.com/OB7-IRD/t3",
+                         ref = "development",
+                         INSTALL_opts=c("--no-multiarch"))
 ```
 
 ## Cheatsheet
