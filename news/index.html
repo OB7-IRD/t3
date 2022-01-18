@@ -71,39 +71,6 @@
       <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div style="text-align: justify">
-<h2 id="t3-091---2020-09-21" class="page-header" data-toc-text="0.9.1">t3 0.9.1 - 2020-09-21</h2>
-<h3 id="added">Added</h3>
-<ul><li>Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)</li>
-<li>Implementation of boostrap method as base for all confidence intervals</li>
-<li>Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode</li>
-<li>Implementation of outputs for the he nominal catches by species and by fishing mode</li>
-<li>Fix minor bugs in all different processes (P1, P2, P3)</li>
-</ul><h3 id="changed">Changed</h3>
-<ul><li>Improve modelling configuration (addition of new parameters)</li>
-<li>Rewrite several figures for the model checking</li>
-<li>Improve time computing using faster implementation of random forests for the species composition modeling in the level3</li>
-</ul><h3 id="removed">Removed</h3>
-<ul><li>Disabling task and effort computation while waiting for confident interval implementation</li>
-<li>Remove the documentation from the package. Stay available at <a href="https://ob7-ird.github.io/t3/index.html" class="uri">https://ob7-ird.github.io/t3/index.html</a>
-</li>
-</ul><h2 id="t3-090---2020-06-05" class="page-header" data-toc-text="0.9.1">t3 0.9.0 - 2020-06-05</h2>
-<h3 id="added-1">Added</h3>
-<ul><li>Implentation of the model layer in R6class</li>
-<li>Implementation of all logbooks standardization sub-processes</li>
-<li>Implementation of all samples standardization sub-processes</li>
-<li>Implementation of sub-processes for assessing species composition in relation to non-sampled assemblages</li>
-<li>Strict selection of samples used in the model training according to several criteria on sets and wells (school type, location, date, sample quality).<br></li>
-<li>Classification of unknown school type (no data available) by clustering according to major tuna species composition.<br></li>
-<li>Development of a statistical model accounting for:
-<ul><li>Spatial and temporal structure of the fishery (location and date of the catch)</li>
-<li>Vessel specificity which impacts the species composition of the catch</li>
-<li>Crew reporting information which enables more flexibility in the model when a marginal composition is caught</li>
-<li>Several years of fishing in the training to increase the robustness of the estimates</li>
-</ul></li>
-<li>Model checking to ensure reliability of the results</li>
-<li>Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations.</li>
-</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -118,7 +85,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
