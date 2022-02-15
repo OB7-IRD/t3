@@ -376,23 +376,28 @@ list_t3 <- R6Class(
     #' @description Function for select item(s) by specific selection.
     #' @param attribut_l1 Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".
     #' @param filter Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""
+    #' @param clone Object of type \code{\link[base]{logical}} expected. TRUE if you want to create a new object (not link to the original object).
     filter_l1 = function(attribut_l1 = "data",
-                         filter) {
+                         filter,
+                         clone = FALSE) {
       if (length(class(attribut_l1)) != 1
           || class(attribut_l1) != "character") {
-        cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
-          sep = ""
-        )
+        cat(format(Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
+            " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
+            sep = "")
         stop()
       } else if (!attribut_l1 %in% names(private)) {
-        cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
-          sep = ""
-        )
+        cat(format(Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
+            " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+            sep = "")
         stop()
+      } else if (class(x = clone) != "logical") {
+        cat(format(Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
+            " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
+            sep = "")
       } else {
         tmp1 <- private[[attribut_l1]]
         final_filter <- gsub(pattern = "$path$",
@@ -406,14 +411,17 @@ list_t3 <- R6Class(
                                      tmp2 <- tmp1[[a]]
                                      tryCatch(
                                        expr = if (eval(final_filter)) {
-                                         tmp2
+                                         if (clone == TRUE) {
+                                           tmp2$clone()
+                                         } else {
+                                           tmp2
+                                         }
                                        },
                                        error = function(err) {
-                                         cat(
-                                           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"filter\" argument\n",
-                                           sep = ""
-                                         )
+                                         cat(format(Sys.time(),
+                                                    "%Y-%m-%d %H:%M:%S"),
+                                             " - Error: invalid \"filter\" argument\n",
+                                             sep = "")
                                          stop()
                                        }
                                      )

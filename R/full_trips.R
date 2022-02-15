@@ -26,42 +26,43 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               }
+                              # By default, trips are listed by vessel id and landing date
                               full_trips <- list()
                               full_trips_tmp <- list()
                               full_trip_warning <- 0
-                              i <- 1
-                              while (i <= object_trips$count()) {
-                                if (i == 1) {
+                              trip_id <- 1
+                              while (trip_id <= object_trips$count()) {
+                                if (trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Start full trips creation.\n",
                                       sep = "")
                                 }
-                                if (object_trips$view(i)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
+                                if (object_trips$view(trip_id)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
                                   full_trips <- append(full_trips,
-                                                       list(list(object_trips$view(i)[[1]]$clone())))
-                                  i <- i + 1
+                                                       list(list(object_trips$view(trip_id)[[1]]$clone())))
+                                  trip_id <- trip_id + 1
                                 } else {
-                                  for (j in i:object_trips$count()) {
-                                    if (j == object_trips$count()) {
+                                  for (sub_trip_id in trip_id:object_trips$count()) {
+                                    if (sub_trip_id == object_trips$count()) {
                                       full_trips_tmp <- append(full_trips_tmp,
-                                                               object_trips$view(j)[[1]]$clone())
+                                                               object_trips$view(sub_trip_id)[[1]]$clone())
                                       full_trip_warning <- 1
-                                      i <- i + 1
+                                      trip_id <- trip_id + 1
                                     } else {
-                                      if (object_trips$view(j)[[1]]$.__enclos_env__$private$vessel_id == object_trips$view(j + 1)[[1]]$.__enclos_env__$private$vessel_id) {
+                                      if (object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$vessel_id == object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$vessel_id) {
                                         full_trips_tmp <- append(full_trips_tmp,
-                                                                 object_trips$view(j)[[1]]$clone())
-                                        if (object_trips$view(j + 1)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
+                                                                 object_trips$view(sub_trip_id)[[1]]$clone())
+                                        if (object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
                                           full_trips_tmp <- append(full_trips_tmp,
-                                                                   object_trips$view(j + 1)[[1]]$clone())
-                                          i <- j + 2
+                                                                   object_trips$view(sub_trip_id + 1)[[1]]$clone())
+                                          trip_id <- sub_trip_id + 2
                                           break ()
                                         }
                                       } else {
                                         full_trip_warning <- 1
                                         full_trips_tmp <- append(full_trips_tmp,
-                                                                 object_trips$view(j)[[1]]$clone())
-                                        i <- j + 1
+                                                                 object_trips$view(sub_trip_id)[[1]]$clone())
+                                        trip_id <- sub_trip_id + 1
                                         break ()
                                       }
                                     }
@@ -70,11 +71,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     full_trip_warning <- 0
                                     private$id_not_full_trip <- append(private$id_not_full_trip,
                                                                        length(full_trips) + 1)
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: missing trip(s) in item ",
                                         length(full_trips) + 1,
                                         ".\n[trip: ",
-                                        object_trips$view(j)[[1]]$.__enclos_env__$private$trip_id,
+                                        object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
                                   }
@@ -106,17 +108,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               } else {
-                                for (i in seq_len(length.out = length(x = private$data))) {
-                                  if (i == 1) {
+                                for (full_trip_id in seq_len(length.out = length(x = private$data))) {
+                                  if (full_trip_id == 1) {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
                                         " - Start of full trips filtering by reference periode.\n",
                                         sep = "")
                                   }
-                                  full_trips_tmp <- private$data[[i]]
+                                  full_trips_tmp <- private$data[[full_trip_id]]
                                   year_full_trips <- vector(mode = "integer")
-                                  for (j in seq_len(length.out = length(x = full_trips_tmp))) {
-                                    full_trips_tmp_bis <- full_trips_tmp[[j]]
+                                  for (trip_id in seq_len(length.out = length(x = full_trips_tmp))) {
+                                    full_trips_tmp_bis <- full_trips_tmp[[trip_id]]
                                     year_full_trips <- append(year_full_trips,
                                                               as.integer(
                                                                 lubridate::year(
@@ -130,7 +132,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 FUN = function(list_id) {
                                                                                   full_trips_tmp[[list_id]]$clone()
                                                                                 })))
-                                    names(private$data_selected)[length(private$data_selected)] <- names(private$data[i])
+                                    names(private$data_selected)[length(private$data_selected)] <- names(private$data[full_trip_id])
                                   }
                                 }
                                 if (any(private$id_not_full_trip %in% names(private$data_selected))) {
@@ -154,11 +156,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for add activities in full trips object.
                             #' @param object_activities Object of type R6-activities expected. A R6 reference object of class activities.
                             add_activities = function(object_activities) {
-                              if (length(private$data_selected) == 0) {
+                              if (object_activities$count() == 0) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Error: argument \"data_selected\" empty, ",
-                                    "launch selection data before.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(x = object_activities) == "activities")) {
@@ -168,20 +169,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add activity.\n",
                                         sep = "")
                                   }
-                                  for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    activities_tmp <- object_activities$filter_by_trip(trip_id = trip_id)
-                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$activities <- lapply(X = seq_len(length.out = length(x = activities_tmp)),
-                                                                                                                 FUN = function(list_id) {
-                                                                                                                   activities_tmp[[list_id]]$clone()
-                                                                                                                 })
-                                  }
+                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                 file = "NUL")
+                                  full_trips_activities <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                                  FUN = function(trip_id) {
+                                                                    current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                             attribut_l2 = "trip_id",
+                                                                                                             id = trip_id)
+                                                                    object_activities$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                                current_trip_id,
+                                                                                                                "\""),
+                                                                                                clone = TRUE)
+                                                                  })
+                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                       FUN = function(trip_id) {
+                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities <- full_trips_activities[[trip_id]]
+                                                       }))
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add activity.\n",
@@ -195,39 +206,46 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selected\" empty, ",
-                                    "launch selection data before.\n",
+                                    " - Error: argument \"data_selected\" empty.\n",
                                     sep = "")
                                 stop()
-                              } else if (! any(class(object_elementarycatches) == "elementarycatches")) {
+                              } else if (! any(class(x = object_elementarycatches) == "elementarycatches")) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_elementarycatches\" argument, ",
-                                    "class elementarycatches expected.\n",
+                                    " - Error: invalid \"object_elementarycatches\" argument.\n",
                                     sep = "")
                                 stop()
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add elementary catches.\n",
                                         sep = "")
                                   }
-                                  for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                    if (length(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities) != 0) {
-                                      for (k in seq_len(length.out = length(private$data_selected[[i]][[j]]$.__enclos_env__$private$activities))) {
-                                        if (private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
-                                          activity_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$activity_id
-                                          elementarycatches_tmp <- object_elementarycatches$filter_by_activity(activity_id = activity_id)
-                                          private$data_selected[[i]][[j]]$.__enclos_env__$private$activities[[k]]$.__enclos_env__$private$elementarycatches <- lapply(X = seq_len(length.out = length(x = elementarycatches_tmp)),
-                                                                                                                                                                      FUN = function(list_id) {
-                                                                                                                                                                        elementarycatches_tmp[[list_id]]$clone()
-                                                                                                                                                                      })
-                                        }
-                                      }
-                                    }
-                                  }
+                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                 file = "NUL")
+                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                       FUN = function(trip_id) {
+                                                         if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
+                                                           capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                                          file = "NUL")
+                                                           capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
+                                                                          file = "NUL")
+                                                           invisible(x = lapply(X = seq_len(length.out = current_activities$count()),
+                                                                                FUN = function(activity_id) {
+                                                                                  current_activity_id <- current_activities$extract(attribut_l1 = "data",
+                                                                                                                                    attribut_l2 = "activity_id",
+                                                                                                                                    id = activity_id)
+                                                                                  current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                  current_activity_id,
+                                                                                                                                                                  "\""),
+                                                                                                                                                  clone = TRUE)
+                                                                                  current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
+                                                                                }))
+                                                         }
+                                                       }))
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary catches.\n",
@@ -253,21 +271,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add elementary landings.\n",
                                         sep = "")
                                   }
-                                  for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    elementarylandings_tmp <- object_elementarylandings$filter_by_trip(trip_id = trip_id)
-                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$elementarylandings <- lapply(X = seq_len(length.out = length(x = elementarylandings_tmp)),
-                                                                                                                         FUN = function(list_id) {
-                                                                                                                           elementarylandings_tmp[[list_id]]$clone()
-                                                                                                                         })
-                                  }
+                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                 file = "NUL")
+                                  full_trips_elementarylandings <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                                          FUN = function(trip_id) {
+                                                                            current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                                     attribut_l2 = "trip_id",
+                                                                                                                     id = trip_id)
+                                                                            object_elementarylandings$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                                                current_trip_id,
+                                                                                                                                "\""),
+                                                                                                                clone = TRUE)
+                                                                          })
+                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                       FUN = function(trip_id) {
+                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$elementarylandings <- full_trips_elementarylandings[[trip_id]]
+                                                       }))
                                 }
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -282,8 +309,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (length(private$data_selected) == 0) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selecetd\" empty, ",
-                                    "launch selection data before.\n",
+                                    " - Error: argument \"data_selecetd\" empty.\n",
                                     sep = "")
                                 stop()
                               } else if (! any(class(object_wells) == "wells")) {
@@ -292,21 +318,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               } else {
-                                for (i in seq_len(length.out = length(private$data_selected))) {
-                                  if (i == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Start of add well(s) - sample(s).\n",
                                         sep = "")
                                   }
-                                  for (j in seq_len(length.out = length(private$data_selected[[i]]))) {
-                                    trip_id <- private$data_selected[[i]][[j]]$.__enclos_env__$private$trip_id
-                                    trip_wells <- object_wells$filter_by_trip(trip_id = trip_id)
-                                    private$data_selected[[i]][[j]]$.__enclos_env__$private$wells <- lapply(X = seq_len(length.out = length(x = trip_wells)),
-                                                                                                            FUN = function(list_id) {
-                                                                                                              trip_wells[[list_id]]$clone()
-                                                                                                            })
-                                  }
+                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                 file = "NUL")
+                                  full_trips_wells <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                             FUN = function(trip_id) {
+                                                               current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                        attribut_l2 = "trip_id",
+                                                                                                        id = trip_id)
+                                                               object_wells$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                      current_trip_id,
+                                                                                                      "\""),
+                                                                                      clone = TRUE)
+                                                             })
+                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                       FUN = function(trip_id) {
+                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$wells <- full_trips_wells[[trip_id]]
+                                                       }))
                                 }
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),

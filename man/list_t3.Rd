@@ -170,7 +170,7 @@ Function for select attribut's element(s) by specific filter.
 \subsection{Method \code{filter_l1()}}{
 Function for select item(s) by specific selection.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$filter_l1(attribut_l1 = "data", filter)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{list_t3$filter_l1(attribut_l1 = "data", filter, clone = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -179,6 +179,8 @@ Function for select item(s) by specific selection.
 \item{\code{attribut_l1}}{Object of type \code{\link[base]{character}} expected. First strate attribut's name. By default "data".}
 
 \item{\code{filter}}{Object of type \code{\link[base]{character}} expected. Filter by specific selection. Use the pattern $path$ for specify path of element in the R6 object. For example: "$path$elementarycatch_id == "elementarycatch4" & $path$activity_id == "activity168""}
+
+\item{\code{clone}}{Object of type \code{\link[base]{logical}} expected. TRUE if you want to create a new object (not link to the original object).}
 }
 \if{html}{\out{</div>}}
 }

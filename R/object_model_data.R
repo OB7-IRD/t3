@@ -332,29 +332,29 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # common data design ----
                                      trips_data <- unclass(x = trips_data)
                                      object_trips <- t3::object_r6(class_name = "trips")
-                                     object_trips$add(lapply(seq_len(length.out = length(x = trips_data[[1]])),
-                                                             function(i) {
+                                     object_trips$add(lapply(X = seq_len(length.out = length(x = trips_data[[1]])),
+                                                             FUN = function(trip_id) {
                                                                cat(format(x = Sys.time(),
                                                                           "%Y-%m-%d %H:%M:%S"),
                                                                    " - Start importation of trip element ",
-                                                                   i,
+                                                                   trip_id,
                                                                    ".\n",
                                                                    "[trip: ",
-                                                                   trips_data[[1]][i],
+                                                                   trips_data[[1]][trip_id],
                                                                    "]\n",
                                                                    sep = "")
-                                                               trip <- trip$new(trip_id = trips_data[[1]][i],
-                                                                                fleet = trips_data[[2]][i],
-                                                                                departure_date = trips_data[[3]][i],
-                                                                                landing_date = trips_data[[4]][i],
-                                                                                logbook_availability = trips_data[[5]][i],
-                                                                                fish_hold_empty = trips_data[[6]][i],
-                                                                                vessel_id = trips_data[[7]][i],
-                                                                                vessel_type = trips_data[[8]][i])
+                                                               trip <- trip$new(trip_id = trips_data[[1]][trip_id],
+                                                                                fleet = trips_data[[2]][trip_id],
+                                                                                departure_date = trips_data[[3]][trip_id],
+                                                                                landing_date = trips_data[[4]][trip_id],
+                                                                                logbook_availability = trips_data[[5]][trip_id],
+                                                                                fish_hold_empty = trips_data[[6]][trip_id],
+                                                                                vessel_id = trips_data[[7]][trip_id],
+                                                                                vessel_type = trips_data[[8]][trip_id])
                                                                cat(format(x = Sys.time(),
                                                                           format = "%Y-%m-%d %H:%M:%S"),
                                                                    " - Successful importation of trip element ",
-                                                                   i,
+                                                                   trip_id,
                                                                    ".\n",
                                                                    sep = "")
                                                                return(trip)
@@ -702,31 +702,31 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      activities_data <- unclass(x = activities_data)
                                      object_activities <- t3::object_r6(class_name = "activities")
                                      object_activities$add(lapply(X = seq_len(length.out = length(activities_data[[1]])),
-                                                                  FUN = function(i) {
+                                                                  FUN = function(activity_id) {
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                         " - Start importation of activity element ",
-                                                                        i,
+                                                                        activity_id,
                                                                         ".\n",
                                                                         "[activity: ",
-                                                                        activities_data[[2]][i],
+                                                                        activities_data[[2]][activity_id],
                                                                         "]\n",
                                                                         sep = "")
-                                                                    activity <- activity$new(trip_id = activities_data[[1]][i],
-                                                                                             activity_id = activities_data[[2]][i],
-                                                                                             ocean = activities_data[[3]][i],
-                                                                                             activity_date = activities_data[[4]][i],
-                                                                                             activity_number = activities_data[[5]][i],
-                                                                                             activity_longitude = activities_data[[6]][i],
-                                                                                             activity_latitude = activities_data[[7]][i],
-                                                                                             set_count = activities_data[[8]][i],
-                                                                                             school_type = activities_data[[9]][i],
-                                                                                             activity_code = activities_data[[10]][i],
-                                                                                             activity_name = activities_data[[11]][i],
-                                                                                             time_at_sea = activities_data[[12]][i])
+                                                                    activity <- activity$new(trip_id = activities_data[[1]][activity_id],
+                                                                                             activity_id = activities_data[[2]][activity_id],
+                                                                                             ocean = activities_data[[3]][activity_id],
+                                                                                             activity_date = activities_data[[4]][activity_id],
+                                                                                             activity_number = activities_data[[5]][activity_id],
+                                                                                             activity_longitude = activities_data[[6]][activity_id],
+                                                                                             activity_latitude = activities_data[[7]][activity_id],
+                                                                                             set_count = activities_data[[8]][activity_id],
+                                                                                             school_type = activities_data[[9]][activity_id],
+                                                                                             activity_code = activities_data[[10]][activity_id],
+                                                                                             activity_name = activities_data[[11]][activity_id],
+                                                                                             time_at_sea = activities_data[[12]][activity_id])
                                                                     cat(format(x = Sys.time(),
                                                                                format = "%Y-%m-%d %H:%M:%S"),
                                                                         " - Successful importation of activity element ",
-                                                                        i,
+                                                                        activity_id,
                                                                         ".\n",
                                                                         sep = "")
                                                                     return(activity)
@@ -1069,28 +1069,28 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      elementarycatches_data <- unclass(x = elementarycatches_data)
                                      object_elementarycatches <- t3::object_r6(class_name = "elementarycatches")
                                      object_elementarycatches$add(lapply(X = seq_len(length.out = length(elementarycatches_data[[1]])),
-                                                                         FUN = function(i) {
+                                                                         FUN = function(elementarycatch_id) {
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                                " - Start importation of elementary catch element ",
-                                                                               i,
+                                                                               elementarycatch_id,
                                                                                ".\n",
                                                                                "[elementarycatch: ",
-                                                                               elementarycatches_data[[2]][i],
+                                                                               elementarycatches_data[[2]][elementarycatch_id],
                                                                                "]\n",
                                                                                sep = "")
-                                                                           elementarycatch <- elementarycatch$new(activity_id = elementarycatches_data[[1]][i],
-                                                                                                                  elementarycatch_id = elementarycatches_data[[2]][i],
-                                                                                                                  ocean = elementarycatches_data[[3]][i],
-                                                                                                                  school_type = elementarycatches_data[[4]][i],
-                                                                                                                  logbook_category = elementarycatches_data[[5]][i],
-                                                                                                                  logbook_category_name = elementarycatches_data[[6]][i],
-                                                                                                                  specie_code = elementarycatches_data[[7]][i],
-                                                                                                                  specie_code3l = elementarycatches_data[[8]][i],
-                                                                                                                  catch_weight = elementarycatches_data[[9]][i])
+                                                                           elementarycatch <- elementarycatch$new(activity_id = elementarycatches_data[[1]][elementarycatch_id],
+                                                                                                                  elementarycatch_id = elementarycatches_data[[2]][elementarycatch_id],
+                                                                                                                  ocean = elementarycatches_data[[3]][elementarycatch_id],
+                                                                                                                  school_type = elementarycatches_data[[4]][elementarycatch_id],
+                                                                                                                  logbook_category = elementarycatches_data[[5]][elementarycatch_id],
+                                                                                                                  logbook_category_name = elementarycatches_data[[6]][elementarycatch_id],
+                                                                                                                  specie_code = elementarycatches_data[[7]][elementarycatch_id],
+                                                                                                                  specie_code3l = elementarycatches_data[[8]][elementarycatch_id],
+                                                                                                                  catch_weight = elementarycatches_data[[9]][elementarycatch_id])
                                                                            cat(format(x = Sys.time(),
                                                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                                                " - Successful importation of elementary catch element ",
-                                                                               i,
+                                                                               elementarycatch_id,
                                                                                ".\n",
                                                                                sep = "")
                                                                            return(elementarycatch)
@@ -1429,27 +1429,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      elementarylandings_data <- unclass(x = elementarylandings_data)
                                      object_elementarylandings <- t3::object_r6(class_name = "elementarylandings")
                                      object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylandings_data[[1]])),
-                                                                          FUN = function(i) {
+                                                                          FUN = function(elementarylanding_id) {
                                                                             cat(format(x = Sys.time(),
                                                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Start importation of elementary landing element ",
-                                                                                i,
+                                                                                elementarylanding_id,
                                                                                 ".\n",
                                                                                 "[elementarylanding: ",
-                                                                                elementarylandings_data[[2]][i],
+                                                                                elementarylandings_data[[2]][elementarylanding_id],
                                                                                 "]\n",
                                                                                 sep = "")
-                                                                            elementarylanding <- elementarylanding$new(trip_id = elementarylandings_data[[1]][i],
-                                                                                                                       elementarylanding_id = elementarylandings_data[[2]][i],
-                                                                                                                       landing_category = elementarylandings_data[[3]][i],
-                                                                                                                       landing_category_name = elementarylandings_data[[4]][i],
-                                                                                                                       specie_code = elementarylandings_data[[5]][i],
-                                                                                                                       specie_code3l = elementarylandings_data[[6]][i],
-                                                                                                                       landing_weight = elementarylandings_data[[7]][i])
+                                                                            elementarylanding <- elementarylanding$new(trip_id = elementarylandings_data[[1]][elementarylanding_id],
+                                                                                                                       elementarylanding_id = elementarylandings_data[[2]][elementarylanding_id],
+                                                                                                                       landing_category = elementarylandings_data[[3]][elementarylanding_id],
+                                                                                                                       landing_category_name = elementarylandings_data[[4]][elementarylanding_id],
+                                                                                                                       specie_code = elementarylandings_data[[5]][elementarylanding_id],
+                                                                                                                       specie_code3l = elementarylandings_data[[6]][elementarylanding_id],
+                                                                                                                       landing_weight = elementarylandings_data[[7]][elementarylanding_id])
                                                                             cat(format(x = Sys.time(),
                                                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                                                 " - Successful importation of elementary landing element ",
-                                                                                i,
+                                                                                elementarylanding_id,
                                                                                 ".\n",
                                                                                 sep = "")
                                                                             return(elementarylanding)
@@ -2062,7 +2062,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            trip_id,
                                            "]\n",
                                            sep = "")
-                                       tmp_trip <- dplyr::filter(.data = samples_data, trip_id == !!trip_id)
+                                       tmp_trip <- dplyr::filter(.data = samples_data,
+                                                                 trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
