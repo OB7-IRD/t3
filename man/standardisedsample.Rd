@@ -29,8 +29,7 @@ Initialize function for R6 standardisedsample class.
   specie_code3l,
   sample_standardised_length_class_lf,
   sample_number_measured_extrapolated_lf,
-  sample_total_count,
-  elementarysample
+  sample_total_count
 )}\if{html}{\out{</div>}}
 }
 
@@ -56,8 +55,6 @@ Initialize function for R6 standardisedsample class.
 \item{\code{sample_number_measured_extrapolated_lf}}{Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.}
 
 \item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
-
-\item{\code{elementarysample}}{Object of class R6-elementarysample expected. A R6 reference object class elementarysample.}
 }
 \if{html}{\out{</div>}}
 }

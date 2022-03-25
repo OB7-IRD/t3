@@ -19,7 +19,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @param sample_weigth Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).
                                     #' @param sample_weight_unit Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).
                                     #' @param sample_category Object of class {\link[base]{character}} expected. Sample category: -10kg or +10kg.
-                                    #' @param standardisedsample Object of class R6-standardisedsample expected. A R6 reference object class standardisedsample.
                                     initialize = function(trip_id,
                                                           activity_id,
                                                           well_id,
@@ -32,8 +31,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                           sample_number_weighted,
                                                           sample_weigth,
                                                           sample_weight_unit,
-                                                          sample_category,
-                                                          standardisedsample) {
+                                                          sample_category) {
                                       # attribute "trip_id" verification
                                       t3:::check_trip_id(trip_id)
                                       # attribute "activity_id" verification
@@ -68,7 +66,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                       private$sample_weigth <- sample_weigth
                                       private$sample_weight_unit <- sample_weight_unit
                                       private$sample_category <- sample_category
-                                      private$standardisedsample <- standardisedsample
                                     }),
                                   private = list(
                                     trip_id = NULL,
@@ -85,5 +82,4 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     sample_number_weighted_set = NULL,
                                     sample_weigth_set = NULL,
                                     sample_weight_unit = NULL,
-                                    sample_category = NULL,
-                                    standardisedsample = NULL))
+                                    sample_category = NULL))

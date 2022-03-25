@@ -32,8 +32,7 @@ Initialize function for R6 standardisedsampleset class.
   sample_number_weighted,
   sample_weigth,
   sample_weight_unit,
-  sample_category,
-  standardisedsample
+  sample_category
 )}\if{html}{\out{</div>}}
 }
 
@@ -65,8 +64,6 @@ Initialize function for R6 standardisedsampleset class.
 \item{\code{sample_weight_unit}}{Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).}
 
 \item{\code{sample_category}}{Object of class {\link[base]{character}} expected. Sample category: -10kg or +10kg.}
-
-\item{\code{standardisedsample}}{Object of class R6-standardisedsample expected. A R6 reference object class standardisedsample.}
 }
 \if{html}{\out{</div>}}
 }

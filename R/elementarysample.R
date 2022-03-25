@@ -17,7 +17,6 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                     #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
                                     #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.
                                     #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
-                                    #' @param elementarysampleraw Object of class R6-elementarysampleraw expected. A R6 reference object class elementarysampleraw.
                                     initialize = function(trip_id,
                                                           well_id,
                                                           sample_id,
@@ -28,8 +27,7 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                                           specie_code3l,
                                                           sample_standardised_length_class_lf,
                                                           sample_number_measured_extrapolated_lf,
-                                                          sample_total_count,
-                                                          elementarysampleraw) {
+                                                          sample_total_count) {
                                       # attribute "trip_id" verification
                                       t3:::check_trip_id(trip_id)
                                       # attribute "well_id" verification
@@ -64,7 +62,6 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                       private$sample_standardised_length_class_lf <- sample_standardised_length_class_lf
                                       private$sample_number_measured_extrapolated_lf <- sample_number_measured_extrapolated_lf
                                       private$sample_total_count <- sample_total_count
-                                      private$elementarysampleraw <- elementarysampleraw
                                     }),
                                   private = list(
                                     trip_id = NULL,
@@ -77,5 +74,4 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                     specie_code3l = NULL,
                                     sample_standardised_length_class_lf = NULL,
                                     sample_number_measured_extrapolated_lf = NULL,
-                                    sample_total_count = NULL,
-                                    elementarysampleraw = NULL))
+                                    sample_total_count = NULL))
