@@ -172,7 +172,9 @@ Process of Raising Factor level 1 (RF1).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
   species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
   rf1_lowest_limit = 0.8,
-  rf1_highest_limit = 1.2
+  rf1_highest_limit = 1.2,
+  outputs_extraction = FALSE,
+  global_outputs_path = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -184,6 +186,10 @@ Process of Raising Factor level 1 (RF1).
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{\code{outputs_extraction}}{Object of type \code{\link[base]{logical}} expected. By default FALSE. Filled TRUE if you want to have outputs extraction.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 }
 \if{html}{\out{</div>}}
 }

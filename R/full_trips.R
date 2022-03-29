@@ -354,9 +354,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
+                            #' @param outputs_extraction Object of type \code{\link[base]{logical}} expected. By default FALSE. Filled TRUE if you want to have outputs extraction.
+                            #' @param global_outputs_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             rf1 = function(species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
                                            rf1_lowest_limit = 0.8,
-                                           rf1_highest_limit = 1.2) {
+                                           rf1_highest_limit = 1.2,
+                                           outputs_extraction = FALSE,
+                                           global_outputs_path = NULL) {
                               # function parameters verification ----
                               if (any(class(x = species_rf1) != "integer")) {
                                 cat(format(x = Sys.time(),
@@ -378,7 +382,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Error: invalid \"rf1_highest_limit\" argument.\n",
                                     sep = "")
                                 stop()
+                              } else if (class(x = outputs_extraction) != "logical"
+                                         || length(x = outputs_extraction) != 1) {
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"outputs_extraction\" argument.\n",
+                                    sep = "")
+                                stop()
+                              } else if (outputs_extraction == TRUE
+                                         && (class(x = global_outputs_path) != "character"
+                                             || length(x = global_outputs_path) != 1)) {
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"global_outputs_path\" argument.\n",
+                                    sep = "")
+                                stop()
+                              } else if (! file.exists(file.path(global_outputs_path,
+                                                                 "level1",
+                                                                 "data_outputs"))) {
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"global_outputs_path\" argument.\n",
+                                    "run function initiate_directories() to create directories structure expected.\n",
+                                    sep = "")
+                                stop()
                               } else {
+                                # process ----
                                 if (is.null(x = private$data_selected)) {
                                   cat(format(x = Sys.time(),
                                              format = "%Y-%m-%d %H:%M:%S"),
@@ -616,7 +645,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                            current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
+                                                                                                current_rf1))
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
                                           }
                                         }
@@ -642,6 +672,145 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              format = "%Y-%m-%d %H:%M:%S"),
                                       " - Successful process 1.1: Raising Factor level 1.\n",
                                       sep = "")
+                                  # outputs extraction ----
+                                  # outputs manipulation
+                                  if (outputs_extraction == TRUE) {
+                                    full_trips_selected <- private$data_selected
+                                    capture.output(trips_selected <- t3::object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                   file = "NUL")
+                                    total_landings_catches_species <- lapply(X = seq_len(length.out = trips_selected$count()),
+                                                                             FUN = function(trip_id) {
+                                                                               current_trip <- trips_selected$extract(id = trip_id)[[1]]
+                                                                               if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
+                                                                                 capture.output(current_elementarylandings <- t3::object_r6(class_name = "elementarylandings"),
+                                                                                                file = "NUL")
+                                                                                 capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
+                                                                                                file = "NUL")
+                                                                                 current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                              landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
+                                                                                   dplyr::group_by(specie) %>%
+                                                                                   dplyr::summarise(landing_weight = sum(landing_weight),
+                                                                                                    .groups = "drop") %>%
+                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                 elementarylandings <- TRUE
+                                                                               } else {
+                                                                                 elementarylandings <- FALSE
+                                                                               }
+                                                                               if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                                                                 capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                                                                file = "NUL")
+                                                                                 capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
+                                                                                                file = "NUL")
+                                                                                 if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                                                                   capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                                                                  file = "NUL")
+                                                                                   capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                                                                  file = "NUL")
+                                                                                   current_total_catches_species <- data.frame(specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                               catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
+                                                                                                                               catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
+                                                                                     dplyr::group_by(specie) %>%
+                                                                                     dplyr::summarise(catch_weight = sum(catch_weight),
+                                                                                                      catch_weight_rf1 = sum(catch_weight_rf1),
+                                                                                                      .groups = "drop") %>%
+                                                                                     dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                   elementarycatches <- TRUE
+                                                                                 } else {
+                                                                                   elementarycatches <- FALSE
+                                                                                 }
+                                                                               } else {
+                                                                                 elementarycatches <- FALSE
+                                                                               }
+                                                                               if (elementarylandings == TRUE) {
+                                                                                 if (elementarycatches == TRUE) {
+                                                                                   current_total_landings_catches_species <- current_total_landings_species %>%
+                                                                                     dplyr::full_join(current_total_catches_species,
+                                                                                                      by = c("specie",
+                                                                                                             "trip_id"))
+                                                                                 } else {
+                                                                                   current_total_landings_catches_species <- dplyr::mutate(.data = current_total_landings_species,
+                                                                                                                                           catch_weight = NA,
+                                                                                                                                           catch_weight_rf1 = NA)
+                                                                                 }
+                                                                               } else {
+                                                                                 if (elementarycatches == TRUE) {
+                                                                                   current_total_landings_catches_species <- dplyr::mutate(.data = current_total_catches_species,
+                                                                                                                                           landing_weight = NA)
+                                                                                 } else {
+                                                                                   current_total_landings_catches_species <- NULL
+                                                                                 }
+                                                                               }
+                                                                               return(current_total_landings_catches_species)
+                                                                             })
+                                    total_landings_catches_species <- as.data.frame(do.call(what = rbind,
+                                                                                            args = total_landings_catches_species))
+                                    total_landings_catches <- total_landings_catches_species %>%
+                                      dplyr::group_by(trip_id) %>%
+                                      dplyr::summarise(landing_weight = sum(landing_weight,
+                                                                            na.rm = TRUE),
+                                                       catch_weight = sum(catch_weight,
+                                                                          na.rm = TRUE),
+                                                       catch_weight_rf1 = sum(catch_weight_rf1,
+                                                                              na.rm = TRUE),
+                                                       .groups = "drop")
+                                    outputs_process_1_1 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                     FUN = function(full_trip_id) {
+                                                                                                       if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                         return(rep(x = full_trip_id,
+                                                                                                                    length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                       } else {
+                                                                                                         return(full_trip_id)
+                                                                                                       }
+                                                                                                     })),
+                                                                      "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                       FUN = function(full_trip_id) {
+                                                                                                         if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                           return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                      length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                         } else {
+                                                                                                           return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                         }
+                                                                                                       })),
+                                                                      "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                      "landing_date" = do.call("c",
+                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                      "year_landing_date" = sapply(do.call("c",
+                                                                                                           trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                   lubridate::year),
+                                                                      "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                      "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                      "rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf1"))),
+                                                                      "statut_rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf1"))))
+                                    global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
+                                                                                   y = total_landings_catches,
+                                                                                   by = "trip_id")
+                                    detail_outputs_process_1_1 <- outputs_process_1_1 %>%
+                                      dplyr::full_join(x = outputs_process_1_1,
+                                                       y = total_landings_catches_species,
+                                                       by = "trip_id")
+                                    # csv extraction
+                                    write.csv2(x = global_outputs_process_1_1,
+                                               file = file.path(global_outputs_path,
+                                                                "level1",
+                                                                "data_outputs",
+                                                                "process_1_1_global.csv"),
+                                               row.names = FALSE)
+                                    write.csv2(x = detail_outputs_process_1_1,
+                                               file = file.path(global_outputs_path,
+                                                                "level1",
+                                                                "data_outputs",
+                                                                "process_1_1_detail.csv"),
+                                               row.names = FALSE)
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Outputs extracted in the following directory:\n",
+                                        file.path(global_outputs_path,
+                                                  "level1",
+                                                  "data_outputs"),
+                                        sep = "")
+                                  }
                                 }
                               }
                             },

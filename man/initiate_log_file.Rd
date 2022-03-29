@@ -7,11 +7,11 @@
 initiate_log_file(log_file = FALSE, log_path = NULL, log_name = "t3log")
 }
 \arguments{
-\item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
+\item{log_file}{(logical) expected. Initiation or not for log file creation. By default FALSE (no).}
 
-\item{log_path}{(character) Path of the log file directory. By default NULL.}
+\item{log_path}{(character) expected. Path of the log file directory. By default NULL.}
 
-\item{log_name}{(character) Name of the log file. By default "t3log".}
+\item{log_name}{(character) expected. Name of the log file. By default "t3log".}
 }
 \value{
 A log file in text format at the location define in the argument "log_path".
