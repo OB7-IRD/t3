@@ -18,12 +18,26 @@ knitr::opts_chunk$set(
 
 <div style="text-align: justify">
 
-## Title
+## Modelling species proportion in catch and Computation of catch estimates
 
 To do
 
-### Sub-title 1
+### Process 3.1: Data preparatory
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.1.png'/>
 
-### Sub-title 2
+### Process 3.2: Modelling
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.2.png'/>
+
+### Process 3.3: Data and Model checking
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.3.png'/>
+
+### Process 3.4: Dataset for prediction
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.4.png'/>
+
+### Process 3.5: Dataset for prediction
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.5.png'/>
