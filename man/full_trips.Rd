@@ -459,27 +459,27 @@ Data preparatory for the t3 modelling process (level 3).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).}
+\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
 
-\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data ouptut of the level 1 and 2.}
+\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
 
 \item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.}
 
 \item{\code{periode_reference}}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
 
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimaton and prediction.Default value is current year -1.}
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
-\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of year use for the modelling. The default value is 5}
+\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
 \item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
 
 \item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.}
 
-\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.}
+\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
 
-\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.}
+\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.}
 
-\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
 }
 \if{html}{\out{</div>}}
 }

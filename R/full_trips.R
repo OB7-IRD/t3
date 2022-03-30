@@ -3935,7 +3935,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
 
                                 # aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
                                 #                     data = data4mod,
@@ -3947,7 +3947,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
                               }
                               outputs_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
@@ -4042,23 +4042,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process2))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
-                              } else {
-                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
-                                                    "outputs_level3_process2" = outputs_level3_process2)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              #####################
+                              return(outputs_level3_process2)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.2: random forest models.\n",
                                   sep = "")
+                              #################
+
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process2))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
+                              #                       "outputs_level3_process2" = outputs_level3_process2)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
+                              # cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              #     " - End process 3.2: random forest models.\n",
+                              #     sep = "")
                             },
                             # process 3.3: models checking ----
                             #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
@@ -4530,12 +4537,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              row.names = FALSE)
                                   current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                  list("moran_residual_test" = moran_residual_test))
-
-                                  correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
-                                                                          lag_max = 300)
-                                  correlogram_resp_acf <- correlogram_resp[[1]] +
-                                    ggplot2::ggtitle(paste0(correlogram_resp[[1]][["labels"]][["title"]],
-                                                            " (observed data)"))
+                                  correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
+                                  # correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
+                                                                          # lag_max = 300)
+                                  correlogram_resp_acf <- correlogram_resp +
+                                    ggplot2::ggtitle("Autocorrelation function of observed data")
                                   moran_index <- ggplot2::ggplot(data = moran_residual_test,
                                                                  ggplot2::aes(x = dist,
                                                                               y = estimate)) +
@@ -4555,11 +4561,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
                                     ggplot2::xlab("Distance (10^2 km)") +
                                     ggplot2::ylab("Moran index")
-                                  correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
-                                                                         lag_max = 300)
-                                  correlogram_res_acf <- correlogram_res[[1]] +
-                                    ggplot2::ggtitle(paste0(correlogram_res[[1]][["labels"]][["title"]],
-                                                            " (residuals)"))
+                                  # correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
+                                  #                                        lag_max = 300)
+                                  correlogram_res <- forecast::ggAcf(current_model_data$res[order(current_model_data$date_act)], lag.max = 300)
+                                  correlogram_res_acf <- correlogram_res +
+                                    ggplot2::ggtitle("Autocorrelation function of residuals")+
+                                    ggplot2::ylim(min(correlogram_resp$data$Freq, correlogram_res$data$Freq), max(correlogram_resp$data$Freq, correlogram_res$data$Freq))
+
                                   spatio_temporal_checking <- ggpubr::ggarrange(variogram,
                                                                                 correlogram_resp_acf,
                                                                                 moran_index,
@@ -4769,20 +4777,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ".\n",
                                     sep = "")
                               }
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process3))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process3"
-                              } else {
-                                data_level3 <- list("outputs_level3_process2" = outputs_level3_process2,
-                                                    "outputs_level3_process3" = outputs_level3_process3)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process3))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process3"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process2" = outputs_level3_process2,
+                              #                       "outputs_level3_process3" = outputs_level3_process3)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
+                              return(outputs_level3_process3)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
                                   sep = "")
