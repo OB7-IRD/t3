@@ -1,7 +1,7 @@
 #' @name df2boot
 #' @title Translate Data frame to boot class
 #' @description Function to translate data frame to boot class (boot package) for ci computation
-#' @param to The observed value of statistic applied to data
+#' @param t0 The observed value of statistic applied to data
 #' @param t A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.
 #' @param R The number of bootstrap replicates. Usually this will be a single positive integer.
 #' @param sample_data The sample data

@@ -7,9 +7,9 @@
 catch_ci_calculator(fit_data, boot_data)
 }
 \arguments{
-\item{to}{The observed value of statistic applied to data}
+\item{fit_data}{standardized catch estimates from the prediction step}
 
-\item{t}{A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.}
+\item{boot_data}{standardized bootstrap catch data from the bootstap step}
 }
 \value{
 

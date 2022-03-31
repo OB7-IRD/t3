@@ -5772,22 +5772,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }# link to if(plot_predict)
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process5))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
-                              } else {
-                                data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process5))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: model predictions.\n",
                                   sep = "")
+                              return(outputs_level3_process5)
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.

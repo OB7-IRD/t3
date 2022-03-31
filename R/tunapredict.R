@@ -93,7 +93,7 @@ tunapredict <- function(sample_data,
                                       quantreg = FALSE,
                                       keep.inbag= FALSE)
 
-      newd$fit_prop <- ranger:::predict.ranger(model_rf_full, data = newd)$predictions
+      newd$fit_prop <- predict(model_rf_full, data = newd)$predictions
       newd$data_source <- "full_model" # add flag
 
     }
@@ -112,7 +112,7 @@ tunapredict <- function(sample_data,
                                           quantreg = FALSE,
                                           keep.inbag= FALSE)
 
-      new_wtv$fit_prop<- ranger:::predict.ranger(model_rf_wtvessel,data=new_wtv)$predictions
+      new_wtv$fit_prop<- predict(model_rf_wtvessel,data=new_wtv)$predictions
       new_wtv$data_source <- "model_wtv" # add flag
     }
 
@@ -133,7 +133,7 @@ tunapredict <- function(sample_data,
                                         keep.inbag= FALSE
       )
 
-      new_0$fit_prop<- ranger:::predict.ranger(modrf0,newdata=new_0)$predictions
+      new_0$fit_prop<- predict(modrf0,newdata=new_0)$predictions
       new_0$data_source <- "simple_model" # add flag
     }
 
