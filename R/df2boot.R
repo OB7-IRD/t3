@@ -7,7 +7,6 @@
 #' @param sample_data The sample data
 #' @param strata An integer vector or factor specifying the strata for multi-sample problems. This may be specified for any simulation, but is ignored when sim = "parametric". When strata is supplied for a nonparametric bootstrap, the simulations are done within the specified strata
 #' @return
-
 df2boot <- function(t0,
                     t,
                     R,

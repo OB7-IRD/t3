@@ -16,7 +16,6 @@
 #' @importFrom ranger ranger
 #' @importFrom dplyr sample_n rename
 #' @return
-
 tunaboot <- function(sample_data,
                      allset_data,
                      # schooltype = 1,
@@ -37,7 +36,6 @@ tunaboot <- function(sample_data,
   prop_t3 <- modrf0 <- NULL
   if(missing(Nseed_boot)){Nseed_boot = Nboot}
   if(missing(target_period)){target_period = allset_data$yr[1]}
-
   # build structure of the output list for the bootstrap
   boot_output_list <- vector('list', length = Nboot)
   # boot_output_list <- lapply(boot_output_list, function (x){
@@ -45,7 +43,6 @@ tunaboot <- function(sample_data,
   #   names(tmp) <- c("task1", "task2","loop")
   #   return(tmp)
   # })
-
   # subset of all sampled set
   sub <- sample_data
 
@@ -58,11 +55,9 @@ tunaboot <- function(sample_data,
   sub <- droplevels(sub)
   sub$ocean <- factor(sub$ocean)
   sub$fmod <- factor(sub$fmod)
-
   #### bootstrap
 
-  # select sample and data to predict
-
+    # select sample and data to predict
     ### remove set used to train models from data to predict
     no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
     no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
@@ -159,7 +154,7 @@ tunaboot <- function(sample_data,
                                       quantreg = FALSE,
                                       keep.inbag= FALSE
       )
-      newd$fit_prop <- ranger:::predict.ranger(object = model_rf_full,
+      newd$fit_prop <- predict(object = model_rf_full,
                                                data = newd)$predictions
       newd$data_source <- "full_model" # add flag
     }
@@ -179,7 +174,7 @@ tunaboot <- function(sample_data,
                                           keep.inbag= FALSE
       )
 
-      new_wtv$fit_prop<- ranger:::predict.ranger(model_rf_wtvessel,data=new_wtv)$predictions
+      new_wtv$fit_prop<- predict(model_rf_wtvessel,data=new_wtv)$predictions
       new_wtv$data_source <- "model_wtv" # add flag
     }
 
@@ -199,7 +194,7 @@ tunaboot <- function(sample_data,
                                         keep.inbag= FALSE
       )
 
-      new_0$fit_prop<- ranger:::predict.ranger(modrf0,newdata=new_0)$predictions
+      new_0$fit_prop<- predict(modrf0,newdata=new_0)$predictions
       new_0$data_source <- "simple_model" # add flag
     }
 

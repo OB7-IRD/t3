@@ -14,7 +14,6 @@
 #' @importFrom ranger ranger
 #' @importFrom dplyr rename
 #' @return
-
 tunapredict <- function(sample_data,
                      allset_data,
                      # schooltype = 1,
