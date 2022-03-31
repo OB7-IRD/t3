@@ -4696,7 +4696,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 model_ntree <- current_model_outputs[[3]]$num.trees
                                 model_mtry <- current_model_outputs[[3]]$mtry
                                 model_node <- current_model_outputs[[3]]$min.node.size
-
                                 set.seed(7)
                                 fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
                                                                     size = nrow(df),
@@ -4718,7 +4717,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           min.node.size = model_node,
                                                           splitrule = "variance")
 
-                                  test$fit <- ranger:::predict.ranger(model,data = test)$predictions
+                                  test$fit <- predict(model,data = test)$predictions
+
                                   resi[[h]] = test$resp - test$fit
                                   mufit[[h]] = mean(test$resp)
                                 }
@@ -4853,8 +4853,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                "fmod",
                                                                "ocean",
                                                                "year")])
-                              act_chr$yr <- lubridate::year(x = act_chr$date)
-                              act_chr$mon <- lubridate::month(x = act_chr$date)
+                              act_chr$yr <- lubridate::year(x = act_chr$date_act)
+                              act_chr$mon <- lubridate::month(x = act_chr$date_act)
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
@@ -4920,8 +4920,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       replace = TRUE,
                                                       quantreg = FALSE,
                                                       keep.inbag= FALSE)
-                                test$fmod2 <- ranger:::predict.ranger(rfg,
-                                                                      data = test)$predictions
+                                test$fmod2 <- predict(rfg,
+                                                      data = test)$predictions
                                 tmp <- dplyr::left_join(sets_long,
                                                         test[, c("id_act","fmod2")],
                                                         by = "id_act")
@@ -4937,42 +4937,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if(small_fish_only == F){
                                 sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
 
                               } else {
                                 sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
                                   dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
                               }
                               # test unitaire total catch equal
                               # sets_long %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               #   dplyr::summarise(tot = sum(wtot_lb_t3))
                               # tmp %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               # tmp2 %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
-
-
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
                               names(outputs_level3_process4)[length(outputs_level3_process4)] <- "nonsampled_sets"
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process4))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
-                              } else {
-                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
-                                                    "outputs_level3_process4" = outputs_level3_process4)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process4))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
+                              #                       "outputs_level3_process4" = outputs_level3_process4)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.4: data formatting for predictions.\n",
                                   sep = "")
+                              return(outputs_level3_process4)
                             },
                             # process 3.5: model predictions ----
                             #' @description Model predictions for the species composition and computing of catches.
