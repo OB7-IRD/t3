@@ -12,12 +12,22 @@
         }, 
         {
             "affiliation": "IRD", 
-            "name": "Julien Lebranchu"
-        }, 
+            "name": "Antoine Duparc",
+            "orcid": "0000-0001-6135-9015"
+        },
         {
             "affiliation": "IRD", 
-            "name": "Antoine Duparc"
-        }
+            "name": "Laurent FLoch",
+            "orcid": "0000-0002-7759-0534"
+        }, {
+            "affiliation": "IRD", 
+            "name": "Julien Lebranchu",
+            "orcid": "0000-0002-7759-0534"
+        },     {
+            "affiliation": "IRD", 
+            "name": "OB7",
+            "orcid": "0000-0002-4642-3418"
+        }    
     ], 
     "access_right": "open", 
     "related_identifiers": [
