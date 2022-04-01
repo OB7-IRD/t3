@@ -17,8 +17,10 @@
         },
         {
             "affiliation": "IRD", 
-            "name": "Laurent FLoch",
-            "orcid": "0000-0002-7759-0534"
+            "name": "Laurent FLoch"
+        },{
+            "affiliation": "IRD", 
+            "name": "Pascal Cauquil"
         }, {
             "affiliation": "IRD", 
             "name": "Julien Lebranchu",
