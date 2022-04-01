@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attribut "catch_weight" verification — check_catch_weight • t3</title>
+<title>Changelog • t3</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,14 +33,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Attribut "catch_weight" verification — check_catch_weight" />
-<meta property="og:description" content="Check if the item &quot;catch_weight&quot; have one unique class identified as numeric and if values are superior to zero." />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -71,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">t3</a>
+        <a class="navbar-link" href="index.html">t3</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -79,13 +78,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -106,36 +105,91 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Attribut "catch_weight" verification</h1>
-    <small class="dont-index">Source: <a href='https://github.com/OB7-IRD/t3/blob/master/R/checks.R'><code>R/checks.R</code></a></small>
-    <div class="hidden name"><code>check_catch_weight.Rd</code></div>
+      <h1>Changelog</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Check if the item "catch_weight" have one unique class identified as numeric and if values are superior to zero.</p>
-    </div>
+<div id="changelog" class="section level1">
 
-    <pre class="usage"><span class='fu'>check_catch_weight</span><span class='op'>(</span><span class='va'>catch_weight</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>catch_weight</th>
-      <td><p>(numeric) Catch weight in tonnes.</p></td>
-    </tr>
-    </table>
-
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<div id="091---2020-09-21" class="section level2">
+<h2 class="hasAnchor">
+<a href="#091---2020-09-21" class="anchor"></a>[0.9.1] - 2020-09-21</h2>
+<div id="added" class="section level3">
+<h3 class="hasAnchor">
+<a href="#added" class="anchor"></a>Added</h3>
+<ul>
+<li>Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)</li>
+<li>Implementation of boostrap method as base for all confidence intervals</li>
+<li>Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode</li>
+<li>Implementation of outputs for the he nominal catches by species and by fishing mode</li>
+<li>Fix minor bugs in all different processes (P1, P2, P3)</li>
+</ul>
+</div>
+<div id="changed" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changed" class="anchor"></a>Changed</h3>
+<ul>
+<li>Improve modelling configuration (addition of new parameters)</li>
+<li>Rewrite several figures for the model checking</li>
+<li>Improve time computing using faster implementation of random forests for the species composition modeling in the level3</li>
+</ul>
+</div>
+<div id="removed" class="section level3">
+<h3 class="hasAnchor">
+<a href="#removed" class="anchor"></a>Removed</h3>
+<ul>
+<li>Disabling task and effort computation while waiting for confident interval implementation</li>
+<li>Remove the documentation from the package. Stay available at <a href="https://ob7-ird.github.io/t3/index.html" class="uri">https://ob7-ird.github.io/t3/index.html</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="090---2020-06-05" class="section level2">
+<h2 class="hasAnchor">
+<a href="#090---2020-06-05" class="anchor"></a>[0.9.0] - 2020-06-05</h2>
+<div id="added-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#added-1" class="anchor"></a>Added</h3>
+<ul>
+<li>Implentation of the model layer in R6class</li>
+<li>Implementation of all logbooks standardization sub-processes</li>
+<li>Implementation of all samples standardization sub-processes</li>
+<li>Implementation of sub-processes for assessing species composition in relation to non-sampled assemblages
+<ul>
+<li>Strict selection of samples used in the model training according to several criteria on sets and wells: school type, location, date, sample quality.<br>
+</li>
+<li>Classification of unknown school type (no data available) by clustering according to major tuna species composition.<br>
+</li>
+<li>Development of a statistical model accounting for:
+<ul>
+<li>Spatial and temporal structure of the fishery: location and date of the catch</li>
+<li>Vessel specificity which impacts the species composition of the catch</li>
+<li>Crew reporting information which enables more flexibility in the model when a marginal composition is caught</li>
+<li>Several years of fishing in the training to increase the robustness of the estimates</li>
+</ul>
+</li>
+<li>Model checking to ensure reliability of the results</li>
+<li>Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
 
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
+
 
 
       <footer>
