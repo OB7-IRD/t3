@@ -2,7 +2,7 @@ Package: t3
 Type: Package
 Title: Tropical Tunas Treatment
 Version: 0.9.1
-Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosystems", email = "ob7@ird.fr", role = c("cre", "cph")),
+Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosystems", email = "ob7@ird.fr", role = c("cre", "cph", "fnd")), comment = c(ORCID = "0000-0002-4642-3418"),
     person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", role = c("aut")),
     person("Antoine", "Duparc", email = "antoine.duparc@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0001-6135-9015")),
     person("Pascal", "Cauquil", email = "pascal.cauquil@ird.fr", role = c("aut")),
@@ -13,8 +13,7 @@ Authors@R: c(person("Ob7 -", "Observatory of Exploited Tropical Pelagic Ecosyste
     person("Viveca", "Fonteneau", email = "vivinord@wanadoo.fr", role = c("ctb")),
     person("Norbet", "Billet", email = "norbert.billet@ifremer.fr", role = c("ctb")),
     person("Laurent", "Dubroca", email = "laurent.dubroca@ifremer.fr", role = c("ctb")),
-    person("Emmanuel", "Chassot", email = "emmanuel.Chassot@fao.org", role = c("ctb")), comment = c(ORCID = "0000-0002-6779-4955")),
-    person("IRD/OB7", role = c("cph", "fnd"), comment = c(ORCID = "0000-0002-4642-3418"))
+    person("Emmanuel", "Chassot", email = "emmanuel.Chassot@fao.org", role = c("ctb")), comment = c(ORCID = "0000-0002-6779-4955"))
 Description: The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics.
     The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
 License: GPL-3 + file LICENSE
