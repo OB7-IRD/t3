@@ -3,7 +3,7 @@ Type: Package
 Title: Tropical Tunas Treatment
 Version: 0.9.1
 Authors@R: c(person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", role = c("aut", "cre")),
-    person("Antoine", "Duparc", email = "antoine.duparc@ird.fr", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6135-9015")),
+    person("Antoine", "Duparc", email = "antoine.duparc@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0001-6135-9015")),
     person("Pascal", "Cauquil", email = "pascal.cauquil@ird.fr", role = c("aut")),
     person("Laurent", "Floc'h", email = "laurent.floch@ird.fr", role = c("aut")),
     person("Julien", "Lebranchu", email = "julien.lebranchu@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0002-7759-0534")),
