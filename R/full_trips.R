@@ -5198,7 +5198,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                              }
+                              # }
                               # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                               for (ocean in ocean_level) {
@@ -5237,6 +5237,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
                                                                                                                    ocean,
                                                                                                                    sep = "_")
+                              }
                               }
                               # bootstrap step 3 - compute confident intervals ----
                               # Compute CI by set - export catch by set
