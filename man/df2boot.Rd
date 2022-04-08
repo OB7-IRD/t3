@@ -18,7 +18,7 @@ df2boot(t0, t, R, sample_data, strata)
 \item{strata}{An integer vector or factor specifying the strata for multi-sample problems. This may be specified for any simulation, but is ignored when sim = "parametric". When strata is supplied for a nonparametric bootstrap, the simulations are done within the specified strata}
 }
 \value{
-
+TODO
 }
 \description{
 Function to translate data frame to boot class (boot package) for ci computation

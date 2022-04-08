@@ -6,7 +6,7 @@
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
 #' @importFrom boot boot.ci
-#' @importFrom ranger ranger predictions importance predict.ranger
+#' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
 #' @importFrom spdep dnearneigh nb2listw moran.mc moran.test

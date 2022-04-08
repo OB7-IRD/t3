@@ -605,7 +605,7 @@ Model predictions for the species composition and computing of catches.
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
-\item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
+\item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
 
 \item{\code{Nboot}}{Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.}
 
