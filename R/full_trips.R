@@ -5,6 +5,7 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
+#' @importFrom boot boot.ci
 #' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
@@ -2409,7 +2410,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 well_prop_plus10_weigth <- 0
                                                 well_prop_global_weigth <- 0
                                                 if (! any(current_wellplan_weigth_category %in% c("inconnu",
-                                                                                                  "mélange"))) {
+                                                                                                  "m\u00e9lange"))) {
                                                   for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                     current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
                                                     if (current_well_plan$.__enclos_env__$private$wellplan_weigth_category_label == "- 10 kg") {
