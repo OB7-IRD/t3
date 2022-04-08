@@ -5,7 +5,6 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
-#' @importFrom boot boot.ci
 #' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
