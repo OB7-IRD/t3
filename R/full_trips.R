@@ -10,7 +10,7 @@
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
 #' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
-#''@importFrom stats predict
+#' @importFrom stats predict
 #' @importFrom rfUtilities multi.collinear
 #' @importFrom gstat variogram
 full_trips <- R6::R6Class(classname = "full_trips",
