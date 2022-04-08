@@ -10,6 +10,7 @@
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
 #' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
+#''@importFrom stats predict
 #' @importFrom rfUtilities multi.collinear
 #' @importFrom gstat variogram
 full_trips <- R6::R6Class(classname = "full_trips",
@@ -4846,7 +4847,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
                                 dplyr::group_by(id_act, date_act, sp, wcat, code_act_type) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% dplyr::ungroup()
 
                               # set use for modeling to remove for prediction
                               data4mod <- outputs_level3_process1
@@ -5429,8 +5430,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                         input_degree_format = "decimal_degree",
                                 #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
-                                  group_by(yr, mon, sp, ocean, cwp) %>%
-                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                  dplyr::group_by(yr, mon, sp, ocean, cwp) %>%
+                                  dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
 
@@ -5445,8 +5446,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                    lon = x[[i]]$lon,
                                                                                                                                    base = 1)
                                                                                                           boot_tmp_subelement <- x[[i]] %>%
-                                                                                                            group_by(yr, mon, sp, cwp, ocean) %>%
-                                                                                                            summarise(catch_set_fit = sum(catch_set_fit))
+                                                                                                            dplyr::group_by(yr, mon, sp, cwp, ocean) %>%
+                                                                                                            dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                                                                                           boot_tmp_subelement$loop <- i
                                                                                                           return(boot_tmp_subelement)
                                                                                                         }))
@@ -5494,8 +5495,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                         input_degree_format = "decimal_degree",
                                 #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
-                                  group_by(yr, mon, fmod, sp, ocean, cwp) %>%
-                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                  dplyr::group_by(yr, mon, fmod, sp, ocean, cwp) %>%
+                                  dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
