@@ -13,7 +13,7 @@
 #' @param target_period (integer) Time period for the predictions in year. Default is the year of the data to predict
 #' @importFrom ranger ranger
 #' @importFrom dplyr rename
-#' @return
+#' @return TODO
 tunapredict <- function(sample_data,
                      allset_data,
                      # schooltype = 1,

@@ -5,7 +5,11 @@
 #' @param boot_data standardized bootstrap catch data from the bootstap step
 # @param t0 The observed value of statistic applied to data
 # @param t A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.
-#' @return
+#' @return A vector of fitted data and confidence interval
+#' fit_data Fitted data from the input
+#' ci_inf Estimated inferior value of the confidence interval
+#' ci_sup Estimated superior value of the confidence interval
+
 # source(file = file.path(root_path, "function", "df2boot.R", fsep = "\\")) # bootstrap function
 catch_ci_calculator <- function(fit_data,
                                 boot_data){

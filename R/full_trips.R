@@ -5,7 +5,8 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
-#' @importFrom ranger ranger predictions importance
+#' @importFrom boot boot.ci
+#' @importFrom ranger ranger predictions importance predict.ranger
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
 #' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
@@ -4980,7 +4981,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
-                            #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
+                            #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
