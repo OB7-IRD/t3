@@ -7,6 +7,8 @@
 df2boot(t0, t, R, sample_data, strata)
 }
 \arguments{
+\item{t0}{The observed value of statistic applied to data}
+
 \item{t}{A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.}
 
 \item{R}{The number of bootstrap replicates. Usually this will be a single positive integer.}
@@ -14,11 +16,9 @@ df2boot(t0, t, R, sample_data, strata)
 \item{sample_data}{The sample data}
 
 \item{strata}{An integer vector or factor specifying the strata for multi-sample problems. This may be specified for any simulation, but is ignored when sim = "parametric". When strata is supplied for a nonparametric bootstrap, the simulations are done within the specified strata}
-
-\item{to}{The observed value of statistic applied to data}
 }
 \value{
-
+TODO
 }
 \description{
 Function to translate data frame to boot class (boot package) for ci computation

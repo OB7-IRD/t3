@@ -5,10 +5,12 @@
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
 #' @importFrom dplyr group_by summarise last first filter ungroup
+#' @importFrom boot boot.ci
 #' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
 #' @importFrom sp coordinates proj4string spTransform
 #' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
+#' @importFrom stats predict
 #' @importFrom rfUtilities multi.collinear
 #' @importFrom gstat variogram
 full_trips <- R6::R6Class(classname = "full_trips",
@@ -2665,7 +2667,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 well_prop_plus10_weigth <- 0
                                                 well_prop_global_weigth <- 0
                                                 if (! any(current_wellplan_weigth_category %in% c("inconnu",
-                                                                                                  "mélange"))) {
+                                                                                                  "m\u00e9lange"))) {
                                                   for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                     current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
                                                     if (current_well_plan$.__enclos_env__$private$wellplan_weigth_category_label == "- 10 kg") {
@@ -3768,17 +3770,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
-                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Imputs of levels 3 (see function path to level 3).
-                            #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data ouptut of the level 1 and 2.
+                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).
+                            #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.
                             #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.
                             #' @param periode_reference Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
-                            #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimaton and prediction.Default value is current year -1.
-                            #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of year use for the modelling. The default value is 5
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
+                            #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
                             #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
                             #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
-                            #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.
-                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.
-                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.
+                            #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
+                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.
+                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.
                             data_preparatory = function(inputs_level3 = NULL,
                                                         inputs_level3_path = NULL,
                                                         outputs_directory,
@@ -4000,7 +4002,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sample_set_char <- list(sset = sset,
                                                         act_chr = act_chr,
                                                         catch_set_lb = catch_set_lb)
-                                # compute set weight in each sample to detect non representivness of the sample
+                                # compute set weight in each sample to detect non representiveness of the sample
                                 agg_wp <- aggregate(formula = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
                                                     data = wp,
                                                     FUN = sum)
@@ -4015,7 +4017,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # selection based on sets extrapolated (2 first step of the t3 process)
                                 kiset <- sset2
                                 # on sample
-                                # homogneous fishing mode in sample
+                                # homogeneous fishing mode in sample
                                 kiset <- kiset[kiset$fm_purity == 1, ]
                                 # spatial selection + mixture limit
                                 kiset <- kiset[kiset$lat_sample_dif < distance_maximum & kiset$lon_sample_dif < distance_maximum & kiset$nset < number_sets_maximum, ]
@@ -4196,7 +4198,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
 
                                 # aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
                                 #                     data = data4mod,
@@ -4208,7 +4210,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
                               }
                               outputs_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
@@ -4303,23 +4305,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process2))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
-                              } else {
-                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
-                                                    "outputs_level3_process2" = outputs_level3_process2)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              #####################
+                              return(outputs_level3_process2)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.2: random forest models.\n",
                                   sep = "")
+                              #################
+
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process2))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
+                              #                       "outputs_level3_process2" = outputs_level3_process2)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
+                              # cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              #     " - End process 3.2: random forest models.\n",
+                              #     sep = "")
                             },
                             # process 3.3: models checking ----
                             #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
@@ -4791,12 +4800,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              row.names = FALSE)
                                   current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
                                                                                  list("moran_residual_test" = moran_residual_test))
-
-                                  correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
-                                                                          lag_max = 300)
-                                  correlogram_resp_acf <- correlogram_resp[[1]] +
-                                    ggplot2::ggtitle(paste0(correlogram_resp[[1]][["labels"]][["title"]],
-                                                            " (observed data)"))
+                                  correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
+                                  # correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
+                                                                          # lag_max = 300)
+                                  correlogram_resp_acf <- correlogram_resp +
+                                    ggplot2::ggtitle("Autocorrelation function of observed data")
                                   moran_index <- ggplot2::ggplot(data = moran_residual_test,
                                                                  ggplot2::aes(x = dist,
                                                                               y = estimate)) +
@@ -4816,11 +4824,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
                                     ggplot2::xlab("Distance (10^2 km)") +
                                     ggplot2::ylab("Moran index")
-                                  correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
-                                                                         lag_max = 300)
-                                  correlogram_res_acf <- correlogram_res[[1]] +
-                                    ggplot2::ggtitle(paste0(correlogram_res[[1]][["labels"]][["title"]],
-                                                            " (residuals)"))
+                                  # correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
+                                  #                                        lag_max = 300)
+                                  correlogram_res <- forecast::ggAcf(current_model_data$res[order(current_model_data$date_act)], lag.max = 300)
+                                  correlogram_res_acf <- correlogram_res +
+                                    ggplot2::ggtitle("Autocorrelation function of residuals")+
+                                    ggplot2::ylim(min(correlogram_resp$data$Freq, correlogram_res$data$Freq), max(correlogram_resp$data$Freq, correlogram_res$data$Freq))
+
                                   spatio_temporal_checking <- ggpubr::ggarrange(variogram,
                                                                                 correlogram_resp_acf,
                                                                                 moran_index,
@@ -4949,7 +4959,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 model_ntree <- current_model_outputs[[3]]$num.trees
                                 model_mtry <- current_model_outputs[[3]]$mtry
                                 model_node <- current_model_outputs[[3]]$min.node.size
-
                                 set.seed(7)
                                 fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
                                                                     size = nrow(df),
@@ -4971,7 +4980,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           min.node.size = model_node,
                                                           splitrule = "variance")
 
-                                  test$fit <- ranger:::predict.ranger(model,data = test)$predictions
+                                  test$fit <- predict(model,data = test)$predictions
+
                                   resi[[h]] = test$resp - test$fit
                                   mufit[[h]] = mean(test$resp)
                                 }
@@ -5030,20 +5040,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ".\n",
                                     sep = "")
                               }
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process3))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process3"
-                              } else {
-                                data_level3 <- list("outputs_level3_process2" = outputs_level3_process2,
-                                                    "outputs_level3_process3" = outputs_level3_process3)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process3))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process3"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process2" = outputs_level3_process2,
+                              #                       "outputs_level3_process3" = outputs_level3_process3)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
+                              return(outputs_level3_process3)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
                                   sep = "")
@@ -5097,7 +5108,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
                                 dplyr::group_by(id_act, date_act, sp, wcat, code_act_type) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% dplyr::ungroup()
 
                               # set use for modeling to remove for prediction
                               data4mod <- outputs_level3_process1
@@ -5105,8 +5116,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                "fmod",
                                                                "ocean",
                                                                "year")])
-                              act_chr$yr <- lubridate::year(x = act_chr$date)
-                              act_chr$mon <- lubridate::month(x = act_chr$date)
+                              act_chr$yr <- lubridate::year(x = act_chr$date_act)
+                              act_chr$mon <- lubridate::month(x = act_chr$date_act)
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
@@ -5172,8 +5183,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       replace = TRUE,
                                                       quantreg = FALSE,
                                                       keep.inbag= FALSE)
-                                test$fmod2 <- ranger:::predict.ranger(rfg,
-                                                                      data = test)$predictions
+                                test$fmod2 <- predict(rfg,
+                                                      data = test)$predictions
                                 tmp <- dplyr::left_join(sets_long,
                                                         test[, c("id_act","fmod2")],
                                                         by = "id_act")
@@ -5189,42 +5200,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if(small_fish_only == F){
                                 sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
 
                               } else {
                                 sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
                                   dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
-                                  ungroup()
+                                  dplyr::ungroup()
                               }
                               # test unitaire total catch equal
                               # sets_long %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               #   dplyr::summarise(tot = sum(wtot_lb_t3))
                               # tmp %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               # tmp2 %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
-
-
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
                               names(outputs_level3_process4)[length(outputs_level3_process4)] <- "nonsampled_sets"
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process4))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
-                              } else {
-                                data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
-                                                    "outputs_level3_process4" = outputs_level3_process4)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process4))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
+                              #                       "outputs_level3_process4" = outputs_level3_process4)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.4: data formatting for predictions.\n",
                                   sep = "")
+                              return(outputs_level3_process4)
                             },
                             # process 3.5: model predictions ----
                             #' @description Model predictions for the species composition and computing of catches.
@@ -5232,7 +5243,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
-                            #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
+                            #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
@@ -5450,7 +5461,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                              }
+                              # }
                               # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                               # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                               for (ocean in ocean_level) {
@@ -5489,6 +5500,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
                                                                                                                    ocean,
                                                                                                                    sep = "_")
+                              }
                               }
                               # bootstrap step 3 - compute confident intervals ----
                               # Compute CI by set - export catch by set
@@ -5679,8 +5691,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                         input_degree_format = "decimal_degree",
                                 #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
-                                  group_by(yr, mon, sp, ocean, cwp) %>%
-                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                  dplyr::group_by(yr, mon, sp, ocean, cwp) %>%
+                                  dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
 
@@ -5695,8 +5707,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                    lon = x[[i]]$lon,
                                                                                                                                    base = 1)
                                                                                                           boot_tmp_subelement <- x[[i]] %>%
-                                                                                                            group_by(yr, mon, sp, cwp, ocean) %>%
-                                                                                                            summarise(catch_set_fit = sum(catch_set_fit))
+                                                                                                            dplyr::group_by(yr, mon, sp, cwp, ocean) %>%
+                                                                                                            dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                                                                                           boot_tmp_subelement$loop <- i
                                                                                                           return(boot_tmp_subelement)
                                                                                                         }))
@@ -5744,8 +5756,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                         input_degree_format = "decimal_degree",
                                 #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
-                                  group_by(yr, mon, fmod, sp, ocean, cwp) %>%
-                                  summarise(catch_set_fit = sum(catch_set_fit))
+                                  dplyr::group_by(yr, mon, fmod, sp, ocean, cwp) %>%
+                                  dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
@@ -6024,22 +6036,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }# link to if(plot_predict)
-                              if (exists(x = "data_level3",
-                                         envir = .GlobalEnv)) {
-                                data_level3 <- get(x = "data_level3",
-                                                   envir = .GlobalEnv)
-                                data_level3 <- append(data_level3,
-                                                      list(outputs_level3_process5))
-                                names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
-                              } else {
-                                data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
-                              }
-                              assign(x = "data_level3",
-                                     value = data_level3,
-                                     envir = .GlobalEnv)
+                              # if (exists(x = "data_level3",
+                              #            envir = .GlobalEnv)) {
+                              #   data_level3 <- get(x = "data_level3",
+                              #                      envir = .GlobalEnv)
+                              #   data_level3 <- append(data_level3,
+                              #                         list(outputs_level3_process5))
+                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
+                              # } else {
+                              #   data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
+                              # }
+                              # assign(x = "data_level3",
+                              #        value = data_level3,
+                              #        envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: model predictions.\n",
                                   sep = "")
+                              return(outputs_level3_process5)
                             },
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
