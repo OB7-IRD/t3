@@ -82,14 +82,17 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>to</dt>
-<dd><p>The observed value of statistic applied to data</p></dd>
-<dt>t</dt>
-<dd><p>A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.</p></dd>
+    <dl><dt>fit_data</dt>
+<dd><p>standardized catch estimates from the prediction step</p></dd>
+<dt>boot_data</dt>
+<dd><p>standardized bootstrap catch data from the bootstap step</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>A vector of fitted data and confidence interval
+fit_data Fitted data from the input
+ci_inf Estimated inferior value of the confidence interval
+ci_sup Estimated superior value of the confidence interval</p>
     </div>
 
   </div>

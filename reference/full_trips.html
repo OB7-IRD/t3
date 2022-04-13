@@ -231,7 +231,9 @@
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>
   species_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span>,
   rf1_lowest_limit <span class="op">=</span> <span class="fl">0.8</span>,
-  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>
+  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>,
+  outputs_extraction <span class="op">=</span> <span class="cn">FALSE</span>,
+  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
@@ -247,6 +249,14 @@
 
 <dt><code>rf1_highest_limit</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Verification value for the highest limit of the RF1. By default 1.2.</p></dd>
+
+
+<dt><code>outputs_extraction</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. By default FALSE. Filled TRUE if you want to have outputs extraction.</p></dd>
+
+
+<dt><code>global_outputs_path</code></dt>
+<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
 </dl><p></p></div>
@@ -504,11 +514,11 @@
 <div class="section">
 <h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>inputs_level3</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Imputs of levels 3 (see function path to level 3).</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Inputs of levels 3 (see function path to level 3).</p></dd>
 
 
 <dt><code>inputs_level3_path</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Path to the folder containing yearly data ouptut of the level 1 and 2.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.</p></dd>
 
 
 <dt><code>outputs_directory</code></dt>
@@ -520,11 +530,11 @@
 
 
 <dt><code>target_year</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Year of interest for the model estimaton and prediction.Default value is current year -1.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Year of interest for the model estimation and prediction.Default value is current year -1.</p></dd>
 
 
 <dt><code>period_duration</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. number of year use for the modelling. The default value is 5</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. number of years use for the modelling. The default value is 5</p></dd>
 
 
 <dt><code>distance_maximum</code></dt>
@@ -536,15 +546,15 @@
 
 
 <dt><code>set_weight_minimum</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.</p></dd>
 
 
 <dt><code>minimum_set_frequency</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.</p></dd>
 
 
 <dt><code>vessel_id_ignored</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.</p></dd>
 
 
 </dl><p></p></div>
@@ -698,7 +708,7 @@
 
 
 <dt><code>ci_type</code></dt>
-<dd><p>Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1° square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.</p></dd>
+<dd><p>Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.</p></dd>
 
 
 <dt><code>Nboot</code></dt>
