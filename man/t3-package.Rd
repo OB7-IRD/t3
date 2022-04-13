@@ -39,15 +39,14 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ob7 - Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} [copyright holder]
+\strong{Maintainer}: Mathieu Depetris \email{mathieu.depetris@ird.fr}
 
 Authors:
 \itemize{
-  \item Mathieu Depetris \email{mathieu.depetris@ird.fr}
-  \item Antoine Duparc \email{antoine.duparc@ird.fr}
-  \item Pascal Cauquil \email{pascal.cauquil@ird.fr}
+  \item Antoine Duparc \email{antoine.duparc@ird.fr} (\href{https://orcid.org/0000-0001-6135-9015}{ORCID})
+  \item Pascal Cauquil \email{pascal.cauquil@ird.fr} (\href{https://orcid.org/0000-0003-0718-8950}{ORCID})
   \item Laurent Floc'h \email{laurent.floch@ird.fr}
-  \item Julien Lebranchu \email{julien.lebranchu@ird.fr}
+  \item Julien Lebranchu \email{julien.lebranchu@ird.fr} (\href{https://orcid.org/0000-0002-7759-0534}{ORCID})
 }
 
 Other contributors:
@@ -57,7 +56,8 @@ Other contributors:
   \item Viveca Fonteneau \email{vivinord@wanadoo.fr} [contributor]
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
   \item Laurent Dubroca \email{laurent.dubroca@ifremer.fr} [contributor]
-  \item Emmanuel Chassot \email{emmanuel.Chassot@fao.org} [contributor]
+  \item Emmanuel Chassot \email{emmanuel.Chassot@fao.org} (\href{https://orcid.org/0000-0002-6779-4955}{ORCID}) [contributor]
+  \item IRD - Ob7  Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} (\href{https://orcid.org/0000-0002-4642-3418}{ORCID}) [copyright holder, funder]
 }
 
 }
