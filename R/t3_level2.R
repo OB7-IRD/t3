@@ -24,7 +24,10 @@ t3_level2 <- function(object_model_data,
                       threshold_rf_total = as.integer(250),
                       log_file = FALSE,
                       log_path = NULL,
-                      log_name = "t3_level2") {
+                      log_name = "t3_level2",
+                      outputs_path = NULL,
+                      new_directory = NULL,
+                      integrated_process = FALSE) {
   if (paste0(class(object_model_data),
              collapse = " ") != "object_model_data R6") {
     cat(format(x = Sys.time(),
@@ -46,6 +49,13 @@ t3_level2 <- function(object_model_data,
     t3::initiate_log_file(log_file = log_file,
                           log_path = log_path,
                           log_name = log_name)
+    # directories initialization if outputs extraction ----
+    if (integrated_process != TRUE
+        && ! is.null(x = outputs_path)) {
+      outputs_path <- t3::initiate_directories(outputs_path = outputs_path,
+                                               new_directory = new_directory,
+                                               level = "level2")
+    }
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Start function t3 process level 2.\n",
         sep = "")

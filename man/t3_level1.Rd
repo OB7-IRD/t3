@@ -14,7 +14,10 @@ t3_level1(
   sunset_schema = "sunset",
   log_file = FALSE,
   log_path = NULL,
-  log_name = "t3_level1"
+  log_name = "t3_level1",
+  outputs_path = NULL,
+  new_directory = NULL,
+  integrated_process = FALSE
 )
 }
 \arguments{

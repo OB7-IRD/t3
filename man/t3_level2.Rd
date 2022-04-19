@@ -15,7 +15,10 @@ t3_level2(
   threshold_rf_total = as.integer(250),
   log_file = FALSE,
   log_path = NULL,
-  log_name = "t3_level2"
+  log_name = "t3_level2",
+  outputs_path = NULL,
+  new_directory = NULL,
+  integrated_process = FALSE
 )
 }
 \arguments{

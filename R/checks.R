@@ -184,18 +184,18 @@ check_landing_category_name <- function(landing_category_name) {
 #' @description Check if the item "landing_date" is in date format year month day hour minute second UTC and check if the value is inferior to the actual date.
 #' @importFrom lubridate ymd
 check_landing_date <- function(landing_date) {
-  if (is.na(x = lubridate::ymd_hms(landing_date,
-                                   quiet = TRUE,
-                                   tz = "UTC"))) {
+  if (is.na(x = lubridate::ymd(landing_date,
+                               quiet = TRUE,
+                               tz = "UTC"))) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"landing_date\" argument, at least one item failed to parse with format \"ymd_hms\".\n",
+        " - Error: invalide \"landing_date\" argument, at least one item failed to parse with the expected format.\n",
         sep = "")
     stop()
-  } else if (lubridate::ymd_hms(landing_date,
-                                quiet = TRUE,
-                                tz = "UTC") > as.POSIXct(x = Sys.time(),
-                                                         tz = "UTC")) {
+  } else if (lubridate::ymd(landing_date,
+                            quiet = TRUE,
+                            tz = "UTC") > as.POSIXct(x = Sys.time(),
+                                                     tz = "UTC")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: at least one \"landing_date\" is superior to the actual date.\n",
@@ -227,18 +227,18 @@ check_activity_date <- function(activity_date,
         sep = "")
     stop()
   } else if (! is.null(x = landing_date)) {
-    if (is.na(lubridate::ymd_hms(landing_date,
-                                 quiet = TRUE,
-                                 tz = "UTC"))) {
+    if (is.na(lubridate::ymd(landing_date,
+                             quiet = TRUE,
+                             tz = "UTC"))) {
       cat(format(x = Sys.time(),
                  format = "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalide \"landing_date\" argument, at least one item failed to parse with format \"ymd_hms\".\n",
+          " - Error: invalide \"landing_date\" argument, at least one item failed to parse with the expected formats.\n",
           sep = "")
       stop()
     } else if (lubridate::ymd(activity_date,
-                              quiet = TRUE) > lubridate::ymd_hms(landing_date,
-                                                                 quiet = TRUE,
-                                                                 tz = "UTC")) {
+                              quiet = TRUE) > lubridate::ymd(landing_date,
+                                                             quiet = TRUE,
+                                                             tz = "UTC")) {
       cat(format(x = Sys.time(),
                  format = "%Y-%m-%d %H:%M:%S"),
           " - Error: At least one \"activity_date\" is superior to \"landing_date\".\n",
@@ -256,37 +256,37 @@ check_activity_date <- function(activity_date,
 #' @importFrom lubridate ymd
 check_departure_date <- function(departure_date,
                                  landing_date = NULL) {
-  if (is.na(x = lubridate::ymd_hms(departure_date,
-                                   quiet = TRUE,
-                                   tz = "UTC"))) {
+  if (is.na(x = lubridate::ymd(departure_date,
+                               quiet = TRUE,
+                               tz = "UTC"))) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalide \"departure_date\" argument, at least one item failed to parse with format year month day hour minute second.\n",
+        " - Error: invalide \"departure_date\" argument, at least one item failed to parse with the expected formats.\n",
         sep = "")
     stop()
-  } else if (lubridate::ymd_hms(departure_date,
-                                quiet = TRUE,
-                                tz = "UTC") > as.POSIXct(x = Sys.time(),
-                                                         tz = "UTC")) {
+  } else if (lubridate::ymd(departure_date,
+                            quiet = TRUE,
+                            tz = "UTC") > as.POSIXct(x = Sys.time(),
+                                                     tz = "UTC")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: at least one item \"departure_date\" is superior to the actual date.\n",
         sep = "")
     stop()
   } else if (! is.null(x = landing_date)) {
-    if (is.na(lubridate::ymd_hms(landing_date,
-                                 quiet = TRUE,
-                                 tz = "UTC"))) {
+    if (is.na(lubridate::ymd(landing_date,
+                             quiet = TRUE,
+                             tz = "UTC"))) {
       cat(format(x = Sys.time(),
                  format = "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalide \"landing_date\" argument, at least one item failed to parse with format year month day hour minute second.\n",
+          " - Error: invalide \"landing_date\" argument, at least one item failed to parse with the expected formats.\n",
           sep = "")
       stop()
-    } else if (lubridate::ymd_hms(departure_date,
-                                  quiet = TRUE,
-                                  tz = "UTC") > lubridate::ymd_hms(landing_date,
-                                                                   quiet = TRUE,
-                                                                   tz = "UTC")) {
+    } else if (lubridate::ymd(departure_date,
+                              quiet = TRUE,
+                              tz = "UTC") > lubridate::ymd(landing_date,
+                                                           quiet = TRUE,
+                                                           tz = "UTC")) {
       cat(format(x = Sys.time(),
                  format = "%Y-%m-%d %H:%M:%S"),
           " - Error: At least one \"departure_date\" is superior to \"landing_date\".\n",

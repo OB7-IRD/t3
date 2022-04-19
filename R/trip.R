@@ -43,8 +43,12 @@ trip <- R6::R6Class(classname = "trip",
                         # attributions
                         private$trip_id <- trip_id
                         private$fleet <- fleet
-                        private$landing_date <- lubridate::ymd_hms(landing_date, quiet = TRUE, tz = "UTC")
-                        private$departure_date <- lubridate::ymd_hms(departure_date, quiet = TRUE, tz = "UTC")
+                        private$landing_date <- lubridate::ymd(landing_date,
+                                                               quiet = TRUE,
+                                                               tz = "UTC")
+                        private$departure_date <- lubridate::ymd(departure_date,
+                                                                 quiet = TRUE,
+                                                                 tz = "UTC")
                         private$logbook_availability <- logbook_availability
                         private$fish_hold_empty <- fish_hold_empty
                         private$vessel_id <- vessel_id

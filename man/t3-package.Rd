@@ -39,19 +39,19 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Mathieu Depetris \email{mathieu.depetris@ird.fr}
+\strong{Maintainer}: Mathieu Depetris \email{mathieu.depetris@ird.fr} (\href{https://orcid.org/0000-0001-8080-0531}{ORCID})
 
 Authors:
 \itemize{
   \item Antoine Duparc \email{antoine.duparc@ird.fr} (\href{https://orcid.org/0000-0001-6135-9015}{ORCID})
   \item Pascal Cauquil \email{pascal.cauquil@ird.fr} (\href{https://orcid.org/0000-0003-0718-8950}{ORCID})
-  \item Laurent Floc'h \email{laurent.floch@ird.fr}
+  \item Laurent Floc'h \email{laurent.floch@ird.fr} (\href{https://orcid.org/0000-0003-4764-9766}{ORCID})
   \item Julien Lebranchu \email{julien.lebranchu@ird.fr} (\href{https://orcid.org/0000-0002-7759-0534}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item Pascal Bach \email{pascal.bach@ird.fr} [contributor]
+  \item Pascal Bach \email{pascal.bach@ird.fr} (\href{https://orcid.org/0000-0003-0804-8466}{ORCID}) [contributor]
   \item Alain Fonteneau \email{alain.fonteneau@ird.fr} [contributor]
   \item Viveca Fonteneau \email{vivinord@wanadoo.fr} [contributor]
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]

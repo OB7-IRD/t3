@@ -4,12 +4,12 @@
 \alias{initiate_directories}
 \title{Output directories creation}
 \usage{
-initiate_directories(output_path, level = "all")
+initiate_directories(outputs_path, new_directory = TRUE, level = "all")
 }
 \arguments{
-\item{output_path}{(character) expected. General output directory.}
+\item{outputs_path}{(character) expected. General output directory.}
 
-\item{level}{(character) expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2" or "level3").}
+\item{level}{(character) expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").}
 }
 \value{
 A text variable with output directory path.

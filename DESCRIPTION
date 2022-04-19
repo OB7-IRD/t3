@@ -2,12 +2,12 @@ Package: t3
 Type: Package
 Title: Tropical Tunas Treatment
 Version: 0.9.1
-Authors@R: c(person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", role = c("aut", "cre")),
+Authors@R: c(person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8080-0531")),
     person("Antoine", "Duparc", email = "antoine.duparc@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0001-6135-9015")),
     person("Pascal", "Cauquil", email = "pascal.cauquil@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0003-0718-8950")),
-    person("Laurent", "Floc'h", email = "laurent.floch@ird.fr", role = c("aut")),
+    person("Laurent", "Floc'h", email = "laurent.floch@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0003-4764-9766")),
     person("Julien", "Lebranchu", email = "julien.lebranchu@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0002-7759-0534")),
-    person("Pascal", "Bach", email = "pascal.bach@ird.fr", role = c("ctb")),
+    person("Pascal", "Bach", email = "pascal.bach@ird.fr", role = c("ctb"), comment = c(ORCID = "0000-0003-0804-8466")),
     person("Alain", "Fonteneau", email = "alain.fonteneau@ird.fr", role = c("ctb")),
     person("Viveca", "Fonteneau", email = "vivinord@wanadoo.fr", role = c("ctb")),
     person("Norbet", "Billet", email = "norbert.billet@ifremer.fr", role = c("ctb")),

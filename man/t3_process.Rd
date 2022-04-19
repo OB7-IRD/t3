@@ -10,6 +10,8 @@ t3_process(
   db_con,
   log_file = FALSE,
   log_path = NULL,
+  outputs_path = NULL,
+  new_directory = NULL,
   periode_reference,
   countries,
   oceans,

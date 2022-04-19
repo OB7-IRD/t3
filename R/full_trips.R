@@ -356,12 +356,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
-                            #' @param outputs_extraction Object of type \code{\link[base]{logical}} expected. By default FALSE. Filled TRUE if you want to have outputs extraction.
                             #' @param global_outputs_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             rf1 = function(species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
-                                           outputs_extraction = FALSE,
                                            global_outputs_path = NULL) {
                               # function parameters verification ----
                               if (any(class(x = species_rf1) != "integer")) {
@@ -384,14 +382,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - Error: invalid \"rf1_highest_limit\" argument.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(x = outputs_extraction) != "logical"
-                                         || length(x = outputs_extraction) != 1) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"outputs_extraction\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else if (outputs_extraction == TRUE
+                              } else if (! is.null(x = global_outputs_path)
                                          && (class(x = global_outputs_path) != "character"
                                              || length(x = global_outputs_path) != 1)) {
                                 cat(format(x = Sys.time(),
@@ -672,7 +663,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                   # outputs extraction ----
                                   # outputs manipulation
-                                  if (outputs_extraction == TRUE) {
+                                  if (! is.null(x = global_outputs_path)) {
                                     full_trips_selected <- private$data_selected
                                     capture.output(trips_selected <- t3::object_r6(class_name = "trips"),
                                                    file = "NUL")
@@ -1115,7 +1106,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
                                                           private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                      current_elementarycatch_tmp)
+                                                                                                                                                                                                                 current_elementarycatch_tmp)
                                                         } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
@@ -1162,7 +1153,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           current_elementarycatch_tmp$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
                                                           private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                      current_elementarycatch_tmp)
+                                                                                                                                                                                                                 current_elementarycatch_tmp)
                                                         } else if (current_elementarycatch$.__enclos_env__$private$logbook_category %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
                                                           current_elementarycatch$.__enclos_env__$private$corrected_logbook_category <- category_4
                                                           current_elementarycatch$.__enclos_env__$private$catch_weight_category_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
@@ -3851,19 +3842,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Start process 3.1: data preparatory.\n",
                                     sep = "")
-                                outputs_directory_name <- format(Sys.time(),
-                                                                 "%Y%m%d_%H%M%S_t3_level3_outputs")
-                                dir.create(path = file.path(outputs_directory,
-                                                            outputs_directory_name))
-                                for (directory in c("data",
-                                                    "figures",
-                                                    "tables",
-                                                    "functions",
-                                                    "outputs")) {
-                                  dir.create(path = file.path(outputs_directory,
-                                                              outputs_directory_name,
-                                                              directory))
-                                }
                                 if (is.null(periode_reference)) {
                                   periode_reference <- seq.int(from = target_year,
                                                                to = target_year - period_duration)
@@ -4152,7 +4130,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   "vessel")],
                                                               by = c("id_act", "year"))
                                 data_lb_sample_screened = list(data4mod = data4mod)
-                                # export to global environment
+                                # export ----
                                 outputs_level3_process1 <- list(sample_set_char = sample_set_char,
                                                                 data_selected = data_selected,
                                                                 data_sample_extract = data_sample_extract,
@@ -4161,8 +4139,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     " - End process 3.1: data preparatory.\n",
                                     sep = "")
                                 return(list("raw_inputs_level3" = inputs_level3,
-                                            "outputs_directory" = file.path(outputs_directory,
-                                                                            outputs_directory_name),
+                                            "outputs_directory" = outputs_directory,
                                             "outputs_level3_process1" = outputs_level3_process1))
                               }
                             },
@@ -4305,39 +4282,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-                              #####################
                               return(outputs_level3_process2)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.2: random forest models.\n",
                                   sep = "")
-                              #################
-
-                              # if (exists(x = "data_level3",
-                              #            envir = .GlobalEnv)) {
-                              #   data_level3 <- get(x = "data_level3",
-                              #                      envir = .GlobalEnv)
-                              #   data_level3 <- append(data_level3,
-                              #                         list(outputs_level3_process2))
-                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process2"
-                              # } else {
-                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process1,
-                              #                       "outputs_level3_process2" = outputs_level3_process2)
-                              # }
-                              # assign(x = "data_level3",
-                              #        value = data_level3,
-                              #        envir = .GlobalEnv)
-                              # cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                              #     " - End process 3.2: random forest models.\n",
-                              #     sep = "")
                             },
                             # process 3.3: models checking ----
                             #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
                             #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
-                            #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
                             #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
                             models_checking = function(outputs_level3_process2,
-                                                       outputs_path,
+                                                       outputs_directory,
                                                        plot_sample = F,
                                                        avdth_patch_coord = F) {
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -4368,14 +4325,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     "\"",
                                     ".\n",
                                     sep = "")
-                                figures_directory <- file.path(outputs_path,
+                                figures_directory <- file.path(outputs_directory,
+                                                               "level3",
                                                                "figures",
                                                                names(outputs_level3_process2)[[a]])
                                 names(figures_directory) <- "figures"
-                                tables_directory <- file.path(outputs_path,
-                                                              "tables",
+                                tables_directory <- file.path(outputs_directory,
+                                                              "level3",
+                                                              "data_outputs",
                                                               names(outputs_level3_process2)[[a]])
-                                names(tables_directory) <- "tables"
+                                names(tables_directory) <- "data_outputs"
                                 for (b in c(figures_directory, tables_directory)) {
                                   if (file.exists(b)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -4671,10 +4630,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 current_model_data$res <- resrf
                                 current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_outputs[[3]]))
                                 current_model_data$fit<-ranger::predictions(current_model_outputs[[3]])
-
                                 # method
                                 # comparison of the model fitted value
-
                                 # look at variable importance in the model
                                 variables_importance <- as.data.frame(ranger::importance(current_model_outputs[[3]]))
                                 names(variables_importance) <- "value"
@@ -4746,8 +4703,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    legend.title = ggplot2::element_blank()) +
                                     ggplot2::xlab("Distance (m)") +
                                     ggplot2::ylab("Semivariance")
-
-
                                   # moran index on residual
                                   mil <- vector("list",
                                                 length = 10)
@@ -4802,7 +4757,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  list("moran_residual_test" = moran_residual_test))
                                   correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
                                   # correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
-                                                                          # lag_max = 300)
+                                  # lag_max = 300)
                                   correlogram_resp_acf <- correlogram_resp +
                                     ggplot2::ggtitle("Autocorrelation function of observed data")
                                   moran_index <- ggplot2::ggplot(data = moran_residual_test,
@@ -5040,20 +4995,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ".\n",
                                     sep = "")
                               }
-                              # if (exists(x = "data_level3",
-                              #            envir = .GlobalEnv)) {
-                              #   data_level3 <- get(x = "data_level3",
-                              #                      envir = .GlobalEnv)
-                              #   data_level3 <- append(data_level3,
-                              #                         list(outputs_level3_process3))
-                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process3"
-                              # } else {
-                              #   data_level3 <- list("outputs_level3_process2" = outputs_level3_process2,
-                              #                       "outputs_level3_process3" = outputs_level3_process3)
-                              # }
-                              # assign(x = "data_level3",
-                              #        value = data_level3,
-                              #        envir = .GlobalEnv)
                               return(outputs_level3_process3)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
@@ -5217,21 +5158,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
                               names(outputs_level3_process4)[length(outputs_level3_process4)] <- "nonsampled_sets"
-
-                              # if (exists(x = "data_level3",
-                              #            envir = .GlobalEnv)) {
-                              #   data_level3 <- get(x = "data_level3",
-                              #                      envir = .GlobalEnv)
-                              #   data_level3 <- append(data_level3,
-                              #                         list(outputs_level3_process4))
-                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process4"
-                              # } else {
-                              #   data_level3 <- list("outputs_level3_process1" = outputs_level3_process2,
-                              #                       "outputs_level3_process4" = outputs_level3_process4)
-                              # }
-                              # assign(x = "data_level3",
-                              #        value = data_level3,
-                              #        envir = .GlobalEnv)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.4: data formatting for predictions.\n",
                                   sep = "")
@@ -5241,14 +5167,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Model predictions for the species composition and computing of catches.
                             #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
                             #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
-                            #' @param outputs_path Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
                             model_predictions = function(outputs_level3_process2,
                                                          outputs_level3_process4,
-                                                         outputs_path,
+                                                         outputs_directory,
                                                          ci = FALSE,
                                                          ci_type = "all",
                                                          Nboot = 50,
@@ -5256,12 +5182,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
-                              figures_directory <- file.path(outputs_path,
+                              figures_directory <- file.path(outputs_directory,
+                                                             "level3",
                                                              "figures")
                               names(figures_directory) <- "figures"
-                              tables_directory <- file.path(outputs_path,
-                                                            "tables")
-                              names(tables_directory) <- "tables"
+                              tables_directory <- file.path(outputs_directory,
+                                                            "level3",
+                                                            "data_outputs")
+                              names(tables_directory) <- "data_outputs"
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
@@ -5384,20 +5312,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        value = "fit_prop_t3_ST",
                                                                        "BET", "SKJ", "YFT")
                                 boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
-
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-
                                 outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
                                                                        list(boot_tmp_element))
                                 names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
                                                                                                                    ocean,
                                                                                                                    sep = "_")
                               }
-
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
                               if (ci == TRUE){
-
                                 for (ocean in ocean_level) {
                                   sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
                                   for (species in unique(sets_long_ocean$sp)) {
@@ -5438,14 +5362,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   # bootstrap parameters
                                                                   Nboot = Nboot,
                                                                   target_period = dplyr::first(x = sets_long_fishing_mode$yr))
-
                                           outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
                                                                                  list(boot_output))
                                           names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
-                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                          cat(format(Sys.time(),
+                                                     "%Y-%m-%d %H:%M:%S"),
                                               " - Process 3.5 (Bootstrap step) successfull for ocean \"",
                                               ocean,
                                               "\", species \"",
@@ -5461,50 +5385,49 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                              # }
-                              # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
-                              # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
-                              for (ocean in ocean_level) {
-                                outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
-                                                                                                   x = names(outputs_level3_process5[[3]]))]
+                                # }
+                                # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
+                                # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
+                                for (ocean in ocean_level) {
+                                  outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
+                                                                                                     x = names(outputs_level3_process5[[3]]))]
+                                  list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
+                                  for(element in (seq.int(from = 1,
+                                                          to = length(outputs_level3_process5_ocean[[1]])))){
+                                    boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
+                                    boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
+                                    boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
+                                                                           key = "sp",
+                                                                           value = fit_prop)
+                                    boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
+                                    boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                              yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                              no = boot_tmp_element_wide$SKJ)
+                                    boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                              yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                              no = boot_tmp_element_wide$YFT)
+                                    boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
 
-                                list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
+                                    boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
+                                                                           key = "sp",
+                                                                           value = "fit_prop_t3_ST",
+                                                                           "BET", "SKJ", "YFT")
+                                    boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
-                                for(element in (seq.int(from = 1,
-                                                        to = length(outputs_level3_process5_ocean[[1]])))){
-                                  boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
-                                  boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
-                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
-                                                                         key = "sp",
-                                                                         value = fit_prop)
-                                  boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
-                                  boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                            yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
-                                                                            no = boot_tmp_element_wide$SKJ)
-                                  boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                            yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
-                                                                            no = boot_tmp_element_wide$YFT)
-                                  boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
-
-                                  boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
-                                                                         key = "sp",
-                                                                         value = "fit_prop_t3_ST",
-                                                                         "BET", "SKJ", "YFT")
-                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
-
-                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-                                  list_boot_ST_ocean[[element]] <- boot_tmp_element
+                                    boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                    list_boot_ST_ocean[[element]] <- boot_tmp_element
+                                  }
+                                  outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
+                                                                         list(list_boot_ST_ocean))
+                                  names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
+                                                                                                                     ocean,
+                                                                                                                     sep = "_")
                                 }
-                                outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
-                                                                       list(list_boot_ST_ocean))
-                                names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
-                                                                                                                   ocean,
-                                                                                                                   sep = "_")
-                              }
                               }
                               # bootstrap step 3 - compute confident intervals ----
                               # Compute CI by set - export catch by set
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
@@ -5517,12 +5440,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # compute final CI
                                 set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
                                 names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
-
                                 for (o in names(outputs_level3_process5$Estimated_catch_ST)){
                                   set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
                                                                                        boot_data = set_all_boot[[o]])
                                 }
-
                                 set_all_final_ocean <- do.call(rbind, set_all_final_ocean_list)
                                 set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
@@ -5570,12 +5491,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       return(boot_tmp_element)
                                                                     }))
                                 t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
-
                                 for (o in levels(t1_all$ocean)){
                                   t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
                                                                                                   boot_data = t1_all_boot[t1_all_boot$ocean == o,])
                                 }
-
                                 t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
                                 t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
@@ -5608,7 +5527,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean ,data=x, sum)
                                 return(boot_tmp_subelement)
                               }))
-
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1-fmod")) > 0 )){
                                 t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
@@ -5626,14 +5544,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      }))
                                 # compute final CI
                                 t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
-
                                 for (o in levels(t1_fmod$ocean)){
                                   t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
                                                                                                    boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
                                 }
-
                                 t1_fmod_final_ocean <- do.call(rbind, t1_fmod_final_ocean_list)
-
                                 t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
@@ -5662,12 +5577,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               mtrunc <- function(x,base){
                                 base*trunc(x/base)
                               }
-
                               mroundup <- function(x, base)
                               {
                                 base*(x%/%base + as.logical(x%%base))
                               }
-
                               # assign coordinates to cwp with a specific base
                               latlon2cwp<-function(lat,lon,base){
                                 quad<-ifelse(lon>=0,ifelse(lat>=0,1,2),ifelse(lat>=0,4,3)) # define quadrant
@@ -5676,7 +5589,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(paste(quad,lat_tmp,lon_tmp,sep=""))
 
                               }
-
                               # nominal catch by species and cwp (task 2 - catch Effort)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2 catch estimations.\n",
@@ -5695,7 +5607,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
-
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2")) > 0 )){
                                 t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
@@ -5716,7 +5627,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     }))
                                 # compute final CI
                                 t2_all_final_ocean_list <- vector("list", length = length(levels(t2_all$ocean)))
-
                                 for (o in as.numeric(levels(t2_all$ocean))){
                                   t2_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_all[t2_all$ocean == o,],
                                                                                       boot_data = t2_all_boot[t2_all_boot$ocean == o,])
@@ -5805,7 +5715,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-
                               # tmp <- catch_set_t3_long
                               # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
                               #                                         data_longitude = as.character(tmp$lon),
@@ -5852,7 +5761,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                                          "t1",
                               #                                          "t2")
                               # figure task 2 and proportion
-
                               if(plot_predict == T){
                                 sps <- t2
                                 sp::coordinates(object = sps) <- ~ lon + lat
@@ -6035,20 +5943,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                              }# link to if(plot_predict)
-                              # if (exists(x = "data_level3",
-                              #            envir = .GlobalEnv)) {
-                              #   data_level3 <- get(x = "data_level3",
-                              #                      envir = .GlobalEnv)
-                              #   data_level3 <- append(data_level3,
-                              #                         list(outputs_level3_process5))
-                              #   names(data_level3)[length(data_level3)] <- "outputs_level3_process5"
-                              # } else {
-                              #   data_level3 <- list("outputs_level3_process5" = outputs_level3_process5)
-                              # }
-                              # assign(x = "data_level3",
-                              #        value = data_level3,
-                              #        envir = .GlobalEnv)
+                              }
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: model predictions.\n",
                                   sep = "")

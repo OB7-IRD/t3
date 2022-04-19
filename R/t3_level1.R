@@ -22,7 +22,10 @@ t3_level1 <- function(object_model_data,
                       sunset_schema = "sunset",
                       log_file = FALSE,
                       log_path = NULL,
-                      log_name = "t3_level1") {
+                      log_name = "t3_level1",
+                      outputs_path = NULL,
+                      new_directory = NULL,
+                      integrated_process = FALSE) {
   if (paste0(class(object_model_data),
              collapse = " ") != "object_model_data R6") {
     cat(format(x = Sys.time(),
@@ -52,10 +55,18 @@ t3_level1 <- function(object_model_data,
                collapse = ", "),
         "]\n",
         sep = "")
+    # directories initialization if outputs extraction ----
+    if (integrated_process != TRUE
+        && ! is.null(x = outputs_path)) {
+      outputs_path <- t3::initiate_directories(outputs_path = outputs_path,
+                                               new_directory = new_directory,
+                                               level = "level1")
+    }
     # level 1.1: rf1 ----
     object_full_trips$rf1(species_rf1 = species_rf1,
-                          rf1_lowest_limit,
-                          rf1_highest_limit)
+                          rf1_lowest_limit = rf1_lowest_limit,
+                          rf1_highest_limit = rf1_highest_limit,
+                          global_outputs_path = outputs_path)
     # level 1.2: rf2 ----
     object_full_trips$rf2()
     # level 1.3: logbook weigth categories conversion ----

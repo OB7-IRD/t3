@@ -173,7 +173,6 @@ Process of Raising Factor level 1 (RF1).
   species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
-  outputs_extraction = FALSE,
   global_outputs_path = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -186,8 +185,6 @@ Process of Raising Factor level 1 (RF1).
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
-
-\item{\code{outputs_extraction}}{Object of type \code{\link[base]{logical}} expected. By default FALSE. Filled TRUE if you want to have outputs extraction.}
 
 \item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 }
@@ -532,7 +529,7 @@ Load each full model and compute figures and tables to check the model quality. 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(
   outputs_level3_process2,
-  outputs_path,
+  outputs_directory,
   plot_sample = F,
   avdth_patch_coord = F
 )}\if{html}{\out{</div>}}
@@ -543,7 +540,7 @@ Load each full model and compute figures and tables to check the model quality. 
 \describe{
 \item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
 
-\item{\code{outputs_path}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
 \item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
 
@@ -592,7 +589,7 @@ Model predictions for the species composition and computing of catches.
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
   outputs_level3_process2,
   outputs_level3_process4,
-  outputs_path,
+  outputs_directory,
   ci = FALSE,
   ci_type = "all",
   Nboot = 50,
@@ -607,7 +604,7 @@ Model predictions for the species composition and computing of catches.
 
 \item{\code{outputs_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
 
-\item{\code{outputs_path}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 

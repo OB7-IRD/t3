@@ -36,6 +36,8 @@ t3_process <- function(process = "all",
                        db_con,
                        log_file = FALSE,
                        log_path = NULL,
+                       outputs_path = NULL,
+                       new_directory = NULL,
                        periode_reference,
                        countries,
                        oceans,
@@ -78,6 +80,33 @@ t3_process <- function(process = "all",
                                                 oceans = oceans,
                                                 sample_type = sample_type,
                                                 trips_selected = trips_selected)
+    if (process == "level1") {
+      new_directory_level1 <- new_directory
+      outputs_path_level1 <- outputs_path
+      integrated_process <- FALSE
+    } else if (process == "level2") {
+      new_directory_level2 <- new_directory
+      outputs_path_level2 <- outputs_path
+      integrated_process <- FALSE
+    } else if (process %in% c("all",
+                              "until_level2")) {
+      if (! is.null(x = outputs_path)) {
+        integrated_process <- TRUE
+        outputs_path <- t3::initiate_directories(outputs_path = outputs_path,
+                                                 new_directory = new_directory,
+                                                 level = process)
+        new_directory_level1 <- FALSE
+        outputs_path_level1 <- outputs_path
+        new_directory_level2 <- FALSE
+        outputs_path_level2 <- outputs_path
+      } else {
+        integrated_process <- FALSE
+        new_directory_level1 <- new_directory
+        outputs_path_level1 <- outputs_path
+        new_directory_level2 <- new_directory
+        outputs_path_level2 <- outputs_path
+      }
+    }
     if (process %in% c("all",
                        "level1",
                        "until_level2")) {
@@ -90,7 +119,10 @@ t3_process <- function(process = "all",
                                        rf1_lowest_limit = rf1_lowest_limit,
                                        rf1_highest_limit = rf1_highest_limit,
                                        sunrise_schema = sunrise_schema,
-                                       sunset_schema = sunset_schema)
+                                       sunset_schema = sunset_schema,
+                                       new_directory = new_directory_level1,
+                                       outputs_path = outputs_path_level1,
+                                       integrated_process = integrated_process)
     }
     if (process %in% c("all",
                        "level2",
@@ -105,7 +137,10 @@ t3_process <- function(process = "all",
                                        threshold_rf_total = threshold_rf_total,
                                        log_file = log_file,
                                        log_path = log_path,
-                                       log_name = "t3_level2")
+                                       log_name = "t3_level2",
+                                       new_directory = new_directory_level2,
+                                       outputs_path = outputs_path_level2,
+                                       integrated_process = integrated_process)
     }
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Successful process of the Tropical Tuna Treatment.\n",

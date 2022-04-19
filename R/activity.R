@@ -59,7 +59,8 @@ activity <- R6::R6Class(classname = "activity",
                             private$trip_id <- trip_id
                             private$activity_id <- activity_id
                             private$ocean <- ocean
-                            private$activity_date <- lubridate::ymd(activity_date, quiet = TRUE)
+                            private$activity_date <- lubridate::ymd(activity_date,
+                                                                    quiet = TRUE)
                             private$activity_number <- activity_number
                             private$activity_longitude <- activity_longitude
                             private$activity_latitude <- activity_latitude
