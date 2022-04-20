@@ -32,29 +32,29 @@ activity <- R6::R6Class(classname = "activity",
                                                 activity_name,
                                                 time_at_sea) {
                             # attribute "trip_id" verification
-                            t3:::check_trip_id(trip_id)
+                            check_trip_id(trip_id)
                             # attribute "activity_id" verification
-                            t3:::check_activity_id(activity_id)
+                            check_activity_id(activity_id)
                             # attribute "ocean" verification
-                            t3:::check_ocean(ocean)
+                            check_ocean(ocean)
                             # attribute "activity_date" verification
-                            t3:::check_activity_date(activity_date = activity_date)
+                            check_activity_date(activity_date = activity_date)
                             # attribute "check_activity_number" verification
-                            t3:::check_activity_number(activity_number)
+                            check_activity_number(activity_number)
                             # attribute "check_activity_latitude" verification
-                            t3:::check_activity_latitude(activity_latitude)
+                            check_activity_latitude(activity_latitude)
                             # attribute "check_activity_longitude" verification
-                            t3:::check_activity_longitude(activity_longitude)
+                            check_activity_longitude(activity_longitude)
                             # attribute "set_count" verification
-                            t3:::check_set_count(set_count)
+                            check_set_count(set_count)
                             # attribute "school_type" verification
-                            t3:::check_school_type(school_type)
+                            check_school_type(school_type)
                             # attribute "activity_code" verification
-                            t3:::check_activity_code(activity_code)
+                            check_activity_code(activity_code)
                             # attribute "school_type" verification
-                            t3:::check_activity_name(activity_name)
+                            check_activity_name(activity_name)
                             # attribute "time_at_sea" verification
-                            t3:::check_time_at_sea(time_at_sea)
+                            check_time_at_sea(time_at_sea)
                             # attributeions
                             private$trip_id <- trip_id
                             private$activity_id <- activity_id

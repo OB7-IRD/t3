@@ -24,9 +24,9 @@ data_model_initialisation <- function(data_source = "t3_db",
                                       sample_type,
                                       trips_selected = NULL) {
   # log file initialisation ----
-  t3::initiate_log_file(log_file = log_file,
-                        log_path = log_path,
-                        log_name = log_name)
+  initiate_log_file(log_file = log_file,
+                    log_path = log_path,
+                    log_name = log_name)
   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
       " - Start function data model initialisation.\n",
       "[periode reference: ",
@@ -48,7 +48,7 @@ data_model_initialisation <- function(data_source = "t3_db",
                          "]\n")),
       sep = "")
   # initialisation object for data's object model ----
-  object_model_data <- t3:::object_model_data$new()
+  object_model_data <- object_model_data$new()
   # model creation: object trips creation ----
   object_model_data$trips_object_creation(data_source = data_source,
                                           db_con = db_con,
@@ -123,7 +123,7 @@ data_model_initialisation <- function(data_source = "t3_db",
     object_model_data$lengthweightrelationships_data(db_con = db_con)
   }
   # model creation: initialisation object for full trips class ----
-  object_full_trips <- t3:::full_trips$new()
+  object_full_trips <- full_trips$new()
   # model creation: object full_trip creation ----
   object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
   # model creation: filter on reference year ----

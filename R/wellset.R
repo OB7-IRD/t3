@@ -22,15 +22,15 @@ wellset <- R6::R6Class(classname = "wellset",
                                                weighted_weight_minus10,
                                                weighted_weight_plus10) {
                            # attribute "trip_id" verification
-                           t3:::check_trip_id(trip_id)
+                           check_trip_id(trip_id)
                            # attribute "well_id" verification
-                           t3:::check_well_id(well_id)
+                           check_well_id(well_id)
                            # attribute "activity_id" verification
-                           t3:::check_activity_id(activity_id)
+                           check_activity_id(activity_id)
                            # attribute "sample_id" verification
-                           t3:::check_sample_id(sample_id)
+                           check_sample_id(sample_id)
                            # attribute "weighted_weight" verification
-                           t3:::check_weighted_weight(weighted_weight)
+                           check_weighted_weight(weighted_weight)
                            # attributions
                            private$trip_id <- trip_id
                            private$activity_id <- activity_id

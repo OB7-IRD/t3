@@ -1,9 +1,9 @@
 #' @name initiate_log_file
 #' @title Log file creation
 #' @description Initiation a log file creation.
-#' @param log_file (logical) expected. Initiation or not for log file creation. By default FALSE (no).
-#' @param log_path (character) expected. Path of the log file directory. By default NULL.
-#' @param log_name (character) expected. Name of the log file. By default "t3log".
+#' @param log_file Object of class \code{\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
+#' @param log_path Object of class \code{\link[base]{character}} expected. Path of the log file directory. By default NULL.
+#' @param log_name Object of class \code{\link[base]{character}} expected. Name of the log file. By default "t3log".
 #' @return A log file in text format at the location define in the argument "log_path".
 #' @export
 initiate_log_file <- function(log_file = FALSE,

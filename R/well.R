@@ -18,15 +18,15 @@ well <- R6::R6Class(classname = "well",
                                             well_plus10_weigth,
                                             well_global_weigth) {
                         # attribute "trip_id" verification
-                        t3:::check_trip_id(trip_id)
+                        check_trip_id(trip_id)
                         # attribute "well_id" verification
-                        t3:::check_well_id(well_id)
+                        check_well_id(well_id)
                         # attribute "well_minus10_weigth" verification
-                        t3:::check_well_minus10_weigth(well_minus10_weigth)
+                        check_well_minus10_weigth(well_minus10_weigth)
                         # attribute "well_plus10_weigth" verification
-                        t3:::check_well_plus10_weigth(well_plus10_weigth)
+                        check_well_plus10_weigth(well_plus10_weigth)
                         # attribute "well_global_weigth" verification
-                        t3:::check_well_global_weigth(well_global_weigth)
+                        check_well_global_weigth(well_global_weigth)
                         # attributions
                         private$trip_id <- trip_id
                         private$well_id <- well_id

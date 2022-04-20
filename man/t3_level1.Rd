@@ -40,6 +40,12 @@ t3_level1(
 \item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
 \item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".}
+
+\item{outputs_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
+
+\item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
+
+\item{integrated_process}{Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

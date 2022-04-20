@@ -6,8 +6,8 @@ SELECT
 		& format(MONTH(m.D_DBQ), '00')
 		& format(DAY(m.D_DBQ), '00') AS trip_id
 	,p.C_ISO3166_A3 AS fleet
-	,m.D_DEPART AS departure_date
-	,m.D_DBQ AS landing_date
+	,Format(m.D_DEPART, "yyyy-mm-dd") & ' ' & Format(m.D_DEPART, "Long Time") AS departure_date
+	,Format(m.D_DBQ, "yyyy-mm-dd") & ' ' & Format(m.D_DBQ, "Long Time") AS landing_date
 	,m.F_ENQ AS logbook_availability
 	,m.F_CAL_VID AS fish_hold_empty
 	,b.c_bat AS vessel_id

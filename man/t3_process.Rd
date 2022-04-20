@@ -41,6 +41,10 @@ t3_process(
 
 \item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
+\item{outputs_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
+
+\item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
+
 \item{periode_reference}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.}
 
 \item{countries}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.}

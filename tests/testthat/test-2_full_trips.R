@@ -26,7 +26,7 @@ capture.output(object_full_trips$add_wells_samples(object_wells = object_model_d
                file = "NUL")
 # level 1 process ----
 # level 1.1: rf1
-species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11))
+species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
 capture.output(object_full_trips$rf1(species_rf1 = species_rf1),
                file = "NUL")
 
@@ -182,7 +182,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                             code = {
                               testthat::expect_true(object = (all(class(x = current_wellsets) == c("wellsets",
                                                                                                    "list_t3",
-                                                                                                   "R6" ))
+                                                                                                   "R6"))
                                                               || (class(x = current_wellsets) == "logical"
                                                                   && is.na(x = current_wellsets))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
@@ -191,7 +191,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                             })
         if (all(class(current_wellsets) == c("wellsets",
                                              "list_t3",
-                                             "R6" ))) {
+                                             "R6"))) {
           # 219 - Checking if sum "prop_weighted_weight" is equal to 1 ----
           testthat::test_that(desc = "219 - Checking if sum \"prop_weighted_weight\" is equal to 1",
                               code = {
@@ -233,7 +233,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                             code = {
                               testthat::expect_true(object = (all(class(current_standardisedsample) == c("standardisedsamples",
                                                                                                          "list_t3",
-                                                                                                         "R6" ))
+                                                                                                         "R6"))
                                                               || (class(current_standardisedsample) == "logical"
                                                                   && is.na(current_wellsets))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
@@ -246,7 +246,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                             code = {
                               testthat::expect_true(object = (all(class(current_standardisedsampleset) == c("standardisedsamplesets",
                                                                                                             "list_t3",
-                                                                                                            "R6" ))
+                                                                                                            "R6"))
                                                               || (class(current_standardisedsampleset) == "logical"
                                                                   && is.na(current_standardisedsampleset))),
                                                     label = paste0("issue with the full trip ", full_trip_id,
@@ -255,7 +255,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                             })
         if (all(class(current_standardisedsampleset) == c("standardisedsamplesets",
                                                           "list_t3",
-                                                          "R6" ))) {
+                                                          "R6"))) {
           # 224 - Checking if process 2.8 ran correctly ----
           testthat::test_that(desc = "224 - Checking if process 2.8 ran correctly",
                               code = {

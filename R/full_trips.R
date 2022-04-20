@@ -177,7 +177,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add activity.\n",
                                         sep = "")
                                   }
-                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                  capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
@@ -224,14 +224,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary catches.\n",
                                         sep = "")
                                   }
-                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                  capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
                                   invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
                                                        FUN = function(trip_id) {
                                                          if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
-                                                           capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                           capture.output(current_activities <- object_r6(class_name = "activities"),
                                                                           file = "NUL")
                                                            capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
                                                                           file = "NUL")
@@ -279,7 +279,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary landings.\n",
                                         sep = "")
                                   }
-                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                  capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
@@ -326,7 +326,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add well(s) - sample(s).\n",
                                         sep = "")
                                   }
-                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                  capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
@@ -384,19 +384,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop()
                               } else if (! is.null(x = global_outputs_path)
                                          && (class(x = global_outputs_path) != "character"
-                                             || length(x = global_outputs_path) != 1)) {
+                                             || length(x = global_outputs_path) != 1
+                                             || ! file.exists(file.path(global_outputs_path,
+                                                                        "level1",
+                                                                        "data_outputs")))) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"global_outputs_path\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else if (! file.exists(file.path(global_outputs_path,
-                                                                 "level1",
-                                                                 "data_outputs"))) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"global_outputs_path\" argument.\n",
-                                    "run function initiate_directories() to create directories structure expected.\n",
                                     sep = "")
                                 stop()
                               } else {
@@ -443,7 +437,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
-                                            capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
@@ -469,7 +463,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (is.null(x = current_elementarycatches)) {
                                           # case 1.2 ----
                                           # trips with no catches (for example route or support) in not complete full trip item
-                                          capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                          capture.output(current_trips <- object_r6(class_name = "trips"),
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
@@ -505,7 +499,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_trip$.__enclos_env__$private$trip_id,
                                                   "]\n",
                                                   sep = "")
-                                              capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                              capture.output(current_trips <- object_r6(class_name = "trips"),
                                                              file = "NUL")
                                               capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                              file = "NUL")
@@ -514,7 +508,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             } else {
                                               # case 1.4 ----
                                               # almost rocks dude ! (not complete full trip item)
-                                              capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                              capture.output(current_trips <- object_r6(class_name = "trips"),
                                                              file = "NUL")
                                               capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                              file = "NUL")
@@ -541,12 +535,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Warning: missing logbook in trip element \"",
                                                 names(x = private$data_selected)[full_trip_id],
-                                                "\".\n"
-                                                ,"[trip: ",
+                                                "\".\n",
+                                                "[trip: ",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
-                                            capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
@@ -570,7 +564,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (is.null(x = current_elementarycatches)) {
                                           # case 2.2 ----
                                           # trips with no catches (for example route or support) in complete full trip item
-                                          capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                          capture.output(current_trips <- object_r6(class_name = "trips"),
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
@@ -602,7 +596,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
-                                            capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
@@ -634,7 +628,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   "]\n",
                                                   sep = "")
                                             }
-                                            capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
@@ -665,7 +659,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   # outputs manipulation
                                   if (! is.null(x = global_outputs_path)) {
                                     full_trips_selected <- private$data_selected
-                                    capture.output(trips_selected <- t3::object_r6(class_name = "trips"),
+                                    capture.output(trips_selected <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
                                                    file = "NUL")
@@ -673,7 +667,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              FUN = function(trip_id) {
                                                                                current_trip <- trips_selected$extract(id = trip_id)[[1]]
                                                                                if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
-                                                                                 capture.output(current_elementarylandings <- t3::object_r6(class_name = "elementarylandings"),
+                                                                                 capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
                                                                                                 file = "NUL")
                                                                                  capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
                                                                                                 file = "NUL")
@@ -688,12 +682,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  elementarylandings <- FALSE
                                                                                }
                                                                                if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                                                                 capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                                                                 capture.output(current_activities <- object_r6(class_name = "activities"),
                                                                                                 file = "NUL")
                                                                                  capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
                                                                                                 file = "NUL")
                                                                                  if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                                                                   capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                                                   capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                                                                   file = "NUL")
                                                                                    capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                                                                   file = "NUL")
@@ -926,15 +920,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                    capture.output(current_activities <- object_r6(class_name = "activities"),
                                                    file = "NUL")
                                     capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                    file = "NUL")
-                                    capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                    capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                    file = "NUL")
                                     capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                    file = "NUL")
@@ -1360,11 +1354,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                    capture.output(current_activities <- object_r6(class_name = "activities"),
                                                    file = "NUL")
                                     capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                    file = "NUL")
@@ -1385,7 +1379,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                           current_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]
                                           if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
-                                            capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                            capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                            file = "NUL")
                                             if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
                                               capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
@@ -1476,11 +1470,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                    capture.output(current_activities <- object_r6(class_name = "activities"),
                                                    file = "NUL")
                                     capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                    file = "NUL")
@@ -1497,7 +1491,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
@@ -1522,7 +1516,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               stop()
                                             } else {
                                               if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
-                                                capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                                file = "NUL")
                                                 capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
                                                                file = "NUL")
@@ -1621,7 +1615,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                  capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
@@ -1651,14 +1645,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                end = landing_date)) / 3600
                                     } else {
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
                                         if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
                                                                                                 departure_date,
                                                                                                 "\""))) != 0) {
-                                          capture.output(current_activities_departure_date <- t3::object_r6(class_name = "activities"),
+                                          capture.output(current_activities_departure_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
                                           capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
                                                                                                                                                        departure_date,
@@ -1671,7 +1665,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
                                                                                                 landing_date,
                                                                                                 "\""))) != 0) {
-                                          capture.output(current_activities_landing_date <- t3::object_r6(class_name = "activities"),
+                                          capture.output(current_activities_landing_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
                                           capture.output(current_activities_landing_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
                                                                                                                                                      landing_date,
@@ -1758,7 +1752,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
@@ -1777,7 +1771,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       fishing_time <- 0
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
@@ -1787,7 +1781,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         activities_dates <- sort(x = activities_dates)
                                         for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
                                           activities_date <- activities_dates[[activities_dates_id]]
-                                          capture.output(current_activities_date <- t3::object_r6(class_name = "activities"),
+                                          capture.output(current_activities_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
                                           capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
                                                                                                                                              activities_date,
@@ -1857,7 +1851,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
@@ -1875,7 +1869,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
@@ -1969,17 +1963,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
                                       if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
-                                        capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                        capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
                                                        file = "NUL")
                                         capture.output(current_elementarysamplesraw$add(new_item = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
                                                        file = "NUL")
@@ -2000,30 +1994,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
                                         if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                          capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                          capture.output(current_wells <- object_r6(class_name = "wells"),
                                                          file = "NUL")
                                           capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                          file = "NUL")
                                           if (length(x = current_activities$filter_l1(filter = "length($path$elementarycatches) != 0")) != 0) {
-                                            capture.output(current_activities_with_elementarycatches <- t3::object_r6(class_name = "activities"),
+                                            capture.output(current_activities_with_elementarycatches <- object_r6(class_name = "activities"),
                                                            file = "NUL")
                                             capture.output(current_activities_with_elementarycatches$add(new_item = current_activities$filter_l1(filter = "length($path$elementarycatches) != 0")),
                                                            file = "NUL")
                                             oceans_activities <- unique(unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "ocean")))
                                             if (length(oceans_activities) != 1) {
-                                              capture.output(current_elementary_catches <- t3::object_r6(class_name = "elementarycatches"),
+                                              capture.output(current_elementary_catches <- object_r6(class_name = "elementarycatches"),
                                                              file = "NUL")
                                               capture.output(current_elementary_catches$add(new_item = unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches"))),
                                                              file = "NUL")
                                               total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_corrected")))
                                               oceans_activities_weight <- as.numeric()
                                               for (current_ocean_activites in oceans_activities) {
-                                                capture.output(current_elementary_catches_ocean <- t3::object_r6(class_name = "activities"),
+                                                capture.output(current_elementary_catches_ocean <- object_r6(class_name = "activities"),
                                                                file = "NUL")
                                                 capture.output(current_elementary_catches_ocean$add(new_item = current_elementary_catches$filter_l1(filter = paste0("$path$ocean == ",
                                                                                                                                                                     current_ocean_activites))),
@@ -2040,19 +2034,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             for (well_id in seq_len(length.out = current_wells$count())) {
                                               current_well <- current_wells$extract(id = well_id)[[1]]
                                               if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
-                                                capture.output(current_samples <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                capture.output(current_samples <- object_r6(class_name = "elementarysamplesraw"),
                                                                file = "NUL")
                                                 capture.output(current_samples$add(new_item = current_well$.__enclos_env__$private$elementarysampleraw),
                                                                file = "NUL")
                                                 current_samples_removed <- as.integer()
                                                 for (sample_id in seq_len(length.out = current_samples$count())) {
                                                   elementary_sample_skj_removed <- as.integer()
-                                                  capture.output(current_sample <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                  capture.output(current_sample <- object_r6(class_name = "elementarysamplesraw"),
                                                                  file = "NUL")
                                                   capture.output(current_sample$add(new_item = current_samples$extract(id = sample_id)),
                                                                  file = "NUL")
                                                   if (length(current_sample$filter_l1(filter = "$path$length_type == 2")) != 0) {
-                                                    capture.output(current_sample_length_type_2 <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                    capture.output(current_sample_length_type_2 <- object_r6(class_name = "elementarysamplesraw"),
                                                                    file = "NUL")
                                                     capture.output(current_sample_length_type_2$add(new_item = current_sample$filter_l1(filter = "$path$length_type == 2")),
                                                                    file = "NUL")
@@ -2060,7 +2054,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     current_sample_length_type_2$modification_l1(modification = "$path$sample_number_measured_lf = $path$sample_number_measured")
                                                   }
                                                   if (length(current_sample$filter_l1(filter = "$path$length_type == 1")) != 0) {
-                                                    capture.output(current_sample_length_type_1 <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                    capture.output(current_sample_length_type_1 <- object_r6(class_name = "elementarysamplesraw"),
                                                                    file = "NUL")
                                                     capture.output(current_sample_length_type_1$add(new_item = current_sample$filter_l1(filter = "$path$length_type == 1")),
                                                                    file = "NUL")
@@ -2169,7 +2163,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       } else {
                                         if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                          capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                          capture.output(current_wells <- object_r6(class_name = "wells"),
                                                          file = "NUL")
                                           capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                          file = "NUL")
@@ -2227,17 +2221,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
                                       if (length(x = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))) != 0) {
-                                        capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                        capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
                                                        file = "NUL")
                                         capture.output(current_elementarysamplesraw$add(new_item = unlist(current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
                                                        file = "NUL")
@@ -2258,19 +2252,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
                                         for (well_id in seq_len(length.out = current_wells$count())) {
                                           current_well <- current_wells$extract(id = well_id)[[1]]
                                           if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
-                                            capture.output(current_samples <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                            capture.output(current_samples <- object_r6(class_name = "elementarysamplesraw"),
                                                            file = "NUL")
                                             capture.output(current_samples$add(new_item = current_well$.__enclos_env__$private$elementarysampleraw),
                                                            file = "NUL")
                                             for (sample_id in seq_len(length.out = current_samples$count())) {
-                                              capture.output(current_sample <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                              capture.output(current_sample <- object_r6(class_name = "elementarysamplesraw"),
                                                              file = "NUL")
                                               capture.output(current_sample$add(new_item = current_samples$extract(id = sample_id)),
                                                              file = "NUL")
@@ -2283,13 +2277,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 stop()
                                               }
                                               for (sub_sample_id in unique(unlist(current_sample$extract_l1_element_value(element = "sub_sample_id")))) {
-                                                capture.output(current_sub_sample <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                capture.output(current_sub_sample <- object_r6(class_name = "elementarysamplesraw"),
                                                                file = "NUL")
                                                 capture.output(current_sub_sample$add(new_item = current_sample$filter_l1(filter = paste0("$path$sub_sample_id == ",
                                                                                                                                           sub_sample_id))),
                                                                file = "NUL")
                                                 for (sample_specie_id in unique(unlist(current_sub_sample$extract_l1_element_value(element = "specie_code")))) {
-                                                  capture.output(current_sub_sample_specie <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                  capture.output(current_sub_sample_specie <- object_r6(class_name = "elementarysamplesraw"),
                                                                  file = "NUL")
                                                   capture.output(current_sub_sample_specie$add(new_item = current_sub_sample$filter_l1(filter = paste0("$path$specie_code == ",
                                                                                                                                                        sample_specie_id))),
@@ -2298,7 +2292,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   na.rm = TRUE)
                                                   sum_sub_sample_specie_total_count <- 0
                                                   for (sub_sample_id_total_count in unique(unlist(current_sub_sample_specie$extract_l1_element_value(element = "sub_sample_id_total_count")))) {
-                                                    capture.output(current_sub_sample_specie_total_count <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                    capture.output(current_sub_sample_specie_total_count <- object_r6(class_name = "elementarysamplesraw"),
                                                                    file = "NUL")
                                                     capture.output(current_sub_sample_specie_total_count$add(new_item = current_sub_sample_specie$filter_l1(filter = paste0("$path$sub_sample_id_total_count == \"",
                                                                                                                                                                             sub_sample_id_total_count,
@@ -2398,12 +2392,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
@@ -2423,21 +2417,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
                                         for (well_id in seq_len(length.out = current_wells$count())) {
                                           current_well <- current_wells$extract(id = well_id)[[1]]
                                           if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
-                                            capture.output(current_samples <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                            capture.output(current_samples <- object_r6(class_name = "elementarysamplesraw"),
                                                            file = "NUL")
                                             capture.output(current_samples$add(new_item = unlist(x = current_well$.__enclos_env__$private$elementarysampleraw)),
                                                            file = "NUL")
-                                            capture.output(current_elementarysamples <- t3::object_r6(class_name = "elementarysamples"),
+                                            capture.output(current_elementarysamples <- object_r6(class_name = "elementarysamples"),
                                                            file = "NUL")
                                             for (sample_id in unique(x = unlist(x = current_samples$extract_l1_element_value(element = "sample_id")))) {
-                                              capture.output(current_sample <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                              capture.output(current_sample <- object_r6(class_name = "elementarysamplesraw"),
                                                              file = "NUL")
                                               capture.output(current_sample$add(new_item = current_samples$filter_l1(filter = paste0("$path$sample_id == \"",
                                                                                                                                      sample_id,
@@ -2451,7 +2445,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                    specie_id))
                                               }
                                               for (sample_id_specie in sample_species) {
-                                                capture.output(current_sample_specie <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                capture.output(current_sample_specie <- object_r6(class_name = "elementarysamplesraw"),
                                                                file = "NUL")
                                                 capture.output(current_sample_specie$add(new_item = current_sample_by_species[[sample_id_specie]]),
                                                                file = "NUL")
@@ -2492,7 +2486,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
                                                     sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
                                                                                                                      & sample_length_class_lf < upper_border)]
-                                                    capture.output(current_sample_specie_by_step <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                    capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
                                                                    file = "NUL")
                                                     capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf %in% c(",
                                                                                                                                                                 paste0(sample_length_class_lf_for_merge,
@@ -2501,7 +2495,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    file = "NUL")
                                                     current_sample_specie_by_step_subid <- unique(unlist(current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
                                                     for (sub_sample_id in current_sample_specie_by_step_subid) {
-                                                      capture.output(current_sample_specie_by_step_by_subid <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                      capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
                                                                      file = "NUL")
                                                       capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
                                                                                                                                                                                    sub_sample_id))),
@@ -2597,12 +2591,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                           "]\n",
                                           sep = "")
-                                      capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                      capture.output(current_trips <- object_r6(class_name = "trips"),
                                                      file = "NUL")
                                       capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                      file = "NUL")
                                       if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                        file = "NUL")
@@ -2613,7 +2607,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                         if (current_trip$.__enclos_env__$private$vessel_type == "Senneur") {
                                           if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                            capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                            capture.output(current_wells <- object_r6(class_name = "wells"),
                                                            file = "NUL")
                                             capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                            file = "NUL")
@@ -2622,7 +2616,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             for (well_id in seq_len(length.out = current_wells$count())) {
                                               current_well <- current_wells$extract(id = well_id)[[1]]
                                               if (length(current_well$.__enclos_env__$private$wellplan) != 0) {
-                                                capture.output(current_well_plans <- t3::object_r6(class_name = "elementarywellplans"),
+                                                capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
                                                                file = "NUL")
                                                 capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
                                                                file = "NUL")
@@ -2632,7 +2626,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 wells_activities_samples_id[[well_id]][[1]] <- "no_well_plan_available"
                                               }
                                               if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
-                                                capture.output(current_elementarysamplesraw <- t3::object_r6(class_name = "elementarysamplesraw"),
+                                                capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
                                                                file = "NUL")
                                                 capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
                                                                file = "NUL")
@@ -2648,7 +2642,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # do we have a well plan associated to the current well ?
                                               if (length(current_well$.__enclos_env__$private$wellplan) != 0) {
                                                 # yes
-                                                capture.output(current_well_plans <- t3::object_r6(class_name = "elementarywellplans"),
+                                                capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
                                                                file = "NUL")
                                                 capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
                                                                file = "NUL")
@@ -2691,7 +2685,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                                 current_well$.__enclos_env__$private$well_prop_minus10_weigth <- well_prop_minus10_weigth / well_prop_global_weigth
                                                 current_well$.__enclos_env__$private$well_prop_plus10_weigth <- well_prop_plus10_weigth / well_prop_global_weigth
-                                                capture.output(current_well_sets <- t3::object_r6(class_name = "wellsets"),
+                                                capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
                                                                file = "NUL")
                                                 # do we have more than one well associated to the trip ?
                                                 if (length(wells_activities_samples_id) == 1) {
@@ -2823,7 +2817,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       sep = "")
                                                   current_well$.__enclos_env__$private$wellsets <- NA
                                                 } else {
-                                                  capture.output(current_well_sets <- t3::object_r6(class_name = "wellsets"),
+                                                  capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
                                                                  file = "NUL")
                                                   for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
                                                     capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
@@ -2896,12 +2890,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
@@ -2919,7 +2913,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
@@ -2938,9 +2932,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                           if (paste0(class(x = current_well$.__enclos_env__$private$elementarysample),
                                                      collapse = "_") == "elementarysamples_list_t3_R6") {
-                                            capture.output(current_standardisedsamples <- t3::object_r6(class_name = "standardisedsamples"),
+                                            capture.output(current_standardisedsamples <- object_r6(class_name = "standardisedsamples"),
                                                            file = "NUL")
-                                            capture.output(current_elementarysamples <- t3::object_r6(class_name = "elementarysamples"),
+                                            capture.output(current_elementarysamples <- object_r6(class_name = "elementarysamples"),
                                                            file = "NUL")
                                             capture.output(current_elementarysamples$add(new_item = current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data),
                                                            file = "NUL")
@@ -2948,28 +2942,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               unlist(current_elementarysamples$extract_l1_element_value(element = "specie_code3l")),
                                                                                               sep = "_"))
                                             for (elementarysamples_species_id in current_elementarysamples_species) {
-                                              capture.output(current_elementarysamples_specie <- t3::object_r6(class_name = "elementarysamples"),
+                                              capture.output(current_elementarysamples_specie <- object_r6(class_name = "elementarysamples"),
                                                              file = "NUL")
                                               capture.output(current_elementarysamples_specie$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$specie_code == ",
                                                                                                                                                                  as.integer(unlist(strsplit(elementarysamples_species_id, "_"))[1])))),
                                                              file = "NUL")
                                               current_elementarysamples_specie_classes <- unique(unlist(current_elementarysamples_specie$extract_l1_element_value(element = "sample_standardised_length_class_lf")))
                                               for (current_elementarysamples_specie_class_id in current_elementarysamples_specie_classes) {
-                                                capture.output(current_elementarysamples_specie_class <- t3::object_r6(class_name = "elementarysamples"),
+                                                capture.output(current_elementarysamples_specie_class <- object_r6(class_name = "elementarysamples"),
                                                                file = "NUL")
                                                 capture.output(current_elementarysamples_specie_class$add(new_item = current_elementarysamples_specie$filter_l1(filter = paste0("$path$sample_standardised_length_class_lf == ",
                                                                                                                                                                                 current_elementarysamples_specie_class_id))),
                                                                file = "NUL")
                                                 current_elementarysamples_sample_types <- unique(unlist(current_elementarysamples_specie_class$extract_l1_element_value(element = "sample_type")))
                                                 for (current_elementarysamples_sample_type_id in current_elementarysamples_sample_types) {
-                                                  capture.output(current_elementarysamples_sample_type <- t3::object_r6(class_name = "elementarysamples"),
+                                                  capture.output(current_elementarysamples_sample_type <- object_r6(class_name = "elementarysamples"),
                                                                  file = "NUL")
                                                   capture.output(current_elementarysamples_sample_type$add(new_item = current_elementarysamples_specie_class$filter_l1(filter = paste0("$path$sample_type == ",
                                                                                                                                                                                        current_elementarysamples_sample_type_id))),
                                                                  file = "NUL")
                                                   current_elementarysamples_sample_qualities <- unique(unlist(current_elementarysamples_sample_type$extract_l1_element_value(element = "sample_quality")))
                                                   for (current_elementarysamples_sample_quality_id in current_elementarysamples_sample_qualities) {
-                                                    capture.output(current_elementarysamples_sample_quality <- t3::object_r6(class_name = "elementarysamples"),
+                                                    capture.output(current_elementarysamples_sample_quality <- object_r6(class_name = "elementarysamples"),
                                                                    file = "NUL")
                                                     capture.output(current_elementarysamples_sample_quality$add(new_item = current_elementarysamples_sample_type$filter_l1(filter = paste0("$path$sample_quality == ",
                                                                                                                                                                                            current_elementarysamples_sample_quality_id))),
@@ -3051,12 +3045,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
@@ -3065,12 +3059,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   } else {
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
-                                      capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
                                                      file = "NUL")
                                       capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                      file = "NUL")
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
@@ -3084,7 +3078,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               && all(class(current_standardised_samples) == c("standardisedsamples",
                                                                                               "list_t3",
                                                                                               "R6"))) {
-                                            capture.output(standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                            capture.output(standardised_samples_sets <- object_r6(class_name = "standardisedsamplesets"),
                                                            file = "NUL")
                                             for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
                                               current_well_set <- current_wells_sets$extract(id = well_set_id)[[1]]
@@ -3230,25 +3224,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "]\n",
                                         sep = "")
 
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
                                       if (length(x = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")) != 0) {
-                                        capture.output(current_wells_bis <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells_bis <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells_bis$add(new_item = current_wells$filter_l1(filter = "all(class($path$wellsets) == c(\"wellsets\", \"list_t3\", \"R6\"))")),
                                                        file = "NUL")
-                                        capture.output(current_wellsets <- t3::object_r6(class_name = "wellsets"),
+                                        capture.output(current_wellsets <- object_r6(class_name = "wellsets"),
                                                        file = "NUL")
                                         capture.output(current_wellsets$add(new_item = current_wells_bis$extract_l1_element_value(element = "wellsets")),
                                                        file = "NUL")
-                                        capture.output(current_wellsets_bis <- t3::object_r6(class_name = "wellsets"),
+                                        capture.output(current_wellsets_bis <- object_r6(class_name = "wellsets"),
                                                        file = "NUL")
                                         capture.output(current_wellsets_bis$add(new_item = unlist(current_wellsets$extract_l1_element_value(element = "data"))),
                                                        file = "NUL")
@@ -3259,7 +3253,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
@@ -3277,14 +3271,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   && length(current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
                                                                                                                                                  current_well_set$.__enclos_env__$private$activity_id,
                                                                                                                                                  "\""))) != 0) {
-                                                capture.output(current_standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                capture.output(current_standardised_samples_sets <- object_r6(class_name = "standardisedsamplesets"),
                                                                file = "NUL")
                                                 capture.output(current_standardised_samples_sets$add(new_item = current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
                                                                                                                                                                                                      current_well_set$.__enclos_env__$private$activity_id,
                                                                                                                                                                                                      "\""))),
                                                                file = "NUL")
                                                 if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")) != 0) {
-                                                  capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                  capture.output(current_standardised_samples_sets_minus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
                                                                  file = "NUL")
@@ -3295,7 +3289,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_standardised_samples_sets_minus10_nb <- 0
                                                 }
                                                 if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")) != 0) {
-                                                  capture.output(current_standardised_samples_sets_plus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                  capture.output(current_standardised_samples_sets_plus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
                                                                  file = "NUL")
@@ -3435,21 +3429,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                      capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
                                       capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
                                       if (length(x = current_wells$filter_l1(filter = "all(class($path$standardisedsampleset) == c(\"standardisedsamplesets\", \"list_t3\", \"R6\"))")) != 0) {
-                                        capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                        capture.output(current_standardisedsamplesets <- object_r6(class_name = "standardisedsamplesets"),
                                                        file = "NUL")
                                         capture.output(current_standardisedsamplesets$add(new_item = current_wells$extract_l1_element_value(element = "standardisedsampleset")),
                                                        file = "NUL")
-                                        capture.output(current_standardisedsamplesets_bis <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                        capture.output(current_standardisedsamplesets_bis <- object_r6(class_name = "standardisedsamplesets"),
                                                        file = "NUL")
                                         capture.output(current_standardisedsamplesets_bis$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
                                                        file = "NUL")
@@ -3470,7 +3464,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                        capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                        capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                        file = "NUL")
@@ -3488,7 +3482,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   && length(current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
                                                                                                                                                  current_well_set$.__enclos_env__$private$activity_id,
                                                                                                                                                  "\""))) != 0) {
-                                                capture.output(current_standardised_samples_sets <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                capture.output(current_standardised_samples_sets <- object_r6(class_name = "standardisedsamplesets"),
                                                                file = "NUL")
                                                 capture.output(current_standardised_samples_sets$add(new_item = current_well$.__enclos_env__$private$standardisedsampleset$filter_l1(filter = paste0("$path$activity_id == \"",
                                                                                                                                                                                                      current_well_set$.__enclos_env__$private$activity_id,
@@ -3520,13 +3514,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 } else if (current_well_set$.__enclos_env__$private$rf_validation == 5) {
                                                   current_rf_minus10 <- current_well_set$.__enclos_env__$private$rf_minus10
                                                   current_rf_plus10 <- current_well_set$.__enclos_env__$private$rf_plus10
-                                                  capture.output(current_standardised_samples_sets_minus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                  capture.output(current_standardised_samples_sets_minus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
                                                                  file = "NUL")
                                                   current_standardised_samples_sets_minus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
                                                                                                                                   current_rf_minus10))
-                                                  capture.output(current_standardised_samples_sets_plus10 <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                                  capture.output(current_standardised_samples_sets_plus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
                                                                  file = "NUL")
@@ -3596,14 +3590,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sset <- dplyr::tibble()
                               wp <- dplyr::tibble()
                               for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                capture.output(current_trips <- t3::object_r6(class_name = "trips"),
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
                                 capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                file = "NUL")
                                 for (partial_trip_id in seq_len(length.out = current_trips$count())) {
                                   current_trip <- current_trips$extract(id = partial_trip_id)[[1]]
                                   if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                    capture.output(current_activities <- t3::object_r6(class_name = "activities"),
+                                    capture.output(current_activities <- object_r6(class_name = "activities"),
                                                    file = "NUL")
                                     capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                    file = "NUL")
@@ -3622,7 +3616,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     act <- rbind(act,
                                                  tmp_activity)
                                     if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                      capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
+                                      capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                      file = "NUL")
                                       capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                      file = "NUL")
@@ -3652,20 +3646,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                   if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
-                                    capture.output(current_wells <- t3::object_r6(class_name = "wells"),
+                                    capture.output(current_wells <- object_r6(class_name = "wells"),
                                                    file = "NUL")
                                     capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
                                                    file = "NUL")
                                     if (any(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))) {
                                       standardisedsampleset_not_na <- which(! is.na(current_wells$extract_l1_element_value(element = "standardisedsampleset")))
-                                      capture.output(current_standardisedsamplesets <- t3::object_r6(class_name = "list_t3"),
+                                      capture.output(current_standardisedsamplesets <- object_r6(class_name = "list_t3"),
                                                      file = "NUL")
                                       capture.output(current_standardisedsamplesets$add(new_item = lapply(X = standardisedsampleset_not_na,
                                                                                                           FUN = function(a) {
                                                                                                             current_wells$extract_l1_element_value(element = "standardisedsampleset")[[a]]
                                                                                                           })),
                                                      file = "NUL")
-                                      capture.output(current_standardisedsamplesets_data <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                      capture.output(current_standardisedsamplesets_data <- object_r6(class_name = "standardisedsamplesets"),
                                                      file = "NUL")
                                       capture.output(current_standardisedsamplesets_data$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
                                                      file = "NUL")
@@ -3678,7 +3672,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       samw <- rbind(samw,
                                                     tmp_standardisedsampleset)
                                       if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")) != 0) {
-                                        capture.output(current_standardisedsamplesets_data_one_sample <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                        capture.output(current_standardisedsamplesets_data_one_sample <- object_r6(class_name = "standardisedsamplesets"),
                                                        file = "NUL")
                                         capture.output(current_standardisedsamplesets_data_one_sample$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) == 1")),
                                                        file = "NUL")
@@ -3688,7 +3682,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         type = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_type")))
                                       }
                                       if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")) != 0) {
-                                        capture.output(current_standardisedsamplesets_data_multi_samples <- t3::object_r6(class_name = "standardisedsamplesets"),
+                                        capture.output(current_standardisedsamplesets_data_multi_samples <- object_r6(class_name = "standardisedsamplesets"),
                                                        file = "NUL")
                                         capture.output(current_standardisedsamplesets_data_multi_samples$add(new_item = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")),
                                                        file = "NUL")
@@ -3721,7 +3715,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     tmp_standardisedsampleset_qt)
                                     }
                                     if (length(x = unlist(current_wells$extract_l1_element_value(element = "wellplan"))) != 0) {
-                                      capture.output(current_wellplans <- t3::object_r6(class_name = "elementarywellplans"),
+                                      capture.output(current_wellplans <- object_r6(class_name = "elementarywellplans"),
                                                      file = "NUL")
                                       capture.output(current_wellplans$add(new_item = unlist(current_wells$extract_l1_element_value(element = "wellplan"))),
                                                      file = "NUL")
@@ -3776,7 +3770,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         inputs_level3_path = NULL,
                                                         outputs_directory,
                                                         periode_reference = NULL,
-                                                        target_year = as.integer(lubridate::year(Sys.time()-1)),
+                                                        target_year = as.integer(lubridate::year(Sys.time() - 1)),
                                                         period_duration = 4L,
                                                         distance_maximum = as.integer(5),
                                                         number_sets_maximum = as.integer(5),
@@ -3852,8 +3846,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                pattern = "inputs_level3_")
                                   file_year <-  as.numeric(do.call(rbind,
                                                                    strsplit(x = file_available,
-                                                                            split = "_"))[,3])
-                                  target_file <- file_available[file_year %in% target_year:(target_year-period_duration)]
+                                                                            split = "_"))[, 3])
+                                  target_file <- file_available[file_year %in% target_year:(target_year - period_duration)]
                                   dataset_target <- vector("list",
                                                            length = 5)
                                   names(dataset_target) <- c("act_chr",
@@ -3861,15 +3855,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              "samw",
                                                              "sset",
                                                              "wp")
-                                  dataset_target<- lapply(dataset_target,
-                                                          function(x){
-                                                            x <- vector("list",
-                                                                        length = length(target_file))
-                                                          })
-                                  for(x in seq_len(length.out = length(target_file))){
+                                  dataset_target <- lapply(dataset_target,
+                                                           function(x) {
+                                                             x <- vector("list",
+                                                                         length = length(target_file))
+                                                           })
+                                  for (x in seq_len(length.out = length(x = target_file))) {
                                     load(file.path(inputs_level3_path,
                                                    target_file[x],
-                                                   fsep ="/"))
+                                                   fsep = "/"))
                                     # sets characteristics
                                     dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
                                     # catch by set, species and categories from logbook (t3 level 1)
@@ -3882,8 +3876,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dataset_target$wp[[x]] <- data_level3[[1]][[5]]
                                   }
                                   dataset_target <- lapply(X = dataset_target,
-                                                           FUN = function(x){
-                                                             return(unique(do.call(rbind,x)))
+                                                           FUN = function(x) {
+                                                             return(unique(do.call(rbind, x)))
                                                            })
                                   # stock raw data
                                   inputs_level3 <- dataset_target
@@ -3911,10 +3905,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 first_year <- dplyr::first(periode_reference)
                                 # select subset period for the modelling
                                 catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
-                                # catch_set_lb<-catch_set_lb[catch_set_lb$year > first_year & catch_set_lb$year <= target_year, ]
                                 catch_set_lb<-catch_set_lb[catch_set_lb$year %in% periode_reference,]
                                 act_chr$year <- lubridate::year(x = act_chr$date_act)
-                                act_chr<-act_chr[act_chr$year %in% periode_reference, ]
+                                act_chr <- act_chr[act_chr$year %in% periode_reference, ]
                                 # compute selection criteria ----
                                 cdm <- act_chr$id_act[act_chr$vessel %in% vessel_id_ignored]
                                 sset <- sset[! sset$id_act %in% cdm, ]
@@ -3934,7 +3927,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sset <- dplyr::inner_join(x = sset,
                                                           y = act_chr[, c("id_act", "fmod", "lat", "lon")],
                                                           by = "id_act")
-                                tmp <- unique(sset[, c("id_sample","fmod")])
+                                tmp <- unique(sset[, c("id_sample", "fmod")])
                                 agg <- aggregate(formula = cbind(fm_purity = fmod) ~ id_sample,
                                                  data = tmp,
                                                  FUN = length)
@@ -3963,7 +3956,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               sort = F)
                                 # compute total set weight
                                 sset <- droplevels(sset)
-
                                 tmp <- catch_set_lb
                                 tmp <- tmp[tmp$sp %in% c("YFT","BET","SKJ"), ]
                                 agg3 <- aggregate(formula = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
@@ -4170,16 +4162,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           into = c("sp","wcat"),
                                                           sep = "_")
                               # select for small fish catch only if parameter = T
-                              if(small_fish_only == F){
+                              if (small_fish_only == F) {
                                 data4mod <- data4mod %>% dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
                                   dplyr::ungroup()
-
-                                # aggregate(formula = cbind(prop_lb, prop_t3, w_lb_t3) ~ id_act + date_act + year + mon + lat + lon + sp + fmod + ocean + vessel + wtot_lb_t3,
-                                #                     data = data4mod,
-                                # FUN = sum)
                               } else {
                                 data4mod <- data4mod %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0),
                                                                        prop_t3 = replace (prop_t3, wcat == "p10", value = 0)) %>%
@@ -4315,7 +4303,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          '_'))[2]
                                 fishing_mode = unlist(strsplit(names(outputs_level3_process2)[[a]],
                                                                '_'))[3]
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - Ongoing process 3.3 for ocean \"",
                                     ocean,
                                     "\", specie \"",
@@ -4818,15 +4807,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::scale_x_continuous(expand = c(0, 0)) +
                                   ggplot2::labs(x = "Standardized Residuals")
                                 model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
-                                  ggplot2::stat_qq()+
-                                  ggplot2::stat_qq_line(col = 2)+
+                                  ggplot2::stat_qq() +
+                                  ggplot2::stat_qq_line(col = 2) +
                                   ggplot2::labs(x = "Theoretical quantiles", y = "Sample quantiles")
                                 model_validation_response_fit <- ggplot2::ggplot(data = current_model_data,
                                                                                  ggplot2::aes(x = resp,
                                                                                               y = fit)) +
                                   ggplot2::geom_point() +
                                   ggplot2::geom_smooth(method = "gam",
-                                                       formula = y ~ s(x, bs = "cs"))+
+                                                       formula = y ~ s(x, bs = "cs")) +
                                   ggplot2::geom_abline(slope = 1,
                                                        intercept = 0,
                                                        col = "red") +
@@ -4837,7 +4826,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                          y = res_ST)) +
                                   ggplot2::geom_point() +
                                   ggplot2::geom_smooth(method = "gam",
-                                                       formula = y ~ s(x, bs = "cs"))+
+                                                       formula = y ~ s(x, bs = "cs")) +
                                   ggplot2::geom_abline(slope = 0,
                                                        intercept = 0,
                                                        col = "red") +
@@ -5138,22 +5127,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            into = c("sp","wcat"),
                                                            sep = "_")
                               # filter data for small fish catch estimation only
-                              if(small_fish_only == F){
+                              if (small_fish_only == F) {
                                 sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
-
                               } else {
                                 sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
                                   dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
                               }
-                              # test unitaire total catch equal
-                              # sets_long %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
-                              #   dplyr::summarise(tot = sum(wtot_lb_t3))
-                              # tmp %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
-                              # tmp2 %>% dplyr::filter(!duplicated(id_act)) %>% dplyr::summarise(tot = sum(wtot_lb_t3))
                               outputs_level3_process4 <- append(outputs_level3_process4,
                                                                 list(list("sets_long" = sets_long,
                                                                           "sets_wide" = sets_wide)))
@@ -5311,7 +5294,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        key = "sp",
                                                                        value = "fit_prop_t3_ST",
                                                                        "BET", "SKJ", "YFT")
-                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
+                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long,
+                                                                     boot_tmp_element,
+                                                                     by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
                                 boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
                                 outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
                                                                        list(boot_tmp_element))
@@ -5401,10 +5386,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                            value = fit_prop)
                                     boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
                                     boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                              yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                              yes = boot_tmp_element_wide$SKJ / boot_tmp_element_wide$S,
                                                                               no = boot_tmp_element_wide$SKJ)
                                     boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                              yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                              yes = boot_tmp_element_wide$YFT / boot_tmp_element_wide$S,
                                                                               no = boot_tmp_element_wide$YFT)
                                     boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
 
@@ -5434,13 +5419,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )){
                                 set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
                                   set_all_boot_tmp <- dplyr::bind_rows(x)
-                                  set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp)/Nboot)
+                                  set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp) / Nboot)
                                   return(set_all_boot_tmp)
                                 })
                                 # compute final CI
                                 set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
                                 names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
-                                for (o in names(outputs_level3_process5$Estimated_catch_ST)){
+                                for (o in names(outputs_level3_process5$Estimated_catch_ST)) {
                                   set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
                                                                                        boot_data = set_all_boot[[o]])
                                 }
@@ -5479,7 +5464,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # compute final CI
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1")) > 0 )){
                                 t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                    function(x){
+                                                                    function(x) {
                                                                       boot_tmp_element <-do.call(rbind,
                                                                                                  lapply(seq.int(1:length(x)),
                                                                                                         function(i){
@@ -5490,10 +5475,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                         }))
                                                                       return(boot_tmp_element)
                                                                     }))
-                                t1_all_final_ocean_list <- vector("list", length = length(levels(t1_all$ocean)))
-                                for (o in levels(t1_all$ocean)){
+                                t1_all_final_ocean_list <- vector("list", length = length(x = levels(t1_all$ocean)))
+                                for (o in levels(t1_all$ocean)) {
                                   t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
-                                                                                                  boot_data = t1_all_boot[t1_all_boot$ocean == o,])
+                                                                                                  boot_data = t1_all_boot[t1_all_boot$ocean == o, ])
                                 }
                                 t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
                                 t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
@@ -5530,21 +5515,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1-fmod")) > 0 )){
                                 t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                     FUN = function(x){
-                                                                       boot_tmp_element <-do.call(rbind,
-                                                                                                  lapply(seq.int(1:length(x)),
-                                                                                                         function(i){
-                                                                                                           boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
-                                                                                                                                            data=x[[i]],
-                                                                                                                                            FUN = sum)
-                                                                                                           boot_tmp_subelement$loop <- i
-                                                                                                           return(boot_tmp_subelement)
-                                                                                                         }))
+                                                                     FUN = function(x) {
+                                                                       boot_tmp_element <- do.call(rbind,
+                                                                                                   lapply(seq.int(1:length(x)),
+                                                                                                          function(i) {
+                                                                                                            boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + fmod + sp + ocean,
+                                                                                                                                             data=x[[i]],
+                                                                                                                                             FUN = sum)
+                                                                                                            boot_tmp_subelement$loop <- i
+                                                                                                            return(boot_tmp_subelement)
+                                                                                                          }))
                                                                        return(boot_tmp_element)
                                                                      }))
                                 # compute final CI
-                                t1_fmod_final_ocean_list <- vector("list", length = length(levels(t1_fmod$ocean)))
-                                for (o in levels(t1_fmod$ocean)){
+                                t1_fmod_final_ocean_list <- vector("list", length = length(x = levels(t1_fmod$ocean)))
+                                for (o in levels(t1_fmod$ocean)) {
                                   t1_fmod_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_fmod[t1_fmod$ocean == o,],
                                                                                                    boot_data = t1_fmod_boot[t1_fmod_boot$ocean == o,])
                                 }
@@ -5582,26 +5567,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 base*(x%/%base + as.logical(x%%base))
                               }
                               # assign coordinates to cwp with a specific base
-                              latlon2cwp<-function(lat,lon,base){
-                                quad<-ifelse(lon>=0,ifelse(lat>=0,1,2),ifelse(lat>=0,4,3)) # define quadrant
-                                lat_tmp<-ifelse(quad %in% c(1,4),sprintf("%02d",abs(mtrunc(lat,base))),sprintf("%02d",abs(mroundup(lat,base))))
-                                lon_tmp<-ifelse(quad %in% c(1,2),sprintf("%03d",abs(mtrunc(lon,base))),sprintf("%03d",abs(mroundup(lon,base))))
-                                return(paste(quad,lat_tmp,lon_tmp,sep=""))
-
+                              latlon2cwp <- function(lat,
+                                                     lon,
+                                                     base) {
+                                quad <- ifelse(lon >= 0,
+                                               ifelse(lat >= 0,
+                                                      1,
+                                                      2),
+                                               ifelse(lat >= 0,
+                                                      4,
+                                                      3)) # define quadrant
+                                lat_tmp <- ifelse(quad %in% c(1,4),
+                                                  sprintf("%02d",
+                                                          abs(mtrunc(lat,
+                                                                     base))),
+                                                  sprintf("%02d",
+                                                          abs(mroundup(lat,
+                                                                       base))))
+                                lon_tmp <- ifelse(quad %in% c(1,2),
+                                                  sprintf("%03d",
+                                                          abs(mtrunc(lon,
+                                                                     base))),
+                                                  sprintf("%03d",
+                                                          abs(mroundup(lon,
+                                                                       base))))
+                                return(paste(quad,
+                                             lat_tmp,
+                                             lon_tmp,
+                                             sep=""))
                               }
                               # nominal catch by species and cwp (task 2 - catch Effort)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2 catch estimations.\n",
                                   sep = "")
-                              t2_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                              t2_all <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x) {
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
                                                     base = 1)
-                                # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
-                                #                                         data_longitude = as.character(x$lon),
-                                #                                         data_latitude = as.character(x$lat),
-                                #                                         input_degree_format = "decimal_degree",
-                                #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
                                   dplyr::group_by(yr, mon, sp, ocean, cwp) %>%
                                   dplyr::summarise(catch_set_fit = sum(catch_set_fit))
@@ -5610,7 +5613,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # bootstrap distribution
                               if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2")) > 0 )){
                                 t2_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                    FUN = function(x){
+                                                                    FUN = function(x) {
                                                                       boot_tmp_element <-do.call(rbind,
                                                                                                  lapply(seq.int(1:length(x)),
                                                                                                         function(i){
@@ -5627,7 +5630,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     }))
                                 # compute final CI
                                 t2_all_final_ocean_list <- vector("list", length = length(levels(t2_all$ocean)))
-                                for (o in as.numeric(levels(t2_all$ocean))){
+                                for (o in as.numeric(levels(t2_all$ocean))) {
                                   t2_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_all[t2_all$ocean == o,],
                                                                                       boot_data = t2_all_boot[t2_all_boot$ocean == o,])
                                 }
@@ -5656,24 +5659,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-                              t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
+                              t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x) {
                                 x$cwp <- latlon2cwp(lat = x$lat,
                                                     lon = x$lon,
                                                     base = 1)
-                                # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
-                                #                                         data_longitude = as.character(x$lon),
-                                #                                         data_latitude = as.character(x$lat),
-                                #                                         input_degree_format = "decimal_degree",
-                                #                                         cwp_resolution = "1deg_x_1deg")
                                 boot_tmp_subelement <- x %>%
                                   dplyr::group_by(yr, mon, fmod, sp, ocean, cwp) %>%
                                   dplyr::summarise(catch_set_fit = sum(catch_set_fit))
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
-                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t2-fmod")) > 0 )){
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(x = which(ci_type == "t2-fmod")) > 0 )) {
                                 t2_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
-                                                                     FUN = function(x){
+                                                                     FUN = function(x) {
                                                                        boot_tmp_element <-do.call(rbind,
                                                                                                   lapply(seq.int(1:length(x)),
                                                                                                          function(i){
@@ -5690,7 +5688,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      }))
                                 # compute final CI
                                 t2_fmod_final_ocean_list <- vector("list", length = length(levels(t2_fmod$ocean)))
-                                for (o in as.numeric(levels(t2_fmod$ocean))){
+                                for (o in as.numeric(levels(t2_fmod$ocean))) {
                                   t2_fmod_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = t2_fmod[t2_fmod$ocean == o,],
                                                                                        boot_data = t2_fmod_boot[t2_fmod_boot$ocean == o,])
                                 }
@@ -5761,12 +5759,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                                          "t1",
                               #                                          "t2")
                               # figure task 2 and proportion
-                              if(plot_predict == T){
+                              if (plot_predict == T) {
                                 sps <- t2
                                 sp::coordinates(object = sps) <- ~ lon + lat
                                 # select for the year
-                                yr_fig = as.character(unique(sps$year))
-                                fmod_fig = unique(sps$fmod)
+                                yr_fig <- as.character(unique(sps$year))
+                                fmod_fig <- unique(sps$fmod)
                                 ocean_fig <- unique(sps$ocean)
                                 # common extent for all figures
                                 wrl <- rastermap(x = 1,
@@ -5886,9 +5884,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           wrld_sf <- sf::st_as_sf(x = wrld)
                                           # the world map
                                           wrld_df <- as.data.frame(x = wrld)
-                                          r_points = raster::rasterToPoints(x = wrl2)
+                                          r_points <- raster::rasterToPoints(x = wrl2)
                                           # t2
-                                          r_df = data.frame(r_points)
+                                          r_df <- data.frame(r_points)
                                           # breaks for the legend
                                           qt <- raster::quantile(x = r_df$layer,
                                                                  na.rm = T,
@@ -5903,7 +5901,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             ggplot2::geom_tile(data = r_df,
                                                                ggplot2::aes(x = x,
                                                                             y = year,
-                                                                            fill = labs))+
+                                                                            fill = labs)) +
                                             ggplot2::scale_fill_manual("Catches (t)",
                                                                        values = palette4catch(length(levels(r_df$labs)))) +
                                             ggplot2::theme_bw() +
@@ -5959,4 +5957,3 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             id_not_full_trip_retained = NULL,
                             data_selected = NULL
                           ))
-

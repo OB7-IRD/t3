@@ -29,10 +29,9 @@ tunapredict <- function(sample_data,
 {
   # local binding global variables ----
   modrf0 <- prop_t3 <- NULL
-  if(missing(target_period)){target_period = allset_data$yr[1]}
+  if (missing(target_period)) {target_period = allset_data$yr[1]}
   # subset of all sampled set
   sub <- sample_data
-
   # format columns
   sub$resp <- (sub$prop_t3)
   sub$tlb <- (sub$prop_lb)
@@ -42,44 +41,33 @@ tunapredict <- function(sample_data,
   sub <- droplevels(sub)
   sub$ocean <- factor(sub$ocean)
   sub$fmod <- factor(sub$fmod)
-
     ### remove set used to train models from data to predict
     no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
     no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
-
     ## Prepare data
-
     no_sampled_set$tlb <- (no_sampled_set$prop_lb)  # transform predictor if necessary
     no_sampled_set$yr <- factor(no_sampled_set$yr)
     no_sampled_set$mon <- factor(no_sampled_set$mon)
     no_sampled_set$vessel <- factor(no_sampled_set$vessel)
-
     ### split dataframe for different treatment if needed
     # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
     no_sampled_set$data_source <- NA # assign source later
     no_sampled_set$fit_prop <- NA # stock final proportion
-
     # not sampled vessel list
     vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),levels(sub$vessel))
-
     # dataset with all information
     newd <- (no_sampled_set[!no_sampled_set$vessel  %in% vessel_not_train, ])
     # newd$vessel <- factor(newd$vessel, levels = setdiff(levels(newd$vessel),vessel_not_train)) # remove levels of vessel not train
-
     # dataset with vessel not sampled
     new_wtv <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & !is.na(no_sampled_set$prop_lb), ]
-
     # dataset with no logbook
     new_0 <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & is.na(no_sampled_set$prop_lb), ]
     new_0$data_source <- as.character(new_0$data_source)
-
     #-----------------------#
     ## models and predicts ##
     #-----------------------#
-
     # best case  (all information available)###
-    if(nrow(newd)>0) {
-
+    if (nrow(newd) > 0) {
       set.seed(Nseed)
       model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + yr + mon + vessel,
                                       data = sub,
@@ -94,9 +82,7 @@ tunapredict <- function(sample_data,
 
       newd$fit_prop <- predict(model_rf_full, data = newd)$predictions
       newd$data_source <- "full_model" # add flag
-
     }
-
     ##  without vessel information
     if(nrow(new_wtv)>0) {
       set.seed(Nseed)
@@ -114,11 +100,8 @@ tunapredict <- function(sample_data,
       new_wtv$fit_prop<- predict(model_rf_wtvessel,data=new_wtv)$predictions
       new_wtv$data_source <- "model_wtv" # add flag
     }
-
     ## without logbook information on the catch, location and date only
-
     if(nrow(new_0)>0) {
-
       set.seed(Nseed)
       model_rf_simple <- ranger::ranger(resp ~ lon + lat + yr + mon,
                                         data = sub,
@@ -131,11 +114,9 @@ tunapredict <- function(sample_data,
                                         quantreg = FALSE,
                                         keep.inbag= FALSE
       )
-
       new_0$fit_prop<- predict(modrf0,newdata=new_0)$predictions
       new_0$data_source <- "simple_model" # add flag
     }
-
     #-------------------------------------#
     ### compute catch by species by set ###
     #------------------------------------#
@@ -163,7 +144,5 @@ tunapredict <- function(sample_data,
     all_set <- list(newd,new_wtv,new_0, sampled_set,new_0)
     all_set <- all_set[which(unlist(lapply(all_set, nrow)) >0)]
     all_set <- dplyr::bind_rows(all_set)
-
   return(all_set)
-
 }

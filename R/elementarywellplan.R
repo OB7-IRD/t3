@@ -28,25 +28,25 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                                           wellplan_weigth_category_code,
                                                           wellplan_weigth_category_label) {
                                       # attribute "wellplan_id" verification
-                                      t3:::check_wellplan_id(wellplan_id)
+                                      check_wellplan_id(wellplan_id)
                                       # attribute "well_id" verification
-                                      t3:::check_well_id(well_id)
+                                      check_well_id(well_id)
                                       # attribute "activity_id" verification
-                                      t3:::check_activity_id(activity_id)
+                                      check_activity_id(activity_id)
                                       # attribute "sample_id" verification
-                                      t3:::check_sample_id(sample_id)
+                                      check_sample_id(sample_id)
                                       # attribute "specie_code" verification
-                                      t3:::check_specie_code(specie_code)
+                                      check_specie_code(specie_code)
                                       # attribute "specie_code3l" verification
-                                      t3:::check_specie_code3l(specie_code3l)
+                                      check_specie_code3l(specie_code3l)
                                       # attribute "wellplan_weight" verification
-                                      t3:::check_wellplan_weight(wellplan_weight)
+                                      check_wellplan_weight(wellplan_weight)
                                       # attribute "wellplan_number" verification
-                                      t3:::check_wellplan_number(wellplan_number)
+                                      check_wellplan_number(wellplan_number)
                                       # attribute "wellplan_weigth_category_code" verification
-                                      t3:::check_wellplan_weigth_category_code(wellplan_weigth_category_code)
+                                      check_wellplan_weigth_category_code(wellplan_weigth_category_code)
                                       # attribute "wellplan_weigth_category_label" verification
-                                      t3:::check_wellplan_weigth_category_label(wellplan_weigth_category_label)
+                                      check_wellplan_weigth_category_label(wellplan_weigth_category_label)
                                       # attributions
                                       private$wellplan_id <- wellplan_id
                                       private$well_id <- well_id

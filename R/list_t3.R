@@ -320,7 +320,7 @@ list_t3 <- R6Class(
                     x = filter,
                     fixed = TRUE
                   )
-                final_filter = parse(text = final_filter)
+                final_filter <- parse(text = final_filter)
                 tryCatch(
                   expr = if (eval(final_filter)) {
                     data <- append(data, tmp2)
@@ -351,7 +351,7 @@ list_t3 <- R6Class(
                 x = filter,
                 fixed = TRUE
               )
-              final_filter = parse(text = final_filter)
+              final_filter <- parse(text = final_filter)
               tryCatch(
                 expr = if (eval(final_filter)) {
                   data <- append(data, tmp1)
@@ -404,7 +404,7 @@ list_t3 <- R6Class(
                              replacement = "tmp2$.__enclos_env__$private$",
                              x = filter,
                              fixed = TRUE)
-        final_filter = parse(text = final_filter)
+        final_filter <- parse(text = final_filter)
         tmp_final <- Filter(Negate(is.null),
                             lapply(X = seq_len(length.out = length(tmp1)),
                                    FUN = function(a) {
@@ -503,7 +503,7 @@ list_t3 <- R6Class(
                                    replacement = "tmp2$.__enclos_env__$private$",
                                    x = modification,
                                    fixed = TRUE)
-        final_modification = parse(text = final_modification)
+        final_modification <- parse(text = final_modification)
         lapply(X = seq_len(length.out = length(tmp1)),
                FUN = function(a) {
                  tmp2 <- tmp1[[a]]

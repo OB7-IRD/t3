@@ -38,7 +38,7 @@ Initialize function for R6 trip class.
 
 \item{\code{fleet}}{Object of class {\link[base]{character}} expected. Fleet identification.}
 
-\item{\code{landing_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd_hms UTC.}
+\item{\code{landing_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
 
 \item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
 

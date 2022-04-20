@@ -29,27 +29,27 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                                           sample_number_measured_extrapolated_lf,
                                                           sample_total_count) {
                                       # attribute "trip_id" verification
-                                      t3:::check_trip_id(trip_id)
+                                      check_trip_id(trip_id)
                                       # attribute "well_id" verification
-                                      t3:::check_well_id(well_id)
+                                      check_well_id(well_id)
                                       # attribute "sample_id" verification
-                                      t3:::check_sample_id(sample_id)
+                                      check_sample_id(sample_id)
                                       # attribute "sub_sample_id" verification
-                                      t3:::check_sub_sample_id(sub_sample_id)
+                                      check_sub_sample_id(sub_sample_id)
                                       # attribute "sample_quality" verification
-                                      t3:::check_sample_quality(sample_quality)
+                                      check_sample_quality(sample_quality)
                                       # attribute "sample_type" verification
-                                      t3:::check_sample_type(sample_type)
+                                      check_sample_type(sample_type)
                                       # attribute "specie_code" verification
-                                      t3:::check_specie_code(specie_code)
+                                      check_specie_code(specie_code)
                                       # attribute "specie_code3l" verification
-                                      t3:::check_specie_code3l(specie_code3l)
+                                      check_specie_code3l(specie_code3l)
                                       # attribute "sample_standardised_length_class_lf" verification
-                                      t3:::check_sample_standardised_length_class_lf(sample_standardised_length_class_lf)
+                                      check_sample_standardised_length_class_lf(sample_standardised_length_class_lf)
                                       # attribute "sample_number_measured_extrapolated_lf" verification
-                                      t3:::check_sample_number_measured_extrapolated_lf(sample_number_measured_extrapolated_lf)
+                                      check_sample_number_measured_extrapolated_lf(sample_number_measured_extrapolated_lf)
                                       # attribute "sample_total_count" verification
-                                      t3:::check_sample_total_count(sample_total_count)
+                                      check_sample_total_count(sample_total_count)
                                       # attributions
                                       private$trip_id <- trip_id
                                       private$well_id <- well_id

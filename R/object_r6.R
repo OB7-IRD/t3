@@ -20,15 +20,13 @@ object_r6 <- function(class_name, ...) {
   } else {
     arguments <- list(...)
     if (length(arguments) == 0) {
-      expr <- paste0("t3:::",
-                     class_name,
+      expr <- paste0(class_name,
                      "$new()")
       object_r6 <- eval(parse(text = expr))
     } else {
       for (i in seq_len(length.out = length(arguments))) {
         if (i == 1) {
-          expr <- paste0("t3:::",
-                         class_name,
+          expr <- paste0(class_name,
                          "$new(",
                          arguments[[i]],
                          ")")

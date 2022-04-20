@@ -61,7 +61,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -331,7 +331,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # common data design ----
                                      trips_data <- unclass(x = trips_data)
-                                     object_trips <- t3::object_r6(class_name = "trips")
+                                     object_trips <- object_r6(class_name = "trips")
                                      object_trips$add(lapply(X = seq_len(length.out = length(x = trips_data[[1]])),
                                                              FUN = function(trip_id) {
                                                                cat(format(x = Sys.time(),
@@ -415,7 +415,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -700,7 +700,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # common data design ----
                                      activities_data <- unclass(x = activities_data)
-                                     object_activities <- t3::object_r6(class_name = "activities")
+                                     object_activities <- object_r6(class_name = "activities")
                                      object_activities$add(lapply(X = seq_len(length.out = length(activities_data[[1]])),
                                                                   FUN = function(activity_id) {
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -787,7 +787,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -1067,7 +1067,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # common data design ----
                                      elementarycatches_data <- unclass(x = elementarycatches_data)
-                                     object_elementarycatches <- t3::object_r6(class_name = "elementarycatches")
+                                     object_elementarycatches <- object_r6(class_name = "elementarycatches")
                                      object_elementarycatches$add(lapply(X = seq_len(length.out = length(elementarycatches_data[[1]])),
                                                                          FUN = function(elementarycatch_id) {
                                                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -1151,7 +1151,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -1427,7 +1427,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # common data design ----
                                      elementarylandings_data <- unclass(x = elementarylandings_data)
-                                     object_elementarylandings <- t3::object_r6(class_name = "elementarylandings")
+                                     object_elementarylandings <- object_r6(class_name = "elementarylandings")
                                      object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylandings_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
                                                                             cat(format(x = Sys.time(),
@@ -1528,7 +1528,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -2051,7 +2051,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                      }
                                      # global manipulations ----
-                                     object_wells <- t3::object_r6(class_name = "wells")
+                                     object_wells <- object_r6(class_name = "wells")
                                      for (trip_id in unique(x = samples_data$trip_id)) {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
@@ -2258,7 +2258,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -2470,7 +2470,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else if (data_source != "t3_db") {
+                                     } else if (! data_source %in% c("t3_db",
+                                                                     "envir")) {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -2717,7 +2718,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          stop()
                                        }
-                                     } else {
+                                     } else if (data_source != "envir") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -3014,7 +3015,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop()
                                        }
                                      } else if (! data_source %in% c("t3_db",
-                                                                     "avdth_db")) {
+                                                                     "avdth_db",
+                                                                     "envir")) {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Error: invalid \"data_source\" argument.\n",
@@ -3050,63 +3052,63 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source == "sql_query") {
                                        # sql queries ----
                                        # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start length weight relationship data importation from the database.\n",
+                                           sep = "")
+                                       lengthweightrelationships_sql <- DBI::SQL(x = paste(readLines(con = data_path),
+                                                                                           collapse = "\n"))
+                                       cat("[", lengthweightrelationships_sql, "]\n", sep = "")
+                                       lengthweightrelationships_data <- DBI::dbGetQuery(conn = db_con,
+                                                                                         statement = lengthweightrelationships_sql)
+                                       if (nrow(x = lengthweightrelationships_data) == 0) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationship data importation from the database.\n",
+                                             " - Error: no data imported, check the query.\n",
                                              sep = "")
-                                         lengthweightrelationships_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                                             collapse = "\n"))
-                                         cat("[", lengthweightrelationships_sql, "]\n", sep = "")
-                                         lengthweightrelationships_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                           statement = lengthweightrelationships_sql)
-                                         if (nrow(x = lengthweightrelationships_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful length weight relationship data importation from the database.\n",
-                                               sep = "")
-                                         }
+                                         stop()
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length weight relationship data importation from the database.\n",
+                                             sep = "")
+                                       }
                                      } else if (data_source == "csv") {
                                        # csv source ----
                                        # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start length weight relationship data importation from csv file.\n",
+                                           sep = "")
+                                       lengthweightrelationships_data <- read.csv2(file = data_path,
+                                                                                   stringsAsFactors = FALSE)
+                                       if (nrow(lengthweightrelationships_data) == 0) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationship data importation from csv file.\n",
+                                             " - Error: no data imported, check the csv file.\n",
                                              sep = "")
-                                         lengthweightrelationships_data <- read.csv2(file = data_path,
-                                                                                     stringsAsFactors = FALSE)
-                                         if (nrow(lengthweightrelationships_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the csv file.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           lengthweightrelationships_data <- dplyr::mutate(.data = lengthweightrelationships_data,
-                                                                                           ocean = as.integer(ocean),
-                                                                                           specie_code = as.integer(specie_code),
-                                                                                           specie_code3l = as.character(specie_code3l),
-                                                                                           lwr_a = as.numeric(lwr_a),
-                                                                                           lwr_b = as.numeric(lwr_b))
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful length weight relationship data importation from csv file.\n",
-                                               sep = "")
-                                         }
+                                         stop()
+                                       } else {
+                                         lengthweightrelationships_data <- dplyr::mutate(.data = lengthweightrelationships_data,
+                                                                                         ocean = as.integer(ocean),
+                                                                                         specie_code = as.integer(specie_code),
+                                                                                         specie_code3l = as.character(specie_code3l),
+                                                                                         lwr_a = as.numeric(lwr_a),
+                                                                                         lwr_b = as.numeric(lwr_b))
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful length weight relationship data importation from csv file.\n",
+                                             sep = "")
+                                       }
                                      } else if (data_source == "rdata") {
                                        # rdata source ----
                                        # process beginning
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start trip(s) data importation from RData.\n",
-                                             sep = "")
-                                         load(file = data_path,
-                                              envir = tmp_envir <- new.env())
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start trip(s) data importation from RData.\n",
+                                           sep = "")
+                                       load(file = data_path,
+                                            envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthweightrelationships",
                                                   envir = tmp_envir)) {
                                          lengthweightrelationships_data <- get(x = "lengthweightrelationships",

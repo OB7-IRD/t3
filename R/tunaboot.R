@@ -34,10 +34,10 @@ tunaboot <- function(sample_data,
 {
   # local binding global variables ----
   prop_t3 <- modrf0 <- NULL
-  if(missing(Nseed_boot)){Nseed_boot = Nboot}
-  if(missing(target_period)){target_period = allset_data$yr[1]}
+  if (missing(Nseed_boot)) {Nseed_boot = Nboot}
+  if (missing(target_period)) {target_period = allset_data$yr[1]}
   # build structure of the output list for the bootstrap
-  boot_output_list <- vector('list', length = Nboot)
+  boot_output_list <- vector("list", length = Nboot)
   # boot_output_list <- lapply(boot_output_list, function (x){
   #   tmp <- vector('list', length = 3)
   #   names(tmp) <- c("task1", "task2","loop")
@@ -45,7 +45,6 @@ tunaboot <- function(sample_data,
   # })
   # subset of all sampled set
   sub <- sample_data
-
   # format columns
   sub$resp <- (sub$prop_t3)
   sub$tlb <- (sub$prop_lb)
@@ -56,92 +55,74 @@ tunaboot <- function(sample_data,
   sub$ocean <- factor(sub$ocean)
   sub$fmod <- factor(sub$fmod)
   #### bootstrap
+  # select sample and data to predict
+  ### remove set used to train models from data to predict
+  no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
+  no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
+  ## Prepare data
+  no_sampled_set$tlb <- (no_sampled_set$prop_lb)  # transform predictor if necessary
+  no_sampled_set$yr <- factor(no_sampled_set$yr)
+  no_sampled_set$mon <- factor(no_sampled_set$mon)
+  no_sampled_set$vessel <- factor(no_sampled_set$vessel)
+  ### split dataframe for different treatment if needed
+  # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
+  no_sampled_set$data_source <- NA # assign source later
+  no_sampled_set$fit_prop <- NA # stock final proportion
+  # add potential missing level - bug of the predict function
+  # no_sampled_set$yr <- addmissinglevel(no_sampled_set, "yr")
+  # no_sampled_set$mon <- addmissinglevel(no_sampled_set, "mon")
+  # no_sampled_set$vessel <- addmissinglevel(no_sampled_set, "vessel")
+  # missinglevel<- setdiff(levels(sub$vessel), levels(tmp$vessel))
+  # levels(tmp$vessel) <- c(levels(tmp$vessel),missinglevel)
+  # levels(no_sampled_set$vessel) <- modrf$forest$xlevels$vessel
+  # levels(no_sampled_set$yr) <- modrf$forest$xlevels$yr
+  # levels(no_sampled_set$mon) <- modrf$forest$xlevels$mon
+  # not sampled vessel list
+  vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),
+                                    levels(sub$vessel))
+  # dataset with all information
+  newd <- (no_sampled_set[!no_sampled_set$vessel %in% vessel_not_train, ])
+  # newd$vessel <- factor(newd$vessel, levels = setdiff(levels(newd$vessel),vessel_not_train)) # remove levels of vessel not train
+  # dataset with vessel not sampled
+  new_wtv <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & !is.na(no_sampled_set$prop_lb), ]
+  # dataset with no logbook
+  new_0 <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & is.na(no_sampled_set$prop_lb), ]
+  new_0$data_source <- as.character(new_0$data_source)
+  # compute catch by species by set
+  sampled_set <- unique(sub[sub$yr %in% target_period,])
+  # add sample not corrected catch by species
+  if(nrow(sampled_set) > 0){
+    sampled_set$data_source <- "sample"
+  } # add flag
+  sampled_set <- dplyr::rename(sampled_set,
+                               fit_prop = prop_t3)
+  # output columns
+  column_keep <- c("id_act",
+                   "fmod",
+                   "sp",
+                   "lat",
+                   "lon",
+                   "date_act",
+                   "vessel",
+                   "ocean",
+                   "yr",
+                   "mon",
+                   "fit_prop",
+                   "wtot_lb_t3",
+                   # "w_lb_t3",
+                   "data_source")
 
-    # select sample and data to predict
-    ### remove set used to train models from data to predict
-    no_sampled_set <- droplevels(allset_data[!(allset_data$id_act %in% unique(sub$id_act)),])
-    no_sampled_set <- droplevels(no_sampled_set[no_sampled_set$yr %in% target_period,])
-
-    ## Prepare data
-
-    no_sampled_set$tlb <- (no_sampled_set$prop_lb)  # transform predictor if necessary
-    no_sampled_set$yr <- factor(no_sampled_set$yr)
-    no_sampled_set$mon <- factor(no_sampled_set$mon)
-    no_sampled_set$vessel <- factor(no_sampled_set$vessel)
-
-    ### split dataframe for different treatment if needed
-    # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
-
-    no_sampled_set$data_source <- NA # assign source later
-    no_sampled_set$fit_prop <- NA # stock final proportion
-
-    # add potential missing level - bug of the predict function
-
-    # no_sampled_set$yr <- addmissinglevel(no_sampled_set, "yr")
-    # no_sampled_set$mon <- addmissinglevel(no_sampled_set, "mon")
-    # no_sampled_set$vessel <- addmissinglevel(no_sampled_set, "vessel")
-
-    # missinglevel<- setdiff(levels(sub$vessel), levels(tmp$vessel))
-    # levels(tmp$vessel) <- c(levels(tmp$vessel),missinglevel)
-
-    # levels(no_sampled_set$vessel) <- modrf$forest$xlevels$vessel
-    # levels(no_sampled_set$yr) <- modrf$forest$xlevels$yr
-    # levels(no_sampled_set$mon) <- modrf$forest$xlevels$mon
-
-    # not sampled vessel list
-    vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),
-                                      levels(sub$vessel))
-
-    # dataset with all information
-    newd <- (no_sampled_set[!no_sampled_set$vessel %in% vessel_not_train, ])
-    # newd$vessel <- factor(newd$vessel, levels = setdiff(levels(newd$vessel),vessel_not_train)) # remove levels of vessel not train
-
-    # dataset with vessel not sampled
-    new_wtv <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & !is.na(no_sampled_set$prop_lb), ]
-
-    # dataset with no logbook
-    new_0 <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & is.na(no_sampled_set$prop_lb), ]
-    new_0$data_source <- as.character(new_0$data_source)
-
-
-    # compute catch by species by set
-    sampled_set <- unique(sub[sub$yr %in% target_period,])
-    # add sample not corrected catch by species
-    if(nrow(sampled_set) > 0){
-      sampled_set$data_source <- "sample"
-    } # add flag
-    sampled_set <- dplyr::rename(sampled_set,
-                                 fit_prop = prop_t3)
-    # output columns
-    column_keep <- c("id_act",
-                     "fmod",
-                     "sp",
-                     "lat",
-                     "lon",
-                     "date_act",
-                     "vessel",
-                     "ocean",
-                     "yr",
-                     "mon",
-                     "fit_prop",
-                     "wtot_lb_t3",
-                     # "w_lb_t3",
-                     "data_source")
-
-    for (i in seq.int(from = 1, to = Nboot)){
-      print(i)
-      set.seed(i)
-      newsample <- dplyr::sample_n(tbl = sub,
-                                   size = nrow(sub),
-                                   replace = TRUE)
-
+  for (i in seq.int(from = 1, to = Nboot)) {
+    print(i)
+    set.seed(i)
+    newsample <- dplyr::sample_n(tbl = sub,
+                                 size = nrow(sub),
+                                 replace = TRUE)
     #-----------------------#
     ## models and predicts ##
     #-----------------------#
-
     # best case  (all information available)###
-    if(nrow(newd)>0) {
-
+    if (nrow(newd)>0) {
       set.seed(Nseed_boot)
       model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + yr + mon + vessel,
                                       data = newsample,
@@ -155,12 +136,11 @@ tunaboot <- function(sample_data,
                                       keep.inbag= FALSE
       )
       newd$fit_prop <- predict(object = model_rf_full,
-                                               data = newd)$predictions
+                               data = newd)$predictions
       newd$data_source <- "full_model" # add flag
     }
-
     ##  without vessel information
-    if(nrow(new_wtv)>0) {
+    if (nrow(new_wtv)>0) {
       set.seed(Nseed_boot)
       model_rf_wtvessel <- ranger::ranger(resp ~ tlb + lon + lat + yr + mon,
                                           data = newsample,
@@ -173,14 +153,11 @@ tunaboot <- function(sample_data,
                                           quantreg = FALSE,
                                           keep.inbag= FALSE
       )
-
       new_wtv$fit_prop<- predict(model_rf_wtvessel,data=new_wtv)$predictions
       new_wtv$data_source <- "model_wtv" # add flag
     }
-
     # without logbook information on the catch, location and date only
-    if(nrow(new_0)>0) {
-
+    if (nrow(new_0)>0) {
       set.seed(Nseed_boot)
       model_rf_simple <- ranger::ranger(resp ~ lon + lat + yr + mon,
                                         data = newsample,
@@ -193,16 +170,13 @@ tunaboot <- function(sample_data,
                                         quantreg = FALSE,
                                         keep.inbag= FALSE
       )
-
       new_0$fit_prop<- predict(modrf0,newdata=new_0)$predictions
       new_0$data_source <- "simple_model" # add flag
     }
-
     # remove set with no data and combine all catch
     all_set <- list(newd,new_wtv,new_0, sampled_set)
     all_set <- all_set[which(unlist(lapply(all_set, nrow)) > 0)]
     all_set <- dplyr::bind_rows(all_set)
-
     boot_output_list[[i]] <- all_set
   }
   return(boot_output_list)

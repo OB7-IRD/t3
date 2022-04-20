@@ -3,7 +3,7 @@
 #' @description Create R6 reference object class elementarywellplans
 #' @importFrom R6 R6Class
 elementarywellplans <- R6::R6Class(classname = "elementarywellplans",
-                                   inherit = t3:::list_t3,
+                                   inherit = list_t3,
                                    public = list(
                                      # initialize ----
                                      #' @description Initialize function for R6 elementarywellplans class.

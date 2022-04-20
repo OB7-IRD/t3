@@ -7,9 +7,11 @@
 initiate_directories(outputs_path, new_directory = TRUE, level = "all")
 }
 \arguments{
-\item{outputs_path}{(character) expected. General output directory.}
+\item{outputs_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory.}
 
-\item{level}{(character) expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").}
+\item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default TRUE.}
+
+\item{level}{Object of class \code{\link[base]{character}} expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").}
 }
 \value{
 A text variable with output directory path.

@@ -22,19 +22,19 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                                          specie_code3l,
                                                          landing_weight) {
                                      # attribute "trip_id" verification
-                                     t3:::check_trip_id(trip_id)
+                                     check_trip_id(trip_id)
                                      # attribute "elementarylanding_id" verification
-                                     t3:::check_elementarylanding_id(elementarylanding_id)
+                                     check_elementarylanding_id(elementarylanding_id)
                                      # attribute "landing_category" verification
-                                     t3:::check_landing_category(landing_category)
+                                     check_landing_category(landing_category)
                                      # attribute "landing_category_name" verification
-                                     t3:::check_landing_category_name(landing_category_name)
+                                     check_landing_category_name(landing_category_name)
                                      # attribute "specie_code" verification
-                                     t3:::check_specie_code(specie_code)
+                                     check_specie_code(specie_code)
                                      # attribute "specie_code3l" verification
-                                     t3:::check_specie_code3l(specie_code3l)
+                                     check_specie_code3l(specie_code3l)
                                      # attribute "landing_weight" verification
-                                     t3:::check_landing_weight(landing_weight)
+                                     check_landing_weight(landing_weight)
                                      # attributeions
                                      private$trip_id <- trip_id
                                      private$elementarylanding_id <- elementarylanding_id

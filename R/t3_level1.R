@@ -11,6 +11,9 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".
+#' @param outputs_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
+#' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
+#' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @return The function a R6 reference object of class "object_full_trips".
 #' @export
 t3_level1 <- function(object_model_data,
@@ -44,9 +47,9 @@ t3_level1 <- function(object_model_data,
     stop()
   } else {
     # log file initialisation ----
-    t3::initiate_log_file(log_file = log_file,
-                          log_path = log_path,
-                          log_name = log_name)
+    initiate_log_file(log_file = log_file,
+                      log_path = log_path,
+                      log_name = log_name)
     cat(format(Sys.time(),
                "%Y-%m-%d %H:%M:%S"),
         " - Start function t3 process level 1.\n",
@@ -58,9 +61,9 @@ t3_level1 <- function(object_model_data,
     # directories initialization if outputs extraction ----
     if (integrated_process != TRUE
         && ! is.null(x = outputs_path)) {
-      outputs_path <- t3::initiate_directories(outputs_path = outputs_path,
-                                               new_directory = new_directory,
-                                               level = "level1")
+      outputs_path <- initiate_directories(outputs_path = outputs_path,
+                                           new_directory = new_directory,
+                                           level = "level1")
     }
     # level 1.1: rf1 ----
     object_full_trips$rf1(species_rf1 = species_rf1,

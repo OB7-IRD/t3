@@ -25,23 +25,23 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        specie_code3l,
                                                        catch_weight) {
                                    # attributee "activity_id" verification
-                                   t3:::check_activity_id(activity_id)
+                                   check_activity_id(activity_id)
                                    # attribute "elementarycatch_id" verification
-                                   t3:::check_elementarycatch_id(elementarycatch_id)
+                                   check_elementarycatch_id(elementarycatch_id)
                                    # attribute "ocean" verification
-                                   t3:::check_ocean(ocean)
+                                   check_ocean(ocean)
                                    # attribute "school_type" verification
-                                   t3:::check_school_type(school_type)
+                                   check_school_type(school_type)
                                    # attribute "logbook_category" verification
-                                   t3:::check_logbook_category(logbook_category)
+                                   check_logbook_category(logbook_category)
                                    # attribute "logbook_category_name" verification
-                                   t3:::check_logbook_category_name(logbook_category_name)
+                                   check_logbook_category_name(logbook_category_name)
                                    # attribute "specie_code" verification
-                                   t3:::check_specie_code(specie_code)
+                                   check_specie_code(specie_code)
                                    # attribute "specie_code3l" verification
-                                   t3:::check_specie_code3l(specie_code3l)
+                                   check_specie_code3l(specie_code3l)
                                    # attribute "catch_weight" verification
-                                   t3:::check_catch_weight(catch_weight)
+                                   check_catch_weight(catch_weight)
                                    # attributeions
                                    private$activity_id <- activity_id
                                    private$elementarycatch_id <- elementarycatch_id
