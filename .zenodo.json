@@ -1,14 +1,15 @@
 {
-    "description": "<p>Beta release of T3R package</p>\n<p>T3 package aims to facilitate the processing of tuna data from purse seine catches in order to calculate the nomical catch on the one hand, and the catch and fishing effort statistics for each species on the other hand.</p>", 
+    "description": "<p>t3: A R package for processing tropical tuna fisheries data</p>\<p>The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics. The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal). Its aims are to correct biases of the logbook data on species composition and provide more accurate catch estimations per species for the purse seiner fleet, especially European and Seychelles fleet. </p><p>The process is composed of three levels :<ul> <li> The standardisation of the logbook data </li> <li> The standardisation of the sampling data </li> <li> The modelling of species composition and catch estimations </li></ul></p><p>There is two output :<ul> <li>Catch estimates: annual catch by species, region, gear, flag. </li> <li>Fishing effort : catch and fishing effort for each species by small area (1x1 degree squares), gear, flag and month. </li></ul></p><p>Added features:<ul> <li> Implementation of unit tests </li> <li> Implementation of the documentation for the level 3 </li> <li> Development of output extraction functions for process 1.1 </li> <li> Adding an output directory intilisation function and integrating it into the processes </li></ul></p><p>Changed features:<ul> <li> Fix minor bugs and optimisation of the code and regarding the overall process </li> <li> Update of the level 3 process </li></ul></p>", 
     "license": "other-open", 
-    "title": "OB7-IRD/t3: Beta version of T3 software", 
-    "version": "0.9.1", 
+    "title": "t3: A R package for processing tropical tuna fisheries data", 
+    "version": "1.0.0", 
     "upload_type": "software", 
-    "publication_date": "2020-09-21", 
+    "publication_date": "2022-04-21", 
     "creators": [
         {
             "affiliation": "IRD", 
-            "name": "Mathieu Depetris"
+            "name": "Mathieu Depetris",
+            "orcid": "0000-0001-8080-0531"
         }, 
         {
             "affiliation": "IRD", 
@@ -17,7 +18,8 @@
         },
         {
             "affiliation": "IRD", 
-            "name": "Laurent FLoch"
+            "name": "Laurent FLoch",
+            "orcid": "0000-0003-4764-9766"
         },{
             "affiliation": "IRD", 
             "name": "Pascal Cauquil"
@@ -35,7 +37,7 @@
     "related_identifiers": [
         {
             "scheme": "url", 
-            "identifier": "https://github.com/OB7-IRD/t3/tree/0.9.1", 
+            "identifier": "https://github.com/OB7-IRD/t3/tree/1.0.0", 
             "relation": "isSupplementTo"
         }, 
         {
