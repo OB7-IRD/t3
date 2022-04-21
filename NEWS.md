@@ -1,4 +1,4 @@
-# T3 1.0.0-RC - 2022-04-21
+# T3 1.0.0 - 2022-04-21
 
 ## Added
 * Implementation of unit tests
