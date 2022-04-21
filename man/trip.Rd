@@ -2,7 +2,7 @@
 % Please edit documentation in R/trip.R
 \name{trip}
 \alias{trip}
-\title{R6 class trip creation}
+\title{R6 class trip}
 \description{
 Create R6 reference object class trip
 }
@@ -34,21 +34,21 @@ Initialize function for R6 trip class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{fleet}}{(character) Fleet identification.}
+\item{\code{fleet}}{Object of class {\link[base]{character}} expected. Fleet identification.}
 
-\item{\code{landing_date}}{(date and hours) Landing date in format ymd_hms UTC.}
+\item{\code{landing_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
 
-\item{\code{departure_date}}{(date and hours) Departure date in format year month day hour minute second.}
+\item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
 
-\item{\code{logbook_availability}}{(integer) Logbook availability value, 1 for available and 0 for not.}
+\item{\code{logbook_availability}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
 
-\item{\code{fish_hold_empty}}{(integer) Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
+\item{\code{fish_hold_empty}}{Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
 
-\item{\code{vessel_id}}{(integer) Vessel identification.}
+\item{\code{vessel_id}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
 
-\item{\code{vessel_type}}{(character) Vessel type identification.}
+\item{\code{vessel_type}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
 }
 \if{html}{\out{</div>}}
 }

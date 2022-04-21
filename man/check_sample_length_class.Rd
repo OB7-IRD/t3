@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_length_class}
 \alias{check_sample_length_class}
-\title{Attribut "sample_length_class" verification}
+\title{Attribute "sample_length_class" verification}
 \usage{
 check_sample_length_class(sample_length_class)
 }
 \arguments{
-\item{sample_length_class}{(integer) Sample length class of measured individus.}
+\item{sample_length_class}{Object of class {\link[base]{integer}} expected. Sample length class of measured individus.}
 }
 \description{
 Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero.

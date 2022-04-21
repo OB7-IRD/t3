@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_number_weighted}
 \alias{check_sample_number_weighted}
-\title{Attribut "sample_number_weighted" verification}
+\title{Attribute "sample_number_weighted" verification}
 \usage{
 check_sample_number_weighted(sample_number_weighted)
 }
 \arguments{
-\item{sample_number_weighted}{(numeric) Sample number of measured individus extrapolated to all counted individus and weighted by set weight.}
+\item{sample_number_weighted}{Object of class {\link[base]{numeric}} Sample number of measured individus extrapolated to all counted individus and weighted by set weight.}
 }
 \description{
 Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero.

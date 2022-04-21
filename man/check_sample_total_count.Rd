@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_sample_total_count}
 \alias{check_sample_total_count}
-\title{Attribut "sample_total_count" verification}
+\title{Attribute "sample_total_count" verification}
 \usage{
 check_sample_total_count(sample_total_count)
 }
 \arguments{
-\item{sample_total_count}{(integer) Sample number of total individus counted.}
+\item{sample_total_count}{Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.}
 }
 \description{
 Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero.

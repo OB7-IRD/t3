@@ -1,0 +1,85 @@
+template:
+  params:
+    bootswatch: cerulean
+    docsearch:
+      api_key: b232a295f4339cb13abbd7adee1da479
+      index_name: ob7-ird
+
+reference:
+- title: "Shortcut functions"
+  desc: >
+    Functions for run all or several parts of the t3 process.
+- contents:
+  - t3_process
+  - data_model_initialisation
+  - t3_level1
+  - t3_level2
+- title: "Level 3 tools"
+  desc: >
+    Functions used in the process level 3.
+- contents:
+  - catch_ci_calculator
+  - df2boot
+  - tunaboot
+  - tunapredict
+- title: "R6 class"
+  desc: >
+    Link to the function for R6 class creations. Methods and processes associated are encapsulate in each class.
+- contents:
+  - activities
+  - activity
+  - elementarycatch
+  - elementarycatches
+  - elementarylanding
+  - elementarylandings
+  - elementarysample
+  - elementarysamples
+  - elementarysampleraw
+  - elementarysamplesraw
+  - elementarywellplan
+  - elementarywellplans
+  - full_trips
+  - list_t3
+  - object_model_data
+  - samples
+  - standardisedsample
+  - standardisedsamples
+  - standardisedsampleset
+  - standardisedsamplesets
+  - trip
+  - trips
+  - well
+  - wells
+  - wellset
+  - wellsets
+- title: "Typing verification"
+  desc: >
+    Functions for typing verification. Used before class creations for checking attributes consistency.
+- contents:
+  - starts_with("check_")
+- title: "Diverse"
+  desc: >
+    Diverse functions and tools.
+- contents:
+  - object_r6
+  - initiate_log_file
+  - initiate_directories
+
+url: https://ob7-ird.github.io/t3
+
+authors:
+  Ob7 Observatory of Exploited Tropical Pelagic Ecosystemse:
+    href: "https://www.ob7.ird.fr/"
+    html: "<img src='man/figures/logo_obs7.png' height=24>"
+
+articles:
+- title: t3 processes description
+  navbar: ~
+  contents:
+  - model_initialisation
+  - level_1
+  - level_2
+  - level_3
+
+development:
+  mode: auto

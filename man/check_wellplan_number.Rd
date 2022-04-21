@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_number}
 \alias{check_wellplan_number}
-\title{Attribut "wellplan_number" verification}
+\title{Attribute "wellplan_number" verification}
 \usage{
 check_wellplan_number(wellplan_number)
 }
 \arguments{
-\item{wellplan_number}{(integer) Well plan number of individus.}
+\item{wellplan_number}{Object of class {\link[base]{integer}} expected. Well plan number of individus.}
 }
 \description{
 Check if the item "wellplan_number" have one unique class identified as integer.

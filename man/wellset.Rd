@@ -2,7 +2,7 @@
 % Please edit documentation in R/wellset.R
 \name{wellset}
 \alias{wellset}
-\title{R6 class wellset creation}
+\title{R6 class wellset}
 \description{
 Create R6 reference object class wellset
 }
@@ -33,19 +33,19 @@ Initialize function for R6 wellset class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{activity_id}}{(character) Activity identification.}
+\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{well_id}}{(character) Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{sample_id}}{(character) Sample identification.}
+\item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{weighted_weight}}{(numeric) Set weight weighted by all set in the well(s).}
+\item{\code{weighted_weight}}{Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s).}
 
-\item{\code{weighted_weight_minus10}}{(numeric) Set weight of individuals less than 10 kg (weighted by all set in the well(s))}
+\item{\code{weighted_weight_minus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals less than 10 kg (weighted by all set in the well(s))}
 
-\item{\code{weighted_weight_plus10}}{(numeric) Set weight of individuals plus than 10 kg (weighted by all set in the well(s))}
+\item{\code{weighted_weight_plus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals plus than 10 kg (weighted by all set in the well(s))}
 }
 \if{html}{\out{</div>}}
 }

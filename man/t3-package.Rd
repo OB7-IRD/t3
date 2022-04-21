@@ -33,30 +33,31 @@ The multi-species nature of tropical tuna surface fisheries gives rise to a seri
 Useful links:
 \itemize{
   \item \url{https://github.com/OB7-IRD/t3}
+  \item \url{https://ob7-ird.github.io/t3}
   \item Report bugs at \url{https://github.com/OB7-IRD/t3/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Ob7 - Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} [copyright holder]
+\strong{Maintainer}: Mathieu Depetris \email{mathieu.depetris@ird.fr} (\href{https://orcid.org/0000-0001-8080-0531}{ORCID})
 
 Authors:
 \itemize{
-  \item Mathieu Depetris \email{mathieu.depetris@ird.fr}
-  \item Antoine Duparc \email{antoine.duparc@ird.fr}
-  \item Pascal Cauquil \email{pascal.cauquil@ird.fr}
-  \item Laurent Floc'h \email{laurent.floch@ird.fr}
-  \item Julien Lebranchu \email{julien.lebranchu@ird.fr}
+  \item Antoine Duparc \email{antoine.duparc@ird.fr} (\href{https://orcid.org/0000-0001-6135-9015}{ORCID})
+  \item Pascal Cauquil \email{pascal.cauquil@ird.fr} (\href{https://orcid.org/0000-0003-0718-8950}{ORCID})
+  \item Laurent Floc'h \email{laurent.floch@ird.fr} (\href{https://orcid.org/0000-0003-4764-9766}{ORCID})
+  \item Julien Lebranchu \email{julien.lebranchu@ird.fr} (\href{https://orcid.org/0000-0002-7759-0534}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item Pascal Bach \email{pascal.bach@ird.fr} [contributor]
-  \item Alain Fonteneau \email{???} [contributor]
-  \item Viveca Fonteneau \email{???} [contributor]
+  \item Pascal Bach \email{pascal.bach@ird.fr} (\href{https://orcid.org/0000-0003-0804-8466}{ORCID}) [contributor]
+  \item Alain Fonteneau \email{alain.fonteneau@ird.fr} [contributor]
+  \item Viveca Fonteneau \email{vivinord@wanadoo.fr} [contributor]
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
   \item Laurent Dubroca \email{laurent.dubroca@ifremer.fr} [contributor]
-  \item Emmanuel Chassot \email{mchassot@sfa.sc} [contributor]
+  \item Emmanuel Chassot \email{emmanuel.Chassot@fao.org} (\href{https://orcid.org/0000-0002-6779-4955}{ORCID}) [contributor]
+  \item IRD - Ob7  Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} (\href{https://orcid.org/0000-0002-4642-3418}{ORCID}) [copyright holder, funder]
 }
 
 }

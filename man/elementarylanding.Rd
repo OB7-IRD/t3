@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarylanding.R
 \name{elementarylanding}
 \alias{elementarylanding}
-\title{R6 class elementarylanding creation}
+\title{R6 class elementarylanding}
 \description{
 Create R6 reference object class elementarylanding
 }
@@ -33,19 +33,19 @@ Initialize function for R6 elementarylanding class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{elementarylanding_id}}{(character) Elementary landing identification.}
+\item{\code{elementarylanding_id}}{Object of class {\link[base]{character}} expected. Elementary landing identification.}
 
-\item{\code{landing_category}}{(integer) Landing category identification.}
+\item{\code{landing_category}}{Object of class {\link[base]{integer}} expected. Landing category identification.}
 
-\item{\code{landing_category_name}}{(character) Landing category name identification.}
+\item{\code{landing_category_name}}{Object of class {\link[base]{character}} expected. Landing category name identification.}
 
-\item{\code{specie_code}}{(integer) Specie code identification.}
+\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
-\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
-\item{\code{landing_weight}}{(numeric) Landing weight in tonnes.}
+\item{\code{landing_weight}}{Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.}
 }
 \if{html}{\out{</div>}}
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_set_count}
 \alias{check_set_count}
-\title{Attribut "set_count" verification}
+\title{Attribute "set_count" verification}
 \usage{
 check_set_count(set_count)
 }
 \arguments{
-\item{set_count}{(integer) Number of set associated to the activity.}
+\item{set_count}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
 }
 \description{
 Check if the item "set_count" have one unique class identified as integer and if value are superior or equal to 0

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_school_type}
 \alias{check_school_type}
-\title{Attribut "school_type" verification}
+\title{Attribute "school_type" verification}
 \usage{
 check_school_type(school_type)
 }
 \arguments{
-\item{school_type}{(integer) School type identification.}
+\item{school_type}{Object of class {\link[base]{integer}} expected. School type identification.}
 }
 \description{
 Check if the item "school_type" is class integer and if all values are 1, 2, or 3.

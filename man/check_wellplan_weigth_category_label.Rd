@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_weigth_category_label}
 \alias{check_wellplan_weigth_category_label}
-\title{Attribut "wellplan_weigth_category_label" verification}
+\title{Attribute "wellplan_weigth_category_label" verification}
 \usage{
 check_wellplan_weigth_category_label(wellplan_weigth_category_label)
 }
 \arguments{
-\item{wellplan_weigth_category_label}{(character) Well plan weight category identification.}
+\item{wellplan_weigth_category_label}{Object of class {\link[base]{character}} expected. Well plan weight category identification.}
 }
 \description{
 Check if the item "wellplan_weigth_category_label" have one unique class identified as character.

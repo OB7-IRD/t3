@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title></title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<div style="text-align: justify">
+
+## Data model description
+
+### R&rsquo;s R6 reference classes
+
+The t3 process was built under [R’s R6 reference classes](https://r6.r-lib.org/). R6 is an implementation of encapsulated object-oriented programming for R. This style of programming is also sometimes referred to as classical object-oriented programming. An online documentation was available at [https://r6.r-lib.org](https://r6.r-lib.org) and you can find a brief introduction and overview in the chapter 14 of the book “Advanced R” written by Hadley Wickham (online view was available [here](https://adv-r.hadley.nz/index.html)).
+
+Just to sum up, among other things we choose R6 for the t3 process because:
+
+* all the methods, or function/process if you want to match with R&rsquo;s current typology, are encapsulated in a class. You can make anymore mistake when you run a process (for example with functions how doors the same name in two different package).
+
+* you can use the process of inheritance from an existing class to another. All your methods work in synergy and transparency.
+
+* class are defined with attributes and controls are associated to them to ensure data consistency. When a class was built, you could be sure of what you have inside!
+
+* you manipulate class of a data model how represent a vision of reality more understandable. For example, when you manipulate and object of class &ldquo;trip&rdquo;, this object contains all attributes necessary to define a trip. 
+
+* you can optimise and increase the running speed of your process, especially related to the R&rsquo;s memory usage and the identification of treatments/functions associated.
+
+### Class and methods documentations
+
+All documentation regarding class and methods associated are available thought the navigation bar Reference in the section R6 class. For example, if you search the main t3 process you can find them in the documentation of the class full_trip. This documentation, like the other one, is also available when the call the function help in the R console (for example above ?full_trip).
+
+## Model initialisation
+
+You have three different ways to launch the model creation:
+
+* through the function t3::t3_process(). This function can run all the t3 process or just a part of it. Use this way if you planned to run the process at least until the level 1. This function not allow switching with several data sources and work only with a t3 database as data source. If you want to customise or change this kind of parameter prefer to use the basic functions (see the third option).
+
+* the second possibility is thought the function t3::data_model_initialisation(). Just like the previous one, you can&rsquo;t switch with another data sources as t3 database. Furthermore, this function run all the processes related to the data model creation and the selection of data associated (in relation to function parameters provided, see function help for more details).
+
+* the last way is to use all the different sub-functions of the data model creation process. All the sub-functions, and documentations associated, were available under methods of the class ?t3::object_model_data() for the data importation process and under several methods of the class ?t3::full_trips() for the model creation and data selection. The table below summarise all different processes and code/method associated.
+
+| Process                                         | Code/method associated                 | Class(es) associated                                        |
+|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|
+| Initialisation R object for data&rsquo;s object model | t3:::object_model_data$new()         | object_model_data                                           |
+| Create trips object                             | trips_object_creation()              | object_model_data, trip, trips                              |
+| Create activities object                        | activities_object_creation()         | object_model_data, activity, activities                     |
+| Create elementary catches object                | elementarycatches_object_creation()  | object_model_data, elementarycatch, elementarycatches       |
+| Create elementary landings object               | elementarylandings_object_creation() | object_model_data, elementarylanding, elementarylandings    |
+| Create wells object                             | wells_object_creation()              | object_model_data, wells, well, samples, elementarywellplan |
+| Create set durations object                     | setdurationrefs_data()               | object_model_data                                           |
+| Create length steps object                      | lengthsteps_data()                   | object_model_data                                           |
+| Create sample sets object                       | samplesets_data()                    | object_model_data                                           |
+| Create length weight relationships object       | lengthweightrelationships_data()     | object_model_data                                           |
+| Initialisation of R object for full trips class | t3:::full_trips$new()                | full_trips                                                  |
+| Create full_trip object                         | create_full_trips()                  | full_trips                                                  |
+| Filter on reference year(s)                     | filter_by_periode()                  | full_trips                                                  |
+| Add activities to trip(s) selected              | add_activities()                     | full_trips                                                  |
+| Add elementary catches to trip(s) selected      | add_elementarycatches()              | full_trips                                                  |
+| Add elementary landings to trip(s) selected     | add_elementarylandings()             | full_trips                                                  |
+| Add well(s) and sample(s) to trip(s) selected   | add_wells_samples()                  | full_trips                                                  |
+
+</div>
+
+</body>
+
+</html>

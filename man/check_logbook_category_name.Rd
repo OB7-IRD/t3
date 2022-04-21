@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_logbook_category_name}
 \alias{check_logbook_category_name}
-\title{Attribut "logbook_category_name" verification}
+\title{Attribute "logbook_category_name" verification}
 \usage{
 check_logbook_category_name(logbook_category_name)
 }
 \arguments{
-\item{logbook_category_name}{(character) Logbook category name identification.}
+\item{logbook_category_name}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
 }
 \description{
 Check if the item "logbook_category_name" have one unique class identified as character.

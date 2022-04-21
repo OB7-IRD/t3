@@ -1,9 +1,9 @@
 #' @name samples
-#' @title R6 class samples creation
+#' @title R6 class samples
 #' @description Create R6 reference object class samples
 #' @importFrom R6 R6Class
 samples <- R6::R6Class(classname = "samples",
-                                 inherit = t3:::list_t3,
+                                 inherit = list_t3,
                                  public = list(
                                    # initialize ----
                                    #' @description Initialize function for R6 samples class.

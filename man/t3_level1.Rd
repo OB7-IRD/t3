@@ -5,23 +5,47 @@
 \title{T3 process level 1}
 \usage{
 t3_level1(
-  species_rf1,
-  set_duration_ref,
+  object_model_data,
+  object_full_trips,
+  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  rf1_lowest_limit = 0.8,
+  rf1_highest_limit = 1.2,
+  sunrise_schema = "sunrise",
+  sunset_schema = "sunset",
   log_file = FALSE,
   log_path = NULL,
-  log_name = "t3_level1"
+  log_name = "t3_level1",
+  outputs_path = NULL,
+  new_directory = NULL,
+  integrated_process = FALSE
 )
 }
 \arguments{
-\item{species_rf1}{(integer) Specie(s) code(s) used for the rf1 process.}
+\item{object_model_data}{Object of classes \code{\link[t3]{object_model_data}} and \code{\link[R6]{R6}} expected.}
 
-\item{set_duration_ref}{(data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).}
+\item{object_full_trips}{Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.}
 
-\item{log_file}{(logical) Initiation or not for log file creation. By default FALSE (no).}
+\item{species_rf1}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
 
-\item{log_path}{(character) Path of the log file directory. By default NULL.}
+\item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
-\item{log_name}{(character) Name of the log file. By default "t3_level1".}
+\item{rf1_highest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
+
+\item{sunset_schema}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.}
+
+\item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
+
+\item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
+
+\item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".}
+
+\item{outputs_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
+
+\item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
+
+\item{integrated_process}{Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

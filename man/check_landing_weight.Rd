@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_landing_weight}
 \alias{check_landing_weight}
-\title{Attribut "landing_weight" verification}
+\title{Attribute "landing_weight" verification}
 \usage{
 check_landing_weight(landing_weight)
 }
 \arguments{
-\item{landing_weight}{(numeric) Landing weight in tonnes.}
+\item{landing_weight}{Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.}
 }
 \description{
 Check if the item "landing_weight" have one unique class identified as numeric.

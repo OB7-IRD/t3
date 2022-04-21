@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarysampleraw.R
 \name{elementarysampleraw}
 \alias{elementarysampleraw}
-\title{R6 class trip creation}
+\title{R6 class trip}
 \description{
 Create R6 reference object class elementarysampleraw
 }
@@ -24,6 +24,8 @@ Initialize function for R6 elementarysampleraw class.
   well_id,
   sample_id,
   sub_sample_id,
+  sub_sample_id_total_count,
+  elementarysampleraw_id,
   sample_quality,
   sample_type,
   specie_code,
@@ -38,29 +40,33 @@ Initialize function for R6 elementarysampleraw class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{(character) Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{well_id}}{(character) Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{sample_id}}{(character) Sample identification.}
+\item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{sub_sample_id}}{(integer) Sub sample identification.}
+\item{\code{sub_sample_id}}{Object of class {\link[base]{integer}} expected. Sub sample identification.}
 
-\item{\code{sample_quality}}{(integer) Sample quality identification.}
+\item{\code{sub_sample_id_total_count}}{Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.}
 
-\item{\code{sample_type}}{(integer) Sample type identification.}
+\item{\code{elementarysampleraw_id}}{Object of class {\link[base]{character}} expected. Elementary sample raw identification.}
 
-\item{\code{specie_code}}{(integer) Specie code identification.}
+\item{\code{sample_quality}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
-\item{\code{specie_code3l}}{(character) Specie code identification on 3 characters.}
+\item{\code{sample_type}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
 
-\item{\code{length_type}}{(integer) Length type identification, 1 for LD1 and 2 for LF.}
+\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
-\item{\code{sample_total_count}}{(integer) Sample number of total individus counted.}
+\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
-\item{\code{sample_number_measured}}{(integer) Sample number of measured individus.}
+\item{\code{length_type}}{Object of class {\link[base]{integer}} expected. Length type identification, 1 for LD1 and 2 for LF.}
 
-\item{\code{sample_length_class}}{(integer) Sample length class of measured individus.}
+\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
+
+\item{\code{sample_number_measured}}{Object of class {\link[base]{integer}} expected. Sample number of measured individus.}
+
+\item{\code{sample_length_class}}{Object of class {\link[base]{integer}} expected. Sample length class of measured individus.}
 }
 \if{html}{\out{</div>}}
 }

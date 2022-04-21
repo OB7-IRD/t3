@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_landing_category}
 \alias{check_landing_category}
-\title{Attribut "landing_category" verification}
+\title{Attribute "landing_category" verification}
 \usage{
 check_landing_category(landing_category)
 }
 \arguments{
-\item{landing_category}{(integer) Landing category identification.}
+\item{landing_category}{Object of class {\link[base]{character}} expected. Landing category identification.}
 }
 \description{
 Check if the item "landing_category" have one unique class identified as integer.

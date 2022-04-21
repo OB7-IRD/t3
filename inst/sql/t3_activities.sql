@@ -33,6 +33,8 @@ FROM
 	JOIN public.route r ON (a.route = r.topiaid)
 	JOIN public.trip t ON (r.trip = t.topiaid)
 	JOIN public.vessel v ON (t.vessel = v.topiaid)
+	JOIN public.vesseltype vt on (v.vesseltype = vt.topiaid)
+	JOIN public.vesselsimpletype vst ON (vt.vesselsimpletype = vst.topiaid)
 	JOIN public.country c ON (v.flagcountry = c.topiaid)
 	JOIN public.ocean o ON (a.ocean = o.topiaid)
 	JOIN public.schooltype st ON (a.schooltype = st.topiaid)
@@ -40,5 +42,6 @@ FROM
 WHERE
 	t.landingdate BETWEEN ?begin_period AND ?end_period
 	AND c.codeiso3 IN (?countries)
+	AND vst.code IN (1)
 	AND t.topiaid IN (SELECT trip_id FROM ocean_selection)
 ;

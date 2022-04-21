@@ -1,4 +1,3 @@
-
 .Rhistory
 .Rproj.user
 /docsrc/source/_build
@@ -7,4 +6,6 @@
 /.vscode
 .vscode
 *.code-workspace
-
+docs
+tests/testthat/testthat-problems.rds
+.RData

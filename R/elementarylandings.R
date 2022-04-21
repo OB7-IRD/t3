@@ -1,9 +1,9 @@
 #' @name elementarylandings
-#' @title R6 class elementarylandings creation
+#' @title R6 class elementarylandings
 #' @description Create R6 reference object class elementarylandings
 #' @importFrom R6 R6Class
 elementarylandings <- R6::R6Class(classname = "elementarylandings",
-                                  inherit = t3:::list_t3,
+                                  inherit = list_t3,
                                   public = list(
                                     # initialize ----
                                     #' @description Initialize function for R6 elementarylandings class.

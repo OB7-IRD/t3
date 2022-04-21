@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_id}
 \alias{check_wellplan_id}
-\title{Attribut "wellplan_id" verification}
+\title{Attribute "wellplan_id" verification}
 \usage{
 check_wellplan_id(wellplan_id)
 }
 \arguments{
-\item{wellplan_id}{(character) Wellplan identification.}
+\item{wellplan_id}{Object of class {\link[base]{character}} expected. Wellplan identification.}
 }
 \description{
 Check if the item "wellplan_id" have one unique class identified as character.

@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_wellplan_weigth_category_code}
 \alias{check_wellplan_weigth_category_code}
-\title{Attribut "wellplan_weigth_category_code" verification}
+\title{Attribute "wellplan_weigth_category_code" verification}
 \usage{
 check_wellplan_weigth_category_code(wellplan_weigth_category_code)
 }
 \arguments{
-\item{wellplan_weigth_category_code}{(integer) Well plan category code identification.}
+\item{wellplan_weigth_category_code}{Object of class {\link[base]{integer}} expected. Well plan category code identification.}
 }
 \description{
 Check if the item "wellplan_weigth_category_code" have one unique class identified as integer and if all values are 1, 2, 8 or 9.

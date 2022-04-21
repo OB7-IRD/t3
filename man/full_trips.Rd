@@ -2,7 +2,7 @@
 % Please edit documentation in R/full_trips.R
 \name{full_trips}
 \alias{full_trips}
-\title{R6 class full_trips creation}
+\title{R6 class full_trips}
 \description{
 Create R6 reference object class full_trips
 }
@@ -26,8 +26,8 @@ Create R6 reference object class full_trips
 \item \href{#method-time_at_sea}{\code{full_trips$time_at_sea()}}
 \item \href{#method-fishing_time}{\code{full_trips$fishing_time()}}
 \item \href{#method-searching_time}{\code{full_trips$searching_time()}}
-\item \href{#method-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
+\item \href{#method-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
 \item \href{#method-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
 \item \href{#method-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
@@ -50,8 +50,11 @@ Create R6 reference object class full_trips
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="add">}\href{../../t3/html/list_t3.html#method-add}{\code{t3::list_t3$add()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count">}\href{../../t3/html/list_t3.html#method-count}{\code{t3::list_t3$count()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract">}\href{../../t3/html/list_t3.html#method-extract}{\code{t3::list_t3$extract()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value">}\href{../../t3/html/list_t3.html#method-extract_l1_element_value}{\code{t3::list_t3$extract_l1_element_value()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter">}\href{../../t3/html/list_t3.html#method-filter}{\code{t3::list_t3$filter()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1">}\href{../../t3/html/list_t3.html#method-filter_l1}{\code{t3::list_t3$filter_l1()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="initialize">}\href{../../t3/html/list_t3.html#method-initialize}{\code{t3::list_t3$initialize()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1">}\href{../../t3/html/list_t3.html#method-modification_l1}{\code{t3::list_t3$modification_l1()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name">}\href{../../t3/html/list_t3.html#method-name}{\code{t3::list_t3$name()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove">}\href{../../t3/html/list_t3.html#method-remove}{\code{t3::list_t3$remove()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view">}\href{../../t3/html/list_t3.html#method-view}{\code{t3::list_t3$view()}}\out{</span>}
@@ -70,7 +73,7 @@ Creation of full trip item from trips.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_trips}}{(R6-trips) A R6 reference object of class trips.}
+\item{\code{object_trips}}{Object of type R6-trips expected. A R6 reference object of class trips.}
 }
 \if{html}{\out{</div>}}
 }
@@ -87,7 +90,7 @@ Function for filter full trips by a reference periode.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{periode_reference}}{(integer) Year(s) in 4 digits format.}
+\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
 }
 \if{html}{\out{</div>}}
 }
@@ -104,7 +107,7 @@ Function for add activities in full trips object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_activities}}{(R6-activities) A R6 reference object of class activities.}
+\item{\code{object_activities}}{Object of type R6-activities expected. A R6 reference object of class activities.}
 }
 \if{html}{\out{</div>}}
 }
@@ -121,7 +124,7 @@ Function for add elementary catches in full trips object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_elementarycatches}}{(R6-elementarycatches) A R6 reference object of class elementarycatches.}
+\item{\code{object_elementarycatches}}{Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.}
 }
 \if{html}{\out{</div>}}
 }
@@ -138,7 +141,7 @@ Function for add elementary landings in full trips object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_elementarylandings}}{(R6-elementarylandings) A R6 reference object of class elementarylandings.}
+\item{\code{object_elementarylandings}}{Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.}
 }
 \if{html}{\out{</div>}}
 }
@@ -155,7 +158,7 @@ Function for add wells and samples caracteristics in full trips object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_wells}}{(R6-wells) A R6 reference object of class wells.}
+\item{\code{object_wells}}{Object of type R6-wells expected. A R6 reference object of class wells.}
 }
 \if{html}{\out{</div>}}
 }
@@ -166,17 +169,24 @@ Function for add wells and samples caracteristics in full trips object.
 \subsection{Method \code{rf1()}}{
 Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(species_rf1, rf1_lowest_limit = 0.8, rf1_highest_limit = 1.2)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
+  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  rf1_lowest_limit = 0.8,
+  rf1_highest_limit = 1.2,
+  global_outputs_path = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process.}
+\item{\code{species_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
 
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 }
 \if{html}{\out{</div>}}
 }
@@ -223,7 +233,7 @@ Process for set duration calculation (in hours).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set_duration_ref}}{(data frame) Data and parameters for set duration calculation (by year, country, ocean and school type).}
+\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).}
 }
 \if{html}{\out{</div>}}
 }
@@ -250,9 +260,9 @@ Process for fishing time calculation (in hours).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sunrise_schema}}{(character) Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
+\item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
 
-\item{\code{sunset_schema}}{(character) Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+\item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
 }
 \if{html}{\out{</div>}}
 }
@@ -288,16 +298,6 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sample_number_measured_extrapolation"></a>}}
-\if{latex}{\out{\hypertarget{method-sample_number_measured_extrapolation}{}}}
-\subsection{Method \code{sample_number_measured_extrapolation()}}{
-Process for sample number measured individuals extrapolation to sample number individuals counted.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_ld1_to_lf"></a>}}
 \if{latex}{\out{\hypertarget{method-sample_length_class_ld1_to_lf}{}}}
 \subsection{Method \code{sample_length_class_ld1_to_lf()}}{
@@ -309,10 +309,20 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{length_step}}{(data.frame) Data frame object with length ratio between ld1 and lf class.}
+\item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sample_number_measured_extrapolation"></a>}}
+\if{latex}{\out{\hypertarget{method-sample_number_measured_extrapolation}{}}}
+\subsection{Method \code{sample_number_measured_extrapolation()}}{
+Process for sample number measured individuals extrapolation to sample number individuals counted.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample_length_class_step_standardisation"></a>}}
@@ -328,7 +338,7 @@ Process for step standardisation of lf length class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{maximum_lf_class}}{(integer) Theorical maximum lf class that can occur (all species considerated). By default 500.}
+\item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 }
 \if{html}{\out{</div>}}
 }
@@ -345,7 +355,7 @@ Process for well set weigth categories definition.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sample_set}}{(data.frame) Data frame object with weighted weigh of each set sampled.}
+\item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.}
 }
 \if{html}{\out{</div>}}
 }
@@ -372,7 +382,7 @@ R6 object standardised sample set creation.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{length_weight_relationship_data}}{(data.frame) Data frame object with parameters for length weight relationship.}
+\item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.}
 }
 \if{html}{\out{</div>}}
 }
@@ -395,15 +405,15 @@ Raised factors determination for weigth sample set to set.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{threshold_rf_minus10}}{(integer) Threshold limite value for raising factor on individuals category minus 10. By default 500.}
+\item{\code{threshold_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.}
 
-\item{\code{threshold_rf_plus10}}{(integer) Threshold limite value for raising factor on individuals category plus 10. By default 500.}
+\item{\code{threshold_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.}
 
-\item{\code{threshold_frequency_rf_minus10}}{(integer) Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
+\item{\code{threshold_frequency_rf_minus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
 
-\item{\code{threshold_frequency_rf_plus10}}{(integer) Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
+\item{\code{threshold_frequency_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
 
-\item{\code{threshold_rf_total}}{(integer) Threshold limite value for raising factor (all categories). By default 250.}
+\item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
 }
 \if{html}{\out{</div>}}
 }
@@ -436,7 +446,7 @@ Data preparatory for the t3 modelling process (level 3).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$data_preparatory(
   inputs_level3 = NULL,
-  inputs_level3_path,
+  inputs_level3_path = NULL,
   outputs_directory,
   periode_reference = NULL,
   target_year = as.integer(lubridate::year(Sys.time() - 1)),
@@ -452,27 +462,27 @@ Data preparatory for the t3 modelling process (level 3).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3}}{(data frame) Imputs of levels 3 (see function path to level 3).}
+\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
 
-\item{\code{inputs_level3_path}}{(character) Path to the folder containing yearly data ouptut of the level 1 and 2.}
+\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
 
-\item{\code{outputs_directory}}{(character) Path of the t3 processes outputs directory.}
+\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.}
 
-\item{\code{periode_reference}}{(integer) Year(s) period of reference for modelling estimation.}
+\item{\code{periode_reference}}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
 
-\item{\code{target_year}}{(integer) Year of interest for the model estimaton and prediction.Default value is current year -1.}
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
-\item{\code{period_duration}}{(integer) number of year use for the modelling. The default value is 5}
+\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
-\item{\code{distance_maximum}}{(integer) Maximum distance between all sets of a sampled well. By default 5.}
+\item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
 
-\item{\code{number_sets_maximum}}{(integer) Maximum number of sets allowed in mixture. By default 5.}
+\item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.}
 
-\item{\code{set_weight_minimum}}{(integer) Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6.}
+\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
 
-\item{\code{minimum_set_frequency}}{(numeric) Minimum freqency that a set could represent in a well. Another filter considering other set size in the well. By default 0.1.}
+\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.}
 
-\item{\code{vessel_id_ignored}}{(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
 }
 \if{html}{\out{</div>}}
 }
@@ -488,22 +498,25 @@ Modelling proportions in sets througth random forest models.
   num.trees = 1000L,
   mtry = 2L,
   min.node.size = 5,
-  seed_number = 7L
+  seed_number = 7L,
+  small_fish_only = F
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
+\item{\code{outputs_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
 
-\item{\code{num.trees}}{(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
+\item{\code{num.trees}}{Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
 
-\item{\code{mtry}}{Number of variables randomly sampled as candidates at each split. The default value is 2.}
+\item{\code{mtry}}{Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.}
 
-\item{\code{min.node.size}}{Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
+\item{\code{min.node.size}}{Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
 
-\item{\code{seed_number}}{Set the initial seed for the modelling. The default value is 7.}
+\item{\code{seed_number}}{Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.}
+
+\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
 \if{html}{\out{</div>}}
 }
@@ -514,15 +527,24 @@ Modelling proportions in sets througth random forest models.
 \subsection{Method \code{models_checking()}}{
 Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(outputs_level3_process2, outputs_path)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(
+  outputs_level3_process2,
+  outputs_directory,
+  plot_sample = F,
+  avdth_patch_coord = F
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process2}}{(list) Outputs models and data from process 3.2.}
+\item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
 
-\item{\code{outputs_path}}{(character) Outputs directory path.}
+\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+
+\item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+
+\item{\code{avdth_patch_coord}}{parameter waiting for coordinate conversion patch from avdth database}
 }
 \if{html}{\out{</div>}}
 }
@@ -537,20 +559,23 @@ Formatting data for model predictions.
   inputs_level3,
   outputs_level3_process1,
   target_year,
-  vessel_id_ignored = NULL
+  vessel_id_ignored = NULL,
+  small_fish_only = F
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3}}{(data frame) Imputs of levels 3 (see function path to level 3).}
+\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
 
-\item{\code{outputs_level3_process1}}{(data frame) Output table data_lb_sample_screened from process 3.1.}
+\item{\code{outputs_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
 
-\item{\code{target_year}}{(integer) The year of interest for the model estimaton and prediction.}
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
-\item{\code{vessel_id_ignored}}{(integer) Specify here vessel(s) id(s) if you whant to ignore it in the model estimation and prediction .By default NULL.}
+\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
+
+\item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
 \if{html}{\out{</div>}}
 }
@@ -564,9 +589,10 @@ Model predictions for the species composition and computing of catches.
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
   outputs_level3_process2,
   outputs_level3_process4,
-  outputs_path,
+  outputs_directory,
   ci = FALSE,
-  Nboot = 10,
+  ci_type = "all",
+  Nboot = 50,
   plot_predict = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -574,17 +600,19 @@ Model predictions for the species composition and computing of catches.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process2}}{(list) Outputs from level 3 process 2 (random forest models).}
+\item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).}
 
-\item{\code{outputs_level3_process4}}{(list) Outputs from level 3 process 4 (data formatting for predictions).}
+\item{\code{outputs_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
 
-\item{\code{outputs_path}}{(character) Outputs directory path.}
+\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
-\item{\code{ci}}{Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
+\item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
-\item{\code{Nboot}}{The number of bootstrap samples desired for the ci computation. The default value is 10.}
+\item{\code{ci_type}}{Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.}
 
-\item{\code{plot_predict}}{Logical indicating whether maps of catch at size have to be done.}
+\item{\code{Nboot}}{Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.}
+
+\item{\code{plot_predict}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.}
 }
 \if{html}{\out{</div>}}
 }

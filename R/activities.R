@@ -1,9 +1,9 @@
 #' @name activities
-#' @title R6 class activities creation
+#' @title R6 class activities
 #' @description Create R6 reference object class activities
 #' @importFrom R6 R6Class
 activities <- R6::R6Class(classname = "activities",
-                                 inherit = t3:::list_t3,
+                                 inherit = list_t3,
                                  public = list(
                                    # initialize ----
                                    #' @description Initialize function for R6 activities class.

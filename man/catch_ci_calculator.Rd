@@ -7,12 +7,15 @@
 catch_ci_calculator(fit_data, boot_data)
 }
 \arguments{
-\item{to}{The observed value of statistic applied to data}
+\item{fit_data}{standardized catch estimates from the prediction step}
 
-\item{t}{A matrix with sum(R) rows each of which is a bootstrap replicate of the result of calling statistic.}
+\item{boot_data}{standardized bootstrap catch data from the bootstap step}
 }
 \value{
-
+A vector of fitted data and confidence interval
+fit_data Fitted data from the input
+ci_inf Estimated inferior value of the confidence interval
+ci_sup Estimated superior value of the confidence interval
 }
 \description{
 Compute final confidence interval

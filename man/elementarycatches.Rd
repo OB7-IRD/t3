@@ -2,7 +2,7 @@
 % Please edit documentation in R/elementarycatches.R
 \name{elementarycatches}
 \alias{elementarycatches}
-\title{R6 class elementarycatches creation}
+\title{R6 class elementarycatches}
 \description{
 Create R6 reference object class elementarycatches
 }
@@ -23,7 +23,10 @@ Create R6 reference object class elementarycatches
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count">}\href{../../t3/html/list_t3.html#method-count}{\code{t3::list_t3$count()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract">}\href{../../t3/html/list_t3.html#method-extract}{\code{t3::list_t3$extract()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value">}\href{../../t3/html/list_t3.html#method-extract_l1_element_value}{\code{t3::list_t3$extract_l1_element_value()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter">}\href{../../t3/html/list_t3.html#method-filter}{\code{t3::list_t3$filter()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1">}\href{../../t3/html/list_t3.html#method-filter_l1}{\code{t3::list_t3$filter_l1()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1">}\href{../../t3/html/list_t3.html#method-modification_l1}{\code{t3::list_t3$modification_l1()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name">}\href{../../t3/html/list_t3.html#method-name}{\code{t3::list_t3$name()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove">}\href{../../t3/html/list_t3.html#method-remove}{\code{t3::list_t3$remove()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view">}\href{../../t3/html/list_t3.html#method-view}{\code{t3::list_t3$view()}}\out{</span>}

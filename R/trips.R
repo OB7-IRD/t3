@@ -1,9 +1,9 @@
 #' @name trips
-#' @title R6 class trips creation
+#' @title R6 class trips
 #' @description Create R6 reference object class trips
 #' @importFrom R6 R6Class
 trips <- R6::R6Class(classname = "trips",
-                     inherit = t3:::list_t3,
+                     inherit = list_t3,
                      public = list(
                        # initialize ----
                        #' @description Initialize function for R6 trips class.

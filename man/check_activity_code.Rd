@@ -2,12 +2,12 @@
 % Please edit documentation in R/checks.R
 \name{check_activity_code}
 \alias{check_activity_code}
-\title{Attribut "activity_code" verification}
+\title{Attribute "activity_code" verification}
 \usage{
 check_activity_code(activity_code)
 }
 \arguments{
-\item{activity_code}{(integer) Activity code identification.}
+\item{activity_code}{Object of class {\link[base]{integer}} expected. Activity code identification.}
 }
 \description{
 Check if the item "activity_code" have one unique class identified as integer.
