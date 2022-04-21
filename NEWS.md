@@ -1,6 +1,16 @@
-<div style="text-align: justify">
+# T3 1.0.0-RC - 2022-04-21
 
-# t3 0.9.1 - 2020-09-21
+## Added
+* Implementation of unit tests
+* Implementation of the documentation for the level 3
+* Development of output extraction functions for process 1.1
+* Adding an output directory intilisation function and integrating it into the processes
+
+## Changed
+* Fix minor bugs and optimisation of the code and regarding the overall process
+* Update of the level 3 process
+
+# T3 0.9.1 - 2020-09-21
 
 ## Added
 * Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)
@@ -18,7 +28,7 @@
 * Disabling task and effort computation while waiting for confident interval implementation
 * Remove the documentation from the package. Stay available at https://ob7-ird.github.io/t3/index.html
 
-# t3 0.9.0 - 2020-06-05
+# T3 0.9.0 - 2020-06-05
 
 ## Added
 * Implentation of the model layer in R6class
@@ -33,6 +43,4 @@
     - Crew reporting information which enables more flexibility in the model when a marginal composition is caught
     - Several years of fishing in the training to increase the robustness of the estimates
 * Model checking to ensure reliability of the results
-* Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations. 
-
-</div>
+* Computation of a confidence interval (bootstrap method) which give the trust level on catch estimations

@@ -1,7 +1,7 @@
 Package: t3
 Type: Package
-Title: Tropical Tunas Treatment
-Version: 0.9.1
+Title: Tropical Tuna Treatment
+Version: 1.0.0
 Authors@R: c(person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8080-0531")),
     person("Antoine", "Duparc", email = "antoine.duparc@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0001-6135-9015")),
     person("Pascal", "Cauquil", email = "pascal.cauquil@ird.fr", role = c("aut"), comment = c(ORCID = "0000-0003-0718-8950")),
@@ -15,8 +15,9 @@ Authors@R: c(person("Mathieu", "Depetris", email = "mathieu.depetris@ird.fr", ro
     person("Emmanuel", "Chassot", email = "emmanuel.Chassot@fao.org", role = c("ctb"), comment = c(ORCID = "0000-0002-6779-4955")),
     person("IRD - Ob7 ", "Observatory of Exploited Tropical Pelagic Ecosystems", email = "ob7@ird.fr", role = c("cph", "fnd"), comment = c(ORCID = "0000-0002-4642-3418"))
     )
-Description: The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics.
-    The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
+Description: The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics.
+    The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal).
+    Is aims are to correct biases of the logbook data on species composition and provide more accurate catch estimations per species for the purse seiner fleet, especially European and Seychelles fleet.
 License: GPL-3 + file LICENSE
 Depends: R (>= 4.0.0)
 Encoding: UTF-8
