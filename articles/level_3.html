@@ -118,7 +118,41 @@
 <div class="section level2">
 <h2 id="modelling-species-proportion-in-catch-and-computation-of-catch-estimates">Modelling species proportion in catch and Computation of catch estimates<a class="anchor" aria-label="anchor" href="#modelling-species-proportion-in-catch-and-computation-of-catch-estimates"></a>
 </h2>
-<p>To do</p>
+<p>The level 3 process of the T3R package aim at modelling species composition before estimating catch for the major tuna species only: Yellowfin tuna, skipjack and bigeye tuna. The process is divided in 5 steps:</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>Process</strong></th>
+<th><strong>Name</strong></th>
+<th><strong>Corresponding method</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>3.1</td>
+<td>Data preparatory</td>
+<td><code>data_preparatory()</code></td>
+</tr>
+<tr class="even">
+<td>3.2</td>
+<td>Modelling</td>
+<td><code>random_forest_models()</code></td>
+</tr>
+<tr class="odd">
+<td>3.3</td>
+<td>Data and model diagnostic</td>
+<td><code>models_checking()</code></td>
+</tr>
+<tr class="even">
+<td>3.4</td>
+<td>Dataset for prediction</td>
+<td><code>data_formatting_for_predictions()</code></td>
+</tr>
+<tr class="odd">
+<td>3.5</td>
+<td>Catch prediction</td>
+<td><code>model_predictions()</code></td>
+</tr>
+</tbody>
+</table>
 <div class="section level3">
 <h3 id="process-3-1-data-preparatory">Process 3.1: Data preparatory<a class="anchor" aria-label="anchor" href="#process-3-1-data-preparatory"></a>
 </h3>
@@ -140,7 +174,7 @@
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.4.png"></p>
 </div>
 <div class="section level3">
-<h3 id="process-3-5-dataset-for-prediction">Process 3.5: Dataset for prediction<a class="anchor" aria-label="anchor" href="#process-3-5-dataset-for-prediction"></a>
+<h3 id="process-3-5-modelling-speices-composition-and-estimating-catch">Process 3.5: Modelling speices composition and estimating catch<a class="anchor" aria-label="anchor" href="#process-3-5-modelling-speices-composition-and-estimating-catch"></a>
 </h3>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.5.png"></p>
 </div>
