@@ -167,7 +167,41 @@ hr {
 
 <h2>Modelling species proportion in catch and Computation of catch estimates</h2>
 
-<p>To do</p>
+<p>The level 3 process of the T3R package aim at modelling species composition before estimating catch for the major tuna species only: Yellowfin tuna, skipjack and bigeye tuna. The process is divided in 5 steps:</p>
+
+<table><thead>
+<tr>
+<th><strong>Process</strong></th>
+<th><strong>Name</strong></th>
+<th><strong>Corresponding method</strong></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>3.1</td>
+<td>Data preparatory</td>
+<td><code>data_preparatory()</code></td>
+</tr>
+<tr>
+<td>3.2</td>
+<td>Modelling</td>
+<td><code>random_forest_models()</code></td>
+</tr>
+<tr>
+<td>3.3</td>
+<td>Data and model diagnostic</td>
+<td><code>models_checking()</code></td>
+</tr>
+<tr>
+<td>3.4</td>
+<td>Dataset for prediction</td>
+<td><code>data_formatting_for_predictions()</code></td>
+</tr>
+<tr>
+<td>3.5</td>
+<td>Catch prediction</td>
+<td><code>model_predictions()</code></td>
+</tr>
+</tbody></table>
 
 <h3>Process 3.1: Data preparatory</h3>
 
@@ -185,7 +219,7 @@ hr {
 
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.4.png'/></p>
 
-<h3>Process 3.5: Dataset for prediction</h3>
+<h3>Process 3.5: Modelling speices composition and estimating catch</h3>
 
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.5.png'/></p>
 
