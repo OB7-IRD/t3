@@ -177,6 +177,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add activity.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding activities on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -195,6 +200,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        FUN = function(trip_id) {
                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities <- full_trips_activities[[trip_id]]
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding activities on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add activity.\n",
@@ -224,6 +234,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary catches.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding elementary catches on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -248,6 +263,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 }))
                                                          }
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding elementary catches on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary catches.\n",
@@ -279,6 +299,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary landings.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding elementary landings on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -297,6 +322,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        FUN = function(trip_id) {
                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$elementarylandings <- full_trips_elementarylandings[[trip_id]]
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding elementary landings on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -326,6 +356,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add well(s) - sample(s).\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding well(s) - sample(s) on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -344,6 +379,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        FUN = function(trip_id) {
                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$wells <- full_trips_wells[[trip_id]]
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding well(s) - sample(s) on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -617,7 +657,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 | current_rf1 > rf1_highest_limit) {
                                               cat(format(x = Sys.time(),
                                                          format = "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: rf1 value of trip element \"",
+                                                  " - Warning: rf1 value of full trip element \"",
                                                   names(x = private$data_selected)[full_trip_id],
                                                   "\" out of theorical boundaries: ",
                                                   round(x = current_rf1,
@@ -774,18 +814,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        y = total_landings_catches_species,
                                                        by = "trip_id")
                                     # csv extraction
-                                    write.csv2(x = global_outputs_process_1_1,
-                                               file = file.path(global_outputs_path,
-                                                                "level1",
-                                                                "data_outputs",
-                                                                "process_1_1_global.csv"),
-                                               row.names = FALSE)
-                                    write.csv2(x = detail_outputs_process_1_1,
-                                               file = file.path(global_outputs_path,
-                                                                "level1",
-                                                                "data_outputs",
-                                                                "process_1_1_detail.csv"),
-                                               row.names = FALSE)
+                                    write.table(x = global_outputs_process_1_1,
+                                                file = file.path(global_outputs_path,
+                                                                 "level1",
+                                                                 "data_outputs",
+                                                                 "process_1_1_global.txt"),
+                                                row.names = FALSE)
+                                    write.table(x = detail_outputs_process_1_1,
+                                                file = file.path(global_outputs_path,
+                                                                 "level1",
+                                                                 "data_outputs",
+                                                                 "process_1_1_detail.txt"),
+                                                row.names = FALSE)
                                     cat(format(x = Sys.time(),
                                                format = "%Y-%m-%d %H:%M:%S"),
                                         " - Outputs extracted in the following directory:\n",
@@ -883,14 +923,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
-                                    if (full_trip_id == length(x = private$data_selected)) {
-                                      cat(format(x = Sys.time(),
-                                                 format = "%Y-%m-%d %H:%M:%S"),
-                                          " - End of raising factor process 2.\n",
-                                          sep = "")
-                                    }
                                   }
                                 }
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - End of raising factor process 2.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.3: conversion_weigth_category ----
