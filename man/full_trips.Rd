@@ -197,9 +197,16 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Method \code{rf2()}}{
 Process of Raising Factor level 2 (rf2).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_outputs_path = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-conversion_weigth_category"></a>}}

@@ -71,7 +71,7 @@ t3_level1 <- function(object_model_data,
                           rf1_highest_limit = rf1_highest_limit,
                           global_outputs_path = outputs_path)
     # level 1.2: rf2 ----
-    object_full_trips$rf2()
+    object_full_trips$rf2(global_outputs_path = outputs_path)
     # level 1.3: logbook weigth categories conversion ----
     object_full_trips$conversion_weigth_category()
     # level 1.4: set count ----
