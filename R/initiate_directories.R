@@ -11,13 +11,15 @@ initiate_directories <- function(outputs_path,
                                  level = "all") {
   # verification ----
   if (missing(x = outputs_path)
-      || class(x = outputs_path) != "character"
+      || ! inherits(x = outputs_path,
+                    what = "character")
       || length(x = outputs_path) != 1) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalid \"outputs_path\" argument, ",
         sep = "")
     stop()
-  } else if (class(x = level) != "character"
+  } else if (! inherits(x = level,
+                        what = "character")
              || length(x = level) != 1
              || ! level %in% c("all",
                              "level1",

@@ -14,18 +14,26 @@ trips <- R6::R6Class(classname = "trips",
                            super$initialize()
                          } else {
                            for (i in 1:nargs()) {
-                             if (length(class(arguments[[i]])) == 1 && class(arguments[[i]]) == "list") {
-                               for (i in length(arguments[[i]])) {
-                                 if (length(class(arguments[[i]][[i]])) == 2 && (! any(class(arguments[[i]][[i]]) == "R6") & ! any(class(new_item[[i]]) == "trip"))) {
+                             if (length(x = class(x = arguments[[i]])) == 1
+                                 && inherits(x = arguments[[i]],
+                                             what = "list")) {
+                               for (i in length(x = arguments[[i]])) {
+                                 if (length(x = class(x = arguments[[i]][[i]])) == 2
+                                     && (! any(class(x = arguments[[i]][[i]]) == "R6")
+                                         & ! any(class(x = new_item[[i]]) == "trip"))) {
                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                        " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                        sep = "")
                                    stop()
                                  }
                                }
-                               private$data <- append(private$data, arguments[[i]])
-                             } else if (length(class(arguments[[i]])) == 2 && (any(class(arguments[[i]]) == "R6") & any(class(arguments[[i]]) == "trip"))) {
-                               private$data <- append(private$data, arguments[[i]])
+                               private$data <- append(x = private$data,
+                                                      values = arguments[[i]])
+                             } else if (length(x = class(x = arguments[[i]])) == 2
+                                        && (any(class(x = arguments[[i]]) == "R6")
+                                            & any(class(x = arguments[[i]]) == "trip"))) {
+                               private$data <- append(x = private$data,
+                                                      values = arguments[[i]])
                              } else {
                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                    " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
@@ -39,9 +47,13 @@ trips <- R6::R6Class(classname = "trips",
                        #' @description Function for add a new trip in the object trips
                        #' @param new_item (list or R6-trip classes) A list of object R6-trip classes or one object R6-trip classes.
                        add = function(new_item) {
-                         if (length(class(new_item)) == 1 && class(new_item) == "list") {
-                           for (i in length(new_item)) {
-                             if (length(class(new_item[[i]])) == 2 && (! any(class(new_item[[i]]) == "R6") & ! any(class(new_item[[i]]) == "trip"))) {
+                         if (length(x = class(x = new_item)) == 1
+                             && inherits(x = new_item,
+                                         what = "list")) {
+                           for (i in length(x = new_item)) {
+                             if (length(x = class(x = new_item[[i]])) == 2
+                                 && (! any(class(x = new_item[[i]]) == "R6")
+                                     & ! any(class(x = new_item[[i]]) == "trip"))) {
                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                    " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                    sep = "")
@@ -49,7 +61,9 @@ trips <- R6::R6Class(classname = "trips",
                              }
                            }
                            super$add(new_item)
-                         } else if (length(class(new_item)) == 2 && (any(class(new_item) == "R6") & any(class(new_item) == "trip"))) {
+                         } else if (length(x = class(x = new_item)) == 2
+                                    && (any(class(x = new_item) == "R6")
+                                        & any(class(x = new_item) == "trip"))) {
                            super$add(new_item)
                          } else {
                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

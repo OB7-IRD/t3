@@ -15,7 +15,8 @@ standardisedsamples <- R6::R6Class(classname = "standardisedsamples",
                                        } else {
                                          for (i in 1:nargs()) {
                                            if (length(class(arguments[[i]])) == 1
-                                               && class(arguments[[i]]) == "list") {
+                                               && inherits(arguments[[i]],
+                                                           what = "list")) {
                                              for (i in length(arguments[[i]])) {
                                                if (length(class(arguments[[i]][[i]])) == 2
                                                    && (! any(class(arguments[[i]][[i]]) == "R6")
@@ -46,7 +47,8 @@ standardisedsamples <- R6::R6Class(classname = "standardisedsamples",
                                      #' @param new_item (list or R6-standardisedsample classes) A list of object R6-standardisedsample classes or one object R6-standardisedsample classes.
                                      add = function(new_item) {
                                        if (length(class(new_item)) == 1
-                                           && class(new_item) == "list") {
+                                           && inherits(x = new_item,
+                                                       what = "list")) {
                                          for (i in length(new_item)) {
                                            if (length(class(new_item[[i]])) == 2
                                                && (! any(class(new_item[[i]]) == "R6")

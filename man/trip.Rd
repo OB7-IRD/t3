@@ -9,13 +9,13 @@ Create R6 reference object class trip
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{trip$new()}}
-\item \href{#method-clone}{\code{trip$clone()}}
+\item \href{#method-trip-new}{\code{trip$new()}}
+\item \href{#method-trip-clone}{\code{trip$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-trip-new"></a>}}
+\if{latex}{\out{\hypertarget{method-trip-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 trip class.
 \subsection{Usage}{
@@ -54,8 +54,8 @@ Initialize function for R6 trip class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-trip-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-trip-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

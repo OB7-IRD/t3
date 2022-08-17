@@ -9,13 +9,13 @@ Create R6 reference object class activity
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{activity$new()}}
-\item \href{#method-clone}{\code{activity$clone()}}
+\item \href{#method-activity-new}{\code{activity$new()}}
+\item \href{#method-activity-clone}{\code{activity$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-activity-new"></a>}}
+\if{latex}{\out{\hypertarget{method-activity-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 activities class.
 \subsection{Usage}{
@@ -66,8 +66,8 @@ Initialize function for R6 activities class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-activity-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-activity-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

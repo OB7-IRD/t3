@@ -89,7 +89,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                         package = "t3")),
                                                             collapse = "\n")
                                          if (! is.null(trips_selected)) {
-                                           if (class(x = trips_selected) != "character") {
+                                           if (! inherits(x = trips_selected,
+                                                          what = "character")) {
                                              cat(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Error: invalid \"trips_selected\" argument, ",
@@ -443,7 +444,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              package = "t3")),
                                                                  collapse = "\n")
                                          if (! is.null(trips_selected)) {
-                                           if (class(x = trips_selected) != "character") {
+                                           if (! inherits(x = trips_selected,
+                                                          what = "character")) {
                                              cat(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Error: invalid \"trips_selected\" argument, ",
@@ -629,7 +631,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          activities_data <- get(x = "activities",
                                                                 envir = tmp_envir)
-                                         if (class(x = activities_data) != "data.frame") {
+                                         if (! inherits(x = activities_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
@@ -672,7 +675,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          activities_data <- get(x = "activities",
                                                                 envir = environment_name)
-                                         if (class(x = activities_data) != "data.frame") {
+                                         if (! inherits(x = activities_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Error: invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
@@ -815,7 +819,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                     package = "t3")),
                                                                         collapse = "\n")
                                          if (! is.null(x = trips_selected)) {
-                                           if (class(x = trips_selected) != "character") {
+                                           if (! inherits(x = trips_selected,
+                                                          what = "character")) {
                                              cat(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Error: invalid \"trips_selected\" argument, ",
@@ -881,7 +886,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source == "avdth_db") {
                                        # avdth db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "JDBCConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "JDBCConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -996,7 +1002,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          elementarycatches_data <- get(x = "elementarycatches",
                                                                        envir = tmp_envir)
-                                         if (class(x = elementarycatches_data) != "data.frame") {
+                                         if (! inherits(x = elementarycatches_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarycatches_data\" argument, class \"data.frame\" expected.\n",
@@ -1039,7 +1046,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          elementarycatches_data <- get(x = "elementarycatches",
                                                                        envir = environment_name)
-                                         if (class(x = elementarycatches_data) != "data.frame") {
+                                         if (! inherits(x = elementarycatches_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarycatches_data\" argument, class \"data.frame\" expected.\n",
@@ -1161,7 +1169,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "PostgreSQLConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "PostgreSQLConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -1178,7 +1187,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                      package = "t3")),
                                                                          collapse = "\n")
                                          if (! is.null(x = trips_selected)) {
-                                           if (class(x = trips_selected) != "character") {
+                                           if (! inherits(x = trips_selected,
+                                                          what = "character")) {
                                              cat(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Error: invalid \"trips_selected\" argument, ",
@@ -1244,7 +1254,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source == "avdth_db") {
                                        # avdth db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "JDBCConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "JDBCConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -1357,7 +1368,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          elementarylandings_data <- get(x = "elementarylandings",
                                                                         envir = tmp_envir)
-                                         if (class(x = elementarylandings_data) != "data.frame") {
+                                         if (! inherits(x = elementarylandings_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarylandings_data\" argument, class \"data.frame\" expected.\n",
@@ -1399,7 +1411,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          elementarylandings_data <- get(x = "elementarylandings",
                                                                         envir = environment_name)
-                                         if (class(x = elementarylandings_data) != "data.frame") {
+                                         if (! inherits(x = elementarylandings_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"elementarylandings_data\" argument, class \"data.frame\" expected.\n",
@@ -1500,7 +1513,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"oceans\" argument.\n",
                                              sep = "")
-                                       } else if (class(x = sample_type) != "integer") {
+                                       } else if (! inherits(x = sample_type,
+                                                             what = "integer")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"sample_type\" argument.\n",
@@ -1538,7 +1552,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "PostgreSQLConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "PostgreSQLConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -1555,7 +1570,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                         package = "t3")),
                                                             collapse = "\n")
                                        if (! is.null(x = trips_selected)) {
-                                         if (class(x = trips_selected) != "character") {
+                                         if (! inherits(x = trips_selected,
+                                                        what = "character")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Error: invalid \"trips_selected\" argument, ",
@@ -1631,7 +1647,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                          package = "t3")),
                                                              collapse = "\n")
                                        if (! is.null(x = trips_selected)) {
-                                         if (class(x = trips_selected) != "character") {
+                                         if (! inherits(x = trips_selected,
+                                                        what = "character")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Error: invalid \"trips_selected\" argument, ",
@@ -1696,7 +1713,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source == "avdth_db") {
                                        # avdth db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "JDBCConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "JDBCConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -1912,7 +1930,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          samples_data <- get(x = "samples",
                                                              envir = tmp_envir)
-                                         if (class(x = samples_data) != "data.frame") {
+                                         if (! inherits(x = samples_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
@@ -1948,7 +1967,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          wellplan_data <- get(x = "wellplans",
                                                               envir = tmp_envir)
-                                         if (class(x = wellplan_data) != "data.frame") {
+                                         if (! inherits(x = wellplan_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"wellplan_data\" argument, class \"data.frame\" expected.\n",
@@ -1991,7 +2011,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          samples_data <- get(x = "samples",
                                                              envir = environment_name)
-                                         if (class(x = samples_data) != "data.frame") {
+                                         if (! inherits(x = samples_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
@@ -2024,7 +2045,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          wellplan_data <- get(x = "wellplans",
                                                               envir = environment_name)
-                                         if (class(x = wellplan_data) != "data.frame") {
+                                         if (! inherits(x = wellplan_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"wellplan_data\" argument, class \"data.frame\" expected.\n",
@@ -2268,7 +2290,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "PostgreSQLConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "PostgreSQLConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -2376,7 +2399,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          set_duration_refs_data <- get(x = "setdurationrefs",
                                                                        envir = tmp_envir)
-                                         if (class(x = set_duration_refs_data) != "data.frame") {
+                                         if (! inherits(x = set_duration_refs_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"set_duration_refs_data\" argument, class \"data.frame\" expected.\n",
@@ -2419,7 +2443,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          set_duration_refs_data <- get(x = "setdurationrefs",
                                                                        envir = environment_name)
-                                         if (class(x = set_duration_refs_data) != "data.frame") {
+                                         if (! inherits(x = set_duration_refs_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"set_duration_refs_data\" argument, class \"data.frame\" expected.\n",
@@ -2593,7 +2618,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          lengthsteps_data <- get(x = "lengthsteps",
                                                                  envir = tmp_envir)
-                                         if (class(x = lengthsteps_data) != "data.frame") {
+                                         if (! inherits(x = lengthsteps_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"lengthsteps_data\" argument, class \"data.frame\" expected.\n",
@@ -2636,7 +2662,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          lengthsteps_data <- get(x = "lengthsteps",
                                                                  envir = environment_name)
-                                         if (class(x = lengthsteps_data) != "data.frame") {
+                                         if (! inherits(x = lengthsteps_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"lengthsteps_data\" argument, class \"data.frame\" expected.\n",
@@ -2728,7 +2755,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "PostgreSQLConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "PostgreSQLConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -2745,7 +2773,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                            package = "t3")),
                                                                collapse = "\n")
                                        if (! is.null(x = trips_selected)) {
-                                         if (class(x = trips_selected) != "character") {
+                                         if (! inherits(x = trips_selected,
+                                                        what = "character")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Error: invalid \"trips_selected\" argument, ",
@@ -2810,7 +2839,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source == "avdth_db") {
                                        # avdth db source ----
                                        # specific arguments verification
-                                       if (class(x = db_con) != "JDBCConnection") {
+                                       if (! inherits(x = db_con,
+                                                      what = "JDBCConnection")) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"db_con\" argument, ",
@@ -2921,7 +2951,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          samplesets_data <- get(x = "samplesets",
                                                                 envir = tmp_envir)
-                                         if (class(x = samplesets_data) != "data.frame") {
+                                         if (! inherits(x = samplesets_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"samplesets_data\" argument, class \"data.frame\" expected.\n",
@@ -2963,7 +2994,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          samplesets_data <- get(x = "samplesets",
                                                                 envir = environment_name)
-                                         if (class(x = samplesets_data) != "data.frame") {
+                                         if (! inherits(x = samplesets_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"samplesets_data\" argument, class \"data.frame\" expected.\n",
@@ -3113,7 +3145,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          lengthweightrelationships_data <- get(x = "lengthweightrelationships",
                                                                                envir = tmp_envir)
-                                         if (class(lengthweightrelationships_data) != "data.frame") {
+                                         if (! inherits(x = lengthweightrelationships_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"lengthweightrelationships_data\" argument, class \"data.frame\" expected.\n",
@@ -3156,7 +3189,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              sep = "")
                                          lengthweightrelationships_data <- get(x = "lengthweightrelationships",
                                                                                envir = environment_name)
-                                         if (class(x = lengthweightrelationships_data) != "data.frame") {
+                                         if (! inherits(x = lengthweightrelationships_data,
+                                                        what = "data.frame")) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                "invalid \"lengthweightrelationships\" argument, class \"data.frame\" expected.\n",

@@ -11,15 +11,16 @@ object_r6 <- function(class_name, ...) {
       class_name,
       "\"\n",
       sep = "")
-  if (length(class(class_name)) != 1
-      || class(class_name) != "character") {
+  if (length(x = class(x = class_name)) != 1
+      || ! inherits(x = class_name,
+                    what = "character")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalid \"class_name\" argument\nclass character expected\n",
         sep = "")
     stop()
   } else {
     arguments <- list(...)
-    if (length(arguments) == 0) {
+    if (length(x = arguments) == 0) {
       expr <- paste0(class_name,
                      "$new()")
       object_r6 <- eval(parse(text = expr))

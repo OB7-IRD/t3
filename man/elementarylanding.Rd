@@ -9,13 +9,13 @@ Create R6 reference object class elementarylanding
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{elementarylanding$new()}}
-\item \href{#method-clone}{\code{elementarylanding$clone()}}
+\item \href{#method-elementarylanding-new}{\code{elementarylanding$new()}}
+\item \href{#method-elementarylanding-clone}{\code{elementarylanding$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-elementarylanding-new"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarylanding-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarylanding class.
 \subsection{Usage}{
@@ -51,8 +51,8 @@ Initialize function for R6 elementarylanding class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-elementarylanding-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarylanding-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

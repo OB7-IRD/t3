@@ -9,13 +9,13 @@ Create R6 reference object class elementarysampleraw
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{elementarysampleraw$new()}}
-\item \href{#method-clone}{\code{elementarysampleraw$clone()}}
+\item \href{#method-elementarysampleraw-new}{\code{elementarysampleraw$new()}}
+\item \href{#method-elementarysampleraw-clone}{\code{elementarysampleraw$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-elementarysampleraw-new"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarysampleraw-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarysampleraw class.
 \subsection{Usage}{
@@ -72,8 +72,8 @@ Initialize function for R6 elementarysampleraw class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-elementarysampleraw-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarysampleraw-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

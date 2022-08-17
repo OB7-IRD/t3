@@ -4,7 +4,8 @@
 #' @description Check if the item "trip_id" have one unique class identified as character.
 check_trip_id <- function(trip_id) {
   if (length(x = class(x = trip_id)) != 1
-      || class(x = trip_id) != "character") {
+      || ! inherits(x = trip_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"trip_id\" argument, class character expected.\n",
@@ -19,7 +20,8 @@ check_trip_id <- function(trip_id) {
 #' @description Check if the item "wellplan_id" have one unique class identified as character.
 check_wellplan_id <- function(wellplan_id) {
   if (length(x = class(x = wellplan_id)) != 1
-      || class(x = wellplan_id) != "character") {
+      || ! inherits(x = wellplan_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_id\" argument, class character expected.\n",
@@ -34,7 +36,8 @@ check_wellplan_id <- function(wellplan_id) {
 #' @description Check if the item "sample_id" have one unique class identified as character.
 check_sample_id <- function(sample_id) {
   if (length(x = class(x = sample_id)) != 1
-      || class(x = sample_id) != "character") {
+      || ! inherits(x = sample_id,
+                 what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_id\" argument, class character expected.\n",
@@ -49,7 +52,8 @@ check_sample_id <- function(sample_id) {
 #' @description Check if the item "elementarysampleraw_id" have one unique class identified as character.
 check_elementarysampleraw_id <- function(elementarysampleraw_id) {
   if (length(x = class(x = elementarysampleraw_id)) != 1
-      || class(x = elementarysampleraw_id) != "character") {
+      || ! inherits(x = elementarysampleraw_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"elementarysampleraw_id\" argument, class character expected.\n",
@@ -64,7 +68,8 @@ check_elementarysampleraw_id <- function(elementarysampleraw_id) {
 #' @description Check if the item "well_id" have one unique class identified as character.
 check_well_id <- function(well_id) {
   if (length(x = class(x = well_id)) != 1
-      || class(x = well_id) != "character") {
+      || ! inherits(x = well_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"well_id\" argument, class character expected.\n",
@@ -79,7 +84,8 @@ check_well_id <- function(well_id) {
 #' @description Check if the item "activity_id" have one unique class identified as character.
 check_activity_id <- function(activity_id) {
   if (length(x = class(x = activity_id)) != 1
-      || class(x = activity_id) != "character") {
+      || ! inherits(x = activity_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_id\" argument, class character expected.\n",
@@ -94,7 +100,8 @@ check_activity_id <- function(activity_id) {
 #' @description Check if the item "elementarylanding_id" have one unique class identified as character.
 check_elementarylanding_id <- function(elementarylanding_id) {
   if (length(x = class(x = elementarylanding_id)) != 1
-      || class(x = elementarylanding_id) != "character") {
+      || ! inherits(x = elementarylanding_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"elementarylanding_id\" argument, class character expected.\n",
@@ -109,7 +116,8 @@ check_elementarylanding_id <- function(elementarylanding_id) {
 #' @description Check if the item "elementarycatch_id" have one unique class identified as character.
 check_elementarycatch_id <- function(elementarycatch_id) {
   if (length(x = class(x = elementarycatch_id)) != 1
-      || class(x = elementarycatch_id) != "character") {
+      || ! inherits(x = elementarycatch_id,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"elementarycatch_id\" argument, class character expected.\n",
@@ -124,7 +132,8 @@ check_elementarycatch_id <- function(elementarycatch_id) {
 #' @description Check if the item "sub_sample_id" have one unique class identified as integer.
 check_sub_sample_id <- function(sub_sample_id) {
   if (length(x = class(x = sub_sample_id)) != 1
-      || class(x = sub_sample_id) != "integer") {
+      || ! inherits(x = sub_sample_id,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sub_sample_id\" argument, class integer expected.\n",
@@ -139,7 +148,8 @@ check_sub_sample_id <- function(sub_sample_id) {
 #' @description Check if the item "sub_sample_id_total_count" have one unique class identified as character.
 check_sub_sample_id_total_count <- function(sub_sample_id_total_count) {
   if (length(x = class(x = sub_sample_id_total_count)) != 1
-      || class(x = sub_sample_id_total_count) != "character") {
+      || ! inherits(x = sub_sample_id_total_count,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sub_sample_id_total_count\" argument, class character expected.\n",
@@ -154,7 +164,8 @@ check_sub_sample_id_total_count <- function(sub_sample_id_total_count) {
 #' @description Check if the item "landing_category" have one unique class identified as integer.
 check_landing_category <- function(landing_category) {
   if (length(x = class(x = landing_category)) != 1
-      || class(x = landing_category) != "integer") {
+      || ! inherits(x = landing_category,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"landing_category\" argument, class integer expected.\n",
@@ -169,7 +180,8 @@ check_landing_category <- function(landing_category) {
 #' @description Check if the item "landing_category_name" have one unique class identified as character.
 check_landing_category_name <- function(landing_category_name) {
   if (length(x = class(x = landing_category_name)) != 1
-      || class(x = landing_category_name) != "character") {
+      || ! inherits(x = landing_category_name,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"landing_category_name\" argument, class character expected.\n",
@@ -302,7 +314,8 @@ check_departure_date <- function(departure_date,
 #' @description Check if the item "logbook_availability" is class integer and if all values are 1 or 0.
 check_logbook_availability <- function(logbook_availability) {
   if (length(x = class(x = logbook_availability)) != 1
-      || class(x = logbook_availability) != "integer") {
+      || ! inherits(x = logbook_availability,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"logbook_availability\" argument, class integer expected.\n",
@@ -323,7 +336,8 @@ check_logbook_availability <- function(logbook_availability) {
 #' @description Check if the item "fish_hold_empty" is class integer and if all values are 1 or 0.
 check_fish_hold_empty <- function(fish_hold_empty) {
   if (length(x = class(fish_hold_empty)) != 1
-      || class(x = fish_hold_empty) != "integer") {
+      || ! inherits(x = fish_hold_empty,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"fish_hold_empty\" argument, class integer expected.\n",
@@ -344,7 +358,8 @@ check_fish_hold_empty <- function(fish_hold_empty) {
 #' @description Check if the item "vessel_id" have one unique class identified as integer.
 check_vessel_id <- function(vessel_id) {
   if (length(x = class(x = vessel_id)) != 1
-      || class(x = vessel_id) != "integer") {
+      || ! inherits(x = vessel_id,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"vessel_id\" argument, class integer expected.\n",
@@ -359,7 +374,8 @@ check_vessel_id <- function(vessel_id) {
 #' @description Check if the item "vessel_type" have one unique class identified as character.
 check_vessel_type <- function(vessel_type) {
   if (length(x = class(x = vessel_type)) != 1
-      || class(x = vessel_type) != "character") {
+      || ! inherits(x = vessel_type,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"vessel_type\" argument, class character expected.\n",
@@ -374,7 +390,8 @@ check_vessel_type <- function(vessel_type) {
 #' @description Check if the item "activity_number" have one unique class identified as integer.
 check_activity_number <- function(activity_number) {
   if (length(x = class(x = activity_number)) != 1
-      || class(x = activity_number) != "integer") {
+      || ! inherits(x = activity_number,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_number\" argument, class integer expected.\n",
@@ -389,7 +406,8 @@ check_activity_number <- function(activity_number) {
 #' @description Check if the item "ocean" is class integer and if all values are 1, 2, 3, 4 or 5.
 check_ocean <- function(ocean) {
   if (length(x = class(x = ocean)) != 1
-      || class(x = ocean) != "integer") {
+      || ! inherits(x = ocean,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"ocean\" argument, class integer expected.\n",
@@ -410,7 +428,8 @@ check_ocean <- function(ocean) {
 #' @description Check if the item "length_type" is class integer and if all values are 1 or 2.
 check_length_type <- function(length_type) {
   if (length(x = class(x = length_type)) != 1
-      || class(x = length_type) != "integer") {
+      || ! inherits(x = length_type,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"length_type\" argument, class integer expected.\n",
@@ -431,7 +450,8 @@ check_length_type <- function(length_type) {
 #' @description Check if the item "school_type" is class integer and if all values are 1, 2, or 3.
 check_school_type <- function(school_type) {
   if (length(x = class(x = school_type)) != 1
-      || class(x = school_type) != "integer") {
+      || ! inherits(x = school_type,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"school_type\" argument, class integer expected.\n",
@@ -452,7 +472,8 @@ check_school_type <- function(school_type) {
 #' @description Check if the item "logbook_category" have one unique class identified as integer and if values are between 1 and 13.
 check_logbook_category <- function(logbook_category) {
   if (length(x = class(x = logbook_category)) != 1
-      || class(x = logbook_category) != "integer") {
+      || ! inherits(x = logbook_category,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"logbook_category\" argument, class integer expected.\n",
@@ -473,7 +494,8 @@ check_logbook_category <- function(logbook_category) {
 #' @description Check if the item "logbook_category_name" have one unique class identified as character.
 check_logbook_category_name <- function(logbook_category_name) {
   if (length(x = class(x = logbook_category_name)) != 1
-      || class(x = logbook_category_name) != "character") {
+      || ! inherits(x = logbook_category_name,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"logbook_category_name\" argument, class character expected.\n",
@@ -488,7 +510,8 @@ check_logbook_category_name <- function(logbook_category_name) {
 #' @description Check if the item "specie_code3l" have one unique class identified as character and 3 characters.
 check_specie_code3l <- function(specie_code3l) {
   if (length(x = class(x = specie_code3l)) != 1
-      || class(x = specie_code3l) != "character") {
+      || ! inherits(x = specie_code3l,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"specie_code3l\" argument, class character expected.\n",
@@ -509,7 +532,8 @@ check_specie_code3l <- function(specie_code3l) {
 #' @description Check if the item "specie_code" have one unique class identified as integer and superior to zero.
 check_specie_code <- function(specie_code) {
   if (length(x = class(x = specie_code)) != 1
-      || class(x = specie_code) != "integer") {
+      || ! inherits(x = specie_code,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"specie_code\" argument, class integer expected.\n",
@@ -530,7 +554,8 @@ check_specie_code <- function(specie_code) {
 #' @description Check if the item "check_activity_name" have one unique class identified as character.
 check_activity_name <- function(activity_name) {
   if (length(x = class(x = activity_name)) != 1
-      || class(x = activity_name) != "character") {
+      || ! inherits(x = activity_name,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_name\" argument, class character expected.\n",
@@ -545,7 +570,8 @@ check_activity_name <- function(activity_name) {
 #' @description Check if the item "fleet" have one unique class identified as character.
 check_fleet <- function(fleet) {
   if (length(x = class(x = fleet)) != 1
-      || class(fleet) != "character") {
+      || ! inherits(x = fleet,
+                    what = "character")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"fleet\" argument, class character expected.\n",
         sep = "")
@@ -559,7 +585,8 @@ check_fleet <- function(fleet) {
 #' @description Check if the item "wellplan_weigth_category_label" have one unique class identified as character.
 check_wellplan_weigth_category_label <- function(wellplan_weigth_category_label) {
   if (length(x = class(x = wellplan_weigth_category_label)) != 1
-      || class(x = wellplan_weigth_category_label) != "character") {
+      || ! inherits(x = wellplan_weigth_category_label,
+                    what = "character")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_weigth_category_label\" argument, class character expected.\n",
@@ -574,7 +601,8 @@ check_wellplan_weigth_category_label <- function(wellplan_weigth_category_label)
 #' @description Check if the item "activity_code" have one unique class identified as integer.
 check_activity_code <- function(activity_code) {
   if (length(x = class(x = activity_code)) != 1
-      || class(activity_code) != "integer") {
+      || ! inherits(x = activity_code,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_code\" argument, class integer expected.\n",
@@ -589,7 +617,8 @@ check_activity_code <- function(activity_code) {
 #' @description Check if the item "wellplan_number" have one unique class identified as integer.
 check_wellplan_number <- function(wellplan_number) {
   if (length(x = class(x = wellplan_number)) != 1
-      || class(x = wellplan_number) != "integer") {
+      || ! inherits(x = wellplan_number,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_number\" argument, class integer expected.\n",
@@ -604,7 +633,8 @@ check_wellplan_number <- function(wellplan_number) {
 #' @description Check if the item "catch_weight" have one unique class identified as numeric and if values are superior to zero.
 check_catch_weight <- function(catch_weight) {
   if (length(x = class(x = catch_weight)) != 1
-      || class(x = catch_weight) != "numeric") {
+      || ! inherits(x = catch_weight,
+                    what = "numeric")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"catch_weight\" argument, class numeric expected.\n",
@@ -624,7 +654,9 @@ check_catch_weight <- function(catch_weight) {
 #' @param well_minus10_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
 #' @description Check if the item "well_minus10_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_minus10_weigth <- function(well_minus10_weigth) {
-  if (length(class(well_minus10_weigth)) != 1 || class(well_minus10_weigth) != "integer") {
+  if (length(class(well_minus10_weigth)) != 1
+      || ! inherits(x = well_minus10_weigth,
+                    what = "integer")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"well_minus10_weigth\" argument, class integer expected.\n",
         sep = "")
@@ -642,7 +674,9 @@ check_well_minus10_weigth <- function(well_minus10_weigth) {
 #' @param weighted_weight Object of class {\link[base]{numeric}} Set weight weighted by all set in the well(s).
 #' @description Check if the item "weighted_weight" have one unique class identified as numeric and if value are >= 0.
 check_weighted_weight <- function(weighted_weight) {
-  if (length(class(weighted_weight)) != 1 || class(weighted_weight) != "numeric") {
+  if (length(class(weighted_weight)) != 1
+      || ! inherits(x = weighted_weight,
+                    what = "numeric")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"weighted_weight\" argument, class numeric expected.\n",
         sep = "")
@@ -660,7 +694,9 @@ check_weighted_weight <- function(weighted_weight) {
 #' @param well_plus10_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
 #' @description Check if the item "well_plus10_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_plus10_weigth <- function(well_plus10_weigth) {
-  if (length(class(well_plus10_weigth)) != 1 || class(well_plus10_weigth) != "integer") {
+  if (length(class(well_plus10_weigth)) != 1
+      || ! inherits(x = well_plus10_weigth,
+                    what = "numeric")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"well_plus10_weigth\" argument, class integer expected.\n",
         sep = "")
@@ -678,7 +714,9 @@ check_well_plus10_weigth <- function(well_plus10_weigth) {
 #' @param well_global_weigth Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
 #' @description Check if the item "well_global_weigth" have one unique class identified as integer and if value are >= 0.
 check_well_global_weigth <- function(well_global_weigth) {
-  if (length(class(well_global_weigth)) != 1 || class(well_global_weigth) != "integer") {
+  if (length(class(well_global_weigth)) != 1
+      || ! inherits(x = well_global_weigth,
+                    what = "integer")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"well_global_weigth\" argument, class integer expected.\n",
         sep = "")
@@ -697,7 +735,8 @@ check_well_global_weigth <- function(well_global_weigth) {
 #' @description Check if the item "landing_weight" have one unique class identified as numeric.
 check_landing_weight <- function(landing_weight) {
   if (length(x = class(x = landing_weight)) != 1
-      || class(x = landing_weight) != "numeric") {
+      || ! inherits(x = landing_weight,
+                    what = "numeric")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"landing_weight\" argument, class numeric expected.\n",
@@ -712,7 +751,8 @@ check_landing_weight <- function(landing_weight) {
 #' @description Check if the item "set_count" have one unique class identified as integer and if value are superior or equal to 0
 check_set_count <- function(set_count) {
   if (length(x = class(x = set_count)) != 1
-      || class(x = set_count) != "integer") {
+      || ! inherits(x = set_count,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"set_count\" argument, class integer expected.\n",
@@ -733,7 +773,8 @@ check_set_count <- function(set_count) {
 #' @description Check if the item "time_at_sea" have one unique class identified as integer and if all values are superior or egal to zero.
 check_time_at_sea <- function(time_at_sea) {
   if (length(x = class(x = time_at_sea)) != 1
-      || class(x = time_at_sea) != "integer") {
+      || ! inherits(x = time_at_sea,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"time_at_sea\" argument, class integer expected.\n",
@@ -754,7 +795,8 @@ check_time_at_sea <- function(time_at_sea) {
 #' @description Check if the item "sample_total_count" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_total_count <- function(sample_total_count) {
   if (length(x = class(x = sample_total_count)) != 1
-      || class(x = sample_total_count) != "integer") {
+      || ! inherits(x = sample_total_count,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_total_count\" argument, class integer expected.\n",
@@ -775,7 +817,8 @@ check_sample_total_count <- function(sample_total_count) {
 #' @description Check if the item "sample_number_measured" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_number_measured <- function(sample_number_measured) {
   if (length(x = class(x = sample_number_measured)) != 1
-      || class(x = sample_number_measured) != "integer") {
+      || ! inherits(x = sample_number_measured,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_number_measured\" argument, class integer expected.\n",
@@ -795,7 +838,9 @@ check_sample_number_measured <- function(sample_number_measured) {
 #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} Sample number of measured individus extrapolated to all counted individus.
 #' @description Check if the item "sample_number_measured_extrapolated_lf" have one unique class identified as numeric and if all values are positive and different of zero.
 check_sample_number_measured_extrapolated_lf <- function(sample_number_measured_extrapolated_lf) {
-  if (length(class(sample_number_measured_extrapolated_lf)) != 1 || class(sample_number_measured_extrapolated_lf) != "numeric") {
+  if (length(class(sample_number_measured_extrapolated_lf)) != 1
+      || ! inherits(x = sample_number_measured_extrapolated_lf,
+                    what = "numeric")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_number_measured_extrapolated_lf\" argument, class numeric expected.\n",
         sep = "")
@@ -813,7 +858,9 @@ check_sample_number_measured_extrapolated_lf <- function(sample_number_measured_
 #' @param sample_number_weighted Object of class {\link[base]{numeric}} Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
 #' @description Check if the item "sample_number_weighted" have one unique class identified as numeric and if all values are positive and different of zero.
 check_sample_number_weighted <- function(sample_number_weighted) {
-  if (length(class(sample_number_weighted)) != 1 || class(sample_number_weighted) != "numeric") {
+  if (length(class(sample_number_weighted)) != 1
+      || ! inherits(x = sample_number_weighted,
+                    what = "numeric")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_number_weighted\" argument, class numeric expected.\n",
         sep = "")
@@ -832,7 +879,8 @@ check_sample_number_weighted <- function(sample_number_weighted) {
 #' @description Check if the item "wellplan_weight" have one unique class identified as numeric and if all values are positive and different of zero.
 check_wellplan_weight <- function(wellplan_weight) {
   if (length(x = class(x = wellplan_weight)) != 1
-      || class(x = wellplan_weight) != "numeric") {
+      || ! inherits(x = wellplan_weight,
+                    what = "numeric")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_weight\" argument, class numeric expected.\n",
@@ -853,7 +901,8 @@ check_wellplan_weight <- function(wellplan_weight) {
 #' @description Check if the item "sample_length_class" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_length_class <- function(sample_length_class) {
   if (length(x = class(x = sample_length_class)) != 1
-      || class(x = sample_length_class) != "integer") {
+      || ! inherits(x = sample_length_class,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_length_class\" argument, class integer expected.\n",
@@ -874,7 +923,8 @@ check_sample_length_class <- function(sample_length_class) {
 #' @description Check if the item "sample_quality" have one unique class identified as integer and if all values are 1, 2, 3, 4 or 9.
 check_sample_quality <- function(sample_quality) {
   if (length(x = class(x = sample_quality)) != 1
-      || class(x = sample_quality) != "integer") {
+      || ! inherits(x = sample_quality,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_quality\" argument, class integer expected.\n",
@@ -895,7 +945,8 @@ check_sample_quality <- function(sample_quality) {
 #' @description Check if the item "sample_type" have one unique class identified as integer and if all values are 1, 2, 3, 4, 9 or 11.
 check_sample_type <- function(sample_type) {
   if (length(x = class(x = sample_type)) != 1
-      || class(x = sample_type) != "integer") {
+      || ! inherits(x = sample_type,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_type\" argument, class integer expected.\n",
@@ -916,7 +967,8 @@ check_sample_type <- function(sample_type) {
 #' @description Check if the item "wellplan_weigth_category_code" have one unique class identified as integer and if all values are 1, 2, 8 or 9.
 check_wellplan_weigth_category_code <- function(wellplan_weigth_category_code) {
   if (length(x = class(x = wellplan_weigth_category_code)) != 1
-      || class(x = wellplan_weigth_category_code) != "integer") {
+      || ! inherits(x = wellplan_weigth_category_code,
+                    what = "integer")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"wellplan_weigth_category_code\" argument, class integer expected.\n",
@@ -936,7 +988,9 @@ check_wellplan_weigth_category_code <- function(wellplan_weigth_category_code) {
 #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
 #' @description Check if the item "sample_standardised_length_class_lf" have one unique class identified as integer and if all values are positive and different of zero.
 check_sample_standardised_length_class_lf <- function(sample_standardised_length_class_lf) {
-  if (length(class(sample_standardised_length_class_lf)) != 1 || class(sample_standardised_length_class_lf) != "integer") {
+  if (length(class(sample_standardised_length_class_lf)) != 1
+      || ! inherits(x = sample_standardised_length_class_lf,
+                    what = "integer")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"sample_standardised_length_class_lf\" argument, class integer expected.\n",
         sep = "")
@@ -955,7 +1009,8 @@ check_sample_standardised_length_class_lf <- function(sample_standardised_length
 #' @description Check if the item "activity_longitude" have one unique class identified as numeric.
 check_activity_longitude <- function(activity_longitude) {
   if (length(x = class(x = activity_longitude)) != 1
-      || class(x = activity_longitude) != "numeric") {
+      || ! inherits(x = activity_longitude,
+                    what = "numeric")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_longitude\" argument, class numeric expected.\n",
@@ -970,7 +1025,8 @@ check_activity_longitude <- function(activity_longitude) {
 #' @description Check if the item "activity_latitude" have one unique class identified as numeric.
 check_activity_latitude <- function(activity_latitude) {
   if (length(x = class(x = activity_latitude)) != 1
-      || class(x = activity_latitude) != "numeric") {
+      || ! inherits(x = activity_latitude,
+                    what = "numeric")) {
     cat(format(x = Sys.time(),
                format = "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"activity_latitude\" argument, class numeric expected.\n",

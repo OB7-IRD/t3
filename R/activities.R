@@ -14,7 +14,9 @@ activities <- R6::R6Class(classname = "activities",
                                        super$initialize()
                                      } else {
                                        for (i in 1:nargs()) {
-                                         if (length(class(arguments[[i]])) == 1 && class(arguments[[i]]) == "list") {
+                                         if (length(class(arguments[[i]])) == 1
+                                             && inherits(x = arguments[[i]],
+                                                         what = "list")) {
                                            for (i in length(arguments[[i]])) {
                                              if (length(class(arguments[[i]][[i]])) == 2 && (! any(class(arguments[[i]][[i]]) == "R6") & ! any(class(new_item[[i]]) == "activity"))) {
                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -39,7 +41,9 @@ activities <- R6::R6Class(classname = "activities",
                                    #' @description Function for add a new activity in the object activities.
                                    #' @param new_item (list or R6-activity classes) A list of object R6-activity classes or one object R6-activity classes.
                                    add = function(new_item) {
-                                     if (length(class(new_item)) == 1 && class(new_item) == "list") {
+                                     if (length(class(new_item)) == 1
+                                         && inherits(x = new_item,
+                                                     what = "list")) {
                                        for (i in length(new_item)) {
                                          if (length(class(new_item[[i]])) == 2 && (! any(class(new_item[[i]]) == "R6") & ! any(class(new_item[[i]]) == "activity"))) {
                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),

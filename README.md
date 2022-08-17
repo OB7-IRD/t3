@@ -9,7 +9,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
-[![R-CMD-check](https://github.com/OB7-IRD/t3/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/furdeb/actions)
+[![R-CMD-check](https://github.com/OB7-IRD/t3/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/t3/actions)
 <!-- badges: end -->
 
 ***Tropical Tuna Treatment***

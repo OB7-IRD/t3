@@ -12,30 +12,30 @@ Create R6 reference object class elementarywellplans
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{elementarywellplans$new()}}
-\item \href{#method-add}{\code{elementarywellplans$add()}}
-\item \href{#method-filter_by_trip}{\code{elementarywellplans$filter_by_trip()}}
-\item \href{#method-clone}{\code{elementarywellplans$clone()}}
+\item \href{#method-elementarywellplans-new}{\code{elementarywellplans$new()}}
+\item \href{#method-elementarywellplans-add}{\code{elementarywellplans$add()}}
+\item \href{#method-elementarywellplans-filter_by_trip}{\code{elementarywellplans$filter_by_trip()}}
+\item \href{#method-elementarywellplans-clone}{\code{elementarywellplans$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count">}\href{../../t3/html/list_t3.html#method-count}{\code{t3::list_t3$count()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract">}\href{../../t3/html/list_t3.html#method-extract}{\code{t3::list_t3$extract()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value">}\href{../../t3/html/list_t3.html#method-extract_l1_element_value}{\code{t3::list_t3$extract_l1_element_value()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter">}\href{../../t3/html/list_t3.html#method-filter}{\code{t3::list_t3$filter()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1">}\href{../../t3/html/list_t3.html#method-filter_l1}{\code{t3::list_t3$filter_l1()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1">}\href{../../t3/html/list_t3.html#method-modification_l1}{\code{t3::list_t3$modification_l1()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name">}\href{../../t3/html/list_t3.html#method-name}{\code{t3::list_t3$name()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove">}\href{../../t3/html/list_t3.html#method-remove}{\code{t3::list_t3$remove()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view">}\href{../../t3/html/list_t3.html#method-view}{\code{t3::list_t3$view()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="count"><a href='../../t3/html/list_t3.html#method-list_t3-count'><code>t3::list_t3$count()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract"><a href='../../t3/html/list_t3.html#method-list_t3-extract'><code>t3::list_t3$extract()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="extract_l1_element_value"><a href='../../t3/html/list_t3.html#method-list_t3-extract_l1_element_value'><code>t3::list_t3$extract_l1_element_value()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter"><a href='../../t3/html/list_t3.html#method-list_t3-filter'><code>t3::list_t3$filter()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="filter_l1"><a href='../../t3/html/list_t3.html#method-list_t3-filter_l1'><code>t3::list_t3$filter_l1()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="modification_l1"><a href='../../t3/html/list_t3.html#method-list_t3-modification_l1'><code>t3::list_t3$modification_l1()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="name"><a href='../../t3/html/list_t3.html#method-list_t3-name'><code>t3::list_t3$name()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="remove"><a href='../../t3/html/list_t3.html#method-list_t3-remove'><code>t3::list_t3$remove()</code></a></li>
+<li><span class="pkg-link" data-pkg="t3" data-topic="list_t3" data-id="view"><a href='../../t3/html/list_t3.html#method-list_t3-view'><code>t3::list_t3$view()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-elementarywellplans-new"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplans-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarywellplans class.
 \subsection{Usage}{
@@ -51,8 +51,8 @@ Initialize function for R6 elementarywellplans class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add"></a>}}
-\if{latex}{\out{\hypertarget{method-add}{}}}
+\if{html}{\out{<a id="method-elementarywellplans-add"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplans-add}{}}}
 \subsection{Method \code{add()}}{
 Function for add a new elementarywellplan in the object elementarywellplans.
 \subsection{Usage}{
@@ -68,8 +68,8 @@ Function for add a new elementarywellplan in the object elementarywellplans.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filter_by_trip"></a>}}
-\if{latex}{\out{\hypertarget{method-filter_by_trip}{}}}
+\if{html}{\out{<a id="method-elementarywellplans-filter_by_trip"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplans-filter_by_trip}{}}}
 \subsection{Method \code{filter_by_trip()}}{
 Function for filter elementarywellplans by trip identification.
 \subsection{Usage}{
@@ -85,8 +85,8 @@ Function for filter elementarywellplans by trip identification.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-elementarywellplans-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplans-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

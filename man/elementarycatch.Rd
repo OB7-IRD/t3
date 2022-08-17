@@ -9,13 +9,13 @@ Create R6 reference object class elementarycatch
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{elementarycatch$new()}}
-\item \href{#method-clone}{\code{elementarycatch$clone()}}
+\item \href{#method-elementarycatch-new}{\code{elementarycatch$new()}}
+\item \href{#method-elementarycatch-clone}{\code{elementarycatch$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-elementarycatch-new"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarycatch-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 activities class.
 \subsection{Usage}{
@@ -57,8 +57,8 @@ Initialize function for R6 activities class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-elementarycatch-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarycatch-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -79,8 +79,8 @@ list_t3 <- R6Class(
           sep = ""
         )
         stop()
-      } else if (length(class(item_id)) != 1 ||
-                 !class(item_id) %in% c("numeric", "integer")) {
+      } else if (length(x = class(x = item_id)) != 1 ||
+                 ! class(x = item_id) %in% c("numeric", "integer")) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"item_id\" argument, class numeric or integer expected.\n",
@@ -132,7 +132,7 @@ list_t3 <- R6Class(
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"attribut\" argument, attribut doesn't exist.\n",
             sep = ""
-            )
+        )
         stop()
       }
       item_id <- list(...)
@@ -147,23 +147,26 @@ list_t3 <- R6Class(
         } else {
           tmp <- list()
           for (i in seq_len(length.out = length(item_id))) {
-            if (length(class(item_id[[i]])) != 1 ||
-                !class(item_id[[i]]) %in% c("numeric", "character", "integer")) {
+            if (length(x = class(x = item_id[[i]])) != 1 ||
+                ! class(x = item_id[[i]]) %in% c("numeric",
+                                                 "character",
+                                                 "integer")) {
               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                   " - Error: invalid \"item_id\" argument, more than 1 class or not numeric/character.\n",
                   sep = "")
               stop()
             } else {
               for (j in seq_len(length.out = length(item_id[[i]]))) {
-                if (class(item_id[[i]]) %in% c("numeric", "integer") &&
-                    (item_id[[i]][j] <= 0 |
-                     item_id[[i]][j] > length(private[[attribut]]))) {
+                if (class(x = item_id[[i]]) %in% c("numeric",
+                                                   "integer")
+                    && (item_id[[i]][j] <= 0 |
+                        item_id[[i]][j] > length(x = private[[attribut]]))) {
                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                       " - Error: invalid \"item_id\" argument, subscript out of bounds.\n",
                       sep = "")
                   stop()
-                } else if (class(item_id[[i]]) %in% c("character") &&
-                           !item_id[[i]][j] %in% names(private[[attribut]])) {
+                } else if (class(item_id[[i]]) %in% c("character")
+                           && !item_id[[i]][j] %in% names(x = private[[attribut]])) {
                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                       " - Error: invalid \"item_id\" argument, item_id not exist in the attribut.\n",
                       sep = "")
@@ -207,8 +210,9 @@ list_t3 <- R6Class(
                        attribut_l2 = NULL,
                        id = NULL) {
       attributs <- append(attribut_l1, attribut_l2)
-      if (length(class(attributs)) != 1 ||
-          class(attributs) != "character") {
+      if (length(x = class(x = attributs)) != 1
+          || ! inherits(x = attributs,
+                        what = "character")) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut(s)\" argument, only class character expected.\n",
@@ -223,25 +227,28 @@ list_t3 <- R6Class(
         )
         stop()
       } else {
-        if (!is.null(id)) {
-          if (length(class(id)) != 1 ||
-              !any(class(id) %in% c("character", "numeric", "integer"))) {
+        if (!is.null(x = id)) {
+          if (length(x = class(x = id)) != 1
+              || !any(class(x = id) %in% c("character",
+                                           "numeric",
+                                           "integer"))) {
             cat(
               format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
               " - Error: invalid \"id\" argument, class character or numeric expected.\n",
               sep = ""
             )
             stop()
-          } else if (class(id) %in% c("numeric", "integer") &&
-                     (id > length(private[[attributs[1]]]) | id <= 0)) {
+          } else if (class(x = id) %in% c("numeric",
+                                          "integer") &&
+                     (id > length(x = private[[attributs[1]]]) | id <= 0)) {
             cat(
               format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
               " - Error: invalid \"id\" argument, subscript out of bounds.\n",
               sep = ""
             )
             stop()
-          } else if (class(id) %in% c("character") &&
-                     !id %in% names(private[[attributs[1]]])) {
+          } else if (class(x = id) %in% c("character") &&
+                     ! id %in% names(x = private[[attributs[1]]])) {
             cat(
               format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
               " - Error: invalid \"id\" argument, id's name not exist in the attribut.\n",
@@ -249,15 +256,15 @@ list_t3 <- R6Class(
             )
             stop()
           } else {
-            data <- unlist(private[[attributs[1]]][id])
+            data <- unlist(x = private[[attributs[1]]][id])
           }
         } else {
-          data <- unlist(private[[attributs[1]]])
+          data <- unlist(x = private[[attributs[1]]])
         }
         output <-
           sapply(seq_len(length.out = length(data)),
                  function(i) {
-                   if (!is.null(attribut_l2)) {
+                   if (!is.null(x = attribut_l2)) {
                      if (!attribut_l2 %in% names(data[[i]]$.__enclos_env__$private)) {
                        cat(
                          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -282,15 +289,16 @@ list_t3 <- R6Class(
     #' @param filter (character) Filter by a specific filter.
     filter = function(attribut_l1 = "data",
                       filter) {
-      if (length(class(attribut_l1)) != 1 ||
-          class(attribut_l1) != "character") {
+      if (length(x = class(x = attribut_l1)) != 1
+          || ! inherits(x = attribut_l1,
+                        what = "character")) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
           sep = ""
         )
         stop()
-      } else if (!attribut_l1 %in% names(private)) {
+      } else if (! attribut_l1 %in% names(x = private)) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
@@ -304,8 +312,8 @@ list_t3 <- R6Class(
           if (is.list(tmp1)) {
             for (j in seq_len(length.out = length(tmp1))) {
               tmp2 <- tmp1[[j]]
-              if (!any(class(tmp2) == "R6") |
-                  is.list(tmp2)) {
+              if (!any(class(x = tmp2) == "R6") |
+                  is.list(x = tmp2)) {
                 cat(
                   format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                   " - Error: invalid object's structure, R6 object and maximum list of two levels are expected.\n",
@@ -323,7 +331,8 @@ list_t3 <- R6Class(
                 final_filter <- parse(text = final_filter)
                 tryCatch(
                   expr = if (eval(final_filter)) {
-                    data <- append(data, tmp2)
+                    data <- append(x = data,
+                                   values = tmp2)
                   },
                   error = function(err) {
                     cat(
@@ -337,7 +346,7 @@ list_t3 <- R6Class(
               }
             }
           } else {
-            if (!any(class(tmp1) == "R6")) {
+            if (!any(class(x = tmp1) == "R6")) {
               cat(
                 format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                 " - Error: invalid object's structure, at least class R6 expected.\n",
@@ -380,20 +389,22 @@ list_t3 <- R6Class(
     filter_l1 = function(attribut_l1 = "data",
                          filter,
                          clone = FALSE) {
-      if (length(class(attribut_l1)) != 1
-          || class(attribut_l1) != "character") {
+      if (length(x = class(x = attribut_l1)) != 1
+          || ! inherits(x = attribut_l1,
+                        what = "character")) {
         cat(format(Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
             sep = "")
         stop()
-      } else if (!attribut_l1 %in% names(private)) {
+      } else if (! attribut_l1 %in% names(x = private)) {
         cat(format(Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
             sep = "")
         stop()
-      } else if (class(x = clone) != "logical") {
+      } else if (! inherits(x = clone,
+                            what = "logical")) {
         cat(format(Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
@@ -435,8 +446,9 @@ list_t3 <- R6Class(
     #' @param element Object of type \code{\link[base]{character}} expected. Name of the element.
     extract_l1_element_value = function(attribut_l1 = "data",
                                         element) {
-      if (length(class(attribut_l1)) != 1
-          || class(attribut_l1) != "character") {
+      if (length(x = class(x = attribut_l1)) != 1
+          || ! inherits(x = attribut_l1,
+                        what = "character")) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
@@ -482,8 +494,9 @@ list_t3 <- R6Class(
     modification_l1 = function(attribut_l1 = "data",
                                modification,
                                silent = TRUE) {
-      if (length(class(attribut_l1)) != 1
-          || class(attribut_l1) != "character") {
+      if (length(x = class(x = attribut_l1)) != 1
+          || ! inherits(x = attribut_l1,
+                        what = "character")) {
         cat(
           format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",

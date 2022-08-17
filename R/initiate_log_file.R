@@ -10,19 +10,22 @@ initiate_log_file <- function(log_file = FALSE,
                               log_path = NULL,
                               log_name = "t3log") {
   # verifications ----
-  if (class(log_file) != "logical") {
+  if (! inherits(x = log_file,
+                 what = "logical")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalid \"log_file\" argument, ",
         "class \"logical\" expected.\n",
         sep = "")
   } else {
     if (log_file %in% c(T, TRUE)) {
-      if (class(log_path) != "character") {
+      if (! inherits(x = log_path,
+                     what = "character")) {
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"log_path\" argument, ",
             "class \"character\" expected.\n",
             sep = "")
-      } else if (class(log_name) != "character") {
+      } else if (! inherits(x = log_name,
+                            what = "character")) {
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"log_name\" argument, ",
             "class \"character\" expected.\n",
