@@ -46,29 +46,35 @@ elementarywellplans <- R6::R6Class(classname = "elementarywellplans",
                                      #' @description Function for add a new elementarywellplan in the object elementarywellplans.
                                      #' @param new_item (list or R6-elementarywellplan classes) A list of object R6-elementarywellplan classes or one object R6-elementarywellplan classes.
                                      add = function(new_item) {
-                                       if (length(x = class(new_item)) == 1
-                                           && inherits(x = new_item,
-                                                       what = "list")) {
-                                         for (i in length(x = new_item)) {
-                                           if (length(x = class(x = new_item[[i]])) == 2
-                                               && (! any(class(x = new_item[[i]]) == "R6")
-                                                   & ! any(class(x = new_item[[i]]) == "elementarywellplan"))) {
-                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"data\" argument, class list or R6-elementarywellplan expected.\n",
-                                                 sep = "")
-                                             stop()
-                                           }
+                                       if (inherits(x = new_item,
+                                                    what = "list")) {
+                                         class_new_item <- unique(x = sapply(X = seq_len(length.out = length(x = new_item)),
+                                                                             FUN = function(new_item_id) {
+                                                                               paste(class(x = new_item[[new_item_id]]),
+                                                                                     collapse = "_")
+                                                                             }))
+                                         if (length(x = class_new_item) != 1
+                                             || class_new_item != "elementarywellplan_R6") {
+                                           cat(format(x = Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"data\" argument, class elementarywellplan-R6 expected.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           super$add(new_item = new_item)
                                          }
-                                         super$add(new_item)
-                                       } else if (length(x = class(x = new_item)) == 2
-                                                  && (any(class(x = new_item) == "R6")
-                                                      & any(class(x = new_item) == "elementarywellplan"))) {
-                                         super$add(new_item)
                                        } else {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data\" argument, class list or R6-elementarysample expected.\n",
-                                             sep = "")
-                                         stop()
+                                         class_new_item <- paste(class(x = new_item),
+                                                                 collapse = "_")
+                                         if (class_new_item != "elementarywellplan_R6") {
+                                           cat(format(x = Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: invalid \"data\" argument, class elementarywellplan-R6 expected.\n",
+                                               sep = "")
+                                           stop()
+                                         } else {
+                                           super$add(new_item = new_item)
+                                         }
                                        }
                                      },
                                      # filter by trip ----

@@ -47,29 +47,35 @@ standardisedsamplesets <- R6::R6Class(classname = "standardisedsamplesets",
                                         #' @description Function for add a new standardisedsampleset in the object standardisedsamplesets.
                                         #' @param new_item (list or R6-standardisedsampleset classes) A list of object R6-standardisedsampleset classes or one object R6-standardisedsampleset classes.
                                         add = function(new_item) {
-                                          if (length(x = class(x = new_item)) == 1
-                                              && inherits(x = new_item,
-                                                          what = "list")) {
-                                            for (i in length(x = new_item)) {
-                                              if (length(class(x = new_item[[i]])) == 2
-                                                  && (! any(class(x = new_item[[i]]) == "R6")
-                                                      & ! any(class(x = new_item[[i]]) == "standardisedsampleset"))) {
-                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"data\" argument, class list or R6-standardisedsampleset expected.\n",
-                                                    sep = "")
-                                                stop()
-                                              }
+                                          if (inherits(x = new_item,
+                                                       what = "list")) {
+                                            class_new_item <- unique(x = sapply(X = seq_len(length.out = length(x = new_item)),
+                                                                                FUN = function(new_item_id) {
+                                                                                  paste(class(x = new_item[[new_item_id]]),
+                                                                                        collapse = "_")
+                                                                                }))
+                                            if (length(x = class_new_item) != 1
+                                                || class_new_item != "standardisedsampleset_R6") {
+                                              cat(format(x = Sys.time(),
+                                                         "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: invalid \"data\" argument, class standardisedsampleset-R6 expected.\n",
+                                                  sep = "")
+                                              stop()
+                                            } else {
+                                              super$add(new_item = new_item)
                                             }
-                                            super$add(new_item)
-                                          } else if (length(class(x = new_item)) == 2
-                                                     && (any(class(x = new_item) == "R6")
-                                                         & any(class(x = new_item) == "standardisedsampleset"))) {
-                                            super$add(new_item)
                                           } else {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: invalid \"data\" argument, class list or R6-standardisedsampleset expected.\n",
-                                                sep = "")
-                                            stop()
+                                            class_new_item <- paste(class(x = new_item),
+                                                                    collapse = "_")
+                                            if (class_new_item != "standardisedsampleset_R6") {
+                                              cat(format(x = Sys.time(),
+                                                         "%Y-%m-%d %H:%M:%S"),
+                                                  " - Error: invalid \"data\" argument, class standardisedsampleset-R6 expected.\n",
+                                                  sep = "")
+                                              stop()
+                                            } else {
+                                              super$add(new_item = new_item)
+                                            }
                                           }
                                         },
                                         # filter by trip ----

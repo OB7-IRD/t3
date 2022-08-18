@@ -696,7 +696,7 @@ check_weighted_weight <- function(weighted_weight) {
 check_well_plus10_weigth <- function(well_plus10_weigth) {
   if (length(class(well_plus10_weigth)) != 1
       || ! inherits(x = well_plus10_weigth,
-                    what = "numeric")) {
+                    what = "integer")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalide \"well_plus10_weigth\" argument, class integer expected.\n",
         sep = "")
