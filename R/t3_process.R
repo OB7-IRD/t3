@@ -7,6 +7,7 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param outputs_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
+#' @param outputs_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.
 #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.
@@ -39,6 +40,7 @@ t3_process <- function(process = "all",
                        log_file = FALSE,
                        log_path = NULL,
                        outputs_path = NULL,
+                       outputs_format = "eu",
                        new_directory = NULL,
                        periode_reference,
                        countries,
@@ -124,6 +126,7 @@ t3_process <- function(process = "all",
                                    sunset_schema = sunset_schema,
                                    new_directory = new_directory_level1,
                                    outputs_path = outputs_path_level1,
+                                   outputs_format = outputs_format,
                                    integrated_process = integrated_process)
     }
     if (process %in% c("all",

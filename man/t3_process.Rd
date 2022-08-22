@@ -11,6 +11,7 @@ t3_process(
   log_file = FALSE,
   log_path = NULL,
   outputs_path = NULL,
+  outputs_format = "eu",
   new_directory = NULL,
   periode_reference,
   countries,
@@ -42,6 +43,8 @@ t3_process(
 \item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
 \item{outputs_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
+
+\item{outputs_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 

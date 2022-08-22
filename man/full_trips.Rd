@@ -173,7 +173,8 @@ Process of Raising Factor level 1 (RF1).
   species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
-  global_outputs_path = NULL
+  global_outputs_path = NULL,
+  outputs_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -187,6 +188,8 @@ Process of Raising Factor level 1 (RF1).
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
 
 \item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -197,13 +200,15 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Method \code{rf2()}}{
 Process of Raising Factor level 2 (rf2).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_outputs_path = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -214,13 +219,18 @@ Process of Raising Factor level 2 (rf2).
 \subsection{Method \code{conversion_weigth_category()}}{
 Process of logbook weigth categories conversion.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(global_outputs_path = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -231,9 +241,18 @@ Process of logbook weigth categories conversion.
 \subsection{Method \code{set_count()}}{
 Process for postive sets count.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-set_duration"></a>}}
@@ -241,13 +260,21 @@ Process for postive sets count.
 \subsection{Method \code{set_duration()}}{
 Process for set duration calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(set_duration_ref)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
+  set_duration_ref,
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -258,9 +285,18 @@ Process for set duration calculation (in hours).
 \subsection{Method \code{time_at_sea()}}{
 Process for time at sea calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-fishing_time"></a>}}
@@ -268,7 +304,12 @@ Process for time at sea calculation (in hours).
 \subsection{Method \code{fishing_time()}}{
 Process for fishing time calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(sunrise_schema = "sunrise", sunset_schema = "sunset")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(
+  sunrise_schema = "sunrise",
+  sunset_schema = "sunset",
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -277,6 +318,10 @@ Process for fishing time calculation (in hours).
 \item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
 
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -307,9 +352,18 @@ Available variables are:
 \subsection{Method \code{searching_time()}}{
 Process for searching time calculation (in hours, fishing time minus sets durations).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_length_class_ld1_to_lf"></a>}}
@@ -317,13 +371,21 @@ Process for searching time calculation (in hours, fishing time minus sets durati
 \subsection{Method \code{sample_length_class_ld1_to_lf()}}{
 Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(length_step)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(
+  length_step,
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -334,9 +396,21 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \subsection{Method \code{sample_number_measured_extrapolation()}}{
 Process for sample number measured individuals extrapolation to sample number individuals counted.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation(
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_length_class_step_standardisation"></a>}}
@@ -345,7 +419,9 @@ Process for sample number measured individuals extrapolation to sample number in
 Process for step standardisation of lf length class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation(
-  maximum_lf_class = as.integer(500)
+  maximum_lf_class = as.integer(500),
+  global_outputs_path = NULL,
+  outputs_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -353,6 +429,10 @@ Process for step standardisation of lf length class.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -363,13 +443,21 @@ Process for step standardisation of lf length class.
 \subsection{Method \code{well_set_weigth_categories()}}{
 Process for well set weigth categories definition.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(sample_set)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
+  sample_set,
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -380,9 +468,21 @@ Process for well set weigth categories definition.
 \subsection{Method \code{standardised_sample_creation()}}{
 Object standardised sample creation.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation(
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-standardised_sample_set_creation"></a>}}
@@ -390,13 +490,21 @@ Object standardised sample creation.
 \subsection{Method \code{standardised_sample_set_creation()}}{
 R6 object standardised sample set creation.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(length_weight_relationship_data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(
+  length_weight_relationship_data,
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -412,7 +520,9 @@ Raised factors determination for weigth sample set to set.
   threshold_rf_plus10 = as.integer(500),
   threshold_frequency_rf_minus10 = as.integer(75),
   threshold_frequency_rf_plus10 = as.integer(75),
-  threshold_rf_total = as.integer(250)
+  threshold_rf_total = as.integer(250),
+  global_outputs_path = NULL,
+  outputs_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -428,6 +538,10 @@ Raised factors determination for weigth sample set to set.
 \item{\code{threshold_frequency_rf_plus10}}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
 
 \item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
+
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -438,9 +552,21 @@ Raised factors determination for weigth sample set to set.
 \subsection{Method \code{raised_standardised_sample_set()}}{
 Application of process 2.8 raised factors on standardised sample set.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set(
+  global_outputs_path = NULL,
+  outputs_format = "eu"
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+
+\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-path_to_level3"></a>}}

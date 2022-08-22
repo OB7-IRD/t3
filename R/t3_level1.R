@@ -12,6 +12,7 @@
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".
 #' @param outputs_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
+#' @param outputs_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @return The function a R6 reference object of class "object_full_trips".
@@ -27,6 +28,7 @@ t3_level1 <- function(object_model_data,
                       log_path = NULL,
                       log_name = "t3_level1",
                       outputs_path = NULL,
+                      outputs_format = "eu",
                       new_directory = NULL,
                       integrated_process = FALSE) {
   if (paste0(class(object_model_data),
@@ -69,22 +71,32 @@ t3_level1 <- function(object_model_data,
     object_full_trips$rf1(species_rf1 = species_rf1,
                           rf1_lowest_limit = rf1_lowest_limit,
                           rf1_highest_limit = rf1_highest_limit,
-                          global_outputs_path = outputs_path)
+                          global_outputs_path = outputs_path,
+                          outputs_format = outputs_format)
     # level 1.2: rf2 ----
-    object_full_trips$rf2(global_outputs_path = outputs_path)
+    object_full_trips$rf2(global_outputs_path = outputs_path,
+                          outputs_format = outputs_format)
     # level 1.3: logbook weigth categories conversion ----
-    object_full_trips$conversion_weigth_category()
+    object_full_trips$conversion_weigth_category(global_outputs_path = outputs_path,
+                                                 outputs_format = outputs_format)
     # level 1.4: set count ----
-    object_full_trips$set_count()
+    object_full_trips$set_count(global_outputs_path = outputs_path,
+                                outputs_format = outputs_format)
     # level 1.5: set duration ----
-    object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs)
+    object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                   global_outputs_path = outputs_path,
+                                   outputs_format = outputs_format)
     # level 1.6: time at sea ----
-    object_full_trips$time_at_sea()
+    object_full_trips$time_at_sea(global_outputs_path = outputs_path,
+                                  outputs_format = outputs_format)
     # level 1.7: fishing time ----
     object_full_trips$fishing_time(sunrise_schema = "sunrise",
-                                   sunset_schema = "sunset")
+                                   sunset_schema = "sunset",
+                                   global_outputs_path = outputs_path,
+                                   outputs_format = outputs_format)
     # level 1.8: searching time ----
-    object_full_trips$searching_time()
+    object_full_trips$searching_time(global_outputs_path = outputs_path,
+                                     outputs_format = outputs_format)
     # close, if necessary log file connection ----
     if (log_file == TRUE) {
       closeAllConnections()
