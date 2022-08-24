@@ -2761,7 +2761,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_corrected")))
                                               oceans_activities_weight <- as.numeric()
                                               for (current_ocean_activites in oceans_activities) {
-                                                capture.output(current_elementary_catches_ocean <- object_r6(class_name = "activities"),
+                                                capture.output(current_elementary_catches_ocean <- object_r6(class_name = "elementarycatches"),
                                                                file = "NUL")
                                                 capture.output(current_elementary_catches_ocean$add(new_item = current_elementary_catches$filter_l1(filter = paste0("$path$ocean == ",
                                                                                                                                                                     current_ocean_activites))),
@@ -4966,7 +4966,98 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "]\n",
                                       sep = "")
                                 }
-                                browser()
+                                if (! is.null(x = global_outputs_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected <- object_r6(class_name = "standardisedsamplesets"),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
+                                                                                                              FUN = function(standardisedsampleset_id) {
+                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                              }))),
+                                                 file = "NUL")
+                                  outputs_process_2_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                           "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                           "sample_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                           "specie_code3l" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                           "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
+                                                                                           "sample_number_weighted_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted_set")),
+                                                                                           "sample_weigth_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth_set")))
+                                  outputs_process_2_8 <- outputs_process_2_8_standardisedsamplesets %>%
+                                    dplyr::left_join(outputs_process_2_8_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (outputs_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (outputs_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
+                                        sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  }
+                                  write.table(x = outputs_process_2_8,
+                                              file = file.path(global_outputs_path,
+                                                               "level2",
+                                                               "data_outputs",
+                                                               "process_2_8.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_outputs_path,
+                                                "level2",
+                                                "data_outputs"),
+                                      sep = "")
+                                }
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End 2.8 process: raised standardised sample set.\n",

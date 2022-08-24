@@ -288,8 +288,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                              file = "NUL")
               capture.output(current_elementarysamples_species <- t3::object_r6(class_name = "elementarysamples"),
                              file = "NUL")
-              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$specie_code == ",
-                                                                                                                                     specie))),
+              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$specie_code == ",
+                                                                                                                                  specie))),
                              file = "NUL")
               # 217 - Checking if sum "sample_number_measured_extrapolated_lf" in object "elementarysamplesraw" is equal to "sample_number_measured" in object "elementarysamples" ----
               testthat::test_that(desc = "217 - Checking if sum \"sample_number_measured_extrapolated_lf\" in object \"elementarysamplesraw\" is equal to \"sample_number_measured\" in object \"elementarysamples\"",
