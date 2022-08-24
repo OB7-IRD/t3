@@ -83,30 +83,30 @@
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-trips_object_creation"><code>object_model_data$trips_object_creation()</code></a></p></li>
-<li><p><a href="#method-activities_object_creation"><code>object_model_data$activities_object_creation()</code></a></p></li>
-<li><p><a href="#method-elementarycatches_object_creation"><code>object_model_data$elementarycatches_object_creation()</code></a></p></li>
-<li><p><a href="#method-elementarylandings_object_creation"><code>object_model_data$elementarylandings_object_creation()</code></a></p></li>
-<li><p><a href="#method-wells_object_creation"><code>object_model_data$wells_object_creation()</code></a></p></li>
-<li><p><a href="#method-setdurationrefs_data"><code>object_model_data$setdurationrefs_data()</code></a></p></li>
-<li><p><a href="#method-lengthsteps_data"><code>object_model_data$lengthsteps_data()</code></a></p></li>
-<li><p><a href="#method-samplesets_data"><code>object_model_data$samplesets_data()</code></a></p></li>
-<li><p><a href="#method-lengthweightrelationships_data"><code>object_model_data$lengthweightrelationships_data()</code></a></p></li>
-<li><p><a href="#method-clone"><code>object_model_data$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-trips_object_creation"></a><div class="section">
+<ul><li><p><a href="#method-object_model_data-trips_object_creation"><code>object_model_data$trips_object_creation()</code></a></p></li>
+<li><p><a href="#method-object_model_data-activities_object_creation"><code>object_model_data$activities_object_creation()</code></a></p></li>
+<li><p><a href="#method-object_model_data-elementarycatches_object_creation"><code>object_model_data$elementarycatches_object_creation()</code></a></p></li>
+<li><p><a href="#method-object_model_data-elementarylandings_object_creation"><code>object_model_data$elementarylandings_object_creation()</code></a></p></li>
+<li><p><a href="#method-object_model_data-wells_object_creation"><code>object_model_data$wells_object_creation()</code></a></p></li>
+<li><p><a href="#method-object_model_data-setdurationrefs_data"><code>object_model_data$setdurationrefs_data()</code></a></p></li>
+<li><p><a href="#method-object_model_data-lengthsteps_data"><code>object_model_data$lengthsteps_data()</code></a></p></li>
+<li><p><a href="#method-object_model_data-samplesets_data"><code>object_model_data$samplesets_data()</code></a></p></li>
+<li><p><a href="#method-object_model_data-lengthweightrelationships_data"><code>object_model_data$lengthweightrelationships_data()</code></a></p></li>
+<li><p><a href="#method-object_model_data-clone"><code>object_model_data$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-object_model_data-trips_object_creation"></a><div class="section">
 <h3 id="method-trips-object-creation-">Method <code>trips_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-trips-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -146,20 +146,20 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-activities_object_creation"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-activities_object_creation"></a><div class="section">
 <h3 id="method-activities-object-creation-">Method <code>activities_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-activities-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -199,20 +199,20 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-elementarycatches_object_creation"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-elementarycatches_object_creation"></a><div class="section">
 <h3 id="method-elementarycatches-object-creation-">Method <code>elementarycatches_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-elementarycatches-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarycatches_object_creation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarycatches_object_creation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -252,20 +252,20 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-elementarylandings_object_creation"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-elementarylandings_object_creation"></a><div class="section">
 <h3 id="method-elementarylandings-object-creation-">Method <code>elementarylandings_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-elementarylandings-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -305,22 +305,22 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-wells_object_creation"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-wells_object_creation"></a><div class="section">
 <h3 id="method-wells-object-creation-">Method <code>wells_object_creation()</code><a class="anchor" aria-label="anchor" href="#method-wells-object-creation-"></a></h3>
 <p>Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  sample_type <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path_samples <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path_wellplans <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sample_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path_samples <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path_wellplans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -368,18 +368,18 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-setdurationrefs_data"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-setdurationrefs_data"></a><div class="section">
 <h3 id="method-setdurationrefs-data-">Method <code>setdurationrefs_data()</code><a class="anchor" aria-label="anchor" href="#method-setdurationrefs-data-"></a></h3>
 <p>Creation of a data frame object with parameters of set duration algorithms.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span>
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span></span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -411,16 +411,16 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-lengthsteps_data"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-lengthsteps_data"></a><div class="section">
 <h3 id="method-lengthsteps-data-">Method <code>lengthsteps_data()</code><a class="anchor" aria-label="anchor" href="#method-lengthsteps-data-"></a></h3>
 <p>Creation of a data frame object with length ratio between ld1 and lf class.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span>
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span></span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -444,20 +444,20 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-samplesets_data"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-samplesets_data"></a><div class="section">
 <h3 id="method-samplesets-data-">Method <code>samplesets_data()</code><a class="anchor" aria-label="anchor" href="#method-samplesets-data-"></a></h3>
 <p>Creation of a data frame object with weighted weigth of each set sampled.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,
-  countries <span class="op">=</span> <span class="cn">NULL</span>,
-  oceans <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  oceans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -497,16 +497,16 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-lengthweightrelationships_data"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-lengthweightrelationships_data"></a><div class="section">
 <h3 id="method-lengthweightrelationships-data-">Method <code>lengthweightrelationships_data()</code><a class="anchor" aria-label="anchor" href="#method-lengthweightrelationships-data-"></a></h3>
 <p>Creation of a data frame object with parameters for length weight relationship.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthweightrelationships_data</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  db_con <span class="op">=</span> <span class="cn">NULL</span>,
-  data_path <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthweightrelationships_data</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -530,11 +530,11 @@
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-object_model_data-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">object_model_data</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -562,7 +562,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -77,46 +77,67 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_model_initialisation</span><span class="op">(</span>
-  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,
-  <span class="va">db_con</span>,
-  log_file <span class="op">=</span> <span class="cn">FALSE</span>,
-  log_path <span class="op">=</span> <span class="cn">NULL</span>,
-  log_name <span class="op">=</span> <span class="st">"data_model_initialisation"</span>,
-  <span class="va">periode_reference</span>,
-  <span class="va">countries</span>,
-  <span class="va">oceans</span>,
-  <span class="va">sample_type</span>,
-  trips_selected <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_model_initialisation</span><span class="op">(</span></span>
+<span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
+<span>  <span class="va">db_con</span>,</span>
+<span>  log_file <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  log_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  log_name <span class="op">=</span> <span class="st">"data_model_initialisation"</span>,</span>
+<span>  <span class="va">periode_reference</span>,</span>
+<span>  <span class="va">countries</span>,</span>
+<span>  <span class="va">oceans</span>,</span>
+<span>  <span class="va">sample_type</span>,</span>
+<span>  trips_selected <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data_source</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".</p></dd>
+
+
 <dt>db_con</dt>
 <dd><p>Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".</p></dd>
+
+
 <dt>log_file</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> expected. Initiation or not for log file creation. By default FALSE (no).</p></dd>
+
+
 <dt>log_path</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Path of the log file directory. By default NULL.</p></dd>
+
+
 <dt>log_name</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Name of the log file. By default "data_model_initialisation".</p></dd>
+
+
 <dt>periode_reference</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Year(s) of the reference period coded on 4 digits. By default NULL.</p></dd>
+
+
 <dt>countries</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. ISO code on 3 letters related to one or more countries. By default NULL.</p></dd>
+
+
 <dt>oceans</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Ocean(s) related to data coded on 1 digit. By default NULL.</p></dd>
+
+
 <dt>sample_type</dt>
 <dd><p>(integer) Sample type identification (landing, observer, ...). By default NULL.</p></dd>
+
+
 <dt>trips_selected</dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".</p>
+    
+
+<p>The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".</p>
     </div>
 
   </div>
@@ -131,7 +152,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -77,43 +77,62 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tunaboot</span><span class="op">(</span>
-  <span class="va">sample_data</span>,
-  <span class="va">allset_data</span>,
-  Ntree <span class="op">=</span> <span class="fl">1000</span>,
-  Nmtry <span class="op">=</span> <span class="fl">2</span>,
-  Nseed <span class="op">=</span> <span class="fl">7</span>,
-  min_node <span class="op">=</span> <span class="fl">5</span>,
-  Nboot <span class="op">=</span> <span class="fl">10</span>,
-  <span class="va">Nseed_boot</span>,
-  <span class="va">target_period</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tunaboot</span><span class="op">(</span></span>
+<span>  <span class="va">sample_data</span>,</span>
+<span>  <span class="va">allset_data</span>,</span>
+<span>  Ntree <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  Nmtry <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  Nseed <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  min_node <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Nboot <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  <span class="va">Nseed_boot</span>,</span>
+<span>  <span class="va">target_period</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sample_data</dt>
 <dd><p>(data frame) Data used for the modelling. Output table from process 3.1.</p></dd>
+
+
 <dt>allset_data</dt>
 <dd><p>(data frame) Data used for prediction.Output table from process 3.4.</p></dd>
+
+
 <dt>Ntree</dt>
 <dd><p>(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.</p></dd>
+
+
 <dt>Nmtry</dt>
 <dd><p>Number of variables randomly sampled as candidates at each split. The default value is 2.</p></dd>
+
+
 <dt>Nseed</dt>
 <dd><p>Set the initial seed for the modelling. The default value is 7.</p></dd>
+
+
 <dt>min_node</dt>
 <dd><p>Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.</p></dd>
+
+
 <dt>Nboot</dt>
 <dd><p>The number of bootstrap samples desired. The fefault value is 10</p></dd>
+
+
 <dt>Nseed_boot</dt>
 <dd><p>Set the initial seed for the modelling. The default value is equal to Nseed parameter</p></dd>
+
+
 <dt>target_period</dt>
 <dd><p>Time period for the predictions in year. Default is the year of the data to predict</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>TODO</p>
+    
+
+<p>TODO</p>
     </div>
 
   </div>
@@ -128,7 +147,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
