@@ -19,8 +19,8 @@ The first level of the t3 process aim to standardize logbook data. These standar
 
 | Process                                           | Code/method associated         | Class(es) associated | Observations |
 |---------------------------------------------------|--------------------------------|----------------------|--------------|
-| Process 1.1: raising Factor level 1               | `rf1()`                        | full_trips           |              |
-| Process 1.2: raising Factor level 2               | `rf2()`                        | full_trips           |              |
+| Process 1.1: Raising Factor level 1               | `rf1()`                        | full_trips           |              |
+| Process 1.2: Raising Factor level 2               | `rf2()`                        | full_trips           |              |
 | Process 1.3: logbook weigth categories conversion | `conversion_weigth_category()` | full_trips           |              |
 | Process 1.4: postive sets count                   | `set_count()`                  | full_trips           |              |
 | Process 1.5: set duration calculation             | `set_duration()`               | full_trips           | In hours     |
@@ -28,37 +28,106 @@ The first level of the t3 process aim to standardize logbook data. These standar
 | Process 1.7: fishing time calculation             | `fishing_time()`               | full_trips           | In hours     |
 | Process 1.8: searching time calculation           | `searching_time()`             | full_trips           | In hours     |
 
-### Process 1.1: raising Factor level 1
+### Process 1.1: Raising Factor level 1
 
 Catches filled in logbooks are based on visual estimations when they rise from the purse senner salabarde. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a peson located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
-Regarding this process, for each full trip (one full trip should be composed of one or several partial trip, for example if the vessel unloads a part of theses wells and go back to sea with not empty well(s)) we will calculate a raising factor, ratio of landing weight on catches weight. Furthermore, if a full trRf1 value are normally between 0.8 and 1.2 and values out of range should be investigated for quality control. This range could be modified through function parameter `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will in the function log a warning if the rf1 value is out of range. This ratio will be applied on logbook catches (associated with the full trip) to adjust declared values (by rising or lower them).
+Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
 
-By aware that for know, even if a rf1 value are out of user range, it will be apply anyway on the logbook catches associated. It's up to the user to check the log file and correct (if necessary) values associated before switch to the next process.
+Be careful, so far in the process all RF level 1 values will be applied to the logbook catches associated, even if values are out of range. It's up to the user to check the log file and correct data, if necessary, before moving to the next process.
 
-Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, theses species should be different for each fleet, especially because canneries don't purchased through the same rules according to the each fleet. This raising factor will be estimate only on theses species. Species list could be modify through the function parameter `species_rf1`. For now theses following selections were validated since several years:
+Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, these species should be different for each fleet, especially because canneries don't purchased through the same rules according to the fleet. This raising factor will be estimated only on theses species. Species list could be modified through the function parameter `species_rf1`. For now theses following selections were validated since several years:
 
 * for French (French and Mayotte fleets), use codes 1 (*Thunnus albacares*), 2 (*Katsuwonus pelamis*), 3 (*Thunnus obesus*), 4 (*Thunnus alalunga*), 9 (mix of tunas species) and 11 (*Thunnus tonggol*).
 
 * for Spain (Spanish and Seychelles fleets), use codes 1 (*Thunnus albacares*), 2 (*Katsuwonus pelamis*), 3 (*Thunnus obesus*), 4 (*Thunnus alalunga*), 5 (*Euthynnus alletteratus*), 6 (*Auxis thazard*),  9 (mix of tunas species) and 11 (*Thunnus tonggol*).
 
-In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of raising factor level 2 (see below in the next function).
+In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process `rf2()`).
 
-By the way, there are several cases when the rf1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
+By the way, there are several cases when the RF level 1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.1.png'/>
 
-### Process 1.2: raising Factor level 2
+<div style="text-align: center">Figure 1: Raising Factor level 1 flowchart</div>
 
-This process is useful for historical data, especially when logbooks trips were not collected or available. In theses cases, don't apply the RF2 mean a under-estimation of catches due to the missing logbooks. Like in the process 1.1, we made the hypotesis that all the landings were known and available.
+### Process 1.2: Raising Factor level 2
 
-#### Information: due to time constraints, this process is partially implemented in the source code. The figure below, after the methodology explication, display what is currently operational.
+In some cases, especially for historial data, several logbooks trips were not collected or available. Therefore it's impossible to apply the process 1.1. Don't do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypostesis that all the landings were know and available.
+
+So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven't been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalise it when we run our process on the whole time serie (and when we manipulated historical data). The figure below show the actual development of the process. 
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.2.png'/>
 
+<div style="text-align: center">Figure 2: Raising Factor level 2 flowchart</div>
+
 ### Process 1.3: logbook weigth categories conversion
 
+The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.
+
+This process aims to homogenise these weight categories and create simplify categories divided in function of the fishing school and the ocean:
+
+- < 10kg and > 10kg for the floating object school in the Atlantic and Indian Ocean,
+- < 10kg, 10-30kg and > 10kg for undetermined and free school in the Atlantic Ocean,
+- < 10kg and > 10kg for undetermined and free school in the Indian Ocean.
+
+For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribution key is applied for conversion to standardised weight categories. Details of the distribution key is available in tables below.
+
+| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+|----------------|-------------------------|--------------|-------------------------------------|
+| YFT, BET & ALB | 1                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 2                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 3                       | 1            | 10-30kg                             |
+| YFT, BET & ALB | 4                       | 0,2          | < 10kg                              |
+| YFT, BET & ALB | 4                       | 0,8          | 10-30kg                             |
+| YFT, BET & ALB | 5                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 6                       | 0,5          | 10-30kg                             |
+| YFT, BET & ALB | 6                       | 0,5          | > 30kg                              |
+| YFT, BET & ALB | 7                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 8                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 10                      | 1            | < 10kg                              |
+| YFT, BET & ALB | 11                      | 0,1          | 10-30kg                             |
+| YFT, BET & ALB | 11                      | 0,9          | > 30kg                              |
+| YFT, BET & ALB | 12                      | 1            | 10-30kg                             |
+| YFT, BET & ALB | 13                      | 1            | > 30kg                              |
+| SKJ            | All                     | 1            | < 10kg                              |
+| Others         | All                     | 1            | Unknown                             |
+
+<div style="text-align: center">Table 1: Distribution conversion key for undetermined and free school in the Atlantic Ocean.</div>
+
+| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+|----------------|-------------------------|--------------|-------------------------------------|
+| YFT, BET & ALB | 1                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 2                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 3                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 4                       | 0,2          | < 10kg                              |
+| YFT, BET & ALB | 4                       | 0,8          | > 10kg                              |
+| YFT, BET & ALB | 5                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 6                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 7                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 8                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 10                      | 1            | < 10kg                              |
+| YFT, BET & ALB | 11                      | 1            | > 10kg                              |
+| YFT, BET & ALB | 12                      | 1            | > 10kg                              |
+| YFT, BET & ALB | 13                      | 1            | > 10kg                              |
+| SKJ            | All                     | 1            | < 10kg                              |
+| Others         | All                     | 1            | Unknown                             |
+
+<div style="text-align: center">Table 2: Distribution conversion key for floating object school in the Atlantic Ocean and for undetermined, free and floating object school in the Indian Ocean.</div>
+
+Among the process, there are two major step:
+
+- the first one for conversion of all categories except for unknown category (9),
+- the second one for conversion of category unknown if it's possible.
+
+During the first part, all logbook weight categories except the category unknow are standardised following the distribution conversion key display above. Each catch weight associated is multiply by the weight ratio associated. For several logbook weight category, like the categories 4 or 11 according to strata, this standardisation create new data because the initial logbook weight category is divied into several standardised logbook weight categories. It's normal that at the end of the process you could have more catch items than before.
+
+For the second part, the process try to make the conversion of catches filled in the unknown category. For each trip and at the scale of an ocean/fishing school/specie, proportion of standardised logbook weight categories will be applied on items filled as unknown logbook weight categories. For example, in a common stratum, if proportion weight of standardised logbook weight category are divided by 60% for the category < 10kg and 40% for the category > 10kg, catches weight of unknown logbook weight category will display in standardised logbook weight category with 60% of < 10kg category and 40% of > 10kg category. 
+
+The global process flowchart is available in the figure 3 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.3.png'/>
+
+<div style="text-align: center">Figure 3: Logbook weigth categories conversion flowchart</div>
  
 ### Process 1.4: postive sets count
 

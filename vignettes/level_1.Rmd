@@ -75,6 +75,61 @@ This process aims to homogenise these weight categories and create simplify cate
 - < 10kg, 10-30kg and > 10kg for undetermined and free school in the Atlantic Ocean,
 - < 10kg and > 10kg for undetermined and free school in the Indian Ocean.
 
+For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribution key is applied for conversion to standardised weight categories. Details of the distribution key is available in tables below.
+
+| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+|----------------|-------------------------|--------------|-------------------------------------|
+| YFT, BET & ALB | 1                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 2                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 3                       | 1            | 10-30kg                             |
+| YFT, BET & ALB | 4                       | 0,2          | < 10kg                              |
+| YFT, BET & ALB | 4                       | 0,8          | 10-30kg                             |
+| YFT, BET & ALB | 5                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 6                       | 0,5          | 10-30kg                             |
+| YFT, BET & ALB | 6                       | 0,5          | > 30kg                              |
+| YFT, BET & ALB | 7                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 8                       | 1            | > 30kg                              |
+| YFT, BET & ALB | 10                      | 1            | < 10kg                              |
+| YFT, BET & ALB | 11                      | 0,1          | 10-30kg                             |
+| YFT, BET & ALB | 11                      | 0,9          | > 30kg                              |
+| YFT, BET & ALB | 12                      | 1            | 10-30kg                             |
+| YFT, BET & ALB | 13                      | 1            | > 30kg                              |
+| SKJ            | All                     | 1            | < 10kg                              |
+| Others         | All                     | 1            | Unknown                             |
+
+<div style="text-align: center">Table 1: Distribution conversion key for undetermined and free school in the Atlantic Ocean.</div>
+
+| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+|----------------|-------------------------|--------------|-------------------------------------|
+| YFT, BET & ALB | 1                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 2                       | 1            | < 10kg                              |
+| YFT, BET & ALB | 3                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 4                       | 0,2          | < 10kg                              |
+| YFT, BET & ALB | 4                       | 0,8          | > 10kg                              |
+| YFT, BET & ALB | 5                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 6                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 7                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 8                       | 1            | > 10kg                              |
+| YFT, BET & ALB | 10                      | 1            | < 10kg                              |
+| YFT, BET & ALB | 11                      | 1            | > 10kg                              |
+| YFT, BET & ALB | 12                      | 1            | > 10kg                              |
+| YFT, BET & ALB | 13                      | 1            | > 10kg                              |
+| SKJ            | All                     | 1            | < 10kg                              |
+| Others         | All                     | 1            | Unknown                             |
+
+<div style="text-align: center">Table 2: Distribution conversion key for floating object school in the Atlantic Ocean and for undetermined, free and floating object school in the Indian Ocean.</div>
+
+Among the process, there are two major step:
+
+- the first one for conversion of all categories except for unknown category (9),
+- the second one for conversion of category unknown if it's possible.
+
+During the first part, all logbook weight categories except the category unknow are standardised following the distribution conversion key display above. Each catch weight associated is multiply by the weight ratio associated. For several logbook weight category, like the categories 4 or 11 according to strata, this standardisation create new data because the initial logbook weight category is divied into several standardised logbook weight categories. It's normal that at the end of the process you could have more catch items than before.
+
+For the second part, the process try to make the conversion of catches filled in the unknown category. For each trip and at the scale of an ocean/fishing school/specie, proportion of standardised logbook weight categories will be applied on items filled as unknown logbook weight categories. For example, in a common stratum, if proportion weight of standardised logbook weight category are divided by 60% for the category < 10kg and 40% for the category > 10kg, catches weight of unknown logbook weight category will display in standardised logbook weight category with 60% of < 10kg category and 40% of > 10kg category. 
+
+The global process flowchart is available in the figure 3 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.3.png'/>
 
 <div style="text-align: center">Figure 3: Logbook weigth categories conversion flowchart</div>

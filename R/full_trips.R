@@ -1426,7 +1426,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                      # second stage: conversion of category unknow (category 9) if possible
+                                      # second stage: conversion of category unknown (category 9) if possible
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         current_elementarycatches <- vector(mode = "list")
