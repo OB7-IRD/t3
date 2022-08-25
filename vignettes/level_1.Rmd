@@ -136,7 +136,11 @@ The global process flowchart is available in the figure 3 below.
  
 ### Process 1.4: postive sets count
 
+In this process, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in the data, a count of set is done according to the catches associated. Like before, the global process flowchart is available below in figure 4.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.4.png'/>
+
+<div style="text-align: center">Figure 4: Postive sets count flowchart</div>
 
 ### Process 1.5: set duration calculation
 
