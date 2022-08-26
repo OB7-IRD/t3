@@ -187,7 +187,17 @@ In addition the global process flowchart is available in the figure 5 below.
 
 ### Process 1.6: time at sea estimation
 
+This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:
+
+- first, if departure and landing dates have times associated and available. So time at sea value will the difference between these two values. Unfortunately, this case is not the major scenario that we have regarding our data available.
+- secondly, if departure and landing dates haven't times available and no activity is associated with the trip. In this case, time at sea will be the difference between the departure date value plus one day and the landing date minus one day.
+- finally, if departure and landing dates haven't times available but at least one activity is associated with the trip. Just like the previous one, time at sea will be the difference between the departure date value plus one day and the landing date minus one day but in addition to time at sea of each activity occur on the same dates as departure or landing dates.
+
+The global process flowchart is available in the figure 6 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src='process_1.6.png'/>
+
+<div style="text-align: center">Figure 6: Time at sea estimation flowchart.</div>
 
 ### level 1.7: fishing time determination
 
