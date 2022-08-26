@@ -144,11 +144,7 @@ In this process, for each activity filled as null set (0), positive set (1), unk
 
 ### Process 1.5: set duration calculation
 
-The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function:    
-
-$ \text{set duration value} = a * \sum_{1}^{n} \text{catch weight category corrected} + b $
-
-Parameters values of a and b are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.
+The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.
 
 | Year | Country    | Ocean | Fishing school  | a       | b     | Null set value |
 |------|------------|-------|-----------------|---------|-------|----------------|
@@ -199,7 +195,7 @@ The global process flowchart is available in the figure 6 below.
 
 <div style="text-align: center">Figure 6: Time at sea estimation flowchart.</div>
 
-### level 1.7: fishing time determination
+### Process 1.7: fishing time determination
 
 This process calculated the fishing time value in hours. Historialcaly, this process use a constant parameter according to the theorical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
 
@@ -228,8 +224,14 @@ The global process flowchart is available in the figure 7 below.
 
 <div style="text-align: center">Figure 7: Time at sea estimation flowchart.</div>
 
-### level 1.8: searching time process
+### Process 1.8: searching time process
+
+The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.
+
+The global process flowchart is available in the figure 8 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.8.png'/>
+
+<div style="text-align: center">Figure 8: Searching time estimation flowchart.</div>
         
 </div>
