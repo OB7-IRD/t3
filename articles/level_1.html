@@ -193,14 +193,14 @@
 <p>By the way, there are several cases when the RF level 1 can’t be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src="process_1.1.png"></p>
 <div style="text-align: center">
-Figure 1: Raising Factor level 1 flowchart
+Figure 1: Raising Factor level 1 flowchart.
 </div>
 <h3 id="process-1.2-raising-factor-level-2">Process 1.2: Raising Factor level 2</h3>
 <p>In some cases, especially for historial data, several logbooks trips were not collected or available. Therefore it’s impossible to apply the process 1.1. Don’t do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypostesis that all the landings were know and available.</p>
 <p>So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven’t been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalise it when we run our process on the whole time serie (and when we manipulated historical data). The figure below show the actual development of the process.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.2.png"></p>
 <div style="text-align: center">
-Figure 2: Raising Factor level 2 flowchart
+Figure 2: Raising Factor level 2 flowchart.
 </div>
 <h3 id="process-1.3-logbook-weigth-categories-conversion">Process 1.3: logbook weigth categories conversion</h3>
 <p>The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.</p>
@@ -451,22 +451,297 @@ Table 2: Distribution conversion key for floating object school in the Atlantic 
 <p>The global process flowchart is available in the figure 3 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src="process_1.3.png"></p>
 <div style="text-align: center">
-Figure 3: Logbook weigth categories conversion flowchart
+Figure 3: Logbook weigth categories conversion flowchart.
 </div>
 <h3 id="process-1.4-postive-sets-count">Process 1.4: postive sets count</h3>
 <p>In this process, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in the data, a count of set is done according to the catches associated. Like before, the global process flowchart is available below in figure 4.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.4.png"></p>
 <div style="text-align: center">
-Figure 4: Postive sets count flowchart
+Figure 4: Postive sets count flowchart.
 </div>
 <h3 id="process-1.5-set-duration-calculation">Process 1.5: set duration calculation</h3>
+<p>The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.</p>
+<table class="table">
+<thead><tr class="header">
+<th>Year</th>
+<th>Country</th>
+<th>Ocean</th>
+<th>Fishing school</th>
+<th>a</th>
+<th>b</th>
+<th>Null set value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>2014</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2014</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2014</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2015</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2015</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2015</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2016</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2016</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2016</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2017</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2017</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2017</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2018</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2018</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2018</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2019</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2019</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2019</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2020</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2020</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2020</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2021</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>1</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>2021</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>2</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+<tr class="even">
+<td>2021</td>
+<td>Seychelles</td>
+<td>2</td>
+<td>3</td>
+<td>0,33235</td>
+<td>127,1</td>
+<td>120</td>
+</tr>
+</tbody>
+</table>
+<div style="text-align: center">
+Table 3: Set duration reference parameters.
+</div>
+<p>In addition the global process flowchart is available in the figure 5 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src="process_1.5.png"></p>
+<div style="text-align: center">
+Figure 5: Set duration calculation flowchart.
+</div>
 <h3 id="process-1.6-time-at-sea-estimation">Process 1.6: time at sea estimation</h3>
+<p>This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:</p>
+<ul>
+<li>first, if departure and landing dates have times associated and available. So time at sea value will the difference between these two values. Unfortunately, this case is not the major scenario that we have regarding our data available.</li>
+<li>secondly, if departure and landing dates haven’t times available and no activity is associated with the trip. In this case, time at sea will be the difference between the departure date value plus one day and the landing date minus one day.</li>
+<li>finally, if departure and landing dates haven’t times available but at least one activity is associated with the trip. Just like the previous one, time at sea will be the difference between the departure date value plus one day and the landing date minus one day but in addition to time at sea of each activity occur on the same dates as departure or landing dates.</li>
+</ul>
+<p>The global process flowchart is available in the figure 6 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src="process_1.6.png"></p>
-<h3 id="level-1.7-fishing-time-determination">level 1.7: fishing time determination</h3>
+<div style="text-align: center">
+Figure 6: Time at sea estimation flowchart.
+</div>
+<h3 id="process-1.7-fishing-time-determination">Process 1.7: fishing time determination</h3>
+<p>This process calculated the fishing time value in hours. Historialcaly, this process use a constant parameter according to the theorical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.</p>
+<p>These parameters could be modify in the parameters <code>sunrise_schema</code> and <code>sunset_schema</code> and use in background the R package <a href="https://CRAN.R-project.org/package=suncalc" class="external-link">suncalc</a>. The function associated use latitude and longitude data to provide sunrise and sunset times of the selected day. Furthermore, you can switch between several values for these two parameters to adjust the process:</p>
+<ul>
+<li>sunrise: sunrise (top edge of the sun appears on the horizon),</li>
+<li>sunriseEnd: sunrise ends (bottom edge of the sun touches the horizon),</li>
+<li>goldenHourEnd: morning golden hour ends(soft light, best time for photography),</li>
+<li>solarNoon: solar noon (sun is in the highest position),</li>
+<li>goldenHour: evening golden hour starts,</li>
+<li>sunsetStart: sunset starts (bottom edge of the sun touches the horizon),</li>
+<li>sunset: sunset (sun disappears below the horizon, evening civil twilight starts),</li>
+<li>dusk: dusk (evening nautical twilight starts),</li>
+<li>nauticalDusk: nautical dusk (evening astronomical twilight starts),</li>
+<li>night: night starts (dark enough for astronomical observations),</li>
+<li>nadir: nadir (darkest moment of the night, sun is in the lowest position),</li>
+<li>nightEnd: night ends (morning astronomical twilight starts),</li>
+<li>nauticalDawn: nautical dawn (morning nautical twilight starts),</li>
+<li>dawn: dawn (morning nautical twilight ends, morning civil twilight starts).</li>
+</ul>
+<p>At the trip scale and related to all the activities related, the fishing time value is the sum of each fishing time day if in the day activites associated at least one is different of no-wake road (4), damage (7), on hold (10), at the harbour (15) or fictive activity for trip without logbook (100).</p>
+<p>The global process flowchart is available in the figure 7 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_1.7.png"></p>
-<h3 id="level-1.8-searching-time-process">level 1.8: searching time process</h3>
+<div style="text-align: center">
+Figure 7: Time at sea estimation flowchart.
+</div>
+<h3 id="process-1.8-searching-time-process">Process 1.8: searching time process</h3>
+<p>The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.</p>
+<p>The global process flowchart is available in the figure 8 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.8.png"></p>
+<div style="text-align: center">
+Figure 8: Searching time estimation flowchart.
+</div>
 </div>
   </div>
 
