@@ -12,5 +12,9 @@
 #'\itemize{
 #' \item{\code{\link{t3_level2}}}
 #' }
+#'@section Generic process fuction:
+#'\itemize{
+#' \item{\code{\link{t3_process}}}
+#' }
 #' @keywords internal
 "_PACKAGE"
