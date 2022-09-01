@@ -113,7 +113,11 @@ The global process flowchart is available in the figure 4 below.
 
 ### Process 2.5: standardised sample creation
 
+This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data. In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF) and create a new object called standardised sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the specie.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
+
+<div style="text-align: center">Figure 5: Standardised sample creation flowchart.</div>
 
 ### Process 2.6: sample number standardisation
 
