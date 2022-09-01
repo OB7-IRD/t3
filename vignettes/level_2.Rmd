@@ -89,7 +89,27 @@ The global process flowchart is available in the figure 3 below.
 
 ### Process 2.4: well set weight categories
 
+The sampling provides information at the well scale. However, a set could be displayed between several wells and sampled individuals could belong to as much as sets in the well.
+
+This process aim to calcul a weighted weigth, which represent the weight of a set in a well, regarding the repartition of this set in all the wells. The global formula is the following one:
+
+$$WW = \displaystyle \frac{W1}{W2} \times WT$$
+
+Where WW is the Weighted weight, W1 is the weight of the set in the well, W2 is the weight of the set in the others sampled wells and WT the total set weight.
+
+So far, the process is developed for the purse seiner. To better understand what the process do, take a look to an example. A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one. The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).
+
+Furthermore, a proportion of each samplings sets among the sampling well will be calculated in relation with the weighted weight:
+
+$$ PWW = \displaystyle \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}$$
+
+Where PWW is the proportionnal weighted weight and WW~i,j~ is weighted weight of the current set i in well j.
+
+The global process flowchart is available in the figure 4 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_2.4.png'/>
+
+<div style="text-align: center">Figure 4: Well set weight categories flowchart.</div>
 
 ### Process 2.5: standardised sample creation
 

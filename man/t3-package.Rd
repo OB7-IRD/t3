@@ -29,6 +29,13 @@ The multi-species nature of tropical tuna surface fisheries gives rise to a seri
 }
 }
 
+\section{Generic process fuction}{
+
+\itemize{
+\item{\code{\link{t3_process}}}
+}
+}
+
 \seealso{
 Useful links:
 \itemize{

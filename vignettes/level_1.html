@@ -200,7 +200,7 @@ By the way, there are several cases when the RF level 1 can&rsquo;t be calculate
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.1.png'/>
 
-<div style="text-align: center">Figure 1: Raising Factor level 1 flowchart</div>
+<div style="text-align: center">Figure 1: Raising Factor level 1 flowchart.</div>
 
 ### Process 1.2: Raising Factor level 2
 
@@ -210,7 +210,7 @@ So far, this process is partially implemented in the source code and in our data
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.2.png'/>
 
-<div style="text-align: center">Figure 2: Raising Factor level 2 flowchart</div>
+<div style="text-align: center">Figure 2: Raising Factor level 2 flowchart.</div>
 
 ### Process 1.3: logbook weigth categories conversion
 
@@ -279,7 +279,7 @@ The global process flowchart is available in the figure 3 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.3.png'/>
 
-<div style="text-align: center">Figure 3: Logbook weigth categories conversion flowchart</div>
+<div style="text-align: center">Figure 3: Logbook weigth categories conversion flowchart.</div>
  
 ### Process 1.4: postive sets count
 
@@ -287,23 +287,99 @@ In this process, for each activity filled as null set (0), positive set (1), unk
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.4.png'/>
 
-<div style="text-align: center">Figure 4: Postive sets count flowchart</div>
+<div style="text-align: center">Figure 4: Postive sets count flowchart.</div>
 
 ### Process 1.5: set duration calculation
 
+The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.
+
+| Year | Country    | Ocean | Fishing school  | a       | b     | Null set value |
+|&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;|&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;-|
+| 2014 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2014 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2014 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2015 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2015 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2015 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2016 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2016 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2016 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2017 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2017 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2017 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2018 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2018 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2018 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2019 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2019 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2019 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2020 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2020 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2020 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+| 2021 | Seychelles | 2     | 1               | 0,33235 | 127,1 | 120            |
+| 2021 | Seychelles | 2     | 2               | 0,33235 | 127,1 | 120            |
+| 2021 | Seychelles | 2     | 3               | 0,33235 | 127,1 | 120            |
+
+<div style="text-align: center">Table 3: Set duration reference parameters.</div>
+
+In addition the global process flowchart is available in the figure 5 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.5.png'/>
+
+<div style="text-align: center">Figure 5: Set duration calculation flowchart.</div>
 
 ### Process 1.6: time at sea estimation
 
+This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:
+
+- first, if departure and landing dates have times associated and available. So time at sea value will the difference between these two values. Unfortunately, this case is not the major scenario that we have regarding our data available.
+- secondly, if departure and landing dates haven&rsquo;t times available and no activity is associated with the trip. In this case, time at sea will be the difference between the departure date value plus one day and the landing date minus one day.
+- finally, if departure and landing dates haven&rsquo;t times available but at least one activity is associated with the trip. Just like the previous one, time at sea will be the difference between the departure date value plus one day and the landing date minus one day but in addition to time at sea of each activity occur on the same dates as departure or landing dates.
+
+The global process flowchart is available in the figure 6 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src='process_1.6.png'/>
 
-### level 1.7: fishing time determination
+<div style="text-align: center">Figure 6: Time at sea estimation flowchart.</div>
+
+### Process 1.7: fishing time determination
+
+This process calculated the fishing time value in hours. Historialcaly, this process use a constant parameter according to the theorical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
+
+These parameters could be modify in the parameters sunrise_schema and sunset_schema and use in background the R package [suncalc](https://CRAN.R-project.org/package=suncalc). The function associated use latitude and longitude data to provide sunrise and sunset times of the selected day. Furthermore, you can switch between several values for these two parameters to adjust the process:
+
+- sunrise: sunrise (top edge of the sun appears on the horizon),
+- sunriseEnd: sunrise ends (bottom edge of the sun touches the horizon),
+- goldenHourEnd: morning golden hour ends(soft light, best time for photography),
+- solarNoon: solar noon (sun is in the highest position),
+- goldenHour: evening golden hour starts,
+- sunsetStart: sunset starts (bottom edge of the sun touches the horizon),
+- sunset: sunset (sun disappears below the horizon, evening civil twilight starts),
+- dusk: dusk (evening nautical twilight starts),
+- nauticalDusk: nautical dusk (evening astronomical twilight starts),
+- night: night starts (dark enough for astronomical observations),
+- nadir: nadir (darkest moment of the night, sun is in the lowest position),
+- nightEnd: night ends (morning astronomical twilight starts),
+- nauticalDawn: nautical dawn (morning nautical twilight starts),
+- dawn: dawn (morning nautical twilight ends, morning civil twilight starts).
+
+At the trip scale and related to all the activities related, the fishing time value is the sum of each fishing time day if in the day activites associated at least one is different of no-wake road (4), damage (7), on hold (10), at the harbour (15) or fictive activity for trip without logbook (100).
+
+The global process flowchart is available in the figure 7 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_1.7.png'/>
 
-### level 1.8: searching time process
+<div style="text-align: center">Figure 7: Time at sea estimation flowchart.</div>
+
+### Process 1.8: searching time process
+
+The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.
+
+The global process flowchart is available in the figure 8 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.8.png'/>
+
+<div style="text-align: center">Figure 8: Searching time estimation flowchart.</div>
         
 </div>
 

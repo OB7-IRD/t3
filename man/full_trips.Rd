@@ -330,7 +330,7 @@ Available variables are:
 \itemize{
  \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
  \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
- \item{"goldenHourEnd"}{morning golden hour (soft light, best time for photography) ends}
+ \item{"goldenHourEnd"}{morning golden hour ends(soft light, best time for photography)}
  \item{"solarNoon"}{solar noon (sun is in the highest position)}
  \item{"goldenHour"}{evening golden hour starts}
  \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
