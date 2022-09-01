@@ -74,7 +74,18 @@ The global process flowchart is available in the figure 2 below.
 
 ### Process 2.3: sample step length class standardisation
 
+LF length classes used during the treatment are not necessary the same that filled during the sampling. Furthermore, even if the actual sampling protocol detail what kind of lenght classes we have to use by specie, it's not impossible to have differencies regarding this length classes if we mix "old data" with the actual one. In addition, it's possible that the protocol could evolve in the future.
+
+According to that, this step aim to standardise sample length classes. So far, these specifications are integrate in the process:
+
+- a length classes step of 1cm for SKY (*Katsuwonus pelamis*), LTA (*Euthynnus alletteratus*) and FRI (*Auxis thazard*),
+- a length classes step of 2cm for YFT (*Thunnus albacares*), BET (*Thunnus obesus*) and ALB (*Thunnus alalunga*).
+
+The global process flowchart is available in the figure 3 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.3.png'/>
+
+<div style="text-align: center">Figure 3: Sample step length class standardisation flowchart.</div>
 
 ### Process 2.4: well set weight categories
 
