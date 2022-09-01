@@ -62,7 +62,15 @@ The global process flowchart is available in the figure 1 below.
 
 ### Process 2.2: sample number measured extrapolation
 
+During the sampling and according to the protocole, just a part of the sampled individuals are measured in comparision of the one counted. This step aim extrapolate sample number measured individuals to sample number individuals counted.
+
+A Raising Factor (RF4) is calculated stratified by well, sample, sub-sample and specie. He is equal by strate to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).
+
+The global process flowchart is available in the figure 2 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.2.png'/>
+
+<div style="text-align: center">Figure 2: Sample number measured extrapolation flowchart.</div>
 
 ### Process 2.3: sample step length class standardisation
 
