@@ -192,4 +192,10 @@ Verification thresholds could be modify in the function parameters throught the 
 
 ### Process 2.8: samples number standardisation at set scale
 
+This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculed in the process 2.7.
+
+The global process flowchart is available in the figure 8 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>
+
+<div style="text-align: center">Figure 8: Samples number standardisation at set scale flowchart.</div>

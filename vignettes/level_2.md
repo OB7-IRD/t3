@@ -84,20 +84,113 @@ The global process flowchart is available in the figure 3 below.
 
 ### Process 2.4: well set weight categories
 
+The sampling provides information at the well scale. However, a set could be displayed between several wells and sampled individuals could belong to as much as sets in the well.
+
+This process aim to calcul a weighted weigth, which represent the weight of a set in a well, regarding the repartition of this set in all the wells. The global formula is the following one:
+
+$$WW = \displaystyle \frac{W1}{W2} \times WT$$
+
+Where WW is the Weighted weight, W1 is the weight of the set in the well, W2 is the weight of the set in the others sampled wells and WT the total set weight.
+
+So far, the process is developed for the purse seiner. To better understand what the process do, take a look to an example. A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one. The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).
+
+Furthermore, a proportion of each samplings sets among the sampling well will be calculated in relation with the weighted weight:
+
+$$ PWW = \displaystyle \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}$$
+
+Where PWW is the proportionnal weighted weight and WW~i,j~ is weighted weight of the current set i in well j.
+
+The global process flowchart is available in the figure 4 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_2.4.png'/>
+
+<div style="text-align: center">Figure 4: Well set weight categories flowchart.</div>
 
 ### Process 2.5: standardised sample creation
 
+This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data. In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF) and create a new object called standardised sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the specie.
+
+The global process flowchart is available in the figure 5 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
+
+<div style="text-align: center">Figure 5: Standardised sample creation flowchart.</div>
 
 ### Process 2.6: sample number standardisation
 
+In the previous process and in the object standarised sample associated, samples is expressed at the well scale. In this step, the aim is to move to the expression of sample by well to sample by set. In the process 2.4, a weighted weight has been calculated and in addition a proportion of this weighted weight at the set scale. By combination of this value and elements of the object standarised sample, a new object called standardised sample set was created. Like explain before, this object is the expression of the sample at the set scale. Furthermore, this process made a conversion of the samples lenght measurements in weight by length weight relationship. Formula associated are the following one:
+
+$$ RWT = a \times LF^{b}$$
+
+Where RWT is the round weight, LF is the curved fork length and parameters a and b comes from a references table and are dependant of of the species and potentially of the area (ocean or others) and the season. More detail information could be find on the regional fisheries management organisations (RFMOs) like ICCAT (https://www.iccat.int/) or IOTC (https://iotc.org/).
+
+In addition, you will find below in the table 2 the reference table for the length weight relationship and global process flowchart in the figure 6.
+
+| Ocean    | Specie code | Specie name                      | a            | b           |
+|----------|-------------|----------------------------------|--------------|-------------|
+| Atlantic | YFT         | Thunnus albacares                | 0,000021527  | 2,976000000 |
+| Atlantic | SKJ         | Katsuwonus pelamis               | 0,000007480  | 3,252600000 |
+| Atlantic | BET         | Thunnus obesus                   | 0,000023960  | 2,977400000 |
+| Atlantic | ALB         | Thunnus alalunga                 | 0,000013718  | 3,097300000 |
+| Atlantic | LTA         | Euthynnus alletteratus           | 0,000013770  | 3,035000000 |
+| Atlantic | FRI         | Auxis thazard                    | 0,000000280  | 4,135140000 |
+| Atlantic | SKH         | Selachimorpha (Pleurotremata)    | 50,000000000 | 0,000000000 |
+| Atlantic | BLF         | Thunnus atlanticus               | 0,000015400  | 3,080000000 |
+| Atlantic | BON         | Sarda sarda                      | 0,500000000  | 0,000000000 |
+| Atlantic | BLT         | Auxis rochei                     | 0,000007600  | 3,249000000 |
+| Atlantic | FRZ         | Auxis spp,                       | 0,000000280  | 4,135140000 |
+| Atlantic | WAH         | Acanthocybium solandri           | 0,000003200  | 3,201000000 |
+| Atlantic | MAW         | Scomberomorus tritor             | 0,500000000  | 0,000000000 |
+| Atlantic | KGX         | Scomberomorus spp,               | 0,500000000  | 0,000000000 |
+| Atlantic | SAI         | Istiophorus albicans             | 0,000004400  | 3,000000000 |
+| Atlantic | BLM         | Makaira indica                   | 0,000006500  | 2,960000000 |
+| Atlantic | BUM         | Makaira nigricans                | 0,000003500  | 3,158000000 |
+| Atlantic | WHM         | Tetrapturus albidus              | 0,000004600  | 3,000000000 |
+| Atlantic | SPF         | Tetrapurus pfluegeri & T, belone | 0,000004400  | 3,000000000 |
+| Atlantic | BIL         | Istiophoridae spp,               | 0,000004400  | 3,000000000 |
+| Atlantic | SWO         | Xiphias gladius                  | 0,000007800  | 3,210000000 |
+| Indian   | YFT         | Thunnus albacares                | 0,000015849  | 3,046000000 |
+| Indian   | SKJ         | Katsuwonus pelamis               | 0,000005320  | 3,349580000 |
+| Indian   | BET         | Thunnus obesus                   | 0,000027000  | 2,951000000 |
+| Indian   | ALB         | Thunnus alalunga                 | 0,000006303  | 3,282500000 |
+| Indian   | LTA         | Euthynnus alletteratus           | 0,000013770  | 3,035000000 |
+| Indian   | FRI         | Auxis thazard                    | 0,000000280  | 4,135140000 |
+| Indian   | SKH         | Selachimorpha (Pleurotremata)    | 50,000000000 | 0,000000000 |
+| Indian   | KAW         | Euthynnus affinis                | 0,000030000  | 2,908000000 |
+| Indian   | LOT         | Thunnus tonggol                  | 0,000014300  | 3,000000000 |
+| Indian   | BLT         | Auxis rochei                     | 0,000007600  | 3,249000000 |
+| Indian   | FRZ         | Auxis spp,                       | 0,000000280  | 4,135140000 |
+| Indian   | WAH         | Acanthocybium solandri           | 0,000003200  | 3,201000000 |
+| Indian   | SFA         | Istiophorus platypterus          | 0,000016100  | 2,720000000 |
+| Indian   | BUM         | Makaira nigricans                | 0,000003500  | 3,158000000 |
+| Indian   | MLS         | Tetrapturus audax                | 0,000016500  | 3,062000000 |
+| Indian   | BIL         | Istiophoridae spp,               | 0,000004400  | 3,000000000 |
+| Indian   | SWO         | Xiphias gladius                  | 0,000007800  | 3,210000000 |
+
+<div style="text-align: center">Table 2: Length weight relationship reference table.</div>
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.6.png'/>
+
+<div style="text-align: center">Figure 6: Sample number standardisation flowchart.</div>
 
 ### Process 2.7: raised factors determination
 
+The step aim to check relevance of the object standardised sample set by calculation of 6 parameters at the scale of each well sets: the number and the weight of sampled individuals, the total value and display by weight categories (<= 10kg or > 10kg).
+
+5 diffetents scenarios are explain in the global flowchart of this process (figure 7). If it's possible regarding data available, three raising factors are calculated related to the weighted weight of the set and sample weight (total and display by weight categories <= 10kg and > 10kg).
+
+Verification thresholds could be modify in the function parameters throught the arguments `threshold_rf_minus10` (by default at 500), `threshold_rf_plus10` (by default at 500), `threshold_frequency_rf_minus10` (by default at 75), `threshold_frequency_rf_plus10` (by default at 75) and `threshold_rf_total` (by default at 250).
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
+
+<div style="text-align: center">Figure 7: Raised factors determination flowchart.</div>
 
 ### Process 2.8: samples number standardisation at set scale
 
+This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculed in the process 2.7.
+
+The global process flowchart is available in the figure 8 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>
+
+<div style="text-align: center">Figure 8: Samples number standardisation at set scale flowchart.</div>
