@@ -117,7 +117,7 @@ This process aims to sum up the samples according to the update made from the pr
 
 The global process flowchart is available in the figure 5 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_2.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_2.5.png'/>
 
 <div style="text-align: center">Figure 5: Standardised sample creation flowchart.</div>
 
@@ -174,7 +174,7 @@ In addition, you will find below in the table 2 the reference table for the leng
 
 <div style="text-align: center">Table 2: Length weight relationship reference table.</div>
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_2.6.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_2.6.png'/>
 
 <div style="text-align: center">Figure 6: Sample number standardisation flowchart.</div>
 
