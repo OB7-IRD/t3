@@ -68,7 +68,7 @@ A Raising Factor (RF4) is calculated stratified by well, sample, sub-sample and 
 
 The global process flowchart is available in the figure 2 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.2.png'/>
 
 <div style="text-align: center">Figure 2: Sample number measured extrapolation flowchart.</div>
 
@@ -83,7 +83,7 @@ According to that, this step aim to standardise sample length classes. So far, t
 
 The global process flowchart is available in the figure 3 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.3.png'/>
 
 <div style="text-align: center">Figure 3: Sample step length class standardisation flowchart.</div>
 
@@ -117,7 +117,7 @@ This process aims to sum up the samples according to the update made from the pr
 
 The global process flowchart is available in the figure 5 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_2.5.png'/>
 
 <div style="text-align: center">Figure 5: Standardised sample creation flowchart.</div>
 
@@ -174,7 +174,7 @@ In addition, you will find below in the table 2 the reference table for the leng
 
 <div style="text-align: center">Table 2: Length weight relationship reference table.</div>
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.6.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='process_2.6.png'/>
 
 <div style="text-align: center">Figure 6: Sample number standardisation flowchart.</div>
 

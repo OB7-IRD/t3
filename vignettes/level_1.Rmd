@@ -61,7 +61,7 @@ In some cases, especially for historial data, several logbooks trips were not co
 
 So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven't been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalise it when we run our process on the whole time serie (and when we manipulated historical data). The figure below show the actual development of the process. 
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src='process_1.2.png'/>
 
 <div style="text-align: center">Figure 2: Raising Factor level 2 flowchart.</div>
 
