@@ -115,13 +115,25 @@ The global process flowchart is available in the figure 4 below.
 
 This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data. In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF) and create a new object called standardised sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the specie.
 
+The global process flowchart is available in the figure 5 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.5.png'/>
 
 <div style="text-align: center">Figure 5: Standardised sample creation flowchart.</div>
 
 ### Process 2.6: sample number standardisation
 
+In the previous process and in the object standarised sample associated, samples is expressed at the well scale. In this step, the aim is to move to the expression of sample by well to sample by set. In the process 2.4, a weighted weight has been calculated and in addition a proportion of this weighted weight at the set scale. By combination of this value and elements of the object standarised sample, a new object called standardised sample set was created. Like explain before, this object is the expression of the sample at the set scale. Furthermore, this process made a conversion of the samples lenght measurements in weight by length weight relationship. Formula associated are the following one:
+
+$$ RWT = a \times LF^{b}$$
+
+Where RWT is the round weight, LF is the curved fork length and parameters a and b comes from a references table and are dependant of of the species and potentially of the area (ocean or others) and the season. More detail information could be find on the regional fisheries management organisations (RFMOs) like ICCAT (https://www.iccat.int/) or IOTC (https://iotc.org/).
+
+The global process flowchart is available in the figure 6 below.
+
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.6.png'/>
+
+<div style="text-align: center">Figure 6: Sample number standardisation flowchart.</div>
 
 ### Process 2.7: raised factors determination
 
