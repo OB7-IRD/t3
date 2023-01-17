@@ -4,7 +4,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
-#' @importFrom dplyr group_by summarise last first filter ungroup
+#' @importFrom dplyr group_by summarise last first filter ungroup mutate inner_join left_join
 #' @importFrom boot boot.ci
 #' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
@@ -5418,57 +5418,39 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # selection criteria
                                 # remove bad quality sample and keep sample at landing
                                 sset <- sset[sset$quality == 1 & sset$type == 1, ]
-                                # number of act_chrivity by sample
-                                agg <- aggregate(formula = cbind(nset = id_act) ~ id_sample,
-                                                 data = sset,
-                                                 FUN = length)
-                                sset <- merge(x = sset,
-                                              y = agg,
-                                              sort = F)
+                                # number of activity by sample
+                                sset2 <- sset %>% group_by(id_sample) %>% mutate(nset = n()) %>% ungroup()
+
                                 # fishing mode homogeneity in sample
                                 # add fishing mode
-                                sset <- dplyr::inner_join(x = sset,
+                                sset2 <- dplyr::inner_join(x = sset2,
                                                           y = act_chr[, c("id_act", "fmod", "lat", "lon")],
                                                           by = "id_act")
-                                tmp <- unique(sset[, c("id_sample", "fmod")])
-                                agg <- aggregate(formula = cbind(fm_purity = fmod) ~ id_sample,
-                                                 data = tmp,
-                                                 FUN = length)
-                                sset <- merge(x = sset,
-                                              y = agg,
-                                              sort = F)
+                                fmod_purity_tmp <- sset2 %>% distinct(id_sample, fmod) %>% group_by(id_sample) %>% summarise(fmod_purity = n()) %>% ungroup()
+                                sset2 <- inner_join(sset2, fmod_purity_tmp, by = "id_sample")
                                 # fishing mode of the sample
-                                tmp <- unique(sset[sset$fm_purity == 1,
-                                                   c("id_sample", "fmod")])
-                                names(tmp)[2] <- "fmod_sample"
-                                sset <- merge(x = sset,
-                                              y = tmp,
-                                              all = T,
-                                              sort = F)
-                                # code for mixed fishing mode
-                                sset$fmod_sample[is.na(sset$fmod_sample)] <- 999
-                                sset$fmod_sample <- factor(sset$fmod_sample)
+                                sset2 <- sset2 %>% mutate(fmod_sample = ifelse(fmod_purity == 1, fmod, 999) )
                                 # extent of the sample
-                                agg <- aggregate(formula = cbind(lat_sample_dif = lat, lon_sample_dif = lon) ~ id_sample,
-                                                 data = sset,
+                                agg <- aggregate(x = cbind(lat_sample_dif = lat, lon_sample_dif = lon) ~ id_sample,
+                                                 data = sset2,
                                                  FUN = function(x) {
                                                    max(x) - min(x)
                                                  })
-                                sset <- merge(x = sset,
+                                sset2 <- merge(x = sset2,
                                               y = agg,
                                               sort = F)
                                 # compute total set weight
-                                sset <- droplevels(sset)
+                                sset2 <- droplevels(sset2)
                                 tmp <- catch_set_lb
                                 tmp <- tmp[tmp$sp %in% c("YFT","BET","SKJ"), ]
-                                agg3 <- aggregate(formula = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
+                                agg3 <- aggregate(x = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
                                                   data = tmp,
                                                   FUN = function(x) {
                                                     sum(x,
                                                         na.rm = T)
                                                   })
-                                agg3 <- agg3[agg3$id_act %in% sset$id_act, ]
-                                sset2 <- dplyr::inner_join(x = sset,
+                                agg3 <- agg3[agg3$id_act %in% sset2$id_act, ]
+                                sset3 <- dplyr::inner_join(x = sset2,
                                                            y = agg3[, c("id_act","w_lb_t3")],
                                                            by = "id_act",
                                                            sort = F)
@@ -5476,22 +5458,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         act_chr = act_chr,
                                                         catch_set_lb = catch_set_lb)
                                 # compute set weight in each sample to detect non representiveness of the sample
-                                agg_wp <- aggregate(formula = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
+                                agg_wp <- aggregate(x = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
                                                     data = wp,
                                                     FUN = sum)
-                                agg_wp2 <- aggregate(formula = cbind(w_tot_well = weight) ~ id_sample + id_well,
+                                agg_wp2 <- aggregate(x = cbind(w_tot_well = weight) ~ id_sample + id_well,
                                                      data = wp,
                                                      FUN = sum)
                                 agg_wp <- merge(x = agg_wp,
                                                 y = agg_wp2)
                                 # compute proportion of weight by set
                                 agg_wp$prop_act_chr <- agg_wp$w_in_well / agg_wp$w_tot_well
-                                # selection of act_chrivities ----
+                                # selection of activities ----
                                 # selection based on sets extrapolated (2 first step of the t3 process)
-                                kiset <- sset2
+                                kiset <- sset3
                                 # on sample
                                 # homogeneous fishing mode in sample
-                                kiset <- kiset[kiset$fm_purity == 1, ]
+                                kiset <- kiset[kiset$fmod_purity == 1, ]
                                 # spatial selection + mixture limit
                                 kiset <- kiset[kiset$lat_sample_dif < distance_maximum & kiset$lon_sample_dif < distance_maximum & kiset$nset < number_sets_maximum, ]
                                 # remove all small sets considered as missed catches
@@ -5525,14 +5507,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
                                 catch_set_lb <- droplevels(catch_set_lb)
                                 # calculate total catch for thonidae only
-                                tot <- aggregate(formula = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
+                                tot <- aggregate(x = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
                                                  data = catch_set_lb,
                                                  FUN = sum)
                                 catch_set_lb <- merge(x = catch_set_lb,
                                                       y = tot,
                                                       sort = F)
                                 # sum p10, 10-30 and p30 categories in Atlantic ocean
-                                catch_set_lb <- aggregate(formula = cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
+                                catch_set_lb <- aggregate(x = cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
                                                           data = catch_set_lb,
                                                           FUN = sum)
                                 # calculate proportions
@@ -5567,7 +5549,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 samw$sp <- NULL
                                 samw$wcat <- NULL
                                 # sum the weight categories for SKJ
-                                samw <- aggregate(formula = cbind(w_fit_t3) ~ id_act + sp_cat,
+                                samw <- aggregate(x = cbind(w_fit_t3) ~ id_act + sp_cat,
                                                   data = samw,
                                                   FUN = sum)
                                 samw <- droplevels(samw)
