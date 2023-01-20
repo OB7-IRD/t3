@@ -89,6 +89,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               names(full_trips) <- seq_len(length.out = length(full_trips))
                               private$data <- full_trips
+                              # log summary annotation
+                              private$log_summary <- dplyr::tibble(step = "create_full_trips",
+                                                                   input_trips = object_trips$count(),
+                                                                   output_trips = length(x = unlist(x = full_trips)),
+                                                                   output_full_trips = length(x = full_trips))
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End of full trips creation.\n",
                                   sep = "")
@@ -149,6 +154,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
                                 }
+                                # log summary annotation
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_full_trips = NA_integer_) %>%
+                                  dplyr::add_row(step = "filter_by_periode",
+                                                 input_trips = length(x = unlist(x = private$data)),
+                                                 input_full_trips = length(x = private$data),
+                                                 output_full_trips = length(x = private$data_selected),
+                                                 output_trips = length(x = unlist(x = private$data_selected))) %>%
+                                  dplyr::relocate(input_full_trips,
+                                                 .before = output_trips)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of full trips filtering.\n",
                                     sep = "")
@@ -206,6 +221,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "\".\n",
                                       sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_activities = NA_integer_,
+                                                output_activities = NA_integer_) %>%
+                                  dplyr::add_row(step = "add_activities",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 output_full_trips = input_full_trips,
+                                                 output_trips = input_trips,
+                                                 input_activities = object_activities$count(),
+                                                 output_activities = length(x = unlist(x = current_trips$extract_l1_element_value(element = "activities")))) %>%
+                                  dplyr::relocate(input_activities,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add activity.\n",
                                     sep = "")
@@ -269,6 +301,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "\".\n",
                                       sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_elementary_catches = NA_integer_,
+                                                output_elementary_catches = NA_integer_,
+                                                output_catch_weight_elementary_catches = NA_real_) %>%
+                                  dplyr::add_row(step = "add elementary catches",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = object_elementarycatches$count(),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = current_elementarycatches$count(),
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")))) %>%
+                                  dplyr::relocate(input_elementary_catches,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary catches.\n",
                                     sep = "")
@@ -7410,5 +7471,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                           private = list(
                             id_not_full_trip = NULL,
                             id_not_full_trip_retained = NULL,
-                            data_selected = NULL
+                            data_selected = NULL,
+                            log_summary = NULL
                           ))

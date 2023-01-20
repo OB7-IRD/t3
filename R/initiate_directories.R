@@ -4,7 +4,7 @@
 #' @param outputs_path Object of class \code{\link[base]{character}} expected. Outputs path directory.
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default TRUE.
 #' @param level Object of class \code{\link[base]{character}} expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").
-#' @return A text variable with output directory path.
+#' @return A list with output directory path, at least, and log path if requested.
 #' @export
 initiate_directories <- function(outputs_path,
                                  new_directory = TRUE,
@@ -22,14 +22,20 @@ initiate_directories <- function(outputs_path,
                         what = "character")
              || length(x = level) != 1
              || ! level %in% c("all",
-                             "level1",
-                             "level2",
-                             "until_level2",
-                             "level3")) {
+                               "level1",
+                               "level2",
+                               "until_level2",
+                               "level3")) {
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
         " - Error: invalid \"level\" argument, ",
         sep = "")
     stop()
+  } else if (! inherits(x = new_directory,
+                        what = "logical")
+             || length(x = new_directory) != 1) {
+    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        " - Error: invalid \"new_directory\" argument, ",
+        sep = "")
   } else {
     # function ----
     cat(format(x = Sys.time(),

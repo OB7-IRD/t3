@@ -14,7 +14,7 @@ initiate_directories(outputs_path, new_directory = TRUE, level = "all")
 \item{level}{Object of class \code{\link[base]{character}} expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").}
 }
 \value{
-A text variable with output directory path.
+A list with output directory path, at least, and log path if requested.
 }
 \description{
 Initiation of output directories creation.
