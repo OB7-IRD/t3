@@ -4,7 +4,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom lubridate year hms dseconds int_length interval days as_date
 #' @importFrom suncalc getSunlightTimes
-#' @importFrom dplyr group_by summarise last first filter ungroup mutate inner_join left_join
+#' @importFrom dplyr group_by summarise last first filter ungroup mutate inner_join left_join n distinct
 #' @importFrom boot boot.ci
 #' @importFrom ranger ranger predictions importance
 #' @importFrom tidyr gather spread separate
@@ -5480,14 +5480,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # remove bad quality sample and keep sample at landing
                                 sset <- sset[sset$quality == 1 & sset$type == 1, ]
                                 # number of activity by sample
-                                sset2 <- sset %>% group_by(id_sample) %>% mutate(nset = n()) %>% ungroup()
+                                sset2 <- sset %>% group_by(id_sample) %>% mutate(nset = dplyr::n()) %>% ungroup()
 
                                 # fishing mode homogeneity in sample
                                 # add fishing mode
                                 sset2 <- dplyr::inner_join(x = sset2,
                                                           y = act_chr[, c("id_act", "fmod", "lat", "lon")],
                                                           by = "id_act")
-                                fmod_purity_tmp <- sset2 %>% distinct(id_sample, fmod) %>% group_by(id_sample) %>% summarise(fmod_purity = n()) %>% ungroup()
+                                fmod_purity_tmp <- sset2 %>% dplyr::distinct(id_sample, fmod) %>% group_by(id_sample) %>% summarise(fmod_purity = dplyr::n()) %>% ungroup()
                                 sset2 <- inner_join(sset2, fmod_purity_tmp, by = "id_sample")
                                 # fishing mode of the sample
                                 sset2 <- sset2 %>% mutate(fmod_sample = ifelse(fmod_purity == 1, fmod, 999) )
@@ -5871,7 +5871,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               names(outputs_level3_process2)[[a]])
                                 names(tables_directory) <- "data_outputs"
                                 for (b in c(figures_directory, tables_directory)) {
-                                  if (file.exists(b)) {
+                                  if(dir.exists(b)) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Outputs \"",
                                         names(b),
@@ -5885,7 +5885,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "Outputs associated will used this directory (be careful of overwriting previous files).\n",
                                         sep = "")
                                   } else {
-                                    dir.create(b)
+                                    dir.create(path = b, recursive = T)
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Outputs \"",
                                         names(b),
