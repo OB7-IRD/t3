@@ -100,7 +100,7 @@
 
       
 
-      </header><script src="level_2_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Level 2 process</h1>
@@ -118,7 +118,8 @@
 <div class="section level2">
 <h2 id="samples-standardisation">Samples standardisation<a class="anchor" aria-label="anchor" href="#samples-standardisation"></a>
 </h2>
-<p>The second level of the t3 process aim to standardize samples data. These standardization was divided into 8 steps:</p>
+<p>The second level of the t3 process aim to standardize samples data.
+These standardization was divided into 8 steps:</p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="43%">
@@ -196,9 +197,28 @@
 <div class="section level3">
 <h3 id="process-2-1-sample-length-class-ld1-to-lf-conversion">Process 2.1: sample length class LD1 to LF conversion<a class="anchor" aria-label="anchor" href="#process-2-1-sample-length-class-ld1-to-lf-conversion"></a>
 </h3>
-<p>During the sampling process, fishes length can be collected and expressed in different standards. For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF). Generally, length of small individuals are provided in LF because it’s logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.</p>
-<p>This step aim to standardise this standard among sampling data and at the end have only lenght sampling data expressed in LF. Historrical and so far, the process use a referential conversion table LD1 to LF. This table are expressed and used throught a stratification by ocean and specie. You can find an example of a part of it in the table 1 below.</p>
+<p>During the sampling process, fishes length can be collected and
+expressed in different standards. For example, regarding field
+constraints and more precisely the length of the different species,
+sampling data covered in T3 can by express in first dorsal length (LD1)
+or curved fork length (LF). Generally, length of small individuals are
+provided in LF because it’s logistically possible and easier to measure
+the entire fish, while length of bigger individuals are provided in LD1,
+for the same reciprocal reasons.</p>
+<p>This step aim to standardise this standard among sampling data and at
+the end have only lenght sampling data expressed in LF. Historrical and
+so far, the process use a referential conversion table LD1 to LF. This
+table are expressed and used throught a stratification by ocean and
+specie. You can find an example of a part of it in the table 1
+below.</p>
 <table class="table">
+<colgroup>
+<col width="13%">
+<col width="10%">
+<col width="24%">
+<col width="23%">
+<col width="27%">
+</colgroup>
 <thead><tr class="header">
 <th>Ocean</th>
 <th>Specie</th>
@@ -266,9 +286,17 @@
 </tbody>
 </table>
 <div style="text-align: center">
-Table 1: Conversion LD1 to LF referential table for the YFT (<em>Thunnus albacares</em>) in the Atlantic Ocean.
+Table 1: Conversion LD1 to LF referential table for the YFT (<em>Thunnus
+albacares</em>) in the Atlantic Ocean.
 </div>
-<p>Like you can see in the table 1, for one LD1 length class we have several LF length classes. That mean that in our data processed the number of sampling item could rise. Furthermore, tunas regional fisheries management organisations, like International Commission for the Conservation of Atlantic Tunas (ICCAT) or the Indian Ocean Tuna Commission (IOTC), have validated conversion factors for types of size measurements. One of our next update will be to modify the process according theses formula.</p>
+<p>Like you can see in the table 1, for one LD1 length class we have
+several LF length classes. That mean that in our data processed the
+number of sampling item could rise. Furthermore, tunas regional
+fisheries management organisations, like International Commission for
+the Conservation of Atlantic Tunas (ICCAT) or the Indian Ocean Tuna
+Commission (IOTC), have validated conversion factors for types of size
+measurements. One of our next update will be to modify the process
+according theses formula.</p>
 <p>The global process flowchart is available in the figure 1 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_2.1.png"></p>
 <div style="text-align: center">
@@ -278,8 +306,14 @@ Figure 1: Sample length class LD1 to LF conversion flowchart.
 <div class="section level3">
 <h3 id="process-2-2-sample-number-measured-extrapolation">Process 2.2: sample number measured extrapolation<a class="anchor" aria-label="anchor" href="#process-2-2-sample-number-measured-extrapolation"></a>
 </h3>
-<p>During the sampling and according to the protocole, just a part of the sampled individuals are measured in comparision of the one counted. This step aim extrapolate sample number measured individuals to sample number individuals counted.</p>
-<p>A Raising Factor (RF4) is calculated stratified by well, sample, sub-sample and specie. He is equal by strate to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).</p>
+<p>During the sampling and according to the protocole, just a part of
+the sampled individuals are measured in comparision of the one counted.
+This step aim extrapolate sample number measured individuals to sample
+number individuals counted.</p>
+<p>A Raising Factor (RF4) is calculated stratified by well, sample,
+sub-sample and specie. He is equal by strate to the sum of each counted
+individuals divided by the sum of measured individuals (after conversion
+of measure in curved fork length in the process 2.1).</p>
 <p>The global process flowchart is available in the figure 2 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src="process_2.2.png"></p>
 <div style="text-align: center">
@@ -289,11 +323,20 @@ Figure 2: Sample number measured extrapolation flowchart.
 <div class="section level3">
 <h3 id="process-2-3-sample-step-length-class-standardisation">Process 2.3: sample step length class standardisation<a class="anchor" aria-label="anchor" href="#process-2-3-sample-step-length-class-standardisation"></a>
 </h3>
-<p>LF length classes used during the treatment are not necessary the same that filled during the sampling. Furthermore, even if the actual sampling protocol detail what kind of lenght classes we have to use by specie, it’s not impossible to have differencies regarding this length classes if we mix “old data” with the actual one. In addition, it’s possible that the protocol could evolve in the future.</p>
-<p>According to that, this step aim to standardise sample length classes. So far, these specifications are integrate in the process:</p>
+<p>LF length classes used during the treatment are not necessary the
+same that filled during the sampling. Furthermore, even if the actual
+sampling protocol detail what kind of lenght classes we have to use by
+specie, it’s not impossible to have differencies regarding this length
+classes if we mix “old data” with the actual one. In addition, it’s
+possible that the protocol could evolve in the future.</p>
+<p>According to that, this step aim to standardise sample length
+classes. So far, these specifications are integrate in the process:</p>
 <ul>
-<li>a length classes step of 1cm for SKY (<em>Katsuwonus pelamis</em>), LTA (<em>Euthynnus alletteratus</em>) and FRI (<em>Auxis thazard</em>),</li>
-<li>a length classes step of 2cm for YFT (<em>Thunnus albacares</em>), BET (<em>Thunnus obesus</em>) and ALB (<em>Thunnus alalunga</em>).</li>
+<li>a length classes step of 1cm for SKY (<em>Katsuwonus pelamis</em>),
+LTA (<em>Euthynnus alletteratus</em>) and FRI (<em>Auxis
+thazard</em>),</li>
+<li>a length classes step of 2cm for YFT (<em>Thunnus albacares</em>),
+BET (<em>Thunnus obesus</em>) and ALB (<em>Thunnus alalunga</em>).</li>
 </ul>
 <p>The global process flowchart is available in the figure 3 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src="process_2.3.png"></p>
@@ -304,14 +347,30 @@ Figure 3: Sample step length class standardisation flowchart.
 <div class="section level3">
 <h3 id="process-2-4-well-set-weight-categories">Process 2.4: well set weight categories<a class="anchor" aria-label="anchor" href="#process-2-4-well-set-weight-categories"></a>
 </h3>
-<p>The sampling provides information at the well scale. However, a set could be displayed between several wells and sampled individuals could belong to as much as sets in the well.</p>
-<p>This process aim to calcul a weighted weigth, which represent the weight of a set in a well, regarding the repartition of this set in all the wells. The global formula is the following one:</p>
-<p><span class="math display">\[WW = \displaystyle \frac{W1}{W2} \times WT\]</span></p>
-<p>Where WW is the Weighted weight, W1 is the weight of the set in the well, W2 is the weight of the set in the others sampled wells and WT the total set weight.</p>
-<p>So far, the process is developed for the purse seiner. To better understand what the process do, take a look to an example. A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one. The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).</p>
-<p>Furthermore, a proportion of each samplings sets among the sampling well will be calculated in relation with the weighted weight:</p>
-<p><span class="math display">\[ PWW = \displaystyle \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}\]</span></p>
-<p>Where PWW is the proportionnal weighted weight and WW<sub>i,j</sub> is weighted weight of the current set i in well j.</p>
+<p>The sampling provides information at the well scale. However, a set
+could be displayed between several wells and sampled individuals could
+belong to as much as sets in the well.</p>
+<p>This process aim to calcul a weighted weigth, which represent the
+weight of a set in a well, regarding the repartition of this set in all
+the wells. The global formula is the following one:</p>
+<p><span class="math display">\[WW = \displaystyle \frac{W1}{W2} \times
+WT\]</span></p>
+<p>Where WW is the Weighted weight, W1 is the weight of the set in the
+well, W2 is the weight of the set in the others sampled wells and WT the
+total set weight.</p>
+<p>So far, the process is developed for the purse seiner. To better
+understand what the process do, take a look to an example. A set of 90
+tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in
+the second and 20 tonnes in the last one. The wells 2 and 3 were sampled
+but no the first one. For the second well, the weighted weight will be
+equal to 54 tonnes (30 / 50 x 90). For the third one, the weighted
+weight will be equal to 36 tonnes (20 / 50 x 90).</p>
+<p>Furthermore, a proportion of each samplings sets among the sampling
+well will be calculated in relation with the weighted weight:</p>
+<p><span class="math display">\[ PWW = \displaystyle
+\frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}\]</span></p>
+<p>Where PWW is the proportionnal weighted weight and WW<sub>i,j</sub>
+is weighted weight of the current set i in well j.</p>
 <p>The global process flowchart is available in the figure 4 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src="process_2.4.png"></p>
 <div style="text-align: center">
@@ -321,7 +380,13 @@ Figure 4: Well set weight categories flowchart.
 <div class="section level3">
 <h3 id="process-2-5-standardised-sample-creation">Process 2.5: standardised sample creation<a class="anchor" aria-label="anchor" href="#process-2-5-standardised-sample-creation"></a>
 </h3>
-<p>This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data. In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF) and create a new object called standardised sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the specie.</p>
+<p>This process aims to sum up the samples according to the update made
+from the processes 2.1 to 2.3 on sample data. In this step we left
+behind all the notions of subsamples and we take into account the
+new-sample creation in the step above (for example when we make the
+conversion to LD1 to LF) and create a new object called standardised
+sample expressed at the scale of the trip, the well, the sample (id,
+quality and type) and the specie.</p>
 <p>The global process flowchart is available in the figure 5 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_2.5.png"></p>
 <div style="text-align: center">
@@ -331,11 +396,35 @@ Figure 5: Standardised sample creation flowchart.
 <div class="section level3">
 <h3 id="process-2-6-sample-number-standardisation">Process 2.6: sample number standardisation<a class="anchor" aria-label="anchor" href="#process-2-6-sample-number-standardisation"></a>
 </h3>
-<p>In the previous process and in the object standarised sample associated, samples is expressed at the well scale. In this step, the aim is to move to the expression of sample by well to sample by set. In the process 2.4, a weighted weight has been calculated and in addition a proportion of this weighted weight at the set scale. By combination of this value and elements of the object standarised sample, a new object called standardised sample set was created. Like explain before, this object is the expression of the sample at the set scale. Furthermore, this process made a conversion of the samples lenght measurements in weight by length weight relationship. Formula associated are the following one:</p>
+<p>In the previous process and in the object standarised sample
+associated, samples is expressed at the well scale. In this step, the
+aim is to move to the expression of sample by well to sample by set. In
+the process 2.4, a weighted weight has been calculated and in addition a
+proportion of this weighted weight at the set scale. By combination of
+this value and elements of the object standarised sample, a new object
+called standardised sample set was created. Like explain before, this
+object is the expression of the sample at the set scale. Furthermore,
+this process made a conversion of the samples lenght measurements in
+weight by length weight relationship. Formula associated are the
+following one:</p>
 <p><span class="math display">\[ RWT = a \times LF^{b}\]</span></p>
-<p>Where RWT is the round weight, LF is the curved fork length and parameters a and b comes from a references table and are dependant of of the species and potentially of the area (ocean or others) and the season. More detail information could be find on the regional fisheries management organisations (RFMOs) like ICCAT (<a href="https://www.iccat.int/" class="external-link uri">https://www.iccat.int/</a>) or IOTC (<a href="https://iotc.org/" class="external-link uri">https://iotc.org/</a>).</p>
-<p>In addition, you will find below in the table 2 the reference table for the length weight relationship and global process flowchart in the figure 6.</p>
+<p>Where RWT is the round weight, LF is the curved fork length and
+parameters a and b comes from a references table and are dependant of of
+the species and potentially of the area (ocean or others) and the
+season. More detail information could be find on the regional fisheries
+management organisations (RFMOs) like ICCAT (<a href="https://www.iccat.int/" class="external-link uri">https://www.iccat.int/</a>) or
+IOTC (<a href="https://iotc.org/" class="external-link uri">https://iotc.org/</a>).</p>
+<p>In addition, you will find below in the table 2 the reference table
+for the length weight relationship and global process flowchart in the
+figure 6.</p>
 <table class="table">
+<colgroup>
+<col width="11%">
+<col width="15%">
+<col width="40%">
+<col width="16%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
 <th>Ocean</th>
 <th>Specie code</th>
@@ -623,9 +712,21 @@ Figure 6: Sample number standardisation flowchart.
 <div class="section level3">
 <h3 id="process-2-7-raised-factors-determination">Process 2.7: raised factors determination<a class="anchor" aria-label="anchor" href="#process-2-7-raised-factors-determination"></a>
 </h3>
-<p>The step aim to check relevance of the object standardised sample set by calculation of 6 parameters at the scale of each well sets: the number and the weight of sampled individuals, the total value and display by weight categories (&lt;= 10kg or &gt; 10kg).</p>
-<p>5 diffetents scenarios are explain in the global flowchart of this process (figure 7). If it’s possible regarding data available, three raising factors are calculated related to the weighted weight of the set and sample weight (total and display by weight categories &lt;= 10kg and &gt; 10kg).</p>
-<p>Verification thresholds could be modify in the function parameters throught the arguments <code>threshold_rf_minus10</code> (by default at 500), <code>threshold_rf_plus10</code> (by default at 500), <code>threshold_frequency_rf_minus10</code> (by default at 75), <code>threshold_frequency_rf_plus10</code> (by default at 75) and <code>threshold_rf_total</code> (by default at 250).</p>
+<p>The step aim to check relevance of the object standardised sample set
+by calculation of 6 parameters at the scale of each well sets: the
+number and the weight of sampled individuals, the total value and
+display by weight categories (&lt;= 10kg or &gt; 10kg).</p>
+<p>5 diffetents scenarios are explain in the global flowchart of this
+process (figure 7). If it’s possible regarding data available, three
+raising factors are calculated related to the weighted weight of the set
+and sample weight (total and display by weight categories &lt;= 10kg and
+&gt; 10kg).</p>
+<p>Verification thresholds could be modify in the function parameters
+throught the arguments <code>threshold_rf_minus10</code> (by default at
+500), <code>threshold_rf_plus10</code> (by default at 500),
+<code>threshold_frequency_rf_minus10</code> (by default at 75),
+<code>threshold_frequency_rf_plus10</code> (by default at 75) and
+<code>threshold_rf_total</code> (by default at 250).</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src="process_2.7.png"></p>
 <div style="text-align: center">
 Figure 7: Raised factors determination flowchart.
@@ -634,7 +735,9 @@ Figure 7: Raised factors determination flowchart.
 <div class="section level3">
 <h3 id="process-2-8-samples-number-standardisation-at-set-scale">Process 2.8: samples number standardisation at set scale<a class="anchor" aria-label="anchor" href="#process-2-8-samples-number-standardisation-at-set-scale"></a>
 </h3>
-<p>This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculed in the process 2.7.</p>
+<p>This last step aim to express number and weight of sampled
+individuals at the scale of the set. The process use the factors
+calculed in the process 2.7.</p>
 <p>The global process flowchart is available in the figure 8 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_2.8.png"></p>
 <div style="text-align: center">
@@ -661,7 +764,7 @@ Figure 8: Samples number standardisation at set scale flowchart.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

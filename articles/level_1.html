@@ -100,7 +100,7 @@
 
       
 
-      </header><script src="level_1_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Level 1 process</h1>
@@ -113,9 +113,11 @@
 
     
     
-<div style="text-align: justify">
-<h2 id="logbooks-standardisation">Logbooks standardisation</h2>
-<p>The first level of the t3 process aim to standardize logbook data. These standardization was divided into 8 steps:</p>
+<div class="section level2" style="text-align: justify">
+<h2 id="logbooks-standardisation">Logbooks standardisation<a class="anchor" aria-label="anchor" href="#logbooks-standardisation"></a>
+</h2>
+<p>The first level of the t3 process aim to standardize logbook data.
+These standardization was divided into 8 steps:</p>
 <table class="table">
 <colgroup>
 <col width="42%">
@@ -180,37 +182,113 @@
 </tr>
 </tbody>
 </table>
-<h3 id="process-1.1-raising-factor-level-1">Process 1.1: Raising Factor level 1</h3>
-<p>Catches filled in logbooks are based on visual estimations when they rise from the purse senner salabarde. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a peson located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.</p>
-<p>Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters <code>rf1_lowest_limit</code> (by default at 0.8) and <code>rf1_highest_limit</code> (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).</p>
-<p>Be careful, so far in the process all RF level 1 values will be applied to the logbook catches associated, even if values are out of range. It’s up to the user to check the log file and correct data, if necessary, before moving to the next process.</p>
-<p>Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, these species should be different for each fleet, especially because canneries don’t purchased through the same rules according to the fleet. This raising factor will be estimated only on theses species. Species list could be modified through the function parameter <code>species_rf1</code>. For now theses following selections were validated since several years:</p>
+<div class="section level3">
+<h3 id="process-1-1-raising-factor-level-1">Process 1.1: Raising Factor level 1<a class="anchor" aria-label="anchor" href="#process-1-1-raising-factor-level-1"></a>
+</h3>
+<p>Catches filled in logbooks are based on visual estimations when they
+rise from the purse senner salabarde. This is the only technical way
+available at this moment to have an estimation by species. Thereafter,
+catches will be stored in one or several wells. During the landing
+process, well catches will be weighed, generally through a peson located
+under the unloading crane. By move from set to well(s) we lost the exact
+information about catch location.</p>
+<p>Regarding this process, for each full trip we will calculate a
+Raising Factor (RF), ratio of landing weight on catch weight. To recall,
+one full trip should be composed of one or several partial trip, for
+example if a vessel unloads a part of these wells and go back to the sea
+with not empty well(s). Furthermore, a RF level 1 value is normally
+between 0.8 and 1.2. If any values were out of range, an investigation
+if necessary for data quality control. This range could be modified
+through function parameters <code>rf1_lowest_limit</code> (by default at
+0.8) and <code>rf1_highest_limit</code> (by default at 1.2). In
+addition, you will find in the function log a warning for each RF level
+1 value out of range. This ratio will be applied to logbook catches to
+adjust declared values (by rising or lower them).</p>
+<p>Be careful, so far in the process all RF level 1 values will be
+applied to the logbook catches associated, even if values are out of
+range. It’s up to the user to check the log file and correct data, if
+necessary, before moving to the next process.</p>
+<p>Furthermore, not all the well species are weighted during the landing
+process. Only several tunas species are purchased (and weighted by
+association). In addition, these species should be different for each
+fleet, especially because canneries don’t purchased through the same
+rules according to the fleet. This raising factor will be estimated only
+on theses species. Species list could be modified through the function
+parameter <code>species_rf1</code>. For now theses following selections
+were validated since several years:</p>
 <ul>
-<li><p>for French (French and Mayotte fleets), use codes 1 (<em>Thunnus albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3 (<em>Thunnus obesus</em>), 4 (<em>Thunnus alalunga</em>), 9 (mix of tunas species) and 11 (<em>Thunnus tonggol</em>).</p></li>
-<li><p>for Spain (Spanish and Seychelles fleets), use codes 1 (<em>Thunnus albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3 (<em>Thunnus obesus</em>), 4 (<em>Thunnus alalunga</em>), 5 (<em>Euthynnus alletteratus</em>), 6 (<em>Auxis thazard</em>), 9 (mix of tunas species) and 11 (<em>Thunnus tonggol</em>).</p></li>
+<li><p>for French (French and Mayotte fleets), use codes 1 (<em>Thunnus
+albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3 (<em>Thunnus
+obesus</em>), 4 (<em>Thunnus alalunga</em>), 9 (mix of tunas species)
+and 11 (<em>Thunnus tonggol</em>).</p></li>
+<li><p>for Spain (Spanish and Seychelles fleets), use codes 1
+(<em>Thunnus albacares</em>), 2 (<em>Katsuwonus pelamis</em>), 3
+(<em>Thunnus obesus</em>), 4 (<em>Thunnus alalunga</em>), 5
+(<em>Euthynnus alletteratus</em>), 6 (<em>Auxis thazard</em>), 9 (mix of
+tunas species) and 11 (<em>Thunnus tonggol</em>).</p></li>
 </ul>
-<p>In addition, if logbook(s) are missing we can’t apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process <code>rf2()</code>).</p>
-<p>By the way, there are several cases when the RF level 1 can’t be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.</p>
+<p>In addition, if logbook(s) are missing we can’t apply the process. In
+that case, we will tried to apply the process of Raising Factor level 2
+(see section below regarding the process <code>rf2()</code>).</p>
+<p>By the way, there are several cases when the RF level 1 can’t be
+calculated. Take a look to the diagram below to have a brief overview of
+the process. You could notify that the structure of the process should
+be strange in terms of informatics efficiency (for example with
+repetitions of some steps, not necessarily on the first look). This is
+perfectly normal because we think about the potential improvement of the
+process in the future and we let the field open for an easier
+implementation.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src="process_1.1.png"></p>
 <div style="text-align: center">
 Figure 1: Raising Factor level 1 flowchart.
 </div>
-<h3 id="process-1.2-raising-factor-level-2">Process 1.2: Raising Factor level 2</h3>
-<p>In some cases, especially for historial data, several logbooks trips were not collected or available. Therefore it’s impossible to apply the process 1.1. Don’t do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypostesis that all the landings were know and available.</p>
-<p>So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven’t been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalise it when we run our process on the whole time serie (and when we manipulated historical data). The figure below show the actual development of the process.</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-2-raising-factor-level-2">Process 1.2: Raising Factor level 2<a class="anchor" aria-label="anchor" href="#process-1-2-raising-factor-level-2"></a>
+</h3>
+<p>In some cases, especially for historial data, several logbooks trips
+were not collected or available. Therefore it’s impossible to apply the
+process 1.1. Don’t do anything for this trips would result in an
+under-estimation of catches among the global process. Of course and like
+the process 1.1, we made the hypostesis that all the landings were know
+and available.</p>
+<p>So far, this process is partially implemented in the source code and
+in our data simulation since 2000 we haven’t been faced with trips with
+missing logbooks. Due to time constraints, the development of this
+process has been postponed, but it will be essential to finalise it when
+we run our process on the whole time serie (and when we manipulated
+historical data). The figure below show the actual development of the
+process.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="process_1.2.png"></p>
 <div style="text-align: center">
 Figure 2: Raising Factor level 2 flowchart.
 </div>
-<h3 id="process-1.3-logbook-weigth-categories-conversion">Process 1.3: logbook weigth categories conversion</h3>
-<p>The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.</p>
-<p>This process aims to homogenise these weight categories and create simplify categories divided in function of the fishing school and the ocean:</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-3-logbook-weigth-categories-conversion">Process 1.3: logbook weigth categories conversion<a class="anchor" aria-label="anchor" href="#process-1-3-logbook-weigth-categories-conversion"></a>
+</h3>
+<p>The core of the t3 process is to consider that the species
+composition of the logbooks was biased. Furthermore, logbook information
+related to global weight catches and weight categories are correct.
+Indeed, the weight categories of individuals as a strong influence on
+their commercial value. Furthermore, these weight categories change from
+one tuna fishing company to another, involves overlaps and are hardly
+usable directly from the logbook.</p>
+<p>This process aims to homogenise these weight categories and create
+simplify categories divided in function of the fishing school and the
+ocean:</p>
 <ul>
-<li>&lt; 10kg and &gt; 10kg for the floating object school in the Atlantic and Indian Ocean,</li>
-<li>&lt; 10kg, 10-30kg and &gt; 10kg for undetermined and free school in the Atlantic Ocean,</li>
-<li>&lt; 10kg and &gt; 10kg for undetermined and free school in the Indian Ocean.</li>
+<li>&lt; 10kg and &gt; 10kg for the floating object school in the
+Atlantic and Indian Ocean,</li>
+<li>&lt; 10kg, 10-30kg and &gt; 10kg for undetermined and free school in
+the Atlantic Ocean,</li>
+<li>&lt; 10kg and &gt; 10kg for undetermined and free school in the
+Indian Ocean.</li>
 </ul>
-<p>For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribution key is applied for conversion to standardised weight categories. Details of the distribution key is available in tables below.</p>
+<p>For eatch layer ocean/fishing school/specie/logbook weigth categorie,
+a distribution key is applied for conversion to standardised weight
+categories. Details of the distribution key is available in tables
+below.</p>
 <table class="table">
 <colgroup>
 <col width="17%">
@@ -330,7 +408,8 @@ Figure 2: Raising Factor level 2 flowchart.
 </tbody>
 </table>
 <div style="text-align: center">
-Table 1: Distribution conversion key for undetermined and free school in the Atlantic Ocean.
+Table 1: Distribution conversion key for undetermined and free school in
+the Atlantic Ocean.
 </div>
 <table class="table">
 <colgroup>
@@ -439,29 +518,75 @@ Table 1: Distribution conversion key for undetermined and free school in the Atl
 </tbody>
 </table>
 <div style="text-align: center">
-Table 2: Distribution conversion key for floating object school in the Atlantic Ocean and for undetermined, free and floating object school in the Indian Ocean.
+Table 2: Distribution conversion key for floating object school in the
+Atlantic Ocean and for undetermined, free and floating object school in
+the Indian Ocean.
 </div>
 <p>Among the process, there are two major step:</p>
 <ul>
-<li>the first one for conversion of all categories except for unknown category (9),</li>
-<li>the second one for conversion of category unknown if it’s possible.</li>
+<li>the first one for conversion of all categories except for unknown
+category (9),</li>
+<li>the second one for conversion of category unknown if it’s
+possible.</li>
 </ul>
-<p>During the first part, all logbook weight categories except the category unknow are standardised following the distribution conversion key display above. Each catch weight associated is multiply by the weight ratio associated. For several logbook weight category, like the categories 4 or 11 according to strata, this standardisation create new data because the initial logbook weight category is divied into several standardised logbook weight categories. It’s normal that at the end of the process you could have more catch items than before.</p>
-<p>For the second part, the process try to make the conversion of catches filled in the unknown category. For each trip and at the scale of an ocean/fishing school/specie, proportion of standardised logbook weight categories will be applied on items filled as unknown logbook weight categories. For example, in a common stratum, if proportion weight of standardised logbook weight category are divided by 60% for the category &lt; 10kg and 40% for the category &gt; 10kg, catches weight of unknown logbook weight category will display in standardised logbook weight category with 60% of &lt; 10kg category and 40% of &gt; 10kg category.</p>
+<p>During the first part, all logbook weight categories except the
+category unknow are standardised following the distribution conversion
+key display above. Each catch weight associated is multiply by the
+weight ratio associated. For several logbook weight category, like the
+categories 4 or 11 according to strata, this standardisation create new
+data because the initial logbook weight category is divied into several
+standardised logbook weight categories. It’s normal that at the end of
+the process you could have more catch items than before.</p>
+<p>For the second part, the process try to make the conversion of
+catches filled in the unknown category. For each trip and at the scale
+of an ocean/fishing school/specie, proportion of standardised logbook
+weight categories will be applied on items filled as unknown logbook
+weight categories. For example, in a common stratum, if proportion
+weight of standardised logbook weight category are divided by 60% for
+the category &lt; 10kg and 40% for the category &gt; 10kg, catches
+weight of unknown logbook weight category will display in standardised
+logbook weight category with 60% of &lt; 10kg category and 40% of &gt;
+10kg category.</p>
 <p>The global process flowchart is available in the figure 3 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src="process_1.3.png"></p>
 <div style="text-align: center">
 Figure 3: Logbook weigth categories conversion flowchart.
 </div>
-<h3 id="process-1.4-postive-sets-count">Process 1.4: postive sets count</h3>
-<p>In this process, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in the data, a count of set is done according to the catches associated. Like before, the global process flowchart is available below in figure 4.</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-4-postive-sets-count">Process 1.4: postive sets count<a class="anchor" aria-label="anchor" href="#process-1-4-postive-sets-count"></a>
+</h3>
+<p>In this process, for each activity filled as null set (0), positive
+set (1), unknown set (2) or pocket capsizing (14) in the data, a count
+of set is done according to the catches associated. Like before, the
+global process flowchart is available below in figure 4.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.4.png"></p>
 <div style="text-align: center">
 Figure 4: Postive sets count flowchart.
 </div>
-<h3 id="process-1.5-set-duration-calculation">Process 1.5: set duration calculation</h3>
-<p>The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-5-set-duration-calculation">Process 1.5: set duration calculation<a class="anchor" aria-label="anchor" href="#process-1-5-set-duration-calculation"></a>
+</h3>
+<p>The aim of this process is to calculate the duration of each set in
+hours. Like the process before, for each activity filled as null set
+(0), positive set (1), unknown set (2) or pocket capsizing (14), the set
+duration is calculated according to a linear function with two
+parameters a and b. These are found through a reference table, for each
+year, ocean, fishing school and country. Furthermore, a specific value
+provided for a null set (a fishing set without any catches associated).
+An example of this reference table is available below in the table
+3.</p>
 <table class="table">
+<colgroup>
+<col width="8%">
+<col width="16%">
+<col width="9%">
+<col width="22%">
+<col width="12%">
+<col width="9%">
+<col width="21%">
+</colgroup>
 <thead><tr class="header">
 <th>Year</th>
 <th>Country</th>
@@ -693,61 +818,112 @@ Figure 4: Postive sets count flowchart.
 <div style="text-align: center">
 Table 3: Set duration reference parameters.
 </div>
-<p>In addition the global process flowchart is available in the figure 5 below.</p>
+<p>In addition the global process flowchart is available in the figure 5
+below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src="process_1.5.png"></p>
 <div style="text-align: center">
 Figure 5: Set duration calculation flowchart.
 </div>
-<h3 id="process-1.6-time-at-sea-estimation">Process 1.6: time at sea estimation</h3>
-<p>This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-6-time-at-sea-estimation">Process 1.6: time at sea estimation<a class="anchor" aria-label="anchor" href="#process-1-6-time-at-sea-estimation"></a>
+</h3>
+<p>This step aim to make an estimation, at the trip scale, of the time
+at sea in hours. For each trip we have several possibilities:</p>
 <ul>
-<li>first, if departure and landing dates have times associated and available. So time at sea value will the difference between these two values. Unfortunately, this case is not the major scenario that we have regarding our data available.</li>
-<li>secondly, if departure and landing dates haven’t times available and no activity is associated with the trip. In this case, time at sea will be the difference between the departure date value plus one day and the landing date minus one day.</li>
-<li>finally, if departure and landing dates haven’t times available but at least one activity is associated with the trip. Just like the previous one, time at sea will be the difference between the departure date value plus one day and the landing date minus one day but in addition to time at sea of each activity occur on the same dates as departure or landing dates.</li>
+<li>first, if departure and landing dates have times associated and
+available. So time at sea value will the difference between these two
+values. Unfortunately, this case is not the major scenario that we have
+regarding our data available.</li>
+<li>secondly, if departure and landing dates haven’t times available and
+no activity is associated with the trip. In this case, time at sea will
+be the difference between the departure date value plus one day and the
+landing date minus one day.</li>
+<li>finally, if departure and landing dates haven’t times available but
+at least one activity is associated with the trip. Just like the
+previous one, time at sea will be the difference between the departure
+date value plus one day and the landing date minus one day but in
+addition to time at sea of each activity occur on the same dates as
+departure or landing dates.</li>
 </ul>
 <p>The global process flowchart is available in the figure 6 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src="process_1.6.png"></p>
 <div style="text-align: center">
 Figure 6: Time at sea estimation flowchart.
 </div>
-<h3 id="process-1.7-fishing-time-determination">Process 1.7: fishing time determination</h3>
-<p>This process calculated the fishing time value in hours. Historialcaly, this process use a constant parameter according to the theorical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.</p>
-<p>These parameters could be modify in the parameters <code>sunrise_schema</code> and <code>sunset_schema</code> and use in background the R package <a href="https://CRAN.R-project.org/package=suncalc" class="external-link">suncalc</a>. The function associated use latitude and longitude data to provide sunrise and sunset times of the selected day. Furthermore, you can switch between several values for these two parameters to adjust the process:</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-7-fishing-time-determination">Process 1.7: fishing time determination<a class="anchor" aria-label="anchor" href="#process-1-7-fishing-time-determination"></a>
+</h3>
+<p>This process calculated the fishing time value in hours.
+Historialcaly, this process use a constant parameter according to the
+theorical day duration working time (12 or 13 hours according to the
+ocean and related to the global sunrise and sunset). Now, the process
+was modified to bring more accuracy in the calculation and module the
+duration of a working day according to the real sunrise and sunset of
+each day.</p>
+<p>These parameters could be modify in the parameters
+<code>sunrise_schema</code> and <code>sunset_schema</code> and use in
+background the R package <a href="https://CRAN.R-project.org/package=suncalc" class="external-link">suncalc</a>. The
+function associated use latitude and longitude data to provide sunrise
+and sunset times of the selected day. Furthermore, you can switch
+between several values for these two parameters to adjust the
+process:</p>
 <ul>
 <li>sunrise: sunrise (top edge of the sun appears on the horizon),</li>
-<li>sunriseEnd: sunrise ends (bottom edge of the sun touches the horizon),</li>
-<li>goldenHourEnd: morning golden hour ends(soft light, best time for photography),</li>
+<li>sunriseEnd: sunrise ends (bottom edge of the sun touches the
+horizon),</li>
+<li>goldenHourEnd: morning golden hour ends(soft light, best time for
+photography),</li>
 <li>solarNoon: solar noon (sun is in the highest position),</li>
 <li>goldenHour: evening golden hour starts,</li>
-<li>sunsetStart: sunset starts (bottom edge of the sun touches the horizon),</li>
-<li>sunset: sunset (sun disappears below the horizon, evening civil twilight starts),</li>
+<li>sunsetStart: sunset starts (bottom edge of the sun touches the
+horizon),</li>
+<li>sunset: sunset (sun disappears below the horizon, evening civil
+twilight starts),</li>
 <li>dusk: dusk (evening nautical twilight starts),</li>
-<li>nauticalDusk: nautical dusk (evening astronomical twilight starts),</li>
-<li>night: night starts (dark enough for astronomical observations),</li>
-<li>nadir: nadir (darkest moment of the night, sun is in the lowest position),</li>
+<li>nauticalDusk: nautical dusk (evening astronomical twilight
+starts),</li>
+<li>night: night starts (dark enough for astronomical
+observations),</li>
+<li>nadir: nadir (darkest moment of the night, sun is in the lowest
+position),</li>
 <li>nightEnd: night ends (morning astronomical twilight starts),</li>
 <li>nauticalDawn: nautical dawn (morning nautical twilight starts),</li>
-<li>dawn: dawn (morning nautical twilight ends, morning civil twilight starts).</li>
+<li>dawn: dawn (morning nautical twilight ends, morning civil twilight
+starts).</li>
 </ul>
-<p>At the trip scale and related to all the activities related, the fishing time value is the sum of each fishing time day if in the day activites associated at least one is different of no-wake road (4), damage (7), on hold (10), at the harbour (15) or fictive activity for trip without logbook (100).</p>
+<p>At the trip scale and related to all the activities related, the
+fishing time value is the sum of each fishing time day if in the day
+activites associated at least one is different of no-wake road (4),
+damage (7), on hold (10), at the harbour (15) or fictive activity for
+trip without logbook (100).</p>
 <p>The global process flowchart is available in the figure 7 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_1.7.png"></p>
 <div style="text-align: center">
 Figure 7: Time at sea estimation flowchart.
 </div>
-<h3 id="process-1.8-searching-time-process">Process 1.8: searching time process</h3>
-<p>The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.</p>
+</div>
+<div class="section level3">
+<h3 id="process-1-8-searching-time-process">Process 1.8: searching time process<a class="anchor" aria-label="anchor" href="#process-1-8-searching-time-process"></a>
+</h3>
+<p>The aim of this last step is to calculate the searching time. Like
+the previous variables, it is expressed in hours and equal to the
+fishing time value minus the sum of the sets duration values.</p>
 <p>The global process flowchart is available in the figure 8 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.8.png"></p>
 <div style="text-align: center">
 Figure 8: Searching time estimation flowchart.
 </div>
 </div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
@@ -760,7 +936,7 @@ Figure 8: Searching time estimation flowchart.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
