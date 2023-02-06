@@ -318,7 +318,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::mutate(input_elementary_catches = NA_integer_,
                                                 output_elementary_catches = NA_integer_,
                                                 output_catch_weight_elementary_catches = NA_real_) %>%
-                                  dplyr::add_row(step = "add elementary catches",
+                                  dplyr::add_row(step = "add_elementarycatches",
                                                  input_trips = length(x = unlist(x = private$data_selected)),
                                                  input_full_trips = length(x = private$data_selected),
                                                  input_activities = current_activities$count(),
@@ -389,6 +389,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "\".\n",
                                       sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_elementary_landings = NA_integer_,
+                                                output_elementary_landings = NA_integer_,
+                                                output_landing_weight_elementary_landings = NA_real_) %>%
+                                  dplyr::add_row(step = "add_elementarylandings",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = current_elementarycatches$count(),
+                                                 input_elementary_landings = object_elementarylandings$count(),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = input_elementary_catches,
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                                 output_elementary_landings = current_elementarylandings$count(),
+                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight")))) %>%
+                                  dplyr::relocate(input_elementary_landings,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary landings.\n",
@@ -446,6 +482,56 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "\".\n",
                                       sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                               file = "NUL")
+                                capture.output(current_wells <- object_r6(class_name = "wells"),
+                                               file = "NUL")
+                                capture.output(current_wells$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "wells"))),
+                                               file = "NUL")
+                                capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                               file = "NUL")
+                                capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_wells = NA_integer_,
+                                                input_elementarysamplesraw = NA_integer_,
+                                                output_wells = NA_integer_,
+                                                output_elementarysamplesraw = NA_integer_) %>%
+                                  dplyr::add_row(step = "add_wells_samples",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = current_elementarycatches$count(),
+                                                 input_elementary_landings = current_elementarylandings$count(),
+                                                 input_wells = object_wells$count(),
+                                                 input_elementarysamplesraw = length(x = unlist(x = object_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = input_elementary_catches,
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                                 output_elementary_landings = input_elementary_landings,
+                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))),
+                                                 output_wells = current_wells$count(),
+                                                 output_elementarysamplesraw = current_elementarysamplesraw$count()) %>%
+                                  dplyr::relocate(input_wells,
+                                                  input_elementarysamplesraw,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End of add well(s) - sample(s).\n",

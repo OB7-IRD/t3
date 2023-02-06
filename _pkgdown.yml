@@ -80,6 +80,7 @@ articles:
   - level_1
   - level_2
   - level_3
+  - running_processes_examples
 
 development:
   mode: auto
