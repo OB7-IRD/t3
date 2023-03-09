@@ -5350,7 +5350,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                    current_number_samples))
                                                                                                    })
                                       }
-                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble()
+                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble(x = matrix(ncol = 0,
+                                                                                                  nrow = 0))
                                       if (exists(x = "tmp_standardisedsampleset_one_sample_qt")) {
                                         tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
                                           dplyr::bind_rows(tmp_standardisedsampleset_one_sample_qt)
