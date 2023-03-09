@@ -173,8 +173,8 @@ Process of Raising Factor level 1 (RF1).
   species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -187,9 +187,9 @@ Process of Raising Factor level 1 (RF1).
 
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -200,15 +200,15 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Method \code{rf2()}}{
 Process of Raising Factor level 2 (rf2).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -220,17 +220,17 @@ Process of Raising Factor level 2 (rf2).
 Process of logbook weigth categories conversion.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -241,15 +241,15 @@ Process of logbook weigth categories conversion.
 \subsection{Method \code{set_count()}}{
 Process for postive sets count.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -262,8 +262,8 @@ Process for set duration calculation (in hours).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
   set_duration_ref,
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -272,9 +272,9 @@ Process for set duration calculation (in hours).
 \describe{
 \item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -285,15 +285,15 @@ Process for set duration calculation (in hours).
 \subsection{Method \code{time_at_sea()}}{
 Process for time at sea calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -307,8 +307,8 @@ Process for fishing time calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -319,9 +319,9 @@ Process for fishing time calculation (in hours).
 
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -352,15 +352,15 @@ Available variables are:
 \subsection{Method \code{searching_time()}}{
 Process for searching time calculation (in hours, fishing time minus sets durations).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time(global_outputs_path = NULL, outputs_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -373,8 +373,8 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(
   length_step,
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -383,9 +383,9 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \describe{
 \item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -397,17 +397,17 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 Process for sample number measured individuals extrapolation to sample number individuals counted.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_number_measured_extrapolation(
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -420,8 +420,8 @@ Process for step standardisation of lf length class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_step_standardisation(
   maximum_lf_class = as.integer(500),
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -430,9 +430,9 @@ Process for step standardisation of lf length class.
 \describe{
 \item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -445,8 +445,8 @@ Process for well set weigth categories definition.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
   sample_set,
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -455,9 +455,9 @@ Process for well set weigth categories definition.
 \describe{
 \item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -469,17 +469,17 @@ Process for well set weigth categories definition.
 Object standardised sample creation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_creation(
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -492,8 +492,8 @@ R6 object standardised sample set creation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$standardised_sample_set_creation(
   length_weight_relationship_data,
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -502,9 +502,9 @@ R6 object standardised sample set creation.
 \describe{
 \item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -521,8 +521,8 @@ Raised factors determination for weigth sample set to set.
   threshold_frequency_rf_minus10 = as.integer(75),
   threshold_frequency_rf_plus10 = as.integer(75),
   threshold_rf_total = as.integer(250),
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
@@ -539,9 +539,9 @@ Raised factors determination for weigth sample set to set.
 
 \item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
 
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -553,17 +553,17 @@ Raised factors determination for weigth sample set to set.
 Application of process 2.8 raised factors on standardised sample set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set(
-  global_outputs_path = NULL,
-  outputs_format = "eu"
+  global_output_path = NULL,
+  output_format = "eu"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_outputs_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
-\item{\code{outputs_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
 \if{html}{\out{</div>}}
 }
@@ -587,8 +587,8 @@ Data preparatory for the t3 modelling process (level 3).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$data_preparatory(
   inputs_level3 = NULL,
   inputs_level3_path = NULL,
-  outputs_directory,
-  periode_reference = NULL,
+  output_directory,
+  periode_reference_level3 = NULL,
   target_year = as.integer(lubridate::year(Sys.time() - 1)),
   period_duration = 4L,
   distance_maximum = as.integer(5),
@@ -606,9 +606,9 @@ Data preparatory for the t3 modelling process (level 3).
 
 \item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
 
-\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.}
+\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Path of the outputs directory.}
 
-\item{\code{periode_reference}}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
+\item{\code{periode_reference_level3}}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
 
 \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
@@ -634,7 +634,7 @@ Data preparatory for the t3 modelling process (level 3).
 Modelling proportions in sets througth random forest models.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$random_forest_models(
-  outputs_level3_process1,
+  output_level3_process1,
   num.trees = 1000L,
   mtry = 2L,
   min.node.size = 5,
@@ -646,7 +646,7 @@ Modelling proportions in sets througth random forest models.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
+\item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
 
 \item{\code{num.trees}}{Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
 
@@ -665,11 +665,12 @@ Modelling proportions in sets througth random forest models.
 \if{html}{\out{<a id="method-full_trips-models_checking"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-models_checking}{}}}
 \subsection{Method \code{models_checking()}}{
-Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
+Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$models_checking(
-  outputs_level3_process2,
-  outputs_directory,
+  output_level3_process2,
+  output_directory,
+  output_format = "eu",
   plot_sample = F,
   avdth_patch_coord = F
 )}\if{html}{\out{</div>}}
@@ -678,9 +679,11 @@ Load each full model and compute figures and tables to check the model quality. 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
+\item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.}
 
-\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{\code{plot_sample}}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
 
@@ -697,7 +700,7 @@ Formatting data for model predictions.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$data_formatting_for_predictions(
   inputs_level3,
-  outputs_level3_process1,
+  output_level3_process1,
   target_year,
   vessel_id_ignored = NULL,
   small_fish_only = F
@@ -709,7 +712,7 @@ Formatting data for model predictions.
 \describe{
 \item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
 
-\item{\code{outputs_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
+\item{\code{output_level3_process1}}{Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.}
 
 \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
@@ -727,9 +730,10 @@ Formatting data for model predictions.
 Model predictions for the species composition and computing of catches.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$model_predictions(
-  outputs_level3_process2,
-  outputs_level3_process4,
-  outputs_directory,
+  output_level3_process2,
+  output_level3_process4,
+  output_directory,
+  output_format = "eu",
   ci = FALSE,
   ci_type = "all",
   Nboot = 50,
@@ -740,11 +744,13 @@ Model predictions for the species composition and computing of catches.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{outputs_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).}
+\item{\code{output_level3_process2}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).}
 
-\item{\code{outputs_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
+\item{\code{output_level3_process4}}{Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).}
 
-\item{\code{outputs_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
+
+\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
