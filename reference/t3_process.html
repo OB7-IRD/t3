@@ -86,9 +86,9 @@
 <span>  <span class="va">db_con</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  log_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
-<span>  new_directory <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
+<span>  new_directory <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">periode_reference</span>,</span>
 <span>  <span class="va">countries</span>,</span>
 <span>  <span class="va">oceans</span>,</span>
@@ -104,7 +104,26 @@
 <span>  threshold_rf_plus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
 <span>  threshold_frequency_rf_minus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">75</span><span class="op">)</span>,</span>
 <span>  threshold_frequency_rf_plus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">75</span><span class="op">)</span>,</span>
-<span>  threshold_rf_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">250</span><span class="op">)</span></span>
+<span>  threshold_rf_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">250</span><span class="op">)</span>,</span>
+<span>  periode_reference_level3 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">target_year</span>,</span>
+<span>  <span class="va">period_duration</span>,</span>
+<span>  distance_maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>  number_sets_maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>  set_weight_minimum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>,</span>
+<span>  minimum_set_frequency <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  vessel_id_ignored <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  num.trees <span class="op">=</span> <span class="fl">1000L</span>,</span>
+<span>  mtry <span class="op">=</span> <span class="fl">2L</span>,</span>
+<span>  min.node.size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  seed_number <span class="op">=</span> <span class="fl">7L</span>,</span>
+<span>  small_fish_only <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  plot_sample <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  avdth_patch_coord <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  ci <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ci_type <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  Nboot <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  plot_predict <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,11 +149,11 @@
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Path of the log file directory. By default NULL.</p></dd>
 
 
-<dt>outputs_path</dt>
+<dt>output_path</dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Outputs path directory. By default NULL.</p></dd>
 
 
-<dt>outputs_format</dt>
+<dt>output_format</dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -204,6 +223,82 @@
 
 <dt>threshold_rf_total</dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></dd>
+
+
+<dt>periode_reference_level3</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Year(s) period of reference for modelling estimation.</p></dd>
+
+
+<dt>target_year</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Year of interest for the model estimation and prediction.Default value is current year -1.</p></dd>
+
+
+<dt>period_duration</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. number of years use for the modelling. The default value is 5</p></dd>
+
+
+<dt>distance_maximum</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Maximum distance between all sets of a sampled well. By default 5.</p></dd>
+
+
+<dt>number_sets_maximum</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Maximum number of sets allowed in mixture. By default 5.</p></dd>
+
+
+<dt>set_weight_minimum</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.</p></dd>
+
+
+<dt>minimum_set_frequency</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.</p></dd>
+
+
+<dt>vessel_id_ignored</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.</p></dd>
+
+
+<dt>num.trees</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.</p></dd>
+
+
+<dt>mtry</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Number of variables randomly sampled as candidates at each split. The default value is 2.</p></dd>
+
+
+<dt>min.node.size</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.</p></dd>
+
+
+<dt>seed_number</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Set the initial seed for the modelling. The default value is 7.</p></dd>
+
+
+<dt>small_fish_only</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. Whether the model estimate proportion for small fish only (&lt; 10 kg).</p></dd>
+
+
+<dt>plot_sample</dt>
+<dd><p><code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code>. Whether the sample figure is computed. Default value = F</p></dd>
+
+
+<dt>avdth_patch_coord</dt>
+<dd><p>parameter waiting for coordinate conversion patch from avdth database</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.</p></dd>
+
+
+<dt>ci_type</dt>
+<dd><p>Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.</p></dd>
+
+
+<dt>Nboot</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. The number of bootstrap samples desired for the ci computation. The default value is 10.</p></dd>
+
+
+<dt>plot_predict</dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. Logical indicating whether maps of catch at size have to be done.</p></dd>
 
 </dl></div>
     <div id="details">

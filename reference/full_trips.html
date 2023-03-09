@@ -235,8 +235,8 @@
 <span>  species_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  rf1_lowest_limit <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -254,11 +254,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Verification value for the highest limit of the RF1. By default 1.2.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -269,16 +269,16 @@
 <h3 id="method-rf--1">Method <code>rf2()</code><a class="anchor" aria-label="anchor" href="#method-rf--1"></a></h3>
 <p>Process of Raising Factor level 2 (rf2).</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">rf2</span><span class="op">(</span>global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>, outputs_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">rf2</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span>, output_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -290,18 +290,18 @@
 <p>Process of logbook weigth categories conversion.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">conversion_weigth_category</span><span class="op">(</span></span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -312,16 +312,16 @@
 <h3 id="method-set-count-">Method <code>set_count()</code><a class="anchor" aria-label="anchor" href="#method-set-count-"></a></h3>
 <p>Process for postive sets count.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">set_count</span><span class="op">(</span>global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>, outputs_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">set_count</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span>, output_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -334,8 +334,8 @@
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">set_duration</span><span class="op">(</span></span>
 <span>  <span class="va">set_duration_ref</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -345,11 +345,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data and parameters for set duration calculation (by year, country, ocean and school type).</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -360,16 +360,16 @@
 <h3 id="method-time-at-sea-">Method <code>time_at_sea()</code><a class="anchor" aria-label="anchor" href="#method-time-at-sea-"></a></h3>
 <p>Process for time at sea calculation (in hours).</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">time_at_sea</span><span class="op">(</span>global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>, outputs_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">time_at_sea</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span>, output_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -383,8 +383,8 @@
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">fishing_time</span><span class="op">(</span></span>
 <span>  sunrise_schema <span class="op">=</span> <span class="st">"sunrise"</span>,</span>
 <span>  sunset_schema <span class="op">=</span> <span class="st">"sunset"</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -398,11 +398,11 @@
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -431,16 +431,16 @@
 <h3 id="method-searching-time-">Method <code>searching_time()</code><a class="anchor" aria-label="anchor" href="#method-searching-time-"></a></h3>
 <p>Process for searching time calculation (in hours, fishing time minus sets durations).</p><div class="section">
 <h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">searching_time</span><span class="op">(</span>global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>, outputs_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">searching_time</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span>, output_format <span class="op">=</span> <span class="st">"eu"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-13">Arguments<a class="anchor" aria-label="anchor" href="#arguments-13"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -453,8 +453,8 @@
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_length_class_ld1_to_lf</span><span class="op">(</span></span>
 <span>  <span class="va">length_step</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -464,11 +464,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data frame object with length ratio between ld1 and lf class.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -480,18 +480,18 @@
 <p>Process for sample number measured individuals extrapolation to sample number individuals counted.</p><div class="section">
 <h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_number_measured_extrapolation</span><span class="op">(</span></span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -504,8 +504,8 @@
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_length_class_step_standardisation</span><span class="op">(</span></span>
 <span>  maximum_lf_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -515,11 +515,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Theorical maximum lf class that can occur (all species considerated). By default 500.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -532,8 +532,8 @@
 <h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">well_set_weigth_categories</span><span class="op">(</span></span>
 <span>  <span class="va">sample_set</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -543,11 +543,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data frame object with weighted weigh of each set sampled.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -559,18 +559,18 @@
 <p>Object standardised sample creation.</p><div class="section">
 <h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">standardised_sample_creation</span><span class="op">(</span></span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -583,8 +583,8 @@
 <h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">standardised_sample_set_creation</span><span class="op">(</span></span>
 <span>  <span class="va">length_weight_relationship_data</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -594,11 +594,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data frame object with parameters for length weight relationship.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -615,8 +615,8 @@
 <span>  threshold_frequency_rf_minus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">75</span><span class="op">)</span>,</span>
 <span>  threshold_frequency_rf_plus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">75</span><span class="op">)</span>,</span>
 <span>  threshold_rf_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">250</span><span class="op">)</span>,</span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -642,11 +642,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></dd>
 
 
-<dt><code>global_outputs_path</code></dt>
+<dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -658,18 +658,18 @@
 <p>Application of process 2.8 raised factors on standardised sample set.</p><div class="section">
 <h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">raised_standardised_sample_set</span><span class="op">(</span></span>
-<span>  global_outputs_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputs_format <span class="op">=</span> <span class="st">"eu"</span></span>
+<span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>global_outputs_path</code></dt>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
 <dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.</p></dd>
 
 
-<dt><code>outputs_format</code></dt>
+<dt><code>output_format</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
@@ -691,8 +691,8 @@
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">data_preparatory</span><span class="op">(</span></span>
 <span>  inputs_level3 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  inputs_level3_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">outputs_directory</span>,</span>
-<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">output_directory</span>,</span>
+<span>  periode_reference_level3 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  target_year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  period_duration <span class="op">=</span> <span class="fl">4L</span>,</span>
 <span>  distance_maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
@@ -713,11 +713,11 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.</p></dd>
 
 
-<dt><code>outputs_directory</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Path of the t3 processes outputs directory.</p></dd>
+<dt><code>output_directory</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Path of the outputs directory.</p></dd>
 
 
-<dt><code>periode_reference</code></dt>
+<dt><code>periode_reference_level3</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Year(s) period of reference for modelling estimation.</p></dd>
 
 
@@ -757,7 +757,7 @@
 <p>Modelling proportions in sets througth random forest models.</p><div class="section">
 <h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">random_forest_models</span><span class="op">(</span></span>
-<span>  <span class="va">outputs_level3_process1</span>,</span>
+<span>  <span class="va">output_level3_process1</span>,</span>
 <span>  num.trees <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  mtry <span class="op">=</span> <span class="fl">2L</span>,</span>
 <span>  min.node.size <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -768,7 +768,7 @@
 
 <div class="section">
 <h4 id="arguments-23">Arguments<a class="anchor" aria-label="anchor" href="#arguments-23"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>outputs_level3_process1</code></dt>
+<p></p><div class="arguments"><dl><dt><code>output_level3_process1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
 
@@ -797,11 +797,12 @@
 
 </div><p></p><hr><a id="method-full_trips-models_checking"></a><div class="section">
 <h3 id="method-models-checking-">Method <code>models_checking()</code><a class="anchor" aria-label="anchor" href="#method-models-checking-"></a></h3>
-<p>Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><div class="section">
+<p>Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.</p><div class="section">
 <h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">models_checking</span><span class="op">(</span></span>
-<span>  <span class="va">outputs_level3_process2</span>,</span>
-<span>  <span class="va">outputs_directory</span>,</span>
+<span>  <span class="va">output_level3_process2</span>,</span>
+<span>  <span class="va">output_directory</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
 <span>  plot_sample <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  avdth_patch_coord <span class="op">=</span> <span class="cn">F</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -809,12 +810,16 @@
 
 <div class="section">
 <h4 id="arguments-24">Arguments<a class="anchor" aria-label="anchor" href="#arguments-24"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>outputs_level3_process2</code></dt>
+<p></p><div class="arguments"><dl><dt><code>output_level3_process2</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> expected. Outputs models and data from process 3.2.</p></dd>
 
 
-<dt><code>outputs_directory</code></dt>
+<dt><code>output_directory</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Outputs directory path.</p></dd>
+
+
+<dt><code>output_format</code></dt>
+<dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
 <dt><code>plot_sample</code></dt>
@@ -834,7 +839,7 @@
 <h4 id="usage-26">Usage<a class="anchor" aria-label="anchor" href="#usage-26"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">data_formatting_for_predictions</span><span class="op">(</span></span>
 <span>  <span class="va">inputs_level3</span>,</span>
-<span>  <span class="va">outputs_level3_process1</span>,</span>
+<span>  <span class="va">output_level3_process1</span>,</span>
 <span>  <span class="va">target_year</span>,</span>
 <span>  vessel_id_ignored <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  small_fish_only <span class="op">=</span> <span class="cn">F</span></span>
@@ -847,7 +852,7 @@
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Inputs of levels 3 (see function path to level 3).</p></dd>
 
 
-<dt><code>outputs_level3_process1</code></dt>
+<dt><code>output_level3_process1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
 
@@ -871,9 +876,10 @@
 <p>Model predictions for the species composition and computing of catches.</p><div class="section">
 <h4 id="usage-27">Usage<a class="anchor" aria-label="anchor" href="#usage-27"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">model_predictions</span><span class="op">(</span></span>
-<span>  <span class="va">outputs_level3_process2</span>,</span>
-<span>  <span class="va">outputs_level3_process4</span>,</span>
-<span>  <span class="va">outputs_directory</span>,</span>
+<span>  <span class="va">output_level3_process2</span>,</span>
+<span>  <span class="va">output_level3_process4</span>,</span>
+<span>  <span class="va">output_directory</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ci_type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  Nboot <span class="op">=</span> <span class="fl">50</span>,</span>
@@ -883,16 +889,20 @@
 
 <div class="section">
 <h4 id="arguments-26">Arguments<a class="anchor" aria-label="anchor" href="#arguments-26"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>outputs_level3_process2</code></dt>
+<p></p><div class="arguments"><dl><dt><code>output_level3_process2</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> expected. Outputs from level 3 process 2 (random forest models).</p></dd>
 
 
-<dt><code>outputs_level3_process4</code></dt>
+<dt><code>output_level3_process4</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> expected. Outputs from level 3 process 4 (data formatting for predictions).</p></dd>
 
 
-<dt><code>outputs_directory</code></dt>
+<dt><code>output_directory</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. Outputs directory path.</p></dd>
+
+
+<dt><code>output_format</code></dt>
+<dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).</p></dd>
 
 
 <dt><code>ci</code></dt>
