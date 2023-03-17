@@ -6127,9 +6127,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                     x = prop_lb,
                                                                                     color = year)) +
                                   ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "loess",
-                                                       se = FALSE,
-                                                       formula = "y ~ x") +
+                                  ggplot2::geom_smooth(method = "gam",
+                                                       formula = y ~ s(x, bs = "cs", fx = F, k = 5)) +
                                   ggplot2::geom_abline(slope = 1,
                                                        intercept = 0) +
                                   ggplot2::xlab("Species Frequency in set from logbook") +
@@ -6143,7 +6142,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        ggplot2::aes(x = prop_lb,
                                                                                     color = year)) +
                                   ggplot2::geom_density(fill = rgb(0,0,0,0.1),
-                                                        ggplot2::aes(y = ..scaled..)) +
+                                                        ggplot2::aes(y = ggplot2::after_stat(scaled))) +
                                   ggplot2::xlab("Species Frequency in set from logbook")
                                 logbook_vs_sample <- ggpubr::ggarrange(logbook_vs_sample_1,
                                                                        logbook_vs_sample_2,
@@ -6330,7 +6329,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
                                                                                 list("set_sampled_map" = set_sampled_map))
                                 }
-                                # model checking
+                                ## model checking ----
                                 # compute model residuals
                                 resrf <- current_model_data$resp - ranger::predictions(current_model_output[[3]])
                                 current_model_data$res <- resrf
@@ -6512,12 +6511,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
                                                                                 list("spatio_temporal_checking" = spatio_temporal_checking))
                                 }
-                                # model validity
+                                ## model validation ----
                                 model_validation_density_res <- ggplot2::ggplot(current_model_data,
                                                                                 ggplot2::aes(x = res_ST)) +
                                   ggplot2::geom_density(stat = "density",
                                                         fill = rgb(1,0,0,0.2),
-                                                        ggplot2::aes(y = ..scaled..)) +
+                                                        ggplot2::aes(y = ggplot2::after_stat(scaled))) +
                                   ggplot2::scale_x_continuous(expand = c(0, 0)) +
                                   ggplot2::labs(x = "Standardized Residuals")
                                 model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
@@ -6608,10 +6607,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 dpi = 300)
                                 current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
                                                                               list("model_validation" = model_validation))
-                                # model accuracy
+                                ## model accuracy ----
                                 # cross validation by k-folds
                                 npartition <- 10 # not a parameter
                                 df <- current_model_data
+                                if(nrow(df) < 50){
+                                  cat(format(x = Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " Current dataset < 50 data. Not enougth data for model accuracy testing.\n",
+                                      sep = "")
+                                } else {
                                 model_formula <- strsplit(as.character(current_model_output[[3]]$call),",")[[2]]
                                 model_ntree <- current_model_output[[3]]$num.trees
                                 model_mtry <- current_model_output[[3]]$mtry
@@ -6688,6 +6693,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 output_level3_process3 <- append(output_level3_process3,
                                                                  list(current_output_level3_process3))
                                 names(output_level3_process3)[length(output_level3_process3)] <- paste(ocean, specie, fishing_mode, sep = "_")
+                                }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Process 3.3 successfull for ocean \"",
                                     ocean,
