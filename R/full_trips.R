@@ -5543,20 +5543,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    target_file[x],
                                                    fsep = "/"))
                                     # sets characteristics
-                                    dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
+                                    dataset_target$act_chr[[x]] <- data_level3$act
                                     # catch by set, species and categories from logbook (t3 level 1)
-                                    dataset_target$catch_set_lb[[x]] <- data_level3[[1]][[2]]
+                                    dataset_target$catch_set_lb[[x]] <- data_level3$act3
                                     # catch by set, species and categories (t3 level 2)
-                                    dataset_target$samw[[x]] <- data_level3[[1]][[3]]
+                                    dataset_target$samw[[x]] <- data_level3$samw
                                     # link between sample and set, + sample quality and type
-                                    dataset_target$sset[[x]] <- data_level3[[1]][[4]]
+                                    dataset_target$sset[[x]] <- data_level3$sset
                                     # well plan
-                                    dataset_target$wp[[x]] <- data_level3[[1]][[5]]
+                                    dataset_target$wp[[x]] <- data_level3$wp
                                   }
                                   dataset_target <- lapply(X = dataset_target,
                                                            FUN = function(x) {
                                                              return(unique(do.call(rbind, x)))
                                                            })
+
                                   # stock raw data
                                   inputs_level3 <- dataset_target
                                 }
@@ -7029,6 +7030,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
+                                if(nrow(boot_tmp_element) > 0){
                                 boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
                                                                        key = "sp",
                                                                        value = fit_prop)
@@ -7054,6 +7056,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
                                                                                                                    ocean,
                                                                                                                    sep = "_")
+                                }
                               }
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
@@ -7115,7 +7118,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               "\"",
                                               ".\n",
                                               sep = "")
-
                                         }
                                       }
                                     }
@@ -7127,6 +7129,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 for (ocean in ocean_level) {
                                   outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                      x = names(outputs_level3_process5[[3]]))]
+                                  if(length(outputs_level3_process5_ocean) > 0){
                                   list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
                                   for(element in (seq.int(from = 1,
                                                           to = length(outputs_level3_process5_ocean[[1]])))){
@@ -7158,6 +7161,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
                                                                                                                      ocean,
                                                                                                                      sep = "_")
+                                  }
                                 }
                               }
                               # bootstrap step 3 - compute confident intervals ----
