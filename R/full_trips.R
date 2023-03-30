@@ -7193,7 +7193,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 set_all <- set_all_final_ocean
                               }
                               write.table(x = set_all,
@@ -7247,7 +7247,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
+                                                                                                          digits = 4)
                                 outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                        list(t1_all_final_ocean))
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
@@ -7305,7 +7305,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                        list(t1_fmod_final_ocean))
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
@@ -7409,7 +7409,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
+                                                                                                          digits = 4)
                                 t2_all <- t2_all_final_ocean
                               }
                               write.table(x = t2_all,
@@ -7471,7 +7471,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 t2_fmod <- t2_fmod_final_ocean
                               }
                               write.table(x = t2_fmod,
