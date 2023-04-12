@@ -174,13 +174,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Load ADVTH SQL for trips\n",
                                              sep = "")
-                                         trips_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                        "avdth_trip.sql",
+                                         trips_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_trip.sql"),
                                                                                         package = "t3")),
                                                             collapse = "\n")
                                         cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - ", trips_sql,
+                                             " - SQL - ", trips_sql,
                                              sep = "")
                                          trips_sql_final <- DBI::sqlInterpolate(conn = db_con,
                                                                                 sql = trips_sql,
@@ -198,8 +197,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                             "'")),
                                                                                 oceans = DBI::SQL(paste0(paste0(oceans,
                                                                                                                 collapse = ", "))))
-
-                                         cat("[", trips_sql_final, "]\n", sep = "")
+                                          cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - SQL - [", trips_sql_final, "]\n", sep = "")
                                          trips_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
                                                                                      statement = trips_sql_final)) %>%
                                            dplyr::mutate(trip_id = as.character(x = trip_id),
@@ -534,8 +534,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from avdth database.\n",
                                              sep = "")
-                                         activities_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                             "avdth_activities.sql",
+                                         activities_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_activities.sql"),
                                                                                              package = "t3")),
                                                                  collapse = "\n")
                                          activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
@@ -909,8 +908,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary catches data importation from avdth database.\n",
                                              sep = "")
-                                         elementarycatches_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                                    "avdth_elementarycatches.sql",
+                                         elementarycatches_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_elementarycatches.sql"),
                                                                                                     package = "t3")),
                                                                         collapse = "\n")
                                          elementarycatches_sql_final <- DBI::sqlInterpolate(conn = db_con,
@@ -1277,9 +1275,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary landings data importation from avdth database.\n",
                                              sep = "")
-                                         elementarylandings_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                                     "avdth_elementarylandings.sql",
-                                                                                                     package = "t3")),
+                                         elementarylandings_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_elementarylandings.sql"),
+                                                                                                                                                                                                          package = "t3")),
                                                                          collapse = "\n")
                                          elementarylandings_sql_final <- DBI::sqlInterpolate(conn = db_con,
                                                                                              sql = elementarylandings_sql,
@@ -1736,8 +1733,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start samples data importation from avdth database.\n",
                                            sep = "")
-                                       samples_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                        "avdth_samples.sql",
+                                       samples_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_samples.sql"),
                                                                                         package = "t3")),
                                                             collapse = "\n")
                                        samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
@@ -1797,8 +1793,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start well plans data importation from avdth database.\n",
                                            sep = "")
-                                       wellplan_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                         "avdth_wellplans.sql",
+                                       wellplan_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_wellplans.sql"),
                                                                                          package = "t3")),
                                                              collapse = "\n")
                                        wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
@@ -2862,8 +2857,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start sample sets data importation from avdth database.\n",
                                            sep = "")
-                                       samplesets_sql <- paste(readLines(con = system.file("sql\\avdth",
-                                                                                           "avdth_samplesets.sql",
+                                       samplesets_sql <- paste(readLines(con = system.file(file.path("sql","avdth", "avdth_samplesets.sql"),
                                                                                            package = "t3")),
                                                                collapse = "\n")
                                        samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
