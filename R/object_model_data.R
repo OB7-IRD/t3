@@ -40,6 +40,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"countries\" argument.\n",
                                              sep = "")
+                                         # error(logger, "Invalid \"countries\" argument")
                                          stop()
                                        } else if (paste0(class(x = oceans),
                                                          collapse = " ") != "integer") {
@@ -169,10 +170,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start trip(s) data importation from avdth database.\n",
                                              sep = "")
+                                        cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Load ADVTH SQL for trips\n",
+                                             sep = "")
                                          trips_sql <- paste(readLines(con = system.file("sql\\avdth",
                                                                                         "avdth_trip.sql",
                                                                                         package = "t3")),
                                                             collapse = "\n")
+                                        cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - ", trips_sql,
+                                             sep = "")
                                          trips_sql_final <- DBI::sqlInterpolate(conn = db_con,
                                                                                 sql = trips_sql,
                                                                                 begin_period = DBI::SQL(paste0("#",
@@ -384,6 +393,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_db")) {
                                        if (paste0(class(x = periode_reference),
                                                   collapse = " ") != "integer") {
+                                         
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Error: invalid \"periode_reference\" argument.\n",
