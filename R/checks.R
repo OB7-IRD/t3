@@ -194,7 +194,7 @@ check_landing_category_name <- function(landing_category_name) {
 #' @title Attribute "landing_date" verification
 #' @param landing_date Object of class {\link[base]{character}} expected. Landing date in format year month day hour minute second UTC.
 #' @description Check if the item "landing_date" is in date format year month day hour minute second UTC and check if the value is inferior to the actual date.
-#' @importFrom lubridate ymd
+#' @importFrom lubridate ymd_hms
 check_landing_date <- function(landing_date) {
   if (is.na(x = lubridate::ymd_hms(landing_date,
                                    quiet = TRUE,
@@ -221,7 +221,7 @@ check_landing_date <- function(landing_date) {
 #' @param activity_date Object of class {\link[base]{character}} expected. Activity date in format year month day.
 #' @param landing_date Object of class {\link[base]{character}} expected. Landing date in format year month day hour minute second UTC. By default NULL.
 #' @description Check if the item "activity_date" is in date format year month day, if the value is inferior to the actual date and if it is inferior to the landing_date (if there are provided).
-#' @importFrom lubridate ymd
+#' @importFrom lubridate ymd ymd_hms
 check_activity_date <- function(activity_date,
                                 landing_date = NULL) {
   if (is.na(x = lubridate::ymd(activity_date,

@@ -18,7 +18,8 @@ list_t3 <- R6Class(
         return(names(private))
       } else if (!attribut %in% names(private)) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut\" argument, attribut doesn't exist.\n",
           sep = ""
         )
@@ -67,14 +68,16 @@ list_t3 <- R6Class(
     remove = function(item_id, attribut = "data") {
       if (!attribut %in% names(private)) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"attribut\" argument, attribut doesn't exist.\n",
           sep = ""
         )
         stop()
       } else if (length(private[[attribut]]) == 0) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: you can't delete an item from an empty list.\n",
           sep = ""
         )
@@ -82,21 +85,24 @@ list_t3 <- R6Class(
       } else if (length(x = class(x = item_id)) != 1 ||
                  ! class(x = item_id) %in% c("numeric", "integer")) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"item_id\" argument, class numeric or integer expected.\n",
           sep = ""
         )
         stop()
       } else if (any(as.integer(item_id) != item_id)) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"item_id\" argument, number integer expected.\n",
           sep = ""
         )
         stop()
       } else if (anyDuplicated(item_id) != 0) {
         cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
           " - Error: invalid \"item_id\" argument, duplicate(s) element(s).\n",
           sep = ""
         )
@@ -105,7 +111,8 @@ list_t3 <- R6Class(
         if (length(item_id) == 1) {
           if (item_id <= 0 | item_id > length(private[[attribut]])) {
             cat(
-              format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+              format(Sys.time(),
+                     "%Y-%m-%d %H:%M:%S"),
               " - Error: invalid \"item_number\" argument, subscript out of bounds.\n",
               sep = ""
             )
@@ -129,7 +136,8 @@ list_t3 <- R6Class(
     #' @param attribut (character) Attribut's name. By default "data".
     view = function(..., attribut = "data") {
       if (!attribut %in% names(private)) {
-        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        cat(format(Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
             " - Error: invalid \"attribut\" argument, attribut doesn't exist.\n",
             sep = ""
         )
@@ -140,7 +148,8 @@ list_t3 <- R6Class(
         return(private[[attribut]])
       } else {
         if (length(private[[attribut]]) == 0) {
-          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+          cat(format(Sys.time(),
+                     "%Y-%m-%d %H:%M:%S"),
               " - Error: empty list.\n",
               sep = "")
           stop()
@@ -151,7 +160,8 @@ list_t3 <- R6Class(
                 ! class(x = item_id[[i]]) %in% c("numeric",
                                                  "character",
                                                  "integer")) {
-              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+              cat(format(Sys.time(),
+                         "%Y-%m-%d %H:%M:%S"),
                   " - Error: invalid \"item_id\" argument, more than 1 class or not numeric/character.\n",
                   sep = "")
               stop()

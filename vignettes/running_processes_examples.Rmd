@@ -38,7 +38,7 @@ periode_reference <- as.integer(c(2006,
                                   2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
-# countries for the France fleet 
+# countries for the France fleet
 countries <- c("FRA",
                "MYT")
 # code 1 for the Atlantic Ocean
@@ -50,7 +50,7 @@ species_rf1_fr <- as.integer(c(1, 2, 3, 4, 9, 11))
 # output directories initiation
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
-# output format 
+# output format
 output_format <- "eu"
 # generation of the confidence interval
 confidence_interval <- TRUE
@@ -112,10 +112,10 @@ object_model_data$lengthweightrelationships_data(data_source = "csv",
 object_full_trips <- t3:::full_trips$new()
 # object full_trip creation
 object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
-# filter on reference year
-object_full_trips$filter_by_periode(periode_reference = periode_reference)
 # add activities to trips selected
 object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
+# filter by reference year
+object_full_trips$filter_by_time_period_reference(time_periode_reference = periode_reference)
 # add elementarycatches to trips selected
 object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
 # add elementarylandings to trips selected
@@ -215,7 +215,7 @@ periode_reference <- as.integer(c(2006,
                                   2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
-# countries for the France fleet 
+# countries for the France fleet
 countries <- c("FRA",
                "MYT")
 # code 1 for the Atlantic Ocean
@@ -227,7 +227,7 @@ species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
 # output directories initiation
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
-# output format 
+# output format
 output_format <- "eu"
 # generation of the confidence interval
 confidence_interval <- TRUE
@@ -273,7 +273,7 @@ periode_reference <- as.integer(c(2006,
                                   2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
-# countries for the France fleet 
+# countries for the France fleet
 countries <- c("FRA",
                "MYT")
 # code 1 for the Atlantic Ocean
@@ -282,7 +282,7 @@ ocean <- as.integer(1)
 sample_type <- as.integer(1)
 # for french fleet YFT, SKJ, BET, ALB, MIX and LOT
 species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
-# output format 
+# output format
 output_format <- "eu"
 # generation of the confidence interval
 confidence_interval <- TRUE
@@ -294,7 +294,7 @@ t3_process_all <- t3::t3_process(process = "all",
                                  output_path = output_path,
                                  output_format = "eu",
                                  periode_reference = periode_reference,
-                                 countries= countries,
+                                 countries = countries,
                                  oceans = ocean,
                                  sample_type = sample_type,
                                  species_rf1 = species_rf1,

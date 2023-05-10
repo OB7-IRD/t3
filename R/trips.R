@@ -21,7 +21,8 @@ trips <- R6::R6Class(classname = "trips",
                                  if (length(x = class(x = arguments[[i]][[i]])) == 2
                                      && (! any(class(x = arguments[[i]][[i]]) == "R6")
                                          & ! any(class(x = new_item[[i]]) == "trip"))) {
-                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                   cat(format(Sys.time(),
+                                              "%Y-%m-%d %H:%M:%S"),
                                        " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                        sep = "")
                                    stop()
@@ -35,7 +36,8 @@ trips <- R6::R6Class(classname = "trips",
                                private$data <- append(x = private$data,
                                                       values = arguments[[i]])
                              } else {
-                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                               cat(format(Sys.time(),
+                                          "%Y-%m-%d %H:%M:%S"),
                                    " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
                                    sep = "")
                                stop()

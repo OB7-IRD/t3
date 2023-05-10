@@ -4,38 +4,12 @@
 \name{t3-package}
 \alias{t3}
 \alias{t3-package}
-\title{Tropical Tunas Treatment (T3)}
+\title{Tropical Tunas Treatment}
 \description{
-The multi-species nature of tropical tuna surface fisheries gives rise to a series of difficulties when estimating the catch by species and catch at size statistics. The T3 processing was built about 30 years ago in order to correct biases of the logbook data on species composition and to provide more accurate catch estimates per species for the European purse seine fleet.
-}
-\section{Process for data model initialisation}{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-\itemize{
-\item{\code{\link{data_model_initialisation}}}
+The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics. The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal). Is aims are to correct biases of the logbook data on species composition and provide more accurate catch estimations per species for the purse seiner fleet, especially European and Seychelles fleet.
 }
-}
-
-\section{Process for level 1 (logbooks standardisation)}{
-
-\itemize{
-\item{\code{\link{t3_level1}}}
-}
-}
-
-\section{Process for level 2 (samples standardisation)}{
-
-\itemize{
-\item{\code{\link{t3_level2}}}
-}
-}
-
-\section{Generic process fuction}{
-
-\itemize{
-\item{\code{\link{t3_process}}}
-}
-}
-
 \seealso{
 Useful links:
 \itemize{

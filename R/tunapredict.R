@@ -12,21 +12,16 @@
 #' @param min_node (integer) Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
 #' @param target_period (integer) Time period for the predictions in year. Default is the year of the data to predict
 #' @importFrom ranger ranger
-#' @importFrom dplyr rename
+#' @importFrom dplyr rename bind_rows
+#' @importFrom stats predict
 #' @return TODO
 tunapredict <- function(sample_data,
                      allset_data,
-                     # schooltype = 1,
-                     # ocean = 1,
-                     # species = "SKJ",
-                     # model parameters
                      Ntree = 1000,
                      Nmtry = 2,
-                     Nseed = 7, # fix seed number for reproducibility of the predicts
+                     Nseed = 7,
                      min_node = 5,
-                     target_period
-)
-{
+                     target_period) {
   # local binding global variables ----
   modrf0 <- prop_t3 <- NULL
   if (missing(target_period)) {target_period = allset_data$yr[1]}
@@ -50,14 +45,12 @@ tunapredict <- function(sample_data,
     no_sampled_set$mon <- factor(no_sampled_set$mon)
     no_sampled_set$vessel <- factor(no_sampled_set$vessel)
     ### split dataframe for different treatment if needed
-    # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
     no_sampled_set$data_source <- NA # assign source later
     no_sampled_set$fit_prop <- NA # stock final proportion
     # not sampled vessel list
-    vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),levels(sub$vessel))
+    vessel_not_train <- setdiff(levels(no_sampled_set$vessel),levels(sub$vessel))
     # dataset with all information
     newd <- (no_sampled_set[!no_sampled_set$vessel  %in% vessel_not_train, ])
-    # newd$vessel <- factor(newd$vessel, levels = setdiff(levels(newd$vessel),vessel_not_train)) # remove levels of vessel not train
     # dataset with vessel not sampled
     new_wtv <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & !is.na(no_sampled_set$prop_lb), ]
     # dataset with no logbook
@@ -80,7 +73,8 @@ tunapredict <- function(sample_data,
                                       quantreg = FALSE,
                                       keep.inbag= FALSE)
 
-      newd$fit_prop <- predict(model_rf_full, data = newd)$predictions
+      newd$fit_prop <- stats::predict(object = model_rf_full,
+                                      data = newd)$predictions
       newd$data_source <- "full_model" # add flag
     }
     ##  without vessel information

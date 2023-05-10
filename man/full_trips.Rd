@@ -4,7 +4,9 @@
 \alias{full_trips}
 \title{R6 class full_trips}
 \description{
-Create R6 reference object class full_trips
+R6 class full_trips
+
+R6 class full_trips
 }
 \section{Super class}{
 \code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
@@ -15,6 +17,7 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
 \item \href{#method-full_trips-filter_by_periode}{\code{full_trips$filter_by_periode()}}
 \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
+\item \href{#method-full_trips-filter_by_time_period_reference}{\code{full_trips$filter_by_time_period_reference()}}
 \item \href{#method-full_trips-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
@@ -108,6 +111,23 @@ Function for add activities in full trips object.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{object_activities}}{Object of type R6-activities expected. A R6 reference object of class activities.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-full_trips-filter_by_time_period_reference"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-filter_by_time_period_reference}{}}}
+\subsection{Method \code{filter_by_time_period_reference()}}{
+Function for filter full trips by a reference time period.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_time_period_reference(time_periode_reference)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{time_periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
 }
 \if{html}{\out{</div>}}
 }
@@ -639,7 +659,7 @@ Modelling proportions in sets througth random forest models.
   mtry = 2L,
   min.node.size = 5,
   seed_number = 7L,
-  small_fish_only = F
+  small_fish_only = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -671,8 +691,8 @@ Load each full model and compute figure and tables to check the model quality. F
   output_level3_process2,
   output_directory,
   output_format = "eu",
-  plot_sample = F,
-  avdth_patch_coord = F
+  plot_sample = FALSE,
+  avdth_patch_coord = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -703,7 +723,7 @@ Formatting data for model predictions.
   output_level3_process1,
   target_year,
   vessel_id_ignored = NULL,
-  small_fish_only = F
+  small_fish_only = FALSE
 )}\if{html}{\out{</div>}}
 }
 

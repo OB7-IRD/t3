@@ -17,7 +17,8 @@ initiate_log_file <- function(log_file = FALSE,
         "class \"logical\" expected.\n",
         sep = "")
   } else {
-    if (log_file %in% c(T, TRUE)) {
+    if (log_file %in% c(T,
+                        TRUE)) {
       if (! inherits(x = log_path,
                      what = "character")) {
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -40,11 +41,11 @@ initiate_log_file <- function(log_file = FALSE,
                                     open = "wt")
         sink(file = log_path_connection,
              type = "message",
-             split = F)
+             split = FALSE)
         sink(file = log_path_connection,
-             append = F,
+             append = FALSE,
              type = "output",
-             split = T)
+             split = TRUE)
         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
             " - Filling of the log file start now.\n",
             "[file path: ",
