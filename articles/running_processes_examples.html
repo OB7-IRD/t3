@@ -158,7 +158,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co"># countries for the France fleet </span></span>
+<span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
@@ -170,7 +170,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="co"># output format </span></span>
+<span><span class="co"># output format</span></span>
 <span><span class="va">output_format</span> <span class="op">&lt;-</span> <span class="st">"eu"</span></span>
 <span><span class="co"># generation of the confidence interval</span></span>
 <span><span class="va">confidence_interval</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
@@ -232,10 +232,10 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">object_full_trips</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">:::</span><span class="va"><a href="../reference/full_trips.html">full_trips</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># object full_trip creation</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">create_full_trips</span><span class="op">(</span>object_trips <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">trips</span><span class="op">)</span></span>
-<span><span class="co"># filter on reference year</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">filter_by_periode</span><span class="op">(</span>periode_reference <span class="op">=</span> <span class="va">periode_reference</span><span class="op">)</span></span>
 <span><span class="co"># add activities to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_activities</span><span class="op">(</span>object_activities <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activities</span><span class="op">)</span></span>
+<span><span class="co"># filter by reference year</span></span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">filter_by_time_period_reference</span><span class="op">(</span>time_periode_reference <span class="op">=</span> <span class="va">periode_reference</span><span class="op">)</span></span>
 <span><span class="co"># add elementarycatches to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_elementarycatches</span><span class="op">(</span>object_elementarycatches <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">elementarycatches</span><span class="op">)</span></span>
 <span><span class="co"># add elementarylandings to trips selected</span></span>
@@ -335,7 +335,7 @@ part of the treatment.</p>
 <span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co"># countries for the France fleet </span></span>
+<span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
@@ -347,7 +347,7 @@ part of the treatment.</p>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="co"># output format </span></span>
+<span><span class="co"># output format</span></span>
 <span><span class="va">output_format</span> <span class="op">&lt;-</span> <span class="st">"eu"</span></span>
 <span><span class="co"># generation of the confidence interval</span></span>
 <span><span class="va">confidence_interval</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
@@ -395,7 +395,7 @@ skip part(s) of the process.</p>
 <span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co"># countries for the France fleet </span></span>
+<span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
@@ -404,7 +404,7 @@ skip part(s) of the process.</p>
 <span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
 <span><span class="va">species_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># output format </span></span>
+<span><span class="co"># output format</span></span>
 <span><span class="va">output_format</span> <span class="op">&lt;-</span> <span class="st">"eu"</span></span>
 <span><span class="co"># generation of the confidence interval</span></span>
 <span><span class="va">confidence_interval</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
@@ -416,7 +416,7 @@ skip part(s) of the process.</p>
 <span>                                 output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
 <span>                                 periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                 countries<span class="op">=</span> <span class="va">countries</span>,</span>
+<span>                                 countries <span class="op">=</span> <span class="va">countries</span>,</span>
 <span>                                 oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                 sample_type <span class="op">=</span> <span class="va">sample_type</span>,</span>
 <span>                                 species_rf1 <span class="op">=</span> <span class="va">species_rf1</span>,</span>
