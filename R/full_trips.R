@@ -973,81 +973,93 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
                                                  file = "NUL")
-                                  total_landings_catches_species <- lapply(X = seq_len(length.out = trips_selected$count()),
-                                                                           FUN = function(trip_id) {
-                                                                             current_trip <- trips_selected$extract(id = trip_id)[[1]]
-                                                                             if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
-                                                                               capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
-                                                                                              file = "NUL")
-                                                                               capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
-                                                                                              file = "NUL")
-                                                                               current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
-                                                                                                                            landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
-                                                                                 dplyr::group_by(specie) %>%
-                                                                                 dplyr::summarise(landing_weight = sum(landing_weight),
-                                                                                                  .groups = "drop") %>%
-                                                                                 dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
-                                                                               elementarylandings <- TRUE
-                                                                             } else {
-                                                                               elementarylandings <- FALSE
-                                                                             }
-                                                                             if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                                                               capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                                                              file = "NUL")
-                                                                               capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
-                                                                                              file = "NUL")
-                                                                               if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                                                                 capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                                                                file = "NUL")
-                                                                                 capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                                                                file = "NUL")
-                                                                                 current_total_catches_species <- data.frame(specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
-                                                                                                                             catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
-                                                                                                                             catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
-                                                                                   dplyr::group_by(specie) %>%
-                                                                                   dplyr::summarise(catch_weight = sum(catch_weight),
-                                                                                                    catch_weight_rf1 = sum(catch_weight_rf1),
-                                                                                                    .groups = "drop") %>%
-                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
-                                                                                 elementarycatches <- TRUE
-                                                                               } else {
-                                                                                 elementarycatches <- FALSE
-                                                                               }
-                                                                             } else {
-                                                                               elementarycatches <- FALSE
-                                                                             }
-                                                                             if (elementarylandings == TRUE) {
-                                                                               if (elementarycatches == TRUE) {
-                                                                                 current_total_landings_catches_species <- current_total_landings_species %>%
-                                                                                   dplyr::full_join(current_total_catches_species,
-                                                                                                    by = c("specie",
-                                                                                                           "trip_id"))
-                                                                               } else {
-                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_landings_species,
-                                                                                                                                         catch_weight = NA,
-                                                                                                                                         catch_weight_rf1 = NA)
-                                                                               }
-                                                                             } else {
-                                                                               if (elementarycatches == TRUE) {
-                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_catches_species,
-                                                                                                                                         landing_weight = NA)
-                                                                               } else {
-                                                                                 current_total_landings_catches_species <- NULL
-                                                                               }
-                                                                             }
-                                                                             return(current_total_landings_catches_species)
-                                                                           })
-                                  total_landings_catches_species <- as.data.frame(do.call(what = rbind,
-                                                                                          args = total_landings_catches_species))
-                                  total_landings_catches <- total_landings_catches_species %>%
+                                  total_landings_catches_species_activities <- lapply(X = seq_len(length.out = trips_selected$count()),
+                                                                                      FUN = function(trip_id) {
+                                                                                        current_trip <- trips_selected$extract(id = trip_id)[[1]]
+                                                                                        if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
+                                                                                          capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                                                                                         file = "NUL")
+                                                                                          capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
+                                                                                                         file = "NUL")
+                                                                                          current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                       landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
+                                                                                            dplyr::group_by(specie) %>%
+                                                                                            dplyr::summarise(landing_weight = sum(landing_weight),
+                                                                                                             .groups = "drop") %>%
+                                                                                            dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                          elementarylandings <- TRUE
+                                                                                        } else {
+                                                                                          elementarylandings <- FALSE
+                                                                                        }
+                                                                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                                                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                                                                         file = "NUL")
+                                                                                          capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
+                                                                                                         file = "NUL")
+                                                                                          if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                                                                            capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                                                                           file = "NUL")
+                                                                                            capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                                                                           file = "NUL")
+                                                                                            current_total_catches_species_activities <- tidyr::tibble(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
+                                                                                                                                                      specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                                      catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
+                                                                                                                                                      catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
+                                                                                              dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
+                                                                                              dplyr::relocate(trip_id,
+                                                                                                              .before = activity_id) %>%
+                                                                                              dplyr::arrange(activity_id)
+                                                                                            elementarycatches <- TRUE
+                                                                                          } else {
+                                                                                            elementarycatches <- FALSE
+                                                                                          }
+                                                                                        } else {
+                                                                                          elementarycatches <- FALSE
+                                                                                        }
+                                                                                        if (elementarylandings == TRUE) {
+                                                                                          if (elementarycatches == TRUE) {
+                                                                                            current_total_landings_catches_species_activities <- current_total_landings_species %>%
+                                                                                              dplyr::full_join(current_total_catches_species_activities,
+                                                                                                               by = c("specie",
+                                                                                                                      "trip_id"))
+                                                                                          } else {
+                                                                                            current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_landings_species,
+                                                                                                                                                               activity_id = NA_character_,
+                                                                                                                                                               catch_weight = NA_real_,
+                                                                                                                                                               catch_weight_rf1 = NA_real_)
+                                                                                          }
+                                                                                        } else {
+                                                                                          if (elementarycatches == TRUE) {
+                                                                                            current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
+                                                                                                                                                               landing_weight = NA_real_)
+
+                                                                                          } else {
+                                                                                            current_total_landings_catches_species_activities <- NULL
+                                                                                          }
+                                                                                        }
+                                                                                        return(current_total_landings_catches_species_activities)
+                                                                                      })
+                                  total_landings_catches_species_activities <- tidyr::tibble(do.call(what = rbind,
+                                                                                                     args = total_landings_catches_species_activities))
+                                  total_landings_catches <- dplyr::distinct(.data = total_landings_catches_species_activities,
+                                                          trip_id,
+                                                          specie,
+                                                          landing_weight) %>%
                                     dplyr::group_by(trip_id) %>%
                                     dplyr::summarise(landing_weight = sum(landing_weight,
                                                                           na.rm = TRUE),
-                                                     catch_weight = sum(catch_weight,
-                                                                        na.rm = TRUE),
-                                                     catch_weight_rf1 = sum(catch_weight_rf1,
-                                                                            na.rm = TRUE),
-                                                     .groups = "drop")
+                                                     .groups = "drop") %>%
+                                    dplyr::inner_join(dplyr::select(.data = total_landings_catches_species_activities,
+                                                                    trip_id,
+                                                                    catch_weight,
+                                                                    catch_weight_rf1) %>%
+                                                        dplyr::group_by(trip_id) %>%
+                                                        dplyr::summarise(catch_weight = sum(catch_weight,
+                                                                                            na.rm = TRUE),
+                                                                         catch_weight_rf1 = sum(catch_weight_rf1,
+                                                                                                na.rm = TRUE),
+                                                                         .groups = "drop"),
+                                                      by = "trip_id")
                                   outputs_process_1_1 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                    FUN = function(full_trip_id) {
                                                                                                      if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
@@ -1081,8 +1093,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  by = "trip_id")
                                   detail_outputs_process_1_1 <- outputs_process_1_1 %>%
                                     dplyr::full_join(x = outputs_process_1_1,
-                                                     y = total_landings_catches_species,
-                                                     by = "trip_id")
+                                                     y = total_landings_catches_species_activities,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(activity_id,
+                                                    .after = trip_id)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -7294,11 +7308,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              value = fit_prop)
                                       boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
                                       boot_tmp_element_wide$SKJ <- ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                                yes = boot_tmp_element_wide$SKJ / boot_tmp_element_wide$S,
-                                                                                no = boot_tmp_element_wide$SKJ)
+                                                                          yes = boot_tmp_element_wide$SKJ / boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$SKJ)
                                       boot_tmp_element_wide$YFT <- ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                                yes = boot_tmp_element_wide$YFT / boot_tmp_element_wide$S,
-                                                                                no = boot_tmp_element_wide$YFT)
+                                                                          yes = boot_tmp_element_wide$YFT / boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$YFT)
                                       boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
                                       boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
                                                                              key = "sp",
