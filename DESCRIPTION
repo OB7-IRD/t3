@@ -57,7 +57,7 @@ Authors@R:
     person(given = "IRD - Ob7",
            family = "Observatory of Exploited Tropical Pelagic Ecosystems",
            email = "ob7@ird.fr",
-           role = c("ctb", "fnd"),
+           role = c("cph", "fnd"),
            comment = c(ORCID = "0000-0002-4642-3418")))
 Description: The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics.
     The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal).
