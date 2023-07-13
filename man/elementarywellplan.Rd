@@ -9,13 +9,13 @@ Create R6 reference object class elementarywellplan
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{elementarywellplan$new()}}
-\item \href{#method-clone}{\code{elementarywellplan$clone()}}
+\item \href{#method-elementarywellplan-new}{\code{elementarywellplan$new()}}
+\item \href{#method-elementarywellplan-clone}{\code{elementarywellplan$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-elementarywellplan-new"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplan-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 elementarywellplan class.
 \subsection{Usage}{
@@ -60,8 +60,8 @@ Initialize function for R6 elementarywellplan class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-elementarywellplan-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-elementarywellplan-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

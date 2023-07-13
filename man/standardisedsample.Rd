@@ -9,13 +9,13 @@ Create R6 reference object class standardisedsample
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{standardisedsample$new()}}
-\item \href{#method-clone}{\code{standardisedsample$clone()}}
+\item \href{#method-standardisedsample-new}{\code{standardisedsample$new()}}
+\item \href{#method-standardisedsample-clone}{\code{standardisedsample$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-standardisedsample-new"></a>}}
+\if{latex}{\out{\hypertarget{method-standardisedsample-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 standardisedsample class.
 \subsection{Usage}{
@@ -60,8 +60,8 @@ Initialize function for R6 standardisedsample class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-standardisedsample-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-standardisedsample-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

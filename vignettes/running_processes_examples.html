@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Running processes examples</title>
+<style type="text/css">
+/**
+ * Prism.s theme ported from highlight.js's xcode style
+ */
+pre code {
+  padding: 1em;
+}
+.token.comment {
+  color: #007400;
+}
+.token.punctuation {
+  color: #999;
+}
+.token.tag,
+.token.selector {
+  color: #aa0d91;
+}
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #1c00cf;
+}
+.token.property,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #c41a16;
+}
+.token.inserted {
+  background-color: #ccffd8;
+}
+.token.deleted {
+  background-color: #ffebe9;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #836c28;
+}
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #5c2699;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+</style>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
+}
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
+}
+
+@media print {
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
+}
+</style>
+</head>
+<body>
+<div class="include-before">
+</div>
+<div class="frontmatter">
+<div class="title"><h1>Running processes examples</h1></div>
+<div class="author"><h2></h2></div>
+<div class="date"><h3></h3></div>
+</div>
+<div class="body">
+<div style="text-align: justify">
+<h2 id="process-philosophy">Process philosophy</h2>
+<p>The Topical Tuna Treatment (T3) aim to provide a support for the data manipulation of tropical tuna surface fisheries. This support can take many different forms and have various objectives associated. For that purpose, T3 can be processes in various ways, depending of what question(s) drive your reflexion. You will find below several examples for running process and help you regarding your personnal work. Furthermore, don’t hesitate to take a look on the issues webpage of the package (<a href="https://github.com/OB7-IRD/t3/issues">https://github.com/OB7-IRD/t3/issues</a>) or send a mail to <a href="mailto:ob7@ird.fr">ob7@ird.fr</a> if you need specific support.</p>
+<p>Furthermore, in the following functions the “database_con” argument refers to an R object which contains connection information with an avdth database. For more detail about connections available check the function documentation. In addition, the argument “output_path” refer to the output directory on your computer. The function associated, “initiate_directory”, will create the output structure for the process.</p>
+<h2 id="running-the-process-step-by-step">Running the process step by step</h2>
+<p>Globaly, the T3 process have 3 differents parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to “follow” several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called “setup”. You can modified them to customize the example. If you more information regarding functions arguments take à look to the R function documentation (or in the reference website section <a href="https://ob7-ird.github.io/t3/reference/index.html">https://ob7-ird.github.io/t3/reference/index.html</a>)</p>
+<pre><code class="language-r"># setup ----
+library(t3)
+periode_reference &lt;- as.integer(c(2006,
+                                  2007,
+                                  2008))
+target_year &lt;- as.integer(2008)
+period_duration &lt;- as.integer(2)
+# countries for the France fleet
+countries &lt;- c(&quot;FRA&quot;,
+               &quot;MYT&quot;)
+# code 1 for the Atlantic Ocean
+ocean &lt;- as.integer(1)
+# code 1 for landing data
+sample_type &lt;- as.integer(1)
+# for french fleet YFT, SKJ, BET, ALB, MIX and LOT
+species_rf1_fr &lt;- as.integer(c(1, 2, 3, 4, 9, 11))
+# output directories initiation
+final_output_path &lt;- initiate_directory(output_path = output_path,
+                                        level = &quot;all&quot;)
+# output format
+output_format &lt;- &quot;eu&quot;
+# generation of the confidence interval
+confidence_interval &lt;- TRUE
+
+# model creation ----
+object_model_data &lt;- t3:::object_model_data$new()
+# object trips creation
+object_model_data$trips_object_creation(data_source = &quot;avdth_db&quot;,
+                                        periode_reference = periode_reference,
+                                        countries = countries,
+                                        oceans = ocean,
+                                        db_con = database_con)
+# object activities creation
+object_model_data$activities_object_creation(data_source = &quot;avdth_db&quot;,
+                                             periode_reference = periode_reference,
+                                             countries = countries,
+                                             oceans = ocean,
+                                             db_con = database_con)
+# object elementarycatches creation
+object_model_data$elementarycatches_object_creation(data_source = &quot;avdth_db&quot;,
+                                                    periode_reference = periode_reference,
+                                                    countries = countries,
+                                                    oceans = ocean,
+                                                    db_con = database_con)
+# object elementarylandings creation
+object_model_data$elementarylandings_object_creation(data_source = &quot;avdth_db&quot;,
+                                                     periode_reference = periode_reference,
+                                                     countries = countries,
+                                                     oceans = ocean,
+                                                     db_con = database_con)
+# object wells creation
+object_model_data$wells_object_creation(data_source = &quot;avdth_db&quot;,
+                                        periode_reference = periode_reference,
+                                        countries = countries,
+                                        oceans = ocean,
+                                        sample_type = sample_type,
+                                        db_con = database_con)
+# model creation: set durations data
+object_model_data$setdurationrefs_data(data_source = &quot;csv&quot;,
+                                       data_path = system.file(&quot;setdurationrefs.csv&quot;,
+                                                               package = &quot;t3&quot;),
+                                       periode_reference = periode_reference,
+                                       countries = countries)
+# model creation: length steps data
+object_model_data$lengthsteps_data(data_source = &quot;csv&quot;,
+                                   data_path = system.file(&quot;lengthsteps.csv&quot;,
+                                                           package = &quot;t3&quot;))
+# model creation: sample sets data
+object_model_data$samplesets_data(data_source = &quot;avdth_db&quot;,
+                                  periode_reference = periode_reference,
+                                  countries = countries,
+                                  oceans = ocean,
+                                  db_con = database_con)
+# model creation: length weight relationships data
+object_model_data$lengthweightrelationships_data(data_source = &quot;csv&quot;,
+                                                 data_path = system.file(&quot;lengthweightrelationships.csv&quot;,
+                                                                         package = &quot;t3&quot;))
+# initialisation object for full trips class
+object_full_trips &lt;- t3:::full_trips$new()
+# object full_trip creation
+object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
+# add activities to trips selected
+object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
+# filter by reference year
+object_full_trips$filter_by_time_period_reference(time_periode_reference = periode_reference)
+# add elementarycatches to trips selected
+object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
+# add elementarylandings to trips selected
+object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings)
+# add well(s) and sample(s) to trip(s) selected
+object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_env__$private$wells)
+
+# level 1 ---
+# level 1.1: rf1
+object_full_trips$rf1(species_rf1 = species_rf1_fr,
+                      global_output_path = final_output_path,
+                      output_format = output_format)
+# level 1.2: rf2
+object_full_trips$rf2(global_output_path = final_output_path,
+                      output_format = output_format)
+# level 1.3: logbook weigth categories conversion ----
+object_full_trips$conversion_weigth_category(global_output_path = final_output_path,
+                                             output_format = output_format)
+# level 1.4: set count
+object_full_trips$set_count(global_output_path = final_output_path,
+                            output_format = output_format)
+# level 1.5: set duration
+object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                               global_output_path = final_output_path,
+                               output_format = output_format)
+# level 1.6: time at sea
+object_full_trips$time_at_sea(global_output_path = final_output_path,
+                              output_format = output_format)
+# level 1.7: fishing time
+object_full_trips$fishing_time(global_output_path = final_output_path,
+                               output_format = output_format)
+# level 1.8: searching time
+object_full_trips$searching_time(global_output_path = final_output_path,
+                                 output_format = output_format)
+
+# level 2 ----
+# level 2.1: sample length class ld1 to lf conversion
+object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
+                                                global_output_path = final_output_path,
+                                                output_format = output_format)
+# level 2.2: sample number measured extrapolation
+object_full_trips$sample_number_measured_extrapolation(global_output_path = final_output_path,
+                                                       output_format = output_format)
+# level 2.3: sample step length class standardisation
+object_full_trips$sample_length_class_step_standardisation(global_output_path = final_output_path,
+                                                           output_format = output_format)
+# level 2.4: well set weight categories
+object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
+                                             global_output_path = final_output_path,
+                                             output_format = output_format)
+# level 2.5: standardised sample creation
+object_full_trips$standardised_sample_creation(global_output_path = final_output_path,
+                                               output_format = output_format)
+# level 2.6: sample number standardisation
+object_full_trips$standardised_sample_set_creation(length_weight_relationship_data = object_model_data$.__enclos_env__$private$lengthweightrelationships,
+                                                   global_output_path = final_output_path,
+                                                   output_format = output_format)
+# level 2.7: raised factors determination
+object_full_trips$raised_factors_determination(global_output_path = final_output_path,
+                                               output_format = output_format)
+# level 2.8: samples number standardisation at set scale
+object_full_trips$raised_standardised_sample_set(global_output_path = final_output_path,
+                                                 output_format = output_format)
+
+# level 3 ----
+process_level3 &lt;- object_full_trips$path_to_level3()
+# level 3.1: data preparatory
+process_level3 &lt;- object_full_trips$data_preparatory(inputs_level3 = process_level3[[1]],
+                                                     output_directory = final_output_path,
+                                                     target_year = target_year,
+                                                     period_duration = period_duration)
+# level 3.2: random forest models ----
+process_level3$output_level3_process2 &lt;- object_full_trips$random_forest_models(output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod)
+# level 3.3: models checking ----
+process_level3$output_level3_process3 &lt;- object_full_trips$models_checking(output_level3_process2 = process_level3$output_level3_process2,
+                                                                           output_directory = process_level3$output_directory)
+# level 3.4: data formatting for predictions ----
+process_level3$output_level3_process4 &lt;- object_full_trips$data_formatting_for_predictions(inputs_level3 = process_level3$raw_inputs_level3,
+                                                                                           output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod,
+                                                                                           target_year = target_year)
+# level 3.5: predictions ----
+process_level3$output_level3_process5 &lt;- object_full_trips$model_predictions(output_level3_process2 = process_level3$output_level3_process2,
+                                                                             output_level3_process4 = process_level3$output_level3_process4,
+                                                                             output_directory = process_level3$output_directory,
+                                                                             ci = confidence_interval)
+</code></pre>
+<h2 id="shortcut-functions">Shortcut functions</h2>
+<p>Through the following codes, you will be able to run separely each part of the treatment.</p>
+<pre><code class="language-r"># setup ----
+library(t3)
+periode_reference &lt;- as.integer(c(2006,
+                                  2007,
+                                  2008))
+target_year &lt;- as.integer(2008)
+period_duration &lt;- as.integer(2)
+# countries for the France fleet
+countries &lt;- c(&quot;FRA&quot;,
+               &quot;MYT&quot;)
+# code 1 for the Atlantic Ocean
+ocean &lt;- as.integer(1)
+# code 1 for landing data
+sample_type &lt;- as.integer(1)
+# for french fleet YFT, SKJ, BET, ALB, MIX and LOT
+species_rf1 &lt;- as.integer(c(1, 2, 3, 4, 9, 11))
+# output directories initiation
+final_output_path &lt;- initiate_directory(output_path = output_path,
+                                        level = &quot;all&quot;)
+# output format
+output_format &lt;- &quot;eu&quot;
+# generation of the confidence interval
+confidence_interval &lt;- TRUE
+
+# data model initialisation ----
+t3_process &lt;- t3::data_model_initialisation(data_source = &quot;avdth_db&quot;,
+                                            db_con = database_con,
+                                            periode_reference = periode_reference,
+                                            countries = countries,
+                                            oceans = ocean,
+                                            sample_type = sample_type)
+# level 1 ----
+t3_process[[2]] &lt;- t3::t3_level1(object_model_data = t3_process[[1]],
+                                 object_full_trips = t3_process[[2]],
+                                 species_rf1 = species_rf1,
+                                 output_path = final_output_path,
+                                 output_format = output_format)
+# level 2 ----
+t3_process[[2]] &lt;- t3::t3_level2(object_model_data = t3_process[[1]],
+                                 object_full_trips = t3_process[[2]],
+                                 output_path = final_output_path,
+                                 output_format = output_format)
+# level 3 ----
+t3_process[[3]] &lt;- t3_process$object_full_trips$path_to_level3()
+names(t3_process)[3] &lt;- &quot;process_level3&quot;
+t3_process[[3]] &lt;- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
+                                 target_year = target_year,
+                                 period_duration = period_duration,
+                                 ci = confidence_interval,
+                                 output_path = final_output_path,
+                                 output_format = output_format)
+</code></pre>
+<h2 id="global-shortcut-function">Global shortcut function</h2>
+<p>The last section presents an example of a function able to run all the t3 process through one command line. Like before, you can “play” with the arguments to customise the function, especially if you want to skip part(s) of the process.</p>
+<pre><code class="language-r"># setup ----
+library(t3)
+periode_reference &lt;- as.integer(c(2006,
+                                  2007,
+                                  2008))
+target_year &lt;- as.integer(2008)
+period_duration &lt;- as.integer(2)
+# countries for the France fleet
+countries &lt;- c(&quot;FRA&quot;,
+               &quot;MYT&quot;)
+# code 1 for the Atlantic Ocean
+ocean &lt;- as.integer(1)
+# code 1 for landing data
+sample_type &lt;- as.integer(1)
+# for french fleet YFT, SKJ, BET, ALB, MIX and LOT
+species_rf1 &lt;- as.integer(c(1, 2, 3, 4, 9, 11))
+# output format
+output_format &lt;- &quot;eu&quot;
+# generation of the confidence interval
+confidence_interval &lt;- TRUE
+
+# process ----
+t3_process_all &lt;- t3::t3_process(process = &quot;all&quot;,
+                                 data_source = &quot;avdth_db&quot;,
+                                 db_con = database_con,
+                                 output_path = output_path,
+                                 output_format = &quot;eu&quot;,
+                                 periode_reference = periode_reference,
+                                 countries = countries,
+                                 oceans = ocean,
+                                 sample_type = sample_type,
+                                 species_rf1 = species_rf1,
+                                 target_year = target_year,
+                                 period_duration = period_duration,
+                                 ci = confidence_interval)
+</code></pre>
+</div>
+</div>
+<div class="include-after">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</body>
+</html>

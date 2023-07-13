@@ -9,23 +9,23 @@ Create R6 reference object class list_t3.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{list_t3$new()}}
-\item \href{#method-name}{\code{list_t3$name()}}
-\item \href{#method-add}{\code{list_t3$add()}}
-\item \href{#method-remove}{\code{list_t3$remove()}}
-\item \href{#method-view}{\code{list_t3$view()}}
-\item \href{#method-count}{\code{list_t3$count()}}
-\item \href{#method-extract}{\code{list_t3$extract()}}
-\item \href{#method-filter}{\code{list_t3$filter()}}
-\item \href{#method-filter_l1}{\code{list_t3$filter_l1()}}
-\item \href{#method-extract_l1_element_value}{\code{list_t3$extract_l1_element_value()}}
-\item \href{#method-modification_l1}{\code{list_t3$modification_l1()}}
-\item \href{#method-clone}{\code{list_t3$clone()}}
+\item \href{#method-list_t3-new}{\code{list_t3$new()}}
+\item \href{#method-list_t3-name}{\code{list_t3$name()}}
+\item \href{#method-list_t3-add}{\code{list_t3$add()}}
+\item \href{#method-list_t3-remove}{\code{list_t3$remove()}}
+\item \href{#method-list_t3-view}{\code{list_t3$view()}}
+\item \href{#method-list_t3-count}{\code{list_t3$count()}}
+\item \href{#method-list_t3-extract}{\code{list_t3$extract()}}
+\item \href{#method-list_t3-filter}{\code{list_t3$filter()}}
+\item \href{#method-list_t3-filter_l1}{\code{list_t3$filter_l1()}}
+\item \href{#method-list_t3-extract_l1_element_value}{\code{list_t3$extract_l1_element_value()}}
+\item \href{#method-list_t3-modification_l1}{\code{list_t3$modification_l1()}}
+\item \href{#method-list_t3-clone}{\code{list_t3$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-list_t3-new"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize function for R6 list_t3 class.
 \subsection{Usage}{
@@ -34,8 +34,8 @@ Initialize function for R6 list_t3 class.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-name"></a>}}
-\if{latex}{\out{\hypertarget{method-name}{}}}
+\if{html}{\out{<a id="method-list_t3-name"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-name}{}}}
 \subsection{Method \code{name()}}{
 Function for display item's name(s) attribut.
 \subsection{Usage}{
@@ -51,8 +51,8 @@ Function for display item's name(s) attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add"></a>}}
-\if{latex}{\out{\hypertarget{method-add}{}}}
+\if{html}{\out{<a id="method-list_t3-add"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-add}{}}}
 \subsection{Method \code{add()}}{
 Function for add new element in specific attribut.
 \subsection{Usage}{
@@ -70,8 +70,8 @@ Function for add new element in specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove"></a>}}
-\if{latex}{\out{\hypertarget{method-remove}{}}}
+\if{html}{\out{<a id="method-list_t3-remove"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-remove}{}}}
 \subsection{Method \code{remove()}}{
 Function for removed element of specific attribut.
 \subsection{Usage}{
@@ -89,8 +89,8 @@ Function for removed element of specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-view"></a>}}
-\if{latex}{\out{\hypertarget{method-view}{}}}
+\if{html}{\out{<a id="method-list_t3-view"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-view}{}}}
 \subsection{Method \code{view()}}{
 Function for display element(s) of specific attribut.
 \subsection{Usage}{
@@ -108,8 +108,8 @@ Function for display element(s) of specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-count"></a>}}
-\if{latex}{\out{\hypertarget{method-count}{}}}
+\if{html}{\out{<a id="method-list_t3-count"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-count}{}}}
 \subsection{Method \code{count()}}{
 Function for display number of elements of a specific attribut.
 \subsection{Usage}{
@@ -125,8 +125,8 @@ Function for display number of elements of a specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-extract"></a>}}
-\if{latex}{\out{\hypertarget{method-extract}{}}}
+\if{html}{\out{<a id="method-list_t3-extract"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-extract}{}}}
 \subsection{Method \code{extract()}}{
 Function for extract element(s) of a specific attribut.
 \subsection{Usage}{
@@ -146,8 +146,8 @@ Function for extract element(s) of a specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filter"></a>}}
-\if{latex}{\out{\hypertarget{method-filter}{}}}
+\if{html}{\out{<a id="method-list_t3-filter"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-filter}{}}}
 \subsection{Method \code{filter()}}{
 Function for select attribut's element(s) by specific filter.
 \subsection{Usage}{
@@ -165,8 +165,8 @@ Function for select attribut's element(s) by specific filter.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filter_l1"></a>}}
-\if{latex}{\out{\hypertarget{method-filter_l1}{}}}
+\if{html}{\out{<a id="method-list_t3-filter_l1"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-filter_l1}{}}}
 \subsection{Method \code{filter_l1()}}{
 Function for select item(s) by specific selection.
 \subsection{Usage}{
@@ -186,8 +186,8 @@ Function for select item(s) by specific selection.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-extract_l1_element_value"></a>}}
-\if{latex}{\out{\hypertarget{method-extract_l1_element_value}{}}}
+\if{html}{\out{<a id="method-list_t3-extract_l1_element_value"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-extract_l1_element_value}{}}}
 \subsection{Method \code{extract_l1_element_value()}}{
 Function for extract element(s) of a specific attribut.
 \subsection{Usage}{
@@ -205,8 +205,8 @@ Function for extract element(s) of a specific attribut.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-modification_l1"></a>}}
-\if{latex}{\out{\hypertarget{method-modification_l1}{}}}
+\if{html}{\out{<a id="method-list_t3-modification_l1"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-modification_l1}{}}}
 \subsection{Method \code{modification_l1()}}{
 Function for modification item(s).
 \subsection{Usage}{
@@ -226,8 +226,8 @@ Function for modification item(s).
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-list_t3-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-list_t3-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
