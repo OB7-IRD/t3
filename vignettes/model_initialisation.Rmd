@@ -45,7 +45,7 @@ You have three different ways to launch the model creation:
 
 | Process                                         | Code/method associated                 | Class(es) associated                                        |
 |-------------------------------------------------|----------------------------------------|-------------------------------------------------------------|
-| Initialisation R object for data's object model | `t3:::object_model_data$new()`         | object_model_data                                           |
+| Initialisation R object for data's object model | `object_model_data$new()`         | object_model_data                                           |
 | Create trips object                             | `trips_object_creation()`              | object_model_data, trip, trips                              |
 | Create activities object                        | `activities_object_creation()`         | object_model_data, activity, activities                     |
 | Create elementary catches object                | `elementarycatches_object_creation()`  | object_model_data, elementarycatch, elementarycatches       |
@@ -55,10 +55,10 @@ You have three different ways to launch the model creation:
 | Create length steps object                      | `lengthsteps_data()`                   | object_model_data                                           |
 | Create sample sets object                       | `samplesets_data()`                    | object_model_data                                           |
 | Create length weight relationships object       | `lengthweightrelationships_data()`     | object_model_data                                           |
-| Initialisation of R object for full trips class | `t3:::full_trips$new()`                | full_trips                                                  |
+| Initialisation of R object for full trips class | `full_trips$new()`                | full_trips                                                  |
 | Create full_trip object                         | `create_full_trips()`                  | full_trips                                                  |
-| Filter on reference year(s)                     | `filter_by_periode()`                  | full_trips                                                  |
 | Add activities to trip(s) selected              | `add_activities()`                     | full_trips                                                  |
+| Filter on reference year(s)                     | `filter_by_time_period_reference()`    | full_trips                                                  |
 | Add elementary catches to trip(s) selected      | `add_elementarycatches()`              | full_trips                                                  |
 | Add elementary landings to trip(s) selected     | `add_elementarylandings()`             | full_trips                                                  |
 | Add well(s) and sample(s) to trip(s) selected   | `add_wells_samples()`                  | full_trips                                                  |

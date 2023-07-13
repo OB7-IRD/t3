@@ -126,10 +126,10 @@ data_model_initialisation <- function(data_source = "t3_db",
   object_full_trips <- full_trips$new()
   # model creation: object full_trip creation ----
   object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
-  # model creation: filter on reference year ----
-  object_full_trips$filter_by_periode(periode_reference = periode_reference)
   # model creation: add activities to trips selected ----
   object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
+  # model creation: filter by reference year
+  object_full_trips$filter_by_time_period_reference(time_periode_reference = periode_reference)
   # model creation: add elementarycatches to trips selected ----
   object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
   # model creation: add elementarylandings to trips selected ----

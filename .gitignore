@@ -9,3 +9,6 @@
 docs
 tests/testthat/testthat-problems.rds
 .RData
+vignettes/*.html
+vignettes/*.md
+vignettes/*.R

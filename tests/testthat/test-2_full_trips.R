@@ -4,16 +4,16 @@ load(file = system.file("test_data",
                         package = "t3"))
 # model creation ----
 # initialisation object for full trips class
-object_full_trips <- t3:::full_trips$new()
+object_full_trips <- full_trips$new()
 # object full_trip creation
 capture.output(object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips),
                file = "NUL")
-# filter on reference year
-capture.output(object_full_trips$filter_by_periode(periode_reference = as.integer(c(1884,
-                                                                                    1885))),
-               file = "NUL")
 # add activities to trips selected
 capture.output(object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities),
+               file = "NUL")
+# filter on reference year
+capture.output(object_full_trips$filter_by_time_period_reference(time_periode_reference = as.integer(c(1884,
+                                                                                                       1885))),
                file = "NUL")
 # add elementarycatches to trips selected
 capture.output(object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches),
@@ -29,59 +29,45 @@ capture.output(object_full_trips$add_wells_samples(object_wells = object_model_d
 species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
 capture.output(object_full_trips$rf1(species_rf1 = species_rf1),
                file = "NUL")
-
 # level 1.2: rf2
 capture.output(object_full_trips$rf2(),
                file = "NUL")
-
 # level 1.3: logbook weigth categories conversion ----
 capture.output(object_full_trips$conversion_weigth_category(),
                file = "NUL")
-
 # level 1.4: set count ----
 capture.output(object_full_trips$set_count(),
                file = "NUL")
-
 # level 1.5: set duration ----
 capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs),
                file = "NUL")
-
 # level 1.6: time at sea ----
 capture.output(object_full_trips$time_at_sea(),
                file = "NUL")
-
 # level 1.7: fishing time ----
 capture.output(object_full_trips$fishing_time(),
                file = "NUL")
-
 # level 1.8: searching time ----
 capture.output(object_full_trips$searching_time(),
                file = "NUL")
-
 # level 2.1: sample length class ld1 to lf conversion ----
 capture.output(object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps),
                file = "NUL")
-
 # level 2.2: sample number measured extrapolation ----
 capture.output(object_full_trips$sample_number_measured_extrapolation(),
                file = "NUL")
-
 # level 2.3: sample step length class standardisation ----
 capture.output(object_full_trips$sample_length_class_step_standardisation(),
                file = "NUL")
-
 # level 2.4: well set weight categories ----
 capture.output(object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets),
                file = "NUL")
-
 # level 2.5: standardised sample creation ----
 capture.output(object_full_trips$standardised_sample_creation(),
                file = "NUL")
-
 # level 2.6: sample number standardisation ----
 capture.output(object_full_trips$standardised_sample_set_creation(length_weight_relationship_data = object_model_data$.__enclos_env__$private$lengthweightrelationships),
                file = "NUL")
-
 # level 2.7: raised factors determination ----
 capture.output(object_full_trips$raised_factors_determination(),
                file = "NUL")
@@ -89,11 +75,9 @@ capture.output(object_full_trips$raised_factors_determination(),
 # level 2.8: samples number standardisation at set scale ----
 capture.output(object_full_trips$raised_standardised_sample_set(),
                file = "NUL")
-
 # path to level 3 ----
 capture.output(object_full_trips$path_to_level3(),
                file = "NUL")
-
 for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -288,8 +272,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                              file = "NUL")
               capture.output(current_elementarysamples_species <- t3::object_r6(class_name = "elementarysamples"),
                              file = "NUL")
-              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$specie_code == ",
-                                                                                                                                     specie))),
+              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$specie_code == ",
+                                                                                                                                  specie))),
                              file = "NUL")
               # 217 - Checking if sum "sample_number_measured_extrapolated_lf" in object "elementarysamplesraw" is equal to "sample_number_measured" in object "elementarysamples" ----
               testthat::test_that(desc = "217 - Checking if sum \"sample_number_measured_extrapolated_lf\" in object \"elementarysamplesraw\" is equal to \"sample_number_measured\" in object \"elementarysamples\"",
@@ -310,13 +294,17 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
           testthat::test_that(desc = "212 - Checking if process 2.1 run on all data",
                               code = {
                                 testthat::expect_true(object = (all(unlist(lapply(X = current_sample_length_class_lf,
-                                                                                  FUN = function(x) (! is.null(x)
-                                                                                                     && ((is.na(x)
-                                                                                                          || is.numeric(x))))))))
+                                                                                  FUN = function(x) {
+                                                                                    (! is.null(x)
+                                                                                     && ((is.na(x)
+                                                                                          || is.numeric(x))))
+                                                                                  }))))
                                                       & (all(unlist(lapply(X = current_sample_number_measured_lf,
-                                                                           FUN = function(x) (! is.null(x)
-                                                                                              && ((is.na(x)
-                                                                                                   || is.numeric(x)))))))),
+                                                                           FUN = function(x) {
+                                                                             (! is.null(x)
+                                                                              && ((is.na(x)
+                                                                                   || is.numeric(x))))
+                                                                           })))),
                                                       label = paste0("issue with the full trip ", full_trip_id,
                                                                      ", partial trip ", partial_trip_id,
                                                                      " and the well ", well_id))
@@ -327,13 +315,17 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
           testthat::test_that(desc = "214 - Checking if variables \"rf4\" and \"sample_number_measured_extrapolated_lf\" are filled and in the correct format according to the process 2.2",
                               code = {
                                 testthat::expect_true(object = (all(unlist(lapply(X = current_sample_rf4,
-                                                                                  FUN = function(x) (! is.null(x)
-                                                                                                     && ((is.na(x)
-                                                                                                          || is.numeric(x))))))))
+                                                                                  FUN = function(x) {
+                                                                                    (! is.null(x)
+                                                                                     && ((is.na(x)
+                                                                                          || is.numeric(x))))
+                                                                                  }))))
                                                       & (all(unlist(lapply(X = current_sample_sample_number_measured_extrapolated_lf,
-                                                                           FUN = function(x) (! is.null(x)
-                                                                                              && ((is.na(x)
-                                                                                                   || is.numeric(x)))))))),
+                                                                           FUN = function(x) {
+                                                                             (! is.null(x)
+                                                                              && ((is.na(x)
+                                                                                   || is.numeric(x))))
+                                                                           })))),
                                                       label = paste0("issue with the full trip ", full_trip_id,
                                                                      ", partial trip ", partial_trip_id,
                                                                      " and the well ", well_id))

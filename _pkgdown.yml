@@ -14,6 +14,7 @@ reference:
   - data_model_initialisation
   - t3_level1
   - t3_level2
+  - t3_level3
 - title: "Level 3 tools"
   desc: >
     Functions used in the process level 3.
@@ -63,7 +64,7 @@ reference:
 - contents:
   - object_r6
   - initiate_log_file
-  - initiate_directories
+  - initiate_directory
 
 url: https://ob7-ird.github.io/t3
 
@@ -80,6 +81,7 @@ articles:
   - level_1
   - level_2
   - level_3
+  - running_processes_examples
 
 development:
   mode: auto

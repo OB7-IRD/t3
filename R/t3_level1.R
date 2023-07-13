@@ -11,7 +11,8 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".
-#' @param outputs_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
+#' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
+#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @return The function a R6 reference object of class "object_full_trips".
@@ -26,8 +27,9 @@ t3_level1 <- function(object_model_data,
                       log_file = FALSE,
                       log_path = NULL,
                       log_name = "t3_level1",
-                      outputs_path = NULL,
-                      new_directory = NULL,
+                      output_path = NULL,
+                      output_format = "eu",
+                      new_directory = FALSE,
                       integrated_process = FALSE) {
   if (paste0(class(object_model_data),
              collapse = " ") != "object_model_data R6") {
@@ -50,7 +52,7 @@ t3_level1 <- function(object_model_data,
     initiate_log_file(log_file = log_file,
                       log_path = log_path,
                       log_name = log_name)
-    cat(format(Sys.time(),
+    cat(format(x = Sys.time(),
                "%Y-%m-%d %H:%M:%S"),
         " - Start function t3 process level 1.\n",
         "[species rf1: ",
@@ -60,35 +62,49 @@ t3_level1 <- function(object_model_data,
         sep = "")
     # directories initialization if outputs extraction ----
     if (integrated_process != TRUE
-        && ! is.null(x = outputs_path)) {
-      outputs_path <- initiate_directories(outputs_path = outputs_path,
-                                           new_directory = new_directory,
-                                           level = "level1")
+        && ! is.null(x = output_path)) {
+      output_path <- initiate_directory(output_path = output_path,
+                                        new_directory = new_directory,
+                                        level = "level1")
     }
     # level 1.1: rf1 ----
     object_full_trips$rf1(species_rf1 = species_rf1,
                           rf1_lowest_limit = rf1_lowest_limit,
                           rf1_highest_limit = rf1_highest_limit,
-                          global_outputs_path = outputs_path)
+                          global_output_path = output_path,
+                          output_format = output_format)
     # level 1.2: rf2 ----
-    object_full_trips$rf2()
+    object_full_trips$rf2(global_output_path = output_path,
+                          output_format = output_path)
     # level 1.3: logbook weigth categories conversion ----
-    object_full_trips$conversion_weigth_category()
+    object_full_trips$conversion_weigth_category(global_output_path = output_path,
+                                                 output_format = output_format)
     # level 1.4: set count ----
-    object_full_trips$set_count()
+    object_full_trips$set_count(global_output_path = output_path,
+                                output_format = output_format)
     # level 1.5: set duration ----
-    object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs)
+    object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                   global_output_path = output_path,
+                                   output_format = output_format)
     # level 1.6: time at sea ----
-    object_full_trips$time_at_sea()
+    object_full_trips$time_at_sea(global_output_path = output_path,
+                                  output_format = output_format)
     # level 1.7: fishing time ----
     object_full_trips$fishing_time(sunrise_schema = "sunrise",
-                                   sunset_schema = "sunset")
+                                   sunset_schema = "sunset",
+                                   global_output_path = output_path,
+                                   output_format = output_format)
     # level 1.8: searching time ----
-    object_full_trips$searching_time()
+    object_full_trips$searching_time(global_output_path = output_path,
+                                     output_format = output_format)
     # close, if necessary log file connection ----
     if (log_file == TRUE) {
       closeAllConnections()
     }
+    cat(format(x = Sys.time(),
+               format = "%Y-%m-%d %H:%M:%S"),
+        " - Successful function t3 process level 1.\n",
+        sep = "")
     return(object_full_trips)
   }
 }

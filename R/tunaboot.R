@@ -14,35 +14,24 @@
 #' @param Nseed_boot Set the initial seed for the modelling. The default value is equal to Nseed parameter
 #' @param target_period Time period for the predictions in year. Default is the year of the data to predict
 #' @importFrom ranger ranger
-#' @importFrom dplyr sample_n rename
+#' @importFrom dplyr sample_n bind_rows rename
+#' @importFrom stats predict
 #' @return TODO
 tunaboot <- function(sample_data,
                      allset_data,
-                     # schooltype = 1,
-                     # ocean = 1,
-                     # species = "SKJ",
-                     # # model parameters
                      Ntree = 1000,
                      Nmtry = 2,
-                     Nseed = 7, # fix seed number for reproducibility of the predicts
+                     Nseed = 7,
                      min_node = 5,
-                     # bootstrap parameters
                      Nboot = 10,
-                     Nseed_boot, # fix seed number in the bootstrap model
-                     target_period
-)
-{
+                     Nseed_boot,
+                     target_period) {
   # local binding global variables ----
   prop_t3 <- modrf0 <- NULL
   if (missing(Nseed_boot)) {Nseed_boot = Nboot}
   if (missing(target_period)) {target_period = allset_data$yr[1]}
   # build structure of the output list for the bootstrap
   boot_output_list <- vector("list", length = Nboot)
-  # boot_output_list <- lapply(boot_output_list, function (x){
-  #   tmp <- vector('list', length = 3)
-  #   names(tmp) <- c("task1", "task2","loop")
-  #   return(tmp)
-  # })
   # subset of all sampled set
   sub <- sample_data
   # format columns
@@ -65,24 +54,13 @@ tunaboot <- function(sample_data,
   no_sampled_set$mon <- factor(no_sampled_set$mon)
   no_sampled_set$vessel <- factor(no_sampled_set$vessel)
   ### split dataframe for different treatment if needed
-  # no_sampled_set$wtot_lb_t3 <- no_sampled_set$w_tuna #  total tuna catch of each set
   no_sampled_set$data_source <- NA # assign source later
   no_sampled_set$fit_prop <- NA # stock final proportion
-  # add potential missing level - bug of the predict function
-  # no_sampled_set$yr <- addmissinglevel(no_sampled_set, "yr")
-  # no_sampled_set$mon <- addmissinglevel(no_sampled_set, "mon")
-  # no_sampled_set$vessel <- addmissinglevel(no_sampled_set, "vessel")
-  # missinglevel<- setdiff(levels(sub$vessel), levels(tmp$vessel))
-  # levels(tmp$vessel) <- c(levels(tmp$vessel),missinglevel)
-  # levels(no_sampled_set$vessel) <- modrf$forest$xlevels$vessel
-  # levels(no_sampled_set$yr) <- modrf$forest$xlevels$yr
-  # levels(no_sampled_set$mon) <- modrf$forest$xlevels$mon
   # not sampled vessel list
-  vessel_not_train <- base::setdiff(levels(no_sampled_set$vessel),
-                                    levels(sub$vessel))
+  vessel_not_train <- setdiff(levels(no_sampled_set$vessel),
+                              levels(sub$vessel))
   # dataset with all information
   newd <- (no_sampled_set[!no_sampled_set$vessel %in% vessel_not_train, ])
-  # newd$vessel <- factor(newd$vessel, levels = setdiff(levels(newd$vessel),vessel_not_train)) # remove levels of vessel not train
   # dataset with vessel not sampled
   new_wtv <- no_sampled_set[no_sampled_set$vessel %in% vessel_not_train & !is.na(no_sampled_set$prop_lb), ]
   # dataset with no logbook
@@ -135,8 +113,8 @@ tunaboot <- function(sample_data,
                                       quantreg = FALSE,
                                       keep.inbag= FALSE
       )
-      newd$fit_prop <- predict(object = model_rf_full,
-                               data = newd)$predictions
+      newd$fit_prop <- stats::predict(object = model_rf_full,
+                                      data = newd)$predictions
       newd$data_source <- "full_model" # add flag
     }
     ##  without vessel information

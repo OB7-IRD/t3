@@ -1,18 +1,25 @@
 #' @name full_trips
 #' @title R6 class full_trips
-#' @description Create R6 reference object class full_trips
 #' @importFrom R6 R6Class
-#' @importFrom lubridate year hms dseconds int_length interval days as_date
+#' @importFrom dplyr tibble mutate add_row relocate group_by summarise full_join left_join n last first filter bind_rows as_tibble ungroup inner_join distinct
+#' @importFrom lubridate year hms dseconds int_length interval days dhours dminutes month
+#' @importFrom codama r_type_checking
 #' @importFrom suncalc getSunlightTimes
-#' @importFrom dplyr group_by summarise last first filter ungroup
-#' @importFrom boot boot.ci
+#' @importFrom stringr str_extract
+#' @importFrom tidyr spread gather separate
 #' @importFrom ranger ranger predictions importance
-#' @importFrom tidyr gather spread separate
-#' @importFrom sp coordinates proj4string spTransform
-#' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
-#' @importFrom stats predict
 #' @importFrom rfUtilities multi.collinear
+#' @importFrom ggplot2 ggplot stat_qq stat_qq_line ylim geom_line theme aes geom_point geom_smooth geom_segment scale_y_discrete geom_abline xlab ylab ggtitle geom_density after_stat ggsave geom_boxplot labs scale_color_discrete scale_x_continuous scale_color_manual geom_tile scale_fill_gradient2 scale_fill_manual geom_sf coord_sf theme_classic theme_bw
+#' @importFrom ggpubr ggarrange
+#' @importFrom sp coordinates SpatialPoints fullgrid gridded proj4string CRS spTransform
+#' @importFrom adehabitatHR kernelUD getvolumeUD
+#' @importFrom automap autoKrige
+#' @importFrom sf st_as_sf
 #' @importFrom gstat variogram
+#' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
+#' @importFrom forecast ggAcf
+#' @importFrom raster raster crs crop extent rasterize rasterToPoints quantile cut
+#' @importFrom grDevices colorRampPalette
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = list_t3,
                           public = list(
@@ -20,7 +27,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Creation of full trip item from trips.
                             #' @param object_trips Object of type R6-trips expected. A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
-                              if (paste(class(object_trips),
+                              if (paste(class(x = object_trips),
                                         collapse = " ") != "trips list_t3 R6") {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -89,6 +96,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               names(full_trips) <- seq_len(length.out = length(full_trips))
                               private$data <- full_trips
+                              # log summary annotation
+                              private$log_summary <- dplyr::tibble(step = "create_full_trips",
+                                                                   input_trips = object_trips$count(),
+                                                                   output_trips = length(x = unlist(x = full_trips)),
+                                                                   output_full_trips = length(x = full_trips))
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End of full trips creation.\n",
                                   sep = "")
@@ -149,6 +161,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sep = "")
                                   private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
                                 }
+                                # log summary annotation
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_full_trips = NA_integer_) %>%
+                                  dplyr::add_row(step = "filter_by_periode",
+                                                 input_trips = length(x = unlist(x = private$data)),
+                                                 input_full_trips = length(x = private$data),
+                                                 output_full_trips = length(x = private$data_selected),
+                                                 output_trips = length(x = unlist(x = private$data_selected))) %>%
+                                  dplyr::relocate(input_full_trips,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of full trips filtering.\n",
                                     sep = "")
@@ -158,48 +180,170 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for add activities in full trips object.
                             #' @param object_activities Object of type R6-activities expected. A R6 reference object of class activities.
                             add_activities = function(object_activities) {
+                              # 1 - Arguments verification
                               if (object_activities$count() == 0) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selected\" empty, ",
+                                    " - Error: no activity is available for the process.\n",
                                     sep = "")
                                 stop()
-                              } else if (! any(class(x = object_activities) == "activities")) {
+                              }
+                              if (! any(class(x = object_activities) == "activities")) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"object_activities\" argument.\n",
                                     sep = "")
                                 stop()
-                              } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                  if (full_trip_id == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add activity.\n",
-                                        sep = "")
-                                  }
-                                  capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                 file = "NUL")
-                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                 file = "NUL")
-                                  full_trips_activities <- lapply(X = seq_len(length.out = current_trips$count()),
-                                                                  FUN = function(trip_id) {
-                                                                    current_trip_id <- current_trips$extract(attribut_l1 = "data",
-                                                                                                             attribut_l2 = "trip_id",
-                                                                                                             id = trip_id)
-                                                                    object_activities$filter_l1(filter = paste0("$path$trip_id == \"",
-                                                                                                                current_trip_id,
-                                                                                                                "\""),
-                                                                                                clone = TRUE)
-                                                                  })
-                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
-                                                       FUN = function(trip_id) {
-                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities <- full_trips_activities[[trip_id]]
-                                                       }))
+                              }
+                              # 2 - Process
+                              for (full_trip_id in seq_len(length.out = length(private$data))) {
+                                if (full_trip_id == 1) {
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - Start of add activity.\n",
+                                      sep = "")
                                 }
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add activity.\n",
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Ongoing process of adding activities on full trip \"",
+                                    names(x = private$data)[[full_trip_id]],
+                                    "\".\n",
+                                    sep = "")
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = private$data[[full_trip_id]]),
+                                               file = "NUL")
+                                full_trips_activities <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                                FUN = function(trip_id) {
+                                                                  current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                           attribut_l2 = "trip_id",
+                                                                                                           id = trip_id)
+                                                                  object_activities$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                              current_trip_id,
+                                                                                                              "\""),
+                                                                                              clone = TRUE)
+                                                                })
+                                invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                     FUN = function(trip_id) {
+                                                       current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities <- full_trips_activities[[trip_id]]
+                                                     }))
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Successful process of adding activities on full trip \"",
+                                    names(private$data)[[full_trip_id]],
+                                    "\".\n",
                                     sep = "")
                               }
+                              # 3 - log summary annotation
+                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips$add(new_item = unlist(x = private$data)),
+                                             file = "NUL")
+                              private$log_summary <- private$log_summary %>%
+                                dplyr::mutate(input_full_trips = NA_integer_,
+                                              input_activities = NA_integer_,
+                                              output_activities = NA_integer_) %>%
+                                dplyr::add_row(step = "add_activities",
+                                               input_trips = length(x = unlist(x = private$data)),
+                                               input_full_trips = length(x = private$data),
+                                               output_full_trips = input_full_trips,
+                                               output_trips = input_trips,
+                                               input_activities = object_activities$count(),
+                                               output_activities = length(x = unlist(x = current_trips$extract_l1_element_value(element = "activities")))) %>%
+                                dplyr::relocate(input_full_trips,
+                                                input_activities,
+                                                .before = output_trips)
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - End of add activity.\n",
+                                  sep = "")
+                            },
+                            # filter full trips by time period reference ----
+                            #' @description Function for filter full trips by a reference time period.
+                            #' @param time_periode_reference Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
+                            filter_by_time_period_reference = function(time_periode_reference) {
+                              # 1 - Arguments verification
+                              if (codama::r_type_checking(r_object = time_periode_reference,
+                                                          type = "integer",
+                                                          output = "logical") != TRUE) {
+                                codama::r_type_checking(r_object = time_periode_reference,
+                                                        type = "integer",
+                                                        output = "message")
+                                stop()
+                              }
+                              # 2 - Process
+                              for (full_trip_id in seq_len(length.out = length(x = private$data))) {
+                                if (full_trip_id == 1) {
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - Start of full trips filtering by reference periode.\n",
+                                      sep = "")
+                                }
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = private$data[[full_trip_id]]),
+                                               file = "NUL")
+                                if (length(x = unlist(x = current_trips$extract_l1_element_value(element = "activities"))) != 0) {
+                                  capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                                 file = "NUL")
+                                  activities_date <- do.call("c",
+                                                             current_activities$extract_l1_element_value(element = "activity_date"))
+                                  activities_years <- unique(x = lubridate::year(x = activities_date))
+                                  if (any(activities_years %in% time_periode_reference)) {
+                                    private$data_selected <- append(private$data_selected,
+                                                                    list(lapply(X = seq_len(length.out = current_trips$count()),
+                                                                                FUN = function(list_id) {
+                                                                                  private$data[[full_trip_id]][[list_id]]$clone()
+                                                                                })))
+                                    names(private$data_selected)[length(x = private$data_selected)] <- names(private$data[full_trip_id])
+                                  }
+                                }
+                              }
+                              if (any(private$id_not_full_trip %in% names(private$data_selected))) {
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Warning: missing trip(s) in at least one full trip item selected.\n",
+                                    "[name(s)/id(s) of element(s): ",
+                                    paste0(private$id_not_full_trip,
+                                           "/",
+                                           which(x = names(private$data_selected) %in% private$id_not_full_trip),
+                                           collapse = ", "),
+                                    "]\n",
+                                    sep = "")
+                                private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
+                              }
+                              # 3 - log summary annotation
+                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips$add(new_item = unlist(x = private$data)),
+                                             file = "NUL")
+                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              capture.output(current_trips_selected <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                             file = "NUL")
+                              capture.output(current_activities_selected <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities_selected$add(new_item = unlist(x = current_trips_selected$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              private$log_summary <- private$log_summary %>%
+                                dplyr::add_row(step = "filter_by_time_period_reference",
+                                               input_trips = length(x = unlist(x = private$data)),
+                                               input_activities = current_activities$count(),
+                                               input_full_trips = length(x = private$data),
+                                               output_full_trips = length(x = private$data_selected),
+                                               output_trips = length(x = unlist(x = private$data_selected)),
+                                               output_activities = current_activities_selected$count()) %>%
+                                dplyr::relocate(input_full_trips,
+                                                .before = output_trips)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End of full trips filtering.\n",
+                                  sep = "")
                             },
                             # add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.
@@ -224,6 +368,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary catches.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding elementary catches on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -248,7 +397,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 }))
                                                          }
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding elementary catches on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_elementary_catches = NA_integer_,
+                                                output_elementary_catches = NA_integer_,
+                                                output_catch_weight_elementary_catches = NA_real_) %>%
+                                  dplyr::add_row(step = "add_elementarycatches",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = object_elementarycatches$count(),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = current_elementarycatches$count(),
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")))) %>%
+                                  dplyr::relocate(input_elementary_catches,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary catches.\n",
                                     sep = "")
@@ -279,6 +462,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add elementary landings.\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding elementary landings on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -297,7 +485,48 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        FUN = function(trip_id) {
                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$elementarylandings <- full_trips_elementarylandings[[trip_id]]
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding elementary landings on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_elementary_landings = NA_integer_,
+                                                output_elementary_landings = NA_integer_,
+                                                output_landing_weight_elementary_landings = NA_real_) %>%
+                                  dplyr::add_row(step = "add_elementarylandings",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = current_elementarycatches$count(),
+                                                 input_elementary_landings = object_elementarylandings$count(),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = input_elementary_catches,
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                                 output_elementary_landings = current_elementarylandings$count(),
+                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight")))) %>%
+                                  dplyr::relocate(input_elementary_landings,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End of add elementary landings.\n",
@@ -326,6 +555,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start of add well(s) - sample(s).\n",
                                         sep = "")
                                   }
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Ongoing process of adding well(s) - sample(s) on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                   capture.output(current_trips <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -344,7 +578,62 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        FUN = function(trip_id) {
                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$wells <- full_trips_wells[[trip_id]]
                                                        }))
+                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - Successful process of adding well(s) - sample(s) on full trip \"",
+                                      names(private$data_selected)[[full_trip_id]],
+                                      "\".\n",
+                                      sep = "")
                                 }
+                                # log summary annotation
+                                capture.output(current_trips <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                               file = "NUL")
+                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                               file = "NUL")
+                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                               file = "NUL")
+                                capture.output(current_wells <- object_r6(class_name = "wells"),
+                                               file = "NUL")
+                                capture.output(current_wells$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "wells"))),
+                                               file = "NUL")
+                                capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                               file = "NUL")
+                                capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                               file = "NUL")
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_wells = NA_integer_,
+                                                input_elementarysamplesraw = NA_integer_,
+                                                output_wells = NA_integer_,
+                                                output_elementarysamplesraw = NA_integer_) %>%
+                                  dplyr::add_row(step = "add_wells_samples",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = current_elementarycatches$count(),
+                                                 input_elementary_landings = current_elementarylandings$count(),
+                                                 input_wells = object_wells$count(),
+                                                 input_elementarysamplesraw = length(x = unlist(x = object_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = input_elementary_catches,
+                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                                 output_elementary_landings = input_elementary_landings,
+                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))),
+                                                 output_wells = current_wells$count(),
+                                                 output_elementarysamplesraw = current_elementarysamplesraw$count()) %>%
+                                  dplyr::relocate(input_wells,
+                                                  input_elementarysamplesraw,
+                                                  .before = output_trips)
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End of add well(s) - sample(s).\n",
@@ -356,237 +645,161 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
-                            #' @param global_outputs_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             rf1 = function(species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
-                                           global_outputs_path = NULL) {
-                              # function parameters verification ----
+                                           global_output_path = NULL,
+                                           output_format = "eu") {
+                              # 1 - Arguments verification ----
                               if (any(class(x = species_rf1) != "integer")) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"species_rf1\" argument.\n",
                                     sep = "")
                                 stop()
-                              } else if (length(x = class(x = rf1_lowest_limit)) != 1
-                                         || class(x = rf1_lowest_limit) != "numeric") {
+                              }
+                              if (length(x = class(x = rf1_lowest_limit)) != 1
+                                  || ! inherits(x = rf1_lowest_limit,
+                                                what = "numeric")) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"rf1_lowest_limit\" argument.\n",
                                     sep = "")
                                 stop()
-                              } else if (length(x = class(rf1_highest_limit)) != 1
-                                         || class(x = rf1_highest_limit) != "numeric") {
+                              }
+                              if (length(x = class(rf1_highest_limit)) != 1
+                                  || ! inherits(x = rf1_highest_limit,
+                                                what = "numeric")) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"rf1_highest_limit\" argument.\n",
                                     sep = "")
                                 stop()
-                              } else if (! is.null(x = global_outputs_path)
-                                         && (class(x = global_outputs_path) != "character"
-                                             || length(x = global_outputs_path) != 1
-                                             || ! file.exists(file.path(global_outputs_path,
-                                                                        "level1",
-                                                                        "data_outputs")))) {
+                              }
+                              if (! is.null(x = global_output_path)
+                                  && (! inherits(x = global_output_path,
+                                                 what = "character")
+                                      || length(x = global_output_path) != 1
+                                      || ! file.exists(file.path(global_output_path,
+                                                                 "level1",
+                                                                 "data")))) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"global_outputs_path\" argument.\n",
+                                    " - Error: invalid \"global_output_path\" argument.\n",
                                     sep = "")
                                 stop()
+                              }
+                              if (codama::r_type_checking(r_object = output_format,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          allowed_value = c("us",
+                                                                            "eu"),
+                                                          output = "logical") != TRUE) {
+                                stop(codama::r_type_checking(r_object = output_format,
+                                                             type = "character",
+                                                             length = 1L,
+                                                             allowed_value = c("us",
+                                                                               "eu"),
+                                                             output = "message"))
+                              }
+                              # 2 - Process ----
+                              if (is.null(x = private$data_selected)) {
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Empty data selected in the R6 object.\n",
+                                    " - Process 1.1 (Raising Factor level 1) cancelled.\n",
+                                    sep = "")
                               } else {
-                                # process ----
-                                if (is.null(x = private$data_selected)) {
-                                  cat(format(x = Sys.time(),
-                                             format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Empty data selected in the R6 object.\n",
-                                      " - Process 1.1 (Raising Factor level 1) cancelled.\n",
-                                      sep = "")
-                                } else {
-                                  for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
-                                    if (full_trip_id == 1) {
-                                      cat(format(x = Sys.time(),
-                                                 format = "%Y-%m-%d %H:%M:%S"),
-                                          " - Start process 1.1: Raising Factor level 1.\n",
-                                          sep = "")
-                                    }
-                                    if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                      cat(format(x = Sys.time(),
-                                                 format = "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: missing trip(s) in full trip element \"",
-                                          names(x = private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          sep = "")
-                                      stop <- 0
-                                      for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                        # case 1.1 ----
-                                        # at least one logbook is missing in not complete full trip item
-                                        if (trip_id == 1) {
-                                          logbook_availability <- vector(mode = "integer")
-                                        }
-                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        logbook_availability <- append(logbook_availability,
-                                                                       current_trip$.__enclos_env__$private$logbook_availability)
-                                        if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
-                                          if (any(logbook_availability) == 0) {
-                                            cat(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: missing logbook in trip element \"",
-                                                names(x = private$data_selected)[full_trip_id],
-                                                "\".\n",
-                                                "[trip: ",
-                                                current_trip$.__enclos_env__$private$trip_id,
-                                                "]\n",
-                                                sep = "")
-                                            capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                           file = "NUL")
-                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                           file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- NA")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.1")
-                                            stop <- 1
-                                          }
-                                        }
+                                for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Start process 1.1: Raising Factor level 1.\n",
+                                        sep = "")
+                                  }
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: missing trip(s) in full trip element \"",
+                                        names(x = private$data_selected)[full_trip_id],
+                                        "\".\n",
+                                        sep = "")
+                                    stop <- 0
+                                    for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                      # case 1.1 ----
+                                      # at least one logbook is missing in not complete full trip item
+                                      if (trip_id == 1) {
+                                        logbook_availability <- vector(mode = "integer")
                                       }
-                                      if (stop != 1) {
-                                        for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                          if (trip_id == 1) {
-                                            current_elementarycatches <- NULL
-                                          }
-                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                          if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                            for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                              current_elementarycatches <- append(current_elementarycatches,
-                                                                                  current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
-                                            }
-                                          }
-                                        }
-                                        if (is.null(x = current_elementarycatches)) {
-                                          # case 1.2 ----
-                                          # trips with no catches (for example route or support) in not complete full trip item
+                                      current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                      logbook_availability <- append(logbook_availability,
+                                                                     current_trip$.__enclos_env__$private$logbook_availability)
+                                      if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
+                                        if (any(logbook_availability) == 0) {
+                                          cat(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Warning: missing logbook in trip element \"",
+                                              names(x = private$data_selected)[full_trip_id],
+                                              "\".\n",
+                                              "[trip: ",
+                                              current_trip$.__enclos_env__$private$trip_id,
+                                              "]\n",
+                                              sep = "")
                                           capture.output(current_trips <- object_r6(class_name = "trips"),
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
                                           current_trips$modification_l1(modification = "$path$rf1 <- NA")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.2")
-                                        } else {
-                                          for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
-                                            if (trip_id == 1) {
-                                              current_elementarylandings <- NULL
-                                              stop_bis <- 0
-                                            }
-                                            current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                            if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
-                                              if (! is.null(x = unlist(x = current_trip$.__enclos_env__$private$elementarylandings))) {
-                                                current_elementarylandings <- append(current_elementarylandings,
-                                                                                     unlist(current_trip$.__enclos_env__$private$elementarylandings))
-                                              } else {
-                                                stop_bis <- 1
-                                              }
-                                            } else {
-                                              current_elementarylandings <- append(current_elementarylandings,
-                                                                                   unlist(current_trip$.__enclos_env__$private$elementarylandings))
-                                            }
-                                            if (stop_bis == 1) {
-                                              # case 1.3 ----
-                                              # at least one elementary landing is missing in not complete full trip item
-                                              cat(format(x = Sys.time(),
-                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: missing elementary landing in trip element \"",
-                                                  names(x = private$data_selected)[full_trip_id],
-                                                  "\".\n",
-                                                  "[trip: ",
-                                                  current_trip$.__enclos_env__$private$trip_id,
-                                                  "]\n",
-                                                  sep = "")
-                                              capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                             file = "NUL")
-                                              capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                             file = "NUL")
-                                              current_trips$modification_l1(modification = "$path$rf1 <- NA")
-                                              current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.3")
-                                            } else {
-                                              # case 1.4 ----
-                                              # almost rocks dude ! (not complete full trip item)
-                                              capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                             file = "NUL")
-                                              capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                             file = "NUL")
-                                              current_trips$modification_l1(modification = "$path$rf1 <- NA")
-                                              current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.4")
-                                            }
-                                          }
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.1")
+                                          stop <- 1
                                         }
                                       }
-                                    } else {
-                                      stop <- 0
+                                    }
+                                    if (stop != 1) {
                                       for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                        # case 2.1 ----
-                                        # at least one logbook is missing in complete full trip item
                                         if (trip_id == 1) {
-                                          logbook_availability <- vector(mode = "integer")
+                                          current_elementarycatches <- NULL
                                         }
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        logbook_availability <- append(logbook_availability,
-                                                                       current_trip$.__enclos_env__$private$logbook_availability)
-                                        if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
-                                          if (any(logbook_availability) == 0) {
-                                            cat(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: missing logbook in trip element \"",
-                                                names(x = private$data_selected)[full_trip_id],
-                                                "\".\n",
-                                                "[trip: ",
-                                                current_trip$.__enclos_env__$private$trip_id,
-                                                "]\n",
-                                                sep = "")
-                                            capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                           file = "NUL")
-                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                           file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.1")
-                                            stop <- 1
+                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                          for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                            current_elementarycatches <- append(current_elementarycatches,
+                                                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
                                           }
                                         }
                                       }
-                                      if (stop != 1) {
-                                        current_elementarycatches <- NULL
-                                        for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                      if (is.null(x = current_elementarycatches)) {
+                                        # case 1.2 ----
+                                        # trips with no catches (for example route or support) in not complete full trip item
+                                        capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                       file = "NUL")
+                                        capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                       file = "NUL")
+                                        current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                        current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.2")
+                                      } else {
+                                        for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                          if (trip_id == 1) {
+                                            current_elementarylandings <- NULL
+                                            stop_bis <- 0
+                                          }
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                          if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                            for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                              current_elementarycatches <- append(current_elementarycatches,
-                                                                                  current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
+                                          if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
+                                            if (! is.null(x = unlist(x = current_trip$.__enclos_env__$private$elementarylandings))) {
+                                              current_elementarylandings <- append(current_elementarylandings,
+                                                                                   unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                            } else {
+                                              stop_bis <- 1
                                             }
-                                          }
-                                        }
-                                        if (is.null(x = current_elementarycatches)) {
-                                          # case 2.2 ----
-                                          # trips with no catches (for example route or support) in complete full trip item
-                                          capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                         file = "NUL")
-                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                         file = "NUL")
-                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
-                                        } else {
-                                          current_elementarycatches_weight <- vector(mode = "numeric")
-                                          for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            if (current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$specie_code %in% species_rf1) {
-                                              current_elementarycatches_weight <- append(current_elementarycatches_weight,
-                                                                                         current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight)
-                                            }
-                                          }
-                                          current_elementarylandings <- NULL
-                                          for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                            current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                          } else {
                                             current_elementarylandings <- append(current_elementarylandings,
                                                                                  unlist(current_trip$.__enclos_env__$private$elementarylandings))
                                           }
-                                          if (is.null(x = current_elementarylandings)) {
-                                            # case 2.3 ----
-                                            # no elementary landing in complete full trip item
+                                          if (stop_bis == 1) {
+                                            # case 1.3 ----
+                                            # at least one elementary landing is missing in not complete full trip item
                                             cat(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Warning: missing elementary landing in trip element \"",
@@ -600,210 +813,334 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.3")
                                           } else {
-                                            # case 2.4 ----
-                                            # everything rocks dude !
-                                            current_elementarylandings_weight <- vector(mode = "numeric")
-                                            for (elementarylanding_id in seq_len(length.out = length(x = current_elementarylandings))) {
-                                              if (current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$specie_code %in% species_rf1) {
-                                                current_elementarylandings_weight <- append(current_elementarylandings_weight,
-                                                                                            current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$landing_weight)
-                                              }
-                                            }
-                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
-                                            if (current_rf1 < rf1_lowest_limit
-                                                | current_rf1 > rf1_highest_limit) {
-                                              cat(format(x = Sys.time(),
-                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: rf1 value of trip element \"",
-                                                  names(x = private$data_selected)[full_trip_id],
-                                                  "\" out of theorical boundaries: ",
-                                                  round(x = current_rf1,
-                                                        digits = 3),
-                                                  ".\n",
-                                                  "[trip: ",
-                                                  current_trip$.__enclos_env__$private$trip_id,
-                                                  "]\n",
-                                                  sep = "")
-                                            }
+                                            # case 1.4 ----
+                                            # almost rocks dude ! (not complete full trip item)
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
-                                            current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
-                                                                                                current_rf1))
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.4")
                                           }
                                         }
                                       }
                                     }
-                                    # assign rf1 to elementary catches ----
+                                  } else {
+                                    stop <- 0
                                     for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                      # case 2.1 ----
+                                      # at least one logbook is missing in complete full trip item
+                                      if (trip_id == 1) {
+                                        logbook_availability <- vector(mode = "integer")
+                                      }
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                      current_rf1 <- current_trip$.__enclos_env__$private$rf1
-                                      if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                        for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                          current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
-                                          if (! is.null(x = current_elementarycatches)) {
-                                            for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight * current_rf1
+                                      logbook_availability <- append(logbook_availability,
+                                                                     current_trip$.__enclos_env__$private$logbook_availability)
+                                      if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
+                                        if (any(logbook_availability) == 0) {
+                                          cat(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Warning: missing logbook in trip element \"",
+                                              names(x = private$data_selected)[full_trip_id],
+                                              "\".\n",
+                                              "[trip: ",
+                                              current_trip$.__enclos_env__$private$trip_id,
+                                              "]\n",
+                                              sep = "")
+                                          capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                         file = "NUL")
+                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                         file = "NUL")
+                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.1")
+                                          stop <- 1
+                                        }
+                                      }
+                                    }
+                                    if (stop != 1) {
+                                      current_elementarycatches <- NULL
+                                      for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                          for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                            current_elementarycatches <- append(current_elementarycatches,
+                                                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
+                                          }
+                                        }
+                                      }
+                                      if (is.null(x = current_elementarycatches)) {
+                                        # case 2.2 ----
+                                        # trips with no catches (for example route or support) in complete full trip item
+                                        capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                       file = "NUL")
+                                        capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                       file = "NUL")
+                                        current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                        current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
+                                      } else {
+                                        current_elementarycatches_weight <- vector(mode = "numeric")
+                                        for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
+                                          if (current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$specie_code %in% species_rf1) {
+                                            current_elementarycatches_weight <- append(current_elementarycatches_weight,
+                                                                                       current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight)
+                                          }
+                                        }
+                                        current_elementarylandings <- NULL
+                                        for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                          current_elementarylandings <- append(current_elementarylandings,
+                                                                               unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                        }
+                                        if (is.null(x = current_elementarylandings)) {
+                                          # case 2.3 ----
+                                          # no elementary landing in complete full trip item
+                                          cat(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Warning: missing elementary landing in trip element \"",
+                                              names(x = private$data_selected)[full_trip_id],
+                                              "\".\n",
+                                              "[trip: ",
+                                              current_trip$.__enclos_env__$private$trip_id,
+                                              "]\n",
+                                              sep = "")
+                                          capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                         file = "NUL")
+                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                         file = "NUL")
+                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
+                                        } else {
+                                          # case 2.4 ----
+                                          # everything rocks dude !
+                                          current_elementarylandings_weight <- vector(mode = "numeric")
+                                          for (elementarylanding_id in seq_len(length.out = length(x = current_elementarylandings))) {
+                                            if (current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$specie_code %in% species_rf1) {
+                                              current_elementarylandings_weight <- append(current_elementarylandings_weight,
+                                                                                          current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$landing_weight)
                                             }
                                           }
+                                          current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
+                                          if (current_rf1 < rf1_lowest_limit
+                                              | current_rf1 > rf1_highest_limit) {
+                                            cat(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: rf1 value of full trip element \"",
+                                                names(x = private$data_selected)[full_trip_id],
+                                                "\" out of theorical boundaries: ",
+                                                round(x = current_rf1,
+                                                      digits = 3),
+                                                ".\n",
+                                                "[trip: ",
+                                                current_trip$.__enclos_env__$private$trip_id,
+                                                "]\n",
+                                                sep = "")
+                                          }
+                                          capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                         file = "NUL")
+                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                         file = "NUL")
+                                          current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
+                                                                                              current_rf1))
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
                                         }
                                       }
                                     }
                                   }
-                                  # outputs extraction ----
-                                  # outputs manipulation
-                                  if (! is.null(x = global_outputs_path)) {
-                                    full_trips_selected <- private$data_selected
-                                    capture.output(trips_selected <- object_r6(class_name = "trips"),
-                                                   file = "NUL")
-                                    capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
-                                                   file = "NUL")
-                                    total_landings_catches_species <- lapply(X = seq_len(length.out = trips_selected$count()),
-                                                                             FUN = function(trip_id) {
-                                                                               current_trip <- trips_selected$extract(id = trip_id)[[1]]
-                                                                               if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
-                                                                                 capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
-                                                                                                file = "NUL")
-                                                                                 capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
-                                                                                                file = "NUL")
-                                                                                 current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
-                                                                                                                              landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
-                                                                                   dplyr::group_by(specie) %>%
-                                                                                   dplyr::summarise(landing_weight = sum(landing_weight),
-                                                                                                    .groups = "drop") %>%
-                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
-                                                                                 elementarylandings <- TRUE
-                                                                               } else {
-                                                                                 elementarylandings <- FALSE
-                                                                               }
-                                                                               if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                                                                 capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                                                                file = "NUL")
-                                                                                 capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
-                                                                                                file = "NUL")
-                                                                                 if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                                                                   capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                                                                  file = "NUL")
-                                                                                   capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                                                                  file = "NUL")
-                                                                                   current_total_catches_species <- data.frame(specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
-                                                                                                                               catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
-                                                                                                                               catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
-                                                                                     dplyr::group_by(specie) %>%
-                                                                                     dplyr::summarise(catch_weight = sum(catch_weight),
-                                                                                                      catch_weight_rf1 = sum(catch_weight_rf1),
-                                                                                                      .groups = "drop") %>%
-                                                                                     dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
-                                                                                   elementarycatches <- TRUE
-                                                                                 } else {
-                                                                                   elementarycatches <- FALSE
-                                                                                 }
-                                                                               } else {
-                                                                                 elementarycatches <- FALSE
-                                                                               }
-                                                                               if (elementarylandings == TRUE) {
-                                                                                 if (elementarycatches == TRUE) {
-                                                                                   current_total_landings_catches_species <- current_total_landings_species %>%
-                                                                                     dplyr::full_join(current_total_catches_species,
-                                                                                                      by = c("specie",
-                                                                                                             "trip_id"))
-                                                                                 } else {
-                                                                                   current_total_landings_catches_species <- dplyr::mutate(.data = current_total_landings_species,
-                                                                                                                                           catch_weight = NA,
-                                                                                                                                           catch_weight_rf1 = NA)
-                                                                                 }
-                                                                               } else {
-                                                                                 if (elementarycatches == TRUE) {
-                                                                                   current_total_landings_catches_species <- dplyr::mutate(.data = current_total_catches_species,
-                                                                                                                                           landing_weight = NA)
-                                                                                 } else {
-                                                                                   current_total_landings_catches_species <- NULL
-                                                                                 }
-                                                                               }
-                                                                               return(current_total_landings_catches_species)
-                                                                             })
-                                    total_landings_catches_species <- as.data.frame(do.call(what = rbind,
-                                                                                            args = total_landings_catches_species))
-                                    total_landings_catches <- total_landings_catches_species %>%
-                                      dplyr::group_by(trip_id) %>%
-                                      dplyr::summarise(landing_weight = sum(landing_weight,
-                                                                            na.rm = TRUE),
-                                                       catch_weight = sum(catch_weight,
+                                  # assign rf1 to elementary catches ----
+                                  for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                    current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                    current_rf1 <- current_trip$.__enclos_env__$private$rf1
+                                    if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                      for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                        current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
+                                        if (! is.null(x = current_elementarycatches)) {
+                                          for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
+                                            current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight * current_rf1
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  total_landings_catches_species_activities <- lapply(X = seq_len(length.out = trips_selected$count()),
+                                                                                      FUN = function(trip_id) {
+                                                                                        current_trip <- trips_selected$extract(id = trip_id)[[1]]
+                                                                                        if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
+                                                                                          capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                                                                                         file = "NUL")
+                                                                                          capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
+                                                                                                         file = "NUL")
+                                                                                          current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                       landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
+                                                                                            dplyr::group_by(specie) %>%
+                                                                                            dplyr::summarise(landing_weight = sum(landing_weight),
+                                                                                                             .groups = "drop") %>%
+                                                                                            dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                          elementarylandings <- TRUE
+                                                                                        } else {
+                                                                                          elementarylandings <- FALSE
+                                                                                        }
+                                                                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                                                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                                                                         file = "NUL")
+                                                                                          capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
+                                                                                                         file = "NUL")
+                                                                                          if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                                                                            capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                                                                           file = "NUL")
+                                                                                            capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                                                                           file = "NUL")
+                                                                                            current_total_catches_species_activities <- tidyr::tibble(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
+                                                                                                                                                      specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                                      catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
+                                                                                                                                                      catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
+                                                                                              dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
+                                                                                              dplyr::relocate(trip_id,
+                                                                                                              .before = activity_id) %>%
+                                                                                              dplyr::arrange(activity_id)
+                                                                                            elementarycatches <- TRUE
+                                                                                          } else {
+                                                                                            elementarycatches <- FALSE
+                                                                                          }
+                                                                                        } else {
+                                                                                          elementarycatches <- FALSE
+                                                                                        }
+                                                                                        if (elementarylandings == TRUE) {
+                                                                                          if (elementarycatches == TRUE) {
+                                                                                            current_total_landings_catches_species_activities <- current_total_landings_species %>%
+                                                                                              dplyr::full_join(current_total_catches_species_activities,
+                                                                                                               by = c("specie",
+                                                                                                                      "trip_id"))
+                                                                                          } else {
+                                                                                            current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_landings_species,
+                                                                                                                                                               activity_id = NA_character_,
+                                                                                                                                                               catch_weight = NA_real_,
+                                                                                                                                                               catch_weight_rf1 = NA_real_)
+                                                                                          }
+                                                                                        } else {
+                                                                                          if (elementarycatches == TRUE) {
+                                                                                            current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
+                                                                                                                                                               landing_weight = NA_real_)
+
+                                                                                          } else {
+                                                                                            current_total_landings_catches_species_activities <- NULL
+                                                                                          }
+                                                                                        }
+                                                                                        return(current_total_landings_catches_species_activities)
+                                                                                      })
+                                  total_landings_catches_species_activities <- tidyr::tibble(do.call(what = rbind,
+                                                                                                     args = total_landings_catches_species_activities))
+                                  total_landings_catches <- dplyr::distinct(.data = total_landings_catches_species_activities,
+                                                          trip_id,
+                                                          specie,
+                                                          landing_weight) %>%
+                                    dplyr::group_by(trip_id) %>%
+                                    dplyr::summarise(landing_weight = sum(landing_weight,
                                                                           na.rm = TRUE),
-                                                       catch_weight_rf1 = sum(catch_weight_rf1,
-                                                                              na.rm = TRUE),
-                                                       .groups = "drop")
-                                    outputs_process_1_1 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                     .groups = "drop") %>%
+                                    dplyr::inner_join(dplyr::select(.data = total_landings_catches_species_activities,
+                                                                    trip_id,
+                                                                    catch_weight,
+                                                                    catch_weight_rf1) %>%
+                                                        dplyr::group_by(trip_id) %>%
+                                                        dplyr::summarise(catch_weight = sum(catch_weight,
+                                                                                            na.rm = TRUE),
+                                                                         catch_weight_rf1 = sum(catch_weight_rf1,
+                                                                                                na.rm = TRUE),
+                                                                         .groups = "drop"),
+                                                      by = "trip_id")
+                                  outputs_process_1_1 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                   FUN = function(full_trip_id) {
+                                                                                                     if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                       return(rep(x = full_trip_id,
+                                                                                                                  length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                     } else {
+                                                                                                       return(full_trip_id)
+                                                                                                     }
+                                                                                                   })),
+                                                                    "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                      FUN = function(full_trip_id) {
                                                                                                        if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
-                                                                                                         return(rep(x = full_trip_id,
+                                                                                                         return(rep(x = names(x = full_trips_selected[full_trip_id]),
                                                                                                                     length(x = full_trips_selected[[full_trip_id]])))
                                                                                                        } else {
-                                                                                                         return(full_trip_id)
+                                                                                                         return(names(x = full_trips_selected[full_trip_id]))
                                                                                                        }
                                                                                                      })),
-                                                                      "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
-                                                                                                       FUN = function(full_trip_id) {
-                                                                                                         if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
-                                                                                                           return(rep(x = names(x = full_trips_selected[full_trip_id]),
-                                                                                                                      length(x = full_trips_selected[[full_trip_id]])))
-                                                                                                         } else {
-                                                                                                           return(names(x = full_trips_selected[full_trip_id]))
-                                                                                                         }
-                                                                                                       })),
-                                                                      "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                      "landing_date" = do.call("c",
-                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                      "year_landing_date" = sapply(do.call("c",
-                                                                                                           trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                   lubridate::year),
-                                                                      "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                      "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
-                                                                      "rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf1"))),
-                                                                      "statut_rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf1"))))
-                                    global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
-                                                                                   y = total_landings_catches,
-                                                                                   by = "trip_id")
-                                    detail_outputs_process_1_1 <- outputs_process_1_1 %>%
-                                      dplyr::full_join(x = outputs_process_1_1,
-                                                       y = total_landings_catches_species,
-                                                       by = "trip_id")
-                                    # csv extraction
-                                    write.csv2(x = global_outputs_process_1_1,
-                                               file = file.path(global_outputs_path,
-                                                                "level1",
-                                                                "data_outputs",
-                                                                "process_1_1_global.csv"),
-                                               row.names = FALSE)
-                                    write.csv2(x = detail_outputs_process_1_1,
-                                               file = file.path(global_outputs_path,
-                                                                "level1",
-                                                                "data_outputs",
-                                                                "process_1_1_detail.csv"),
-                                               row.names = FALSE)
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Outputs extracted in the following directory:\n",
-                                        file.path(global_outputs_path,
-                                                  "level1",
-                                                  "data_outputs"),
-                                        sep = "")
+                                                                    "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                    "landing_date" = do.call("c",
+                                                                                             trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                    "year_landing_date" = sapply(do.call("c",
+                                                                                                         trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                 lubridate::year),
+                                                                    "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                    "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                    "rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf1"))),
+                                                                    "statut_rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf1"))))
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
+                                                                                 y = total_landings_catches,
+                                                                                 by = "trip_id")
+                                  detail_outputs_process_1_1 <- outputs_process_1_1 %>%
+                                    dplyr::full_join(x = outputs_process_1_1,
+                                                     y = total_landings_catches_species_activities,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(activity_id,
+                                                    .after = trip_id)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = global_outputs_process_1_1,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_1_global.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  write.table(x = detail_outputs_process_1_1,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_1_detail.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
                                   cat(format(x = Sys.time(),
                                              format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process 1.1: Raising Factor level 1.\n",
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
                                       sep = "")
                                 }
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Successful process 1.1: Raising Factor level 1.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.2: rf2 ----
                             #' @description Process of Raising Factor level 2 (rf2).
-                            rf2 = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            rf2 = function(global_output_path = NULL,
+                                           output_format = "eu") {
                               if (is.null(x = private$data_selected)) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
@@ -883,19 +1220,177 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
-                                    if (full_trip_id == length(x = private$data_selected)) {
-                                      cat(format(x = Sys.time(),
-                                                 format = "%Y-%m-%d %H:%M:%S"),
-                                          " - End of raising factor process 2.\n",
-                                          sep = "")
-                                    }
                                   }
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  total_landings_catches_species <- lapply(X = seq_len(length.out = trips_selected$count()),
+                                                                           FUN = function(trip_id) {
+                                                                             current_trip <- trips_selected$extract(id = trip_id)[[1]]
+                                                                             if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0) {
+                                                                               capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                                                                              file = "NUL")
+                                                                               capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
+                                                                                              file = "NUL")
+                                                                               current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                            landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
+                                                                                 dplyr::group_by(specie) %>%
+                                                                                 dplyr::summarise(landing_weight = sum(landing_weight),
+                                                                                                  .groups = "drop") %>%
+                                                                                 dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                               elementarylandings <- TRUE
+                                                                             } else {
+                                                                               elementarylandings <- FALSE
+                                                                             }
+                                                                             if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                                                               capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                                                              file = "NUL")
+                                                                               capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
+                                                                                              file = "NUL")
+                                                                               if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
+                                                                                 capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                                                                file = "NUL")
+                                                                                 capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                                                                file = "NUL")
+                                                                                 current_total_catches_species <- data.frame(specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                             catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
+                                                                                                                             catch_weight_rf2 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf2"))) %>%
+                                                                                   dplyr::group_by(specie) %>%
+                                                                                   dplyr::summarise(catch_weight = sum(catch_weight),
+                                                                                                    catch_weight_rf2 = sum(catch_weight_rf2),
+                                                                                                    .groups = "drop") %>%
+                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                 elementarycatches <- TRUE
+                                                                               } else {
+                                                                                 elementarycatches <- FALSE
+                                                                               }
+                                                                             } else {
+                                                                               elementarycatches <- FALSE
+                                                                             }
+                                                                             if (elementarylandings == TRUE) {
+                                                                               if (elementarycatches == TRUE) {
+                                                                                 current_total_landings_catches_species <- current_total_landings_species %>%
+                                                                                   dplyr::full_join(current_total_catches_species,
+                                                                                                    by = c("specie",
+                                                                                                           "trip_id"))
+                                                                               } else {
+                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_landings_species,
+                                                                                                                                         catch_weight = NA,
+                                                                                                                                         catch_weight_rf2 = NA)
+                                                                               }
+                                                                             } else {
+                                                                               if (elementarycatches == TRUE) {
+                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_catches_species,
+                                                                                                                                         landing_weight = NA)
+                                                                               } else {
+                                                                                 current_total_landings_catches_species <- NULL
+                                                                               }
+                                                                             }
+                                                                             return(current_total_landings_catches_species)
+                                                                           })
+                                  total_landings_catches_species <- as.data.frame(do.call(what = rbind,
+                                                                                          args = total_landings_catches_species))
+                                  total_landings_catches <- total_landings_catches_species %>%
+                                    dplyr::group_by(trip_id) %>%
+                                    dplyr::summarise(landing_weight = sum(landing_weight,
+                                                                          na.rm = TRUE),
+                                                     catch_weight = sum(catch_weight,
+                                                                        na.rm = TRUE),
+                                                     catch_weight_rf2 = sum(catch_weight_rf2,
+                                                                            na.rm = TRUE),
+                                                     .groups = "drop")
+                                  outputs_process_1_2 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                   FUN = function(full_trip_id) {
+                                                                                                     if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                       return(rep(x = full_trip_id,
+                                                                                                                  length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                     } else {
+                                                                                                       return(full_trip_id)
+                                                                                                     }
+                                                                                                   })),
+                                                                    "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                     FUN = function(full_trip_id) {
+                                                                                                       if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                         return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                    length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                       } else {
+                                                                                                         return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                       }
+                                                                                                     })),
+                                                                    "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                    "landing_date" = do.call("c",
+                                                                                             trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                    "year_landing_date" = sapply(do.call("c",
+                                                                                                         trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                 lubridate::year),
+                                                                    "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                    "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                    "rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf2"))),
+                                                                    "statut_rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf2"))))
+                                  global_outputs_process_1_2 <- dplyr::left_join(x = outputs_process_1_2,
+                                                                                 y = total_landings_catches,
+                                                                                 by = "trip_id")
+                                  detail_outputs_process_1_2 <- outputs_process_1_2 %>%
+                                    dplyr::full_join(x = outputs_process_1_2,
+                                                     y = total_landings_catches_species,
+                                                     by = "trip_id")
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
+                                        sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  }
+                                  write.table(x = global_outputs_process_1_2,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_2_global.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  write.table(x = detail_outputs_process_1_2,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_2_detail.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
+                                }
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - End of raising factor process 2.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.3: conversion_weigth_category ----
                             #' @description Process of logbook weigth categories conversion.
-                            conversion_weigth_category = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            conversion_weigth_category = function(global_output_path = NULL,
+                                                                  output_format = "eu") {
                               category_1 <- "<10kg"
                               category_2 <- "10-30kg"
                               category_3 <- ">30kg"
@@ -1202,7 +1697,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                      # second stage: conversion of category unknow (category 9) if possible
+                                      # second stage: conversion of category unknown (category 9) if possible
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         current_elementarycatches <- vector(mode = "list")
@@ -1321,17 +1816,123 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "]\n",
                                         sep = "")
                                   }
-                                  if (full_trip_id == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.3: logbook weight categories conversion.\n",
-                                        sep = "")
-                                  }
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
+                                                 file = "NUL")
+                                  capture.output(elementarycatches_selected <- object_r6(class_name = "elementarycatches"),
+                                                 file = "NUL")
+                                  capture.output(elementarycatches_selected$add(new_item = unlist(x = activities_selected$extract_l1_element_value(element = "elementarycatches"))),
+                                                 file = "NUL")
+
+                                  outputs_process_1_3_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_1_3_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                               "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_date" = do.call("c",
+                                                                                                         activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
+                                                                               "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")))
+                                  outputs_process_1_3_elementarycatches <- data.frame("activity_id" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                      "elementarycatch_id" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "elementarycatch_id")),
+                                                                                      "specie_code3l" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                      "logbook_category" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "logbook_category")),
+                                                                                      "logbook_category_name" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "logbook_category_name")),
+                                                                                      "catch_weight_rf2" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "catch_weight_rf2")),
+                                                                                      "corrected_logbook_category" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "corrected_logbook_category")),
+                                                                                      "catch_weight_category_corrected" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "catch_weight_category_corrected")))
+                                  outputs_process_1_3 <- outputs_process_1_3_elementarycatches %>%
+                                    dplyr::left_join(outputs_process_1_3_activities,
+                                                     by = "activity_id") %>%
+                                    dplyr::left_join(outputs_process_1_3_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type,
+                                                    activity_id,
+                                                    activity_date,
+                                                    ocean,
+                                                    school_type,
+                                                    elementarycatch_id)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
+                                        sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  }
+                                  write.table(x = outputs_process_1_3,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_3.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 1.3: logbook weight categories conversion.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.4: set_count ----
                             #' @description Process for postive sets count.
-                            set_count = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            set_count = function(global_output_path = NULL,
+                                                 output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -1424,21 +2025,115 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
+                                                 file = "NUL")
+                                  outputs_process_1_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_1_4_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                               "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_date" = do.call("c",
+                                                                                                         activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
+                                                                               "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")),
+                                                                               "set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "set_count")))
+                                  outputs_process_1_4 <- outputs_process_1_4_activities %>%
+                                    dplyr::left_join(outputs_process_1_4_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type,
+                                                    activity_id,
+                                                    activity_date,
+                                                    ocean,
+                                                    school_type,
+                                                    set_count)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.4: set count.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_1_4,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_4.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 1.4: set count.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.5: set_duration ----
                             #' @description Process for set duration calculation (in hours).
                             #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
-                            set_duration = function(set_duration_ref) {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            set_duration = function(set_duration_ref,
+                                                    global_output_path = NULL,
+                                                    output_format = "eu") {
                               if (length(class(set_duration_ref)) != 1
-                                  || class(set_duration_ref) != "data.frame"
+                                  || ! inherits(x = set_duration_ref,
+                                                what = "data.frame")
                                   || dim(set_duration_ref)[2] != 7
                                   || dim(set_duration_ref)[1] < 1) {
                                 cat(format(Sys.time(),
@@ -1582,17 +2277,109 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.5: set duration calculation\n",
-                                        sep = "")
-                                  }
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
+                                                 file = "NUL")
+                                  outputs_process_1_5_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_1_5_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                               "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_date" = do.call("c",
+                                                                                                         activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
+                                                                               "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")),
+                                                                               "set_duration" = unlist(x = activities_selected$extract_l1_element_value(element = "set_duration")))
+                                  outputs_process_1_5 <- outputs_process_1_5_activities %>%
+                                    dplyr::left_join(outputs_process_1_5_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type,
+                                                    activity_id,
+                                                    activity_date,
+                                                    ocean,
+                                                    school_type,
+                                                    set_duration)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
+                                        sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  }
+                                  write.table(x = outputs_process_1_5,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_5.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 1.5: set duration calculation\n",
+                                    sep = "")
                               }
                             },
                             # process 1.6: time at sea ----
                             #' @description Process for time at sea calculation (in hours).
-                            time_at_sea = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            time_at_sea = function(global_output_path = NULL,
+                                                   output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -1698,24 +2485,115 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                     "]\n",
                                     sep = "")
-                                if (full_trip_id == 1) {
+                              }
+                              # outputs extraction ----
+                              # outputs manipulation
+                              if (! is.null(x = global_output_path)) {
+                                full_trips_selected <- private$data_selected
+                                capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                               file = "NUL")
+                                capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                               file = "NUL")
+                                capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                               file = "NUL")
+                                capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
+                                               file = "NUL")
+                                outputs_process_1_6_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                       FUN = function(full_trip_id) {
+                                                                                                         if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                           return(rep(x = full_trip_id,
+                                                                                                                      length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                         } else {
+                                                                                                           return(full_trip_id)
+                                                                                                         }
+                                                                                                       })),
+                                                                        "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                           }
+                                                                                                         })),
+                                                                        "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                        "landing_date" = do.call("c",
+                                                                                                 trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                        "year_landing_date" = sapply(do.call("c",
+                                                                                                             trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                     lubridate::year),
+                                                                        "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                        "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                outputs_process_1_6_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                             "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "activity_date" = do.call("c",
+                                                                                                       activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                             "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
+                                                                             "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")),
+                                                                             "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")))
+                                outputs_process_1_6 <- outputs_process_1_6_activities %>%
+                                  dplyr::left_join(outputs_process_1_6_trips,
+                                                   by = "trip_id") %>%
+                                  dplyr::relocate(full_trip_id,
+                                                  full_trip_name,
+                                                  trip_id,
+                                                  landing_date,
+                                                  year_landing_date,
+                                                  vessel_id,
+                                                  vessel_type,
+                                                  activity_id,
+                                                  activity_date,
+                                                  ocean,
+                                                  school_type,
+                                                  time_at_sea)
+                                # extraction
+                                if (output_format == "us") {
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
+                                } else if (output_format == "eu") {
+                                  outputs_dec <- ","
+                                  outputs_sep <- ";"
+                                } else {
                                   cat(format(Sys.time(),
                                              "%Y-%m-%d %H:%M:%S"),
-                                      " - End process 1.6: time at sea calculation.\n",
+                                      " - Warning: wrong outputs format define, European format will be applied\n",
                                       sep = "")
+                                  outputs_dec <- ","
+                                  outputs_sep <- ";"
                                 }
+                                write.table(x = outputs_process_1_6,
+                                            file = file.path(global_output_path,
+                                                             "level1",
+                                                             "data",
+                                                             "process_1_6.csv"),
+                                            row.names = FALSE,
+                                            sep = outputs_sep,
+                                            dec = outputs_dec)
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Outputs extracted in the following directory:\n",
+                                    file.path(global_output_path,
+                                              "level1",
+                                              "data"),
+                                    sep = "")
                               }
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - End process 1.6: time at sea calculation.\n",
+                                  sep = "")
                             },
                             # process 1.7: fishing_time ----
                             #' @description Process for fishing time calculation (in hours).
                             #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @details
                             #' Available variables are:
                             #' \itemize{
                             #'  \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
                             #'  \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
-                            #'  \item{"goldenHourEnd"}{morning golden hour (soft light, best time for photography) ends}
+                            #'  \item{"goldenHourEnd"}{morning golden hour ends(soft light, best time for photography)}
                             #'  \item{"solarNoon"}{solar noon (sun is in the highest position)}
                             #'  \item{"goldenHour"}{evening golden hour starts}
                             #'  \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
@@ -1729,7 +2607,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"dawn"}{dawn (morning nautical twilight ends, morning civil twilight starts)}
                             #' }
                             fishing_time = function(sunrise_schema = "sunrise",
-                                                    sunset_schema = "sunset") {
+                                                    sunset_schema = "sunset",
+                                                    global_output_path = NULL,
+                                                    output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -1817,18 +2697,85 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  outputs_process_1_7_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                          "fishing_time" = unlist(x = (trips_selected$extract_l1_element_value(element = "fishing_time"))))
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.7: fishing time calculation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_1_7_trips,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_7.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 1.7: fishing time calculation.\n",
+                                    sep = "")
                               }
                             },
                             # process 1.8: searching_time ----
                             #' @description Process for searching time calculation (in hours, fishing time minus sets durations).
-                            searching_time = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            searching_time = function(global_output_path = NULL,
+                                                      output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -1910,19 +2857,87 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  outputs_process_1_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                          "searching_time" = unlist(x = (trips_selected$extract_l1_element_value(element = "searching_time"))))
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 1.8: searching time calculation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_1_8_trips,
+                                              file = file.path(global_output_path,
+                                                               "level1",
+                                                               "data",
+                                                               "process_1_8.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level1",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 1.8: searching time calculation.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.1: sample length class conversion ld1 to lf ----
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
                             #' @param length_step Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.
-                            sample_length_class_ld1_to_lf =  function(length_step) {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            sample_length_class_ld1_to_lf =  function(length_step,
+                                                                      global_output_path = NULL,
+                                                                      output_format = "eu") {
                               if (is.null(x = private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -2017,7 +3032,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_corrected")))
                                               oceans_activities_weight <- as.numeric()
                                               for (current_ocean_activites in oceans_activities) {
-                                                capture.output(current_elementary_catches_ocean <- object_r6(class_name = "activities"),
+                                                capture.output(current_elementary_catches_ocean <- object_r6(class_name = "elementarycatches"),
                                                                file = "NUL")
                                                 capture.output(current_elementary_catches_ocean$add(new_item = current_elementary_catches$filter_l1(filter = paste0("$path$ocean == ",
                                                                                                                                                                     current_ocean_activites))),
@@ -2127,8 +3142,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   if (length(elementary_sample_skj_removed) != 0) {
                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                         " - Warning: ",
-                                                        length(elementary_sample_skj_removed)
-                                                        ," elementary sample(s) with length class measured in LD1 for SKJ specie detected. Sample associated not usable and removed for next process.\n",
+                                                        length(elementary_sample_skj_removed),
+                                                        " elementary sample(s) with length class measured in LD1 for SKJ specie detected. Sample associated not usable and removed for next process.\n",
                                                         "[trip_id: ",
                                                         current_well$.__enclos_env__$private$trip_id,
                                                         ", well_id: ",
@@ -2188,17 +3203,111 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.1 sample length class conversion ld1 to lf.\n",
-                                        sep = "")
-                                  }
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(elementarysamplesraw_selected <- object_r6(class_name = "elementarysamplesraw"),
+                                                 file = "NUL")
+                                  capture.output(elementarysamplesraw_selected$add(new_item = unlist(x = wells_selected$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                 file = "NUL")
+                                  outputs_process_2_1_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_1_elementarysamplesraw <- data.frame("trip_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                         "well_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id")),
+                                                                                         "sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                         "sub_sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_id")),
+                                                                                         "elementarysampleraw_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "elementarysampleraw_id")),
+                                                                                         "specie_code3l" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                         "sample_length_class" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_length_class")),
+                                                                                         "sample_number_measured" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_number_measured")),
+                                                                                         "sample_length_class_lf" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_length_class_lf")),
+                                                                                         "sample_number_measured_lf" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_number_measured_lf")))
+                                  outputs_process_2_1 <- outputs_process_2_1_elementarysamplesraw %>%
+                                    dplyr::left_join(outputs_process_2_1_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
+                                        sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  }
+                                  write.table(x = outputs_process_2_1,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_1.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
+                                }
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.1 sample length class conversion ld1 to lf.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.2: sample number measured extrapolation ----
                             #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
-                            sample_number_measured_extrapolation = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            sample_number_measured_extrapolation = function(global_output_path = NULL,
+                                                                            output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -2358,19 +3467,115 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(elementarysamplesraw_selected <- object_r6(class_name = "elementarysamplesraw"),
+                                                 file = "NUL")
+                                  capture.output(elementarysamplesraw_selected$add(new_item = unlist(x = wells_selected$extract_l1_element_value(element = "elementarysampleraw"))),
+                                                 file = "NUL")
+                                  outputs_process_2_2_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_2_elementarysamplesraw <- data.frame("trip_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                         "well_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "well_id")),
+                                                                                         "sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                         "sub_sample_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_id")),
+                                                                                         "sub_sample_id_total_count" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sub_sample_id_total_count")),
+                                                                                         "elementarysampleraw_id" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "elementarysampleraw_id")),
+                                                                                         "specie_code3l" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                         "sample_length_class_lf" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_length_class_lf")),
+                                                                                         "sample_number_measured_lf" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_number_measured_lf")),
+                                                                                         "sample_total_count" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_total_count")),
+                                                                                         "sample_number_measured_extrapolated_lf" = unlist(x = elementarysamplesraw_selected$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")))
+                                  outputs_process_2_2 <- outputs_process_2_2_elementarysamplesraw %>%
+                                    dplyr::left_join(outputs_process_2_2_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.2: sample number measured extrapolation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_2,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_2.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.2: sample number measured extrapolation.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.3: sample_length_class_step_standardisation ----
                             #' @description Process for step standardisation of lf length class.
                             #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
-                            sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500)) {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500),
+                                                                                global_output_path = NULL,
+                                                                                output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -2481,7 +3686,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 to = maximum_lf_class,
                                                                                 by = step)
                                                   sample_length_class_lf_id <- 1
-                                                  while(sample_length_class_lf_id <= length(sample_length_class_lf)) {
+                                                  while (sample_length_class_lf_id <= length(sample_length_class_lf)) {
                                                     lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
                                                     upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
                                                     sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
@@ -2536,19 +3741,117 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(elementarysamples_selected <- object_r6(class_name = "elementarysamples"),
+                                                 file = "NUL")
+                                  capture.output(elementarysamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "elementarysample"))),
+                                                                                                         FUN = function(elementarysample_id) {
+                                                                                                           wells_selected$extract_l1_element_value(element = "elementarysample")[[elementarysample_id]]$extract()
+                                                                                                         }))),
+                                                 file = "NUL")
+                                  outputs_process_2_3_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_3_elementarysamples <- data.frame("trip_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                      "well_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "well_id")),
+                                                                                      "sample_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                      "sample_type" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_type")),
+                                                                                      "sample_quality" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_quality")),
+                                                                                      "sub_sample_id" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sub_sample_id")),
+                                                                                      "specie_code3l" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                      "sample_total_count" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_total_count")),
+                                                                                      "sample_standardised_length_class_lf" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
+                                                                                      "sample_number_measured_extrapolated_lf" = unlist(x = elementarysamples_selected$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")))
+                                  outputs_process_2_3 <- outputs_process_2_3_elementarysamples %>%
+                                    dplyr::left_join(outputs_process_2_3_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.3: sample length class step standardisation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_3,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_3.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.3: sample length class step standardisation.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.4: well_set_weigth_categories ----
                             #' @description Process for well set weigth categories definition.
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
-                            well_set_weigth_categories = function(sample_set) {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            well_set_weigth_categories = function(sample_set,
+                                                                  global_output_path = NULL,
+                                                                  output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -2858,19 +4161,111 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    if (full_trip_id == length(private$data_selected)) {
+                                  }
+                                  # outputs extraction ----
+                                  # outputs manipulation
+                                  if (! is.null(x = global_output_path)) {
+                                    full_trips_selected <- private$data_selected
+                                    capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                   file = "NUL")
+                                    capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                   file = "NUL")
+                                    capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                   file = "NUL")
+                                    capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
+                                                   file = "NUL")
+                                    capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
+                                                                                                  FUN = function(wellsets_id) {
+                                                                                                    wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
+                                                                                                  }))),
+                                                   file = "NUL")
+                                    outputs_process_2_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = full_trip_id,
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(full_trip_id)
+                                                                                                             }
+                                                                                                           })),
+                                                                            "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                             FUN = function(full_trip_id) {
+                                                                                                               if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                                 return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                            length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                               } else {
+                                                                                                                 return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                               }
+                                                                                                             })),
+                                                                            "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                            "landing_date" = do.call("c",
+                                                                                                     trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                            "year_landing_date" = sapply(do.call("c",
+                                                                                                                 trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                         lubridate::year),
+                                                                            "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                            "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                    outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                               "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
+                                                                               "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
+                                                                               "weighted_weight_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_plus10")),
+                                                                               "weighted_weight" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight")))
+                                    outputs_process_2_4 <- outputs_process_2_4_wellsets %>%
+                                      dplyr::left_join(outputs_process_2_4_trips,
+                                                       by = "trip_id") %>%
+                                      dplyr::relocate(full_trip_id,
+                                                      full_trip_name,
+                                                      trip_id,
+                                                      landing_date,
+                                                      year_landing_date,
+                                                      vessel_id,
+                                                      vessel_type)
+                                    # extraction
+                                    if (output_format == "us") {
+                                      outputs_dec <- "."
+                                      outputs_sep <- ","
+                                    } else if (output_format == "eu") {
+                                      outputs_dec <- ","
+                                      outputs_sep <- ";"
+                                    } else {
                                       cat(format(Sys.time(),
                                                  "%Y-%m-%d %H:%M:%S"),
-                                          " - End process 2.4 well-set weight categories definition.\n",
+                                          " - Warning: wrong outputs format define, European format will be applied\n",
                                           sep = "")
+                                      outputs_dec <- ","
+                                      outputs_sep <- ";"
                                     }
+                                    write.table(x = outputs_process_2_4,
+                                                file = file.path(global_output_path,
+                                                                 "level2",
+                                                                 "data",
+                                                                 "process_2_4.csv"),
+                                                row.names = FALSE,
+                                                sep = outputs_sep,
+                                                dec = outputs_dec)
+                                    cat(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Outputs extracted in the following directory:\n",
+                                        file.path(global_output_path,
+                                                  "level2",
+                                                  "data"),
+                                        sep = "")
                                   }
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - End process 2.4 well-set weight categories definition.\n",
+                                      sep = "")
                                 }
                               }
                             },
                             # process 2.5: standardised_sample_creation ----
                             #' @description Object standardised sample creation.
-                            standardised_sample_creation = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            standardised_sample_creation = function(global_output_path = NULL,
+                                                                    output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
@@ -3001,19 +4396,113 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamples_selected <- object_r6(class_name = "standardisedsamples"),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsample"))),
+                                                                                                           FUN = function(standardisedsample_id) {
+                                                                                                             wells_selected$extract_l1_element_value(element = "standardisedsample")[[standardisedsample_id]]$extract()
+                                                                                                           }))),
+                                                 file = "NUL")
+                                  outputs_process_2_5_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_5_standardisedsamples <- data.frame("trip_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                        "well_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "well_id")),
+                                                                                        "sample_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                        "specie_code3l" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                        "sample_standardised_length_class_lf" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
+                                                                                        "sample_number_measured_extrapolated_lf" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")))
+                                  outputs_process_2_5 <- outputs_process_2_5_standardisedsamples %>%
+                                    dplyr::left_join(outputs_process_2_5_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.5 standardised sample creation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_5,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_5.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.5 standardised sample creation.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
                             #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.
-                            standardised_sample_set_creation = function(length_weight_relationship_data) {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            standardised_sample_set_creation = function(length_weight_relationship_data,
+                                                                        global_output_path = NULL,
+                                                                        output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -3171,13 +4660,104 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                # outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected <- object_r6(class_name = "standardisedsamplesets"),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
+                                                                                                              FUN = function(standardisedsampleset_id) {
+                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                              }))),
+                                                 file = "NUL")
+                                  outputs_process_2_6_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_6_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                           "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
+                                                                                           "sample_number_weighted" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted")),
+                                                                                           "sample_weigth" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth")),
+                                                                                           "sample_weight_unit" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weight_unit")),
+                                                                                           "sample_category" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_category")))
+                                  outputs_process_2_6 <- outputs_process_2_6_standardisedsamplesets %>%
+                                    dplyr::left_join(outputs_process_2_6_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.6: standardised sample set creation.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_6,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_6.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.6: standardised sample set creation.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.7: raised_factors_determination ----
@@ -3187,11 +4767,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
                             #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
                             #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
-                                                                    threshold_rf_total = as.integer(250)) {
+                                                                    threshold_rf_total = as.integer(250),
+                                                                    global_output_path = NULL,
+                                                                    output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -3395,18 +4979,110 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
+                                                 file = "NUL")
+                                  capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
+                                                                                                FUN = function(wellset_id) {
+                                                                                                  wells_selected$extract_l1_element_value(element = "wellsets")[[wellset_id]]$extract()
+                                                                                                }))),
+                                                 file = "NUL")
+                                  outputs_process_2_7_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_7_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                             "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "weighted_samples_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_minus10")),
+                                                                             "weighted_samples_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_plus10")),
+                                                                             "weighted_samples_total" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_total")),
+                                                                             "rf_validation" = unlist(x = wellsets_selected$extract_l1_element_value(element = "rf_validation")))
+                                  outputs_process_2_7 <- outputs_process_2_7_wellsets %>%
+                                    dplyr::left_join(outputs_process_2_7_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End process 2.7: raised factors determination.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_7,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_7.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End process 2.7: raised factors determination.\n",
+                                    sep = "")
                               }
                             },
                             # process 2.8: raised standardised sample set ----
                             #' @description Application of process 2.8 raised factors on standardised sample set.
-                            raised_standardised_sample_set = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            raised_standardised_sample_set = function(global_output_path = NULL,
+                                                                      output_format = "eu") {
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -3560,13 +5236,103 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n",
                                       sep = "")
-                                  if (full_trip_id == length(private$data_selected)) {
+                                }
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected <- object_r6(class_name = "standardisedsamplesets"),
+                                                 file = "NUL")
+                                  capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
+                                                                                                              FUN = function(standardisedsampleset_id) {
+                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                              }))),
+                                                 file = "NUL")
+                                  outputs_process_2_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                           FUN = function(full_trip_id) {
+                                                                                                             if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
+                                                                                                                          length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                             } else {
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
+                                                                                                             }
+                                                                                                           })),
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "landing_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "year_landing_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                                                       lubridate::year),
+                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
+                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                  outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                           "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                           "sample_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                           "specie_code3l" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "specie_code3l")),
+                                                                                           "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
+                                                                                           "sample_number_weighted_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted_set")),
+                                                                                           "sample_weigth_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth_set")))
+                                  outputs_process_2_8 <- outputs_process_2_8_standardisedsamplesets %>%
+                                    dplyr::left_join(outputs_process_2_8_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    landing_date,
+                                                    year_landing_date,
+                                                    vessel_id,
+                                                    vessel_type)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
-                                        " - End 2.8 process: raised standardised sample set.\n",
+                                        " - Warning: wrong outputs format define, European format will be applied\n",
                                         sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
+                                  write.table(x = outputs_process_2_8,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_8.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  cat(format(x = Sys.time(),
+                                             format = "%Y-%m-%d %H:%M:%S"),
+                                      " - Outputs extracted in the following directory:\n",
+                                      file.path(global_output_path,
+                                                "level2",
+                                                "data"),
+                                      sep = "")
                                 }
+                                cat(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - End 2.8 process: raised standardised sample set.\n",
+                                    sep = "")
                               }
                             },
                             # path to level 3 ----
@@ -3699,7 +5465,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                    current_number_samples))
                                                                                                    })
                                       }
-                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble()
+                                      tmp_standardisedsampleset_qt <- dplyr::as_tibble(x = matrix(ncol = 0,
+                                                                                                  nrow = 0))
                                       if (exists(x = "tmp_standardisedsampleset_one_sample_qt")) {
                                         tmp_standardisedsampleset_qt <- tmp_standardisedsampleset_qt %>%
                                           dplyr::bind_rows(tmp_standardisedsampleset_one_sample_qt)
@@ -3757,8 +5524,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Data preparatory for the t3 modelling process (level 3).
                             #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).
                             #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.
-                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Path of the t3 processes outputs directory.
-                            #' @param periode_reference Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
+                            #' @param output_directory Object of type \code{\link[base]{character}} expected. Path of the outputs directory.
+                            #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
                             #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
                             #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
@@ -3768,8 +5535,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.
                             data_preparatory = function(inputs_level3 = NULL,
                                                         inputs_level3_path = NULL,
-                                                        outputs_directory,
-                                                        periode_reference = NULL,
+                                                        output_directory,
+                                                        periode_reference_level3 = NULL,
                                                         target_year = as.integer(lubridate::year(Sys.time() - 1)),
                                                         period_duration = 4L,
                                                         distance_maximum = as.integer(5),
@@ -3777,50 +5544,62 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         set_weight_minimum = as.integer(6),
                                                         minimum_set_frequency = 0.1,
                                                         vessel_id_ignored = NULL) {
-                              if (class(outputs_directory) != "character") {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"outputs_directory\" argument, class character expected.\n",
-                                    sep = "")
-                                stop()
-                              } else if (class(target_year) != "integer"
-                                         || length(target_year) != 1
-                                         || nchar(target_year) != 4) {
+                              # 1 - Arguments verification
+                              if (codama::r_type_checking(r_object = output_directory,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          output = "logical") != TRUE) {
+                                return(codama::r_type_checking(r_object = output_directory,
+                                                               type = "character",
+                                                               length = 1L,
+                                                               output = "message"))
+                              }
+                              if (! inherits(x = target_year,
+                                             what = "integer")
+                                  || length(target_year) != 1
+                                  || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(period_duration) != "integer"
+                              } else if (! inherits(x = period_duration,
+                                                    what = "integer")
                                          || length(period_duration) != 1
                                          || period_duration > 99) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"period_duration\" argument, one value of class integer expected with  maximum value 99.\n",
                                     sep = "")
                                 stop()
-                              } else if (!is.null(periode_reference)
-                                         && class(periode_reference) != "integer") {
+                              } else if (!is.null(periode_reference_level3)
+                                         && ! inherits(x = periode_reference_level3,
+                                                       what = "integer")) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument, class integer expected.\n",
+                                    " - Error: invalid \"periode_reference_level3\" argument, class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(distance_maximum) != "integer"
+                              } else if (! inherits(x = distance_maximum,
+                                                    what = "integer")
                                          || length(distance_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"distance_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(number_sets_maximum) != "integer"
+                              } else if (! inherits(x = number_sets_maximum,
+                                                    what = "integer")
                                          || length(number_sets_maximum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"number_sets_maximum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(set_weight_minimum) != "integer"
+                              } else if (! inherits(x = set_weight_minimum,
+                                                    what = "integer")
                                          || length(set_weight_minimum) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"set_weight_minimum\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
-                              } else if (class(minimum_set_frequency) != "numeric"
+                              } else if (! inherits(x = minimum_set_frequency,
+                                                    what = "numeric")
                                          || length(minimum_set_frequency) != 1) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"minimum_set_frequency\" argument, one value of class numeric expected.\n",
@@ -3833,12 +5612,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               } else {
+                                # 2 - Process
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Start process 3.1: data preparatory.\n",
                                     sep = "")
-                                if (is.null(periode_reference)) {
-                                  periode_reference <- seq.int(from = target_year,
-                                                               to = target_year - period_duration)
+                                # directories verification
+                                output_path <- output_directory
+                                if (! all(c("level3/data",
+                                            "level3/figure") %in% stringr::str_extract(string = list.files(path = output_path,
+                                                                                                           full.names = TRUE,
+                                                                                                           recursive = TRUE,
+                                                                                                           include.dirs = TRUE),
+                                                                                       pattern = "level3/[:alpha:]{4,6}$"))) {
+                                  stop(format(x = Sys.time(),
+                                              "%Y-%m-%d %H:%M:%S"),
+                                       " - Error: invalid \"output_directory\" argument, use the argument \"initiate_directory\" to create valid output architecture.\n",
+                                       sep = "")
+                                }
+                                if (is.null(periode_reference_level3)) {
+                                  periode_reference_level3 <- seq.int(from = target_year,
+                                                                      to = target_year - period_duration)
                                 }
                                 if (! is.null(inputs_level3_path)) {
                                   # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
@@ -3865,20 +5658,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    target_file[x],
                                                    fsep = "/"))
                                     # sets characteristics
-                                    dataset_target$act_chr[[x]] <- data_level3[[1]][[1]]
+                                    dataset_target$act_chr[[x]] <- data_level3$act
                                     # catch by set, species and categories from logbook (t3 level 1)
-                                    dataset_target$catch_set_lb[[x]] <- data_level3[[1]][[2]]
+                                    dataset_target$catch_set_lb[[x]] <- data_level3$act3
                                     # catch by set, species and categories (t3 level 2)
-                                    dataset_target$samw[[x]] <- data_level3[[1]][[3]]
+                                    dataset_target$samw[[x]] <- data_level3$samw
                                     # link between sample and set, + sample quality and type
-                                    dataset_target$sset[[x]] <- data_level3[[1]][[4]]
+                                    dataset_target$sset[[x]] <- data_level3$sset
                                     # well plan
-                                    dataset_target$wp[[x]] <- data_level3[[1]][[5]]
+                                    dataset_target$wp[[x]] <- data_level3$wp
                                   }
                                   dataset_target <- lapply(X = dataset_target,
                                                            FUN = function(x) {
                                                              return(unique(do.call(rbind, x)))
                                                            })
+
                                   # stock raw data
                                   inputs_level3 <- dataset_target
                                 }
@@ -3902,12 +5696,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # only one category (called less 10) use for SKJ
                                 catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
                                 # period parameters ----
-                                first_year <- dplyr::first(periode_reference)
+                                first_year <- dplyr::first(periode_reference_level3)
                                 # select subset period for the modelling
                                 catch_set_lb$year <- lubridate::year(x = catch_set_lb$date_act)
-                                catch_set_lb<-catch_set_lb[catch_set_lb$year %in% periode_reference,]
+                                catch_set_lb<-catch_set_lb[catch_set_lb$year %in% periode_reference_level3,]
                                 act_chr$year <- lubridate::year(x = act_chr$date_act)
-                                act_chr <- act_chr[act_chr$year %in% periode_reference, ]
+                                act_chr <- act_chr[act_chr$year %in% periode_reference_level3, ]
                                 # compute selection criteria ----
                                 cdm <- act_chr$id_act[act_chr$vessel %in% vessel_id_ignored]
                                 sset <- sset[! sset$id_act %in% cdm, ]
@@ -3915,80 +5709,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # selection criteria
                                 # remove bad quality sample and keep sample at landing
                                 sset <- sset[sset$quality == 1 & sset$type == 1, ]
-                                # number of act_chrivity by sample
-                                agg <- aggregate(formula = cbind(nset = id_act) ~ id_sample,
-                                                 data = sset,
-                                                 FUN = length)
-                                sset <- merge(x = sset,
-                                              y = agg,
-                                              sort = F)
+                                # number of activity by sample
+                                sset2 <- sset %>%
+                                  dplyr::group_by(id_sample) %>%
+                                  dplyr::mutate(nset = dplyr::n()) %>%
+                                  dplyr::ungroup()
                                 # fishing mode homogeneity in sample
                                 # add fishing mode
-                                sset <- dplyr::inner_join(x = sset,
-                                                          y = act_chr[, c("id_act", "fmod", "lat", "lon")],
-                                                          by = "id_act")
-                                tmp <- unique(sset[, c("id_sample", "fmod")])
-                                agg <- aggregate(formula = cbind(fm_purity = fmod) ~ id_sample,
-                                                 data = tmp,
-                                                 FUN = length)
-                                sset <- merge(x = sset,
-                                              y = agg,
-                                              sort = F)
+                                sset2 <- dplyr::inner_join(x = sset2,
+                                                           y = act_chr[, c("id_act", "fmod", "lat", "lon")],
+                                                           by = "id_act")
+                                fmod_purity_tmp <- sset2 %>%
+                                  dplyr::distinct(id_sample, fmod) %>%
+                                  dplyr::group_by(id_sample) %>%
+                                  dplyr::summarise(fmod_purity = dplyr::n()) %>%
+                                  dplyr::ungroup()
+                                sset2 <- dplyr::inner_join(sset2,
+                                                           fmod_purity_tmp,
+                                                           by = "id_sample")
                                 # fishing mode of the sample
-                                tmp <- unique(sset[sset$fm_purity == 1,
-                                                   c("id_sample", "fmod")])
-                                names(tmp)[2] <- "fmod_sample"
-                                sset <- merge(x = sset,
-                                              y = tmp,
-                                              all = T,
-                                              sort = F)
-                                # code for mixed fishing mode
-                                sset$fmod_sample[is.na(sset$fmod_sample)] <- 999
-                                sset$fmod_sample <- factor(sset$fmod_sample)
+                                sset2 <- sset2 %>%
+                                  dplyr::mutate(fmod_sample = ifelse(fmod_purity == 1,
+                                                                     fmod,
+                                                                     999))
                                 # extent of the sample
-                                agg <- aggregate(formula = cbind(lat_sample_dif = lat, lon_sample_dif = lon) ~ id_sample,
-                                                 data = sset,
+                                agg <- aggregate(x = cbind(lat_sample_dif = lat,
+                                                           lon_sample_dif = lon) ~ id_sample,
+                                                 data = sset2,
                                                  FUN = function(x) {
                                                    max(x) - min(x)
                                                  })
-                                sset <- merge(x = sset,
-                                              y = agg,
-                                              sort = F)
+                                sset2 <- merge(x = sset2,
+                                               y = agg,
+                                               sort = FALSE)
                                 # compute total set weight
-                                sset <- droplevels(sset)
+                                sset2 <- droplevels(sset2)
                                 tmp <- catch_set_lb
-                                tmp <- tmp[tmp$sp %in% c("YFT","BET","SKJ"), ]
-                                agg3 <- aggregate(formula = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
+                                tmp <- tmp[tmp$sp %in% c("YFT",
+                                                         "BET",
+                                                         "SKJ"), ]
+                                agg3 <- aggregate(x = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
                                                   data = tmp,
                                                   FUN = function(x) {
                                                     sum(x,
-                                                        na.rm = T)
+                                                        na.rm = TRUE)
                                                   })
-                                agg3 <- agg3[agg3$id_act %in% sset$id_act, ]
-                                sset2 <- dplyr::inner_join(x = sset,
-                                                           y = agg3[, c("id_act","w_lb_t3")],
-                                                           by = "id_act",
-                                                           sort = F)
+                                agg3 <- agg3[agg3$id_act %in% sset2$id_act, ]
+                                sset3 <- dplyr::inner_join(x = sset2,
+                                                           y = agg3[, c("id_act",
+                                                                        "w_lb_t3")],
+                                                           by = "id_act")
                                 sample_set_char <- list(sset = sset,
                                                         act_chr = act_chr,
                                                         catch_set_lb = catch_set_lb)
                                 # compute set weight in each sample to detect non representiveness of the sample
-                                agg_wp <- aggregate(formula = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
+                                agg_wp <- aggregate(x = cbind(w_in_well = weight) ~ id_sample + id_well + id_act,
                                                     data = wp,
                                                     FUN = sum)
-                                agg_wp2 <- aggregate(formula = cbind(w_tot_well = weight) ~ id_sample + id_well,
+                                agg_wp2 <- aggregate(x = cbind(w_tot_well = weight) ~ id_sample + id_well,
                                                      data = wp,
                                                      FUN = sum)
                                 agg_wp <- merge(x = agg_wp,
                                                 y = agg_wp2)
                                 # compute proportion of weight by set
                                 agg_wp$prop_act_chr <- agg_wp$w_in_well / agg_wp$w_tot_well
-                                # selection of act_chrivities ----
+                                # selection of activities ----
                                 # selection based on sets extrapolated (2 first step of the t3 process)
-                                kiset <- sset2
+                                kiset <- sset3
                                 # on sample
                                 # homogeneous fishing mode in sample
-                                kiset <- kiset[kiset$fm_purity == 1, ]
+                                kiset <- kiset[kiset$fmod_purity == 1, ]
                                 # spatial selection + mixture limit
                                 kiset <- kiset[kiset$lat_sample_dif < distance_maximum & kiset$lon_sample_dif < distance_maximum & kiset$nset < number_sets_maximum, ]
                                 # remove all small sets considered as missed catches
@@ -4016,20 +5806,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # name change
                                 catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date_act)
                                 # select and rename species
-                                catch_set_lb$sp[!catch_set_lb$sp %in% c("YFT","BET","SKJ")] <- "OTH"
+                                catch_set_lb$sp[!catch_set_lb$sp %in% c("YFT",
+                                                                        "BET",
+                                                                        "SKJ")] <- "OTH"
                                 catch_set_lb <- droplevels(catch_set_lb)
                                 # remove other species from lb before calculate species composition (to be compare to sample)
                                 catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
                                 catch_set_lb <- droplevels(catch_set_lb)
                                 # calculate total catch for thonidae only
-                                tot <- aggregate(formula = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
+                                tot <- aggregate(x = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
                                                  data = catch_set_lb,
                                                  FUN = sum)
                                 catch_set_lb <- merge(x = catch_set_lb,
                                                       y = tot,
-                                                      sort = F)
+                                                      sort = FALSE)
                                 # sum p10, 10-30 and p30 categories in Atlantic ocean
-                                catch_set_lb <- aggregate(formula = cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
+                                catch_set_lb <- aggregate(x = cbind(w_lb_t3) ~ id_act + date_act + code_act_type + year + mon + wtot_lb_t3 + sp + wcat,
                                                           data = catch_set_lb,
                                                           FUN = sum)
                                 # calculate proportions
@@ -4043,11 +5835,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      value = w_lb_t3,
                                                      fill = 0)
                                 tmp2 <- tmp[, names(tmp) %in% levels(catch_set_lb$sp_cat)]
-                                tmp2 <- prop.table(as.matrix(tmp2), 1)
+                                tmp2 <- prop.table(as.matrix(tmp2),
+                                                   1)
                                 tmp[, names(tmp) %in% colnames(tmp2)] <- tmp2
-                                lb_set<-tmp
+                                lb_set <- tmp
                                 # compute proportion from t3 step 2 ----
-                                samw$sp[!samw$sp %in% c("YFT","BET","SKJ")] <- "OTH"
+                                samw$sp[!samw$sp %in% c("YFT",
+                                                        "BET",
+                                                        "SKJ")] <- "OTH"
                                 samw <- samw[samw$sp_code %in% c(1, 2, 3), ]
                                 samw$wcat <- gsub("kg",
                                                   "",
@@ -4064,7 +5859,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 samw$sp <- NULL
                                 samw$wcat <- NULL
                                 # sum the weight categories for SKJ
-                                samw <- aggregate(formula = cbind(w_fit_t3) ~ id_act + sp_cat,
+                                samw <- aggregate(x = cbind(w_fit_t3) ~ id_act + sp_cat,
                                                   data = samw,
                                                   FUN = sum)
                                 samw <- droplevels(samw)
@@ -4121,67 +5916,75 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   "ocean",
                                                                                                   "vessel")],
                                                               by = c("id_act", "year"))
-                                data_lb_sample_screened = list(data4mod = data4mod)
+                                data_lb_sample_screened <- list(data4mod = data4mod)
                                 # export ----
-                                outputs_level3_process1 <- list(sample_set_char = sample_set_char,
-                                                                data_selected = data_selected,
-                                                                data_sample_extract = data_sample_extract,
-                                                                data_lb_sample_screened = data_lb_sample_screened)
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                output_level3_process1 <- list(sample_set_char = sample_set_char,
+                                                               data_selected = data_selected,
+                                                               data_sample_extract = data_sample_extract,
+                                                               data_lb_sample_screened = data_lb_sample_screened)
+                                cat(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - End process 3.1: data preparatory.\n",
                                     sep = "")
                                 return(list("raw_inputs_level3" = inputs_level3,
-                                            "outputs_directory" = outputs_directory,
-                                            "outputs_level3_process1" = outputs_level3_process1))
+                                            "output_directory" = output_directory,
+                                            "output_level3_process1" = output_level3_process1))
                               }
                             },
                             # process 3.2: random forest models ----
                             #' @description Modelling proportions in sets througth random forest models.
-                            #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
+                            #' @param output_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
                             #' @param num.trees Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
                             #' @param mtry Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.
                             #' @param min.node.size Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
                             #' @param seed_number Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.
                             #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
-                            random_forest_models = function(outputs_level3_process1,
+                            random_forest_models = function(output_level3_process1,
                                                             num.trees = 1000L,
                                                             mtry = 2L,
                                                             min.node.size = 5,
                                                             seed_number = 7L,
-                                                            small_fish_only = F) {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                            small_fish_only = FALSE) {
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.2: random forest models.\n",
                                   sep = "")
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
-                              data4mod <- outputs_level3_process1
+                              data4mod <- output_level3_process1
                               # sum proportion by species when working on total
                               data4mod <- tidyr::separate(data = data4mod,
                                                           col = sp_cat,
-                                                          into = c("sp","wcat"),
+                                                          into = c("sp",
+                                                                   "wcat"),
                                                           sep = "_")
                               # select for small fish catch only if parameter = T
-                              if (small_fish_only == F) {
-                                data4mod <- data4mod %>% dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                              if (small_fish_only == FALSE) {
+                                data4mod <- data4mod %>%
+                                  dplyr::group_by(id_act, date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
                                   dplyr::ungroup()
                               } else {
-                                data4mod <- data4mod %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0),
-                                                                       prop_t3 = replace (prop_t3, wcat == "p10", value = 0)) %>%
+                                data4mod <- data4mod %>%
+                                  dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0),
+                                                prop_t3 = replace (prop_t3,
+                                                                   wcat == "p10",
+                                                                   value = 0)) %>%
                                   dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
                                   dplyr::ungroup()
                               }
-                              outputs_level3_process2 <- list()
+                              output_level3_process2 <- list()
                               for (ocean in unique(data4mod$ocean)) {
                                 data4mod_ocean <- data4mod[data4mod$ocean == ocean, ]
                                 for(sp in unique(data4mod_ocean$sp)) {
-                                  if (! sp %in% c("SKJ","YFT")) {
+                                  if (! sp %in% c("SKJ",
+                                                  "YFT")) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: process 3.2 not developed yet for the specie \"",
                                         sp,
@@ -4193,7 +5996,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   } else {
                                     data4mod_ocean_specie <- data4mod_ocean[data4mod_ocean$sp == sp, ]
                                     for (fmod in unique(data4mod_ocean_specie$fmod)) {
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      cat(format(x = Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
                                           " - Ongoing process 3.2 for ocean \"",
                                           ocean,
                                           "\", specie \"",
@@ -4222,8 +6026,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         importance = "impurity",
                                                                         replace = TRUE,
                                                                         quantreg = FALSE,
-                                                                        keep.inbag= FALSE)
-
+                                                                        keep.inbag = FALSE)
                                       # model with no vessel id
                                       set.seed(seed_number)
                                       model_rf_wtvessel <- ranger::ranger(resp ~ tlb + lon + lat + year + mon,
@@ -4235,8 +6038,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           importance = "impurity",
                                                                           replace = TRUE,
                                                                           quantreg = FALSE,
-                                                                          keep.inbag= FALSE)
-
+                                                                          keep.inbag = FALSE)
                                       # full model
                                       set.seed(seed_number)
                                       model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + year + mon + vessel,
@@ -4250,12 +6052,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       quantreg = FALSE,
                                                                       keep.inbag= FALSE)
 
-                                      outputs_level3_process2 <- append(outputs_level3_process2,
-                                                                        list(list(data = sub,
-                                                                                  model_rf_simple = model_rf_simple,
-                                                                                  model_rf_full = model_rf_full,
-                                                                                  model_rf_wtvessel = model_rf_wtvessel)))
-                                      names(outputs_level3_process2)[length(outputs_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
+                                      output_level3_process2 <- append(output_level3_process2,
+                                                                       list(list(data = sub,
+                                                                                 model_rf_simple = model_rf_simple,
+                                                                                 model_rf_full = model_rf_full,
+                                                                                 model_rf_wtvessel = model_rf_wtvessel)))
+                                      names(output_level3_process2)[length(output_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Process 3.2 successfull for ocean \"",
                                           ocean,
@@ -4270,40 +6072,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   }
                                 }
                               }
-                              return(outputs_level3_process2)
+                              return(output_level3_process2)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.2: random forest models.\n",
                                   sep = "")
                             },
                             # process 3.3: models checking ----
-                            #' @description Load each full model and compute figures and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
-                            #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
-                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @description Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
+                            #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
+                            #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
                             #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
-                            models_checking = function(outputs_level3_process2,
-                                                       outputs_directory,
-                                                       plot_sample = F,
-                                                       avdth_patch_coord = F) {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                            models_checking = function(output_level3_process2,
+                                                       output_directory,
+                                                       output_format = "eu",
+                                                       plot_sample = FALSE,
+                                                       avdth_patch_coord = FALSE) {
+                              # 1 - Arguments verification ----
+                              if (codama::r_type_checking(r_object = output_directory,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          output = "logical") != TRUE) {
+                                stop(codama::r_type_checking(r_object = output_directory,
+                                                             type = "character",
+                                                             length = 1L,
+                                                             output = "message"))
+                              }
+                              if (codama::r_type_checking(r_object = output_format,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          allowed_value = c("us",
+                                                                            "eu"),
+                                                          output = "logical") != TRUE) {
+                                stop(codama::r_type_checking(r_object = output_format,
+                                                             type = "character",
+                                                             length = 1L,
+                                                             allowed_value = c("us",
+                                                                               "eu"),
+                                                             output = "message"))
+                              }
+                              # 2 - Process ----
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.3: models checking.\n",
                                   sep = "")
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
-                              outputs_level3_process3 <- list()
-                              for (a in seq_len(length.out = length(outputs_level3_process2))) {
-                                current_outputs_level3_process3 <- vector(mode = "list",
-                                                                          length = 2)
-                                names(current_outputs_level3_process3) <- c("figures", "tables")
-                                current_model_outputs <- outputs_level3_process2[[a]]
-                                ocean = unlist(strsplit(names(outputs_level3_process2)[[a]],
-                                                        '_'))[1]
-                                specie = unlist(strsplit(names(outputs_level3_process2)[[a]],
-                                                         '_'))[2]
-                                fishing_mode = unlist(strsplit(names(outputs_level3_process2)[[a]],
-                                                               '_'))[3]
-                                cat(format(Sys.time(),
+                              output_level3_process3 <- list()
+                              # extraction specifications
+                              if (output_format == "us") {
+                                outputs_dec <- "."
+                                outputs_sep <- ","
+                              } else if (output_format == "eu") {
+                                outputs_dec <- ","
+                                outputs_sep <- ";"
+                              }
+                              for (a in seq_len(length.out = length(output_level3_process2))) {
+                                current_output_level3_process3 <- vector(mode = "list",
+                                                                         length = 2)
+                                names(current_output_level3_process3) <- c("figure",
+                                                                           "table")
+                                current_model_output <- output_level3_process2[[a]]
+                                ocean = unlist(strsplit(names(output_level3_process2)[[a]],
+                                                        "_"))[1]
+                                specie = unlist(strsplit(names(output_level3_process2)[[a]],
+                                                         "_"))[2]
+                                fishing_mode = unlist(strsplit(names(output_level3_process2)[[a]],
+                                                               "_"))[3]
+                                cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Ongoing process 3.3 for ocean \"",
                                     ocean,
@@ -4314,19 +6152,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     "\"",
                                     ".\n",
                                     sep = "")
-                                figures_directory <- file.path(outputs_directory,
-                                                               "level3",
-                                                               "figures",
-                                                               names(outputs_level3_process2)[[a]])
-                                names(figures_directory) <- "figures"
-                                tables_directory <- file.path(outputs_directory,
+                                figure_directory <- file.path(output_directory,
                                                               "level3",
-                                                              "data_outputs",
-                                                              names(outputs_level3_process2)[[a]])
-                                names(tables_directory) <- "data_outputs"
-                                for (b in c(figures_directory, tables_directory)) {
-                                  if (file.exists(b)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                              "figure",
+                                                              names(output_level3_process2)[[a]])
+                                names(figure_directory) <- "figure"
+                                table_directory <- file.path(output_directory,
+                                                             "level3",
+                                                             "data",
+                                                             names(output_level3_process2)[[a]])
+                                names(table_directory) <- "data"
+                                for (b in c(figure_directory,
+                                            table_directory)) {
+                                  if(dir.exists(b)) {
+                                    cat(format(x = Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Outputs \"",
                                         names(b),
                                         "\" directory for ocean \"",
@@ -4339,7 +6179,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "Outputs associated will used this directory (be careful of overwriting previous files).\n",
                                         sep = "")
                                   } else {
-                                    dir.create(b)
+                                    dir.create(path = b,
+                                               recursive = TRUE)
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Outputs \"",
                                         names(b),
@@ -4351,13 +6192,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         fishing_mode,
                                         "\" created.\n",
                                         "[directory path: ",
-                                        figures_directory,
+                                        figure_directory,
                                         "]\n",
                                         sep = "")
                                   }
                                 }
                                 # check data subset for modeling ----
-                                current_model_data <- current_model_outputs[[1]]
+                                current_model_data <- current_model_output[[1]]
                                 period <- paste0("period: ",
                                                  min(as.numeric(as.character(current_model_data$year))),
                                                  " - ",
@@ -4368,19 +6209,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                     "resp",
                                                                                     "tlb",
                                                                                     "wtot_lb_t3")])
-                                write.csv2(x = covariance_matrix,
-                                           file = file.path(tables_directory,
-                                                            paste("covariance_matrix_",
-                                                                  ocean,
-                                                                  "_",
-                                                                  specie,
-                                                                  "_",
-                                                                  fishing_mode,
-                                                                  ".csv",
-                                                                  sep = "")),
-                                           row.names = TRUE)
-                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
-                                                                               list("covariance_matrix" = covariance_matrix))
+                                write.table(x = covariance_matrix,
+                                            file = file.path(table_directory,
+                                                             paste("covariance_matrix_",
+                                                                   ocean,
+                                                                   "_",
+                                                                   specie,
+                                                                   "_",
+                                                                   fishing_mode,
+                                                                   ".csv",
+                                                                   sep = "")),
+                                            row.names = FALSE,
+                                            sep = outputs_sep,
+                                            dec = outputs_dec)
+                                current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                              list("covariance_matrix" = covariance_matrix))
                                 multi_collinearity_test <- rfUtilities::multi.collinear(x = current_model_data[, c("lat",
                                                                                                                    "lon",
                                                                                                                    "resp",
@@ -4390,28 +6233,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                    "year")],
                                                                                         perm = TRUE,
                                                                                         leave.out = TRUE)
-                                write.csv2(x = multi_collinearity_test,
-                                           file = file.path(tables_directory,
-                                                            paste("multi_collinearity_test_",
-                                                                  ocean,
-                                                                  "_",
-                                                                  specie,
-                                                                  "_",
-                                                                  fishing_mode,
-                                                                  ".csv",
-                                                                  sep = "")),
-                                           row.names = FALSE)
-                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
-                                                                               list("multi_collinearity_test" = multi_collinearity_test))
+                                write.table(x = multi_collinearity_test,
+                                            file = file.path(table_directory,
+                                                             paste("multi_collinearity_test_",
+                                                                   ocean,
+                                                                   "_",
+                                                                   specie,
+                                                                   "_",
+                                                                   fishing_mode,
+                                                                   ".csv",
+                                                                   sep = "")),
+                                            row.names = FALSE,
+                                            sep = outputs_sep,
+                                            dec = outputs_dec)
+                                current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                              list("multi_collinearity_test" = multi_collinearity_test))
                                 # figure on logbook vs sample set
                                 logbook_vs_sample_1 <- ggplot2::ggplot(data = current_model_data,
                                                                        ggplot2::aes(y = prop_t3,
                                                                                     x = prop_lb,
                                                                                     color = year)) +
                                   ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "loess",
-                                                       se = FALSE,
-                                                       formula = "y ~ x") +
+                                  ggplot2::geom_smooth(method = "gam",
+                                                       formula = y ~ s(x,
+                                                                       bs = "cs",
+                                                                       fx = FALSE,
+                                                                       k = 5)) +
                                   ggplot2::geom_abline(slope = 1,
                                                        intercept = 0) +
                                   ggplot2::xlab("Species Frequency in set from logbook") +
@@ -4425,14 +6272,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        ggplot2::aes(x = prop_lb,
                                                                                     color = year)) +
                                   ggplot2::geom_density(fill = rgb(0,0,0,0.1),
-                                                        ggplot2::aes(y = ..scaled..)) +
+                                                        ggplot2::aes(y = ggplot2::after_stat(scaled))) +
                                   ggplot2::xlab("Species Frequency in set from logbook")
                                 logbook_vs_sample <- ggpubr::ggarrange(logbook_vs_sample_1,
                                                                        logbook_vs_sample_2,
                                                                        nrow = 2,
                                                                        ncol = 1)
                                 ggplot2::ggsave(plot = logbook_vs_sample,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("logbook_vs_sample_",
                                                                        ocean,
                                                                        "_",
@@ -4444,8 +6291,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 width = 15,
                                                 height = 30,
                                                 units = c("cm"))
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("logbook_vs_sample" = logbook_vs_sample))
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("logbook_vs_sample" = logbook_vs_sample))
                                 # various figures to visualize some relationship from data before modelling
                                 # single vessel effect
                                 vessel_effect <- ggplot2::ggplot(current_model_data,
@@ -4454,7 +6301,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::geom_boxplot() +
                                   ggplot2::ylab("Species Frequency in set from sample")
                                 ggplot2::ggsave(plot = vessel_effect,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("vessel_effect_",
                                                                        ocean,
                                                                        "_",
@@ -4466,8 +6313,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 width = 8,
                                                 height = 8,
                                                 units = c("cm"))
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("vessel_effect" = vessel_effect))
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("vessel_effect" = vessel_effect))
                                 # month effect
                                 month_variation <- ggplot2::ggplot(current_model_data,
                                                                    ggplot2::aes(x = mon,
@@ -4476,7 +6323,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = "Month",
                                                 y = "Species Frequency in set from sample")
                                 ggplot2::ggsave(plot = month_variation,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("month_effect_",
                                                                        ocean,
                                                                        "_",
@@ -4488,8 +6335,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 width = 8,
                                                 height = 8,
                                                 units = c("cm"))
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("month_variation" = month_variation))
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("month_variation" = month_variation))
                                 # year effect
                                 year_effect <- ggplot2::ggplot(current_model_data,
                                                                ggplot2::aes(x = year,
@@ -4498,7 +6345,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::labs(x = NULL,
                                                 y = "Species Frequency in set from sample")
                                 ggplot2::ggsave(plot = year_effect,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("year_effect_",
                                                                        ocean,
                                                                        "_",
@@ -4510,8 +6357,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 width = 8,
                                                 height = 8,
                                                 units = c("cm"))
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("year_effect" = year_effect))
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("year_effect" = year_effect))
                                 # species composition in logbook vs sampleset (t3 level 1)
                                 reporting_vs_sampling_data <- tidyr::gather(current_model_data,
                                                                             "prop_lb",
@@ -4528,7 +6375,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ggplot2::scale_color_discrete(labels = c("Reporting",
                                                                            "Sampling"))
                                 ggplot2::ggsave(plot = reporting_vs_sampling,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("reporting_vs_sampling_",
                                                                        ocean,
                                                                        "_",
@@ -4540,11 +6387,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 width = 16,
                                                 height = 16,
                                                 units = c("cm"))
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("reporting_vs_sampling" = reporting_vs_sampling))
-
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("reporting_vs_sampling" = reporting_vs_sampling))
                                 # map of the data used for modelling
-                                if(plot_sample == T){
+                                if(plot_sample == TRUE){
                                   current_data_map <- current_model_data
                                   sp::coordinates(obj = current_data_map) <- ~ lon + lat
                                   ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
@@ -4597,7 +6443,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    sep = "_")) +
                                     ggplot2::theme_classic()
                                   ggplot2::ggsave(plot = set_sampled_map,
-                                                  file = file.path(figures_directory,
+                                                  file = file.path(figure_directory,
                                                                    paste("set_sampled_map_",
                                                                          ocean,
                                                                          "_",
@@ -4610,40 +6456,38 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   height = 10,
                                                   units = c("cm"),
                                                   pointsize = 10)
-                                  current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                                 list("set_sampled_map" = set_sampled_map))
+                                  current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                                list("set_sampled_map" = set_sampled_map))
                                 }
-                                # model checking
+                                ## model checking ----
                                 # compute model residuals
-                                resrf <- current_model_data$resp - ranger::predictions(current_model_outputs[[3]])
+                                resrf <- current_model_data$resp - ranger::predictions(current_model_output[[3]])
                                 current_model_data$res <- resrf
-                                current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_outputs[[3]]))
-                                current_model_data$fit<-ranger::predictions(current_model_outputs[[3]])
+                                current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_output[[3]]))
+                                current_model_data$fit<-ranger::predictions(current_model_output[[3]])
                                 # method
                                 # comparison of the model fitted value
                                 # look at variable importance in the model
-                                variables_importance <- as.data.frame(ranger::importance(current_model_outputs[[3]]))
+                                variables_importance <- as.data.frame(ranger::importance(current_model_output[[3]]))
                                 names(variables_importance) <- "value"
                                 variables_importance$var_name <- rownames(variables_importance)
 
-                                variables_importance <- variables_importance[order(variables_importance$value, decreasing = F),]
-
+                                variables_importance <- variables_importance[order(variables_importance$value,
+                                                                                   decreasing = FALSE), ]
                                 variables_importance_plot <- ggplot2::ggplot(data = variables_importance,
                                                                              ggplot2::aes(y = var_name,
-                                                                                          x = value))+
-                                  ggplot2::geom_point()+
+                                                                                          x = value)) +
+                                  ggplot2::geom_point() +
                                   ggplot2::geom_segment(data = variables_importance,
                                                         ggplot2::aes(x = 0,
                                                                      xend = value,
                                                                      y = var_name,
                                                                      yend = var_name)) +
                                   ggplot2::scale_y_discrete(name = "Variables",
-                                                            limits= variables_importance$var_name)+
+                                                            limits= variables_importance$var_name) +
                                   ggplot2::xlab("Importance (impurity)")
-
-
                                 ggplot2::ggsave(plot = variables_importance_plot,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("variables_importance_",
                                                                        ocean,
                                                                        "_",
@@ -4657,10 +6501,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 units = c("cm"),
                                                 dpi = 300,
                                                 pointsize = 10)
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("variables_importance" = variables_importance))
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("variables_importance" = variables_importance))
                                 # test for spatial and temporal correlation on residuals
-                                if(avdth_patch_coord == T){
+                                if(avdth_patch_coord == TRUE){
                                   current_model_data_map <- current_model_data
                                   sp::coordinates(current_model_data_map) <- ~ lon+lat
                                   sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
@@ -4731,21 +6575,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                               function(g) {
                                                                                 g$p.value
                                                                               }))
-                                  write.csv2(x = moran_residual_test,
-                                             file = file.path(tables_directory,
-                                                              paste("moran_residual_test_",
-                                                                    ocean,
-                                                                    "_",
-                                                                    specie,
-                                                                    "_",
-                                                                    fishing_mode,
-                                                                    ".csv",
-                                                                    sep = "")),
-                                             row.names = FALSE)
-                                  current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
-                                                                                 list("moran_residual_test" = moran_residual_test))
+                                  write.table(x = moran_residual_test,
+                                              file = file.path(table_directory,
+                                                               paste("moran_residual_test_",
+                                                                     ocean,
+                                                                     "_",
+                                                                     specie,
+                                                                     "_",
+                                                                     fishing_mode,
+                                                                     ".csv",
+                                                                     sep = "")),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                                list("moran_residual_test" = moran_residual_test))
                                   correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
-                                  # correlogram_resp <- furdeb::ggplot_corr(data = current_model_data$resp[order(current_model_data$date_act)],
                                   # lag_max = 300)
                                   correlogram_resp_acf <- correlogram_resp +
                                     ggplot2::ggtitle("Autocorrelation function of observed data")
@@ -4768,8 +6613,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
                                     ggplot2::xlab("Distance (10^2 km)") +
                                     ggplot2::ylab("Moran index")
-                                  # correlogram_res <- furdeb::ggplot_corr(data = current_model_data$res[order(current_model_data$date_act)],
-                                  #                                        lag_max = 300)
                                   correlogram_res <- forecast::ggAcf(current_model_data$res[order(current_model_data$date_act)], lag.max = 300)
                                   correlogram_res_acf <- correlogram_res +
                                     ggplot2::ggtitle("Autocorrelation function of residuals")+
@@ -4782,7 +6625,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 nrow = 2,
                                                                                 ncol = 2)
                                   ggplot2::ggsave(plot = spatio_temporal_checking,
-                                                  file = file.path(figures_directory,
+                                                  file = file.path(figure_directory,
                                                                    paste("spatio_temporal_checking_",
                                                                          ocean,
                                                                          "_",
@@ -4795,15 +6638,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   height = 20,
                                                   units = c("cm"),
                                                   dpi = 300)
-                                  current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                                 list("spatio_temporal_checking" = spatio_temporal_checking))
+                                  current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                                list("spatio_temporal_checking" = spatio_temporal_checking))
                                 }
-                                # model validity
+                                ## model validation ----
                                 model_validation_density_res <- ggplot2::ggplot(current_model_data,
                                                                                 ggplot2::aes(x = res_ST)) +
                                   ggplot2::geom_density(stat = "density",
                                                         fill = rgb(1,0,0,0.2),
-                                                        ggplot2::aes(y = ..scaled..)) +
+                                                        ggplot2::aes(y = ggplot2::after_stat(scaled))) +
                                   ggplot2::scale_x_continuous(expand = c(0, 0)) +
                                   ggplot2::labs(x = "Standardized Residuals")
                                 model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
@@ -4879,7 +6722,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       nrow = 2,
                                                                       ncol = 4)
                                 ggplot2::ggsave(plot = model_validation,
-                                                file = file.path(figures_directory,
+                                                file = file.path(figure_directory,
                                                                  paste("model_validation_",
                                                                        ocean,
                                                                        "_",
@@ -4892,87 +6735,94 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 height = 20,
                                                 units = c("cm"),
                                                 dpi = 300)
-                                current_outputs_level3_process3[[1]] <- append(current_outputs_level3_process3[[1]],
-                                                                               list("model_validation" = model_validation))
-                                # model accuracy
+                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                              list("model_validation" = model_validation))
+                                ## model accuracy ----
                                 # cross validation by k-folds
                                 npartition <- 10 # not a parameter
                                 df <- current_model_data
-
-                                model_formula <- strsplit(as.character(current_model_outputs[[3]]$call),",")[[2]]
-                                model_ntree <- current_model_outputs[[3]]$num.trees
-                                model_mtry <- current_model_outputs[[3]]$mtry
-                                model_node <- current_model_outputs[[3]]$min.node.size
-                                set.seed(7)
-                                fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
-                                                                    size = nrow(df),
-                                                                    replace = FALSE),
-                                                   nfold = rep_len(x = seq_len(length.out = npartition),
-                                                                   length.out = nrow(df)))
-                                resi <- vector(mode = "list",
-                                               length = npartition)
-                                mufit <- vector(mode = "list",
-                                                length = npartition)
-                                for (h in seq_len(length.out = npartition)) {
-                                  test <- df[fold$row_ord[fold$nfold == h], ]
-                                  train <- df[fold$row_ord[fold$nfold != h], ]
+                                if(nrow(df) < 50){
+                                  cat(format(x = Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " Current dataset < 50 data. Not enougth data for model accuracy testing.\n",
+                                      sep = "")
+                                } else {
+                                  model_formula <- strsplit(as.character(current_model_output[[3]]$call),",")[[2]]
+                                  model_ntree <- current_model_output[[3]]$num.trees
+                                  model_mtry <- current_model_output[[3]]$mtry
+                                  model_node <- current_model_output[[3]]$min.node.size
                                   set.seed(7)
-                                  model <- ranger::ranger(formula = model_formula,
-                                                          data = train,
-                                                          num.trees = model_ntree,
-                                                          mtry = model_mtry,
-                                                          min.node.size = model_node,
-                                                          splitrule = "variance")
+                                  fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
+                                                                      size = nrow(df),
+                                                                      replace = FALSE),
+                                                     nfold = rep_len(x = seq_len(length.out = npartition),
+                                                                     length.out = nrow(df)))
+                                  resi <- vector(mode = "list",
+                                                 length = npartition)
+                                  mufit <- vector(mode = "list",
+                                                  length = npartition)
+                                  for (h in seq_len(length.out = npartition)) {
+                                    test <- df[fold$row_ord[fold$nfold == h], ]
+                                    train <- df[fold$row_ord[fold$nfold != h], ]
+                                    set.seed(7)
+                                    model <- ranger::ranger(formula = model_formula,
+                                                            data = train,
+                                                            num.trees = model_ntree,
+                                                            mtry = model_mtry,
+                                                            min.node.size = model_node,
+                                                            splitrule = "variance")
 
-                                  test$fit <- predict(model,data = test)$predictions
-
-                                  resi[[h]] = test$resp - test$fit
-                                  mufit[[h]] = mean(test$resp)
+                                    test$fit <- predict(model,data = test)$predictions
+                                    resi[[h]] <- test$resp - test$fit
+                                    mufit[[h]] <- mean(test$resp)
+                                  }
+                                  RMSE <- NULL
+                                  MAE <- NULL
+                                  CVMAE <- NULL
+                                  RMSE <- unlist(lapply(resi,
+                                                        function(i) {
+                                                          ifelse(test = ! is.null(i),
+                                                                 yes = sqrt(mean((i^2))),
+                                                                 no = NA)
+                                                        }))
+                                  MAE <- unlist(lapply(resi,
+                                                       function(j) {
+                                                         ifelse(test = ! is.null(j),
+                                                                yes = mean(abs(j)),
+                                                                no = NA)
+                                                       }))
+                                  CVMAE <- MAE / (unlist(mufit))
+                                  kfold <- data.frame(index = c("RMSE",
+                                                                "MAE",
+                                                                "CVMAE"),
+                                                      value = c(mean(RMSE,
+                                                                     na.rm = TRUE),
+                                                                mean(MAE,
+                                                                     na.rm = TRUE),
+                                                                mean(CVMAE,
+                                                                     na.rm = TRUE)),
+                                                      stdev = c(sd(RMSE),
+                                                                sd(MAE),
+                                                                sd(CVMAE)))
+                                  write.table(x = kfold,
+                                              file = file.path(table_directory,
+                                                               paste("kfold_",
+                                                                     ocean,
+                                                                     "_",
+                                                                     specie,
+                                                                     "_",
+                                                                     fishing_mode,
+                                                                     ".csv",
+                                                                     sep = "")),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                                list("kfold" = kfold))
+                                  output_level3_process3 <- append(output_level3_process3,
+                                                                   list(current_output_level3_process3))
+                                  names(output_level3_process3)[length(output_level3_process3)] <- paste(ocean, specie, fishing_mode, sep = "_")
                                 }
-                                RMSE <- NULL
-                                MAE <- NULL
-                                CVMAE <- NULL
-                                RMSE <- unlist(lapply(resi,
-                                                      function(i) {
-                                                        ifelse(test = ! is.null(i),
-                                                               yes = sqrt(mean((i^2))),
-                                                               no = NA)
-                                                      }))
-                                MAE <- unlist(lapply(resi,
-                                                     function(j) {
-                                                       ifelse(test = ! is.null(j),
-                                                              yes = mean(abs(j)),
-                                                              no = NA)
-                                                     }))
-                                CVMAE <- MAE / (unlist(mufit))
-                                kfold <- data.frame(index = c("RMSE",
-                                                              "MAE",
-                                                              "CVMAE"),
-                                                    value = c(mean(RMSE,
-                                                                   na.rm = TRUE),
-                                                              mean(MAE,
-                                                                   na.rm = TRUE),
-                                                              mean(CVMAE,
-                                                                   na.rm = TRUE)),
-                                                    stdev = c(sd(RMSE),
-                                                              sd(MAE),
-                                                              sd(CVMAE)))
-                                write.csv2(x = kfold,
-                                           file = file.path(tables_directory,
-                                                            paste("kfold_",
-                                                                  ocean,
-                                                                  "_",
-                                                                  specie,
-                                                                  "_",
-                                                                  fishing_mode,
-                                                                  ".csv",
-                                                                  sep = "")),
-                                           row.names = FALSE)
-                                current_outputs_level3_process3[[2]] <- append(current_outputs_level3_process3[[2]],
-                                                                               list("kfold" = kfold))
-                                outputs_level3_process3 <- append(outputs_level3_process3,
-                                                                  list(current_outputs_level3_process3))
-                                names(outputs_level3_process3)[length(outputs_level3_process3)] <- paste(ocean, specie, fishing_mode, sep = "_")
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Process 3.3 successfull for ocean \"",
                                     ocean,
@@ -4984,7 +6834,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     ".\n",
                                     sep = "")
                               }
-                              return(outputs_level3_process3)
+                              return(output_level3_process3)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
                                   sep = "")
@@ -4992,23 +6842,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # process 3.4: data formatting for predictions ----
                             #' @description Formatting data for model predictions.
                             #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).
-                            #' @param outputs_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
+                            #' @param output_level3_process1 Object of type \code{\link[base]{data.frame}} expected. Output table data_lb_sample_screened from process 3.1.
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
                             #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
 
                             data_formatting_for_predictions = function(inputs_level3,
-                                                                       outputs_level3_process1,
+                                                                       output_level3_process1,
                                                                        target_year,
                                                                        vessel_id_ignored = NULL,
-                                                                       small_fish_only = F) {
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                                       small_fish_only = FALSE) {
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.4: data formatting for predictions.\n",
                                   sep = "")
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
-                              outputs_level3_process4 <- list()
+                              output_level3_process4 <- list()
                               # load from t3 levels 1 and 2 outputs ----
                               # sets characteristics
                               act_chr <- inputs_level3[[1]]
@@ -5020,11 +6871,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sset <- inputs_level3[[4]]
                               # well plan
                               wp <- inputs_level3[[5]]
-
                               # catches keep onboard only = set
                               catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
                               catch_set_lb <- droplevels(catch_set_lb)
-
                               # standardize weight category
                               catch_set_lb$wcat <- gsub("kg",
                                                         "",
@@ -5038,10 +6887,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
                                 dplyr::group_by(id_act, date_act, sp, wcat, code_act_type) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>% dplyr::ungroup()
-
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::ungroup()
                               # set use for modeling to remove for prediction
-                              data4mod <- outputs_level3_process1
+                              data4mod <- output_level3_process1
                               sampleset <- unique(data4mod[, c("id_act",
                                                                "fmod",
                                                                "ocean",
@@ -5054,7 +6903,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # reduce data to the period considered in the modeling and check data availability
                               act_chr <- act_chr[act_chr$yr %in% target_year, ]
                               if (nrow(act_chr) == 0) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                cat(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
                                     " - Error: NO data available for the selected target_year.\n",
                                     sep = "")
                                 stop()
@@ -5062,7 +6912,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
                               sets <- dplyr::inner_join(act_chr,
                                                         catch_set_lb,
-                                                        by = c("id_act", "date_act", "code_act_type"))
+                                                        by = c("id_act",
+                                                               "date_act",
+                                                               "code_act_type"))
                               # catches keep onboard only = set
                               sets <- sets[sets$code_act_type %in% c(0,1,2), ]
                               sets$sp <- factor(sets$sp)
@@ -5073,16 +6925,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           sep = "_"))
                               sets$sp <- NULL
                               sets$wcat <- NULL
-
                               # calculate proportion of weight from t3 level 1
                               sets_wide <- tidyr::spread(data = sets,
                                                          key = sp_cat,
                                                          value = w_lb_t3,
                                                          fill = 0)
-                              sets_wide$wtot_lb_t3 <- rowSums(sets_wide[, c("YFT_p10", "BET_p10", "SKJ_m10", "YFT_m10", "BET_m10")])
+                              sets_wide$wtot_lb_t3 <- rowSums(sets_wide[, c("YFT_p10",
+                                                                            "BET_p10",
+                                                                            "SKJ_m10",
+                                                                            "YFT_m10",
+                                                                            "BET_m10")])
+                              sets_wide$fmod <- factor(sets_wide$fmod)
                               # remove activity with no catch
                               sets_wide <- sets_wide[sets_wide$wtot_lb_t3 > 0, ]
-
                               tmp <- sets_wide[, names(sets_wide) %in% levels(sets$sp_cat)]
                               tmp <- prop.table(as.matrix(tmp), 1)
                               sets_wide_tmp <- sets_wide
@@ -5096,14 +6951,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          "YFT_m10",
                                                          "YFT_p10")
                               # Assign fishing mode to unknown
-                              sets_wide$fmod <- factor(sets_wide$fmod)
-                              sets_long$fmod <- factor(sets_long$fmod)
-                              train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
-                              test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
-                              if(nrow(test) >0) {
+                              train <- droplevels(sets_wide_tmp[sets_wide_tmp$fmod != 3, ])
+                              test <- droplevels(sets_wide_tmp[sets_wide_tmp$fmod == 3, ])
+                              if(nrow(test) > 0) {
                                 ntree <- 1000
                                 set.seed(7)
-                                rfg <- ranger::ranger(fmod ~ p_YFT + p_SKJ + p_BET,
+                                rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
                                                       data = train,
                                                       mtry=2L,
                                                       num.trees = ntree,
@@ -5127,52 +6980,113 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            into = c("sp","wcat"),
                                                            sep = "_")
                               # filter data for small fish catch estimation only
-                              if (small_fish_only == F) {
-                                sets_long <- sets_long %>% dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                              if (small_fish_only == FALSE) {
+                                sets_long <- sets_long %>%
+                                  dplyr::group_by(id_act,
+                                                  id_trip,
+                                                  date_act,
+                                                  yr,
+                                                  mon,
+                                                  lat,
+                                                  lon,
+                                                  sp,
+                                                  fmod,
+                                                  ocean,
+                                                  vessel,
+                                                  wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
                               } else {
-                                sets_long <- sets_long %>% dplyr::mutate(prop_lb = replace (prop_lb, wcat == "p10", value = 0)) %>%
-                                  dplyr::group_by(id_act, id_trip, date_act, yr, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                sets_long <- sets_long %>%
+                                  dplyr::mutate(prop_lb = replace (prop_lb,
+                                                                   wcat == "p10",
+                                                                   value = 0)) %>%
+                                  dplyr::group_by(id_act,
+                                                  id_trip,
+                                                  date_act,
+                                                  yr,
+                                                  mon,
+                                                  lat,
+                                                  lon,
+                                                  sp,
+                                                  fmod,
+                                                  ocean,
+                                                  vessel,
+                                                  wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
                               }
-                              outputs_level3_process4 <- append(outputs_level3_process4,
-                                                                list(list("sets_long" = sets_long,
-                                                                          "sets_wide" = sets_wide)))
-                              names(outputs_level3_process4)[length(outputs_level3_process4)] <- "nonsampled_sets"
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              output_level3_process4 <- append(output_level3_process4,
+                                                               list(list("sets_long" = sets_long,
+                                                                         "sets_wide" = sets_wide)))
+                              names(output_level3_process4)[length(output_level3_process4)] <- "nonsampled_sets"
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.4: data formatting for predictions.\n",
                                   sep = "")
-                              return(outputs_level3_process4)
+                              return(output_level3_process4)
                             },
                             # process 3.5: model predictions ----
                             #' @description Model predictions for the species composition and computing of catches.
-                            #' @param outputs_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
-                            #' @param outputs_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
-                            #' @param outputs_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
+                            #' @param output_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
+                            #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
+                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
-                            model_predictions = function(outputs_level3_process2,
-                                                         outputs_level3_process4,
-                                                         outputs_directory,
+                            model_predictions = function(output_level3_process2,
+                                                         output_level3_process4,
+                                                         output_directory,
+                                                         output_format = "eu",
                                                          ci = FALSE,
                                                          ci_type = "all",
                                                          Nboot = 50,
                                                          plot_predict = FALSE) {
+                              # 1 - Arguments verification ----
+                              if (codama::r_type_checking(r_object = output_directory,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          output = "logical") != TRUE) {
+                                stop(codama::r_type_checking(r_object = output_directory,
+                                                             type = "character",
+                                                             length = 1L,
+                                                             output = "message"))
+                              }
+                              if (codama::r_type_checking(r_object = output_format,
+                                                          type = "character",
+                                                          length = 1L,
+                                                          allowed_value = c("us",
+                                                                            "eu"),
+                                                          output = "logical") != TRUE) {
+                                stop(codama::r_type_checking(r_object = output_format,
+                                                             type = "character",
+                                                             length = 1L,
+                                                             allowed_value = c("us",
+                                                                               "eu"),
+                                                             output = "message"))
+                              }
+                              # 2 - Process ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
-                              figures_directory <- file.path(outputs_directory,
-                                                             "level3",
-                                                             "figures")
-                              names(figures_directory) <- "figures"
-                              tables_directory <- file.path(outputs_directory,
+                              # extraction specifications
+                              if (output_format == "us") {
+                                outputs_dec <- "."
+                                outputs_sep <- ","
+                              } else if (output_format == "eu") {
+                                outputs_dec <- ","
+                                outputs_sep <- ";"
+                              }
+                              figure_directory <- file.path(output_directory,
                                                             "level3",
-                                                            "data_outputs")
-                              names(tables_directory) <- "data_outputs"
+                                                            "figure")
+                              names(figure_directory) <- "figure"
+                              table_directory <- file.path(output_directory,
+                                                           "level3",
+                                                           "data")
+                              names(table_directory) <- "data"
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
                               options(warn = 1)
@@ -5183,7 +7097,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (is.factor(df[, a])) {
                                   return(factor(df[, a],
                                                 levels = c(levels(df[, a]),
-                                                           setdiff(current_outputs_level3_process2[[3]]$forest$xlevels[a][[1]],
+                                                           setdiff(current_output_level3_process2[[3]]$forest$xlevels[a][[1]],
                                                                    levels(df[, a])))))
                                 }
                               }
@@ -5209,15 +7123,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   "Boot_output_list",
                                                                   "Boot_output_list_ST",
                                                                   "Final_output")
-                              sets_long <- outputs_level3_process4[[1]][[1]]
+                              sets_long <- output_level3_process4[[1]][[1]]
                               ocean_level <- unique(do.call(what = rbind,
-                                                            args = strsplit(names(outputs_level3_process2),
+                                                            args = strsplit(names(output_level3_process2),
                                                                             split = "_"))[,1])
                               for (ocean in ocean_level) {
                                 sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
                                 for (species in unique(sets_long_ocean$sp)) {
-                                  if (! species %in% c("SKJ","YFT")) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (! species %in% c("SKJ",
+                                                       "YFT")) {
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: process 3.5 not developed yet for the species \"",
                                         species,
                                         "\" in the ocean \"",
@@ -5229,7 +7145,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sets_long_specie <- sets_long_ocean[sets_long_ocean$sp == species, ]
                                     for (fishing_mode in unique(sets_long_specie$fmod)) {
                                       sets_long_fishing_mode <- sets_long_specie[sets_long_specie$fmod == fishing_mode, ]
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      cat(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
                                           " - Ongoing process 3.5 (Predictions step) for ocean \"",
                                           ocean,
                                           "\", species \"",
@@ -5239,13 +7156,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           "\"",
                                           ".\n",
                                           sep = "")
-                                      if(nrow(sets_long_fishing_mode) > 0){
+                                      if(nrow(sets_long_fishing_mode) > 0) {
                                         # models
-                                        current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                          species,
-                                                                                                          fishing_mode,
-                                                                                                          sep = "_")]]
-                                        res <- tunapredict(sample_data = current_outputs_level3_process2[[1]],
+                                        current_output_level3_process2 <- output_level3_process2[[paste(ocean,
+                                                                                                        species,
+                                                                                                        fishing_mode,
+                                                                                                        sep = "_")]]
+                                        res <- tunapredict(sample_data = current_output_level3_process2[[1]],
                                                            allset_data = sets_long_fishing_mode,
                                                            Ntree = 1000,
                                                            Nmtry = 2,
@@ -5257,7 +7174,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                            species,
                                                                                                                            fishing_mode,
                                                                                                                            sep = "_")
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        cat(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
                                             " - Process 3.5 (Predictions step) successfull for ocean \"",
                                             ocean,
                                             "\", species \"",
@@ -5267,7 +7185,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "\"",
                                             ".\n",
                                             sep = "")
-
                                       }
                                     }
                                   }
@@ -5278,31 +7195,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_level3_process5_ocean <- outputs_level3_process5[[1]][grep(pattern = paste(ocean,"_", sep = ""),
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
-                                boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
-                                                                       key = "sp",
-                                                                       value = fit_prop)
-                                boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
-                                boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                          yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
-                                                                          no = boot_tmp_element_wide$SKJ)
-                                boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                          yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
-                                                                          no = boot_tmp_element_wide$YFT)
-                                boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
-
-                                boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
-                                                                       key = "sp",
-                                                                       value = "fit_prop_t3_ST",
-                                                                       "BET", "SKJ", "YFT")
-                                boot_tmp_element <- dplyr::left_join(boot_tmp_element_long,
-                                                                     boot_tmp_element,
-                                                                     by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
-                                boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-                                outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
-                                                                       list(boot_tmp_element))
-                                names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
-                                                                                                                   ocean,
-                                                                                                                   sep = "_")
+                                if(nrow(boot_tmp_element) > 0){
+                                  boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
+                                                                         key = "sp",
+                                                                         value = fit_prop)
+                                  boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
+                                  boot_tmp_element_wide$SKJ <- ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                      yes = boot_tmp_element_wide$SKJ/boot_tmp_element_wide$S,
+                                                                      no = boot_tmp_element_wide$SKJ)
+                                  boot_tmp_element_wide$YFT <- ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                      yes = boot_tmp_element_wide$YFT/boot_tmp_element_wide$S,
+                                                                      no = boot_tmp_element_wide$YFT)
+                                  boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
+                                  boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
+                                                                         key = "sp",
+                                                                         value = "fit_prop_t3_ST",
+                                                                         "BET", "SKJ", "YFT")
+                                  boot_tmp_element <- dplyr::left_join(boot_tmp_element_long,
+                                                                       boot_tmp_element,
+                                                                       by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
+                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                  outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
+                                                                         list(boot_tmp_element))
+                                  names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
+                                                                                                                     ocean,
+                                                                                                                     sep = "_")
+                                }
                               }
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
@@ -5323,7 +7241,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sets_long_species <- sets_long_ocean[sets_long_ocean$sp == species, ]
                                       for (fishing_mode in unique(sets_long_species$fmod)) {
                                         sets_long_fishing_mode <- sets_long_species[sets_long_species$fmod == fishing_mode, ]
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                        cat(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
                                             " - Ongoing process 3.5 (Bootstrap step) for ocean \"",
                                             ocean,
                                             "\", species \"",
@@ -5333,12 +7252,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "\"",
                                             ".\n",
                                             sep = "")
-                                        if(nrow(sets_long_fishing_mode) > 0){
-                                          current_outputs_level3_process2 <- outputs_level3_process2[[paste(ocean,
-                                                                                                            species,
-                                                                                                            fishing_mode,
-                                                                                                            sep = "_")]]
-                                          boot_output <- tunaboot(sample_data = current_outputs_level3_process2[[1]],
+                                        if(nrow(sets_long_fishing_mode) > 0) {
+                                          current_output_level3_process2 <- output_level3_process2[[paste(ocean,
+                                                                                                          species,
+                                                                                                          fishing_mode,
+                                                                                                          sep = "_")]]
+                                          boot_output <- tunaboot(sample_data = current_output_level3_process2[[1]],
                                                                   allset_data = sets_long_fishing_mode,
                                                                   # model parameters
                                                                   Ntree = 1000,
@@ -5364,7 +7283,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               "\"",
                                               ".\n",
                                               sep = "")
-
                                         }
                                       }
                                     }
@@ -5374,57 +7292,63 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # bootstrap step 2 - Standardize SKJ and YFT 'Estimated catch' and compute BET estimated catch ----
                                 # Standardize SKJ and YFT boot output - , compute BET proportion and catch for all
                                 for (ocean in ocean_level) {
-                                  outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,"_", sep = ""),
+                                  outputs_level3_process5_ocean <- outputs_level3_process5[[3]][grep(pattern = paste(ocean,
+                                                                                                                     "_",
+                                                                                                                     sep = ""),
                                                                                                      x = names(outputs_level3_process5[[3]]))]
-                                  list_boot_ST_ocean <- vector("list", length = length(outputs_level3_process5_ocean[[1]]))
-                                  for(element in (seq.int(from = 1,
-                                                          to = length(outputs_level3_process5_ocean[[1]])))){
-                                    boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
-                                    boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
-                                    boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
-                                                                           key = "sp",
-                                                                           value = fit_prop)
-                                    boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
-                                    boot_tmp_element_wide$SKJ <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                              yes = boot_tmp_element_wide$SKJ / boot_tmp_element_wide$S,
-                                                                              no = boot_tmp_element_wide$SKJ)
-                                    boot_tmp_element_wide$YFT <- base::ifelse(test = boot_tmp_element_wide$S > 1,
-                                                                              yes = boot_tmp_element_wide$YFT / boot_tmp_element_wide$S,
-                                                                              no = boot_tmp_element_wide$YFT)
-                                    boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
+                                  if (length(outputs_level3_process5_ocean) > 0) {
+                                    list_boot_ST_ocean <- vector("list",
+                                                                 length = length(outputs_level3_process5_ocean[[1]]))
+                                    for (element in (seq.int(from = 1,
+                                                             to = length(outputs_level3_process5_ocean[[1]])))){
+                                      boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
+                                      boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
+                                      boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
+                                                                             key = "sp",
+                                                                             value = fit_prop)
+                                      boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
+                                      boot_tmp_element_wide$SKJ <- ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                          yes = boot_tmp_element_wide$SKJ / boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$SKJ)
+                                      boot_tmp_element_wide$YFT <- ifelse(test = boot_tmp_element_wide$S > 1,
+                                                                          yes = boot_tmp_element_wide$YFT / boot_tmp_element_wide$S,
+                                                                          no = boot_tmp_element_wide$YFT)
+                                      boot_tmp_element_wide$BET <- 1 - (boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT)
+                                      boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
+                                                                             key = "sp",
+                                                                             value = "fit_prop_t3_ST",
+                                                                             "BET", "SKJ", "YFT")
+                                      boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
 
-                                    boot_tmp_element_long <- tidyr::gather(data = boot_tmp_element_wide,
-                                                                           key = "sp",
-                                                                           value = "fit_prop_t3_ST",
-                                                                           "BET", "SKJ", "YFT")
-                                    boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
-
-                                    boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
-                                    list_boot_ST_ocean[[element]] <- boot_tmp_element
+                                      boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                      list_boot_ST_ocean[[element]] <- boot_tmp_element
+                                    }
+                                    outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
+                                                                           list(list_boot_ST_ocean))
+                                    names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
+                                                                                                                       ocean,
+                                                                                                                       sep = "_")
                                   }
-                                  outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
-                                                                         list(list_boot_ST_ocean))
-                                  names(outputs_level3_process5[[4]])[length(outputs_level3_process5[[4]])] <- paste("ocean",
-                                                                                                                     ocean,
-                                                                                                                     sep = "_")
                                 }
                               }
                               # bootstrap step 3 - compute confident intervals ----
                               # Compute CI by set - export catch by set
-                              cat(format(Sys.time(),
+                              cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
-                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "set")) > 0 )){
-                                set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST, function(x){
-                                  set_all_boot_tmp <- dplyr::bind_rows(x)
-                                  set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp) / Nboot)
-                                  return(set_all_boot_tmp)
-                                })
+                              if (ci == TRUE && (length(which(ci_type == "all")) > 0
+                                                 || length(which(ci_type == "set")) > 0 )) {
+                                set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST,
+                                                       function(x) {
+                                                         set_all_boot_tmp <- dplyr::bind_rows(x)
+                                                         set_all_boot_tmp$loop <- rep(1:Nboot, each = nrow(set_all_boot_tmp) / Nboot)
+                                                         return(set_all_boot_tmp)
+                                                       })
                                 # compute final CI
                                 set_all_final_ocean_list <- vector("list", length = length(outputs_level3_process5$Estimated_catch_ST))
-                                names(set_all_final_ocean_list) <- names(outputs_level3_process5$Estimated_catch_ST)
+                                names(set_all_final_ocean_list) <- names(x = outputs_level3_process5$Estimated_catch_ST)
                                 for (o in names(outputs_level3_process5$Estimated_catch_ST)) {
                                   set_all_final_ocean_list[[o]] <- catch_ci_calculator(fit_data = outputs_level3_process5$Estimated_catch_ST[[o]],
                                                                                        boot_data = set_all_boot[[o]])
@@ -5433,20 +7357,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 set_all <- set_all_final_ocean
                               }
-                              write.csv2(x = set_all,
-                                         file = file.path(tables_directory,
-                                                          paste("set_all_ocean_",
-                                                                paste(unique(set_all$ocean),
-                                                                      collapse = "-"),
-                                                                "_",
-                                                                paste(unique(set_all$yr),
-                                                                      collapse = "-"),
-                                                                ".csv",
-                                                                sep = "")),
-                                         row.names = FALSE)
+                              write.table(x = set_all,
+                                          file = file.path(table_directory,
+                                                           paste("set_all_ocean_",
+                                                                 paste(unique(set_all$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(set_all$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: set catch estimations.\n",
                                   sep = "")
@@ -5462,50 +7388,55 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                return(t1_tmp_element)
                                                              }))
                               # compute final CI
-                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1")) > 0 )){
+                              if (ci == TRUE && (length(which(ci_type == "all")) > 0
+                                                 || length(which(ci_type == "t1")) > 0 )) {
                                 t1_all_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                     function(x) {
-                                                                      boot_tmp_element <-do.call(rbind,
-                                                                                                 lapply(seq.int(1:length(x)),
-                                                                                                        function(i){
-                                                                                                          boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
-                                                                                                                                           data=x[[i]], sum)
-                                                                                                          boot_tmp_subelement$loop <- i
-                                                                                                          return(boot_tmp_subelement)
-                                                                                                        }))
+                                                                      boot_tmp_element <- do.call(rbind,
+                                                                                                  lapply(seq.int(1:length(x)),
+                                                                                                         function(i) {
+                                                                                                           boot_tmp_subelement <- aggregate(cbind(catch_set_fit) ~ yr + sp + ocean,
+                                                                                                                                            data = x[[i]], sum)
+                                                                                                           boot_tmp_subelement$loop <- i
+                                                                                                           return(boot_tmp_subelement)
+                                                                                                         }))
                                                                       return(boot_tmp_element)
                                                                     }))
                                 t1_all_final_ocean_list <- vector("list", length = length(x = levels(t1_all$ocean)))
                                 for (o in levels(t1_all$ocean)) {
-                                  t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o,],
+                                  t1_all_final_ocean_list[[as.numeric(o)]] <- catch_ci_calculator(fit_data = t1_all[t1_all$ocean == o, ],
                                                                                                   boot_data = t1_all_boot[t1_all_boot$ocean == o, ])
                                 }
                                 t1_all_final_ocean <- do.call(rbind, t1_all_final_ocean_list)
                                 t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
+                                                                                                          digits = 4)
                                 outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                        list(t1_all_final_ocean))
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
                                 t1_all <- t1_all_final_ocean
                               }
-                              write.csv2(x = t1_all,
-                                         file = file.path(tables_directory,
-                                                          paste("t1_all_ocean_",
-                                                                paste(unique(t1_all$ocean),
-                                                                      collapse = "-"),
-                                                                "_",
-                                                                paste(unique(t1_all$yr),
-                                                                      collapse = "-"),
-                                                                ".csv",
-                                                                sep = "")),
-                                         row.names = FALSE)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              write.table(x = t1_all,
+                                          file = file.path(table_directory,
+                                                           paste("t1_all_ocean_",
+                                                                 paste(unique(t1_all$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(t1_all$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t1 catch estimations.\n",
                                   sep = "")
                               # nominal catch by species and fishing mode (task 1 by fishing mode)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t1-fmod catch estimations.\n",
                                   sep = "")
                               t1_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x){
@@ -5513,7 +7444,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(boot_tmp_subelement)
                               }))
                               # bootstrap distribution
-                              if(ci == TRUE && (length(which(ci_type == "all")) > 0 || length(which(ci_type == "t1-fmod")) > 0 )){
+                              if(ci == TRUE && (length(which(ci_type == "all")) > 0
+                                                || length(which(ci_type == "t1-fmod")) > 0)) {
                                 t1_fmod_boot <- do.call(rbind,lapply(outputs_level3_process5$Boot_output_list_ST,
                                                                      FUN = function(x) {
                                                                        boot_tmp_element <- do.call(rbind,
@@ -5537,24 +7469,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                        list(t1_fmod_final_ocean))
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
                                 t1_fmod <- t1_fmod_final_ocean
                               }
-                              write.csv2(x = t1_fmod,
-                                         file = file.path(tables_directory,
-                                                          paste("t1_fmod_ocean_",
-                                                                paste(unique(t1_fmod$ocean),
-                                                                      collapse = "-"),
-                                                                "_",
-                                                                paste(unique(t1_fmod$yr),
-                                                                      collapse = "-"),
-                                                                ".csv",
-                                                                sep = "")),
-                                         row.names = FALSE)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              write.table(x = t1_fmod,
+                                          file = file.path(table_directory,
+                                                           paste("t1_fmod_ocean_",
+                                                                 paste(unique(t1_fmod$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(t1_fmod$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t1-fmod catch estimations.\n",
                                   sep = "")
                               ## catch effort (task2)
@@ -5597,7 +7532,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              sep=""))
                               }
                               # nominal catch by species and cwp (task 2 - catch Effort)
-                              cat(format(Sys.time(),
+                              cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2 catch estimations.\n",
                                   sep = "")
@@ -5638,25 +7573,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t2_all_final_ocean[, names(t2_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                          digits = 2)
+                                                                                                          digits = 4)
                                 t2_all <- t2_all_final_ocean
                               }
-                              write.csv2(x = t2_all,
-                                         file = file.path(tables_directory,
-                                                          paste("t2_all_ocean_",
-                                                                paste(unique(t2_all$ocean),
-                                                                      collapse = "-"),
-                                                                "_",
-                                                                paste(unique(t2_all$yr),
-                                                                      collapse = "-"),
-                                                                ".csv",
-                                                                sep = "")),
-                                         row.names = FALSE)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              write.table(x = t2_all,
+                                          file = file.path(table_directory,
+                                                           paste("t2_all_ocean_",
+                                                                 paste(unique(t2_all$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(t2_all$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2 catch estimations.\n",
                                   sep = "")
                               # nominal catch by species and cwp and fishing mode (task 2 by fishing mode)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
                               t2_fmod <- do.call(rbind,lapply(outputs_level3_process5$Estimated_catch_ST, function(x) {
@@ -5696,68 +7635,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t2_fmod_final_ocean[, names(t2_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 2)
+                                                                                                            digits = 4)
                                 t2_fmod <- t2_fmod_final_ocean
                               }
-                              write.csv2(x = t2_fmod,
-                                         file = file.path(tables_directory,
-                                                          paste("t2_fmod_ocean_",
-                                                                paste(unique(t2_fmod$ocean),
-                                                                      collapse = "-"),
-                                                                "_",
-                                                                paste(unique(t2_fmod$yr),
-                                                                      collapse = "-"),
-                                                                ".csv",
-                                                                sep = "")),
-                                         row.names = FALSE)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              write.table(x = t2_fmod,
+                                          file = file.path(table_directory,
+                                                           paste("t2_fmod_ocean_",
+                                                                 paste(unique(t2_fmod$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(t2_fmod$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+                              cat(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-                              # tmp <- catch_set_t3_long
-                              # cwp <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "lat_lon_to_cwp",
-                              #                                         data_longitude = as.character(tmp$lon),
-                              #                                         data_latitude = as.character(tmp$lat),
-                              #                                         input_degree_format = "decimal_degree",
-                              #                                         cwp_resolution = "1deg_x_1deg")
-                              # cwp$longitude_decimal_degree <- as.numeric(cwp$longitude_decimal_degree)
-                              # cwp$latitude_decimal_degree <- as.numeric(cwp$latitude_decimal_degree)
-                              # tmp <- dplyr::inner_join(x = tmp,
-                              #                          y = cwp,
-                              #                          by = c("lon" = "longitude_decimal_degree",
-                              #                                 "lat" = "latitude_decimal_degree")) %>%
-                              #   dplyr::rename(cwp1 = cwp)
-                              # # mean proportion by 1 degree / month
-                              # tmp2 <- aggregate(formula = cbind(fit_prop_t3_ST) ~ year + fmod + sp + ocean + cwp1,
-                              #                   data = tmp,
-                              #                   FUN = mean)
-                              # # catch by 1 degree/month
-                              # tmp3 <- aggregate(formula = cbind(catch_t3_N3) ~ year + fmod + sp + ocean + cwp1,
-                              #                   data = tmp,
-                              #                   FUN = sum)
-                              # t2 <-  dplyr::inner_join(x = tmp3,
-                              #                          y = tmp2,
-                              #                          by = c("year", "fmod", "sp", "ocean", "cwp1"))
-                              # lon_lat <- furdeb::lat_lon_cwp_manipulation(manipulation_process = "cwp_to_lat_lon",
-                              #                                             data_cwp = as.character(t2$cwp1),
-                              #                                             output_degree_format = "decimal_degree",
-                              #                                             output_degree_cwp_parameter = "centroid",
-                              #                                             cwp_resolution = "1deg_x_1deg")
-                              # lon_lat$longitude_decimal_degree_centroid <- as.numeric(lon_lat$longitude_decimal_degree_centroid)
-                              # lon_lat$latitude_decimal_degree_centroid <- as.numeric(lon_lat$latitude_decimal_degree_centroid)
-                              # t2 <- dplyr::inner_join(x = t2,
-                              #                         y = lon_lat,
-                              #                         by = c("cwp1" = "cwp")) %>%
-                              #   dplyr::rename(lon = longitude_decimal_degree_centroid,
-                              #                 lat = latitude_decimal_degree_centroid)
-                              # outputs_level3_process5 <- append(outputs_level3_process5,
-                              #                                   list(list(catch_set_t3_long,
-                              #                                             t1,
-                              #                                             t2)))
-                              # names(outputs_level3_process5)[[2]] <- paste0("raw_t1_t2_",
-                              #                                               unique(catch_set_t3_long$year))
-                              # names(outputs_level3_process5[[2]]) <- c("catch_set_t3_long",
-                              #                                          "t1",
-                              #                                          "t2")
                               # figure task 2 and proportion
                               if (plot_predict == T) {
                                 sps <- t2
@@ -5774,11 +7671,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 palette4catch <- grDevices::colorRampPalette(c("yellow", "red"))
                                 outputs_level3_process5 <- append(outputs_level3_process5,
                                                                   list(list()))
-                                names(outputs_level3_process5)[length(outputs_level3_process5)] <- "figures"
+                                names(outputs_level3_process5)[length(outputs_level3_process5)] <- "figure"
                                 # map of the proportion
                                 for (specie in unique(sps$sp)) {
-                                  if (! specie %in% c("BET", "SKJ", "YFT")) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  if (! specie %in% c("BET",
+                                                      "SKJ",
+                                                      "YFT")) {
+                                    cat(format(x = Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: process 3.5 not developed yet for the specie \"",
                                         specie,
                                         "\".\n",
@@ -5791,15 +7691,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sps_ocean <- sps_fishing_mode[sps_fishing_mode$ocean == ocean, ]
                                         for (year in unique(sps_ocean$year)) {
                                           sps_year <- sps_ocean[sps_ocean$year == year, ]
-                                          figures_directory <- file.path(outputs_path,
-                                                                         "figures",
-                                                                         paste(ocean,
-                                                                               specie,
-                                                                               fishing_mode,
-                                                                               sep = "_"))
-                                          if (file.exists(figures_directory)) {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Outputs \"figures\" directory for ocean \"",
+                                          figure_directory <- file.path(outputs_path,
+                                                                        "figure",
+                                                                        paste(ocean,
+                                                                              specie,
+                                                                              fishing_mode,
+                                                                              sep = "_"))
+                                          if (file.exists(figure_directory)) {
+                                            cat(format(x = Sys.time(),
+                                                       "%Y-%m-%d %H:%M:%S"),
+                                                " - Outputs \"figure\" directory for ocean \"",
                                                 ocean,
                                                 "\", specie \"",
                                                 specie,
@@ -5809,9 +7710,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 "Outputs associated will used this directory (be careful of overwriting previous files).\n",
                                                 sep = "")
                                           } else {
-                                            dir.create(figures_directory)
+                                            dir.create(figure_directory)
                                             cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Outputs \"figures\" directory for ocean \"",
+                                                " - Outputs \"figure\" directory for ocean \"",
                                                 ocean,
                                                 "\", specie \"",
                                                 specie,
@@ -5819,7 +7720,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 fishing_mode,
                                                 "\" created.\n",
                                                 "[directory path: ",
-                                                figures_directory,
+                                                figure_directory,
                                                 "]\n",
                                                 sep = "")
                                           }
@@ -5862,7 +7763,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
                                           ggplot2::ggsave(plot = f_prop,
-                                                          file = file.path(figures_directory,
+                                                          file = file.path(figure_directory,
                                                                            paste0("prop_",
                                                                                   year,
                                                                                   "_",
@@ -5921,7 +7822,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
                                           ggplot2::ggsave(plot = f_catch,
-                                                          file = file.path(figures_directory,
+                                                          file = file.path(figure_directory,
                                                                            paste0("catch_",
                                                                                   year,
                                                                                   "_",
@@ -5955,5 +7856,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                           private = list(
                             id_not_full_trip = NULL,
                             id_not_full_trip_retained = NULL,
-                            data_selected = NULL
+                            data_selected = NULL,
+                            log_summary = NULL
                           ))
