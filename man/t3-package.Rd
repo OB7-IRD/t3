@@ -38,7 +38,7 @@ Other contributors:
   \item Norbet Billet \email{norbert.billet@ifremer.fr} [contributor]
   \item Laurent Dubroca \email{laurent.dubroca@ifremer.fr} [contributor]
   \item Emmanuel Chassot \email{emmanuel.Chassot@fao.org} (\href{https://orcid.org/0000-0002-6779-4955}{ORCID}) [contributor]
-  \item IRD - Ob7 Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} (\href{https://orcid.org/0000-0002-4642-3418}{ORCID}) [contributor, funder]
+  \item IRD - Ob7 Observatory of Exploited Tropical Pelagic Ecosystems \email{ob7@ird.fr} (\href{https://orcid.org/0000-0002-4642-3418}{ORCID}) [copyright holder, funder]
 }
 
 }
