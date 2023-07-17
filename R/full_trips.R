@@ -1,7 +1,7 @@
 #' @name full_trips
 #' @title R6 class full_trips
 #' @importFrom R6 R6Class
-#' @importFrom dplyr tibble mutate add_row relocate group_by summarise full_join left_join n last first filter bind_rows as_tibble ungroup inner_join distinct
+#' @importFrom dplyr tibble mutate add_row relocate group_by summarise full_join left_join n last first filter bind_rows as_tibble ungroup inner_join distinct pull
 #' @importFrom lubridate year hms dseconds int_length interval days dhours dminutes month
 #' @importFrom codama r_type_checking
 #' @importFrom suncalc getSunlightTimes
@@ -20,6 +20,7 @@
 #' @importFrom forecast ggAcf
 #' @importFrom raster raster crs crop extent rasterize rasterToPoints quantile cut
 #' @importFrom grDevices colorRampPalette
+#' @importFrom future.apply future_lapply
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = list_t3,
                           public = list(
@@ -377,26 +378,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                  file = "NUL")
-                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
-                                                       FUN = function(trip_id) {
-                                                         if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
-                                                           capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                                          file = "NUL")
-                                                           capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
-                                                                          file = "NUL")
-                                                           invisible(x = lapply(X = seq_len(length.out = current_activities$count()),
-                                                                                FUN = function(activity_id) {
-                                                                                  current_activity_id <- current_activities$extract(attribut_l1 = "data",
-                                                                                                                                    attribut_l2 = "activity_id",
-                                                                                                                                    id = activity_id)
-                                                                                  current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
-                                                                                                                                                                  current_activity_id,
-                                                                                                                                                                  "\""),
-                                                                                                                                                  clone = TRUE)
-                                                                                  current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
-                                                                                }))
-                                                         }
-                                                       }))
+                                  invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_trips$count()),
+                                                                            FUN = function(trip_id) {
+                                                                              if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
+                                                                                capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                                                               file = "NUL")
+                                                                                capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
+                                                                                               file = "NUL")
+                                                                                invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_activities$count()),
+                                                                                                                          FUN = function(activity_id) {
+                                                                                                                            current_activity_id <- current_activities$extract(attribut_l1 = "data",
+                                                                                                                                                                              attribut_l2 = "activity_id",
+                                                                                                                                                                              id = activity_id)
+                                                                                                                            current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                                                            current_activity_id,
+                                                                                                                                                                                                            "\""),
+                                                                                                                                                                                            clone = TRUE)
+                                                                                                                            current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
+                                                                                                                          }))
+                                                                              }
+                                                                            }))
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - Successful process of adding elementary catches on full trip \"",
                                       names(private$data_selected)[[full_trip_id]],
@@ -1042,9 +1043,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   total_landings_catches_species_activities <- tidyr::tibble(do.call(what = rbind,
                                                                                                      args = total_landings_catches_species_activities))
                                   total_landings_catches <- dplyr::distinct(.data = total_landings_catches_species_activities,
-                                                          trip_id,
-                                                          specie,
-                                                          landing_weight) %>%
+                                                                            trip_id,
+                                                                            specie,
+                                                                            landing_weight) %>%
                                     dplyr::group_by(trip_id) %>%
                                     dplyr::summarise(landing_weight = sum(landing_weight,
                                                                           na.rm = TRUE),
@@ -4444,7 +4445,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
                                   outputs_process_2_5_standardisedsamples <- data.frame("trip_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "trip_id")),
                                                                                         "well_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "well_id")),
-                                                                                        "sample_id" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                        "sample_id" = dplyr::tibble("sample_id_ori"= standardisedsamples_selected$extract_l1_element_value(element = "sample_id")) %>%
+                                                                                          dplyr::rowwise() %>%
+                                                                                          dplyr::mutate(sample_id_final = paste0(sample_id_ori,
+                                                                                                                                 collapse = ", ")) %>%
+                                                                                          dplyr::pull(sample_id_final),
                                                                                         "specie_code3l" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "specie_code3l")),
                                                                                         "sample_standardised_length_class_lf" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                         "sample_number_measured_extrapolated_lf" = unlist(x = standardisedsamples_selected$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")))
@@ -5283,7 +5288,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
-                                                                                           "sample_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                           "sample_id" = dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
+                                                                                             dplyr::rowwise() %>%
+                                                                                             dplyr::mutate(sample_id_final = paste0(sample_id_ori,
+                                                                                                                                    collapse = ", ")) %>%
+                                                                                             dplyr::pull(sample_id_final),
                                                                                            "specie_code3l" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "specie_code3l")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted_set")),
