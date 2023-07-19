@@ -236,8 +236,6 @@ Creation of a data frame object with parameters of set duration algorithms.
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$setdurationrefs_data(
   db_con = NULL,
   data_source = "t3_db",
-  periode_reference = NULL,
-  countries = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -249,10 +247,6 @@ Creation of a data frame object with parameters of set duration algorithms.
 \item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
 
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
-
-\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.}
-
-\item{\code{countries}}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
 

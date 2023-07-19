@@ -2239,53 +2239,34 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a data frame object with parameters of set duration algorithms.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
                                    #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
                                    setdurationrefs_data = function(db_con = NULL,
                                                                    data_source = "t3_db",
-                                                                   periode_reference = NULL,
-                                                                   countries = NULL,
                                                                    data_path = NULL,
                                                                    envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source == "t3_db") {
-                                       if (paste0(class(x = periode_reference),
-                                                  collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = countries),
-                                                         collapse = " ") != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
-                                     } else if (data_source %in% c("sql_query",
-                                                                   "csv",
-                                                                   "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
-                                     } else if (data_source != "envir") {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
+                                     # 1 - Common arguments verification
+                                     if (codama::r_type_checking(r_object = data_source,
+                                                                 type = "character",
+                                                                 length = 1L,
+                                                                 allowed_value = c("t3_db",
+                                                                                   "sql_query",
+                                                                                   "csv",
+                                                                                   "rdata",
+                                                                                   "envir"),
+                                                                 output = "logical") != TRUE) {
+                                       codama::r_type_checking(r_object = data_source,
+                                                               type = "character",
+                                                               length = 1L,
+                                                               allowed_value = c("t3_db",
+                                                                                 "sql_query",
+                                                                                 "csv",
+                                                                                 "rdata",
+                                                                                 "envir"),
+                                                               output = "message")
                                        stop()
                                      }
+                                     # 2 - Global process
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
                                        # specific arguments verification
@@ -2306,18 +2287,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                 "t3_setdurationrefs.sql",
                                                                                                 package = "t3")),
                                                                     collapse = "\n")
-                                       setdurationrefs_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                        sql = setdurationrefs_sql,
-                                                                                        period = DBI::SQL(paste0(c((dplyr::first(periode_reference,
-                                                                                                                                 order_by = periode_reference) - 1)
-                                                                                                                   : (dplyr::last(periode_reference,
-                                                                                                                                  order_by = periode_reference) + 1)),
-                                                                                                                 collapse = ", ")),
-                                                                                        countries = DBI::SQL(paste0("'",
-                                                                                                                    paste0(countries,
-                                                                                                                           collapse = "', '"),
-                                                                                                                    "'")))
-                                       cat("[", setdurationrefs_sql_final, "]\n", sep = "")
+                                       setdurationrefs_sql_final <- DBI::SQL(setdurationrefs_sql)
+                                       cat("[",
+                                           setdurationrefs_sql_final,
+                                           "]\n",
+                                           sep = "")
                                        set_duration_refs_data <- DBI::dbGetQuery(conn = db_con,
                                                                                  statement = setdurationrefs_sql_final)
                                        if (nrow(x = set_duration_refs_data) == 0) {
