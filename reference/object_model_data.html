@@ -378,8 +378,6 @@
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span></span>
 <span>  db_con <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_source <span class="op">=</span> <span class="st">"t3_db"</span>,</span>
-<span>  periode_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  countries <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -393,14 +391,6 @@
 
 <dt><code>data_source</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).</p></dd>
-
-
-<dt><code>periode_reference</code></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.</p></dd>
-
-
-<dt><code>countries</code></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.</p></dd>
 
 
 <dt><code>data_path</code></dt>
