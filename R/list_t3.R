@@ -2,6 +2,7 @@
 #' @title R6 class list_t3
 #' @description Create R6 reference object class list_t3.
 #' @importFrom R6 R6Class
+#' @importFrom future.apply future_sapply
 list_t3 <- R6Class(
   classname = "list_t3",
   public = list(
@@ -219,78 +220,72 @@ list_t3 <- R6Class(
     extract = function(attribut_l1 = "data",
                        attribut_l2 = NULL,
                        id = NULL) {
-      attributs <- append(attribut_l1, attribut_l2)
-      if (length(x = class(x = attributs)) != 1
-          || ! inherits(x = attributs,
-                        what = "character")) {
-        cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"attribut(s)\" argument, only class character expected.\n",
-          sep = ""
-        )
+      attributs <- append(attribut_l1,
+                          attribut_l2)
+      # 1 - Arguments verification
+      if (codama::r_type_checking(r_object = attributs,
+                                  type = "character",
+                                  output = "logical") != TRUE) {
+        codama::r_type_checking(r_object = attributs,
+                                type = "character",
+                                output = "message")
         stop()
-      } else if (!attribut_l1 %in% names(private)) {
-        cat(
-          format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-          " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
-          sep = ""
-        )
-        stop()
-      } else {
-        if (!is.null(x = id)) {
-          if (length(x = class(x = id)) != 1
-              || !any(class(x = id) %in% c("character",
-                                           "numeric",
-                                           "integer"))) {
-            cat(
-              format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-              " - Error: invalid \"id\" argument, class character or numeric expected.\n",
-              sep = ""
-            )
-            stop()
-          } else if (class(x = id) %in% c("numeric",
-                                          "integer") &&
-                     (id > length(x = private[[attributs[1]]]) | id <= 0)) {
-            cat(
-              format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-              " - Error: invalid \"id\" argument, subscript out of bounds.\n",
-              sep = ""
-            )
-            stop()
-          } else if (class(x = id) %in% c("character") &&
-                     ! id %in% names(x = private[[attributs[1]]])) {
-            cat(
-              format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-              " - Error: invalid \"id\" argument, id's name not exist in the attribut.\n",
-              sep = ""
-            )
-            stop()
-          } else {
-            data <- unlist(x = private[[attributs[1]]][id])
-          }
-        } else {
-          data <- unlist(x = private[[attributs[1]]])
-        }
-        output <-
-          sapply(seq_len(length.out = length(data)),
-                 function(i) {
-                   if (!is.null(x = attribut_l2)) {
-                     if (!attribut_l2 %in% names(data[[i]]$.__enclos_env__$private)) {
-                       cat(
-                         format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                         " - Error: invalid \"attribut_l2\" argument, attribut's name not in the object.\n",
-                         sep = ""
-                       )
-                       stop()
-                     } else {
-                       data[[i]]$.__enclos_env__$private[[attribut_l2]]
-                     }
-                   } else {
-                     data[[i]]
-                   }
-                 })
-        return(output)
       }
+      if (! attribut_l1 %in% names(x = private)) {
+        stop(format(Sys.time(),
+                    "%Y-%m-%d %H:%M:%S"),
+             " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.",
+             "\n",
+             sep = "")
+      }
+      # 2 - Process
+      if (! is.null(x = id)) {
+        if (length(x = class(x = id)) != 1
+            || ! any(class(x = id) %in% c("character",
+                                          "numeric",
+                                          "integer"))) {
+          stop(format(Sys.time(),
+                      "%Y-%m-%d %H:%M:%S"),
+               " - Error: invalid \"id\" argument, class character, numeric or integer expected.",
+               "\n",
+               sep = "")
+        } else if (class(x = id) %in% c("numeric",
+                                        "integer")
+                   && (id > length(x = private[[attributs[1]]])
+                       | id <= 0)) {
+          stop(format(Sys.time(),
+                      "%Y-%m-%d %H:%M:%S"),
+               " - Error: invalid \"id\" argument, subscript out of bounds.\n",
+               sep = "")
+        } else if (class(x = id) %in% c("character")
+                   && ! id %in% names(x = private[[attributs[1]]])) {
+          stop(format(Sys.time(),
+                      "%Y-%m-%d %H:%M:%S"),
+               " - Error: invalid \"id\" argument, id's name not exist in the attribut.\n",
+               sep = "")
+        } else {
+          data <- unlist(x = private[[attributs[1]]][id])
+        }
+      } else {
+        data <- unlist(x = private[[attributs[1]]])
+      }
+      output <- future.apply::future_sapply(X = seq_len(length.out = length(data)),
+                                            FUN = function(current_data) {
+                                              if (! is.null(x = attribut_l2)) {
+                                                if (! attribut_l2 %in% names(data[[current_data]]$.__enclos_env__$private)) {
+                                                  stop(format(Sys.time(),
+                                                              "%Y-%m-%d %H:%M:%S"),
+                                                       " - Error: invalid \"attribut_l2\" argument, attribut's name not in the object.",
+                                                       "\n",
+                                                       sep = "")
+                                                } else {
+                                                  data[[current_data]]$.__enclos_env__$private[[attribut_l2]]
+                                                }
+                                              } else {
+                                                data[[current_data]]
+                                              }
+                                            })
+      return(output)
     },
     # filter element ----
     # filter example arg$trip_id %in% trips_selected
@@ -399,56 +394,71 @@ list_t3 <- R6Class(
     filter_l1 = function(attribut_l1 = "data",
                          filter,
                          clone = FALSE) {
-      if (length(x = class(x = attribut_l1)) != 1
-          || ! inherits(x = attribut_l1,
-                        what = "character")) {
-        cat(format(Sys.time(),
-                   "%Y-%m-%d %H:%M:%S"),
-            " - Error: invalid \"attribut_l1\" argument, only class character expected.\n",
-            sep = "")
+      # 1 - Arguments verification
+      if (codama::r_type_checking(r_object = attribut_l1,
+                                  type = "character",
+                                  output = "logical") != TRUE) {
+        codama::r_type_checking(r_object = attribut_l1,
+                                type = "character",
+                                output = "message")
         stop()
-      } else if (! attribut_l1 %in% names(x = private)) {
-        cat(format(Sys.time(),
-                   "%Y-%m-%d %H:%M:%S"),
-            " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
-            sep = "")
-        stop()
-      } else if (! inherits(x = clone,
-                            what = "logical")) {
-        cat(format(Sys.time(),
-                   "%Y-%m-%d %H:%M:%S"),
-            " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.\n",
-            sep = "")
-      } else {
-        tmp1 <- private[[attribut_l1]]
-        final_filter <- gsub(pattern = "$path$",
-                             replacement = "tmp2$.__enclos_env__$private$",
-                             x = filter,
-                             fixed = TRUE)
-        final_filter <- parse(text = final_filter)
-        tmp_final <- Filter(Negate(is.null),
-                            lapply(X = seq_len(length.out = length(tmp1)),
-                                   FUN = function(a) {
-                                     tmp2 <- tmp1[[a]]
-                                     tryCatch(
-                                       expr = if (eval(final_filter)) {
-                                         if (clone == TRUE) {
-                                           tmp2$clone()
-                                         } else {
-                                           tmp2
-                                         }
-                                       },
-                                       error = function(err) {
-                                         cat(format(Sys.time(),
-                                                    "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"filter\" argument\n",
-                                             sep = "")
-                                         stop()
-                                       }
-                                     )
-                                   }))
-        return(tmp_final)
       }
+      if (! attribut_l1 %in% names(x = private)) {
+        stop(cat(format(Sys.time(),
+                        "%Y-%m-%d %H:%M:%S"),
+                 " - Error: invalid \"attribut_l1\" argument, attribut's name not in the object.",
+                 "\n",
+                 sep = ""))
+      }
+      if (codama::r_type_checking(r_object = filter,
+                                  type = "character",
+                                  length = 1L,
+                                  output = "logical") != TRUE) {
+        codama::r_type_checking(r_object = filter,
+                                type = "character",
+                                length = 1L,
+                                output = "message")
+        stop()
+      }
+      if (codama::r_type_checking(r_object = clone,
+                                  type = "logical",
+                                  length = 1L,
+                                  output = "logical") != TRUE) {
+        codama::r_type_checking(r_object = clone,
+                                type = "logical",
+                                length = 1L,
+                                output = "message")
+        stop()
+      }
+      # 2 - Global process
+      data <- private[[attribut_l1]]
+      final_filter <- gsub(pattern = "$path$",
+                           replacement = "current_data$.__enclos_env__$private$",
+                           x = filter,
+                           fixed = TRUE)
+      final_filter <- parse(text = final_filter)
+      data_final <- Filter(Negate(is.null),
+                           lapply(X = seq_len(length.out = length(data)),
+                                  FUN = function(data_id) {
+                                    current_data <- data[[data_id]]
+                                    tryCatch(
+                                      expr = if (eval(expr = final_filter)) {
+                                        if (clone == TRUE) {
+                                          current_data$clone()
+                                        } else {
+                                          current_data
+                                        }
+                                      },
+                                      error = function(err) {
+                                        cat(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Error: invalid \"filter\" argument\n",
+                                            sep = "")
+                                        stop()
+                                      }
+                                    )
+                                  }))
+      return(data_final)
     },
     # extract elements ----
     #' @description Function for extract element(s) of a specific attribut.

@@ -94,9 +94,7 @@ data_model_initialisation <- function(data_source = "t3_db",
                                            countries = countries)
   } else {
     object_model_data$setdurationrefs_data(data_source = data_source,
-                                           db_con = db_con,
-                                           periode_reference = periode_reference,
-                                           countries = countries)
+                                           db_con = db_con)
   }
   # model creation: length steps data ----
   if (data_source == "avdth_db") {
