@@ -89,9 +89,7 @@ data_model_initialisation <- function(data_source = "t3_db",
   if (data_source == "avdth_db") {
     object_model_data$setdurationrefs_data(data_source = "csv",
                                            data_path = system.file("setdurationrefs.csv",
-                                                                   package = "t3"),
-                                           periode_reference = periode_reference,
-                                           countries = countries)
+                                                                   package = "t3"))
   } else {
     object_model_data$setdurationrefs_data(data_source = data_source,
                                            db_con = db_con)

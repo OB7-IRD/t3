@@ -168,7 +168,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start trip(s) data importation from avdth database.\n",
                                              sep = "")
-                                         trips_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                         trips_sql <- paste(readLines(con = system.file("sql",
+                                                                                        "avdth",
                                                                                         "avdth_trip.sql",
                                                                                         package = "t3")),
                                                             collapse = "\n")
@@ -523,7 +524,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start activities data importation from avdth database.\n",
                                              sep = "")
-                                         activities_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                         activities_sql <- paste(readLines(con = system.file("sql",
+                                                                                             "avdth",
                                                                                              "avdth_activities.sql",
                                                                                              package = "t3")),
                                                                  collapse = "\n")
@@ -898,7 +900,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary catches data importation from avdth database.\n",
                                              sep = "")
-                                         elementarycatches_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                         elementarycatches_sql <- paste(readLines(con = system.file("sql",
+                                                                                                    "avdth",
                                                                                                     "avdth_elementarycatches.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n")
@@ -1266,7 +1269,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start elementary landings data importation from avdth database.\n",
                                              sep = "")
-                                         elementarylandings_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                         elementarylandings_sql <- paste(readLines(con = system.file("sql",
+                                                                                                     "avdth",
                                                                                                      "avdth_elementarylandings.sql",
                                                                                                      package = "t3")),
                                                                          collapse = "\n")
@@ -1725,7 +1729,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start samples data importation from avdth database.\n",
                                            sep = "")
-                                       samples_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                       samples_sql <- paste(readLines(con = system.file("sql",
+                                                                                        "avdth",
                                                                                         "avdth_samples.sql",
                                                                                         package = "t3")),
                                                             collapse = "\n")
@@ -1786,7 +1791,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start well plans data importation from avdth database.\n",
                                            sep = "")
-                                       wellplan_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                       wellplan_sql <- paste(readLines(con = system.file("sql",
+                                                                                         "avdth",
                                                                                          "avdth_wellplans.sql",
                                                                                          package = "t3")),
                                                              collapse = "\n")
@@ -2825,7 +2831,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start sample sets data importation from avdth database.\n",
                                            sep = "")
-                                       samplesets_sql <- paste(readLines(con = system.file("sql\\avdth",
+                                       samplesets_sql <- paste(readLines(con = system.file("sql",
+                                                                                           "avdth",
                                                                                            "avdth_samplesets.sql",
                                                                                            package = "t3")),
                                                                collapse = "\n")
