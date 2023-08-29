@@ -4,6 +4,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom DBI sqlInterpolate SQL dbGetQuery
 #' @importFrom dplyr first last tibble mutate row_number
+#' @importFrom lubridate ymd
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of a R6 reference object class trips which contain one or more R6 reference object class trip.
@@ -552,7 +553,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            dplyr::mutate(trip_id = as.character(trip_id),
                                                          activity_id = as.character(activity_id),
                                                          ocean = as.integer(ocean),
-                                                         activity_date = as.Date(activity_date),
+                                                         activity_date = lubridate::ymd(activity_date),
                                                          activity_number = as.integer(activity_number),
                                                          activity_longitude = as.numeric(activity_longitude),
                                                          activity_latitude = as.numeric(activity_latitude),

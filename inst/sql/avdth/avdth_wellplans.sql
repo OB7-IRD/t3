@@ -20,7 +20,7 @@ SELECT
 		& YEAR(cc.D_DBQ)
 		& format(MONTH(cc.D_DBQ), '00')
 		& format(DAY(cc.D_DBQ), '00')
-		& format(cc.D_ACT, 'YYYYMMDD')
+		& format(cc.D_ACT, 'yyyymmdd')
 		& format(cc.N_ACT, '00') AS activity_id
 	,'fr.ird.avdth.entities.data.Sample#'
 		& format(cc.C_BAT, '0000')

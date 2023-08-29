@@ -11,7 +11,7 @@ SELECT
 		& YEAR(ec.D_DBQ)
 		& format(MONTH(ec.D_DBQ), '00')
 		& format(DAY(ec.D_DBQ), '00')
-		& format(ec.D_ACT, 'YYYYMMDD')
+		& format(ec.D_ACT, 'yyyymmdd')
 		& format(ec.N_ACT, '00') AS activity_id
 	,'fr.ird.avdth.entities.data.Well#'
 		& format(ec.C_BAT, '0000')

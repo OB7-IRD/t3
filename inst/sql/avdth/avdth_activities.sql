@@ -11,7 +11,7 @@ SELECT
 		& YEAR(a.D_DBQ)
 		& format(MONTH(a.D_DBQ), '00')
 		& format(DAY(a.D_DBQ), '00')
-		& format(a.D_ACT, 'YYYYMMDD')
+		& format(a.D_ACT, 'yyyymmdd')
 		& format(a.N_ACT, '00') AS activity_id
 	,a.C_OCEA AS ocean
 	,a.D_ACT AS activity_date

@@ -5,7 +5,7 @@ SELECT
 		& YEAR(ce.D_DBQ)
 		& format(MONTH(ce.D_DBQ), '00')
 		& format(DAY(ce.D_DBQ), '00')
-		& format(ce.D_ACT, 'YYYYMMDD')
+		& format(ce.D_ACT, 'yyyymmdd')
 		& format(ce.N_ACT, '00') AS activity_id
 	,'fr.ird.avdth.entities.data.ElementaryCatch#'
 		& format(ce.C_BAT, '0000')
