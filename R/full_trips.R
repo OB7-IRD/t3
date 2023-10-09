@@ -997,6 +997,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          file = "NUL")
                                                                                           capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
                                                                                                          file = "NUL")
+                                                                                          current_activities_latitude_longitude <- dplyr::tibble(activity_id = unlist(x = current_activities$extract_l1_element_value(element = "activity_id")),
+                                                                                                                                                 activity_latitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_latitude")),
+                                                                                                                                                 activity_longitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_longitude")))
                                                                                           if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
                                                                                             capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                                                                            file = "NUL")
@@ -1022,10 +1025,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                             current_total_landings_catches_species_activities <- current_total_landings_species %>%
                                                                                               dplyr::full_join(current_total_catches_species_activities,
                                                                                                                by = c("specie",
-                                                                                                                      "trip_id"))
+                                                                                                                      "trip_id")) %>%
+                                                                                              dplyr::left_join(current_activities_latitude_longitude,
+                                                                                                               by = "activity_id") %>%
+                                                                                              dplyr::relocate(activity_latitude,
+                                                                                                              activity_longitude,
+                                                                                                              .after = activity_id)
                                                                                           } else {
                                                                                             current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_landings_species,
                                                                                                                                                                activity_id = NA_character_,
+                                                                                                                                                               activity_latitude = NA_real_,
+                                                                                                                                                               activity_longitude = NA_real_,
                                                                                                                                                                catch_weight = NA_real_,
                                                                                                                                                                catch_weight_rf1 = NA_real_)
                                                                                           }
@@ -1097,6 +1107,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      y = total_landings_catches_species_activities,
                                                      by = "trip_id") %>%
                                     dplyr::relocate(activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
                                                     .after = trip_id)
                                   # extraction
                                   if (output_format == "us") {
@@ -1254,6 +1266,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               file = "NUL")
                                                                                capture.output(current_activities$add(current_trip$.__enclos_env__$private$activities),
                                                                                               file = "NUL")
+                                                                               current_activities_latitude_longitude <- dplyr::tibble(activity_id = unlist(x = current_activities$extract_l1_element_value(element = "activity_id")),
+                                                                                                                                      activity_latitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_latitude")),
+                                                                                                                                      activity_longitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_longitude")))
                                                                                if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
                                                                                  capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                                                                 file = "NUL")
@@ -1276,6 +1291,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              }
                                                                              if (elementarylandings == TRUE) {
                                                                                if (elementarycatches == TRUE) {
+                                                                                 browser()
                                                                                  current_total_landings_catches_species <- current_total_landings_species %>%
                                                                                    dplyr::full_join(current_total_catches_species,
                                                                                                     by = c("specie",
