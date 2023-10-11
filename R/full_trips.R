@@ -1274,14 +1274,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 file = "NUL")
                                                                                  capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                                                                 file = "NUL")
-                                                                                 current_total_catches_species <- data.frame(specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
-                                                                                                                             catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
-                                                                                                                             catch_weight_rf2 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf2"))) %>%
-                                                                                   dplyr::group_by(specie) %>%
-                                                                                   dplyr::summarise(catch_weight = sum(catch_weight),
-                                                                                                    catch_weight_rf2 = sum(catch_weight_rf2),
-                                                                                                    .groups = "drop") %>%
-                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
+                                                                                 current_total_catches_species_activities <- data.frame(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
+                                                                                                                                        specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                        catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
+                                                                                                                                        catch_weight_rf2 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf2"))) %>%
+                                                                                   dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
+                                                                                   dplyr::arrange(activity_id)
                                                                                  elementarycatches <- TRUE
                                                                                } else {
                                                                                  elementarycatches <- FALSE
@@ -1291,25 +1289,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              }
                                                                              if (elementarylandings == TRUE) {
                                                                                if (elementarycatches == TRUE) {
-                                                                                 browser()
-                                                                                 current_total_landings_catches_species <- current_total_landings_species %>%
-                                                                                   dplyr::full_join(current_total_catches_species,
+                                                                                 current_total_landings_catches_species_activities <- current_total_landings_species %>%
+                                                                                   dplyr::full_join(current_total_catches_species_activities,
                                                                                                     by = c("specie",
-                                                                                                           "trip_id"))
+                                                                                                           "trip_id")) %>%
+                                                                                   dplyr::left_join(current_activities_latitude_longitude,
+                                                                                                    by = "activity_id") %>%
+                                                                                   dplyr::relocate(activity_latitude,
+                                                                                                   activity_longitude,
+                                                                                                   .after = activity_id)
                                                                                } else {
-                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_landings_species,
-                                                                                                                                         catch_weight = NA,
-                                                                                                                                         catch_weight_rf2 = NA)
+                                                                                 current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_landings_species,
+                                                                                                                                                    activity_id = NA_character_,
+                                                                                                                                                    activity_latitude = NA_real_,
+                                                                                                                                                    activity_longitude = NA_real_,
+                                                                                                                                                    catch_weight = NA,
+                                                                                                                                                    catch_weight_rf2 = NA)
                                                                                }
                                                                              } else {
                                                                                if (elementarycatches == TRUE) {
-                                                                                 current_total_landings_catches_species <- dplyr::mutate(.data = current_total_catches_species,
-                                                                                                                                         landing_weight = NA)
+                                                                                 current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
+                                                                                                                                                    landing_weight = NA)
                                                                                } else {
-                                                                                 current_total_landings_catches_species <- NULL
+                                                                                 current_total_landings_catches_species_activities <- NULL
                                                                                }
                                                                              }
-                                                                             return(current_total_landings_catches_species)
+                                                                             return(current_total_landings_catches_species_activities)
                                                                            })
                                   total_landings_catches_species <- as.data.frame(do.call(what = rbind,
                                                                                           args = total_landings_catches_species))
@@ -1356,7 +1361,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   detail_outputs_process_1_2 <- outputs_process_1_2 %>%
                                     dplyr::full_join(x = outputs_process_1_2,
                                                      y = total_landings_catches_species,
-                                                     by = "trip_id")
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
+                                                    .after = trip_id)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -1879,6 +1888,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
                                   outputs_process_1_3_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                               "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
@@ -1904,6 +1915,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_id,
                                                     vessel_type,
                                                     activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
                                                     activity_date,
                                                     ocean,
                                                     school_type,
@@ -2083,6 +2096,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
                                   outputs_process_1_4_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                               "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
@@ -2099,6 +2114,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_id,
                                                     vessel_type,
                                                     activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
                                                     activity_date,
                                                     ocean,
                                                     school_type,
@@ -2335,6 +2352,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
                                   outputs_process_1_5_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                               "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
@@ -2351,6 +2370,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_id,
                                                     vessel_type,
                                                     activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
                                                     activity_date,
                                                     ocean,
                                                     school_type,
@@ -2543,6 +2564,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
                                 outputs_process_1_6_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                             "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                              "activity_date" = do.call("c",
                                                                                                        activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                              "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
@@ -2559,6 +2582,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   vessel_id,
                                                   vessel_type,
                                                   activity_id,
+                                                  activity_latitude,
+                                                  activity_longitude,
                                                   activity_date,
                                                   ocean,
                                                   school_type,
