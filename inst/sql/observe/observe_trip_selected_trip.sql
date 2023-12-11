@@ -2,8 +2,8 @@ select
 	t.topiaid::text as trip_id
 	,c.code::integer as fleet_code
 	,c.iso3code::text as fleet_label
-	,t.startdate::character as departure_date
-	,t.enddate::character as trip_end_date
+	,t.startdate::text as departure_date
+	,t.enddate::text as trip_end_date
 	,v.code::integer as vessel_code
 	,vt.code::integer as vessel_type_code
 	,vt.label1::text as vessel_type_label

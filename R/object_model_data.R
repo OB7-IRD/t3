@@ -25,40 +25,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       if (codama::r_type_checking(r_object = time_period,
-                                                                   type = "integer",
-                                                                   output = "logical") != TRUE) {
-                                         return(codama::r_type_checking(r_object = time_period,
-                                                                        type = "integer"))
-                                       }
-                                       if (codama::r_type_checking(r_object = fleet_code,
-                                                                   type = "integer",
-                                                                   output = "logical") != TRUE) {
-                                         return(codama::r_type_checking(r_object = fleet_code,
-                                                                        type = "integer"))
-                                       }
-                                       if (codama::r_type_checking(r_object = ocean_code,
-                                                                   type = "integer",
-                                                                   output = "logical") != TRUE) {
-                                         return(codama::r_type_checking(r_object = ocean_code,
-                                                                        type = "integer"))
-                                       }
-                                       if (codama::r_type_checking(r_object = vessel_type_code,
-                                                                   type = "integer",
-                                                                   output = "logical") != TRUE) {
-                                         return(codama::r_type_checking(r_object = vessel_type_code,
-                                                                        type = "integer"))
-                                       }
+                                       codama::r_type_checking(r_object = time_period,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = fleet_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = ocean_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = vessel_type_code,
+                                                               type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
-                                       if (codama::r_type_checking(r_object = data_path,
-                                                                   type = "character",
-                                                                   length = 1L,
-                                                                   output = "logical") != TRUE) {
-                                         return(codama::r_type_checking(r_object = data_path,
-                                                                        type = "character",
-                                                                        length = 1L))
-                                       }
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
@@ -78,16 +57,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from observe database.\n",
+                                           " - Start trip(s) data importation from an observe database.\n",
                                            sep = "")
                                        if (! is.null(x = trip_id)) {
-                                         if (codama::r_type_checking(r_object = trip_id,
-                                                                     type = "character",
-                                                                     output = "logical") != TRUE) {
-                                           return(codama::r_type_checking(r_object = trip_id,
-                                                                          type = "character"))
-                                         }
-                                         trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql/observe",
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                "observe",
                                                                                                 "observe_trip_selected_trip.sql",
                                                                                                 package = "t3")),
                                                                     collapse = "\n"))
@@ -98,7 +74,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                 collapse = "', '"),
                                                                                                          "'")))
                                        } else {
-                                         trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql/observe",
+                                         trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                "observe",
                                                                                                 "observe_trip.sql",
                                                                                                 package = "t3")),
                                                                     collapse = "\n"))
@@ -111,17 +88,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      order_by = time_period) + 1),
                                                                                                         "-03-31"),
                                                                                fleet_code = DBI::SQL(paste0("'",
-                                                                                                         paste0(fleet_code,
-                                                                                                                collapse = "', '"),
-                                                                                                         "'")),
+                                                                                                            paste0(fleet_code,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")),
                                                                                ocean_code = DBI::SQL(paste0("'",
-                                                                                                       paste0(ocean_code,
-                                                                                                              collapse = "', '"),
-                                                                                                       "'")),
+                                                                                                            paste0(ocean_code,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")),
                                                                                vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                             paste0(vessel_type_code,
-                                                                                                                    collapse = "', '"),
-                                                                                                             "'")))
+                                                                                                                  paste0(vessel_type_code,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")))
                                        }
                                        cat("[",
                                            trip_sql_final,
@@ -130,17 +107,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        trip_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                   statement = trip_sql_final))
                                        if (nrow(x = trip_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from T3 database.\n",
+                                             " - Successful trip(s) data importation from an observe database.\n",
                                              sep = "")
                                        }
                                      } else if (data_source == "avdth_database") {
@@ -156,7 +129,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from AVDTH database.\n",
+                                           " - Start trip(s) data importation from an AVDTH database.\n",
                                            sep = "")
                                        trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                               "avdth",
@@ -176,9 +149,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                              fleet_code = DBI::SQL(paste0(paste0(fleet_code,
                                                                                                                  collapse = ", "))),
                                                                              ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                            collapse = ", "))),
+                                                                                                                 collapse = ", "))),
                                                                              vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                  collapse = ", "))))
+                                                                                                                       collapse = ", "))))
 
                                        cat("[",
                                            trip_sql_final,
@@ -195,11 +168,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        vessel_code = as.integer(x = vessel_code),
                                                        vessel_type_code = as.integer(x = vessel_type_code))
                                        if (nrow(x = trip_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
@@ -279,10 +250,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                 " - No data imported, check the class of your RData file or data inside.\n")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"trip\" available in the R environment.\n",
-                                             sep = "")
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"trip\" available in the R environment.")
@@ -325,371 +292,289 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$trips <- object_trips
                                    },
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   activities_object_creation = function(data_source = "t3_db",
-                                                                         db_con = NULL,
-                                                                         periode_reference = NULL,
-                                                                         countries = NULL,
-                                                                         oceans = NULL,
+                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
+                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
+                                   activities_object_creation = function(data_source = "observe_database",
+                                                                         database_connection = NULL,
+                                                                         time_period = NULL,
+                                                                         fleet_code = NULL,
+                                                                         ocean_code = NULL,
+                                                                         vessel_type_code = NULL,
+                                                                         trip_id = NULL,
                                                                          data_path = NULL,
-                                                                         trips_selected = NULL,
                                                                          envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("t3_db",
-                                                            "avdth_db")) {
-                                       if (paste0(class(x = periode_reference),
-                                                  collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = countries),
-                                                         collapse = " ") != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = oceans),
-                                                         collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source %in% c("sql_query",
-                                                                   "csv",
-                                                                   "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("observe_database",
+                                                            "avdth_database")) {
+                                       codama::r_type_checking(r_object = time_period,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = fleet_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = ocean_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = vessel_type_code,
+                                                               type = "integer")
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
                                      } else if (data_source != "envir") {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
-                                       stop()
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # specific arguments verification
-                                       if (paste0(class(x = db_con),
+                                     # 2 - Process for observe database ----
+                                     if (data_source == "observe_database") {
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
                                                   collapse = " ") != "PostgreSQLConnection") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         # process beginning
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from T3 database.\n",
-                                             sep = "")
-                                         activities_sql <- paste(readLines(con = system.file("sql",
-                                                                                             "t3_activities.sql",
-                                                                                             package = "t3")),
-                                                                 collapse = "\n")
-                                         if (! is.null(trips_selected)) {
-                                           if (! inherits(x = trips_selected,
-                                                          what = "character")) {
-                                             cat(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument, ",
-                                                 "class \"character\" expected if not NULL.\n",
-                                                 sep = "")
-                                             stop()
-                                           } else {
-                                             activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                         sql = activities_sql,
-                                                                                         begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                             order_by = periode_reference) - 1),
-                                                                                                               "-10-01"),
-                                                                                         end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                          order_by = periode_reference) + 1),
-                                                                                                             "-03-31"),
-                                                                                         countries = DBI::SQL(paste0("'",
-                                                                                                                     paste0(countries,
-                                                                                                                            collapse = "', '"),
-                                                                                                                     "'")),
-                                                                                         oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                         collapse = ", "))),
-                                                                                         trips_selected = DBI::SQL(paste0("'",
-                                                                                                                          paste0(trips_selected,
-                                                                                                                                 collapse = "', '"),
-                                                                                                                          "'")))
-                                           }
-                                         } else {
-                                           activities_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
-                                                                 replacement = "",
-                                                                 x = activities_sql,
-                                                                 fixed = TRUE)
-                                           activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                       sql = activities_sql,
-                                                                                       begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                           order_by = periode_reference) - 1),
-                                                                                                             "-10-01"),
-                                                                                       end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                        order_by = periode_reference) + 1),
-                                                                                                           "-03-31"),
-                                                                                       countries = DBI::SQL(paste0("'",
-                                                                                                                   paste0(countries,
-                                                                                                                          collapse = "', '"),
-                                                                                                                   "'")),
-                                                                                       oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                       collapse = ", "))))
-                                         }
-                                         cat("[", activities_sql_final, "]\n", sep = "")
-                                         activities_data <- DBI::dbGetQuery(conn = db_con,
-                                                                            statement = activities_sql_final)
-                                         if (nrow(x = activities_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query and query's parameters.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activities data importation from T3 database.\n",
-                                               sep = "")
-                                         }
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
                                        }
-                                     } else if (data_source == "avdth_db") {
-                                       # avdth db source ----
-                                       # specific arguments verification
-                                       if (paste0(class(x = db_con),
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start activities data importation from an observe database.\n",
+                                           sep = "")
+                                       if (! is.null(x = trip_id)) {
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                    "observe",
+                                                                                                    "observe_activity_selected_trip.sql",
+                                                                                                    package = "t3")),
+                                                                        collapse = "\n"))
+                                         activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                   sql = activity_sql,
+                                                                                   trip_id = DBI::SQL(paste0("'",
+                                                                                                             paste0(trip_id,
+                                                                                                                    collapse = "', '"),
+                                                                                                             "'")))
+                                       } else {
+                                         activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                    "observe",
+                                                                                                    "observe_activity.sql",
+                                                                                                    package = "t3")),
+                                                                        collapse = "\n"))
+                                         activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                   sql = activity_sql,
+                                                                                   begin_time_period = paste0((dplyr::first(time_period,
+                                                                                                                            order_by = time_period) - 1),
+                                                                                                              "-10-01"),
+                                                                                   end_time_period = paste0((dplyr::last(time_period,
+                                                                                                                         order_by = time_period) + 1),
+                                                                                                            "-03-31"),
+                                                                                   fleet_code = DBI::SQL(paste0("'",
+                                                                                                                paste0(fleet_code,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
+                                                                                   ocean_code = DBI::SQL(paste0("'",
+                                                                                                                paste0(ocean_code,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
+                                                                                   vessel_type_code = DBI::SQL(paste0("'",
+                                                                                                                      paste0(vessel_type_code,
+                                                                                                                             collapse = "', '"),
+                                                                                                                      "'")))
+                                       }
+                                       cat("[",
+                                           activity_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       activity_data <- DBI::dbGetQuery(conn = database_connection,
+                                                                        statement = activity_sql_final)
+                                       if (nrow(x = activity_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful activity(ies) data importation from an observe database.\n",
+                                             sep = "")
+                                       }
+                                     } else if (data_source == "avdth_database") {
+                                       # 3 - Process for AVDTH database ----
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
                                                   collapse = " ") != "JDBCConnection") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         # process beginning
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from avdth database.\n",
-                                             sep = "")
-                                         activities_sql <- paste(readLines(con = system.file("sql",
-                                                                                             "avdth",
-                                                                                             "avdth_activities.sql",
-                                                                                             package = "t3")),
-                                                                 collapse = "\n")
-                                         activities_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                     sql = activities_sql,
-                                                                                     begin_period = DBI::SQL(paste0("#",
-                                                                                                                    (dplyr::first(periode_reference,
-                                                                                                                                  order_by = periode_reference) - 1),
-                                                                                                                    "-10-01#")),
-                                                                                     end_period = DBI::SQL(paste0("#",
-                                                                                                                  (dplyr::last(periode_reference,
-                                                                                                                               order_by = periode_reference) + 1),
-                                                                                                                  "-03-31#")),
-                                                                                     countries = DBI::SQL(paste0("'",
-                                                                                                                 paste0(countries,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
-                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                     collapse = ", "))))
-
-                                         cat("[", activities_sql_final, "]\n", sep = "")
-                                         activities_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
-                                                                                          statement = activities_sql_final)) %>%
-                                           dplyr::mutate(trip_id = as.character(trip_id),
-                                                         activity_id = as.character(activity_id),
-                                                         ocean = as.integer(ocean),
-                                                         activity_date = lubridate::ymd(activity_date),
-                                                         activity_number = as.integer(activity_number),
-                                                         activity_longitude = as.numeric(activity_longitude),
-                                                         activity_latitude = as.numeric(activity_latitude),
-                                                         set_count = as.integer(set_count),
-                                                         school_type = as.integer(school_type),
-                                                         activity_code = as.integer(activity_code),
-                                                         activity_name = as.character(activity_name),
-                                                         time_at_sea = as.integer(time_at_sea))
-                                         if (nrow(x = activities_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query and query's parameters.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activities data importation from avdth database.\n",
-                                               sep = "")
-                                         }
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"JDBCConnection\" expected.")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activities data importation from the database.\n",
+                                           " - Start activities data importation from an AVDTH database.\n",
                                            sep = "")
-                                       activities_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                            collapse = "\n"))
-                                       cat("[", activities_sql, "]\n", sep = "")
-                                       activities_data <- DBI::dbGetQuery(conn = db_con,
-                                                                          statement = activities_sql)
-                                       if (nrow(x = activities_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from the database.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activities data importation from csv file.\n",
+                                       activity_sql <- paste(readLines(con = system.file("sql",
+                                                                                         "avdth",
+                                                                                         "avdth_activities.sql",
+                                                                                         package = "t3")),
+                                                             collapse = "\n")
+                                       activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                 sql = activity_sql,
+                                                                                 begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                      (dplyr::first(time_period,
+                                                                                                                                    order_by = time_period) - 1),
+                                                                                                                      "-10-01#")),
+                                                                                 end_time_period = DBI::SQL(paste0("#",
+                                                                                                                   (dplyr::last(time_period,
+                                                                                                                                order_by = time_period) + 1),
+                                                                                                                   "-03-31#")),
+                                                                                 fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                     collapse = ", "))),
+                                                                                 ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                     collapse = ", "))),
+                                                                                 vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                           collapse = ", "))))
+                                       cat("[",
+                                           activity_sql_final,
+                                           "]\n",
                                            sep = "")
-                                       activities_data <- read.csv2(file = data_path,
-                                                                    stringsAsFactors = FALSE)
-                                       if (nrow(x = activities_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
+                                       activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
+                                                                                      statement = activity_sql_final)) %>%
+                                         dplyr::mutate(trip_id = as.character(x = trip_id),
+                                                       activity_id = as.character(x = activity_id),
+                                                       ocean_code = as.integer(x = ocean_code),
+                                                       activity_date = as.character(x = activity_date),
+                                                       activity_number = as.integer(x = activity_number),
+                                                       activity_longitude = as.numeric(x = activity_longitude),
+                                                       activity_latitude = as.numeric(x = activity_latitude),
+                                                       set_count = as.integer(x = set_count),
+                                                       school_type_code = as.integer(x = school_type_code),
+                                                       activity_code = as.integer(x = activity_code),
+                                                       activity_label = as.character(x = activity_label),
+                                                       time_at_sea = as.integer(x = time_at_sea))
+                                       if (nrow(x = activity_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from csv file.\n",
+                                             " - Successful activity(ies) data importation from an AVDTH database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
+                                     } else if (data_source == "csv_file") {
+                                       # 4 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activities data importation from RData.\n",
+                                           " - Start activity(ies) data importation from csv file.\n",
+                                           sep = "")
+                                       activity_data <- dplyr::tibble(read.csv2(file = data_path,
+                                                                            stringsAsFactors = FALSE))
+                                       if (nrow(x = activity_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful activity(ies) data importation from csv file.\n",
+                                             sep = "")
+                                       }
+                                     } else if (data_source == "rdata_file") {
+                                       # 5 - Process for rdata file ----
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start activity(ies) data importation from RData file.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "activities",
                                                   envir = tmp_envir)) {
-                                         activities_data <- get(x = "activities",
-                                                                envir = tmp_envir)
-                                         if (! inherits(x = activities_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         activity_data <- dplyr::tibble(get(x = "activities",
+                                                                            envir = tmp_envir))
+                                         if (paste0(class(x = activity_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"activities\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"activities\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = activities_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"activities\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful activity(ies) data importation from RData file.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R environment source ----
-                                       # specific arguments verification
+                                       # 6 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "activities")[1])
+                                         environment_name <- as.environment(find(what = "activity")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "activities",
+                                       if (exists(x = "activity",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activities data importation from R environment.\n",
+                                             " - Start activity(ies) data importation from R environment.\n",
                                              sep = "")
-                                         activities_data <- get(x = "activities",
-                                                                envir = environment_name)
-                                         if (! inherits(x = activities_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"activities_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         activity_data <- dplyr::tibble(get(x = "activity",
+                                                                            envir = environment_name))
+                                         if (paste0(class(x = activity_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = activities_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"activities\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activities data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no R object named \"activities\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"activity\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful activity(ies) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     # common data design ----
-                                     activities_data <- unclass(x = activities_data)
+                                     # 7 - Common data design ----
+                                     activity_data <- unclass(x = activity_data)
                                      object_activities <- object_r6(class_name = "activities")
-                                     object_activities$add(lapply(X = seq_len(length.out = length(activities_data[[1]])),
+                                     object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
                                                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                                         " - Start importation of activity element ",
                                                                         activity_id,
                                                                         ".\n",
                                                                         "[activity: ",
-                                                                        activities_data[[2]][activity_id],
+                                                                        activity_data[[2]][activity_id],
                                                                         "]\n",
                                                                         sep = "")
-                                                                    activity <- activity$new(trip_id = activities_data[[1]][activity_id],
-                                                                                             activity_id = activities_data[[2]][activity_id],
-                                                                                             ocean = activities_data[[3]][activity_id],
-                                                                                             activity_date = activities_data[[4]][activity_id],
-                                                                                             activity_number = activities_data[[5]][activity_id],
-                                                                                             activity_longitude = activities_data[[6]][activity_id],
-                                                                                             activity_latitude = activities_data[[7]][activity_id],
-                                                                                             set_count = activities_data[[8]][activity_id],
-                                                                                             school_type = activities_data[[9]][activity_id],
-                                                                                             activity_code = activities_data[[10]][activity_id],
-                                                                                             activity_name = activities_data[[11]][activity_id],
-                                                                                             time_at_sea = activities_data[[12]][activity_id])
+                                                                    activity <- activity$new(trip_id = activity_data$trip_id[activity_id],
+                                                                                             activity_id = activity_data$activity_id[activity_id],
+                                                                                             ocean_code = activity_data$ocean_code[activity_id],
+                                                                                             activity_date = activity_data$activity_date[activity_id],
+                                                                                             activity_number = activity_data$activity_number[activity_id],
+                                                                                             activity_longitude = activity_data$activity_longitude[activity_id],
+                                                                                             activity_latitude = activity_data$activity_latitude[activity_id],
+                                                                                             set_count = activity_data$set_count[activity_id],
+                                                                                             school_type_code = activity_data$school_type_code[activity_id],
+                                                                                             activity_code = activity_data$activity_code[activity_id],
+                                                                                             activity_label = activity_data$activity_label[activity_id],
+                                                                                             time_at_sea = activity_data$time_at_sea[activity_id])
                                                                     cat(format(x = Sys.time(),
                                                                                format = "%Y-%m-%d %H:%M:%S"),
                                                                         " - Successful importation of activity element ",

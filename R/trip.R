@@ -22,78 +22,30 @@ trip <- R6::R6Class(classname = "trip",
                                             vessel_code,
                                             vessel_type_code) {
                         # 1 - Arguments verifications ----
-                        if (codama::r_type_checking(r_object = trip_id,
-                                                    type = "character",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = trip_id,
-                                                  type = "character",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = fleet_code,
-                                                    type = "integer",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = fleet_code,
-                                                  type = "integer",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = departure_date,
-                                                    type = "character",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = departure_date,
-                                                  type = "character",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = trip_end_date,
-                                                    type = "character",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = trip_end_date,
-                                                  type = "character",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = logbook_availability_code,
-                                                    type = "integer",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = logbook_availability_code,
-                                                  type = "integer",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = landing_well_content_code,
-                                                    type = "integer",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = landing_well_content_code,
-                                                  type = "integer",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = vessel_code,
-                                                    type = "integer",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = vessel_code,
-                                                  type = "integer",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
-                        if (codama::r_type_checking(r_object = vessel_type_code,
-                                                    type = "integer",
-                                                    length = 1L,
-                                                    output = "logical") != TRUE) {
-                          codama::r_type_checking(r_object = vessel_type_code,
-                                                  type = "integer",
-                                                  length = 1L,
-                                                  output = "message")
-                        }
+                        codama::r_type_checking(r_object = trip_id,
+                                                type = "character",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = fleet_code,
+                                                type = "integer",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = departure_date,
+                                                type = "character",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = trip_end_date,
+                                                type = "character",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = logbook_availability_code,
+                                                type = "integer",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = landing_well_content_code,
+                                                type = "integer",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = vessel_code,
+                                                type = "integer",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = vessel_type_code,
+                                                type = "integer",
+                                                length = 1L)
                         # 2 - Attributions ----
                         private$trip_id <- trip_id
                         private$fleet_code <- fleet_code
