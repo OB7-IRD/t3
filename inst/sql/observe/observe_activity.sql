@@ -28,5 +28,4 @@ where
 	and c.code in (?fleet_code)
 	and o.code in (?ocean_code)
 	and vt.code in (?vessel_type_code)
-	and t.logbookprogram is not null
 ;
