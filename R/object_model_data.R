@@ -900,343 +900,263 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$elementarycatches <- object_elementarycatches
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   elementarylandings_object_creation = function(data_source = "t3_db",
-                                                                                 db_con = NULL,
-                                                                                 periode_reference = NULL,
-                                                                                 countries = NULL,
-                                                                                 oceans = NULL,
+                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
+                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
+                                   elementarylandings_object_creation = function(data_source = "observe_database",
+                                                                                 database_connection = NULL,
+                                                                                 time_period = NULL,
+                                                                                 fleet_code = NULL,
+                                                                                 ocean_code = NULL,
+                                                                                 vessel_type_code = NULL,
+                                                                                 trip_id = NULL,
                                                                                  data_path = NULL,
-                                                                                 trips_selected = NULL,
                                                                                  envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("t3_db",
-                                                            "avdth_db")) {
-                                       if (paste0(class(x = periode_reference),
-                                                  collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = countries),
-                                                         collapse = " ") != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = oceans),
-                                                         collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source %in% c("sql_query",
-                                                                   "csv",
-                                                                   "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("observe_database",
+                                                            "avdth_database")) {
+                                       codama::r_type_checking(r_object = time_period,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = fleet_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = ocean_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = vessel_type_code,
+                                                               type = "integer")
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
                                      } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
+                                     }
+                                     # 2 - Process for observe database ----
+                                     if (data_source == "observe_database") {
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "PostgreSQLConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                       }
+                                       # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
+                                           " - Start elementary landing(s) data importation from an observe database.\n",
                                            sep = "")
-                                       stop()
-                                     }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "PostgreSQLConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"PostgreSQLConnection\" expected.\n",
-                                             sep = "")
+                                       if (! is.null(x = trip_id)) {
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         elementarylanding_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                             "observe",
+                                                                                                             "observe_elementarylanding_selected_trip.sql",
+                                                                                                             package = "t3")),
+                                                                                 collapse = "\n"))
+                                         elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                            sql = elementarylanding_sql,
+                                                                                            trip_id = DBI::SQL(paste0("'",
+                                                                                                                      paste0(trip_id,
+                                                                                                                             collapse = "', '"),
+                                                                                                                      "'")))
                                        } else {
-                                         # process beginning
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landings data importation from T3 database.\n",
-                                             sep = "")
-                                         elementarylandings_sql <- paste(readLines(con = system.file("sql",
-                                                                                                     "t3_elementarylandings.sql",
-                                                                                                     package = "t3")),
-                                                                         collapse = "\n")
-                                         if (! is.null(x = trips_selected)) {
-                                           if (! inherits(x = trips_selected,
-                                                          what = "character")) {
-                                             cat(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Error: invalid \"trips_selected\" argument, ",
-                                                 "class \"character\" expected if not NULL.\n",
-                                                 sep = "")
-                                             stop()
-                                           } else {
-                                             elementarylandings_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                                 sql = elementarylandings_sql,
-                                                                                                 begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                                     order_by = periode_reference) - 1),
+                                         elementarylanding_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                             "observe",
+                                                                                                             "observe_elementarylanding.sql",
+                                                                                                             package = "t3")),
+                                                                                 collapse = "\n"))
+                                         elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                            sql = elementarylanding_sql,
+                                                                                            begin_time_period = paste0((dplyr::first(time_period,
+                                                                                                                                     order_by = time_period) - 1),
                                                                                                                        "-10-01"),
-                                                                                                 end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                                  order_by = periode_reference) + 1),
+                                                                                            end_time_period = paste0((dplyr::last(time_period,
+                                                                                                                                  order_by = time_period) + 1),
                                                                                                                      "-03-31"),
-                                                                                                 countries = DBI::SQL(paste0("'",
-                                                                                                                             paste0(countries,
-                                                                                                                                    collapse = "', '"),
-                                                                                                                             "'")),
-                                                                                                 oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                                 collapse = ", "))),
-                                                                                                 trips_selected = DBI::SQL(paste0("'",
-                                                                                                                                  paste0(trips_selected,
-                                                                                                                                         collapse = "', '"),
-                                                                                                                                  "'")))
-                                           }
-                                         } else {
-                                           elementarylandings_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
-                                                                         replacement = "",
-                                                                         x = elementarylandings_sql,
-                                                                         fixed = TRUE)
-                                           elementarylandings_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                               sql = elementarylandings_sql,
-                                                                                               begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                                   order_by = periode_reference) - 1),
-                                                                                                                     "-10-01"),
-                                                                                               end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                                order_by = periode_reference) + 1),
-                                                                                                                   "-03-31"),
-                                                                                               countries = DBI::SQL(paste0("'",
-                                                                                                                           paste0(countries,
-                                                                                                                                  collapse = "', '"),
-                                                                                                                           "'")),
-                                                                                               oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                               collapse = ", "))))
-                                         }
-                                         cat("[", elementarylandings_sql_final, "]\n", sep = "")
-                                         elementarylandings_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                    statement = elementarylandings_sql_final)
-                                         if (nrow(x = elementarylandings_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query and query's parameters.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful elementary landings data importation from T3 database.\n",
-                                               sep = "")
-                                         }
-                                       }
-                                     } else if (data_source == "avdth_db") {
-                                       # avdth db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "JDBCConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"JDBCConnection\" expected.\n",
-                                             sep = "")
-                                       } else {
-                                         # process beginning
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landings data importation from avdth database.\n",
-                                             sep = "")
-                                         elementarylandings_sql <- paste(readLines(con = system.file("sql",
-                                                                                                     "avdth",
-                                                                                                     "avdth_elementarylandings.sql",
-                                                                                                     package = "t3")),
-                                                                         collapse = "\n")
-                                         elementarylandings_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                             sql = elementarylandings_sql,
-                                                                                             begin_period = DBI::SQL(paste0("#",
-                                                                                                                            (dplyr::first(periode_reference,
-                                                                                                                                          order_by = periode_reference) - 1),
-                                                                                                                            "-10-01#")),
-                                                                                             end_period = DBI::SQL(paste0("#",
-                                                                                                                          (dplyr::last(periode_reference,
-                                                                                                                                       order_by = periode_reference) + 1),
-                                                                                                                          "-03-31#")),
-                                                                                             countries = DBI::SQL(paste0("'",
-                                                                                                                         paste0(countries,
+                                                                                            fleet_code = DBI::SQL(paste0("'",
+                                                                                                                         paste0(fleet_code,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                             oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                             collapse = ", "))))
-                                         cat("[", elementarylandings_sql_final, "]\n", sep = "")
-                                         elementarylandings_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
-                                                                                                  statement = elementarylandings_sql_final)) %>%
-                                           dplyr::mutate(trip_id = as.character(trip_id),
-                                                         elementarylanding_id = as.character(elementarylanding_id),
-                                                         landing_category = as.integer(landing_category),
-                                                         landing_category_name = as.character(landing_category_name),
-                                                         specie_code = as.integer(specie_code),
-                                                         specie_code3l = as.character(specie_code3l),
-                                                         landing_weight = as.numeric(landing_weight))
-                                         if (nrow(x = elementarylandings_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data imported, check the query and query's parameters.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful elementary landings data importation from avdth database.\n",
-                                               sep = "")
-                                         }
+                                                                                            ocean_code = DBI::SQL(paste0("'",
+                                                                                                                         paste0(ocean_code,
+                                                                                                                                collapse = "', '"),
+                                                                                                                         "'")),
+                                                                                            vessel_type_code = DBI::SQL(paste0("'",
+                                                                                                                               paste0(vessel_type_code,
+                                                                                                                                      collapse = "', '"),
+                                                                                                                               "'")))
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries sources ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landings data importation from the database.\n",
+                                       cat("[",
+                                           elementarylanding_sql_final,
+                                           "]\n",
                                            sep = "")
-                                       elementarylandings_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                                    collapse = "\n"))
-                                       cat("[", elementarylandings_sql, "]\n", sep = "")
-                                       elementarylandings_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                  statement = elementarylandings_sql)
-                                       if (nrow(x = elementarylandings_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
+                                       elementarylanding_data <- DBI::dbGetQuery(conn = database_connection,
+                                                                                 statement = elementarylanding_sql_final)
+                                       if (nrow(x = elementarylanding_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation from the database.\n",
+                                             " - Successful elementary landing(s) data importation from an observe database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
+                                     } else if (data_source == "avdth_database") {
+                                       # 3 - Process for AVDTH database ----
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "JDBCConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"JDBCConnection\" expected.")
+                                       }
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landings data importation from csv file.\n",
+                                           " - Start elementary landing(s) data importation from an AVDTH database.\n",
                                            sep = "")
-                                       elementarylandings_data <- read.csv2(file = data_path,
-                                                                            stringsAsFactors = FALSE)
-                                       if (nrow(x = elementarylandings_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
+                                       elementarylanding_sql <- paste(readLines(con = system.file("sql",
+                                                                                                  "avdth",
+                                                                                                  "avdth_elementarylanding.sql",
+                                                                                                  package = "t3")),
+                                                                      collapse = "\n")
+                                       elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                        sql = elementarylanding_sql,
+                                                                                        begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                             (dplyr::first(time_period,
+                                                                                                                                           order_by = time_period) - 1),
+                                                                                                                             "-10-01#")),
+                                                                                        end_time_period = DBI::SQL(paste0("#",
+                                                                                                                          (dplyr::last(time_period,
+                                                                                                                                       order_by = time_period) + 1),
+                                                                                                                          "-03-31#")),
+                                                                                        fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                            collapse = ", "))),
+                                                                                        ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                            collapse = ", "))),
+                                                                                        vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                                  collapse = ", "))))
+                                       cat("[",
+                                           elementarylanding_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       elementarylanding_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
+                                                                                               statement = elementarylanding_sql_final)) %>%
+                                         dplyr::mutate(trip_id = as.character(trip_id),
+                                                       elementarylanding_id = as.character(elementarylanding_id),
+                                                       weight_category_code = as.character(weight_category_code),
+                                                       weight_category_label = as.character(weight_category_label),
+                                                       species_code = as.integer(species_code),
+                                                       species_fao_code = as.character(species_fao_code),
+                                                       landing_weight = as.numeric(landing_weight))
+                                       if (nrow(x = elementarylanding_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation from csv file.\n",
+                                             " - Successful elementary landing(s) data importation from avdht database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
+                                     } else if (data_source == "csv_file") {
+                                       # 4 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landings data importation from RData.\n",
+                                           " - Start elementary landing(s) data importation from csv file.\n",
+                                           sep = "")
+                                       elementarylanding_data <- read.csv2(file = data_path,
+                                                                           stringsAsFactors = FALSE)
+                                       if (nrow(x = elementarylanding_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful elementary landing(s) data importation from csv file.\n",
+                                             sep = "")
+                                       }
+                                     } else if (data_source == "rdata_file") {
+                                       # 5 - Process for rdata file ----
+                                       # process beginning
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start elementary landing(s) data importation from RData file.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "elementarylandings",
                                                   envir = tmp_envir)) {
-                                         elementarylandings_data <- get(x = "elementarylandings",
-                                                                        envir = tmp_envir)
-                                         if (! inherits(x = elementarylandings_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"elementarylandings_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         elementarylanding_data <- dplyr::tibble(get(x = "elementarylandings",
+                                                                                     envir = tmp_envir))
+                                         if (paste0(class(x = elementarylanding_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = elementarylanding_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"elementarylandings\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"elementarylandings\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = elementarylandings_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"elementarylandings\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful elementary landing(s) data importation from RData file.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R environment source ----
-                                       # specific arguments verification
+                                       # 6 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "elementarylandings")[1])
+                                         environment_name <- as.environment(find(what = "elementarylanding")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "elementarylandings",
+                                       if (exists(x = "elementarylanding",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landings data importation from R environment.\n",
+                                             " - Start elementary landing(s) data importation from R environment.\n",
                                              sep = "")
-                                         elementarylandings_data <- get(x = "elementarylandings",
-                                                                        envir = environment_name)
-                                         if (! inherits(x = elementarylandings_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"elementarylandings_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         elementarylanding_data <- dplyr::tibble(get(x = "elementarylanding",
+                                                                                     envir = environment_name))
+                                         if (paste0(class(x = elementarylanding_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = elementarylanding_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = elementarylandings_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"elementary landings\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landings data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"elementarylandings\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"elementarylanding\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful elementary landing(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     # common data design ----
-                                     elementarylandings_data <- unclass(x = elementarylandings_data)
+                                     # 7 - Common data design ----
+                                     elementarylanding_data <- unclass(x = elementarylanding_data)
                                      object_elementarylandings <- object_r6(class_name = "elementarylandings")
-                                     object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylandings_data[[1]])),
+                                     object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylanding_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
                                                                             cat(format(x = Sys.time(),
                                                                                        format = "%Y-%m-%d %H:%M:%S"),
@@ -1244,19 +1164,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 elementarylanding_id,
                                                                                 ".\n",
                                                                                 "[elementarylanding: ",
-                                                                                elementarylandings_data[[2]][elementarylanding_id],
+                                                                                elementarylanding_data[[2]][elementarylanding_id],
                                                                                 "]\n",
                                                                                 sep = "")
-                                                                            elementarylanding <- elementarylanding$new(trip_id = elementarylandings_data[[1]][elementarylanding_id],
-                                                                                                                       elementarylanding_id = elementarylandings_data[[2]][elementarylanding_id],
-                                                                                                                       landing_category = elementarylandings_data[[3]][elementarylanding_id],
-                                                                                                                       landing_category_name = elementarylandings_data[[4]][elementarylanding_id],
-                                                                                                                       specie_code = elementarylandings_data[[5]][elementarylanding_id],
-                                                                                                                       specie_code3l = elementarylandings_data[[6]][elementarylanding_id],
-                                                                                                                       landing_weight = elementarylandings_data[[7]][elementarylanding_id])
+                                                                            elementarylanding <- elementarylanding$new(trip_id = elementarylanding_data$trip_id[elementarylanding_id],
+                                                                                                                       elementarylanding_id = elementarylanding_data$elementarylanding_id[elementarylanding_id],
+                                                                                                                       weight_category_code = elementarylanding_data$weight_category_code[elementarylanding_id],
+                                                                                                                       weight_category_label = elementarylanding_data$weight_category_label[elementarylanding_id],
+                                                                                                                       species_code = elementarylanding_data$species_code[elementarylanding_id],
+                                                                                                                       species_fao_code = elementarylanding_data$species_fao_code[elementarylanding_id],
+                                                                                                                       landing_weight = elementarylanding_data$landing_weight[elementarylanding_id])
                                                                             cat(format(x = Sys.time(),
                                                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Successful importation of elementary landing element ",
+                                                                                " - Successful importation of elementary landing(s) element ",
                                                                                 elementarylanding_id,
                                                                                 ".\n",
                                                                                 sep = "")
