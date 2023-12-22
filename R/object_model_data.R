@@ -1033,21 +1033,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   package = "t3")),
                                                                       collapse = "\n")
                                        elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
-                                                                                        sql = elementarylanding_sql,
-                                                                                        begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                             (dplyr::first(time_period,
-                                                                                                                                           order_by = time_period) - 1),
-                                                                                                                             "-10-01#")),
-                                                                                        end_time_period = DBI::SQL(paste0("#",
-                                                                                                                          (dplyr::last(time_period,
-                                                                                                                                       order_by = time_period) + 1),
-                                                                                                                          "-03-31#")),
-                                                                                        fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                            collapse = ", "))),
-                                                                                        ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                            collapse = ", "))),
-                                                                                        vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                                  collapse = ", "))))
+                                                                                          sql = elementarylanding_sql,
+                                                                                          begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                               (dplyr::first(time_period,
+                                                                                                                                             order_by = time_period) - 1),
+                                                                                                                               "-10-01#")),
+                                                                                          end_time_period = DBI::SQL(paste0("#",
+                                                                                                                            (dplyr::last(time_period,
+                                                                                                                                         order_by = time_period) + 1),
+                                                                                                                            "-03-31#")),
+                                                                                          fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                              collapse = ", "))),
+                                                                                          ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                              collapse = ", "))),
+                                                                                          vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                                    collapse = ", "))))
                                        cat("[",
                                            elementarylanding_sql_final,
                                            "]\n",
@@ -1185,623 +1185,484 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$elementarylandings <- object_elementarylandings
                                    },
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   #' @param sample_type Object of class {\link[base]{integer}} expected. Sample type identification (landing, observer, ...). By default NULL.
-                                   #' @param data_path_samples Object of class {\link[base]{character}} expected. Path of the data sql/csv file for samples. By default NULL.
-                                   #' @param data_path_wellplans Object of class {\link[base]{character}} expected. Path of the data sql/csv file for well plans. By default NULL.
-                                   wells_object_creation = function(data_source = "t3_db",
-                                                                    db_con = NULL,
-                                                                    periode_reference = NULL,
-                                                                    countries = NULL,
-                                                                    oceans = NULL,
-                                                                    sample_type = NULL,
-                                                                    trips_selected = NULL,
-                                                                    data_path_samples = NULL,
-                                                                    data_path_wellplans = NULL,
+                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
+                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param sample_type_code Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
+                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param data_path_sample Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.
+                                   #' @param data_path_wellplan Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for well plans.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   wells_object_creation = function(data_source = "observe_database",
+                                                                    database_connection = NULL,
+                                                                    time_period = NULL,
+                                                                    fleet_code = NULL,
+                                                                    ocean_code = NULL,
+                                                                    vessel_type_code = NULL,
+                                                                    sample_type_code = NULL,
+                                                                    trip_id = NULL,
+                                                                    data_path_sample = NULL,
+                                                                    data_path_wellplan = NULL,
                                                                     envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("t3_db",
-                                                            "avdth_db")) {
-                                       if (paste0(class(x = periode_reference),
-                                                  collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = countries),
-                                                         collapse = " ") != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = oceans),
-                                                         collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument.\n",
-                                             sep = "")
-                                       } else if (! inherits(x = sample_type,
-                                                             what = "integer")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"sample_type\" argument.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source %in% c("sql_query",
-                                                                   "csv",
-                                                                   "rdata")) {
-                                       if (paste0(class(x = data_path_samples),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path_samples) != 1
-                                           || (! file.exists(data_path_samples))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path_samples\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = data_path_wellplans),
-                                                         collapse = " ") != "character"
-                                                  || length(x = data_path_wellplans) != 1
-                                                  || (! file.exists(data_path_wellplans))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path_wellplans\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("observe_database",
+                                                            "avdth_database")) {
+                                       codama::r_type_checking(r_object = time_period,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = fleet_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = ocean_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = vessel_type_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = sample_type_code,
+                                                               type = "integer")
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path_sample,
+                                                               type = "character",
+                                                               length = 1L)
+                                       codama::r_type_checking(r_object = data_path_wellplan,
+                                                               type = "character",
+                                                               length = 1L)
                                      } else if (data_source != "envir") {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
-                                       stop()
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "PostgreSQLConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"PostgreSQLConnection\" expected.\n",
-                                             sep = "")
+                                     # 2 - Process for observe database ----
+                                     if (data_source == "observe_database") {
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "PostgreSQLConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
+                                       # sample(s) importation
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples data importation from T3 database.\n",
+                                           " - Start sample(s) data importation from an observe database.\n",
                                            sep = "")
-                                       samples_sql <- paste(readLines(con = system.file("sql",
-                                                                                        "t3_samples.sql",
-                                                                                        package = "t3")),
-                                                            collapse = "\n")
-                                       if (! is.null(x = trips_selected)) {
-                                         if (! inherits(x = trips_selected,
-                                                        what = "character")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"trips_selected\" argument, ",
-                                               "class \"character\" expected if not NULL.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                    sql = samples_sql,
-                                                                                    begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                        order_by = periode_reference) - 1),
-                                                                                                          "-10-01"),
-                                                                                    end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                     order_by = periode_reference) + 1),
-                                                                                                        "-03-31"),
-                                                                                    countries = DBI::SQL(paste0("'",
-                                                                                                                paste0(countries,
+                                       if (! is.null(x = trip_id)) {
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         sample_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                  "observe",
+                                                                                                  "observe_sample_selected_trip.sql",
+                                                                                                  package = "t3")),
+                                                                      collapse = "\n"))
+                                         sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                 sql = sample_sql,
+                                                                                 trip_id = DBI::SQL(paste0("'",
+                                                                                                           paste0(trip_id,
+                                                                                                                  collapse = "', '"),
+                                                                                                           "'")))
+                                       } else {
+                                         sample_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                  "observe",
+                                                                                                  "observe_sample.sql",
+                                                                                                  package = "t3")),
+                                                                      collapse = "\n"))
+                                         sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                 sql = sample_sql,
+                                                                                 begin_time_period = paste0((dplyr::first(time_period,
+                                                                                                                          order_by = time_period) - 1),
+                                                                                                            "-10-01"),
+                                                                                 end_time_period = paste0((dplyr::last(time_period,
+                                                                                                                       order_by = time_period) + 1),
+                                                                                                          "-03-31"),
+                                                                                 fleet_code = DBI::SQL(paste0("'",
+                                                                                                              paste0(fleet_code,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
+                                                                                 ocean_code = DBI::SQL(paste0("'",
+                                                                                                              paste0(ocean_code,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
+                                                                                 vessel_type_code = DBI::SQL(paste0("'",
+                                                                                                                    paste0(vessel_type_code,
+                                                                                                                           collapse = "', '"),
+                                                                                                                    "'")),
+                                                                                 sample_type_code = DBI::SQL(paste0("'",
+                                                                                                                    paste0(sample_type_code,
+                                                                                                                           collapse = "', '"),
+                                                                                                                    "'")))
+                                       }
+                                       cat("[",
+                                           sample_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       sample_data <- DBI::dbGetQuery(conn = database_connection,
+                                                                      statement = sample_sql_final)
+                                       if (nrow(x = sample_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
+                                       } else {
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Successful sample(s) data importation from an observe database.\n",
+                                             sep = "")
+                                       }
+                                       # well plan(s) importation
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start well plan(s) data importation from an observe database.\n",
+                                           sep = "")
+                                       if (! is.null(x = trip_id)) {
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         wellplan_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                    "observe",
+                                                                                                    "observe_wellplan_selected_trip.sql",
+                                                                                                    package = "t3")),
+                                                                        collapse = "\n"))
+                                         wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                   sql = wellplan_sql,
+                                                                                   trip_id = DBI::SQL(paste0("'",
+                                                                                                             paste0(trip_id,
+                                                                                                                    collapse = "', '"),
+                                                                                                             "'")))
+                                       } else {
+                                         wellplan_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                    "observe",
+                                                                                                    "observe_wellplan.sql",
+                                                                                                    package = "t3")),
+                                                                        collapse = "\n"))
+                                         wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                   sql = wellplan_sql,
+                                                                                   begin_time_period = paste0((dplyr::first(time_period,
+                                                                                                                            order_by = time_period) - 1),
+                                                                                                              "-10-01"),
+                                                                                   end_time_period = paste0((dplyr::last(time_period,
+                                                                                                                         order_by = time_period) + 1),
+                                                                                                            "-03-31"),
+                                                                                   fleet_code = DBI::SQL(paste0("'",
+                                                                                                                paste0(fleet_code,
                                                                                                                        collapse = "', '"),
                                                                                                                 "'")),
-                                                                                    oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                    collapse = ", "))),
-                                                                                    sample_type = DBI::SQL(paste0(sample_type,
-                                                                                                                  collapse = ", ")),
-                                                                                    trips_selected = DBI::SQL(paste0("'",
-                                                                                                                     paste0(trips_selected,
-                                                                                                                            collapse = "', '"),
-                                                                                                                     "'")))
-                                         }
-                                       } else {
-                                         samples_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
-                                                            replacement = "",
-                                                            x = samples_sql,
-                                                            fixed = TRUE)
-                                         samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                  sql = samples_sql,
-                                                                                  begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                      order_by = periode_reference) - 1),
-                                                                                                        "-10-01"),
-                                                                                  end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                   order_by = periode_reference) + 1),
-                                                                                                      "-03-31"),
-                                                                                  countries = DBI::SQL(paste0("'",
-                                                                                                              paste0(countries,
-                                                                                                                     collapse = "', '"),
-
-                                                                                                              "'")),
-                                                                                  oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                  collapse = ", "))),
-                                                                                  sample_type = DBI::SQL(paste0(sample_type,
-                                                                                                                collapse = ", ")))
-                                       }
-                                       cat("[", samples_sql_final, "]\n", sep = "")
-                                       samples_data <- DBI::dbGetQuery(conn = db_con,
-                                                                       statement = samples_sql_final)
-                                       if (nrow(x = samples_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation from T3 database.\n",
-                                             sep = "")
-                                       }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plans data importation from T3 database.\n",
-                                           sep = "")
-                                       wellplan_sql <- paste(readLines(con = system.file("sql",
-                                                                                         "t3_wellplans.sql",
-                                                                                         package = "t3")),
-                                                             collapse = "\n")
-                                       if (! is.null(x = trips_selected)) {
-                                         if (! inherits(x = trips_selected,
-                                                        what = "character")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"trips_selected\" argument, ",
-                                               "class \"character\" expected if not NULL.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                     sql = wellplan_sql,
-                                                                                     begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                         order_by = periode_reference) - 1),
-                                                                                                           "-10-01"),
-                                                                                     end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                      order_by = periode_reference) + 1),
-                                                                                                         "-03-31"),
-                                                                                     countries = DBI::SQL(paste0("'",
-                                                                                                                 paste0(countries,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
-                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                     collapse = ", "))),
-                                                                                     trips_selected = DBI::SQL(paste0("'",
-                                                                                                                      paste0(trips_selected,
+                                                                                   ocean_code = DBI::SQL(paste0("'",
+                                                                                                                paste0(ocean_code,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
+                                                                                   vessel_type_code = DBI::SQL(paste0("'",
+                                                                                                                      paste0(vessel_type_code,
                                                                                                                              collapse = "', '"),
                                                                                                                       "'")))
-                                         }
-                                       } else {
-                                         wellplan_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
-                                                             replacement = "",
-                                                             x = wellplan_sql,
-                                                             fixed = TRUE)
-                                         wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                   sql = wellplan_sql,
-                                                                                   begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                       order_by = periode_reference) - 1),
-                                                                                                         "-10-01"),
-                                                                                   end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                    order_by = periode_reference) + 1),
-                                                                                                       "-03-31"),
-                                                                                   countries = DBI::SQL(paste0("'",
-                                                                                                               paste0(countries,
-                                                                                                                      collapse = "', '"),
-                                                                                                               "'")),
-                                                                                   oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                   collapse = ", "))))
                                        }
-                                       cat("[", wellplan_sql_final, "]\n", sep = "")
-                                       wellplan_data <- DBI::dbGetQuery(conn = db_con,
+                                       cat("[",
+                                           wellplan_sql_final,
+                                           "]\n", sep = "")
+                                       wellplan_data <- DBI::dbGetQuery(conn = database_connection,
                                                                         statement = wellplan_sql_final)
                                        if (nrow(x = wellplan_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation from T3 database.\n",
+                                             " - Successful well plan(s) data importation from an observe database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "avdth_db") {
-                                       # avdth db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "JDBCConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"JDBCConnection\" expected.\n",
-                                             sep = "")
+                                     } else if (data_source == "avdth_database") {
+                                       # 3 - Process for AVDTH database ----
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "JDBCConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
+                                       # sample(s) importation
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples data importation from avdth database.\n",
+                                           " - Start sample(s) data importation from an AVDTH database.\n",
                                            sep = "")
-                                       samples_sql <- paste(readLines(con = system.file("sql",
-                                                                                        "avdth",
-                                                                                        "avdth_samples.sql",
-                                                                                        package = "t3")),
-                                                            collapse = "\n")
-                                       samples_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                sql = samples_sql,
-                                                                                begin_period = DBI::SQL(paste0("#",
-                                                                                                               (dplyr::first(periode_reference,
-                                                                                                                             order_by = periode_reference) - 1),
-                                                                                                               "-10-01#")),
-                                                                                end_period = DBI::SQL(paste0("#",
-                                                                                                             (dplyr::last(periode_reference,
-                                                                                                                          order_by = periode_reference) + 1),
-                                                                                                             "-03-31#")),
-                                                                                countries = DBI::SQL(paste0("'",
-                                                                                                            paste0(countries,
-                                                                                                                   collapse = "', '"),
-
-                                                                                                            "'")),
-                                                                                oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                collapse = ", "))),
-                                                                                sample_type = DBI::SQL(paste0(sample_type,
-                                                                                                              collapse = ", ")))
-                                       cat("[", samples_sql_final, "]\n", sep = "")
-                                       samples_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
-                                                                                     statement = samples_sql_final)) %>%
+                                       sample_sql <- paste(readLines(con = system.file("sql",
+                                                                                       "avdth",
+                                                                                       "avdth_sample.sql",
+                                                                                       package = "t3")),
+                                                           collapse = "\n")
+                                       sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                               sql = sample_sql,
+                                                                               begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                    (dplyr::first(time_period,
+                                                                                                                                  order_by = time_period) - 1),
+                                                                                                                    "-10-01#")),
+                                                                               end_time_period = DBI::SQL(paste0("#",
+                                                                                                                 (dplyr::last(time_period,
+                                                                                                                              order_by = time_period) + 1),
+                                                                                                                 "-03-31#")),
+                                                                               fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                   collapse = ", "))),
+                                                                               ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                   collapse = ", "))),
+                                                                               vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                         collapse = ", "))),
+                                                                               sample_type_code = DBI::SQL(paste0(sample_type_code,
+                                                                                                                  collapse = ", ")))
+                                       cat("[",
+                                           sample_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       sample_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
+                                                                                    statement = sample_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
                                                        well_id = as.character(well_id),
-                                                       well_minus10_weigth = as.integer(well_minus10_weigth),
-                                                       well_plus10_weigth = as.integer(well_plus10_weigth),
-                                                       well_global_weigth = as.integer(well_global_weigth),
+                                                       well_minus10_weigth = as.numeric(well_minus10_weigth),
+                                                       well_plus10_weigth = as.numeric(well_plus10_weigth),
+                                                       well_global_weigth = as.numeric(well_global_weigth),
                                                        sample_id = as.character(sample_id),
                                                        sub_sample_id = as.integer(sub_sample_id),
-                                                       sub_sample_id_total_count = as.character(sub_sample_id_total_count),
+                                                       sub_sample_total_count_id = as.character(sub_sample_total_count_id),
                                                        elementarysampleraw_id = as.character(paste0(elementarysampleraw_id,
                                                                                                     ".",
                                                                                                     dplyr::row_number())),
-                                                       sample_quality = as.integer(sample_quality),
-                                                       sample_type = as.integer(x = sample_type),
-                                                       specie_code = as.integer(x = specie_code),
-                                                       specie_code3l = as.character(specie_code3l),
-                                                       length_type = as.integer(length_type),
+                                                       sample_quality_code = as.integer(sample_quality_code),
+                                                       sample_type_code = as.integer(x = sample_type_code),
+                                                       species_code = as.integer(x = species_code),
+                                                       species_fao_code = as.character(species_fao_code),
+                                                       size_measure_type_code = as.character(size_measure_type_code),
                                                        sample_total_count = as.integer(sample_total_count),
                                                        sample_number_measured = as.integer(sample_number_measured),
-                                                       sample_length_class = as.integer(sample_length_class))
-                                       if (nrow(x = samples_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                                       sample_length_class = as.numeric(sample_length_class))
+                                       if (nrow(x = sample_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation from avdth database.\n",
+                                             " - Successful sample(s) data importation from avdht database.\n",
                                              sep = "")
                                        }
+                                       # well plan(s) importation
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plans data importation from avdth database.\n",
+                                           " - Start well plan(s) data importation from an AVDTH database.\n",
                                            sep = "")
                                        wellplan_sql <- paste(readLines(con = system.file("sql",
                                                                                          "avdth",
-                                                                                         "avdth_wellplans.sql",
+                                                                                         "avdth_wellplan.sql",
                                                                                          package = "t3")),
                                                              collapse = "\n")
-                                       wellplan_sql_final <- DBI::sqlInterpolate(conn = db_con,
+                                       wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                  sql = wellplan_sql,
-                                                                                 begin_period = DBI::SQL(paste0("#",
-                                                                                                                (dplyr::first(periode_reference,
-                                                                                                                              order_by = periode_reference) - 1),
-                                                                                                                "-10-01#")),
-                                                                                 end_period = DBI::SQL(paste0("#",
-                                                                                                              (dplyr::last(periode_reference,
-                                                                                                                           order_by = periode_reference) + 1),
-                                                                                                              "-03-31#")),
-                                                                                 countries = DBI::SQL(paste0("'",
-                                                                                                             paste0(countries,
-                                                                                                                    collapse = "', '"),
-                                                                                                             "'")),
-                                                                                 oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                 collapse = ", "))))
-
-                                       cat("[", wellplan_sql_final, "]\n", sep = "")
-                                       wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
+                                                                                 begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                      (dplyr::first(time_period,
+                                                                                                                                    order_by = time_period) - 1),
+                                                                                                                      "-10-01#")),
+                                                                                 end_time_period = DBI::SQL(paste0("#",
+                                                                                                                   (dplyr::last(time_period,
+                                                                                                                                order_by = time_period) + 1),
+                                                                                                                   "-03-31#")),
+                                                                                 fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                     collapse = ", "))),
+                                                                                 ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                     collapse = ", "))),
+                                                                                 vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                           collapse = ", "))))
+                                       cat("[",
+                                           wellplan_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                       statement = wellplan_sql_final)) %>%
                                          dplyr::mutate(wellplan_id = as.character(wellplan_id),
                                                        well_id = as.character(well_id),
                                                        activity_id = as.character(activity_id),
                                                        sample_id = as.character(sample_id),
-                                                       specie_code = as.integer(specie_code),
-                                                       specie_code3l = as.character(specie_code3l),
+                                                       species_code = as.integer(species_code),
+                                                       species_fao_code = as.character(species_fao_code),
                                                        wellplan_weight = as.numeric(wellplan_weight),
-                                                       wellplan_number = as.integer(wellplan_number),
-                                                       wellplan_weigth_category_code = as.integer(wellplan_weigth_category_code),
-                                                       wellplan_weigth_category_label = as.character(wellplan_weigth_category_label))
+                                                       wellplan_count = as.integer(wellplan_count),
+                                                       weight_category_code = as.character(weight_category_code),
+                                                       weight_category_label = as.character(weight_category_label))
                                        if (nrow(x = wellplan_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation from avdth database.\n",
+                                             " - Successful well plan(s) data importation from avdht database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
+                                     } else if (data_source == "csv_file") {
+                                       # 4 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples data importation from the database.\n",
+                                           " - Start sample(s) data importation from csv file.\n",
                                            sep = "")
-                                       samples_sql <- DBI::SQL(x = paste(readLines(con = data_path_samples),
-                                                                         collapse = "\n"))
-                                       cat("[", samples_sql, "]\n", sep = "")
-                                       samples_data <- DBI::dbGetQuery(conn = db_con,
-                                                                       statement = samples_sql)
-                                       if (nrow(x = samples_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
+                                       sample_data <- read.csv2(file = data_path_sample,
+                                                                stringsAsFactors = FALSE)
+                                       if (nrow(x = sample_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation from the database.\n",
+                                             " - Successful samples(s) data importation from csv file.\n",
                                              sep = "")
                                        }
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plans data importation from the database.\n",
+                                           " - Start well plan(s) data importation from csv file.\n",
                                            sep = "")
-                                       wellplan_sql <- DBI::SQL(x = paste(readLines(con = data_path_wellplans),
-                                                                          collapse = "\n"))
-                                       cat("[", wellplan_sql, "]\n", sep = "")
-                                       wellplan_data <- DBI::dbGetQuery(conn = db_con,
-                                                                        statement = wellplan_sql)
-                                       if (nrow(x = wellplan_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation from the database.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples data importation from csv file.\n",
-                                           sep = "")
-                                       samples_data <- read.csv2(file = data_path_samples,
-                                                                 stringsAsFactors = FALSE)
-                                       if (nrow(x = samples_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation from csv file.\n",
-                                             sep = "")
-                                       }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plans data importation from csv file.\n",
-                                           sep = "")
-                                       wellplan_data <- read.csv2(file = data_path_wellplans,
+                                       wellplan_data <- read.csv2(file = data_path_wellplan,
                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = wellplan_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation from csv file.\n",
+                                             " - Successful well plans(s) data importation from csv file.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
+                                     } else if (data_source == "rdata_file") {
+                                       # 5 - Process for rdata file ----
                                        # process beginning
+                                       # sample(s) importation
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples data importation from RData.\n",
+                                           " - Start sample(s) data importation from RData file.\n",
                                            sep = "")
-                                       load(file = data_path_samples,
+                                       load(file = data_path_sample,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "samples",
                                                   envir = tmp_envir)) {
-                                         samples_data <- get(x = "samples",
-                                                             envir = tmp_envir)
-                                         if (! inherits(x = samples_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         sample_data <- dplyr::tibble(get(x = "samples",
+                                                                          envir = tmp_envir))
+                                         if (paste0(class(x = sample_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = sample_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"samples\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
-                                       }
-                                       if (nrow(x = samples_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"samples\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation from RData.\n",
-                                             sep = "")
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"samples\" available in the R environment provided.")
                                        }
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plans data importation from RData.\n",
+                                           " - Successful sample(s) data importation from RData file.\n",
                                            sep = "")
-                                       load(file = data_path_wellplans,
+                                       # well plan(s) importation
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Start well plan(s) data importation from RData file.\n",
+                                           sep = "")
+                                       load(file = data_path_wellplan,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "wellplans",
                                                   envir = tmp_envir)) {
-                                         wellplan_data <- get(x = "wellplans",
-                                                              envir = tmp_envir)
-                                         if (! inherits(x = wellplan_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"wellplan_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         wellplan_data <- dplyr::tibble(get(x = "wellplans",
+                                                                            envir = tmp_envir))
+                                         if (paste0(class(x = wellplan_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = wellplan_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"wellplans\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"wellplans\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = wellplan_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"wellplans\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful well plan(s) data importation from RData file.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R environment source ----
-                                       # specific arguments verification
+                                       # 6 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "samples")[1])
+                                         environment_name <- as.environment(find(what = "sample")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "samples",
+                                       # sample(s) importation
+                                       if (exists(x = "sample",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start samples data importation from R environment.\n",
+                                             " - Start sample(s) data importation from R environment.\n",
                                              sep = "")
-                                         samples_data <- get(x = "samples",
-                                                             envir = environment_name)
-                                         if (! inherits(x = samples_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"samples_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         sample_data <- dplyr::tibble(get(x = "sample",
+                                                                          envir = environment_name))
+                                         if (paste0(class(x = sample_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = sample_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = samples_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"samples\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"samples\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"sample\" available in the R environment.")
                                        }
-                                       if (exists(x = "wellplans",
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful sample(s) data importation R environment.\n",
+                                           sep = "")
+                                       # well plan(s) importation
+                                       if (exists(x = "wellplan",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start well plans data importation from R environment.\n",
+                                             " - Start well plan(s) data importation from R environment.\n",
                                              sep = "")
-                                         wellplan_data <- get(x = "wellplans",
-                                                              envir = environment_name)
-                                         if (! inherits(x = wellplan_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"wellplan_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         wellplan_data <- dplyr::tibble(get(x = "wellplan",
+                                                                            envir = environment_name))
+                                         if (paste0(class(x = wellplan_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = wellplan_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = wellplan_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"wellplans\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"wellplans\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"wellplan\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful well plan(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     # global manipulations ----
+                                     # 7 - Common data design ----
                                      object_wells <- object_r6(class_name = "wells")
-                                     for (trip_id in unique(x = samples_data$trip_id)) {
+                                     for (trip_id in unique(x = sample_data$trip_id)) {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start importation of well(s) data for trip element ",
-                                           which(x = unique(x = samples_data$trip_id) == trip_id),
+                                           which(x = unique(x = sample_data$trip_id) == trip_id),
                                            ".\n",
                                            "[trip: ",
                                            trip_id,
                                            "]\n",
                                            sep = "")
-                                       tmp_trip <- dplyr::filter(.data = samples_data,
+                                       tmp_trip <- dplyr::filter(.data = sample_data,
                                                                  trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
                                          cat(format(x = Sys.time(),
@@ -1873,17 +1734,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                            elementarysampleraw$new(trip_id = trip_id,
                                                                                                                                                    well_id = well_id,
                                                                                                                                                    sample_id = sample_id,
-                                                                                                                                                   sub_sample_id = tmp_sample[[7]][i],
-                                                                                                                                                   sub_sample_id_total_count = tmp_sample[[8]][i],
-                                                                                                                                                   elementarysampleraw_id = tmp_sample[[9]][i],
-                                                                                                                                                   sample_quality = tmp_sample[[10]][i],
-                                                                                                                                                   sample_type = tmp_sample[[11]][i],
-                                                                                                                                                   specie_code = tmp_sample[[12]][i],
-                                                                                                                                                   specie_code3l = tmp_sample[[13]][i],
-                                                                                                                                                   length_type = tmp_sample[[14]][i],
-                                                                                                                                                   sample_total_count = tmp_sample[[15]][i],
-                                                                                                                                                   sample_number_measured = tmp_sample[[16]][i],
-                                                                                                                                                   sample_length_class = tmp_sample[[17]][i])
+                                                                                                                                                   sub_sample_id = tmp_sample$sub_sample_id[i],
+                                                                                                                                                   sub_sample_total_count_id = tmp_sample$sub_sample_total_count_id[i],
+                                                                                                                                                   elementarysampleraw_id = tmp_sample$elementarysampleraw_id[i],
+                                                                                                                                                   sample_quality_code = tmp_sample$sample_quality_code[i],
+                                                                                                                                                   sample_type_code = tmp_sample$sample_type_code[i],
+                                                                                                                                                   species_code = tmp_sample$species_code[i],
+                                                                                                                                                   species_fao_code = tmp_sample$species_fao_code[i],
+                                                                                                                                                   size_measure_type_code = tmp_sample$size_measure_type_code[i],
+                                                                                                                                                   sample_total_count = tmp_sample$sample_total_count[i],
+                                                                                                                                                   sample_number_measured = tmp_sample$sample_number_measured[i],
+                                                                                                                                                   sample_length_class = tmp_sample$sample_length_class[i])
                                                                                                                          })))
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -1895,42 +1756,40 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                "]\n",
                                                sep = "")
                                          }
-                                         if (well_id %in% unique(x = wellplan_data$well_id)) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start importation of well plan data item ",
-                                               which(x = unique(x = wellplan_data$well_id) == well_id),
-                                               ".\n",
-                                               "[well: ",
-                                               well_id,
-                                               "]\n",
-                                               sep = "")
-                                           tmp_wellplan <- dplyr::filter(.data = wellplan_data,
-                                                                         well_id == !!well_id)
-                                           tmp_wellplan <- unclass(x = tmp_wellplan)
-                                           object_well$.__enclos_env__$private$wellplan <- lapply(X = seq_len(length.out = length(x = tmp_wellplan[[1]])),
-                                                                                                  FUN = function(j) {
-                                                                                                    elementarywellplan$new(wellplan_id = tmp_wellplan[[1]][j],
-                                                                                                                           well_id = tmp_wellplan[[2]][j],
-                                                                                                                           activity_id = tmp_wellplan[[3]][j],
-                                                                                                                           sample_id = tmp_wellplan[[4]][j],
-                                                                                                                           specie_code = tmp_wellplan[[5]][j],
-                                                                                                                           specie_code3l = tmp_wellplan[[6]][j],
-                                                                                                                           wellplan_weight = tmp_wellplan[[7]][j],
-                                                                                                                           wellplan_number = tmp_wellplan[[8]][j],
-                                                                                                                           wellplan_weigth_category_code = tmp_wellplan[[9]][j],
-                                                                                                                           wellplan_weigth_category_label = tmp_wellplan[[10]][j])
-                                                                                                  })
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Sucessful importation of well plan data item ",
-                                               which(x = unique(x = wellplan_data$well_id) == well_id),
-                                               ".\n",
-                                               "[well: ",
-                                               well_id,
-                                               "]\n",
-                                               sep = "")
-                                         }
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Start importation of well plan data item ",
+                                             which(x = unique(x = wellplan_data$well_id) == well_id),
+                                             ".\n",
+                                             "[well: ",
+                                             well_id,
+                                             "]\n",
+                                             sep = "")
+                                         tmp_wellplan <- dplyr::filter(.data = wellplan_data,
+                                                                       well_id == !!well_id)
+                                         tmp_wellplan <- unclass(x = tmp_wellplan)
+                                         object_well$.__enclos_env__$private$wellplan <- lapply(X = seq_len(length.out = length(x = tmp_wellplan[[1]])),
+                                                                                                FUN = function(j) {
+                                                                                                  elementarywellplan$new(wellplan_id = tmp_wellplan$wellplan_id[j],
+                                                                                                                         well_id = tmp_wellplan$well_id[j],
+                                                                                                                         activity_id = tmp_wellplan$activity_id[j],
+                                                                                                                         sample_id = tmp_wellplan$sample_id[j],
+                                                                                                                         species_code = tmp_wellplan$species_code[j],
+                                                                                                                         species_fao_code = tmp_wellplan$species_fao_code[j],
+                                                                                                                         wellplan_weight = tmp_wellplan$wellplan_weight[j],
+                                                                                                                         wellplan_count = tmp_wellplan$wellplan_count[j],
+                                                                                                                         weight_category_code = tmp_wellplan$weight_category_code[j],
+                                                                                                                         weight_category_label = tmp_wellplan$weight_category_label[j])
+                                                                                                })
+                                         cat(format(x = Sys.time(),
+                                                    format = "%Y-%m-%d %H:%M:%S"),
+                                             " - Sucessful importation of well plan data item ",
+                                             which(x = unique(x = wellplan_data$well_id) == well_id),
+                                             ".\n",
+                                             "[well: ",
+                                             well_id,
+                                             "]\n",
+                                             sep = "")
                                          object_wells$add(object_well)
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
@@ -1945,7 +1804,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Successful importation of well(s) data for trip element ",
-                                           which(x = unique(x = samples_data$trip_id) == trip_id),
+                                           which(x = unique(x = sample_data$trip_id) == trip_id),
                                            ".\n",
                                            "[trip: ",
                                            trip_id,
@@ -1959,7 +1818,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
                                    #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
                                    #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   setdurationrefs_data = function(db_con = NULL,
+                                   setdurationrefs_data = function(database_connection = NULL,
                                                                    data_source = "t3_db",
                                                                    data_path = NULL,
                                                                    envir = NULL) {

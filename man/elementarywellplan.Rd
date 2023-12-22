@@ -24,12 +24,12 @@ Initialize function for R6 elementarywellplan class.
   well_id,
   activity_id,
   sample_id,
-  specie_code,
-  specie_code3l,
+  species_code,
+  species_fao_code,
   wellplan_weight,
-  wellplan_number,
-  wellplan_weigth_category_code,
-  wellplan_weigth_category_label
+  wellplan_count,
+  weight_category_code,
+  weight_category_label
 )}\if{html}{\out{</div>}}
 }
 
@@ -44,17 +44,17 @@ Initialize function for R6 elementarywellplan class.
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identifiation.}
+\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identifiation.}
 
-\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
+\item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
 \item{\code{wellplan_weight}}{(numeric) Weight in tonnes filled in the well plan.}
 
-\item{\code{wellplan_number}}{Object of class {\link[base]{integer}} expected. Well plan number of individus.}
+\item{\code{wellplan_count}}{Object of class {\link[base]{integer}} expected. Well plan number of individus.}
 
-\item{\code{wellplan_weigth_category_code}}{Object of class {\link[base]{integer}} expected. Well plan category code identification.}
+\item{\code{weight_category_code}}{Object of class {\link[base]{character}} expected. Well plan category code identification.}
 
-\item{\code{wellplan_weigth_category_label}}{Object of class {\link[base]{character}} expected. Well plan weight category identification.}
+\item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Well plan weight category identification.}
 }
 \if{html}{\out{</div>}}
 }

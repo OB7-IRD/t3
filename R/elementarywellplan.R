@@ -1,71 +1,80 @@
 #' @name elementarywellplan
 #' @title R6 class elementarywellplan
 #' @description Create R6 reference object class elementarywellplan
-#' @importFrom R6 R6Class
-# elementarywellplan ----
 elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                   public = list(
-                                    # initialize ----
                                     #' @description Initialize function for R6 elementarywellplan class.
                                     #' @param wellplan_id Object of class {\link[base]{character}} expected. Wellplan identification.
                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                                     #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
-                                    #' @param specie_code Object of class {\link[base]{integer}} expected. Specie code identifiation.
-                                    #' @param specie_code3l Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
+                                    #' @param species_code Object of class {\link[base]{integer}} expected. Specie code identifiation.
+                                    #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
                                     #' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan.
-                                    #' @param wellplan_number Object of class {\link[base]{integer}} expected. Well plan number of individus.
-                                    #' @param wellplan_weigth_category_code Object of class {\link[base]{integer}} expected. Well plan category code identification.
-                                    #' @param wellplan_weigth_category_label Object of class {\link[base]{character}} expected. Well plan weight category identification.
+                                    #' @param wellplan_count Object of class {\link[base]{integer}} expected. Well plan number of individus.
+                                    #' @param weight_category_code Object of class {\link[base]{character}} expected. Well plan category code identification.
+                                    #' @param weight_category_label Object of class {\link[base]{character}} expected. Well plan weight category identification.
                                     initialize = function(wellplan_id,
                                                           well_id,
                                                           activity_id,
                                                           sample_id,
-                                                          specie_code,
-                                                          specie_code3l,
+                                                          species_code,
+                                                          species_fao_code,
                                                           wellplan_weight,
-                                                          wellplan_number,
-                                                          wellplan_weigth_category_code,
-                                                          wellplan_weigth_category_label) {
-                                      # attribute "wellplan_id" verification
-                                      check_wellplan_id(wellplan_id)
-                                      # attribute "well_id" verification
-                                      check_well_id(well_id)
-                                      # attribute "activity_id" verification
-                                      check_activity_id(activity_id)
-                                      # attribute "sample_id" verification
-                                      check_sample_id(sample_id)
-                                      # attribute "specie_code" verification
-                                      check_specie_code(specie_code)
-                                      # attribute "specie_code3l" verification
-                                      check_specie_code3l(specie_code3l)
-                                      # attribute "wellplan_weight" verification
-                                      check_wellplan_weight(wellplan_weight)
-                                      # attribute "wellplan_number" verification
-                                      check_wellplan_number(wellplan_number)
-                                      # attribute "wellplan_weigth_category_code" verification
-                                      check_wellplan_weigth_category_code(wellplan_weigth_category_code)
-                                      # attribute "wellplan_weigth_category_label" verification
-                                      check_wellplan_weigth_category_label(wellplan_weigth_category_label)
-                                      # attributions
+                                                          wellplan_count,
+                                                          weight_category_code,
+                                                          weight_category_label) {
+                                      # 1 - Arguments verifications ----
+                                      codama::r_type_checking(r_object = wellplan_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = well_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = activity_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = sample_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = species_code,
+                                                              type = "integer",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = species_fao_code,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = wellplan_weight,
+                                                              type = "numeric",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = wellplan_count,
+                                                              type = "integer",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = weight_category_code,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = weight_category_label,
+                                                              type = "character",
+                                                              length = 1L)
+                                      # 2 - Attributions ----
                                       private$wellplan_id <- wellplan_id
                                       private$well_id <- well_id
                                       private$activity_id <- activity_id
                                       private$sample_id <- sample_id
-                                      private$specie_code <- specie_code
-                                      private$specie_code3l <- specie_code3l
+                                      private$species_code <- species_code
+                                      private$species_fao_code <- species_fao_code
                                       private$wellplan_weight <- wellplan_weight
-                                      private$wellplan_number <- wellplan_number
-                                      private$wellplan_weigth_category_code <- wellplan_weigth_category_code
-                                      private$wellplan_weigth_category_label <- wellplan_weigth_category_label}),
+                                      private$wellplan_count <- wellplan_count
+                                      private$weight_category_code <- weight_category_code
+                                      private$weight_category_label <- weight_category_label
+                                    }),
                                   private = list(
                                     wellplan_id = NULL,
                                     well_id = NULL,
                                     activity_id = NULL,
                                     sample_id = NULL,
-                                    specie_code = NULL,
-                                    specie_code3l = NULL,
+                                    species_code = NULL,
+                                    species_fao_code = NULL,
                                     wellplan_weight = NULL,
-                                    wellplan_number = NULL,
-                                    wellplan_weigth_category_code = NULL,
-                                    wellplan_weigth_category_label = NULL))
+                                    wellplan_count = NULL,
+                                    weight_category_code = NULL,
+                                    weight_category_label = NULL))

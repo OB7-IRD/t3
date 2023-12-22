@@ -24,13 +24,13 @@ Initialize function for R6 elementarysampleraw class.
   well_id,
   sample_id,
   sub_sample_id,
-  sub_sample_id_total_count,
+  sub_sample_total_count_id,
   elementarysampleraw_id,
-  sample_quality,
-  sample_type,
-  specie_code,
-  specie_code3l,
-  length_type,
+  sample_quality_code,
+  sample_type_code,
+  species_code,
+  species_fao_code,
+  size_measure_type_code,
   sample_total_count,
   sample_number_measured,
   sample_length_class
@@ -48,19 +48,19 @@ Initialize function for R6 elementarysampleraw class.
 
 \item{\code{sub_sample_id}}{Object of class {\link[base]{integer}} expected. Sub sample identification.}
 
-\item{\code{sub_sample_id_total_count}}{Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.}
+\item{\code{sub_sample_total_count_id}}{Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.}
 
 \item{\code{elementarysampleraw_id}}{Object of class {\link[base]{character}} expected. Elementary sample raw identification.}
 
-\item{\code{sample_quality}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
+\item{\code{sample_quality_code}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
-\item{\code{sample_type}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
+\item{\code{sample_type_code}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
 
-\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
+\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
-\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
+\item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
-\item{\code{length_type}}{Object of class {\link[base]{integer}} expected. Length type identification, 1 for LD1 and 2 for LF.}
+\item{\code{size_measure_type_code}}{Object of class {\link[base]{integer}} expected. Length type identification.}
 
 \item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
 
