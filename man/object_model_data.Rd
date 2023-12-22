@@ -280,8 +280,8 @@ Creation of a data frame object with parameters of set duration algorithms.
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthsteps_data(
-  db_con = NULL,
-  data_source = "t3_db",
+  data_source = "observe_database",
+  database_connection = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -290,13 +290,13 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
+\item{\code{database_connection}}{Database connection R object expected. Mandatory argument for data source "observe_database".}
 
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
 
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
 }
 \if{html}{\out{</div>}}
 }
@@ -348,8 +348,8 @@ Creation of a data frame object with weighted weigth of each set sampled.
 Creation of a data frame object with parameters for length weight relationship.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthweightrelationships_data(
-  data_source = "t3_db",
-  db_con = NULL,
+  data_source = "observe_database",
+  database_connection = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -358,13 +358,13 @@ Creation of a data frame object with parameters for length weight relationship.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".}
 
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.}
 
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
 }
 \if{html}{\out{</div>}}
 }

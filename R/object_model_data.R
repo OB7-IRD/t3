@@ -2023,35 +2023,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$setdurationrefs <- set_duration_refs_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   lengthsteps_data = function(db_con = NULL,
-                                                               data_source = "t3_db",
+                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. Mandatory argument for data source "observe_database".
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   lengthsteps_data = function(data_source = "observe_database",
+                                                               database_connection = NULL,
                                                                data_path = NULL,
                                                                envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("sql_query",
-                                                            "csv",
-                                                            "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
+                                     # 1 - Arguments verifications ----
+                                     if (data_source == "observe_database") {
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "PostgreSQLConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
                                        }
-                                     } else if (! data_source %in% c("t3_db",
-                                                                     "envir")) {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
-                                       stop()
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
+                                     } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
                                      if (data_source == "t3_db") {
                                        # t3 db source ----
@@ -2575,199 +2573,149 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$samplesets <- samplesets_data
                                    },
                                    #' @description Creation of a data frame object with parameters for length weight relationship.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   lengthweightrelationships_data = function(data_source = "t3_db",
-                                                                             db_con = NULL,
+                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   lengthweightrelationships_data = function(data_source = "observe_database",
+                                                                             database_connection = NULL,
                                                                              data_path = NULL,
                                                                              envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("sql_query",
-                                                            "csv",
-                                                            "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
+                                     # 1 - Arguments verifications ----
+                                     if (data_source == "observe_database") {
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "PostgreSQLConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
                                        }
-                                     } else if (! data_source %in% c("t3_db",
-                                                                     "avdth_db",
-                                                                     "envir")) {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
-                                       stop()
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
+                                     } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # process beginning
+                                     # 2 - Process for observe database ----
+                                     if (data_source == "observe_database") {
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship data importation from T3 database.\n",
+                                           " - Start length weight relationship(s) data importation from an observe database.\n",
                                            sep = "")
-                                       lengthweightrelationships_sql <- paste(readLines(con = system.file("sql",
-                                                                                                          "t3_lengthweightrelationships.sql",
-                                                                                                          package = "t3")),
-                                                                              collapse = "\n")
-                                       cat("[", lengthweightrelationships_sql, "]\n", sep = "")
-                                       lengthweightrelationships_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                         statement = lengthweightrelationships_sql)
-                                       if (nrow(x = lengthweightrelationships_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                       lengthweightrelationship_sql <- paste(readLines(con = system.file("sql",
+                                                                                                         "observe",
+                                                                                                         "observe_lengthweightrelationship.sql",
+                                                                                                         package = "t3")),
+                                                                             collapse = "\n")
+                                       cat("[",
+                                           lengthweightrelationship_sql,
+                                           "]\n",
+                                           sep = "")
+                                       lengthweightrelationship_data <- DBI::dbGetQuery(conn = database_connection,
+                                                                                        statement = lengthweightrelationship_sql)
+                                       if (nrow(x = lengthweightrelationship_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship data importation from T3 database.\n",
+                                             " - Successful length weight relationship(s) data importation from an observe database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries ----
-                                       # process beginning
+                                     } else if (data_source == "csv_file") {
+                                       # 4 - Process for csv file ----
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship data importation from the database.\n",
+                                           " - Start length weight relationship(s) data importation from csv file.\n",
                                            sep = "")
-                                       lengthweightrelationships_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                                           collapse = "\n"))
-                                       cat("[", lengthweightrelationships_sql, "]\n", sep = "")
-                                       lengthweightrelationships_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                         statement = lengthweightrelationships_sql)
-                                       if (nrow(x = lengthweightrelationships_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
+                                       lengthweightrelationship_data <- read.csv2(file = data_path,
+                                                                                  stringsAsFactors = FALSE)
+                                       if (nrow(x = lengthweightrelationship_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
+                                         lengthweightrelationship_data <- dplyr::mutate(.data = lengthweightrelationship_data,
+                                                                                        ocean_code = as.integer(x = ocean_code),
+                                                                                        ocean_label = as.character(x = ocean_label),
+                                                                                        species_code = as.integer(x = species_code),
+                                                                                        species_fao_code = as.character(x = species_fao_code),
+                                                                                        length_weight_formula = as.character(x = length_weight_formula),
+                                                                                        lwr_a = as.numeric(x = lwr_a),
+                                                                                        lwr_b = as.numeric(x = lwr_b))
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship data importation from the database.\n",
+                                             " - Successful length weight relationship(s) data importation from csv file.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
-                                       # process beginning
+                                     } else if (data_source == "rdata_file") {
+                                       # 5 - Process for rdata file ----
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship data importation from csv file.\n",
-                                           sep = "")
-                                       lengthweightrelationships_data <- read.csv2(file = data_path,
-                                                                                   stringsAsFactors = FALSE)
-                                       if (nrow(lengthweightrelationships_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         lengthweightrelationships_data <- dplyr::mutate(.data = lengthweightrelationships_data,
-                                                                                         ocean = as.integer(ocean),
-                                                                                         specie_code = as.integer(specie_code),
-                                                                                         specie_code3l = as.character(specie_code3l),
-                                                                                         lwr_a = as.numeric(lwr_a),
-                                                                                         lwr_b = as.numeric(lwr_b))
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship data importation from csv file.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from RData.\n",
+                                           " - Start length weight relationship(s) data importation from RData file.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthweightrelationships",
                                                   envir = tmp_envir)) {
-                                         lengthweightrelationships_data <- get(x = "lengthweightrelationships",
-                                                                               envir = tmp_envir)
-                                         if (! inherits(x = lengthweightrelationships_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"lengthweightrelationships_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         lengthweightrelationship_data <- dplyr::tibble(get(x = "lengthweightrelationships",
+                                                                                            envir = tmp_envir))
+                                         if (paste0(class(x = lengthweightrelationship_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = lengthweightrelationship_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"lengthweightrelationships\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"lengthweightrelationships\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = lengthweightrelationships_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"lengthweightrelationships\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationships data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful length weight relationship(s) data importation from RData file.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R environment source ----
-                                       # specific arguments verification
+                                       # 6 - R environment source ----
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "lengthweightrelationships")[1])
+                                         environment_name <- as.environment(find(what = "lengthweightrelationship")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "lengthweightrelationships",
+                                       if (exists(x = "lengthweightrelationship",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationships data importation from R environment.\n",
+                                             " - Start length weight relationship(s) data importation from R environment.\n",
                                              sep = "")
-                                         lengthweightrelationships_data <- get(x = "lengthweightrelationships",
-                                                                               envir = environment_name)
-                                         if (! inherits(x = lengthweightrelationships_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"lengthweightrelationships\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         lengthweightrelationship_data <- dplyr::tibble(get(x = "lengthweightrelationship",
+                                                                                            envir = environment_name))
+                                         if (paste0(class(x = lengthweightrelationship_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = lengthweightrelationship_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = lengthweightrelationships_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"length weight relationships\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationships data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"lengthweightrelationships\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"lengthweightrelationship\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful length weight relationship(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     private$lengthweightrelationships <- lengthweightrelationships_data
+                                     private$lengthweightrelationships <- lengthweightrelationship_data
                                    }
                                  ),
                                  private = list(
