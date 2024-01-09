@@ -2023,25 +2023,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$setdurationrefs <- set_duration_refs_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
-                                   #' @param database_connection Database connection R object expected. Mandatory argument for data source "observe_database".
+                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "csv_file". Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
-                                   lengthsteps_data = function(data_source = "observe_database",
-                                                               database_connection = NULL,
+                                   lengthsteps_data = function(data_source = "csv_file",
                                                                data_path = NULL,
                                                                envir = NULL) {
                                      # 1 - Arguments verifications ----
-                                     if (data_source == "observe_database") {
-                                       if (paste0(class(x = database_connection),
-                                                  collapse = " ") != "PostgreSQLConnection") {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
-                                       }
-                                     } else if (data_source %in% c("csv_file",
-                                                                   "rdata_file")) {
+                                     if (data_source %in% c("csv_file",
+                                                            "rdata_file")) {
                                        codama::r_type_checking(r_object = data_path,
                                                                type = "character",
                                                                length = 1L)
@@ -2051,193 +2041,96 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                             " - Invalid \"data_source\" argument.",
                                             "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
+                                     if (data_source == "csv_file") {
+                                       # 2 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from T3 database.\n",
+                                           " - Start length step(s) data importation from csv file.\n",
                                            sep = "")
-                                       lengthstep_sql <- paste(readLines(con = system.file("sql",
-                                                                                           "t3_lengthsteps.sql",
-                                                                                           package = "t3")),
-                                                               collapse = "\n")
-                                       cat("[", lengthstep_sql, "]\n", sep = "")
-                                       lengthsteps_data <- DBI::dbGetQuery(conn = db_con,
-                                                                           statement = lengthstep_sql)
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                       lengthstep_data <- read.csv2(file = data_path,
+                                                                    stringsAsFactors = FALSE)
+                                       if (nrow(x = lengthstep_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
+                                         lengthstep_data <- dplyr::mutate(.data = lengthstep_data,
+                                                                          ocean_code = as.integer(x = ocean_code),
+                                                                          species_code = as.integer(x = species_code),
+                                                                          species_fao_code = as.character(x = species_fao_code),
+                                                                          ld1_class = as.numeric(x = ld1_class),
+                                                                          lf_class = as.integer(x = lf_class),
+                                                                          ratio = as.numeric(x = ratio))
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from T3 database.\n",
+                                             " - Successful length step(s) data importation from csv file.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
+                                     } else if (data_source == "rdata_file") {
+                                       # 3 - Process for rdata file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from the database.\n",
-                                           sep = "")
-                                       lengthstep_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                            collapse = "\n"))
-                                       cat("[", lengthstep_sql, "]\n", sep = "")
-                                       lengthsteps_data <- DBI::dbGetQuery(conn = db_con,
-                                                                           statement = lengthstep_sql)
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from the database.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from the database.\n",
-                                           sep = "")
-                                       lengthstep_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                            collapse = "\n"))
-                                       cat("[", lengthstep_sql, "]\n", sep = "")
-                                       lengthsteps_data <- DBI::dbGetQuery(conn = db_con,
-                                                                           statement = lengthstep_sql)
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from the database.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length steps data importation from csv file.\n",
-                                           sep = "")
-                                       lengthsteps_data <- read.csv2(file = data_path,
-                                                                     stringsAsFactors = FALSE)
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         lengthsteps_data <- dplyr::mutate(.data = lengthsteps_data,
-                                                                           ocean = as.integer(x = ocean),
-                                                                           specie_code = as.integer(x = specie_code),
-                                                                           specie_code3l = as.character(x = specie_code3l),
-                                                                           ld1_class = as.numeric(x = ld1_class),
-                                                                           lf_class = as.integer(x = lf_class),
-                                                                           ratio = as.numeric(x = ratio))
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length steps data importation from csv file.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length step data importation from RData.\n",
+                                           " - Start length step(s) data importation from RData.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthsteps",
                                                   envir = tmp_envir)) {
-                                         lengthsteps_data <- get(x = "lengthsteps",
-                                                                 envir = tmp_envir)
-                                         if (! inherits(x = lengthsteps_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"lengthsteps_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         lengthstep_data <- get(x = "lengthsteps",
+                                                                envir = tmp_envir)
+                                         if (paste0(class(x = lengthstep_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = lengthstep_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"lengthsteps\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"lengthsteps\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = lengthsteps_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"lengthsteps\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length step data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful length step(s) data importation from RData.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R environment source ----
-                                       # specific arguments verification
+                                       # 4 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "lengthsteps")[1])
+                                         environment_name <- as.environment(find(what = "lengthstep")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "lengthsteps",
+                                       if (exists(x = "lengthstep",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length step data importation from R environment.\n",
+                                             " - Start length step(s) data importation from R environment.\n",
                                              sep = "")
-                                         lengthsteps_data <- get(x = "lengthsteps",
-                                                                 envir = environment_name)
-                                         if (! inherits(x = lengthsteps_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"lengthsteps_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         lengthstep_data <- get(x = "lengthstep",
+                                                                envir = environment_name)
+                                         if (paste0(class(x = lengthstep_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = lengthstep_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = lengthsteps_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"length step\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length step data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"lengthsteps\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"lengthstep\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful length step(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     private$lengthsteps <- lengthsteps_data
+                                     private$lengthsteps <- lengthstep_data
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).

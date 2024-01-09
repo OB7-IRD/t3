@@ -280,8 +280,7 @@ Creation of a data frame object with parameters of set duration algorithms.
 Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$lengthsteps_data(
-  data_source = "observe_database",
-  database_connection = NULL,
+  data_source = "csv_file",
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -290,9 +289,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection R object expected. Mandatory argument for data source "observe_database".}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "csv_file". Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
 

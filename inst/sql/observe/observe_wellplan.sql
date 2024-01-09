@@ -16,7 +16,7 @@ from
 	join ps_logbook.activity a on (wa.activity = a.topiaid)
 	join ps_logbook.route r on (a.route = r.topiaid)
 	join ps_common.trip t on (r.trip = t.topiaid)
-	join ps_logbook.sample s on (s.trip = t.topiaid)
+	left join ps_logbook.sample s on (s.trip = t.topiaid)
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country c on (v.fleetcountry = c.topiaid)
