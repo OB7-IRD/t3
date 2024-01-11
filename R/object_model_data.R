@@ -1814,216 +1814,118 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$wells <- object_wells
                                    },
                                    #' @description Creation of a data frame object with parameters of set duration algorithms.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   setdurationrefs_data = function(database_connection = NULL,
-                                                                   data_source = "t3_db",
+                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   setdurationrefs_data = function(data_source = "csv_file",
                                                                    data_path = NULL,
                                                                    envir = NULL) {
-                                     # 1 - Common arguments verification
-                                     if (codama::r_type_checking(r_object = data_source,
-                                                                 type = "character",
-                                                                 length = 1L,
-                                                                 allowed_value = c("t3_db",
-                                                                                   "sql_query",
-                                                                                   "csv",
-                                                                                   "rdata",
-                                                                                   "envir"),
-                                                                 output = "logical") != TRUE) {
-                                       codama::r_type_checking(r_object = data_source,
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("csv_file",
+                                                            "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
                                                                type = "character",
-                                                               length = 1L,
-                                                               allowed_value = c("t3_db",
-                                                                                 "sql_query",
-                                                                                 "csv",
-                                                                                 "rdata",
-                                                                                 "envir"),
-                                                               output = "message")
-                                       stop()
+                                                               length = 1L)
+                                     } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     # 2 - Global process
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "PostgreSQLConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"PostgreSQLConnection\" expected.\n",
-                                             sep = "")
-                                       }
+                                     if (data_source == "csv_file") {
+                                       # 2 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start set duration data importation from T3 database.\n",
+                                           " - Start set duration(s) data importation from csv file.\n",
                                            sep = "")
-                                       setdurationrefs_sql <- paste(readLines(con = system.file("sql",
-                                                                                                "t3_setdurationrefs.sql",
-                                                                                                package = "t3")),
-                                                                    collapse = "\n")
-                                       setdurationrefs_sql_final <- DBI::SQL(setdurationrefs_sql)
-                                       cat("[",
-                                           setdurationrefs_sql_final,
-                                           "]\n",
-                                           sep = "")
-                                       set_duration_refs_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                 statement = setdurationrefs_sql_final)
-                                       if (nrow(x = set_duration_refs_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                       set_duration_ref_data <- read.csv2(file = data_path,
+                                                                          stringsAsFactors = FALSE)
+                                       if (nrow(x = set_duration_ref_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
+                                         set_duration_ref_data <- dplyr::mutate(.data = set_duration_ref_data,
+                                                                                year = as.integer(year),
+                                                                                country_label = as.character(country_label),
+                                                                                ocean_code = as.integer(ocean_code),
+                                                                                school_type_code = as.integer(school_type_code),
+                                                                                parameter_a = as.numeric(parameter_a),
+                                                                                parameter_b = as.numeric(parameter_b),
+                                                                                null_set_value = as.numeric(null_set_value))
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration data importation from T3 database.\n",
+                                             " - Successful set duration(s) data importation from csv file.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
+                                     } else if (data_source == "rdata_file") {
+                                       # 3 - Process for rdata file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start set duration data importation from the database.\n",
-                                           sep = "")
-                                       setdurationrefs_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                                 collapse = "\n"))
-                                       cat("[", setdurationrefs_sql, "]\n", sep = "")
-                                       set_duration_refs_data <- DBI::dbGetQuery(conn = db_con,
-                                                                                 statement = setdurationrefs_sql)
-                                       if (nrow(x = set_duration_refs_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration data importation from the database.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful set duration data importation from csv file.\n",
-                                           sep = "")
-                                       set_duration_refs_data <- read.csv2(file = data_path,
-                                                                           stringsAsFactors = FALSE)
-                                       if (nrow(x = set_duration_refs_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         set_duration_refs_data <- dplyr::mutate(.data = set_duration_refs_data,
-                                                                                 year = as.integer(year),
-                                                                                 country = as.character(country),
-                                                                                 ocean = as.integer(ocean),
-                                                                                 school_type = as.integer(school_type),
-                                                                                 parameter_a = as.numeric(parameter_a),
-                                                                                 parameter_b = as.numeric(parameter_b),
-                                                                                 null_set_value = as.numeric(null_set_value))
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration data importation from csv file.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start set duration references data importation from RData.\n",
+                                           " - Start set duration(s) data importation from RData.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "setdurationrefs",
                                                   envir = tmp_envir)) {
-                                         set_duration_refs_data <- get(x = "setdurationrefs",
-                                                                       envir = tmp_envir)
-                                         if (! inherits(x = set_duration_refs_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"set_duration_refs_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         set_duration_ref_data <- get(x = "setdurationrefs",
+                                                                      envir = tmp_envir)
+                                         if (paste0(class(x = lengthstep_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = lengthstep_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"setdurationrefs\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"setdurationrefs\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = set_duration_refs_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"setdurationrefs\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration references data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful set duration(s) data importation from RData.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # R envrionment source ----
-                                       # specific arguments verification
+                                       # 4 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "setdurationrefs")[1])
+                                         environment_name <- as.environment(find(what = "setdurationref")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "setdurationrefs",
+                                       if (exists(x = "setdurationref",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start set duration references data importation from R environment.\n",
+                                             " - Start set duration(s) data importation from R environment.\n",
                                              sep = "")
-                                         set_duration_refs_data <- get(x = "setdurationrefs",
+                                         set_duration_refs_data <- get(x = "setdurationref",
                                                                        envir = environment_name)
-                                         if (! inherits(x = set_duration_refs_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"set_duration_refs_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         if (paste0(class(x = set_duration_ref_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = set_duration_ref_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = set_duration_refs_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"elementary landings\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration references data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"setdurationrefs\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"setdurationref\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful set duration(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     private$setdurationrefs <- set_duration_refs_data
+                                     private$setdurationrefs <- set_duration_ref_data
                                    },
                                    #' @description Creation of a data frame object with length ratio between ld1 and lf class.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "csv_file". Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
                                    lengthsteps_data = function(data_source = "csv_file",

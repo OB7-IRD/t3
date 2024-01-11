@@ -252,8 +252,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 Creation of a data frame object with parameters of set duration algorithms.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$setdurationrefs_data(
-  database_connection = NULL,
-  data_source = "t3_db",
+  data_source = "csv_file",
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -262,13 +261,11 @@ Creation of a data frame object with parameters of set duration algorithms.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
 
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.}
-
-\item{\code{db_con}}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
 }
 \if{html}{\out{</div>}}
 }
@@ -289,7 +286,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "csv_file". Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
 
