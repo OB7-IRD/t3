@@ -41,8 +41,8 @@ WHERE
 										WHERE
 											a.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
 											AND p.C_PAYS IN (?fleet_code)
-											AND a.C_OCEA IN (?ocean_code))
-											AND tb.C_TYP_B IN (?vessel_type_code)
+											AND a.C_OCEA IN (?ocean_code)
+											AND tb.C_TYP_B IN (?vessel_type_code))
 ORDER BY
 	m.C_BAT
 	,m.D_DBQ

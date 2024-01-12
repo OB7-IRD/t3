@@ -152,7 +152,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                  collapse = ", "))),
                                                                              vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
                                                                                                                        collapse = ", "))))
-
                                        cat("[",
                                            trip_sql_final,
                                            "]\n",
@@ -1870,8 +1869,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "setdurationrefs",
                                                   envir = tmp_envir)) {
-                                         set_duration_ref_data <- get(x = "setdurationrefs",
-                                                                      envir = tmp_envir)
+                                         set_duration_ref_data <- dplyr::tibble(get(x = "setdurationrefs",
+                                                                                    envir = tmp_envir))
                                          if (paste0(class(x = lengthstep_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
                                              || nrow(x = lengthstep_data) == 0) {
@@ -1903,8 +1902,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start set duration(s) data importation from R environment.\n",
                                              sep = "")
-                                         set_duration_refs_data <- get(x = "setdurationref",
-                                                                       envir = environment_name)
+                                         set_duration_refs_data <- dplyr::tibble(get(x = "setdurationref",
+                                                                                     envir = environment_name))
                                          if (paste0(class(x = set_duration_ref_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
                                              || nrow(x = set_duration_ref_data) == 0) {
@@ -1980,8 +1979,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthsteps",
                                                   envir = tmp_envir)) {
-                                         lengthstep_data <- get(x = "lengthsteps",
-                                                                envir = tmp_envir)
+                                         lengthstep_data <- dplyr::tibble(get(x = "lengthsteps",
+                                                                              envir = tmp_envir))
                                          if (paste0(class(x = lengthstep_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
                                              || nrow(x = lengthstep_data) == 0) {
@@ -2013,8 +2012,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                     format = "%Y-%m-%d %H:%M:%S"),
                                              " - Start length step(s) data importation from R environment.\n",
                                              sep = "")
-                                         lengthstep_data <- get(x = "lengthstep",
-                                                                envir = environment_name)
+                                         lengthstep_data <- dplyr::tibble(get(x = "lengthstep",
+                                                                              envir = environment_name))
                                          if (paste0(class(x = lengthstep_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
                                              || nrow(x = lengthstep_data) == 0) {
@@ -2035,337 +2034,258 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      private$lengthsteps <- lengthstep_data
                                    },
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "sql_query", "csv" (with separator character ";" and decimal ","), "rdata" or "envir" (for an object in the R environment).
-                                   #' @param db_con Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".
-                                   #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param countries Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param oceans Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "t3_db". By default NULL.
-                                   #' @param data_path Object of class {\link[base]{character}} expected. Path of the data sql/csv/RData file. By default NULL.
-                                   #' @param trips_selected Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.
-                                   #' @param envir Object of class {\link[base]{character}} expected. Specify an environment to look in for data source "envir". By default the first environment where data are found will be used.
-                                   samplesets_data = function(data_source = "t3_db",
-                                                              db_con = NULL,
-                                                              periode_reference = NULL,
-                                                              countries = NULL,
-                                                              oceans = NULL,
+                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
+                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
+                                   samplesets_data = function(data_source = "observe_database",
+                                                              database_connection = NULL,
+                                                              time_period = NULL,
+                                                              fleet_code = NULL,
+                                                              ocean_code = NULL,
+                                                              vessel_type_code = NULL,
+                                                              trip_id = NULL,
                                                               data_path = NULL,
-                                                              trips_selected = NULL,
                                                               envir = NULL) {
-                                     # common arguments verification ----
-                                     if (data_source %in% c("t3_db",
-                                                            "avdth_db")) {
-                                       if (paste0(class(x = periode_reference),
-                                                  collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"periode_reference\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = countries),
-                                                         collapse = " ") != "character") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"countries\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       } else if (paste0(class(x = oceans),
-                                                         collapse = " ") != "integer") {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"oceans\" argument.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source %in% c("sql_query",
-                                                                   "csv",
-                                                                   "rdata")) {
-                                       if (paste0(class(x = data_path),
-                                                  collapse = " ") != "character"
-                                           || length(x = data_path) != 1
-                                           || (! file.exists(data_path))) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data_path\" argument.\n",
-                                             sep = "")
-                                         stop()
-                                       }
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("observe_database",
+                                                            "avdth_database")) {
+                                       codama::r_type_checking(r_object = time_period,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = fleet_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = ocean_code,
+                                                               type = "integer")
+                                       codama::r_type_checking(r_object = vessel_type_code,
+                                                               type = "integer")
+                                     } else if (data_source %in% c("csv_file",
+                                                                   "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
                                      } else if (data_source != "envir") {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Error: invalid \"data_source\" argument.\n",
-                                           sep = "")
-                                       stop()
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument.",
+                                            "\nCheck function documention through ?object_model_data for more details.")
                                      }
-                                     if (data_source == "t3_db") {
-                                       # t3 db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "PostgreSQLConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"PostgreSQLConnection\" expected.\n",
-                                             sep = "")
+                                     # 2 - Process for observe database ----
+                                     if (data_source == "observe_database") {
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "PostgreSQLConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample sets data importation from T3 database.\n",
+                                           " - Start sample set(s) data importation from an observe database.\n",
                                            sep = "")
-                                       samplesets_sql <- paste(readLines(con = system.file("sql",
-                                                                                           "t3_samplesets.sql",
-                                                                                           package = "t3")),
-                                                               collapse = "\n")
-                                       if (! is.null(x = trips_selected)) {
-                                         if (! inherits(x = trips_selected,
-                                                        what = "character")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"trips_selected\" argument, ",
-                                               "class \"character\" expected if not NULL.\n",
-                                               sep = "")
-                                           stop()
-                                         } else {
-                                           samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                       sql = samplesets_sql,
-                                                                                       begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                           order_by = periode_reference) - 1),
-                                                                                                             "-10-01"),
-                                                                                       end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                        order_by = periode_reference) + 1),
-                                                                                                           "-03-31"),
-                                                                                       countries = DBI::SQL(paste0("'",
-                                                                                                                   paste0(countries,
-                                                                                                                          collapse = "', '"),
-                                                                                                                   "'")),
-                                                                                       oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                       collapse = ", "))),
-                                                                                       trips_selected = DBI::SQL(paste0("'",
-                                                                                                                        paste0(trips_selected,
-                                                                                                                               collapse = "', '"),
-                                                                                                                        "'")))
-                                         }
+                                       if (! is.null(x = trip_id)) {
+                                         codama::r_type_checking(r_object = trip_id,
+                                                                 type = "character")
+                                         sampleset_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                     "observe",
+                                                                                                     "observe_sampleset_selected_trip.sql",
+                                                                                                     package = "t3")),
+                                                                         collapse = "\n"))
+                                         sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                    sql = sampleset_sql,
+                                                                                    trip_id = DBI::SQL(paste0("'",
+                                                                                                              paste0(trip_id,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")))
                                        } else {
-                                         samplesets_sql <- sub(pattern = "\n\tAND t.topiaid IN (?trips_selected)",
-                                                               replacement = "",
-                                                               x = samplesets_sql,
-                                                               fixed = TRUE)
-                                         samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                     sql = samplesets_sql,
-                                                                                     begin_period = paste0((dplyr::first(periode_reference,
-                                                                                                                         order_by = periode_reference) - 1),
-                                                                                                           "-10-01"),
-                                                                                     end_period = paste0((dplyr::last(periode_reference,
-                                                                                                                      order_by = periode_reference) + 1),
-                                                                                                         "-03-31"),
-                                                                                     countries = DBI::SQL(paste0("'",
-                                                                                                                 paste0(countries,
+                                         sampleset_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                     "observe",
+                                                                                                     "observe_sampleset.sql",
+                                                                                                     package = "t3")),
+                                                                         collapse = "\n"))
+                                         sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                    sql = sampleset_sql,
+                                                                                    begin_time_period = paste0((dplyr::first(time_period,
+                                                                                                                             order_by = time_period) - 1),
+                                                                                                               "-10-01"),
+                                                                                    end_time_period = paste0((dplyr::last(time_period,
+                                                                                                                          order_by = time_period) + 1),
+                                                                                                             "-03-31"),
+                                                                                    fleet_code = DBI::SQL(paste0("'",
+                                                                                                                 paste0(fleet_code,
                                                                                                                         collapse = "', '"),
                                                                                                                  "'")),
-                                                                                     oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                     collapse = ", "))))
+                                                                                    ocean_code = DBI::SQL(paste0("'",
+                                                                                                                 paste0(ocean_code,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                    vessel_type_code = DBI::SQL(paste0("'",
+                                                                                                                       paste0(vessel_type_code,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")))
                                        }
-                                       cat("[", samplesets_sql_final, "]\n", sep = "")
-                                       samplesets_data <- DBI::dbGetQuery(conn = db_con,
-                                                                          statement = samplesets_sql_final)
-                                       if (nrow(x = samplesets_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                       cat("[",
+                                           sampleset_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       sampleset_data <- DBI::dbGetQuery(conn = database_connection,
+                                                                         statement = sampleset_sql_final)
+                                       if (nrow(x = sampleset_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and parameters associated.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from T3 database.\n",
+                                             " - Successful sample set(s) data importation from an observe database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "avdth_db") {
-                                       # avdth db source ----
-                                       # specific arguments verification
-                                       if (! inherits(x = db_con,
-                                                      what = "JDBCConnection")) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"db_con\" argument, ",
-                                             "class \"JDBCConnection\" expected.\n",
-                                             sep = "")
+                                     } else if (data_source == "avdth_database") {
+                                       # 3 - Process for AVDTH database ----
+                                       # specific argument verification
+                                       if (paste0(class(x = database_connection),
+                                                  collapse = " ") != "JDBCConnection") {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"database_connection\" argument.",
+                                              "\nClass \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample sets data importation from avdth database.\n",
+                                           " - Start sample set(s) data importation from an AVDTH database.\n",
                                            sep = "")
-                                       samplesets_sql <- paste(readLines(con = system.file("sql",
-                                                                                           "avdth",
-                                                                                           "avdth_samplesets.sql",
-                                                                                           package = "t3")),
-                                                               collapse = "\n")
-                                       samplesets_sql_final <- DBI::sqlInterpolate(conn = db_con,
-                                                                                   sql = samplesets_sql,
-                                                                                   begin_period = DBI::SQL(paste0("#",
-                                                                                                                  (dplyr::first(periode_reference,
-                                                                                                                                order_by = periode_reference) - 1),
-                                                                                                                  "-10-01#")),
-                                                                                   end_period = DBI::SQL(paste0("#",
-                                                                                                                (dplyr::last(periode_reference,
-                                                                                                                             order_by = periode_reference) + 1),
-                                                                                                                "-03-31#")),
-                                                                                   countries = DBI::SQL(paste0("'",
-                                                                                                               paste0(countries,
-                                                                                                                      collapse = "', '"),
-                                                                                                               "'")),
-                                                                                   oceans = DBI::SQL(paste0(paste0(oceans,
-                                                                                                                   collapse = ", "))))
-
-                                       cat("[", samplesets_sql_final, "]\n", sep = "")
-                                       samplesets_data <- dplyr::tibble(DBI::dbGetQuery(conn = db_con,
-                                                                                        statement = samplesets_sql_final)) %>%
+                                       sampleset_sql <- paste(readLines(con = system.file("sql",
+                                                                                          "avdth",
+                                                                                          "avdth_sampleset.sql",
+                                                                                          package = "t3")),
+                                                              collapse = "\n")
+                                       sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                  sql = sampleset_sql,
+                                                                                  begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                       (dplyr::first(time_period,
+                                                                                                                                     order_by = time_period) - 1),
+                                                                                                                       "-10-01#")),
+                                                                                  end_time_period = DBI::SQL(paste0("#",
+                                                                                                                    (dplyr::last(time_period,
+                                                                                                                                 order_by = time_period) + 1),
+                                                                                                                    "-03-31#")),
+                                                                                  fleet_code = DBI::SQL(paste0(paste0(fleet_code,
+                                                                                                                      collapse = ", "))),
+                                                                                  ocean_code = DBI::SQL(paste0(paste0(ocean_code,
+                                                                                                                      collapse = ", "))),
+                                                                                  vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
+                                                                                                                            collapse = ", "))))
+                                       cat("[",
+                                           sampleset_sql_final,
+                                           "]\n",
+                                           sep = "")
+                                       sampleset_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
+                                                                                       statement = sampleset_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
                                                        activity_id = as.character(activity_id),
                                                        well_id = as.character(well_id),
                                                        sample_id = as.character(sample_id),
                                                        well_set_weighted_weight = as.numeric(well_set_weighted_weight))
-                                       if (nrow(x = samplesets_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query and query's parameters.\n",
-                                             sep = "")
-                                         stop()
+                                       if (nrow(x = sampleset_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from avdth database.\n",
+                                             " - Successful sample set(s) data importation from avdht database.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "sql_query") {
-                                       # sql queries source ----
+                                     } else if (data_source == "csv_file") {
+                                       # 4 - Process for csv file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample sets data importation from the database.\n",
+                                           " - Start sample set(s) data importation from csv file.\n",
                                            sep = "")
-                                       samplesets_sql <- DBI::SQL(x = paste(readLines(con = data_path),
-                                                                            collapse = "\n"))
-                                       cat("[", samplesets_sql, "]\n", sep = "")
-                                       samplesets_data <- DBI::dbGetQuery(conn = db_con,
-                                                                          statement = samplesets_sql)
-                                       if (nrow(x = samplesets_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the query.\n",
-                                             sep = "")
-                                         stop()
+                                       sampleset_data <- read.csv2(file = data_path,
+                                                                   stringsAsFactors = FALSE)
+                                       if (nrow(x = sampleset_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.\n")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from the database.\n",
+                                             " - Successful sample set(s) data importation from csv file.\n",
                                              sep = "")
                                        }
-                                     } else if (data_source == "csv") {
-                                       # csv source ----
+                                     } else if (data_source == "rdata_file") {
+                                       # 5 - Process for rdata file ----
                                        # process beginning
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample sets data importation from csv file.\n",
-                                           sep = "")
-                                       samplesets_data <- read.csv2(file = data_path,
-                                                                    stringsAsFactors = FALSE)
-                                       if (nrow(x = samplesets_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data imported, check the csv file.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample sets data importation from csv file.\n",
-                                             sep = "")
-                                       }
-                                     } else if (data_source == "rdata") {
-                                       # rdata source ----
-                                       # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start samples set data importation from RData.\n",
+                                           " - Start sample set(s) data importation from RData.\n",
                                            sep = "")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "samplesets",
                                                   envir = tmp_envir)) {
-                                         samplesets_data <- get(x = "samplesets",
-                                                                envir = tmp_envir)
-                                         if (! inherits(x = samplesets_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"samplesets_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         sampleset_data <- dplyr::tibble(get(x = "samplesets",
+                                                                             envir = tmp_envir))
+                                         if (paste0(class(x = sampleset_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = sampleset_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "invalid RData, no R object named \"samplesets\" available in the R environment provided.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"samplesets\" available in the R environment provided.")
                                        }
-                                       if (nrow(x = samplesets_data) == 0) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: no data in \"samplesets\" data frame, check the RData.\n",
-                                             sep = "")
-                                         stop()
-                                       } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples set data importation from RData.\n",
-                                             sep = "")
-                                       }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful sample set(s) data importation from RData.\n",
+                                           sep = "")
                                      } else if (data_source == "envir") {
-                                       # specific arguments verification
+                                       # 6 - R environment source ----
+                                       # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "samplesets")[1])
+                                         environment_name <- as.environment(find(what = "sampleset")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "samplesets",
+                                       if (exists(x = "sampleset",
                                                   envir = environment_name)) {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start samples set data importation from R environment.\n",
+                                             " - Start sample set(s) data importation from R environment.\n",
                                              sep = "")
-                                         samplesets_data <- get(x = "samplesets",
-                                                                envir = environment_name)
-                                         if (! inherits(x = samplesets_data,
-                                                        what = "data.frame")) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               "invalid \"samplesets_data\" argument, class \"data.frame\" expected.\n",
-                                               sep = "")
-                                           stop()
+                                         sampleset_data <- dplyr::tibble(get(x = "sampleset",
+                                                                             envir = environment_name))
+                                         if (paste0(class(x = sampleset_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = sampleset_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.\n")
                                          }
-                                         if (nrow(x = samplesets_data) == 0) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: no data in \"samples set\" data frame.\n",
-                                               sep = "")
-                                           stop()
-                                         }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples set data importation R environment.\n",
-                                             sep = "")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             "no R object named \"samplesets\" available in the R environment.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"sampleset\" available in the R environment.")
                                        }
+                                       cat(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - Successful sample set(s) data importation R environment.\n",
+                                           sep = "")
                                      }
-                                     private$samplesets <- samplesets_data
+                                     private$samplesets <- sampleset_data
                                    },
                                    #' @description Creation of a data frame object with parameters for length weight relationship.
                                    #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
