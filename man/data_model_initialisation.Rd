@@ -5,42 +5,48 @@
 \title{Data model initialisation}
 \usage{
 data_model_initialisation(
-  data_source = "t3_db",
-  db_con,
+  data_source = "observe_database",
+  database_connection,
   log_file = FALSE,
   log_path = NULL,
   log_name = "data_model_initialisation",
-  periode_reference,
-  countries,
-  oceans,
-  sample_type,
-  trips_selected = NULL
+  time_period,
+  fleet_code,
+  ocean_code,
+  vessel_type_code,
+  species_fate_code,
+  sample_type_code,
+  trip_id = NULL
 )
 }
 \arguments{
-\item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".}
+\item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "observe_database" but you can switch to "avdth_database".}
 
-\item{db_con}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{database_connection}{Database connection R object expected.  Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
+\item{log_file}{Object of class {\link[base]{logical}} expected. By default FALSE. Initiation or not for log file creation.}
 
-\item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
+\item{log_path}{Object of class {\link[base]{character}} expected. By default NULL. Path of the log file directory.}
 
-\item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "data_model_initialisation".}
+\item{log_name}{Object of class {\link[base]{character}} expected. By default "data_model_initialisation". Name of the log file.}
 
-\item{periode_reference}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.}
+\item{time_period}{Object of class {\link[base]{integer}} expected. Year(s) of the reference time period coded on 4 digits.}
 
-\item{countries}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.}
+\item{fleet_code}{Object of class {\link[base]{character}} expected. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{oceans}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.}
+\item{ocean_code}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{sample_type}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
+\item{vessel_type_code}{Object of class {\link[base]{integer}} expected. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{trips_selected}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{species_fate_code}{Object of class {\link[base]{integer}} expected. Specie fate(s) related to data extraction.}
+
+\item{sample_type_code}{Object of class {\link[base]{integer}} expected. Sample type identification.}
+
+\item{trip_id}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
 }
 \value{
 The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 }
 \description{
-Shortcut for initialisation of data's object model from a t3 or a avdth database.
+Shortcut for initialisation of data's object model from a observe or a AVDTH database.
 }

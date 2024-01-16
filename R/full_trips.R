@@ -1,41 +1,21 @@
-#' @name full_trips
 #' @title R6 class full_trips
-#' @importFrom R6 R6Class
-#' @importFrom dplyr tibble mutate add_row relocate group_by summarise full_join left_join n last first filter bind_rows as_tibble ungroup inner_join distinct pull
-#' @importFrom lubridate year hms dseconds int_length interval days dhours dminutes month
-#' @importFrom codama r_type_checking
-#' @importFrom suncalc getSunlightTimes
-#' @importFrom stringr str_extract
-#' @importFrom tidyr spread gather separate
-#' @importFrom ranger ranger predictions importance
-#' @importFrom rfUtilities multi.collinear
-#' @importFrom ggplot2 ggplot stat_qq stat_qq_line ylim geom_line theme aes geom_point geom_smooth geom_segment scale_y_discrete geom_abline xlab ylab ggtitle geom_density after_stat ggsave geom_boxplot labs scale_color_discrete scale_x_continuous scale_color_manual geom_tile scale_fill_gradient2 scale_fill_manual geom_sf coord_sf theme_classic theme_bw
-#' @importFrom ggpubr ggarrange
-#' @importFrom sp coordinates SpatialPoints fullgrid gridded proj4string CRS spTransform
-#' @importFrom adehabitatHR kernelUD getvolumeUD
-#' @importFrom automap autoKrige
-#' @importFrom sf st_as_sf
-#' @importFrom gstat variogram
-#' @importFrom spdep dnearneigh nb2listw moran.mc moran.test
-#' @importFrom forecast ggAcf
-#' @importFrom raster raster crs crop extent rasterize rasterToPoints quantile cut
-#' @importFrom grDevices colorRampPalette
-#' @importFrom future.apply future_lapply
+#' @name full_trips
+#' @description Create R6 reference object class full_trips
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = list_t3,
                           public = list(
-                            # full trips creation ----
+                            # 1 - Full trips creation ----
                             #' @description Creation of full trip item from trips.
                             #' @param object_trips Object of type R6-trips expected. A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
+                              # 1.1 - Arguments verifications ----
                               if (paste(class(x = object_trips),
                                         collapse = " ") != "trips list_t3 R6") {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_trips\" argument.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"object_trips\" argument.")
                               }
+                              # 1.2 - Global process ----
                               # By default, trips are listed by vessel id and landing date
                               full_trips <- list()
                               full_trips_tmp <- list()
@@ -43,11 +23,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               trip_id <- 1
                               while (trip_id <= object_trips$count()) {
                                 if (trip_id == 1) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Start full trips creation.\n",
                                       sep = "")
                                 }
-                                if (object_trips$view(trip_id)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
+                                if (object_trips$view(trip_id)[[1]]$.__enclos_env__$private$landing_well_content_code == 1) {
                                   full_trips <- append(full_trips,
                                                        list(list(object_trips$view(trip_id)[[1]]$clone())))
                                   trip_id <- trip_id + 1
@@ -59,10 +40,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       full_trip_warning <- 1
                                       trip_id <- trip_id + 1
                                     } else {
-                                      if (object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$vessel_id == object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$vessel_id) {
+                                      if (object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$vessel_code == object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$vessel_code) {
                                         full_trips_tmp <- append(full_trips_tmp,
                                                                  object_trips$view(sub_trip_id)[[1]]$clone())
-                                        if (object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$fish_hold_empty == 1) {
+                                        if (object_trips$view(sub_trip_id + 1)[[1]]$.__enclos_env__$private$landing_well_content_code == 1) {
                                           full_trips_tmp <- append(full_trips_tmp,
                                                                    object_trips$view(sub_trip_id + 1)[[1]]$clone())
                                           trip_id <- sub_trip_id + 2
@@ -97,106 +78,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               names(full_trips) <- seq_len(length.out = length(full_trips))
                               private$data <- full_trips
-                              # log summary annotation
+                              # 1.3 - Log summary annotation ----
                               private$log_summary <- dplyr::tibble(step = "create_full_trips",
                                                                    input_trips = object_trips$count(),
                                                                    output_trips = length(x = unlist(x = full_trips)),
                                                                    output_full_trips = length(x = full_trips))
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
                                   " - End of full trips creation.\n",
                                   sep = "")
                             },
-                            # filter full trips by periode_reference ----
-                            #' @description Function for filter full trips by a reference periode.
-                            #' @param periode_reference Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
-                            filter_by_periode = function(periode_reference) {
-                              if (any(class(x = periode_reference) != "integer")) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else if (any(nchar(x = periode_reference) != 4)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"periode_reference\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else {
-                                for (full_trip_id in seq_len(length.out = length(x = private$data))) {
-                                  if (full_trip_id == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of full trips filtering by reference periode.\n",
-                                        sep = "")
-                                  }
-                                  full_trips_tmp <- private$data[[full_trip_id]]
-                                  year_full_trips <- vector(mode = "integer")
-                                  for (trip_id in seq_len(length.out = length(x = full_trips_tmp))) {
-                                    full_trips_tmp_bis <- full_trips_tmp[[trip_id]]
-                                    year_full_trips <- append(year_full_trips,
-                                                              as.integer(
-                                                                lubridate::year(
-                                                                  x = full_trips_tmp_bis$.__enclos_env__$private$landing_date)
-                                                              )
-                                    )
-                                  }
-                                  if (any(year_full_trips %in% periode_reference)) {
-                                    private$data_selected <- append(private$data_selected,
-                                                                    list(lapply(X = seq_len(length.out = length(x = full_trips_tmp)),
-                                                                                FUN = function(list_id) {
-                                                                                  full_trips_tmp[[list_id]]$clone()
-                                                                                })))
-                                    names(private$data_selected)[length(private$data_selected)] <- names(private$data[full_trip_id])
-                                  }
-                                }
-                                if (any(private$id_not_full_trip %in% names(private$data_selected))) {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: missing trip(s) in at least one full trip item.\n",
-                                      "[name(s)/id(s) of element(s): ",
-                                      paste0(private$id_not_full_trip,
-                                             "/",
-                                             which(x = names(private$data_selected) %in% private$id_not_full_trip),
-                                             collapse = ", "),
-                                      "]\n",
-                                      sep = "")
-                                  private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
-                                }
-                                # log summary annotation
-                                private$log_summary <- private$log_summary %>%
-                                  dplyr::mutate(input_full_trips = NA_integer_) %>%
-                                  dplyr::add_row(step = "filter_by_periode",
-                                                 input_trips = length(x = unlist(x = private$data)),
-                                                 input_full_trips = length(x = private$data),
-                                                 output_full_trips = length(x = private$data_selected),
-                                                 output_trips = length(x = unlist(x = private$data_selected))) %>%
-                                  dplyr::relocate(input_full_trips,
-                                                  .before = output_trips)
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of full trips filtering.\n",
-                                    sep = "")
-                              }
-                            },
-                            # add activities ----
+                            # 2 - Add activities ----
                             #' @description Function for add activities in full trips object.
                             #' @param object_activities Object of type R6-activities expected. A R6 reference object of class activities.
                             add_activities = function(object_activities) {
-                              # 1 - Arguments verification
+                              # 2.1 - Arguments verifications ----
                               if (object_activities$count() == 0) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: no activity is available for the process.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - No activity is available for the process.")
                               }
                               if (! any(class(x = object_activities) == "activities")) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_activities\" argument.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"object_activities\" argument.")
                               }
-                              # 2 - Process
+                              # 2.2 - Global process ----
                               for (full_trip_id in seq_len(length.out = length(private$data))) {
                                 if (full_trip_id == 1) {
                                   cat(format(Sys.time(),
@@ -235,7 +142,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     "\".\n",
                                     sep = "")
                               }
-                              # 3 - log summary annotation
+                              # 2.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
                                              file = "NUL")
                               capture.output(current_trips$add(new_item = unlist(x = private$data)),
@@ -259,20 +166,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End of add activity.\n",
                                   sep = "")
                             },
-                            # filter full trips by time period reference ----
-                            #' @description Function for filter full trips by a reference time period.
-                            #' @param time_periode_reference Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
-                            filter_by_time_period_reference = function(time_periode_reference) {
-                              # 1 - Arguments verification
-                              if (codama::r_type_checking(r_object = time_periode_reference,
-                                                          type = "integer",
-                                                          output = "logical") != TRUE) {
-                                codama::r_type_checking(r_object = time_periode_reference,
-                                                        type = "integer",
-                                                        output = "message")
-                                stop()
-                              }
-                              # 2 - Process
+                            # 3 - Filter full trips by time period ----
+                            #' @description Function for filter full trips by a time period.
+                            #' @param time_period Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
+                            filter_by_time_period = function(time_period) {
+                              # 3.1 - Arguments verifications ----
+                              codama::r_type_checking(r_object = time_period,
+                                                      type = "integer")
+                              # 3.2 - Global process ----
                               for (full_trip_id in seq_len(length.out = length(x = private$data))) {
                                 if (full_trip_id == 1) {
                                   cat(format(Sys.time(),
@@ -292,7 +193,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   activities_date <- do.call("c",
                                                              current_activities$extract_l1_element_value(element = "activity_date"))
                                   activities_years <- unique(x = lubridate::year(x = activities_date))
-                                  if (any(activities_years %in% time_periode_reference)) {
+                                  if (any(activities_years %in% time_period)) {
                                     private$data_selected <- append(private$data_selected,
                                                                     list(lapply(X = seq_len(length.out = current_trips$count()),
                                                                                 FUN = function(list_id) {
@@ -315,7 +216,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
                               }
-                              # 3 - log summary annotation
+                              # 3.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
                                              file = "NUL")
                               capture.output(current_trips$add(new_item = unlist(x = private$data)),
@@ -333,7 +234,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(current_activities_selected$add(new_item = unlist(x = current_trips_selected$extract_l1_element_value(element = "activities"))),
                                              file = "NUL")
                               private$log_summary <- private$log_summary %>%
-                                dplyr::add_row(step = "filter_by_time_period_reference",
+                                dplyr::add_row(step = "filter_by_time_period",
                                                input_trips = length(x = unlist(x = private$data)),
                                                input_activities = current_activities$count(),
                                                input_full_trips = length(x = private$data),
@@ -346,300 +247,292 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End of full trips filtering.\n",
                                   sep = "")
                             },
-                            # add elementary catches ----
+                            # 4 - Add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.
                             #' @param object_elementarycatches Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.
                             add_elementarycatches = function(object_elementarycatches) {
+                              # 4.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selected\" empty.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Argument \"data_selected\" empty.")
                               } else if (! any(class(x = object_elementarycatches) == "elementarycatches")) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_elementarycatches\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                  if (full_trip_id == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add elementary catches.\n",
-                                        sep = "")
-                                  }
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"object_elementarycatches\" argument.")
+                              }
+                              # 4.2 - Global process ----
+                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                if (full_trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process of adding elementary catches on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
-                                      sep = "")
-                                  capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                 file = "NUL")
-                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                 file = "NUL")
-                                  invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_trips$count()),
-                                                                            FUN = function(trip_id) {
-                                                                              if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
-                                                                                capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                                                               file = "NUL")
-                                                                                capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
-                                                                                               file = "NUL")
-                                                                                invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_activities$count()),
-                                                                                                                          FUN = function(activity_id) {
-                                                                                                                            current_activity_id <- current_activities$extract(attribut_l1 = "data",
-                                                                                                                                                                              attribut_l2 = "activity_id",
-                                                                                                                                                                              id = activity_id)
-                                                                                                                            current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
-                                                                                                                                                                                                            current_activity_id,
-                                                                                                                                                                                                            "\""),
-                                                                                                                                                                                            clone = TRUE)
-                                                                                                                            current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
-                                                                                                                          }))
-                                                                              }
-                                                                            }))
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process of adding elementary catches on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
+                                      " - Start of add elementary catches.\n",
                                       sep = "")
                                 }
-                                # log summary annotation
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Ongoing process of adding elementary catches on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
+                                    sep = "")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
-                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                file = "NUL")
-                                capture.output(current_activities <- object_r6(class_name = "activities"),
-                                               file = "NUL")
-                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                               file = "NUL")
-                                private$log_summary <- private$log_summary %>%
-                                  dplyr::mutate(input_elementary_catches = NA_integer_,
-                                                output_elementary_catches = NA_integer_,
-                                                output_catch_weight_elementary_catches = NA_real_) %>%
-                                  dplyr::add_row(step = "add_elementarycatches",
-                                                 input_trips = length(x = unlist(x = private$data_selected)),
-                                                 input_full_trips = length(x = private$data_selected),
-                                                 input_activities = current_activities$count(),
-                                                 input_elementary_catches = object_elementarycatches$count(),
-                                                 output_trips = input_trips,
-                                                 output_full_trips = input_full_trips,
-                                                 output_activities = input_activities,
-                                                 output_elementary_catches = current_elementarycatches$count(),
-                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")))) %>%
-                                  dplyr::relocate(input_elementary_catches,
-                                                  .before = output_trips)
+                                invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_trips$count()),
+                                                                          FUN = function(trip_id) {
+                                                                            if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
+                                                                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                                                             file = "NUL")
+                                                                              capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
+                                                                                             file = "NUL")
+                                                                              invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_activities$count()),
+                                                                                                                        FUN = function(activity_id) {
+                                                                                                                          current_activity_id <- current_activities$extract(attribut_l1 = "data",
+                                                                                                                                                                            attribut_l2 = "activity_id",
+                                                                                                                                                                            id = activity_id)
+                                                                                                                          current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
+                                                                                                                                                                                                          current_activity_id,
+                                                                                                                                                                                                          "\""),
+                                                                                                                                                                                          clone = TRUE)
+                                                                                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
+                                                                                                                        }))
+                                                                            }
+                                                                          }))
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add elementary catches.\n",
+                                    " - Successful process of adding elementary catches on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
                                     sep = "")
                               }
+                              # 4.3 - Log summary annotation ----
+                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                             file = "NUL")
+                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                             file = "NUL")
+                              private$log_summary <- private$log_summary %>%
+                                dplyr::mutate(input_elementary_catches = NA_integer_,
+                                              output_elementary_catches = NA_integer_,
+                                              output_catch_weight_elementary_catches = NA_real_) %>%
+                                dplyr::add_row(step = "add_elementarycatches",
+                                               input_trips = length(x = unlist(x = private$data_selected)),
+                                               input_full_trips = length(x = private$data_selected),
+                                               input_activities = current_activities$count(),
+                                               input_elementary_catches = object_elementarycatches$count(),
+                                               output_trips = input_trips,
+                                               output_full_trips = input_full_trips,
+                                               output_activities = input_activities,
+                                               output_elementary_catches = current_elementarycatches$count(),
+                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")))) %>%
+                                dplyr::relocate(input_elementary_catches,
+                                                .before = output_trips)
+                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  " - End of add elementary catches.\n",
+                                  sep = "")
                             },
-                            # add elementary landings ----
+                            # 5 - Add elementary landings ----
                             #' @description Function for add elementary landings in full trips object.
                             #' @param object_elementarylandings Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.
                             add_elementarylandings = function(object_elementarylandings) {
+                              # 5.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selecetd\" empty, ",
-                                    "launch selection data before.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Argument \"data_selecetd\" empty, ",
+                                     "launch selection data before.")
                               } else if (! any(class(object_elementarylandings) == "elementarylandings")) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_elementarylandings\" argument, ",
-                                    "class elementarylandings expected.\n",
-                                    sep = "")
-                                stop()
-                              } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                  if (full_trip_id == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add elementary landings.\n",
-                                        sep = "")
-                                  }
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"object_elementarylandings\" argument, ",
+                                     "class elementarylandings expected.")
+                              }
+                              # 5.2 - Global process ----
+                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                if (full_trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process of adding elementary landings on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
-                                      sep = "")
-                                  capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                 file = "NUL")
-                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                 file = "NUL")
-                                  full_trips_elementarylandings <- lapply(X = seq_len(length.out = current_trips$count()),
-                                                                          FUN = function(trip_id) {
-                                                                            current_trip_id <- current_trips$extract(attribut_l1 = "data",
-                                                                                                                     attribut_l2 = "trip_id",
-                                                                                                                     id = trip_id)
-                                                                            object_elementarylandings$filter_l1(filter = paste0("$path$trip_id == \"",
-                                                                                                                                current_trip_id,
-                                                                                                                                "\""),
-                                                                                                                clone = TRUE)
-                                                                          })
-                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
-                                                       FUN = function(trip_id) {
-                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$elementarylandings <- full_trips_elementarylandings[[trip_id]]
-                                                       }))
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process of adding elementary landings on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
+                                      " - Start of add elementary landings.\n",
                                       sep = "")
                                 }
-                                # log summary annotation
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Ongoing process of adding elementary landings on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
+                                    sep = "")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
-                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                file = "NUL")
-                                capture.output(current_activities <- object_r6(class_name = "activities"),
-                                               file = "NUL")
-                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                               file = "NUL")
-                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
-                                               file = "NUL")
-                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
-                                               file = "NUL")
-                                private$log_summary <- private$log_summary %>%
-                                  dplyr::mutate(input_elementary_landings = NA_integer_,
-                                                output_elementary_landings = NA_integer_,
-                                                output_landing_weight_elementary_landings = NA_real_) %>%
-                                  dplyr::add_row(step = "add_elementarylandings",
-                                                 input_trips = length(x = unlist(x = private$data_selected)),
-                                                 input_full_trips = length(x = private$data_selected),
-                                                 input_activities = current_activities$count(),
-                                                 input_elementary_catches = current_elementarycatches$count(),
-                                                 input_elementary_landings = object_elementarylandings$count(),
-                                                 output_trips = input_trips,
-                                                 output_full_trips = input_full_trips,
-                                                 output_activities = input_activities,
-                                                 output_elementary_catches = input_elementary_catches,
-                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
-                                                 output_elementary_landings = current_elementarylandings$count(),
-                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight")))) %>%
-                                  dplyr::relocate(input_elementary_landings,
-                                                  .before = output_trips)
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add elementary landings.\n",
+                                full_trips_elementarylandings <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                                        FUN = function(trip_id) {
+                                                                          current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                                   attribut_l2 = "trip_id",
+                                                                                                                   id = trip_id)
+                                                                          object_elementarylandings$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                                              current_trip_id,
+                                                                                                                              "\""),
+                                                                                                              clone = TRUE)
+                                                                        })
+                                invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                     FUN = function(trip_id) {
+                                                       current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$elementarylandings <- full_trips_elementarylandings[[trip_id]]
+                                                     }))
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Successful process of adding elementary landings on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
                                     sep = "")
                               }
+                              # 5.3 - Log summary annotation ----
+                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                             file = "NUL")
+                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                             file = "NUL")
+                              capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                             file = "NUL")
+                              capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                             file = "NUL")
+                              private$log_summary <- private$log_summary %>%
+                                dplyr::mutate(input_elementary_landings = NA_integer_,
+                                              output_elementary_landings = NA_integer_,
+                                              output_landing_weight_elementary_landings = NA_real_) %>%
+                                dplyr::add_row(step = "add_elementarylandings",
+                                               input_trips = length(x = unlist(x = private$data_selected)),
+                                               input_full_trips = length(x = private$data_selected),
+                                               input_activities = current_activities$count(),
+                                               input_elementary_catches = current_elementarycatches$count(),
+                                               input_elementary_landings = object_elementarylandings$count(),
+                                               output_trips = input_trips,
+                                               output_full_trips = input_full_trips,
+                                               output_activities = input_activities,
+                                               output_elementary_catches = input_elementary_catches,
+                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                               output_elementary_landings = current_elementarylandings$count(),
+                                               output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight")))) %>%
+                                dplyr::relocate(input_elementary_landings,
+                                                .before = output_trips)
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - End of add elementary landings.\n",
+                                  sep = "")
                             },
-                            # add wells and samples ----
+                            # 6 - Add wells and samples ----
                             #' @description Function for add wells and samples caracteristics in full trips object.
                             #' @param object_wells Object of type R6-wells expected. A R6 reference object of class wells.
                             add_wells_samples = function(object_wells) {
+                              # 6.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: argument \"data_selecetd\" empty.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Error: argument \"data_selecetd\" empty.")
                               } else if (! any(class(object_wells) == "wells")) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"object_wells\" argument.\n",
-                                    sep = "")
-                                stop()
-                              } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                  if (full_trip_id == 1) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Start of add well(s) - sample(s).\n",
-                                        sep = "")
-                                  }
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Error: invalid \"object_wells\" argument.")
+                              }
+                              # 6.2 - Global process ----
+                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                if (full_trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process of adding well(s) - sample(s) on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
-                                      sep = "")
-                                  capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                 file = "NUL")
-                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                 file = "NUL")
-                                  full_trips_wells <- lapply(X = seq_len(length.out = current_trips$count()),
-                                                             FUN = function(trip_id) {
-                                                               current_trip_id <- current_trips$extract(attribut_l1 = "data",
-                                                                                                        attribut_l2 = "trip_id",
-                                                                                                        id = trip_id)
-                                                               object_wells$filter_l1(filter = paste0("$path$trip_id == \"",
-                                                                                                      current_trip_id,
-                                                                                                      "\""),
-                                                                                      clone = TRUE)
-                                                             })
-                                  invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
-                                                       FUN = function(trip_id) {
-                                                         current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$wells <- full_trips_wells[[trip_id]]
-                                                       }))
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Successful process of adding well(s) - sample(s) on full trip \"",
-                                      names(private$data_selected)[[full_trip_id]],
-                                      "\".\n",
+                                      " - Start of add well(s) - sample(s).\n",
                                       sep = "")
                                 }
-                                # log summary annotation
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Ongoing process of adding well(s) - sample(s) on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
+                                    sep = "")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
-                                capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                file = "NUL")
-                                capture.output(current_activities <- object_r6(class_name = "activities"),
-                                               file = "NUL")
-                                capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                               file = "NUL")
-                                capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                               file = "NUL")
-                                capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
-                                               file = "NUL")
-                                capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
-                                               file = "NUL")
-                                capture.output(current_wells <- object_r6(class_name = "wells"),
-                                               file = "NUL")
-                                capture.output(current_wells$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "wells"))),
-                                               file = "NUL")
-                                capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
-                                               file = "NUL")
-                                capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
-                                               file = "NUL")
-                                private$log_summary <- private$log_summary %>%
-                                  dplyr::mutate(input_wells = NA_integer_,
-                                                input_elementarysamplesraw = NA_integer_,
-                                                output_wells = NA_integer_,
-                                                output_elementarysamplesraw = NA_integer_) %>%
-                                  dplyr::add_row(step = "add_wells_samples",
-                                                 input_trips = length(x = unlist(x = private$data_selected)),
-                                                 input_full_trips = length(x = private$data_selected),
-                                                 input_activities = current_activities$count(),
-                                                 input_elementary_catches = current_elementarycatches$count(),
-                                                 input_elementary_landings = current_elementarylandings$count(),
-                                                 input_wells = object_wells$count(),
-                                                 input_elementarysamplesraw = length(x = unlist(x = object_wells$extract_l1_element_value(element = "elementarysampleraw"))),
-                                                 output_trips = input_trips,
-                                                 output_full_trips = input_full_trips,
-                                                 output_activities = input_activities,
-                                                 output_elementary_catches = input_elementary_catches,
-                                                 output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
-                                                 output_elementary_landings = input_elementary_landings,
-                                                 output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))),
-                                                 output_wells = current_wells$count(),
-                                                 output_elementarysamplesraw = current_elementarysamplesraw$count()) %>%
-                                  dplyr::relocate(input_wells,
-                                                  input_elementarysamplesraw,
-                                                  .before = output_trips)
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - End of add well(s) - sample(s).\n",
+                                full_trips_wells <- lapply(X = seq_len(length.out = current_trips$count()),
+                                                           FUN = function(trip_id) {
+                                                             current_trip_id <- current_trips$extract(attribut_l1 = "data",
+                                                                                                      attribut_l2 = "trip_id",
+                                                                                                      id = trip_id)
+                                                             object_wells$filter_l1(filter = paste0("$path$trip_id == \"",
+                                                                                                    current_trip_id,
+                                                                                                    "\""),
+                                                                                    clone = TRUE)
+                                                           })
+                                invisible(x = lapply(X = seq_len(length.out = current_trips$count()),
+                                                     FUN = function(trip_id) {
+                                                       current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$wells <- full_trips_wells[[trip_id]]
+                                                     }))
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Successful process of adding well(s) - sample(s) on full trip \"",
+                                    names(private$data_selected)[[full_trip_id]],
+                                    "\".\n",
                                     sep = "")
                               }
+                              # 6.3 - Log summary annotation ----
+                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                             file = "NUL")
+                              capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
+                                             file = "NUL")
+                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                             file = "NUL")
+                              capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                             file = "NUL")
+                              capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
+                                             file = "NUL")
+                              capture.output(current_wells <- object_r6(class_name = "wells"),
+                                             file = "NUL")
+                              capture.output(current_wells$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "wells"))),
+                                             file = "NUL")
+                              capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                             file = "NUL")
+                              capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                             file = "NUL")
+                              private$log_summary <- private$log_summary %>%
+                                dplyr::mutate(input_wells = NA_integer_,
+                                              input_elementarysamplesraw = NA_integer_,
+                                              output_wells = NA_integer_,
+                                              output_elementarysamplesraw = NA_integer_) %>%
+                                dplyr::add_row(step = "add_wells_samples",
+                                               input_trips = length(x = unlist(x = private$data_selected)),
+                                               input_full_trips = length(x = private$data_selected),
+                                               input_activities = current_activities$count(),
+                                               input_elementary_catches = current_elementarycatches$count(),
+                                               input_elementary_landings = current_elementarylandings$count(),
+                                               input_wells = object_wells$count(),
+                                               input_elementarysamplesraw = length(x = unlist(x = object_wells$extract_l1_element_value(element = "elementarysampleraw"))),
+                                               output_trips = input_trips,
+                                               output_full_trips = input_full_trips,
+                                               output_activities = input_activities,
+                                               output_elementary_catches = input_elementary_catches,
+                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                               output_elementary_landings = input_elementary_landings,
+                                               output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))),
+                                               output_wells = current_wells$count(),
+                                               output_elementarysamplesraw = current_elementarysamplesraw$count()) %>%
+                                dplyr::relocate(input_wells,
+                                                input_elementarysamplesraw,
+                                                .before = output_trips)
+                              cat(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - End of add well(s) - sample(s).\n",
+                                  sep = "")
                             },
                             # process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1).
@@ -2231,7 +2124,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                      & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                      & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                     & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, ])[1] != 1) {
+                                                                     & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet_code, ])[1] != 1) {
                                               cat(format(Sys.time(),
                                                          "%Y-%m-%d %H:%M:%S"),
                                                   " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -2271,11 +2164,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                 & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_a"]
+                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet_code, "parameter_a"]
                                                 parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                 & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "parameter_b"]
+                                                                                & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet_code, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
                                                 if (current_activity$.__enclos_env__$private$activity_code == 1) {
@@ -2292,7 +2185,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                                                             & set_duration_ref$ocean == current_activity$.__enclos_env__$private$ocean
                                                                                                                             & set_duration_ref$school_type == current_activity$.__enclos_env__$private$school_type
-                                                                                                                            & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet, "null_set_value"]
+                                                                                                                            & set_duration_ref$country == current_trip$.__enclos_env__$private$fleet_code, "null_set_value"]
                                                 }
                                               }
                                             }

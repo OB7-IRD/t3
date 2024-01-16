@@ -4,9 +4,7 @@
 \alias{full_trips}
 \title{R6 class full_trips}
 \description{
-R6 class full_trips
-
-R6 class full_trips
+Create R6 reference object class full_trips
 }
 \section{Super class}{
 \code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
@@ -15,9 +13,8 @@ R6 class full_trips
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
-\item \href{#method-full_trips-filter_by_periode}{\code{full_trips$filter_by_periode()}}
 \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
-\item \href{#method-full_trips-filter_by_time_period_reference}{\code{full_trips$filter_by_time_period_reference()}}
+\item \href{#method-full_trips-filter_by_time_period}{\code{full_trips$filter_by_time_period()}}
 \item \href{#method-full_trips-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
@@ -82,23 +79,6 @@ Creation of full trip item from trips.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-filter_by_periode"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-filter_by_periode}{}}}
-\subsection{Method \code{filter_by_periode()}}{
-Function for filter full trips by a reference periode.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_periode(periode_reference)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-add_activities"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_activities}{}}}
 \subsection{Method \code{add_activities()}}{
@@ -116,18 +96,18 @@ Function for add activities in full trips object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-filter_by_time_period_reference"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-filter_by_time_period_reference}{}}}
-\subsection{Method \code{filter_by_time_period_reference()}}{
-Function for filter full trips by a reference time period.
+\if{html}{\out{<a id="method-full_trips-filter_by_time_period"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-filter_by_time_period}{}}}
+\subsection{Method \code{filter_by_time_period()}}{
+Function for filter full trips by a time period.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_time_period_reference(time_periode_reference)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_time_period(time_period)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{time_periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
+\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
 }
 \if{html}{\out{</div>}}
 }
