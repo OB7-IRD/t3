@@ -534,7 +534,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End of add well(s) - sample(s).\n",
                                   sep = "")
                             },
-                            # process 1.1: rf1 ----
+                            # 7 - Process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1).
                             #' @param species_rf1 Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
@@ -546,7 +546,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            rf1_highest_limit = 1.2,
                                            global_output_path = NULL,
                                            output_format = "eu") {
-                              # 1 - Arguments verification ----
+                              browser()
+                              # 7.1 - Arguments verification ----
                               if (any(class(x = species_rf1) != "integer")) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
@@ -554,51 +555,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               }
-                              if (length(x = class(x = rf1_lowest_limit)) != 1
-                                  || ! inherits(x = rf1_lowest_limit,
-                                                what = "numeric")) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"rf1_lowest_limit\" argument.\n",
-                                    sep = "")
-                                stop()
-                              }
-                              if (length(x = class(rf1_highest_limit)) != 1
-                                  || ! inherits(x = rf1_highest_limit,
-                                                what = "numeric")) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"rf1_highest_limit\" argument.\n",
-                                    sep = "")
-                                stop()
-                              }
-                              if (! is.null(x = global_output_path)
-                                  && (! inherits(x = global_output_path,
-                                                 what = "character")
-                                      || length(x = global_output_path) != 1
-                                      || ! file.exists(file.path(global_output_path,
-                                                                 "level1",
-                                                                 "data")))) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"global_output_path\" argument.\n",
-                                    sep = "")
-                                stop()
-                              }
-                              if (codama::r_type_checking(r_object = output_format,
-                                                          type = "character",
-                                                          length = 1L,
-                                                          allowed_value = c("us",
-                                                                            "eu"),
-                                                          output = "logical") != TRUE) {
-                                stop(codama::r_type_checking(r_object = output_format,
-                                                             type = "character",
-                                                             length = 1L,
-                                                             allowed_value = c("us",
-                                                                               "eu"),
-                                                             output = "message"))
-                              }
-                              # 2 - Process ----
+                              codama::r_type_checking(r_object = rf1_lowest_limit,
+                                                      type = "numeric",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = rf1_highest_limit,
+                                                      type = "numeric",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              # 7.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
@@ -3784,7 +3755,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            well_set_weigth_categories = function(sample_set,
+                            elementarywellplanwell_set_weigth_categories = function(sample_set,
                                                                   global_output_path = NULL,
                                                                   output_format = "eu") {
                               if (is.null(private$data_selected)) {

@@ -1484,7 +1484,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        species_code = as.integer(species_code),
                                                        species_fao_code = as.character(species_fao_code),
                                                        wellplan_weight = as.numeric(wellplan_weight),
-                                                       wellplan_count = as.integer(wellplan_count),
                                                        weight_category_code = as.character(weight_category_code),
                                                        weight_category_label = as.character(weight_category_label))
                                        if (nrow(x = wellplan_data) == 0) {
@@ -1776,19 +1775,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          species_code = tmp_wellplan$species_code[j],
                                                                                                                          species_fao_code = tmp_wellplan$species_fao_code[j],
                                                                                                                          wellplan_weight = tmp_wellplan$wellplan_weight[j],
-                                                                                                                         wellplan_count = tmp_wellplan$wellplan_count[j],
                                                                                                                          weight_category_code = tmp_wellplan$weight_category_code[j],
                                                                                                                          weight_category_label = tmp_wellplan$weight_category_label[j])
                                                                                                 })
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Sucessful importation of well plan data item ",
-                                             which(x = unique(x = wellplan_data$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n",
-                                             sep = "")
                                          object_wells$add(object_well)
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),

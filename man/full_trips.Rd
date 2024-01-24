@@ -29,7 +29,7 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-full_trips-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
+\item \href{#method-full_trips-elementarywellplanwell_set_weigth_categories}{\code{full_trips$elementarywellplanwell_set_weigth_categories()}}
 \item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
 \item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
@@ -438,12 +438,12 @@ Process for step standardisation of lf length class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-well_set_weigth_categories"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-well_set_weigth_categories}{}}}
-\subsection{Method \code{well_set_weigth_categories()}}{
+\if{html}{\out{<a id="method-full_trips-elementarywellplanwell_set_weigth_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-elementarywellplanwell_set_weigth_categories}{}}}
+\subsection{Method \code{elementarywellplanwell_set_weigth_categories()}}{
 Process for well set weigth categories definition.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$elementarywellplanwell_set_weigth_categories(
   sample_set,
   global_output_path = NULL,
   output_format = "eu"

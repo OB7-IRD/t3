@@ -46,9 +46,6 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       codama::r_type_checking(r_object = wellplan_weight,
                                                               type = "numeric",
                                                               length = 1L)
-                                      codama::r_type_checking(r_object = wellplan_count,
-                                                              type = "integer",
-                                                              length = 1L)
                                       codama::r_type_checking(r_object = weight_category_code,
                                                               type = "character",
                                                               length = 1L)
@@ -63,7 +60,6 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       private$species_code <- species_code
                                       private$species_fao_code <- species_fao_code
                                       private$wellplan_weight <- wellplan_weight
-                                      private$wellplan_count <- wellplan_count
                                       private$weight_category_code <- weight_category_code
                                       private$weight_category_label <- weight_category_label
                                     }),
@@ -75,6 +71,5 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     species_code = NULL,
                                     species_fao_code = NULL,
                                     wellplan_weight = NULL,
-                                    wellplan_count = NULL,
                                     weight_category_code = NULL,
                                     weight_category_label = NULL))

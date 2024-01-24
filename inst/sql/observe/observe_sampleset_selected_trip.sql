@@ -1,6 +1,6 @@
 select
 	t.topiaid::text as trip_id
-	,sa.activity::text as activity_id
+	,a.topiaid::text as activity_id
 	,w.topiaid::text as well_id
 	,sa.sample::text as sample_id
 	,sa.weightedweight::numeric as well_set_weighted_weight
