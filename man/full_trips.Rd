@@ -170,7 +170,8 @@ Function for add wells and samples caracteristics in full trips object.
 Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
-  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  species_fao_code_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
+  species_fate_code_rf1 = 6L,
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   global_output_path = NULL,
@@ -181,7 +182,9 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
+\item{\code{species_fao_code_rf1}}{Object of type \code{\link[base]{character}} expected. Specie(s) FAO code(s) used for the RF1 process. By default YFT, SKJ, BET, ALB, MIX and LOT.}
+
+\item{\code{species_fate_code_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) fate code(s) used for the RF1 process. By default 6 ("Retained, presumably destined for the cannery").}
 
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
