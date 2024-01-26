@@ -441,7 +441,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               } else if (! any(class(object_wells) == "wells")) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Error: invalid \"object_wells\" argument.")
+                                     " - Invalid \"object_wells\" argument.")
                               }
                               # 6.2 - Global process ----
                               for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
@@ -543,7 +543,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             rf1 = function(species_fao_code_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
-                                           species_fate_code_rf1 = 6L,
+                                           species_fate_code_rf1 = as.integer(c(6)),
+                                           vessel_type_code_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
                                            global_output_path = NULL,
@@ -552,6 +553,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = species_fao_code_rf1,
                                                       type = "character")
                               codama::r_type_checking(r_object = species_fate_code_rf1,
+                                                      type = "integer")
+                              codama::r_type_checking(r_object = vessel_type_code_rf1,
                                                       type = "integer")
                               codama::r_type_checking(r_object = rf1_lowest_limit,
                                                       type = "numeric",
@@ -591,7 +594,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sep = "")
                                     stop <- 0
                                     for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                      # case 1.1 ----
+                                      # Case 1.1 ----
                                       # at least one logbook is missing in not complete full trip item
                                       if (trip_id == 1) {
                                         logbook_availability <- vector(mode = "integer")
@@ -634,7 +637,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                       if (is.null(x = current_elementarycatches)) {
-                                        # case 1.2 ----
+                                        # Case 1.2 ----
                                         # trips with no catches (for example route or support) in not complete full trip item
                                         capture.output(current_trips <- object_r6(class_name = "trips"),
                                                        file = "NUL")
@@ -661,7 +664,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  unlist(current_trip$.__enclos_env__$private$elementarylandings))
                                           }
                                           if (stop_bis == 1) {
-                                            # case 1.3 ----
+                                            # Case 1.3 ----
                                             # at least one elementary landing is missing in not complete full trip item
                                             cat(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
@@ -679,7 +682,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_trips$modification_l1(modification = "$path$rf1 <- NA")
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.3")
                                           } else {
-                                            # case 1.4 ----
+                                            # Case 1.4 ----
                                             # almost rocks dude ! (not complete full trip item)
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
@@ -692,153 +695,165 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   } else {
-                                    stop <- 0
-                                    for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                      # case 2.1 ----
-                                      # at least one logbook is missing in complete full trip item
-                                      if (trip_id == 1) {
-                                        logbook_availability <- vector(mode = "integer")
-                                      }
-                                      current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                      logbook_availability <- append(logbook_availability,
-                                                                     current_trip$.__enclos_env__$private$logbook_availability_code)
-                                      if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
-                                        if (any(logbook_availability) == 0) {
-                                          cat(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Warning: missing logbook in trip element \"",
-                                              names(x = private$data_selected)[full_trip_id],
-                                              "\".\n",
-                                              "[trip: ",
-                                              current_trip$.__enclos_env__$private$trip_id,
-                                              "]\n",
-                                              sep = "")
-                                          capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                         file = "NUL")
-                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                         file = "NUL")
-                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.1")
-                                          stop <- 1
-                                        }
-                                      }
-                                    }
-                                    if (stop != 1) {
-                                      capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                     file = "NUL")
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (unique(x = unlist(x = current_trips$extract_l1_element_value(element = "vessel_type_code"))) %in% vessel_type_code_rf1) {
+                                      stop <- 0
                                       for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                        # Case 2.1 ----
+                                        # at least one logbook is missing in complete full trip item
+                                        if (trip_id == 1) {
+                                          logbook_availability <- vector(mode = "integer")
+                                        }
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                          for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                            if (length(x = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches) != 0) {
-                                              capture.output(current_elementarycatches$add(new_item = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches),
-                                                             file = "NUL")
-                                            }
-                                          }
-                                        }
-                                      }
-                                      if (current_elementarycatches$count() == 0
-                                          || (! any((paste(species_fao_code_rf1,
-                                                           species_fate_code,
-                                                           sep = "_") %in% paste(unique(x = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code"))),
-                                                                                 unique(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code"))),
-                                                                                 sep = "_"))))) {
-                                        # case 2.2 ----
-                                        # trips with no catches (at all or related to the arguments species_fao_code_rf1 and species_fate_code) in complete full trip item
-                                        capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                       file = "NUL")
-                                        capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                       file = "NUL")
-                                        current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                        current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
-                                      } else {
-                                        current_elementarycatches_weight <- vector(mode = "numeric")
-                                        capture.output(current_elementarycatches_final <- object_r6(class_name = "elementarycatches"),
-                                                       file = "NUL")
-                                        capture.output(current_elementarycatches_final$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
-                                                                                                                                                          paste0(species_fao_code_rf1,
-                                                                                                                                                                 collapse = "\", \""),
-                                                                                                                                                          "\") & $path$species_fate_code %in% c(\"",
-                                                                                                                                                          paste0(species_fate_code,
-                                                                                                                                                                 collapse = "\", \""),
-                                                                                                                                                          "\")"))),
-                                                       file = "NUL")
-                                        current_elementarycatches_weight <- unlist(x = current_elementarycatches_final$extract_l1_element_value(element = "catch_weight"))
-                                        current_elementarylandings <- NULL
-                                        for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
-                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                          current_elementarylandings <- append(current_elementarylandings,
-                                                                               unlist(current_trip$.__enclos_env__$private$elementarylandings))
-                                        }
-                                        if (is.null(x = current_elementarylandings)) {
-                                          # case 2.3 ----
-                                          # no elementary landing in complete full trip item
-                                          cat(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Warning: missing elementary landing in trip element \"",
-                                              names(x = private$data_selected)[full_trip_id],
-                                              "\".\n",
-                                              "[trip: ",
-                                              current_trip$.__enclos_env__$private$trip_id,
-                                              "]\n",
-                                              sep = "")
-                                          capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                         file = "NUL")
-                                          capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                         file = "NUL")
-                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
-                                        } else {
-                                          # case 2.4 ----
-                                          # everything rocks dude !
-                                          current_elementarylandings_weight <- vector(mode = "numeric")
-                                          for (elementarylanding_id in seq_len(length.out = length(x = current_elementarylandings))) {
-                                            if (current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_code_rf1) {
-                                              current_elementarylandings_weight <- append(current_elementarylandings_weight,
-                                                                                          current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$landing_weight)
-                                            }
-                                          }
-                                          current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
-                                          if (current_rf1 < rf1_lowest_limit
-                                              | current_rf1 > rf1_highest_limit) {
+                                        logbook_availability <- append(logbook_availability,
+                                                                       current_trip$.__enclos_env__$private$logbook_availability_code)
+                                        if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
+                                          if (any(logbook_availability) == 0) {
                                             cat(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: rf1 value of full trip element \"",
+                                                " - Warning: missing logbook in trip element \"",
                                                 names(x = private$data_selected)[full_trip_id],
-                                                "\" out of theorical boundaries: ",
-                                                round(x = current_rf1,
-                                                      digits = 3),
-                                                ".\n",
+                                                "\".\n",
                                                 "[trip: ",
                                                 current_trip$.__enclos_env__$private$trip_id,
                                                 "]\n",
                                                 sep = "")
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                           file = "NUL")
+                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                           file = "NUL")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.1")
+                                            stop <- 1
                                           }
+                                        }
+                                      }
+                                      if (stop != 1) {
+                                        capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                       file = "NUL")
+                                        for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                          if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                            for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
+                                              if (length(x = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches) != 0) {
+                                                capture.output(current_elementarycatches$add(new_item = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches),
+                                                               file = "NUL")
+                                              }
+                                            }
+                                          }
+                                        }
+                                        if (current_elementarycatches$count() == 0
+                                            || (! any((paste(species_fao_code_rf1,
+                                                             species_fate_code,
+                                                             sep = "_") %in% paste(unique(x = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code"))),
+                                                                                   unique(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code"))),
+                                                                                   sep = "_"))))) {
+                                          # Case 2.2 ----
+                                          # trips with no catches (at all or related to the arguments species_fao_code_rf1 and species_fate_code) in complete full trip item
                                           capture.output(current_trips <- object_r6(class_name = "trips"),
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
-                                          current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
-                                                                                              current_rf1))
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
+                                          current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
+                                        } else {
+                                          current_elementarycatches_weight <- vector(mode = "numeric")
+                                          capture.output(current_elementarycatches_final <- object_r6(class_name = "elementarycatches"),
+                                                         file = "NUL")
+                                          capture.output(current_elementarycatches_final$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
+                                                                                                                                                            paste0(species_fao_code_rf1,
+                                                                                                                                                                   collapse = "\", \""),
+                                                                                                                                                            "\") & $path$species_fate_code %in% c(\"",
+                                                                                                                                                            paste0(species_fate_code,
+                                                                                                                                                                   collapse = "\", \""),
+                                                                                                                                                            "\")"))),
+                                                         file = "NUL")
+                                          current_elementarycatches_weight <- unlist(x = current_elementarycatches_final$extract_l1_element_value(element = "catch_weight"))
+                                          current_elementarylandings <- NULL
+                                          for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                            current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                            current_elementarylandings <- append(current_elementarylandings,
+                                                                                 unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                          }
+                                          if (is.null(x = current_elementarylandings)) {
+                                            # Case 2.3 ----
+                                            # no elementary landing in complete full trip item
+                                            cat(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - Warning: missing elementary landing in trip element \"",
+                                                names(x = private$data_selected)[full_trip_id],
+                                                "\".\n",
+                                                "[trip: ",
+                                                current_trip$.__enclos_env__$private$trip_id,
+                                                "]\n",
+                                                sep = "")
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                           file = "NUL")
+                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                           file = "NUL")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- 1")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
+                                          } else {
+                                            # Case 2.4 ----
+                                            # everything rocks dude !
+                                            current_elementarylandings_weight <- vector(mode = "numeric")
+                                            for (elementarylanding_id in seq_len(length.out = length(x = current_elementarylandings))) {
+                                              if (current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_code_rf1) {
+                                                current_elementarylandings_weight <- append(current_elementarylandings_weight,
+                                                                                            current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$landing_weight)
+                                              }
+                                            }
+                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
+                                            if (current_rf1 < rf1_lowest_limit
+                                                | current_rf1 > rf1_highest_limit) {
+                                              cat(format(x = Sys.time(),
+                                                         format = "%Y-%m-%d %H:%M:%S"),
+                                                  " - Warning: rf1 value of full trip element \"",
+                                                  names(x = private$data_selected)[full_trip_id],
+                                                  "\" out of theorical boundaries: ",
+                                                  round(x = current_rf1,
+                                                        digits = 3),
+                                                  ".\n",
+                                                  "[trip: ",
+                                                  current_trip$.__enclos_env__$private$trip_id,
+                                                  "]\n",
+                                                  sep = "")
+                                            }
+                                            capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                           file = "NUL")
+                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                           file = "NUL")
+                                            current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
+                                                                                                current_rf1))
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
+                                          }
                                         }
                                       }
+                                    } else {
+                                      # Case 3.1 ----
+                                      current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                      current_trips$modification_l1(modification = "$path$statut_rf1 <- 3.1")
                                     }
                                   }
-                                  # assign rf1 to elementary catches ----
+                                  # Assign rf1 to elementary catches ----
                                   for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                     current_rf1 <- current_trip$.__enclos_env__$private$rf1
+                                    current_vessel_type_code <- current_trip$.__enclos_env__$private$vessel_type_code
                                     if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                       for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                         current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                         if (! is.null(x = current_elementarycatches)) {
                                           for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            if (current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_code_rf1
-                                                & current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fate_code %in% species_fate_code_rf1) {
+                                            if (current_vessel_type_code %in% vessel_type_code_rf1
+                                                && (current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_code_rf1
+                                                & current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fate_code %in% species_fate_code_rf1)) {
                                               current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight * current_rf1
                                             } else {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- NA
+                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- NA_real_
                                             }
                                           }
                                         }
@@ -846,7 +861,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                                # outputs extraction ----
+                                # 7.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
@@ -1035,12 +1050,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # process 1.2: rf2 ----
+                            # 8 - Process 1.2: rf2 ----
                             #' @description Process of Raising Factor level 2 (rf2).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             rf2 = function(global_output_path = NULL,
                                            output_format = "eu") {
+                              # 8.1 - Arguments verification ----
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              # 8.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
@@ -1056,28 +1081,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         sep = "")
                                   }
                                   if (is.null(x = private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1)) {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Error: rf1 is null for the item \"",
-                                        names(private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        "Check if the process 1.1 (raising factor level 1) was successfully applied.\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
-                                    stop()
+                                    stop(format(Sys.time(),
+                                                "%Y-%m-%d %H:%M:%S"),
+                                         " - RF1 is null for the item \"",
+                                         names(private$data_selected)[full_trip_id],
+                                         "\".\n",
+                                         "Check if the process 1.1 (raising factor level 1) was successfully applied.\n",
+                                         "[trip: ",
+                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                         "]")
                                   } else {
                                     if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
-                                      # case 1 ----
+                                      # Case 1 ----
                                       # rf2 calculated
-                                      cat(format(x = Sys.time(),
-                                                 format = "%Y-%m-%d %H:%M:%S"),
-                                          " - Error: rf2 not developped yet.\n",
-                                          sep = "")
-                                      stop()
+                                      stop(format(x = Sys.time(),
+                                                  format = "%Y-%m-%d %H:%M:%S"),
+                                           " - RF2 not developped yet.")
                                     } else {
                                       if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
-                                        # case 2 ----
+                                        # Case 2 ----
                                         # rf2 not need to be calculated
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
@@ -1098,12 +1120,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       } else {
-                                        # case 3 ----
-                                        # full trip not complete
+                                        # Case 3 ----
+                                        # full trip not complete or vessel type code not validated
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                          current_rf2 <- 1
-                                          current_trip$.__enclos_env__$private$rf2 <- NA
+                                          current_trip$.__enclos_env__$private$rf2 <- NA_real_
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 3
                                           current_elementarycatches <- NULL
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
@@ -1122,7 +1143,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                   }
                                 }
-                                # outputs extraction ----
+                                # 8.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
@@ -1138,9 +1159,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               file = "NUL")
                                                                                capture.output(current_elementarylandings$add(current_trip$.__enclos_env__$private$elementarylandings),
                                                                                               file = "NUL")
-                                                                               current_total_landings_species <- data.frame(specie = unlist(x = current_elementarylandings$extract_l1_element_value(element = "specie_code3l")),
+                                                                               current_total_landings_species <- data.frame(species = unlist(x = current_elementarylandings$extract_l1_element_value(element = "species_fao_code")),
                                                                                                                             landing_weight = unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))) %>%
-                                                                                 dplyr::group_by(specie) %>%
+                                                                                 dplyr::group_by(species) %>%
                                                                                  dplyr::summarise(landing_weight = sum(landing_weight),
                                                                                                   .groups = "drop") %>%
                                                                                  dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id)
@@ -1162,7 +1183,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                                                                 file = "NUL")
                                                                                  current_total_catches_species_activities <- data.frame(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
-                                                                                                                                        specie = unlist(x = current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
+                                                                                                                                        species = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
+                                                                                                                                        species_fate_code = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
                                                                                                                                         catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
                                                                                                                                         catch_weight_rf2 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf2"))) %>%
                                                                                    dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
@@ -1178,7 +1200,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                if (elementarycatches == TRUE) {
                                                                                  current_total_landings_catches_species_activities <- current_total_landings_species %>%
                                                                                    dplyr::full_join(current_total_catches_species_activities,
-                                                                                                    by = c("specie",
+                                                                                                    by = c("species",
                                                                                                            "trip_id")) %>%
                                                                                    dplyr::left_join(current_activities_latitude_longitude,
                                                                                                     by = "activity_id") %>%
@@ -1190,13 +1212,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                     activity_id = NA_character_,
                                                                                                                                                     activity_latitude = NA_real_,
                                                                                                                                                     activity_longitude = NA_real_,
-                                                                                                                                                    catch_weight = NA,
-                                                                                                                                                    catch_weight_rf2 = NA)
+                                                                                                                                                    species_fate_code = NA_integer_,
+                                                                                                                                                    catch_weight = NA_real_,
+                                                                                                                                                    catch_weight_rf2 = NA_real_)
                                                                                }
                                                                              } else {
                                                                                if (elementarycatches == TRUE) {
                                                                                  current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
-                                                                                                                                                    landing_weight = NA)
+                                                                                                                                                    landing_weight = NA_real_) %>%
+                                                                                   dplyr::left_join(current_activities_latitude_longitude,
+                                                                                                    by = "activity_id") %>%
+                                                                                   dplyr::relocate(activity_latitude,
+                                                                                                   activity_longitude,
+                                                                                                   .after = activity_id)
                                                                                } else {
                                                                                  current_total_landings_catches_species_activities <- NULL
                                                                                }
@@ -1233,13 +1261,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                        }
                                                                                                      })),
                                                                     "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                    "landing_date" = do.call("c",
-                                                                                             trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                    "year_landing_date" = sapply(do.call("c",
-                                                                                                         trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                    "trip_end_date" = do.call("c",
+                                                                                             trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                    "year_trip_end_date" = sapply(do.call("c",
+                                                                                                         trips_selected$extract_l1_element_value(element = "trip_end_date")),
                                                                                                  lubridate::year),
-                                                                    "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                    "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                    "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                    "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))),
                                                                     "rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf2"))),
                                                                     "statut_rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf2"))))
                                   global_outputs_process_1_2 <- dplyr::left_join(x = outputs_process_1_2,
@@ -1298,12 +1326,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # process 1.3: conversion_weigth_category ----
+                            # 9.1 - Process 1.3: conversion_weigth_category ----
                             #' @description Process of logbook weigth categories conversion.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             conversion_weigth_category = function(global_output_path = NULL,
                                                                   output_format = "eu") {
+                              browser
                               category_1 <- "<10kg"
                               category_2 <- "10-30kg"
                               category_3 <- ">30kg"

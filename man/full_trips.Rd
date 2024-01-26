@@ -171,7 +171,8 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
   species_fao_code_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
-  species_fate_code_rf1 = 6L,
+  species_fate_code_rf1 = as.integer(c(6)),
+  vessel_type_code_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   global_output_path = NULL,
