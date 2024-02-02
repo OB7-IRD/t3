@@ -617,7 +617,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
-                                          current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                          current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                           current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.1")
                                           stop <- 1
                                         }
@@ -643,7 +643,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                        file = "NUL")
-                                        current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                        current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                         current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.2")
                                       } else {
                                         for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
@@ -679,7 +679,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.3")
                                           } else {
                                             # Case 1.4 ----
@@ -688,7 +688,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
-                                            current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                            current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.4")
                                           }
                                         }
@@ -834,7 +834,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     } else {
                                       # Case 3.1 ----
-                                      current_trips$modification_l1(modification = "$path$rf1 <- NA")
+                                      current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                       current_trips$modification_l1(modification = "$path$statut_rf1 <- 3.1")
                                     }
                                   }
@@ -1330,15 +1330,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process of logbook weigth categories conversion.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             conversion_weigth_category = function(global_output_path = NULL,
-                                                                  output_format = "eu") {
-                              browser
+                                                                  output_format = "eu",
+                                                                  referential_template = "observe") {
+                              # 8.1 - Arguments verification ----
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              codama::r_type_checking(r_object = referential_template,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("observe",
+                                                                        "avdth"))
+                              # 8.2 - Global process ----
                               category_1 <- "<10kg"
                               category_2 <- "10-30kg"
                               category_3 <- ">30kg"
                               category_4 <- ">10kg"
                               category_5 <- "unknown"
-                              if (is.null(private$data_selected)) {
+                              if (is.null(x = private$data_selected)) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Empty data selected in the R6 object.\n",
                                     " - Process 1.3 (logbook weight categories) cancelled.\n",
@@ -1350,7 +1366,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start process 1.3: logbook weight categories conversion.\n",
                                         sep = "")
                                   }
-                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
                                         "[trip: ",
@@ -1369,35 +1385,37 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                    file = "NUL")
-                                    current_elementarycatches$modification_l1(modification = "$path$corrected_logbook_category <- NA")
-                                    current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_corrected <- NA")
+                                    current_elementarycatches$modification_l1(modification = "$path$weight_category_code_corrected <- NA_character_")
+                                    current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_code_corrected <- NA_real_")
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    cat(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
                                         " - Ongoing process 1.3 on item \"",
-                                        names(private$data_selected)[full_trip_id],
+                                        names(x = private$data_selected)[full_trip_id],
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                         "]\n",
                                         sep = "")
-                                    if (is.null(private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$rf2)) {
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: rf2 is null for the item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "Check if the process 1.2 (raising factor level 2) was successfully applied.\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]\n",
-                                          sep = "")
-                                      stop()
+                                    if (is.null(x = private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$rf2)) {
+                                      stop(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                           " - RF2 is null for the item \"",
+                                           names(private$data_selected)[full_trip_id],
+                                           "\".\n",
+                                           "Check if the process 1.2 (raising factor level 2) was successfully applied.\n",
+                                           "[trip: ",
+                                           private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                           "]")
                                     } else {
                                       # first stage: conversion of all categories except for unknown (category 9)
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
+                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% ifelse(test = referential_template == "observe",
+                                                                                                                                                                 yes = c(6),
+                                                                                                                                                                 no = c(0, 1, 2, 14))) {
+                                              browser()
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean

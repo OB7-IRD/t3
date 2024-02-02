@@ -82,6 +82,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  catch_weight = NULL,
                                  catch_weight_rf1 = NULL,
                                  catch_weight_rf2 = NULL,
-                                 corrected_logbook_category = NULL,
-                                 catch_weight_category_corrected = NULL
+                                 weight_category_code_corrected = NULL,
+                                 catch_weight_category_code_corrected = NULL
                                ))
