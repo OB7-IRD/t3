@@ -26,5 +26,5 @@ from
 	join common.species sp on (c.species = sp.topiaid)
 	join ps_common.speciesfate sf on (c.speciesfate = sf.topiaid)
 where
-	t.topiaid in (?trip_id)
+	t.topiaid in (?trip_ids)
 ;

@@ -22,5 +22,5 @@ from
 	join ps_common.acquisitionstatus acqs on (t.logbookacquisitionstatus = acqs.topiaid)
 	left join ps_logbook.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)
 where
-	t.topiaid in (?trip_id)
+	t.topiaid in (?trip_ids)
 ;

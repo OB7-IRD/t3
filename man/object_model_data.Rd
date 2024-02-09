@@ -30,11 +30,11 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$trips_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  trip_ids = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -47,15 +47,15 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 
@@ -73,11 +73,11 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  trip_ids = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -90,15 +90,15 @@ Creation of a R6 reference object class activities which contain one or more R6 
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 
@@ -116,12 +116,12 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  species_fate_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  species_fate_codes = NULL,
+  trip_ids = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -134,17 +134,17 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{species_fate_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{species_fate_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 
@@ -162,11 +162,11 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarylandings_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  trip_ids = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -179,15 +179,15 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 
@@ -205,12 +205,12 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$wells_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  sample_type_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  sample_type_codes = NULL,
+  trip_ids = NULL,
   data_path_sample = NULL,
   data_path_wellplan = NULL,
   envir = NULL
@@ -224,17 +224,17 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{sample_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
+\item{\code{sample_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path_sample}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.}
 
@@ -304,11 +304,11 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$samplesets_data(
   data_source = "observe_database",
   database_connection = NULL,
-  time_period = NULL,
-  fleet_code = NULL,
-  ocean_code = NULL,
-  vessel_type_code = NULL,
-  trip_id = NULL,
+  years_period = NULL,
+  fleet_codes = NULL,
+  ocean_codes = NULL,
+  vessel_type_codes = NULL,
+  trip_ids = NULL,
   data_path = NULL,
   envir = NULL
 )}\if{html}{\out{</div>}}
@@ -321,15 +321,15 @@ Creation of a data frame object with weighted weigth of each set sampled.
 
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{vessel_type_code}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 

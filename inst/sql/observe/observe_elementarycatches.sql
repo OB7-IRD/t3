@@ -27,8 +27,8 @@ from
 	join ps_common.speciesfate sf on (c.speciesfate = sf.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
-	and co.code in (?fleet_code)
-	and o.code in (?ocean_code)
-	and vt.code in (?vessel_type_code)
-	and sf.code in (?species_fate_code)
+	and co.code in (?fleet_codes)
+	and o.code in (?ocean_codes)
+	and vt.code in (?vessel_type_codes)
+	and sf.code in (?species_fate_codes)
 ;

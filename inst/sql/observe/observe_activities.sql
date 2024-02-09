@@ -25,7 +25,7 @@ from
 	join ps_common.vesselactivity va on (a.vesselactivity = va.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
-	and c.code in (?fleet_code)
-	and o.code in (?ocean_code)
-	and vt.code in (?vessel_type_code)
+	and c.code in (?fleet_codes)
+	and o.code in (?ocean_codes)
+	and vt.code in (?vessel_type_codes)
 ;

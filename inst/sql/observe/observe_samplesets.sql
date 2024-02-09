@@ -16,5 +16,8 @@ from
 	join ps_logbook.sample s on (sa.sample = s.topiaid)
 	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
 where
-	t.topiaid in (?trip_id)
+	t.enddate between ?begin_time_period and ?end_time_period
+	and c.code in (?fleet_codes)
+	and o.code in (?ocean_codes)
+	and vt.code in (?vessel_type_codes)
 ;

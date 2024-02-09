@@ -35,10 +35,10 @@ from
 	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
 where 
 	t.enddate between ?begin_time_period and ?end_time_period
-	and c.code in (?fleet_code)
-	and o.code in (?ocean_code)
-	and vt.code in (?vessel_type_code)
-	and st.code in (?sample_type_code)
+	and c.code in (?fleet_codes)
+	and o.code in (?ocean_codes)
+	and vt.code in (?vessel_type_codes)
+	and st.code in (?sample_type_codes)
 order by 
 	trip_id
 	,sample_id

@@ -34,7 +34,7 @@ from
 	join common.sizemeasuretype smt on (ss.sizemeasuretype = smt.topiaid)
 	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
 where 
-	t.topiaid in (?trip_id)
+	t.topiaid in (?trip_ids)
 order by 
 	trip_id
 	,sample_id

@@ -24,5 +24,5 @@ from
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)
 	join ps_common.vesselactivity va on (a.vesselactivity = va.topiaid)
 where
-	t.topiaid in (?trip_id)
+	t.topiaid in (?trip_ids)
 ;

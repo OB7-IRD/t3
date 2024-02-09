@@ -14,7 +14,7 @@ Create R6 reference object class full_trips
 \itemize{
 \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
 \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
-\item \href{#method-full_trips-filter_by_time_period}{\code{full_trips$filter_by_time_period()}}
+\item \href{#method-full_trips-filter_by_years_period}{\code{full_trips$filter_by_years_period()}}
 \item \href{#method-full_trips-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
@@ -96,18 +96,18 @@ Function for add activities in full trips object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-filter_by_time_period"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-filter_by_time_period}{}}}
-\subsection{Method \code{filter_by_time_period()}}{
+\if{html}{\out{<a id="method-full_trips-filter_by_years_period"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-filter_by_years_period}{}}}
+\subsection{Method \code{filter_by_years_period()}}{
 Function for filter full trips by a time period.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_time_period(time_period)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_years_period(years_period)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{time_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
 }
 \if{html}{\out{</div>}}
 }
@@ -170,9 +170,9 @@ Function for add wells and samples caracteristics in full trips object.
 Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
-  species_fao_code_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
-  species_fate_code_rf1 = as.integer(c(6)),
-  vessel_type_code_rf1 = as.integer(c(4, 5, 6)),
+  species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
+  species_fate_codes_rf1 = as.integer(c(6)),
+  vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   global_output_path = NULL,
@@ -183,9 +183,11 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_fao_code_rf1}}{Object of type \code{\link[base]{character}} expected. Specie(s) FAO code(s) used for the RF1 process. By default YFT, SKJ, BET, ALB, MIX and LOT.}
+\item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected. By default YFT, SKJ, BET, ALB, MIX and LOT. Specie(s) FAO code(s) used for the RF1 process.}
 
-\item{\code{species_fate_code_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) fate code(s) used for the RF1 process. By default 6 ("Retained, presumably destined for the cannery").}
+\item{\code{species_fate_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
+
+\item{\code{vessel_type_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
 
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 

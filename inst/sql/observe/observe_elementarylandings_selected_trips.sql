@@ -16,8 +16,5 @@ from
 	join common.country co on (v.fleetcountry = co.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 where
-	t.enddate between ?begin_time_period and ?end_time_period
-	and co.code in (?fleet_code)
-	and o.code in (?ocean_code)
-	and vt.code in (?vessel_type_code)
+	t.topiaid in (?trip_ids)
 ;

@@ -6,32 +6,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    trips_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
-                                                                    time_period = NULL,
-                                                                    fleet_code = NULL,
-                                                                    ocean_code = NULL,
-                                                                    vessel_type_code = NULL,
-                                                                    trip_id = NULL,
+                                                                    years_period = NULL,
+                                                                    fleet_codes = NULL,
+                                                                    ocean_codes = NULL,
+                                                                    vessel_type_codes = NULL,
+                                                                    trip_ids = NULL,
                                                                     data_path = NULL,
                                                                     envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -59,46 +59,46 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start trip(s) data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                 "observe",
-                                                                                                "observe_trip_selected_trip.sql",
+                                                                                                "observe_trips_selected_trips.sql",
                                                                                                 package = "t3")),
                                                                     collapse = "\n"))
                                          trip_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                sql = trip_sql,
-                                                                               trip_id = DBI::SQL(paste0("'",
-                                                                                                         paste0(trip_id,
-                                                                                                                collapse = "', '"),
-                                                                                                         "'")))
+                                                                               trip_ids = DBI::SQL(paste0("'",
+                                                                                                          paste0(trip_ids,
+                                                                                                                 collapse = "', '"),
+                                                                                                          "'")))
                                        } else {
                                          trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                 "observe",
-                                                                                                "observe_trip.sql",
+                                                                                                "observe_trips.sql",
                                                                                                 package = "t3")),
                                                                     collapse = "\n"))
                                          trip_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                sql = trip_sql,
-                                                                               begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                        order_by = time_period) - 1),
+                                                                               begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                        order_by = years_period) - 1),
                                                                                                           "-10-01"),
-                                                                               end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                     order_by = time_period) + 1),
+                                                                               end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                     order_by = years_period) + 1),
                                                                                                         "-03-31"),
-                                                                               fleet_code = DBI::SQL(paste0("'",
-                                                                                                            paste0(fleet_code,
-                                                                                                                   collapse = "', '"),
-                                                                                                            "'")),
-                                                                               ocean_code = DBI::SQL(paste0("'",
-                                                                                                            paste0(ocean_code,
-                                                                                                                   collapse = "', '"),
-                                                                                                            "'")),
-                                                                               vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                  paste0(vessel_type_code,
-                                                                                                                         collapse = "', '"),
-                                                                                                                  "'")))
+                                                                               fleet_codes = DBI::SQL(paste0("'",
+                                                                                                             paste0(fleet_codes,
+                                                                                                                    collapse = "', '"),
+                                                                                                             "'")),
+                                                                               ocean_codes = DBI::SQL(paste0("'",
+                                                                                                             paste0(ocean_codes,
+                                                                                                                    collapse = "', '"),
+                                                                                                             "'")),
+                                                                               vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                   paste0(vessel_type_codes,
+                                                                                                                          collapse = "', '"),
+                                                                                                                   "'")))
                                        }
                                        cat("[",
                                            trip_sql_final,
@@ -133,25 +133,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                               "avdth",
-                                                                                              "avdth_trip.sql",
+                                                                                              "avdth_trips.sql",
                                                                                               package = "t3")),
                                                                   collapse = "\n"))
                                        trip_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                              sql = trip_sql,
                                                                              begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                  (dplyr::first(time_period,
-                                                                                                                                order_by = time_period) - 1),
+                                                                                                                  (dplyr::first(years_period,
+                                                                                                                                order_by = years_period) - 1),
                                                                                                                   "-10-01#")),
                                                                              end_time_period = DBI::SQL(paste0("#",
-                                                                                                               (dplyr::last(time_period,
-                                                                                                                            order_by = time_period) + 1),
+                                                                                                               (dplyr::last(years_period,
+                                                                                                                            order_by = years_period) + 1),
                                                                                                                "-03-31#")),
-                                                                             fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                 collapse = ", "))),
-                                                                             ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                 collapse = ", "))),
-                                                                             vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                       collapse = ", "))))
+                                                                             fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                  collapse = ", "))),
+                                                                             ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                  collapse = ", "))),
+                                                                             vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                        collapse = ", "))))
                                        cat("[",
                                            trip_sql_final,
                                            "]\n",
@@ -293,32 +293,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    activities_object_creation = function(data_source = "observe_database",
                                                                          database_connection = NULL,
-                                                                         time_period = NULL,
-                                                                         fleet_code = NULL,
-                                                                         ocean_code = NULL,
-                                                                         vessel_type_code = NULL,
-                                                                         trip_id = NULL,
+                                                                         years_period = NULL,
+                                                                         fleet_codes = NULL,
+                                                                         ocean_codes = NULL,
+                                                                         vessel_type_codes = NULL,
+                                                                         trip_ids = NULL,
                                                                          data_path = NULL,
                                                                          envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -346,46 +346,46 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start activities data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                     "observe",
-                                                                                                    "observe_activity_selected_trip.sql",
+                                                                                                    "observe_activities_selected_trips.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n"))
                                          activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                    sql = activity_sql,
-                                                                                   trip_id = DBI::SQL(paste0("'",
-                                                                                                             paste0(trip_id,
-                                                                                                                    collapse = "', '"),
-                                                                                                             "'")))
+                                                                                   trip_ids = DBI::SQL(paste0("'",
+                                                                                                              paste0(trip_ids,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")))
                                        } else {
                                          activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                     "observe",
-                                                                                                    "observe_activity.sql",
+                                                                                                    "observe_activities.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n"))
                                          activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                    sql = activity_sql,
-                                                                                   begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                            order_by = time_period) - 1),
+                                                                                   begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                            order_by = years_period) - 1),
                                                                                                               "-10-01"),
-                                                                                   end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                         order_by = time_period) + 1),
+                                                                                   end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                         order_by = years_period) + 1),
                                                                                                             "-03-31"),
-                                                                                   fleet_code = DBI::SQL(paste0("'",
-                                                                                                                paste0(fleet_code,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")),
-                                                                                   ocean_code = DBI::SQL(paste0("'",
-                                                                                                                paste0(ocean_code,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")),
-                                                                                   vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                      paste0(vessel_type_code,
-                                                                                                                             collapse = "', '"),
-                                                                                                                      "'")))
+                                                                                   fleet_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(fleet_codes,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                   ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(ocean_codes,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                   vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                       paste0(vessel_type_codes,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")))
                                        }
                                        cat("[",
                                            activity_sql_final,
@@ -420,25 +420,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        activity_sql <- paste(readLines(con = system.file("sql",
                                                                                          "avdth",
-                                                                                         "avdth_activity.sql",
+                                                                                         "avdth_activities.sql",
                                                                                          package = "t3")),
                                                              collapse = "\n")
                                        activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                  sql = activity_sql,
                                                                                  begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                      (dplyr::first(time_period,
-                                                                                                                                    order_by = time_period) - 1),
+                                                                                                                      (dplyr::first(years_period,
+                                                                                                                                    order_by = years_period) - 1),
                                                                                                                       "-10-01#")),
                                                                                  end_time_period = DBI::SQL(paste0("#",
-                                                                                                                   (dplyr::last(time_period,
-                                                                                                                                order_by = time_period) + 1),
+                                                                                                                   (dplyr::last(years_period,
+                                                                                                                                order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                     collapse = ", "))),
-                                                                                 ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                     collapse = ", "))),
-                                                                                 vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                           collapse = ", "))))
+                                                                                 fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                      collapse = ", "))),
+                                                                                 ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                      collapse = ", "))),
+                                                                                 vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                            collapse = ", "))))
                                        cat("[",
                                            activity_sql_final,
                                            "]\n",
@@ -587,36 +587,36 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param species_fate_code Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    elementarycatches_object_creation = function(data_source = "observe_database",
                                                                                 database_connection = NULL,
-                                                                                time_period = NULL,
-                                                                                fleet_code = NULL,
-                                                                                ocean_code = NULL,
-                                                                                vessel_type_code = NULL,
-                                                                                species_fate_code = NULL,
-                                                                                trip_id = NULL,
+                                                                                years_period = NULL,
+                                                                                fleet_codes = NULL,
+                                                                                ocean_codes = NULL,
+                                                                                vessel_type_codes = NULL,
+                                                                                species_fate_codes = NULL,
+                                                                                trip_ids = NULL,
                                                                                 data_path = NULL,
                                                                                 envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = species_fate_code,
+                                       codama::r_type_checking(r_object = species_fate_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -644,50 +644,50 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start elementary catches data importation from an Observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                            "observe",
-                                                                                                           "observe_elementarycatch_selected_trip.sql",
+                                                                                                           "observe_elementarycatches_selected_trips.sql",
                                                                                                            package = "t3")),
                                                                                collapse = "\n"))
                                          elementarycatch_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                           sql = elementarycatch_sql,
-                                                                                          trip_id = DBI::SQL(paste0("'",
-                                                                                                                    paste0(trip_id,
-                                                                                                                           collapse = "', '"),
-                                                                                                                    "'")))
+                                                                                          trip_ids = DBI::SQL(paste0("'",
+                                                                                                                     paste0(trip_ids,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")))
                                        } else {
                                          elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                            "observe",
-                                                                                                           "observe_elementarycatch.sql",
+                                                                                                           "observe_elementarycatches.sql",
                                                                                                            package = "t3")),
                                                                                collapse = "\n"))
                                          elementarycatch_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                           sql = elementarycatch_sql,
-                                                                                          begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                                   order_by = time_period) - 1),
+                                                                                          begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                                   order_by = years_period) - 1),
                                                                                                                      "-10-01"),
-                                                                                          end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                                order_by = time_period) + 1),
+                                                                                          end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                                order_by = years_period) + 1),
                                                                                                                    "-03-31"),
-                                                                                          fleet_code = DBI::SQL(paste0("'",
-                                                                                                                       paste0(fleet_code,
-                                                                                                                              collapse = "', '"),
-                                                                                                                       "'")),
-                                                                                          ocean_code = DBI::SQL(paste0("'",
-                                                                                                                       paste0(ocean_code,
-                                                                                                                              collapse = "', '"),
-                                                                                                                       "'")),
-                                                                                          vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                             paste0(vessel_type_code,
-                                                                                                                                    collapse = "', '"),
-                                                                                                                             "'")),
-                                                                                          species_fate_code = DBI::SQL(paste0("'",
-                                                                                                                              paste0(species_fate_code,
+                                                                                          fleet_codes = DBI::SQL(paste0("'",
+                                                                                                                        paste0(fleet_codes,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")),
+                                                                                          ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                        paste0(ocean_codes,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")),
+                                                                                          vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                              paste0(vessel_type_codes,
                                                                                                                                      collapse = "', '"),
-                                                                                                                              "'")))
+                                                                                                                              "'")),
+                                                                                          species_fate_codes = DBI::SQL(paste0("'",
+                                                                                                                               paste0(species_fate_codes,
+                                                                                                                                      collapse = "', '"),
+                                                                                                                               "'")))
                                        }
                                        cat("[",
                                            elementarycatch_sql_final,
@@ -722,25 +722,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = system.file("sql",
                                                                                                              "avdth",
-                                                                                                             "avdth_elementarycatch.sql",
+                                                                                                             "avdth_elementarycatches.sql",
                                                                                                              package = "t3")),
                                                                                  collapse = "\n"))
                                        elementarycatch_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                         sql = elementarycatch_sql,
                                                                                         begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                             (dplyr::first(time_period,
-                                                                                                                                           order_by = time_period) - 1),
+                                                                                                                             (dplyr::first(years_period,
+                                                                                                                                           order_by = years_period) - 1),
                                                                                                                              "-10-01#")),
                                                                                         end_time_period = DBI::SQL(paste0("#",
-                                                                                                                          (dplyr::last(time_period,
-                                                                                                                                       order_by = time_period) + 1),
+                                                                                                                          (dplyr::last(years_period,
+                                                                                                                                       order_by = years_period) + 1),
                                                                                                                           "-03-31#")),
-                                                                                        fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                            collapse = ", "))),
-                                                                                        ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                            collapse = ", "))),
-                                                                                        vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                                  collapse = ", "))))
+                                                                                        fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                             collapse = ", "))),
+                                                                                        ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                             collapse = ", "))),
+                                                                                        vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                                   collapse = ", "))))
                                        cat("[",
                                            elementarycatch_sql_final,
                                            "]\n",
@@ -762,7 +762,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      collapse = ", "))
                                        }
                                        elementarycatch_data <- elementarycatch_data %>%
-                                         dplyr::filter(species_fate_code %in% !!species_fate_code) %>%
+                                         dplyr::filter(species_fate_code %in% !!species_fate_codes) %>%
                                          dplyr::mutate(activity_id = as.character(x = activity_id),
                                                        elementarycatch_id = as.character(x = elementarycatch_id),
                                                        ocean_code = as.integer(x = ocean_code),
@@ -901,32 +901,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    elementarylandings_object_creation = function(data_source = "observe_database",
                                                                                  database_connection = NULL,
-                                                                                 time_period = NULL,
-                                                                                 fleet_code = NULL,
-                                                                                 ocean_code = NULL,
-                                                                                 vessel_type_code = NULL,
-                                                                                 trip_id = NULL,
+                                                                                 years_period = NULL,
+                                                                                 fleet_codes = NULL,
+                                                                                 ocean_codes = NULL,
+                                                                                 vessel_type_codes = NULL,
+                                                                                 trip_ids = NULL,
                                                                                  data_path = NULL,
                                                                                  envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -954,46 +954,46 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start elementary landing(s) data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          elementarylanding_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
-                                                                                                             "observe_elementarylanding_selected_trip.sql",
+                                                                                                             "observe_elementarylandings_selected_trip.sql",
                                                                                                              package = "t3")),
                                                                                  collapse = "\n"))
                                          elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                             sql = elementarylanding_sql,
-                                                                                            trip_id = DBI::SQL(paste0("'",
-                                                                                                                      paste0(trip_id,
-                                                                                                                             collapse = "', '"),
-                                                                                                                      "'")))
+                                                                                            trip_ids = DBI::SQL(paste0("'",
+                                                                                                                       paste0(trip_ids,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")))
                                        } else {
                                          elementarylanding_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
-                                                                                                             "observe_elementarylanding.sql",
+                                                                                                             "observe_elementarylandings.sql",
                                                                                                              package = "t3")),
                                                                                  collapse = "\n"))
                                          elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                             sql = elementarylanding_sql,
-                                                                                            begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                                     order_by = time_period) - 1),
+                                                                                            begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                                     order_by = years_period) - 1),
                                                                                                                        "-10-01"),
-                                                                                            end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                                  order_by = time_period) + 1),
+                                                                                            end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                                  order_by = years_period) + 1),
                                                                                                                      "-03-31"),
-                                                                                            fleet_code = DBI::SQL(paste0("'",
-                                                                                                                         paste0(fleet_code,
-                                                                                                                                collapse = "', '"),
-                                                                                                                         "'")),
-                                                                                            ocean_code = DBI::SQL(paste0("'",
-                                                                                                                         paste0(ocean_code,
-                                                                                                                                collapse = "', '"),
-                                                                                                                         "'")),
-                                                                                            vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                               paste0(vessel_type_code,
-                                                                                                                                      collapse = "', '"),
-                                                                                                                               "'")))
+                                                                                            fleet_codes = DBI::SQL(paste0("'",
+                                                                                                                          paste0(fleet_codes,
+                                                                                                                                 collapse = "', '"),
+                                                                                                                          "'")),
+                                                                                            ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                          paste0(ocean_codes,
+                                                                                                                                 collapse = "', '"),
+                                                                                                                          "'")),
+                                                                                            vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                                paste0(vessel_type_codes,
+                                                                                                                                       collapse = "', '"),
+                                                                                                                                "'")))
                                        }
                                        cat("[",
                                            elementarylanding_sql_final,
@@ -1028,25 +1028,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        elementarylanding_sql <- paste(readLines(con = system.file("sql",
                                                                                                   "avdth",
-                                                                                                  "avdth_elementarylanding.sql",
+                                                                                                  "avdth_elementarylandings.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n")
                                        elementarylanding_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                           sql = elementarylanding_sql,
                                                                                           begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                               (dplyr::first(time_period,
-                                                                                                                                             order_by = time_period) - 1),
+                                                                                                                               (dplyr::first(years_period,
+                                                                                                                                             order_by = years_period) - 1),
                                                                                                                                "-10-01#")),
                                                                                           end_time_period = DBI::SQL(paste0("#",
-                                                                                                                            (dplyr::last(time_period,
-                                                                                                                                         order_by = time_period) + 1),
+                                                                                                                            (dplyr::last(years_period,
+                                                                                                                                         order_by = years_period) + 1),
                                                                                                                             "-03-31#")),
-                                                                                          fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                              collapse = ", "))),
-                                                                                          ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                              collapse = ", "))),
-                                                                                          vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                                    collapse = ", "))))
+                                                                                          fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                               collapse = ", "))),
+                                                                                          ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                               collapse = ", "))),
+                                                                                          vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                                     collapse = ", "))))
                                        cat("[",
                                            elementarylanding_sql_final,
                                            "]\n",
@@ -1186,38 +1186,38 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param sample_type_code Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path_sample Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.
                                    #' @param data_path_wellplan Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for well plans.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
                                    wells_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
-                                                                    time_period = NULL,
-                                                                    fleet_code = NULL,
-                                                                    ocean_code = NULL,
-                                                                    vessel_type_code = NULL,
-                                                                    sample_type_code = NULL,
-                                                                    trip_id = NULL,
+                                                                    years_period = NULL,
+                                                                    fleet_codes = NULL,
+                                                                    ocean_codes = NULL,
+                                                                    vessel_type_codes = NULL,
+                                                                    sample_type_codes = NULL,
+                                                                    trip_ids = NULL,
                                                                     data_path_sample = NULL,
                                                                     data_path_wellplan = NULL,
                                                                     envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = sample_type_code,
+                                       codama::r_type_checking(r_object = sample_type_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -1249,50 +1249,50 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start sample(s) data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          sample_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                   "observe",
-                                                                                                  "observe_sample_selected_trip.sql",
+                                                                                                  "observe_samples_selected_trips.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n"))
                                          sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                  sql = sample_sql,
-                                                                                 trip_id = DBI::SQL(paste0("'",
-                                                                                                           paste0(trip_id,
-                                                                                                                  collapse = "', '"),
-                                                                                                           "'")))
+                                                                                 trip_ids = DBI::SQL(paste0("'",
+                                                                                                            paste0(trip_ids,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")))
                                        } else {
                                          sample_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                   "observe",
-                                                                                                  "observe_sample.sql",
+                                                                                                  "observe_samples.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n"))
                                          sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                  sql = sample_sql,
-                                                                                 begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                          order_by = time_period) - 1),
+                                                                                 begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                          order_by = years_period) - 1),
                                                                                                             "-10-01"),
-                                                                                 end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                       order_by = time_period) + 1),
+                                                                                 end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                       order_by = years_period) + 1),
                                                                                                           "-03-31"),
-                                                                                 fleet_code = DBI::SQL(paste0("'",
-                                                                                                              paste0(fleet_code,
-                                                                                                                     collapse = "', '"),
-                                                                                                              "'")),
-                                                                                 ocean_code = DBI::SQL(paste0("'",
-                                                                                                              paste0(ocean_code,
-                                                                                                                     collapse = "', '"),
-                                                                                                              "'")),
-                                                                                 vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                    paste0(vessel_type_code,
-                                                                                                                           collapse = "', '"),
-                                                                                                                    "'")),
-                                                                                 sample_type_code = DBI::SQL(paste0("'",
-                                                                                                                    paste0(sample_type_code,
-                                                                                                                           collapse = "', '"),
-                                                                                                                    "'")))
+                                                                                 fleet_codes = DBI::SQL(paste0("'",
+                                                                                                               paste0(fleet_codes,
+                                                                                                                      collapse = "', '"),
+                                                                                                               "'")),
+                                                                                 ocean_codes = DBI::SQL(paste0("'",
+                                                                                                               paste0(ocean_codes,
+                                                                                                                      collapse = "', '"),
+                                                                                                               "'")),
+                                                                                 vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                     paste0(vessel_type_codes,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")),
+                                                                                 sample_type_codes = DBI::SQL(paste0("'",
+                                                                                                                     paste0(sample_type_codes,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")))
                                        }
                                        cat("[",
                                            sample_sql_final,
@@ -1315,46 +1315,46 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start well plan(s) data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          wellplan_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                     "observe",
-                                                                                                    "observe_wellplan_selected_trip.sql",
+                                                                                                    "observe_wellplans_selected_trips.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n"))
                                          wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                    sql = wellplan_sql,
-                                                                                   trip_id = DBI::SQL(paste0("'",
-                                                                                                             paste0(trip_id,
-                                                                                                                    collapse = "', '"),
-                                                                                                             "'")))
+                                                                                   trip_ids = DBI::SQL(paste0("'",
+                                                                                                              paste0(trip_ids,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")))
                                        } else {
                                          wellplan_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                     "observe",
-                                                                                                    "observe_wellplan.sql",
+                                                                                                    "observe_wellplans.sql",
                                                                                                     package = "t3")),
                                                                         collapse = "\n"))
                                          wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                    sql = wellplan_sql,
-                                                                                   begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                            order_by = time_period) - 1),
+                                                                                   begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                            order_by = years_period) - 1),
                                                                                                               "-10-01"),
-                                                                                   end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                         order_by = time_period) + 1),
+                                                                                   end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                         order_by = years_period) + 1),
                                                                                                             "-03-31"),
-                                                                                   fleet_code = DBI::SQL(paste0("'",
-                                                                                                                paste0(fleet_code,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")),
-                                                                                   ocean_code = DBI::SQL(paste0("'",
-                                                                                                                paste0(ocean_code,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")),
-                                                                                   vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                      paste0(vessel_type_code,
-                                                                                                                             collapse = "', '"),
-                                                                                                                      "'")))
+                                                                                   fleet_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(fleet_codes,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                   ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(ocean_codes,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
+                                                                                   vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                       paste0(vessel_type_codes,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")))
                                        }
                                        cat("[",
                                            wellplan_sql_final,
@@ -1389,27 +1389,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        sample_sql <- paste(readLines(con = system.file("sql",
                                                                                        "avdth",
-                                                                                       "avdth_sample.sql",
+                                                                                       "avdth_samples.sql",
                                                                                        package = "t3")),
                                                            collapse = "\n")
                                        sample_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                sql = sample_sql,
                                                                                begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                    (dplyr::first(time_period,
-                                                                                                                                  order_by = time_period) - 1),
+                                                                                                                    (dplyr::first(years_period,
+                                                                                                                                  order_by = years_period) - 1),
                                                                                                                     "-10-01#")),
                                                                                end_time_period = DBI::SQL(paste0("#",
-                                                                                                                 (dplyr::last(time_period,
-                                                                                                                              order_by = time_period) + 1),
+                                                                                                                 (dplyr::last(years_period,
+                                                                                                                              order_by = years_period) + 1),
                                                                                                                  "-03-31#")),
-                                                                               fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                   collapse = ", "))),
-                                                                               ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                   collapse = ", "))),
-                                                                               vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                         collapse = ", "))),
-                                                                               sample_type_code = DBI::SQL(paste0(sample_type_code,
-                                                                                                                  collapse = ", ")))
+                                                                               fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                    collapse = ", "))),
+                                                                               ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                    collapse = ", "))),
+                                                                               vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                          collapse = ", "))),
+                                                                               sample_type_codes = DBI::SQL(paste0(sample_type_codes,
+                                                                                                                   collapse = ", ")))
                                        cat("[",
                                            sample_sql_final,
                                            "]\n",
@@ -1452,25 +1452,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        wellplan_sql <- paste(readLines(con = system.file("sql",
                                                                                          "avdth",
-                                                                                         "avdth_wellplan.sql",
+                                                                                         "avdth_wellplans.sql",
                                                                                          package = "t3")),
                                                              collapse = "\n")
                                        wellplan_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                  sql = wellplan_sql,
                                                                                  begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                      (dplyr::first(time_period,
-                                                                                                                                    order_by = time_period) - 1),
+                                                                                                                      (dplyr::first(years_period,
+                                                                                                                                    order_by = years_period) - 1),
                                                                                                                       "-10-01#")),
                                                                                  end_time_period = DBI::SQL(paste0("#",
-                                                                                                                   (dplyr::last(time_period,
-                                                                                                                                order_by = time_period) + 1),
+                                                                                                                   (dplyr::last(years_period,
+                                                                                                                                order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                     collapse = ", "))),
-                                                                                 ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                     collapse = ", "))),
-                                                                                 vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                           collapse = ", "))))
+                                                                                 fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                      collapse = ", "))),
+                                                                                 ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                      collapse = ", "))),
+                                                                                 vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                            collapse = ", "))))
                                        cat("[",
                                            wellplan_sql_final,
                                            "]\n",
@@ -2025,32 +2025,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
-                                   #' @param time_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_code Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_code Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_code Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_id Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".
+                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
+                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    samplesets_data = function(data_source = "observe_database",
                                                               database_connection = NULL,
-                                                              time_period = NULL,
-                                                              fleet_code = NULL,
-                                                              ocean_code = NULL,
-                                                              vessel_type_code = NULL,
-                                                              trip_id = NULL,
+                                                              years_period = NULL,
+                                                              fleet_codes = NULL,
+                                                              ocean_codes = NULL,
+                                                              vessel_type_codes = NULL,
+                                                              trip_ids = NULL,
                                                               data_path = NULL,
                                                               envir = NULL) {
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
-                                       codama::r_type_checking(r_object = time_period,
+                                       codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_code,
+                                       codama::r_type_checking(r_object = fleet_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = ocean_code,
+                                       codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_code,
+                                       codama::r_type_checking(r_object = vessel_type_codes,
                                                                type = "integer")
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -2078,46 +2078,46 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start sample set(s) data importation from an observe database.\n",
                                            sep = "")
-                                       if (! is.null(x = trip_id)) {
-                                         codama::r_type_checking(r_object = trip_id,
+                                       if (! is.null(x = trip_ids)) {
+                                         codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
                                          sampleset_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                      "observe",
-                                                                                                     "observe_sampleset_selected_trip.sql",
+                                                                                                     "observe_samplesets_selected_trips.sql",
                                                                                                      package = "t3")),
                                                                          collapse = "\n"))
                                          sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                     sql = sampleset_sql,
-                                                                                    trip_id = DBI::SQL(paste0("'",
-                                                                                                              paste0(trip_id,
-                                                                                                                     collapse = "', '"),
-                                                                                                              "'")))
+                                                                                    trip_ids = DBI::SQL(paste0("'",
+                                                                                                               paste0(trip_ids,
+                                                                                                                      collapse = "', '"),
+                                                                                                               "'")))
                                        } else {
                                          sampleset_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                      "observe",
-                                                                                                     "observe_sampleset.sql",
+                                                                                                     "observe_samplesets.sql",
                                                                                                      package = "t3")),
                                                                          collapse = "\n"))
                                          sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                     sql = sampleset_sql,
-                                                                                    begin_time_period = paste0((dplyr::first(time_period,
-                                                                                                                             order_by = time_period) - 1),
+                                                                                    begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                             order_by = years_period) - 1),
                                                                                                                "-10-01"),
-                                                                                    end_time_period = paste0((dplyr::last(time_period,
-                                                                                                                          order_by = time_period) + 1),
+                                                                                    end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                          order_by = years_period) + 1),
                                                                                                              "-03-31"),
-                                                                                    fleet_code = DBI::SQL(paste0("'",
-                                                                                                                 paste0(fleet_code,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
-                                                                                    ocean_code = DBI::SQL(paste0("'",
-                                                                                                                 paste0(ocean_code,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
-                                                                                    vessel_type_code = DBI::SQL(paste0("'",
-                                                                                                                       paste0(vessel_type_code,
-                                                                                                                              collapse = "', '"),
-                                                                                                                       "'")))
+                                                                                    fleet_codes = DBI::SQL(paste0("'",
+                                                                                                                  paste0(fleet_codes,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")),
+                                                                                    ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                  paste0(ocean_codes,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")),
+                                                                                    vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                        paste0(vessel_type_codes,
+                                                                                                                               collapse = "', '"),
+                                                                                                                        "'")))
                                        }
                                        cat("[",
                                            sampleset_sql_final,
@@ -2152,25 +2152,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        sampleset_sql <- paste(readLines(con = system.file("sql",
                                                                                           "avdth",
-                                                                                          "avdth_sampleset.sql",
+                                                                                          "avdth_samplesets.sql",
                                                                                           package = "t3")),
                                                               collapse = "\n")
                                        sampleset_sql_final <- DBI::sqlInterpolate(conn = database_connection,
                                                                                   sql = sampleset_sql,
                                                                                   begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                       (dplyr::first(time_period,
-                                                                                                                                     order_by = time_period) - 1),
+                                                                                                                       (dplyr::first(years_period,
+                                                                                                                                     order_by = years_period) - 1),
                                                                                                                        "-10-01#")),
                                                                                   end_time_period = DBI::SQL(paste0("#",
-                                                                                                                    (dplyr::last(time_period,
-                                                                                                                                 order_by = time_period) + 1),
+                                                                                                                    (dplyr::last(years_period,
+                                                                                                                                 order_by = years_period) + 1),
                                                                                                                     "-03-31#")),
-                                                                                  fleet_code = DBI::SQL(paste0(paste0(fleet_code,
-                                                                                                                      collapse = ", "))),
-                                                                                  ocean_code = DBI::SQL(paste0(paste0(ocean_code,
-                                                                                                                      collapse = ", "))),
-                                                                                  vessel_type_code = DBI::SQL(paste0(paste0(vessel_type_code,
-                                                                                                                            collapse = ", "))))
+                                                                                  fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                                                       collapse = ", "))),
+                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                       collapse = ", "))),
+                                                                                  vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                             collapse = ", "))))
                                        cat("[",
                                            sampleset_sql_final,
                                            "]\n",
@@ -2313,7 +2313,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            sep = "")
                                        lengthweightrelationship_sql <- paste(readLines(con = system.file("sql",
                                                                                                          "observe",
-                                                                                                         "observe_lengthweightrelationship.sql",
+                                                                                                         "observe_lengthweightrelationships.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
                                        cat("[",
