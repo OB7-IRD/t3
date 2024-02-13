@@ -5736,6 +5736,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sset <- inputs_level3[[4]]
                                 # well plan
                                 wp <- inputs_level3[[5]]
+
                                 # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
@@ -6921,8 +6922,49 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sset <- inputs_level3[[4]]
                               # well plan
                               wp <- inputs_level3[[5]]
-                              # catches keep onboard only = set
-                              catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
+
+                              act_chr$yr <- lubridate::year(x = act_chr$date_act)
+                              act_chr$mon <- lubridate::month(x = act_chr$date_act)
+                              act_chr$fmod <- as.factor(act_chr$fmod)
+                              act_chr$vessel <- as.factor(act_chr$vessel)
+                              # reduce data to the period considered in the modeling and check data availability
+                              act_chr <- act_chr %>% filter(yr %in% target_year)
+                              if (nrow(act_chr) == 0) {
+                                cat(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: NO data available for the selected target_year.\n",
+                                    sep = "")
+                                stop()
+                              }
+                              # add the weight by categories, species from logbook (corrected by t3 level 1)
+                              catch_set_lb <- dplyr::inner_join(act_chr,
+                                                        catch_set_lb,
+                                                        by = c("id_act",
+                                                               "date_act",
+                                                               "code_act_type"))
+                              # catches remove discard
+                              catch_discard <- catch_set_lb %>% filter(sp_code %in% c(8, 800:899))
+                              catch_set_lb <- catch_set_lb %>% filter(!sp_code %in% c(8, 800:899))
+                              target_tuna <- c("BET", "SKJ", "YFT")
+                              set_with_target_tuna <- catch_set_lb %>% filter(sp %in% target_tuna) %>%
+                                distinct(id_act)
+                              set_with_mix_tuna <- catch_set_lb %>% filter(sp %in% c("MIX")) %>%
+                                distinct(id_act)
+                              catch_without_target_tuna <- catch_set_lb %>% filter(!id_act %in% c(set_with_target_tuna$id_act,set_with_mix_tuna$id_act))
+
+                              catch_with_mix_tuna <- catch_set_lb %>% filter(id_act %in% set_with_mix_tuna$id_act)
+                              catch_with_target_tuna <- catch_set_lb %>% filter(id_act %in% set_with_target_tuna$id_act,
+                                                                                !id_act %in% set_with_mix_tuna$id_act)
+                              catch_with_other_species <- catch_with_target_tuna %>%
+                                filter(!sp %in% target_tuna)
+
+                              catch_data_not_corrected <- list(catch_with_mix_tuna = catch_with_mix_tuna,
+                                                               catch_without_target_tuna =  catch_without_target_tuna,
+                                                               catch_with_other_species = catch_with_other_species,
+                                                               catch_discard = catch_discard)
+
+                              catch_set_lb <- catch_with_target_tuna %>%
+                                filter(sp %in% target_tuna)
                               catch_set_lb <- droplevels(catch_set_lb)
                               # standardize weight category
                               catch_set_lb$wcat <- gsub("kg",
@@ -6936,7 +6978,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
-                                dplyr::group_by(id_act, date_act, sp, wcat, code_act_type) %>%
+                                dplyr::group_by(across(c(-w_lb_t3))) %>%
                                 dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
                                 dplyr::ungroup()
                               # set use for modeling to remove for prediction
@@ -6945,28 +6987,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                "fmod",
                                                                "ocean",
                                                                "year")])
-                              act_chr$yr <- lubridate::year(x = act_chr$date_act)
-                              act_chr$mon <- lubridate::month(x = act_chr$date_act)
-                              act_chr$fmod <- as.factor(act_chr$fmod)
-                              act_chr$vessel <- as.factor(act_chr$vessel)
+
+                              # act_chr$yr <- lubridate::year(x = act_chr$date_act)
+                              # act_chr$mon <- lubridate::month(x = act_chr$date_act)
+                              # act_chr$fmod <- as.factor(act_chr$fmod)
+                              # act_chr$vessel <- as.factor(act_chr$vessel)
                               # non sampled set
                               # reduce data to the period considered in the modeling and check data availability
-                              act_chr <- act_chr[act_chr$yr %in% target_year, ]
-                              if (nrow(act_chr) == 0) {
-                                cat(format(x = Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: NO data available for the selected target_year.\n",
-                                    sep = "")
-                                stop()
-                              }
+                              # act_chr <- act_chr %>% filter(yr %in% target_year)
+                              # if (nrow(act_chr) == 0) {
+                              #   cat(format(x = Sys.time(),
+                              #              "%Y-%m-%d %H:%M:%S"),
+                              #       " - Error: NO data available for the selected target_year.\n",
+                              #       sep = "")
+                              #   stop()
+                              # }
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
-                              sets <- dplyr::inner_join(act_chr,
-                                                        catch_set_lb,
-                                                        by = c("id_act",
-                                                               "date_act",
-                                                               "code_act_type"))
+                              # sets <- dplyr::inner_join(act_chr,
+                              #                           catch_set_lb,
+                              #                           by = c("id_act",
+                              #                                  "date_act",
+                              #                                  "code_act_type"))
                               # catches keep onboard only = set
-                              sets <- sets[sets$code_act_type %in% c(0,1,2), ]
+                              sets <- catch_set_lb %>% filter(code_act_type %in% c(0,1,2))
                               sets$sp <- factor(sets$sp)
                               sets$ocean <- factor(sets$ocean)
                               sets <- sets[! sets$vessel %in% vessel_id_ignored, ]
@@ -7068,11 +7111,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               output_level3_process4 <- append(output_level3_process4,
                                                                list(list("sets_long" = sets_long,
-                                                                         "sets_wide" = sets_wide)))
+                                                                         "sets_wide" = sets_wide,
+                                                                         "catch_data_not_corrected" = catch_data_not_corrected)))
                               names(output_level3_process4)[length(output_level3_process4)] <- "nonsampled_sets"
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
-                                  " - End process 3.4: data formatting for predictions.\n",
+                                  " - End process 3.4: data formating for predictions.\n",
                                   sep = "")
                               return(output_level3_process4)
                             },
