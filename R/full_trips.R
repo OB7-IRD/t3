@@ -544,7 +544,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             rf1 = function(species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
-                                           species_fate_codes_rf1 = as.integer(c(6)),
+                                           species_fate_codes_rf1 = as.integer(c(6, 11)),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
@@ -849,9 +849,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                         if (! is.null(x = current_elementarycatches)) {
                                           for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            if (current_vessel_type_code %in% vessel_type_codes_rf1
-                                                && (current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_codes_rf1
-                                                    & current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fate_code %in% species_fate_codes_rf1)) {
+                                            if (current_vessel_type_code %in% vessel_type_codes_rf1) {
                                               current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight * current_rf1
                                             } else {
                                               current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- NA_real_
@@ -1904,13 +1902,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                               }
                             },
-                            # process 1.4: set_count ----
+                            # 10 - Process 1.4: set_count ----
                             #' @description Process for postive sets count.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             set_count = function(global_output_path = NULL,
-                                                 output_format = "eu") {
-                              browser()
+                                                 output_format = "eu",
+                                                 referential_template = "observe") {
+                              # 10.1 - Arguments verification ----
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              codama::r_type_checking(r_object = referential_template,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("observe",
+                                                                        "avdth"))
+                              # 10.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -1925,7 +1939,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - Start process 1.4: set count.\n",
                                         sep = "")
                                   }
-                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
                                         " - Warning: full trip avoided because a least one trip inside is missing.\n",
@@ -1941,7 +1955,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                    file = "NUL")
-                                    current_activities$modification_l1(modification = "$path$positive_set_count <- NA")
+                                    current_activities$modification_l1(modification = "$path$positive_set_count <- NA_real_")
                                   } else {
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
@@ -1957,7 +1971,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                         for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                           current_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]
-                                          if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% c(0, 1, 2, 14)) {
+                                          if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% ifelse(test = referential_template == "observe",
+                                                                                                                                                               yes = c(6),
+                                                                                                                                                               no = c(0, 1, 2, 14))) {
                                             capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                            file = "NUL")
                                             if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
@@ -1965,19 +1981,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              file = "NUL")
                                               catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
                                                                                             FUN = function(l) {
-                                                                                              if (is.null(current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected)) {
-                                                                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                                    " - Error: argument \"catch_weight_category_corrected\" is null.\n",
-                                                                                                    "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
-                                                                                                    "\n[trip: ",
-                                                                                                    current_activity$.__enclos_env__$private$trip_id,
-                                                                                                    ", activity: ",
-                                                                                                    current_activity$.__enclos_env__$private$activity_id,
-                                                                                                    "]\n",
-                                                                                                    sep = "")
-                                                                                                stop()
+                                                                                              if (is.null(x = current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected)) {
+                                                                                                stop(format(Sys.time(),
+                                                                                                            "%Y-%m-%d %H:%M:%S"),
+                                                                                                     " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                                                                     "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                                                                     "\n[trip: ",
+                                                                                                     current_activity$.__enclos_env__$private$trip_id,
+                                                                                                     ", activity: ",
+                                                                                                     current_activity$.__enclos_env__$private$activity_id,
+                                                                                                     "]")
                                                                                               } else {
-                                                                                                current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_corrected
+                                                                                                current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected
                                                                                               }
                                                                                             }))
                                               if (catch_weight_category_corrected == 0) {
@@ -1989,13 +2004,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_activity$.__enclos_env__$private$positive_set_count <- 0
                                             }
                                           } else {
-                                            current_activity$.__enclos_env__$private$positive_set_count <- NA
+                                            current_activity$.__enclos_env__$private$positive_set_count <- NA_real_
                                           }
                                         }
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                  cat(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
                                       " - Process 1.4 successfull on item \"",
                                       names(private$data_selected)[full_trip_id],
                                       "\".\n",
@@ -2004,7 +2020,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "]\n",
                                       sep = "")
                                 }
-                                # outputs extraction ----
+                                # 10.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
@@ -2035,21 +2051,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              }
                                                                                                            })),
                                                                           "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                          "landing_date" = do.call("c",
-                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                          "year_landing_date" = sapply(do.call("c",
-                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                   trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                               trips_selected$extract_l1_element_value(element = "trip_end_date")),
                                                                                                        lubridate::year),
-                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_1_4_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
                                                                                "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
                                                                                "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
-                                                                               "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
-                                                                               "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")),
+                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                "set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "set_count")))
                                   outputs_process_1_4 <- outputs_process_1_4_activities %>%
                                     dplyr::left_join(outputs_process_1_4_trips,
@@ -2057,16 +2073,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(full_trip_id,
                                                     full_trip_name,
                                                     trip_id,
-                                                    landing_date,
-                                                    year_landing_date,
-                                                    vessel_id,
-                                                    vessel_type,
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code,
                                                     activity_id,
                                                     activity_latitude,
                                                     activity_longitude,
                                                     activity_date,
-                                                    ocean,
-                                                    school_type,
+                                                    ocean_code,
+                                                    school_type_code,
                                                     set_count)
                                   # extraction
                                   if (output_format == "us") {
@@ -2113,6 +2129,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             set_duration = function(set_duration_ref,
                                                     global_output_path = NULL,
                                                     output_format = "eu") {
+                              browser()
                               if (length(class(set_duration_ref)) != 1
                                   || ! inherits(x = set_duration_ref,
                                                 what = "data.frame")
