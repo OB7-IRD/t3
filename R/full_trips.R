@@ -7392,6 +7392,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                      sep = "_")
                                 }
                               }
+                              browser()
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
                               if (ci == TRUE){
@@ -7507,6 +7508,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
+                              browser()
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
                                                  || length(which(ci_type == "set")) > 0 )) {
@@ -7530,6 +7532,51 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             digits = 4)
                                 set_all <- set_all_final_ocean
                               }
+
+                              # add other species and mix tuna
+                              # compute average tuna proportion in sets by fishing mode
+                              catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
+                                dplyr::rename(sp_mix = sp)
+                              tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
+                              # unknown fishing mode
+                              if(any(catch_mix_tuna$fmod == 3)){
+                              tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
+                                dplyr::mutate(fmod = as.factor(3))
+                              tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
+
+                              }
+                              catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
+                                dplyr::mutate(wtot_lb_t3  = w_lb_t3,
+                                       catch_set_fit = fit_prop_t3_ST * wtot_lb_t3,
+                                       data_source = "tuna_mix",
+                                       mon =as.character(mon),
+                                       ocean = as.factor(ocean))
+
+                              catch_without_target_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_tuna %>%
+                                dplyr::mutate(data_source = "unchanged",
+                                              catch_set_fit  = w_lb_t3,
+                                              mon =as.character(mon),
+                                              ocean = as.factor(ocean))
+
+                              catch_with_other_species <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_other_species %>%
+                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(data_source = "unchanged",
+                                              catch_set_fit  = w_lb_t3,
+                                              mon =as.character(mon),
+                                              ocean = as.factor(ocean))
+
+                              catch_discard <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_discard  %>%
+                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(data_source = "discard",
+                                              catch_set_fit  = w_lb_t3,
+                                              mon = as.character(mon),
+                                              ocean = as.factor(ocean))
+                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna, catch_with_other_species, catch_discard)
+                              name_to_trash <- dplyr::setdiff(names(catch_all_other), names(set_all))
+
+                              set_all <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
+                                                                              !name_to_trash))
+                              # export dataset
                               write.table(x = set_all,
                                           file = file.path(table_directory,
                                                            paste("set_all_ocean_",
@@ -7587,6 +7634,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
                                 t1_all <- t1_all_final_ocean
                               }
+                              # add other species and mix tuna
+                              t1_all_other <- catch_all_other %>% mutate(status = ifelse(data_source == "discard","discard", "catch")) %>%
+                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t1_all_tmp <- bind_rows(t1_all, t1_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              # export dataset
                               write.table(x = t1_all,
                                           file = file.path(table_directory,
                                                            paste("t1_all_ocean_",
@@ -7645,6 +7700,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
                                 t1_fmod <- t1_fmod_final_ocean
                               }
+                              # add other species and mix tuna
+
+                              # export dataset
                               write.table(x = t1_fmod,
                                           file = file.path(table_directory,
                                                            paste("t1_fmod_ocean_",
@@ -7746,6 +7804,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                           digits = 4)
                                 t2_all <- t2_all_final_ocean
                               }
+                              # add other species and mix tuna
+
+                              # export dataset
                               write.table(x = t2_all,
                                           file = file.path(table_directory,
                                                            paste("t2_all_ocean_",
@@ -7808,6 +7869,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             digits = 4)
                                 t2_fmod <- t2_fmod_final_ocean
                               }
+                              # add other species and mix tuna
+
+                              # export dataset
                               write.table(x = t2_fmod,
                                           file = file.path(table_directory,
                                                            paste("t2_fmod_ocean_",
@@ -7825,7 +7889,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-                              # figure task 2 and proportion
+                              # figure task 2 and proportion ----
                               if (plot_predict == T) {
                                 sps <- t2
                                 sp::coordinates(object = sps) <- ~ lon + lat
