@@ -7392,7 +7392,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                      sep = "_")
                                 }
                               }
-                              browser()
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
                               if (ci == TRUE){
@@ -7503,11 +7502,50 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                               # bootstrap step 3 - compute confident intervals ----
-                              # Compute CI by set - export catch by set
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
+
+                              # function for rounding, rounding up and down to a specific base
+                              mtrunc <- function(x,base){
+                                base*trunc(x/base)
+                              }
+                              mroundup <- function(x, base)
+                              {
+                                base*(x%/%base + as.logical(x%%base))
+                              }
+                              # assign coordinates to cwp with a specific base
+                              latlon2cwp <- function(lat,
+                                                     lon,
+                                                     base) {
+                                quad <- ifelse(lon >= 0,
+                                               ifelse(lat >= 0,
+                                                      1,
+                                                      2),
+                                               ifelse(lat >= 0,
+                                                      4,
+                                                      3)) # define quadrant
+                                lat_tmp <- ifelse(quad %in% c(1,4),
+                                                  sprintf("%02d",
+                                                          abs(mtrunc(lat,
+                                                                     base))),
+                                                  sprintf("%02d",
+                                                          abs(mroundup(lat,
+                                                                       base))))
+                                lon_tmp <- ifelse(quad %in% c(1,2),
+                                                  sprintf("%03d",
+                                                          abs(mtrunc(lon,
+                                                                     base))),
+                                                  sprintf("%03d",
+                                                          abs(mroundup(lon,
+                                                                       base))))
+                                return(paste(quad,
+                                             lat_tmp,
+                                             lon_tmp,
+                                             sep=""))
+                              }
+                              # Compute CI by set - export catch by set
                               browser()
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
@@ -7532,7 +7570,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             digits = 4)
                                 set_all <- set_all_final_ocean
                               }
-
                               # add other species and mix tuna
                               # compute average tuna proportion in sets by fishing mode
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
@@ -7543,7 +7580,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
                                 dplyr::mutate(fmod = as.factor(3))
                               tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
-
                               }
                               catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
                                 dplyr::mutate(wtot_lb_t3  = w_lb_t3,
@@ -7571,11 +7607,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               catch_set_fit  = w_lb_t3,
                                               mon = as.character(mon),
                                               ocean = as.factor(ocean))
-                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna, catch_with_other_species, catch_discard)
+                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna, catch_with_other_species, catch_discard) %>%
+                                mutate(status = ifelse(data_source == "discard","discard", "catch"),
+                                       ci_inf = catch_set_fit,
+                                       ci_sup = catch_set_fit)
                               name_to_trash <- dplyr::setdiff(names(catch_all_other), names(set_all))
 
                               set_all <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
                                                                               !name_to_trash))
+                              # format output
+
                               # export dataset
                               write.table(x = set_all,
                                           file = file.path(table_directory,
@@ -7593,7 +7634,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: set catch estimations.\n",
                                   sep = "")
-                              # nominal catch by species (task 1)
+                              ### nominal catch by species (task 1) ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t1 catch estimations.\n",
                                   sep = "")
@@ -7629,17 +7670,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
                                                                                                           digits = 4)
-                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                       list(t1_all_final_ocean))
-                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
+                                # outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                #                                        list(t1_all_final_ocean))
+                                # names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
                                 t1_all <- t1_all_final_ocean
                               }
                               # add other species and mix tuna
-                              t1_all_other <- catch_all_other %>% mutate(status = ifelse(data_source == "discard","discard", "catch")) %>%
-                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit))
+                              t1_all_other <- catch_all_other %>%
+                                group_by(yr, sp, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
 
-                              t1_all_tmp <- bind_rows(t1_all, t1_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
-                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit))
+                              t1_all <- bind_rows(t1_all, t1_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                    ci_inf = sum(ci_inf),
+                                                                                    ci_sup = sum(ci_sup))
+
+                              # format output
 
                               # export dataset
                               write.table(x = t1_all,
@@ -7695,12 +7740,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
                                                                                                             digits = 4)
-                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                       list(t1_fmod_final_ocean))
-                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
+                                # outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                #                                        list(t1_fmod_final_ocean))
+                                # names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
                                 t1_fmod <- t1_fmod_final_ocean
                               }
                               # add other species and mix tuna
+                              t1_fmod_other <- catch_all_other %>%
+                                group_by(yr, sp, fmod, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t1_fmod <- bind_rows(t1_fmod, t1_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, fmod, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                    ci_inf = sum(ci_inf),
+                                                                                    ci_sup = sum(ci_sup))
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t1_fmod))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
 
                               # export dataset
                               write.table(x = t1_fmod,
@@ -7720,45 +7775,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t1-fmod catch estimations.\n",
                                   sep = "")
-                              ## catch effort (task2)
-                              # function for rounding, rounding up and down to a specific base
-                              mtrunc <- function(x,base){
-                                base*trunc(x/base)
-                              }
-                              mroundup <- function(x, base)
-                              {
-                                base*(x%/%base + as.logical(x%%base))
-                              }
-                              # assign coordinates to cwp with a specific base
-                              latlon2cwp <- function(lat,
-                                                     lon,
-                                                     base) {
-                                quad <- ifelse(lon >= 0,
-                                               ifelse(lat >= 0,
-                                                      1,
-                                                      2),
-                                               ifelse(lat >= 0,
-                                                      4,
-                                                      3)) # define quadrant
-                                lat_tmp <- ifelse(quad %in% c(1,4),
-                                                  sprintf("%02d",
-                                                          abs(mtrunc(lat,
-                                                                     base))),
-                                                  sprintf("%02d",
-                                                          abs(mroundup(lat,
-                                                                       base))))
-                                lon_tmp <- ifelse(quad %in% c(1,2),
-                                                  sprintf("%03d",
-                                                          abs(mtrunc(lon,
-                                                                     base))),
-                                                  sprintf("%03d",
-                                                          abs(mroundup(lon,
-                                                                       base))))
-                                return(paste(quad,
-                                             lat_tmp,
-                                             lon_tmp,
-                                             sep=""))
-                              }
+                              ### catch effort (task2) ----
                               # nominal catch by species and cwp (task 2 - catch Effort)
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -7805,7 +7822,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_all <- t2_all_final_ocean
                               }
                               # add other species and mix tuna
+                              t2_all_other <- catch_all_other %>% mutate(cwp = latlon2cwp(lat = lat,
+                                                                                          lon = lon,
+                                                                                          base = 1)) %>%
+                                group_by(yr, sp, mon, cwp, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
 
+                              t2_all <- bind_rows(t2_all, t2_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, mon, cwp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                        ci_inf = sum(ci_inf),
+                                                                                        ci_sup = sum(ci_sup))
                               # export dataset
                               write.table(x = t2_all,
                                           file = file.path(table_directory,
@@ -7870,7 +7895,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 t2_fmod <- t2_fmod_final_ocean
                               }
                               # add other species and mix tuna
+                              t2_fmod_other <- catch_all_other %>% mutate(cwp = latlon2cwp(lat = lat,
+                                                                                          lon = lon,
+                                                                                          base = 1)) %>%
+                                group_by(yr, sp, mon, cwp, fmod, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
 
+                              t2_fmod <- bind_rows(t2_fmod, t2_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, mon, cwp, fmod, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                        ci_inf = sum(ci_inf),
+                                                                                        ci_sup = sum(ci_sup))
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t2_fmod))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_effort_fishing_mode"
                               # export dataset
                               write.table(x = t2_fmod,
                                           file = file.path(table_directory,
