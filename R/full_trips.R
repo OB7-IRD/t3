@@ -7576,8 +7576,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # add other species and mix tuna
                               # compute average tuna proportion in sets by fishing mode
+                              # MIX with other tuna should have been corrected in process 1.3 (issue #98)
+                              # only sets with only MIX should remained here
+                              catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
+                                filter(sp != "MIX") %>%dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
+                                                                     data_source = "tuna_mix",
+                                                                     mon =as.character(mon),
+                                                                     ocean = as.factor(ocean),
+                                                                     wcat = NULL)
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                dplyr::rename(sp_mix = sp)
+                                filter(sp == "MIX") %>% dplyr::mutate(sp = NULL,
+                                                                      wcat = NULL)
                               tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
                               # unknown fishing mode
                               if(any(catch_mix_tuna$fmod == 3)){
@@ -7585,12 +7594,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::mutate(fmod = as.factor(3))
                               tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
+                              # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
                               catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
-                                dplyr::mutate(wtot_lb_t3  = w_lb_t3,
-                                       catch_set_fit = round(fit_prop_t3_ST * wtot_lb_t3, digits = 4),
+                                dplyr::mutate(
+                                       catch_set_fit = round(fit_prop_t3_ST * w_lb_t3, digits = 4),
                                        data_source = "tuna_mix",
                                        mon =as.character(mon),
-                                       ocean = as.factor(ocean))
+                                       ocean = as.factor(ocean),
+                                       fit_prop_t3_ST = NULL)
 
                               catch_without_target_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_tuna %>%
                                 dplyr::mutate(data_source = "unchanged",
@@ -7613,7 +7624,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               ocean = as.factor(ocean))
 
                               name_to_summarise <- c("catch_set_fit", "ci_inf","ci_sup", "w_lb_t3")
-                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna, catch_with_other_species, catch_discard) %>%
+                              # remove catch_with_mix_tuna when issue #98 will be corrected
+                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna, catch_with_other_species, catch_discard, catch_with_mix_tuna) %>%
                                 mutate(status = ifelse(data_source == "discard","discard", "catch"),
                                        ci_inf = catch_set_fit,
                                        ci_sup = catch_set_fit)%>%  group_by(across(-name_to_summarise)) %>%
@@ -7621,8 +7633,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           ci_inf = sum(ci_inf),
                                           ci_sup = sum(ci_sup),
                                           w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
-                              name_to_trash <- dplyr::setdiff(names(catch_all_other), names(set_all))
 
+                              name_to_trash <- dplyr::setdiff(names(catch_all_other), names(set_all))
                               set_all <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
                                                                               !name_to_trash)) %>%
                                 mutate(status = ifelse(data_source == "discard","discard", "catch"))
@@ -7661,7 +7673,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  'fsc_fishing_duration')
                               # selection, renaming and new column
                               test_dupli <- set_all %>% group_by(id_act, sp, status) %>% mutate(dupli = n())
-                              if(any(test_dupli$dupli)>1){
+                              if(any(test_dupli$dupli>1)){
                                 stop("Duplicated catch species data in activities, check Catch_set_detail")
                               }
                               set_all_output_long <- set_all %>% dplyr::select(name_select_columns_output) %>%
@@ -7674,12 +7686,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               catch_set_total_ST = wtot_lb_t3) %>%  ungroup()
                               set_all_output_long <- Add_multi_columns(df = set_all_output_long, name_list = name_list_ecd)
 
-                              name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "prop_LB_ST", "prop_fit_ST", "catch_set_total_ST")
-                              set_all_output_wide <- set_all_output_long %>% select(-name_to_remove_for_wide) %>%
-                                tidyr::pivot_wider(values_from = capture,
-                                                   names_from = c(species, status),
-                                                   values_fill = 0)
+                              # format and filtering for ecd
+                              name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "prop_LB_ST", "prop_fit_ST", "catch_set_total_ST","status")
+                              SHX_group <- c("SHX","FAL","OCS","SHK","BSH","SRX")
+                              FRZ_group <- c("FRZ", "FRI","BLT","RAV")
+                              species_ecd_filter <- c("ALB","BET","SKJ","YFT","DSC", "SHX","FRZ","YOU","KAW","LOT","BLF")
+                              set_all_output_long_tmp <- set_all_output_long %>% dplyr::mutate(RF3 = 1,
+                                                                                               flagexpert = 9,
+                                                                                               zet = 99,
+                                                                                               species = dplyr::case_when(status == "discard" ~ "DSC",
+                                                                                                                      species %in% SHX_group ~ "SHX",
+                                                                                                                      species %in% FRZ_group ~ "FRZ",
+                                                                                                                      !species %in% species_ecd_filter ~ "YOU",
+                                                                                                                      TRUE ~ species)) %>%
+                                dplyr::filter(species %in% species_ecd_filter) %>%
+                                dplyr::select(-name_to_remove_for_wide) %>%
+                                dplyr::group_by(across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
 
+                              set_all_output_wide <- set_all_output_long_tmp %>%
+                                tidyr::pivot_wider(values_from = capture,
+                                                   names_from = c(species),
+                                                   values_fill = 0)
                               # export dataset
                               write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
