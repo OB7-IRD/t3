@@ -7547,6 +7547,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              lon_tmp,
                                              sep=""))
                               }
+                              dd2dms_posit <- function(x) {
+                                degrees <- trunc(x)
+                                minutes <- abs((x - degrees)) * 60
+                                seconds <- (minutes - trunc(minutes)) * 60
+                                minutes <- trunc(minutes)
+                                return(data.frame(degrees = abs(degrees), minutes = abs(minutes), seconds = abs(seconds)))
+                              }
                               # Compute CI by set - export catch by set
                               browser()
                               set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
@@ -7665,7 +7672,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     "association1",	"association2","association3","association4","association5",
                                                     "code_assoc_reduit","code_assoc_groupe",
                                                     "temperature","direction_courant","vitesse_courant",
-                                                    "rf3","duree","capture")
+                                                    "rf3","duree",
+                                                    "capture_YFT",	"capture_SKJ",	"capture_BET",	"capture_ALB",
+                                                 "capture_LTA",	"capture_FRZ",	"capture_SHX",	"capture_DSC",
+                                                 "capture_YOU",	"capture_KAW",	"capture_LOT",	"capture_BLF",
+                                                 "capture_YFT_categ1_corrigee", "capture_YFT_categ2_corrigee","capture_YFT_categ3_corrigee",
+                                                 "capture_BET_categ1_corrigee","capture_BET_categ2_corrigee",	"capture_BET_categ3_corrigee")
 
                               name_list_m11 <- c('ocean','fishing_year', 'flag', 'gear', 'month', 'square',
                                                  'time_at_sea','fishing_time', 'fishing_time_std',
@@ -7677,21 +7689,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop("Duplicated catch species data in activities, check Catch_set_detail")
                               }
                               set_all_output_long <- set_all %>% dplyr::select(name_select_columns_output) %>%
-                                dplyr::mutate(annee_de_peche = lubridate::year(date_act),
-                                              mois_de_peche = lubridate::month(date_act),
-                                              jour_de_peche = lubridate::mday(date_act)) %>%
-                                dplyr::rename(species = sp, latitude_dec = lat, longitude_dec = lon, NUMBAT = vessel,
+                                dplyr::rename(species = sp, latitude_dec = lat, longitude_dec = lon, NUMBAT = vessel, code_assoc_groupe = fmod,
                                               capture = catch_set_fit, capture_ci_inf = ci_inf, capture_ci_sup = ci_sup,
                                               prop_LB_ST = fit_prop, prop_fit_ST = fit_prop_t3_ST,
                                               catch_set_total_ST = wtot_lb_t3) %>%  ungroup()
-                              set_all_output_long <- Add_multi_columns(df = set_all_output_long, name_list = name_list_ecd)
 
                               # format and filtering for ecd
                               name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "prop_LB_ST", "prop_fit_ST", "catch_set_total_ST","status")
                               SHX_group <- c("SHX","FAL","OCS","SHK","BSH","SRX")
                               FRZ_group <- c("FRZ", "FRI","BLT","RAV")
                               species_ecd_filter <- c("ALB","BET","SKJ","YFT","DSC", "SHX","FRZ","YOU","KAW","LOT","BLF")
-                              set_all_output_long_tmp <- set_all_output_long %>% dplyr::mutate(RF3 = 1,
+                              set_all_output_long_tmp <- set_all_output_long %>% dplyr::mutate(rf3 = 1,
                                                                                                flagexpert = 9,
                                                                                                zet = 99,
                                                                                                species = dplyr::case_when(status == "discard" ~ "DSC",
@@ -7706,7 +7714,40 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               set_all_output_wide <- set_all_output_long_tmp %>%
                                 tidyr::pivot_wider(values_from = capture,
                                                    names_from = c(species),
-                                                   values_fill = 0)
+                                                   names_prefix = "capture_",
+                                                   values_fill = 0) %>%
+                                mutate(cwp11 = latlon2cwp(lat = latitude_dec,
+                                                        lon = longitude_dec,
+                                                        base = 1),
+                                       cwp55 = latlon2cwp(lat = latitude_dec,
+                                                          lon = longitude_dec,
+                                                          base = 5),
+                                       quadrant = substr(cwp11,1,1),
+                                       annee_de_peche = lubridate::year(date_act),
+                                       mois_de_peche = lubridate::month(date_act),
+                                       jour_de_peche = lubridate::mday(date_act),
+                                       heure_de_peche = lubridate::hour(date_act),
+                                       trimestre = lubridate::quarter(date_act))
+
+                              latitude_tmp <-dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
+                                dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
+                              })) %>% dplyr::rename(latitude_deg = "degrees",
+                                                    latitude_min = "minutes")
+                              longitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
+                                dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
+                              })) %>% dplyr::rename(longitude_deg = "degrees",
+                                                    longitude_min = "minutes")
+                              set_all_output_wide <- dplyr::bind_cols(set_all_output_wide,
+                                                  dplyr::select(.data =latitude_tmp, -seconds),
+                                                  dplyr::select(.data =longitude_tmp, -seconds))
+
+                              set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:n())) %>% dplyr::ungroup()
+
+                              set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
+                                dplyr::relocate(id_act, name_list_ecd) %>%
+                                dplyr::mutate(date_act = NULL, latitude_dec = NULL,	longitude_dec = NULL) %>%
+                                replace(is.na(.), 0)
+
                               # export dataset
                               write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
