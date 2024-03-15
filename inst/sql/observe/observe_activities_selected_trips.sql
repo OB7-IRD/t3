@@ -8,6 +8,8 @@ select
 	,a.longitude::numeric as activity_longitude
 	,a.latitude::numeric as activity_latitude
 	,a.setcount::integer as set_count
+	,sss.code::integer as set_success_status_code
+	,sss.label1::text as set_success_status_label
 	,s.code::integer as school_type_code
 	,s.label1::text as school_type_label
 	,va.code::integer as activity_code
@@ -23,6 +25,7 @@ from
 	join common.ocean o on (t.ocean = o.topiaid)
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)
 	join ps_common.vesselactivity va on (a.vesselactivity = va.topiaid)
+	left join ps_logbook.setsuccessstatus sss on (a.setsuccessstatus = sss.topiaid)
 where
 	t.topiaid in (?trip_ids)
 ;

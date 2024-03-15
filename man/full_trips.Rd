@@ -278,7 +278,8 @@ Process for set duration calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
   set_duration_ref,
   global_output_path = NULL,
-  output_format = "eu"
+  output_format = "eu",
+  referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
 
@@ -290,6 +291,8 @@ Process for set duration calculation (in hours).
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }

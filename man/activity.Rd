@@ -28,6 +28,8 @@ Initialize function for R6 activities class.
   activity_latitude,
   activity_longitude,
   set_count,
+  set_success_status_code,
+  set_success_status_label,
   school_type_code,
   activity_code,
   activity_label,
@@ -53,6 +55,10 @@ Initialize function for R6 activities class.
 \item{\code{activity_longitude}}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
 
 \item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
+
+\item{\code{set_success_status_code}}{Object of class {\link[base]{integer}} expected. Code status of the set.}
+
+\item{\code{set_success_status_label}}{Object of class {\link[base]{character}} expected. Label status of the set.}
 
 \item{\code{school_type_code}}{Object of class {\link[base]{integer}} expected. School type identification.}
 
