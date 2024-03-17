@@ -7555,7 +7555,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 return(data.frame(degrees = abs(degrees), minutes = abs(minutes), seconds = abs(seconds)))
                               }
                               # Compute CI by set - export catch by set
-                              browser()
                               set_all<- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::mutate(ci_inf = NA,ci_sup = NA)
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
