@@ -7384,7 +7384,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if(any(boot_tmp_element$dupli >1)){
                                     stop("Duplicated species catch in a set")
                                   }
-                                  boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                  boot_tmp_element$catch_set_fit <- round(boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST,digits = 4)
                                   outputs_level3_process5[[2]] <- append(outputs_level3_process5[[2]],
                                                                          list(boot_tmp_element))
                                   names(outputs_level3_process5[[2]])[length(outputs_level3_process5[[2]])] <- paste("ocean",
@@ -7473,7 +7473,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              to = length(outputs_level3_process5_ocean[[1]])))){
                                       boot_tmp_element <- lapply(outputs_level3_process5_ocean, function(l) l[[element]])
                                       boot_tmp_element <- dplyr::bind_rows(boot_tmp_element)
-                                      boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp")],
+                                      boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%
+                                                                                                       c("w_lb_t3","prop_lb","tlb","year","resp")],
                                                                              key = "sp",
                                                                              value = fit_prop)
                                       boot_tmp_element_wide$S <- boot_tmp_element_wide$SKJ + boot_tmp_element_wide$YFT
@@ -7488,9 +7489,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              key = "sp",
                                                                              value = "fit_prop_t3_ST",
                                                                              "BET", "SKJ", "YFT")
-                                      boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element, by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip", "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
-
-                                      boot_tmp_element$catch_set_fit <- boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST
+                                      boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element,
+                                                                           by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip",
+                                                                                  "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
+                                      boot_tmp_element$catch_set_fit <- round(boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST, digits = 4)
                                       list_boot_ST_ocean[[element]] <- boot_tmp_element
                                     }
                                     outputs_level3_process5[[4]] <- append(outputs_level3_process5[[4]],
@@ -7502,12 +7504,59 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                               # bootstrap step 3 - compute confident intervals ----
-                              # Compute CI by set - export catch by set
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: set catch estimations.\n",
                                   sep = "")
-                              set_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST)
+
+                              # function for rounding, rounding up and down to a specific base
+                              mtrunc <- function(x,base){
+                                base*trunc(x/base)
+                              }
+                              mroundup <- function(x, base)
+                              {
+                                base*(x%/%base + as.logical(x%%base))
+                              }
+                              # assign coordinates to cwp with a specific base
+                              latlon2cwp <- function(lat,
+                                                     lon,
+                                                     base) {
+                                quad <- ifelse(lon >= 0,
+                                               ifelse(lat >= 0,
+                                                      1,
+                                                      2),
+                                               ifelse(lat >= 0,
+                                                      4,
+                                                      3)) # define quadrant
+                                lat_tmp <- ifelse(quad %in% c(1,4),
+                                                  sprintf("%02d",
+                                                          abs(mtrunc(lat,
+                                                                     base))),
+                                                  sprintf("%02d",
+                                                          abs(mroundup(lat,
+                                                                       base))))
+                                lon_tmp <- ifelse(quad %in% c(1,2),
+                                                  sprintf("%03d",
+                                                          abs(mtrunc(lon,
+                                                                     base))),
+                                                  sprintf("%03d",
+                                                          abs(mroundup(lon,
+                                                                       base))))
+                                return(paste(quad,
+                                             lat_tmp,
+                                             lon_tmp,
+                                             sep=""))
+                              }
+                              dd2dms_posit <- function(x) {
+                                degrees <- trunc(x)
+                                minutes <- abs((x - degrees)) * 60
+                                seconds <- (minutes - trunc(minutes)) * 60
+                                minutes <- trunc(minutes)
+                                return(data.frame(degrees = abs(degrees), minutes = abs(minutes), seconds = abs(seconds)))
+                              }
+                              # Compute CI by set - export catch by set
+                              set_all<- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
+                                dplyr::mutate(ci_inf = NA,ci_sup = NA)
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
                                                  || length(which(ci_type == "set")) > 0 )) {
                                 set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST,
@@ -7524,15 +7573,198 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                        boot_data = set_all_boot[[o]])
                                 }
                                 set_all_final_ocean <- do.call(rbind, set_all_final_ocean_list)
-                                set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
-                                                                                        "ci_inf",
-                                                                                        "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
-                                                                                                            digits = 4)
+                                # old rounding issue
+                                # set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit",
+                                #                                                         "ci_inf",
+                                #                                                         "ci_sup")] <- round(set_all_final_ocean[, names(set_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
+                                #                                                                             digits = 4)
                                 set_all <- set_all_final_ocean
                               }
-                              write.table(x = set_all,
+                              # add other species and mix tuna
+                              # compute average tuna proportion in sets by fishing mode
+                              # MIX with other tuna should have been corrected in process 1.3 (issue #98)
+                              # only sets with only MIX should remained here
+                              catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
+                                filter(sp != "MIX") %>%dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
+                                                                     data_source = "tuna_mix",
+                                                                     mon =as.character(mon),
+                                                                     ocean = as.factor(ocean),
+                                                                     wcat = NULL)
+                              catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
+                                filter(sp == "MIX") %>% dplyr::mutate(sp = NULL,
+                                                                      wcat = NULL)
+                              tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
+                              # unknown fishing mode
+                              if(any(catch_mix_tuna$fmod == 3)){
+                              tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
+                                dplyr::mutate(fmod = as.factor(3))
+                              tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
+                              }
+                              # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
+                              catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
+                                dplyr::mutate(
+                                       catch_set_fit = round(fit_prop_t3_ST * w_lb_t3, digits = 4),
+                                       data_source = "tuna_mix",
+                                       mon =as.character(mon),
+                                       ocean = as.factor(ocean),
+                                       fit_prop_t3_ST = NULL)
+
+                              catch_without_target_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_tuna %>%
+                                dplyr::mutate(data_source = "unchanged",
+                                              catch_set_fit  = round(w_lb_t3, digits = 4),
+                                              mon =as.character(mon),
+                                              ocean = as.factor(ocean))
+
+                              catch_with_other_species <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_other_species %>%
+                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(data_source = "unchanged",
+                                              catch_set_fit  = round(w_lb_t3, digits = 4),
+                                              mon =as.character(mon),
+                                              ocean = as.factor(ocean))
+
+                              catch_discard <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_discard  %>%
+                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(data_source = "discard",
+                                              catch_set_fit  = round(w_lb_t3, digits = 4),
+                                              mon = as.character(mon),
+                                              ocean = as.factor(ocean))
+
+                              name_to_summarise <- c("catch_set_fit", "ci_inf","ci_sup", "w_lb_t3")
+                              # remove catch_with_mix_tuna when issue #98 will be corrected
+                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna,
+                                                                  catch_with_other_species, catch_discard, catch_with_mix_tuna) %>%
+                                mutate(status = ifelse(data_source == "discard","discard", "catch"),
+                                       ci_inf = catch_set_fit,
+                                       ci_sup = catch_set_fit)%>%  group_by(across(-name_to_summarise)) %>%
+                                summarise(catch_set_fit = sum(catch_set_fit),
+                                          ci_inf = sum(ci_inf),
+                                          ci_sup = sum(ci_sup),
+                                          w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
+
+                              # recover the weight declaration standardized
+                              weigth_declaration_ST <- tmp <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
+                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = join_by("id_act", "sp"))
+
+                              name_to_trash <- c("code_act_type", "wcat","sp_code","status")
+                              set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
+                                                                                 !name_to_trash)) %>%
+                                tidyr::separate(id_act,into = c("text_tmp", "vessel_id_tmp", "numbers"),
+                                                sep = "#",
+                                                remove = FALSE) %>%
+                                dplyr::mutate(text_tmp = NULL,
+                                              vessel_id_tmp = NULL,
+                                              landing_date = lubridate::as_date(substr(numbers,1,8)),
+                                              status = ifelse(data_source == "discard","discard", "catch"),
+                                              fit_prop = NULL)
+
+                              if(!(nrow(set_all)+nrow(catch_all_other)) == nrow(set_all_output)){
+                                warning("Duplicated detected in 'Catch_set_detail'")
+                              }
+                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, status) %>% mutate(dupli = n())
+                              if(any(test_dupli$dupli>1)){
+                                warning("Duplicated catch species data in activities, check 'Catch_set_detail'")
+                              }
+
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(set_all_output))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_set_detail"
+                                # format output
+                              # function to create every new column from a list
+                              Add_multi_columns <- function(df, name_list){
+                                name_list_tmp <- dplyr::setdiff(name_list, names(df))
+                                for(i in name_list_tmp){
+                                  df <- dplyr::mutate(.data = df, !!i := NA)
+                                }
+                                return(df)
+                              }
+                              name_select_columns_output <- c("id_act","sp","date_act","landing_date","lat","lon",
+                                                              "fmod","ocean","vessel","status",
+                                                              "w_lb_t3","fit_prop_t3_ST","wtot_lb_t3",
+                                                              "catch_set_fit","ci_inf", "ci_sup")
+
+                              name_list_ecd <- c("ocean","port","pays","engin","NUMBAT","type_bateau","categorie",
+                                                    "annee_de_debarquement","mois_de_debarquement",	"jour_de_debarquement",
+                                                    "annee_de_peche","mois_de_peche","jour_de_peche","heure_de_peche",
+                                                    "quinzaine","trimestre","quadrant","latitude_deg","latitude_min","longitude_deg",	"longitude_min",
+                                                    "cwp11","cwp55","zet","zee","heures_mer","heures_peche","heures_peche_standard","nombre_de_calees",
+                                                    "nombre_de_calees_pos","nombre_de_calees_neg","numero_activite","c_opera","flagexpert",
+                                                    "association1",	"association2","association3","association4","association5",
+                                                    "code_assoc_reduit","code_assoc_groupe",
+                                                    "temperature","direction_courant","vitesse_courant",
+                                                    "rf3","duree",
+                                                    "capture_YFT",	"capture_SKJ",	"capture_BET",	"capture_ALB",
+                                                 "capture_LTA",	"capture_FRZ",	"capture_SHX",	"capture_DSC",
+                                                 "capture_YOU",	"capture_KAW",	"capture_LOT",	"capture_BLF",
+                                                 "capture_YFT_categ1_corrigee", "capture_YFT_categ2_corrigee","capture_YFT_categ3_corrigee",
+                                                 "capture_BET_categ1_corrigee","capture_BET_categ2_corrigee",	"capture_BET_categ3_corrigee")
+
+                              # selection, renaming and new column
+                              set_all_output_long <- set_all_output %>% dplyr::select(name_select_columns_output) %>%
+                                dplyr::rename(species = sp, latitude_dec = lat, longitude_dec = lon, NUMBAT = vessel, code_assoc_groupe = fmod,
+                                              capture = catch_set_fit, capture_ci_inf = ci_inf, capture_ci_sup = ci_sup,
+                                              catch_LB_ST = w_lb_t3, prop_fit_ST = fit_prop_t3_ST,
+                                              catch_set_total_ST = wtot_lb_t3) %>%  ungroup()
+
+                              # format and filtering for ecd
+                              name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "catch_LB_ST", "prop_fit_ST", "catch_set_total_ST","status")
+                              SHX_group <- c("SHX","FAL","OCS","SHK","BSH","SRX")
+                              FRZ_group <- c("FRZ", "FRI","BLT","RAV")
+                              species_ecd_filter <- c("ALB","BET","SKJ","YFT","DSC", "SHX","FRZ","YOU","KAW","LOT","BLF")
+                              set_all_output_long_tmp <- set_all_output_long %>% dplyr::mutate(rf3 = 1,
+                                                                                               flagexpert = 9,
+                                                                                               zet = 99,
+                                                                                               species = dplyr::case_when(status == "discard" ~ "DSC",
+                                                                                                                      species %in% SHX_group ~ "SHX",
+                                                                                                                      species %in% FRZ_group ~ "FRZ",
+                                                                                                                      !species %in% species_ecd_filter ~ "YOU",
+                                                                                                                      TRUE ~ species)) %>%
+                                dplyr::filter(species %in% species_ecd_filter) %>%
+                                dplyr::select(-name_to_remove_for_wide) %>%
+                                dplyr::group_by(across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
+
+                              set_all_output_wide <- set_all_output_long_tmp %>%
+                                tidyr::pivot_wider(values_from = capture,
+                                                   names_from = c(species),
+                                                   names_prefix = "capture_",
+                                                   values_fill = 0) %>%
+                                mutate(cwp11 = latlon2cwp(lat = latitude_dec,
+                                                          lon = longitude_dec,
+                                                          base = 1),
+                                       cwp55 = latlon2cwp(lat = latitude_dec,
+                                                          lon = longitude_dec,
+                                                          base = 5),
+                                       quadrant = substr(cwp11,1,1),
+                                       annee_de_peche = lubridate::year(date_act),
+                                       mois_de_peche = lubridate::month(date_act),
+                                       jour_de_peche = lubridate::mday(date_act),
+                                       heure_de_peche = lubridate::hour(date_act),
+                                       trimestre = lubridate::quarter(date_act),
+                                       annee_de_debarquement = lubridate::year(landing_date),
+                                       mois_de_debarquement = lubridate::month(landing_date),
+                                       jour_de_debarquement = lubridate::mday(landing_date))
+
+                              latitude_tmp <-dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
+                                dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
+                              })) %>% dplyr::rename(latitude_deg = "degrees",
+                                                    latitude_min = "minutes")
+                              longitude_tmp <- dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
+                                dd2dms_posit(set_all_output_wide[x,]$longitude_dec)
+                              })) %>% dplyr::rename(longitude_deg = "degrees",
+                                                    longitude_min = "minutes")
+                              set_all_output_wide <- dplyr::bind_cols(set_all_output_wide,
+                                                  dplyr::select(.data =latitude_tmp, -seconds),
+                                                  dplyr::select(.data =longitude_tmp, -seconds))
+
+                              set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:n())) %>% dplyr::ungroup()
+
+                              set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
+                                dplyr::relocate(id_act, name_list_ecd) %>%
+                                dplyr::mutate(date_act = NULL, latitude_dec = NULL,	longitude_dec = NULL) %>%
+                                replace(is.na(.), 0)
+                              # export dataset
+                              write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
-                                                           paste("set_all_ocean_",
+                                                           paste("Catch_set_ocean_",
                                                                  paste(unique(set_all$ocean),
                                                                        collapse = "-"),
                                                                  "_",
@@ -7543,10 +7775,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           row.names = FALSE,
                                           sep = outputs_sep,
                                           dec = outputs_dec)
+
+                              write.table(x = set_all_output_wide,
+                                          file = file.path(table_directory,
+                                                           paste("ecd_ocean_",
+                                                                 paste(unique(set_all$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(set_all$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: set catch estimations.\n",
                                   sep = "")
-                              # nominal catch by species (task 1)
+                              ### nominal catch by species (task 1) ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t1 catch estimations.\n",
                                   sep = "")
@@ -7582,11 +7829,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       "ci_inf",
                                                                                       "ci_sup")] <- round(t1_all_final_ocean[, names(t1_all_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
                                                                                                           digits = 4)
-                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                       list(t1_all_final_ocean))
-                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
+                                # outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                #                                        list(t1_all_final_ocean))
+                                # names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_species"
                                 t1_all <- t1_all_final_ocean
                               }
+                              # add other species and mix tuna
+                              t1_all_other <- catch_all_other %>%
+                                group_by(yr, sp, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t1_all <- bind_rows(t1_all, t1_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                    ci_inf = sum(ci_inf),
+                                                                                    ci_sup = sum(ci_sup))
+
+                              # format output
+
+                              # export dataset
                               write.table(x = t1_all,
                                           file = file.path(table_directory,
                                                            paste("t1_all_ocean_",
@@ -7640,11 +7899,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         "ci_inf",
                                                                                         "ci_sup")] <- round(t1_fmod_final_ocean[, names(t1_fmod_final_ocean) %in% c("catch_set_fit","ci_inf","ci_sup")],
                                                                                                             digits = 4)
-                                outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
-                                                                       list(t1_fmod_final_ocean))
-                                names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
+                                # outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                #                                        list(t1_fmod_final_ocean))
+                                # names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
                                 t1_fmod <- t1_fmod_final_ocean
                               }
+                              # add other species and mix tuna
+                              t1_fmod_other <- catch_all_other %>%
+                                group_by(yr, sp, fmod, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t1_fmod <- bind_rows(t1_fmod, t1_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, fmod, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                    ci_inf = sum(ci_inf),
+                                                                                    ci_sup = sum(ci_sup))
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t1_fmod))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
+
+                              # export dataset
                               write.table(x = t1_fmod,
                                           file = file.path(table_directory,
                                                            paste("t1_fmod_ocean_",
@@ -7662,45 +7934,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t1-fmod catch estimations.\n",
                                   sep = "")
-                              ## catch effort (task2)
-                              # function for rounding, rounding up and down to a specific base
-                              mtrunc <- function(x,base){
-                                base*trunc(x/base)
-                              }
-                              mroundup <- function(x, base)
-                              {
-                                base*(x%/%base + as.logical(x%%base))
-                              }
-                              # assign coordinates to cwp with a specific base
-                              latlon2cwp <- function(lat,
-                                                     lon,
-                                                     base) {
-                                quad <- ifelse(lon >= 0,
-                                               ifelse(lat >= 0,
-                                                      1,
-                                                      2),
-                                               ifelse(lat >= 0,
-                                                      4,
-                                                      3)) # define quadrant
-                                lat_tmp <- ifelse(quad %in% c(1,4),
-                                                  sprintf("%02d",
-                                                          abs(mtrunc(lat,
-                                                                     base))),
-                                                  sprintf("%02d",
-                                                          abs(mroundup(lat,
-                                                                       base))))
-                                lon_tmp <- ifelse(quad %in% c(1,2),
-                                                  sprintf("%03d",
-                                                          abs(mtrunc(lon,
-                                                                     base))),
-                                                  sprintf("%03d",
-                                                          abs(mroundup(lon,
-                                                                       base))))
-                                return(paste(quad,
-                                             lat_tmp,
-                                             lon_tmp,
-                                             sep=""))
-                              }
+                              ### catch effort (task2) ----
                               # nominal catch by species and cwp (task 2 - catch Effort)
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -7746,6 +7980,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                           digits = 4)
                                 t2_all <- t2_all_final_ocean
                               }
+                              # add other species and mix tuna
+                              t2_all_other <- catch_all_other %>% mutate(cwp = latlon2cwp(lat = lat,
+                                                                                          lon = lon,
+                                                                                          base = 1)) %>%
+                                group_by(yr, sp, mon, cwp, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t2_all <- bind_rows(t2_all, t2_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, mon, cwp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                        ci_inf = sum(ci_inf),
+                                                                                        ci_sup = sum(ci_sup))
+                              # export dataset
                               write.table(x = t2_all,
                                           file = file.path(table_directory,
                                                            paste("t2_all_ocean_",
@@ -7763,7 +8008,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2 catch estimations.\n",
                                   sep = "")
-                              # nominal catch by species and cwp and fishing mode (task 2 by fishing mode)
+                              # nominal catch by species and cwp and fishing mode (task 2 by fishing mode) ----
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: t2-fmod catch estimations.\n",
@@ -7808,6 +8053,69 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                             digits = 4)
                                 t2_fmod <- t2_fmod_final_ocean
                               }
+                              # add other species and mix tuna
+                              t2_fmod_other <- catch_all_other %>% mutate(cwp = latlon2cwp(lat = lat,
+                                                                                          lon = lon,
+                                                                                          base = 1)) %>%
+                                group_by(yr, sp, mon, cwp, fmod, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
+
+                              t2_fmod <- bind_rows(t2_fmod, t2_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                group_by(yr, sp, mon, cwp, fmod, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
+                                                                                        catch_ci_inf = sum(ci_inf),
+                                                                                        catch_ci_sup = sum(ci_sup))
+                              outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
+                                                                     list(t2_fmod))
+                              names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_effort_fishing_mode"
+
+                              # format m11 file
+                              name_list_m11 <- c('ocean','fishing_year', 'flag', 'gear', 'month', 'square',
+                                                 'time_at_sea','fishing_time', 'fishing_time_std',
+                                                 'obj_fishing_duration',"obj_yft", "obj_skj",	"obj_bet",	"obj_alb",	"obj_lta_kaw",
+                                                 "obj_frz", "obj_blf_lot",
+                                                 'fsc_fishing_duration', "fsc_yft",	"fsc_skj",	"fsc_bet",	"fsc_alb",	"fsc_lta_kaw",
+                                                 "fsc_frz",	"fsc_blf_lot")
+
+                              FRZ_group <- c("FRZ", "FRI","BLT","RAV")
+                              LTA_KAW_group <- c("LTA","KAW")
+                              BLT_LOT_group <- c("BLF","LOT")
+                              species_m11_filter <- c("ALB","BET","SKJ","YFT","FRZ","LTA","BLF")
+
+                              name_to_remove_for_wide <- c("catch_ci_inf", "catch_ci_sup", "status")
+
+                              t2_fmod_output_long <- t2_fmod %>% filter(status == "catch") %>%
+                                dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)]) %>%
+                                ungroup() %>%
+                                mutate(fmod = ifelse((fmod == 3 & max_sp == "SKJ"), 1, fmod),
+                                       fmod = dplyr::case_when(fmod == 1 ~ "obj",
+                                                               fmod == 2 ~ "fsc",
+                                                               TRUE ~ "unk"),
+                                       sp = dplyr::case_when(sp %in% FRZ_group ~ "FRZ",
+                                                             sp %in% LTA_KAW_group ~ "LTA",
+                                                             sp %in% BLT_LOT_group ~ "BLT",
+                                                             !sp %in% species_m11_filter ~ "OTH",
+                                                             TRUE ~ sp)) %>%
+                                dplyr::filter(sp %in% species_m11_filter) %>%
+                                dplyr::select(-name_to_remove_for_wide) %>%
+                                dplyr::group_by(across(-catch_set_fit)) %>%  dplyr::summarise(catch_set_fit = sum(catch_set_fit)) %>%
+                                ungroup() %>%
+                                mutate(sp = dplyr::recode(sp, ALB = "alb", BET = "bet", SKJ = "skj", YFT = "yft",
+                                                          FRZ = "frz", LTA = "lta_kaw", BLT = "blt_lot"))
+
+                              t2_fmod_output_wide <- t2_fmod_output_long %>%
+                                tidyr::pivot_wider(values_from = catch_set_fit,
+                                                   names_from = c(fmod,sp),
+                                                   values_fill = 0) %>%
+                                rename(square = cwp,
+                                       fishing_year = yr,
+                                       month = mon)
+
+                              t2_fmod_output_wide <- Add_multi_columns(df = t2_fmod_output_wide, name_list = name_list_m11) %>%
+                                dplyr::relocate(name_list_m11) %>%
+                                dplyr::mutate(max_sp = NULL) %>%
+                                replace(is.na(.), 0)
+
+
+                              # export dataset
                               write.table(x = t2_fmod,
                                           file = file.path(table_directory,
                                                            paste("t2_fmod_ocean_",
@@ -7821,11 +8129,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           row.names = FALSE,
                                           sep = outputs_sep,
                                           dec = outputs_dec)
+
+                              write.table(x = t2_fmod_output_wide,
+                                          file = file.path(table_directory,
+                                                           paste("m11_ocean_",
+                                                                 paste(unique(t2_fmod$ocean),
+                                                                       collapse = "-"),
+                                                                 "_",
+                                                                 paste(unique(t2_fmod$yr),
+                                                                       collapse = "-"),
+                                                                 ".csv",
+                                                                 sep = "")),
+                                          row.names = FALSE,
+                                          sep = outputs_sep,
+                                          dec = outputs_dec)
+
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.5: t2-fmod catch estimations.\n",
                                   sep = "")
-                              # figure task 2 and proportion
+                              # figure task 2 and proportion ----
                               if (plot_predict == T) {
                                 sps <- t2
                                 sp::coordinates(object = sps) <- ~ lon + lat
