@@ -1041,9 +1041,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                           }
                                                                                         } else {
                                                                                           if (elementarycatches == TRUE) {
-                                                                                            current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
-                                                                                                                                                               landing_weight = NA_real_)
-
+                                                                                            current_total_landings_catches_species_activities <- current_total_catches_species_activities %>%
+                                                                                              dplyr::left_join(current_activities_latitude_longitude,
+                                                                                                               by = "activity_id") %>%
+                                                                                              dplyr::relocate(activity_latitude,
+                                                                                                              activity_longitude,
+                                                                                                              .after = activity_id) %>%
+                                                                                              dplyr::mutate(landing_weight = NA_real_) %>%
+                                                                                              dplyr::relocate(specie,
+                                                                                                              landing_weight,
+                                                                                                              .before = trip_id)
                                                                                           } else {
                                                                                             current_total_landings_catches_species_activities <- NULL
                                                                                           }
@@ -1308,8 +1315,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                }
                                                                              } else {
                                                                                if (elementarycatches == TRUE) {
-                                                                                 current_total_landings_catches_species_activities <- dplyr::mutate(.data = current_total_catches_species_activities,
-                                                                                                                                                    landing_weight = NA)
+                                                                                 current_total_landings_catches_species_activities <- current_total_catches_species_activities %>%
+                                                                                   dplyr::left_join(current_activities_latitude_longitude,
+                                                                                                    by = "activity_id") %>%
+                                                                                   dplyr::relocate(activity_latitude,
+                                                                                                   activity_longitude,
+                                                                                                   .after = activity_id) %>%
+                                                                                   dplyr::mutate(landing_weight = NA_real_) %>%
+                                                                                   dplyr::relocate(specie,
+                                                                                                   landing_weight,
+                                                                                                   .before = trip_id)
                                                                                } else {
                                                                                  current_total_landings_catches_species_activities <- NULL
                                                                                }
@@ -3798,10 +3813,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(elementarysamples_selected <- object_r6(class_name = "elementarysamples"),
                                                  file = "NUL")
-                                  capture.output(elementarysamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "elementarysample"))),
-                                                                                                         FUN = function(elementarysample_id) {
-                                                                                                           wells_selected$extract_l1_element_value(element = "elementarysample")[[elementarysample_id]]$extract()
-                                                                                                         }))),
+                                  elementarysamples_selected_not_na <- wells_selected$extract_l1_element_value(element = "elementarysample")
+                                  elementarysamples_selected_not_na <- elementarysamples_selected_not_na[! is.na(x = elementarysamples_selected_not_na)]
+                                  elementarysamples_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = elementarysamples_selected_not_na)),
+                                                          FUN = function(elementarysamples_selected_id) {
+                                                            elementarysamples_selected_not_na[[elementarysamples_selected_id]]$extract()
+                                                          }))
+                                  capture.output(elementarysamples_selected$add(new_item = elementarysamples_selected_not_na),
                                                  file = "NUL")
                                   outputs_process_2_3_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -4218,10 +4236,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
                                                    file = "NUL")
-                                    capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
-                                                                                                  FUN = function(wellsets_id) {
-                                                                                                    wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
-                                                                                                  }))),
+                                    wellsets_selected_not_na <- wells_selected$extract_l1_element_value(element = "wellsets")
+                                    wellsets_selected_not_na <- wellsets_selected_not_na[! is.na(x = wellsets_selected_not_na)]
+                                    wellsets_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = wellsets_selected_not_na)),
+                                                                                          FUN = function(wellsets_selected_id) {
+                                                                                            wellsets_selected_not_na[[wellsets_selected_id]]$extract()
+                                                                                          }))
+                                    capture.output(wellsets_selected$add(new_item = wellsets_selected_not_na),
                                                    file = "NUL")
                                     outputs_process_2_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                            FUN = function(full_trip_id) {
@@ -4453,10 +4474,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamples_selected <- object_r6(class_name = "standardisedsamples"),
                                                  file = "NUL")
-                                  capture.output(standardisedsamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsample"))),
-                                                                                                           FUN = function(standardisedsample_id) {
-                                                                                                             wells_selected$extract_l1_element_value(element = "standardisedsample")[[standardisedsample_id]]$extract()
-                                                                                                           }))),
+                                  standardisedsamples_selected_not_na <- wells_selected$extract_l1_element_value(element = "standardisedsample")
+                                  standardisedsamples_selected_not_na <- standardisedsamples_selected_not_na[! is.na(x = standardisedsamples_selected_not_na)]
+                                  standardisedsamples_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = standardisedsamples_selected_not_na)),
+                                                                               FUN = function(standardisedsamples_selected_id) {
+                                                                                 standardisedsamples_selected_not_na[[standardisedsamples_selected_id]]$extract()
+                                                                               }))
+                                  capture.output(standardisedsamples_selected$add(new_item = standardisedsamples_selected_not_na),
                                                  file = "NUL")
                                   outputs_process_2_5_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -4721,10 +4745,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamplesets_selected <- object_r6(class_name = "standardisedsamplesets"),
                                                  file = "NUL")
-                                  capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
-                                                                                                              FUN = function(standardisedsampleset_id) {
-                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
-                                                                                                              }))),
+
+                                  standardisedsamplesets_selected_not_na <- wells_selected$extract_l1_element_value(element = "standardisedsampleset")
+                                  standardisedsamplesets_selected_not_na <- standardisedsamplesets_selected_not_na[! is.na(x = standardisedsamplesets_selected_not_na)]
+                                  standardisedsamplesets_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = standardisedsamplesets_selected_not_na)),
+                                                                                          FUN = function(standardisedsamplesets_selected_id) {
+                                                                                            standardisedsamplesets_selected_not_na[[standardisedsamplesets_selected_id]]$extract()
+                                                                                          }))
+                                  capture.output(standardisedsamplesets_selected$add(new_item = standardisedsamplesets_selected_not_na),
                                                  file = "NUL")
                                   outputs_process_2_6_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -5026,6 +5054,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "]\n",
                                       sep = "")
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
                                   capture.output(trips_selected <- object_r6(class_name = "trips"),
@@ -5038,10 +5068,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
                                                  file = "NUL")
-                                  capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
-                                                                                                FUN = function(wellset_id) {
-                                                                                                  wells_selected$extract_l1_element_value(element = "wellsets")[[wellset_id]]$extract()
-                                                                                                }))),
+                                  wellsets_selected_not_na <- wells_selected$extract_l1_element_value(element = "wellsets")
+                                  wellsets_selected_not_na <- wellsets_selected_not_na[! is.na(x = wellsets_selected_not_na)]
+                                  wellsets_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = wellsets_selected_not_na)),
+                                                                                             FUN = function(wellsets_selected_id) {
+                                                                                               wellsets_selected_not_na[[wellsets_selected_id]]$extract()
+                                                                                             }))
+                                  capture.output(wellsets_selected$add(new_item = wellsets_selected_not_na),
                                                  file = "NUL")
                                   outputs_process_2_7_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -5283,6 +5316,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "]\n",
                                       sep = "")
                                 }
+                                # outputs extraction ----
+                                # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
                                   capture.output(trips_selected <- object_r6(class_name = "trips"),
@@ -5295,10 +5330,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamplesets_selected <- object_r6(class_name = "standardisedsamplesets"),
                                                  file = "NUL")
-                                  capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
-                                                                                                              FUN = function(standardisedsampleset_id) {
-                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
-                                                                                                              }))),
+                                  standardisedsamplesets_selected_not_na <- wells_selected$extract_l1_element_value(element = "standardisedsampleset")
+                                  standardisedsamplesets_selected_not_na <- standardisedsamplesets_selected_not_na[! is.na(x = standardisedsamplesets_selected_not_na)]
+                                  standardisedsamplesets_selected_not_na = unlist(x = lapply(X = seq_len(length.out = length(x = standardisedsamplesets_selected_not_na)),
+                                                                               FUN = function(standardisedsamplesets_selected_id) {
+                                                                                 standardisedsamplesets_selected_not_na[[standardisedsamplesets_selected_id]]$extract()
+                                                                               }))
+                                  capture.output(standardisedsamplesets_selected$add(new_item = standardisedsamplesets_selected_not_na),
                                                  file = "NUL")
                                   outputs_process_2_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -6067,28 +6105,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       sub$vessel <- factor(sub$vessel)
                                       sub <- droplevels(sub)
 
-                                    if(sp == "BET"){
-                                      data4mod_ocean_specie <- data4mod_ocean[data4mod_ocean$sp == sp, ]
-                                      output_level3_process2 <- append(output_level3_process2,
-                                                                       list(list(data = sub)))
-                                      names(output_level3_process2)[length(output_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
-                                    } else {
-                                      # models ----
-                                      # model with spatio temporal variable only
-                                      set.seed(seed_number)
-                                      model_rf_simple <- ranger::ranger(resp ~ lon + lat + year + mon,
-                                                                        data = sub,
-                                                                        num.trees = num.trees,
-                                                                        mtry = mtry,
-                                                                        min.node.size = min.node.size,
-                                                                        splitrule = "variance",
-                                                                        importance = "impurity",
-                                                                        replace = TRUE,
-                                                                        quantreg = FALSE,
-                                                                        keep.inbag = FALSE)
-                                      # model with no vessel id
-                                      set.seed(seed_number)
-                                      model_rf_wtvessel <- ranger::ranger(resp ~ tlb + lon + lat + year + mon,
+                                      if(sp == "BET"){
+                                        data4mod_ocean_specie <- data4mod_ocean[data4mod_ocean$sp == sp, ]
+                                        output_level3_process2 <- append(output_level3_process2,
+                                                                         list(list(data = sub)))
+                                        names(output_level3_process2)[length(output_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
+                                      } else {
+                                        # models ----
+                                        # model with spatio temporal variable only
+                                        set.seed(seed_number)
+                                        model_rf_simple <- ranger::ranger(resp ~ lon + lat + year + mon,
                                                                           data = sub,
                                                                           num.trees = num.trees,
                                                                           mtry = mtry,
@@ -6098,26 +6124,38 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           replace = TRUE,
                                                                           quantreg = FALSE,
                                                                           keep.inbag = FALSE)
-                                      # full model
-                                      set.seed(seed_number)
-                                      model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + year + mon + vessel,
-                                                                      data = sub,
-                                                                      num.trees = num.trees,
-                                                                      mtry = mtry,
-                                                                      min.node.size = min.node.size,
-                                                                      splitrule = "variance",
-                                                                      importance = "impurity",
-                                                                      replace = TRUE,
-                                                                      quantreg = FALSE,
-                                                                      keep.inbag= FALSE)
+                                        # model with no vessel id
+                                        set.seed(seed_number)
+                                        model_rf_wtvessel <- ranger::ranger(resp ~ tlb + lon + lat + year + mon,
+                                                                            data = sub,
+                                                                            num.trees = num.trees,
+                                                                            mtry = mtry,
+                                                                            min.node.size = min.node.size,
+                                                                            splitrule = "variance",
+                                                                            importance = "impurity",
+                                                                            replace = TRUE,
+                                                                            quantreg = FALSE,
+                                                                            keep.inbag = FALSE)
+                                        # full model
+                                        set.seed(seed_number)
+                                        model_rf_full <- ranger::ranger(resp ~ tlb + lon + lat + year + mon + vessel,
+                                                                        data = sub,
+                                                                        num.trees = num.trees,
+                                                                        mtry = mtry,
+                                                                        min.node.size = min.node.size,
+                                                                        splitrule = "variance",
+                                                                        importance = "impurity",
+                                                                        replace = TRUE,
+                                                                        quantreg = FALSE,
+                                                                        keep.inbag= FALSE)
 
-                                      output_level3_process2 <- append(output_level3_process2,
-                                                                       list(list(data = sub,
-                                                                                 model_rf_simple = model_rf_simple,
-                                                                                 model_rf_full = model_rf_full,
-                                                                                 model_rf_wtvessel = model_rf_wtvessel)))
-                                      names(output_level3_process2)[length(output_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
-                                    }
+                                        output_level3_process2 <- append(output_level3_process2,
+                                                                         list(list(data = sub,
+                                                                                   model_rf_simple = model_rf_simple,
+                                                                                   model_rf_full = model_rf_full,
+                                                                                   model_rf_wtvessel = model_rf_wtvessel)))
+                                        names(output_level3_process2)[length(output_level3_process2)] <- paste(ocean, sp, fmod, sep = "_")
+                                      }
                                       cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                           " - Process 3.2 successfull for ocean \"",
                                           ocean,
@@ -6521,173 +6559,270 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                                 ## model checking ----
                                 if(specie != "BET"){
-                                # compute model residuals
-                                resrf <- current_model_data$resp - ranger::predictions(current_model_output[[3]])
-                                current_model_data$res <- resrf
-                                current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_output[[3]]))
-                                current_model_data$fit<-ranger::predictions(current_model_output[[3]])
-                                # method
-                                # comparison of the model fitted value
-                                # look at variable importance in the model
-                                variables_importance <- as.data.frame(ranger::importance(current_model_output[[3]]))
-                                names(variables_importance) <- "value"
-                                variables_importance$var_name <- rownames(variables_importance)
+                                  # compute model residuals
+                                  resrf <- current_model_data$resp - ranger::predictions(current_model_output[[3]])
+                                  current_model_data$res <- resrf
+                                  current_model_data$res_ST <- resrf / sd(ranger::predictions(current_model_output[[3]]))
+                                  current_model_data$fit<-ranger::predictions(current_model_output[[3]])
+                                  # method
+                                  # comparison of the model fitted value
+                                  # look at variable importance in the model
+                                  variables_importance <- as.data.frame(ranger::importance(current_model_output[[3]]))
+                                  names(variables_importance) <- "value"
+                                  variables_importance$var_name <- rownames(variables_importance)
 
-                                variables_importance <- variables_importance[order(variables_importance$value,
-                                                                                   decreasing = FALSE), ]
-                                variables_importance_plot <- ggplot2::ggplot(data = variables_importance,
-                                                                             ggplot2::aes(y = var_name,
-                                                                                          x = value)) +
-                                  ggplot2::geom_point() +
-                                  ggplot2::geom_segment(data = variables_importance,
-                                                        ggplot2::aes(x = 0,
-                                                                     xend = value,
-                                                                     y = var_name,
-                                                                     yend = var_name)) +
-                                  ggplot2::scale_y_discrete(name = "Variables",
-                                                            limits= variables_importance$var_name) +
-                                  ggplot2::xlab("Importance (impurity)")
-                                ggplot2::ggsave(plot = variables_importance_plot,
-                                                file = file.path(figure_directory,
-                                                                 paste("variables_importance_",
+                                  variables_importance <- variables_importance[order(variables_importance$value,
+                                                                                     decreasing = FALSE), ]
+                                  variables_importance_plot <- ggplot2::ggplot(data = variables_importance,
+                                                                               ggplot2::aes(y = var_name,
+                                                                                            x = value)) +
+                                    ggplot2::geom_point() +
+                                    ggplot2::geom_segment(data = variables_importance,
+                                                          ggplot2::aes(x = 0,
+                                                                       xend = value,
+                                                                       y = var_name,
+                                                                       yend = var_name)) +
+                                    ggplot2::scale_y_discrete(name = "Variables",
+                                                              limits= variables_importance$var_name) +
+                                    ggplot2::xlab("Importance (impurity)")
+                                  ggplot2::ggsave(plot = variables_importance_plot,
+                                                  file = file.path(figure_directory,
+                                                                   paste("variables_importance_",
+                                                                         ocean,
+                                                                         "_",
+                                                                         specie,
+                                                                         "_",
+                                                                         fishing_mode,
+                                                                         ".jpeg",
+                                                                         sep = "")),
+                                                  width = 8,
+                                                  height = 8,
+                                                  units = c("cm"),
+                                                  dpi = 300,
+                                                  pointsize = 10)
+                                  current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                                list("variables_importance" = variables_importance))
+                                  # test for spatial and temporal correlation on residuals
+                                  if(avdth_patch_coord == TRUE){
+                                    current_model_data_map <- current_model_data
+                                    sp::coordinates(current_model_data_map) <- ~ lon+lat
+                                    sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
+                                    current_model_data_map <- sp::spTransform(current_model_data_map,
+                                                                              sp::CRS("+init=epsg:3395"))
+                                    # variogram
+                                    variogram_resp_data <- gstat::variogram(object = resp ~ 1,
+                                                                            data = current_model_data_map,
+                                                                            cutoff = 4000000,
+                                                                            width = 100000)
+                                    variogram_resp_data$label <- "Observed data"
+                                    variogram_res_data <- gstat::variogram(object = res ~ 1,
+                                                                           data = current_model_data_map,
+                                                                           cutoff = 4000000,
+                                                                           width = 100000)
+                                    variogram_res_data$label <- "Residuals"
+                                    variogram_data <- dplyr::bind_rows(variogram_resp_data,
+                                                                       variogram_res_data)
+                                    variogram <- ggplot2::ggplot(data = variogram_data,
+                                                                 ggplot2::aes(x = dist,
+                                                                              y = gamma,
+                                                                              group = label,
+                                                                              color = label)) +
+                                      ggplot2::scale_color_manual(values = c("black", "red")) +
+                                      ggplot2::geom_line() +
+                                      ggplot2::theme(legend.position = c(0,1),
+                                                     legend.justification = c(0,1),
+                                                     legend.direction="horizontal",
+                                                     legend.title = ggplot2::element_blank()) +
+                                      ggplot2::xlab("Distance (m)") +
+                                      ggplot2::ylab("Semivariance")
+                                    # moran index on residual
+                                    mil <- vector("list",
+                                                  length = 10)
+                                    mil2 <- vector("list",
+                                                   length = 10)
+                                    for (c in seq_len(10)){
+                                      nb <- spdep::dnearneigh(as.matrix(current_model_data[, c("lon", "lat")]),
+                                                              d1 = 0,
+                                                              d2 = c * 100,
+                                                              longlat = TRUE)
+                                      listw <- spdep::nb2listw(neighbours = nb,
+                                                               zero.policy = TRUE)
+                                      mil[[c]] <- spdep::moran.mc(x = current_model_data$res,
+                                                                  listw = listw,
+                                                                  zero.policy = TRUE,
+                                                                  nsim = 999,
+                                                                  alternative = "greater")
+                                      mil2[[c]] <- spdep::moran.test(x = current_model_data$res,
+                                                                     listw = listw,
+                                                                     zero.policy = TRUE,
+                                                                     alternative = "two.sided")
+                                    }
+                                    moran_residual_test <- data.frame(dist = 1:10,
+                                                                      estimate = unlist(lapply(mil2,
+                                                                                               function(d) {
+                                                                                                 d$estimate[1]
+                                                                                               })))
+                                    moran_residual_test$var <- unlist(lapply(mil2,
+                                                                             function(e) {
+                                                                               e$estimate[3]
+                                                                             }))
+                                    moran_residual_test$pvaltest <- unlist(lapply(mil2,
+                                                                                  function(f) {
+                                                                                    f$p.value
+                                                                                  }))
+                                    moran_residual_test$pvalmc <- unlist(lapply(mil,
+                                                                                function(g) {
+                                                                                  g$p.value
+                                                                                }))
+                                    write.table(x = moran_residual_test,
+                                                file = file.path(table_directory,
+                                                                 paste("moran_residual_test_",
                                                                        ocean,
                                                                        "_",
                                                                        specie,
                                                                        "_",
                                                                        fishing_mode,
-                                                                       ".jpeg",
+                                                                       ".csv",
                                                                        sep = "")),
-                                                width = 8,
-                                                height = 8,
-                                                units = c("cm"),
-                                                dpi = 300,
-                                                pointsize = 10)
-                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
-                                                                              list("variables_importance" = variables_importance))
-                                # test for spatial and temporal correlation on residuals
-                                if(avdth_patch_coord == TRUE){
-                                  current_model_data_map <- current_model_data
-                                  sp::coordinates(current_model_data_map) <- ~ lon+lat
-                                  sp::proj4string(current_model_data_map) <- sp::CRS("+init=epsg:4326")
-                                  current_model_data_map <- sp::spTransform(current_model_data_map,
-                                                                            sp::CRS("+init=epsg:3395"))
-                                  # variogram
-                                  variogram_resp_data <- gstat::variogram(object = resp ~ 1,
-                                                                          data = current_model_data_map,
-                                                                          cutoff = 4000000,
-                                                                          width = 100000)
-                                  variogram_resp_data$label <- "Observed data"
-                                  variogram_res_data <- gstat::variogram(object = res ~ 1,
-                                                                         data = current_model_data_map,
-                                                                         cutoff = 4000000,
-                                                                         width = 100000)
-                                  variogram_res_data$label <- "Residuals"
-                                  variogram_data <- dplyr::bind_rows(variogram_resp_data,
-                                                                     variogram_res_data)
-                                  variogram <- ggplot2::ggplot(data = variogram_data,
-                                                               ggplot2::aes(x = dist,
-                                                                            y = gamma,
-                                                                            group = label,
-                                                                            color = label)) +
-                                    ggplot2::scale_color_manual(values = c("black", "red")) +
-                                    ggplot2::geom_line() +
-                                    ggplot2::theme(legend.position = c(0,1),
-                                                   legend.justification = c(0,1),
-                                                   legend.direction="horizontal",
-                                                   legend.title = ggplot2::element_blank()) +
-                                    ggplot2::xlab("Distance (m)") +
-                                    ggplot2::ylab("Semivariance")
-                                  # moran index on residual
-                                  mil <- vector("list",
-                                                length = 10)
-                                  mil2 <- vector("list",
-                                                 length = 10)
-                                  for (c in seq_len(10)){
-                                    nb <- spdep::dnearneigh(as.matrix(current_model_data[, c("lon", "lat")]),
-                                                            d1 = 0,
-                                                            d2 = c * 100,
-                                                            longlat = TRUE)
-                                    listw <- spdep::nb2listw(neighbours = nb,
-                                                             zero.policy = TRUE)
-                                    mil[[c]] <- spdep::moran.mc(x = current_model_data$res,
-                                                                listw = listw,
-                                                                zero.policy = TRUE,
-                                                                nsim = 999,
-                                                                alternative = "greater")
-                                    mil2[[c]] <- spdep::moran.test(x = current_model_data$res,
-                                                                   listw = listw,
-                                                                   zero.policy = TRUE,
-                                                                   alternative = "two.sided")
-                                  }
-                                  moran_residual_test <- data.frame(dist = 1:10,
-                                                                    estimate = unlist(lapply(mil2,
-                                                                                             function(d) {
-                                                                                               d$estimate[1]
-                                                                                             })))
-                                  moran_residual_test$var <- unlist(lapply(mil2,
-                                                                           function(e) {
-                                                                             e$estimate[3]
-                                                                           }))
-                                  moran_residual_test$pvaltest <- unlist(lapply(mil2,
-                                                                                function(f) {
-                                                                                  f$p.value
-                                                                                }))
-                                  moran_residual_test$pvalmc <- unlist(lapply(mil,
-                                                                              function(g) {
-                                                                                g$p.value
-                                                                              }))
-                                  write.table(x = moran_residual_test,
-                                              file = file.path(table_directory,
-                                                               paste("moran_residual_test_",
-                                                                     ocean,
-                                                                     "_",
-                                                                     specie,
-                                                                     "_",
-                                                                     fishing_mode,
-                                                                     ".csv",
-                                                                     sep = "")),
-                                              row.names = FALSE,
-                                              sep = outputs_sep,
-                                              dec = outputs_dec)
-                                  current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
-                                                                                list("moran_residual_test" = moran_residual_test))
-                                  correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
-                                  # lag_max = 300)
-                                  correlogram_resp_acf <- correlogram_resp +
-                                    ggplot2::ggtitle("Autocorrelation function of observed data")
-                                  moran_index <- ggplot2::ggplot(data = moran_residual_test,
-                                                                 ggplot2::aes(x = dist,
-                                                                              y = estimate)) +
-                                    ggplot2::geom_line() +
-                                    ggplot2::geom_point() +
-                                    ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                    y = estimate + sqrt(var)),
-                                                       color = "lightskyblue") +
-                                    ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                    y = estimate - sqrt(var)),
-                                                       color = "lightskyblue") +
-                                    ggplot2::geom_line(ggplot2::aes(x = dist,
-                                                                    y = 0),
-                                                       color = "red",
-                                                       linetype = 2) +
-                                    ggplot2::ylim(-0.3, 0.4) +
-                                    ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
-                                    ggplot2::xlab("Distance (10^2 km)") +
-                                    ggplot2::ylab("Moran index")
-                                  correlogram_res <- forecast::ggAcf(current_model_data$res[order(current_model_data$date_act)], lag.max = 300)
-                                  correlogram_res_acf <- correlogram_res +
-                                    ggplot2::ggtitle("Autocorrelation function of residuals")+
-                                    ggplot2::ylim(min(correlogram_resp$data$Freq, correlogram_res$data$Freq), max(correlogram_resp$data$Freq, correlogram_res$data$Freq))
+                                                row.names = FALSE,
+                                                sep = outputs_sep,
+                                                dec = outputs_dec)
+                                    current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                                  list("moran_residual_test" = moran_residual_test))
+                                    correlogram_resp <- forecast::ggAcf(current_model_data$resp[order(current_model_data$date_act)], lag.max = 300)
+                                    # lag_max = 300)
+                                    correlogram_resp_acf <- correlogram_resp +
+                                      ggplot2::ggtitle("Autocorrelation function of observed data")
+                                    moran_index <- ggplot2::ggplot(data = moran_residual_test,
+                                                                   ggplot2::aes(x = dist,
+                                                                                y = estimate)) +
+                                      ggplot2::geom_line() +
+                                      ggplot2::geom_point() +
+                                      ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                      y = estimate + sqrt(var)),
+                                                         color = "lightskyblue") +
+                                      ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                      y = estimate - sqrt(var)),
+                                                         color = "lightskyblue") +
+                                      ggplot2::geom_line(ggplot2::aes(x = dist,
+                                                                      y = 0),
+                                                         color = "red",
+                                                         linetype = 2) +
+                                      ggplot2::ylim(-0.3, 0.4) +
+                                      ggplot2::scale_x_continuous(expand = c(0.01, 0.01)) +
+                                      ggplot2::xlab("Distance (10^2 km)") +
+                                      ggplot2::ylab("Moran index")
+                                    correlogram_res <- forecast::ggAcf(current_model_data$res[order(current_model_data$date_act)], lag.max = 300)
+                                    correlogram_res_acf <- correlogram_res +
+                                      ggplot2::ggtitle("Autocorrelation function of residuals")+
+                                      ggplot2::ylim(min(correlogram_resp$data$Freq, correlogram_res$data$Freq), max(correlogram_resp$data$Freq, correlogram_res$data$Freq))
 
-                                  spatio_temporal_checking <- ggpubr::ggarrange(variogram,
-                                                                                correlogram_resp_acf,
-                                                                                moran_index,
-                                                                                correlogram_res_acf,
-                                                                                nrow = 2,
-                                                                                ncol = 2)
-                                  ggplot2::ggsave(plot = spatio_temporal_checking,
+                                    spatio_temporal_checking <- ggpubr::ggarrange(variogram,
+                                                                                  correlogram_resp_acf,
+                                                                                  moran_index,
+                                                                                  correlogram_res_acf,
+                                                                                  nrow = 2,
+                                                                                  ncol = 2)
+                                    ggplot2::ggsave(plot = spatio_temporal_checking,
+                                                    file = file.path(figure_directory,
+                                                                     paste("spatio_temporal_checking_",
+                                                                           ocean,
+                                                                           "_",
+                                                                           specie,
+                                                                           "_",
+                                                                           fishing_mode,
+                                                                           ".jpeg",
+                                                                           sep = "")),
+                                                    width = 30,
+                                                    height = 20,
+                                                    units = c("cm"),
+                                                    dpi = 300)
+                                    current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                                                                  list("spatio_temporal_checking" = spatio_temporal_checking))
+                                  }
+                                  ## model validation ----
+                                  model_validation_density_res <- ggplot2::ggplot(current_model_data,
+                                                                                  ggplot2::aes(x = res_ST)) +
+                                    ggplot2::geom_density(stat = "density",
+                                                          fill = rgb(1,0,0,0.2),
+                                                          ggplot2::aes(y = ggplot2::after_stat(scaled))) +
+                                    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+                                    ggplot2::labs(x = "Standardized Residuals")
+                                  model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
+                                    ggplot2::stat_qq() +
+                                    ggplot2::stat_qq_line(col = 2) +
+                                    ggplot2::labs(x = "Theoretical quantiles", y = "Sample quantiles")
+                                  model_validation_response_fit <- ggplot2::ggplot(data = current_model_data,
+                                                                                   ggplot2::aes(x = resp,
+                                                                                                y = fit)) +
+                                    ggplot2::geom_point() +
+                                    ggplot2::geom_smooth(method = "gam",
+                                                         formula = y ~ s(x, bs = "cs")) +
+                                    ggplot2::geom_abline(slope = 1,
+                                                         intercept = 0,
+                                                         col = "red") +
+                                    ggplot2::labs(x = "Observed values",
+                                                  y = "Fitted values")
+                                  model_validation_fit_res <- ggplot2::ggplot(data = current_model_data,
+                                                                              ggplot2::aes(x = fit,
+                                                                                           y = res_ST)) +
+                                    ggplot2::geom_point() +
+                                    ggplot2::geom_smooth(method = "gam",
+                                                         formula = y ~ s(x, bs = "cs")) +
+                                    ggplot2::geom_abline(slope = 0,
+                                                         intercept = 0,
+                                                         col = "red") +
+                                    ggplot2::labs(x = "Fitted values",
+                                                  y = "Standardized Residuals")
+                                  model_validation_logbook_res <- ggplot2::ggplot(data = current_model_data,
+                                                                                  ggplot2::aes(x = tlb,
+                                                                                               y = res_ST)) +
+                                    ggplot2::geom_point() +
+                                    ggplot2::geom_smooth(method = "gam",
+                                                         formula = y ~ s(x, bs = "cs")) +
+                                    ggplot2::geom_abline(slope = 0,
+                                                         intercept = 0,
+                                                         col = "red") +
+                                    ggplot2::labs(x = "Proportion in logbook",
+                                                  y = "Standardized Residuals")
+                                  model_validation_yr_res <- ggplot2::ggplot(data = current_model_data,
+                                                                             ggplot2::aes(x = year,
+                                                                                          y = res_ST)) +
+                                    ggplot2::geom_boxplot() +
+                                    ggplot2::geom_abline(slope = 0,
+                                                         intercept = 0,
+                                                         col = "red") +
+                                    ggplot2::labs(x = NULL,
+                                                  y = "Standardized Residuals")
+                                  model_validation_mon_res <- ggplot2::ggplot(data = current_model_data,
+                                                                              ggplot2::aes(x = mon,
+                                                                                           y = res_ST)) +
+                                    ggplot2::geom_boxplot() +
+                                    ggplot2::geom_abline(slope = 0,
+                                                         intercept = 0,
+                                                         col = "red") +
+                                    ggplot2::labs(x = "Month",
+                                                  y = "Standardized Residuals")
+                                  model_validation_vessel_res <- ggplot2::ggplot(data = current_model_data,
+                                                                                 ggplot2::aes(x = vessel,
+                                                                                              y = res_ST)) +
+                                    ggplot2::geom_boxplot() +
+                                    ggplot2::geom_abline(slope = 0, intercept = 0, col="red") +
+                                    ggplot2::labs(x = "Vessel",
+                                                  y = "Standardized Residuals")
+                                  model_validation <- ggpubr::ggarrange(model_validation_density_res,
+                                                                        model_validation_qqplot_res,
+                                                                        model_validation_response_fit,
+                                                                        model_validation_fit_res,
+                                                                        model_validation_logbook_res,
+                                                                        model_validation_yr_res,
+                                                                        model_validation_mon_res,
+                                                                        model_validation_vessel_res,
+                                                                        nrow = 2,
+                                                                        ncol = 4)
+                                  ggplot2::ggsave(plot = model_validation,
                                                   file = file.path(figure_directory,
-                                                                   paste("spatio_temporal_checking_",
+                                                                   paste("model_validation_",
                                                                          ocean,
                                                                          "_",
                                                                          specie,
@@ -6700,190 +6835,93 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   units = c("cm"),
                                                   dpi = 300)
                                   current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
-                                                                                list("spatio_temporal_checking" = spatio_temporal_checking))
-                                }
-                                ## model validation ----
-                                model_validation_density_res <- ggplot2::ggplot(current_model_data,
-                                                                                ggplot2::aes(x = res_ST)) +
-                                  ggplot2::geom_density(stat = "density",
-                                                        fill = rgb(1,0,0,0.2),
-                                                        ggplot2::aes(y = ggplot2::after_stat(scaled))) +
-                                  ggplot2::scale_x_continuous(expand = c(0, 0)) +
-                                  ggplot2::labs(x = "Standardized Residuals")
-                                model_validation_qqplot_res <- ggplot2::ggplot(current_model_data, ggplot2::aes(sample = res_ST)) +
-                                  ggplot2::stat_qq() +
-                                  ggplot2::stat_qq_line(col = 2) +
-                                  ggplot2::labs(x = "Theoretical quantiles", y = "Sample quantiles")
-                                model_validation_response_fit <- ggplot2::ggplot(data = current_model_data,
-                                                                                 ggplot2::aes(x = resp,
-                                                                                              y = fit)) +
-                                  ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "gam",
-                                                       formula = y ~ s(x, bs = "cs")) +
-                                  ggplot2::geom_abline(slope = 1,
-                                                       intercept = 0,
-                                                       col = "red") +
-                                  ggplot2::labs(x = "Observed values",
-                                                y = "Fitted values")
-                                model_validation_fit_res <- ggplot2::ggplot(data = current_model_data,
-                                                                            ggplot2::aes(x = fit,
-                                                                                         y = res_ST)) +
-                                  ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "gam",
-                                                       formula = y ~ s(x, bs = "cs")) +
-                                  ggplot2::geom_abline(slope = 0,
-                                                       intercept = 0,
-                                                       col = "red") +
-                                  ggplot2::labs(x = "Fitted values",
-                                                y = "Standardized Residuals")
-                                model_validation_logbook_res <- ggplot2::ggplot(data = current_model_data,
-                                                                                ggplot2::aes(x = tlb,
-                                                                                             y = res_ST)) +
-                                  ggplot2::geom_point() +
-                                  ggplot2::geom_smooth(method = "gam",
-                                                       formula = y ~ s(x, bs = "cs")) +
-                                  ggplot2::geom_abline(slope = 0,
-                                                       intercept = 0,
-                                                       col = "red") +
-                                  ggplot2::labs(x = "Proportion in logbook",
-                                                y = "Standardized Residuals")
-                                model_validation_yr_res <- ggplot2::ggplot(data = current_model_data,
-                                                                           ggplot2::aes(x = year,
-                                                                                        y = res_ST)) +
-                                  ggplot2::geom_boxplot() +
-                                  ggplot2::geom_abline(slope = 0,
-                                                       intercept = 0,
-                                                       col = "red") +
-                                  ggplot2::labs(x = NULL,
-                                                y = "Standardized Residuals")
-                                model_validation_mon_res <- ggplot2::ggplot(data = current_model_data,
-                                                                            ggplot2::aes(x = mon,
-                                                                                         y = res_ST)) +
-                                  ggplot2::geom_boxplot() +
-                                  ggplot2::geom_abline(slope = 0,
-                                                       intercept = 0,
-                                                       col = "red") +
-                                  ggplot2::labs(x = "Month",
-                                                y = "Standardized Residuals")
-                                model_validation_vessel_res <- ggplot2::ggplot(data = current_model_data,
-                                                                               ggplot2::aes(x = vessel,
-                                                                                            y = res_ST)) +
-                                  ggplot2::geom_boxplot() +
-                                  ggplot2::geom_abline(slope = 0, intercept = 0, col="red") +
-                                  ggplot2::labs(x = "Vessel",
-                                                y = "Standardized Residuals")
-                                model_validation <- ggpubr::ggarrange(model_validation_density_res,
-                                                                      model_validation_qqplot_res,
-                                                                      model_validation_response_fit,
-                                                                      model_validation_fit_res,
-                                                                      model_validation_logbook_res,
-                                                                      model_validation_yr_res,
-                                                                      model_validation_mon_res,
-                                                                      model_validation_vessel_res,
-                                                                      nrow = 2,
-                                                                      ncol = 4)
-                                ggplot2::ggsave(plot = model_validation,
-                                                file = file.path(figure_directory,
-                                                                 paste("model_validation_",
+                                                                                list("model_validation" = model_validation))
+                                  ## model accuracy ----
+                                  # cross validation by k-folds
+                                  npartition <- 10 # not a parameter
+                                  df <- current_model_data
+                                  if(nrow(df) < 50){
+                                    cat(format(x = Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " Current dataset < 50 data. Not enougth data for model accuracy testing.\n",
+                                        sep = "")
+                                  } else {
+                                    model_formula <- strsplit(as.character(current_model_output[[3]]$call),",")[[2]]
+                                    model_ntree <- current_model_output[[3]]$num.trees
+                                    model_mtry <- current_model_output[[3]]$mtry
+                                    model_node <- current_model_output[[3]]$min.node.size
+                                    set.seed(7)
+                                    fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
+                                                                        size = nrow(df),
+                                                                        replace = FALSE),
+                                                       nfold = rep_len(x = seq_len(length.out = npartition),
+                                                                       length.out = nrow(df)))
+                                    resi <- vector(mode = "list",
+                                                   length = npartition)
+                                    mufit <- vector(mode = "list",
+                                                    length = npartition)
+                                    for (h in seq_len(length.out = npartition)) {
+                                      test <- df[fold$row_ord[fold$nfold == h], ]
+                                      train <- df[fold$row_ord[fold$nfold != h], ]
+                                      set.seed(7)
+                                      model <- ranger::ranger(formula = model_formula,
+                                                              data = train,
+                                                              num.trees = model_ntree,
+                                                              mtry = model_mtry,
+                                                              min.node.size = model_node,
+                                                              splitrule = "variance")
+
+                                      test$fit <- predict(model,data = test)$predictions
+                                      resi[[h]] <- test$resp - test$fit
+                                      mufit[[h]] <- mean(test$resp)
+                                    }
+                                    RMSE <- NULL
+                                    MAE <- NULL
+                                    CVMAE <- NULL
+                                    RMSE <- unlist(lapply(resi,
+                                                          function(i) {
+                                                            ifelse(test = ! is.null(i),
+                                                                   yes = sqrt(mean((i^2))),
+                                                                   no = NA)
+                                                          }))
+                                    MAE <- unlist(lapply(resi,
+                                                         function(j) {
+                                                           ifelse(test = ! is.null(j),
+                                                                  yes = mean(abs(j)),
+                                                                  no = NA)
+                                                         }))
+                                    CVMAE <- MAE / (unlist(mufit))
+                                    kfold <- data.frame(index = c("RMSE",
+                                                                  "MAE",
+                                                                  "CVMAE"),
+                                                        value = c(mean(RMSE,
+                                                                       na.rm = TRUE),
+                                                                  mean(MAE,
+                                                                       na.rm = TRUE),
+                                                                  mean(CVMAE,
+                                                                       na.rm = TRUE)),
+                                                        stdev = c(sd(RMSE),
+                                                                  sd(MAE),
+                                                                  sd(CVMAE)))
+                                    write.table(x = kfold,
+                                                file = file.path(table_directory,
+                                                                 paste("kfold_",
                                                                        ocean,
                                                                        "_",
                                                                        specie,
                                                                        "_",
                                                                        fishing_mode,
-                                                                       ".jpeg",
+                                                                       ".csv",
                                                                        sep = "")),
-                                                width = 30,
-                                                height = 20,
-                                                units = c("cm"),
-                                                dpi = 300)
-                                current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
-                                                                              list("model_validation" = model_validation))
-                                ## model accuracy ----
-                                # cross validation by k-folds
-                                npartition <- 10 # not a parameter
-                                df <- current_model_data
-                                if(nrow(df) < 50){
-                                  cat(format(x = Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " Current dataset < 50 data. Not enougth data for model accuracy testing.\n",
-                                      sep = "")
-                                } else {
-                                  model_formula <- strsplit(as.character(current_model_output[[3]]$call),",")[[2]]
-                                  model_ntree <- current_model_output[[3]]$num.trees
-                                  model_mtry <- current_model_output[[3]]$mtry
-                                  model_node <- current_model_output[[3]]$min.node.size
-                                  set.seed(7)
-                                  fold <- data.frame(row_ord = sample(x = seq_len(length.out = nrow(df)),
-                                                                      size = nrow(df),
-                                                                      replace = FALSE),
-                                                     nfold = rep_len(x = seq_len(length.out = npartition),
-                                                                     length.out = nrow(df)))
-                                  resi <- vector(mode = "list",
-                                                 length = npartition)
-                                  mufit <- vector(mode = "list",
-                                                  length = npartition)
-                                  for (h in seq_len(length.out = npartition)) {
-                                    test <- df[fold$row_ord[fold$nfold == h], ]
-                                    train <- df[fold$row_ord[fold$nfold != h], ]
-                                    set.seed(7)
-                                    model <- ranger::ranger(formula = model_formula,
-                                                            data = train,
-                                                            num.trees = model_ntree,
-                                                            mtry = model_mtry,
-                                                            min.node.size = model_node,
-                                                            splitrule = "variance")
-
-                                    test$fit <- predict(model,data = test)$predictions
-                                    resi[[h]] <- test$resp - test$fit
-                                    mufit[[h]] <- mean(test$resp)
+                                                row.names = FALSE,
+                                                sep = outputs_sep,
+                                                dec = outputs_dec)
+                                    current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                                                                  list("kfold" = kfold))
+                                    output_level3_process3 <- append(output_level3_process3,
+                                                                     list(current_output_level3_process3))
+                                    names(output_level3_process3)[length(output_level3_process3)] <- paste(ocean, specie, fishing_mode, sep = "_")
                                   }
-                                  RMSE <- NULL
-                                  MAE <- NULL
-                                  CVMAE <- NULL
-                                  RMSE <- unlist(lapply(resi,
-                                                        function(i) {
-                                                          ifelse(test = ! is.null(i),
-                                                                 yes = sqrt(mean((i^2))),
-                                                                 no = NA)
-                                                        }))
-                                  MAE <- unlist(lapply(resi,
-                                                       function(j) {
-                                                         ifelse(test = ! is.null(j),
-                                                                yes = mean(abs(j)),
-                                                                no = NA)
-                                                       }))
-                                  CVMAE <- MAE / (unlist(mufit))
-                                  kfold <- data.frame(index = c("RMSE",
-                                                                "MAE",
-                                                                "CVMAE"),
-                                                      value = c(mean(RMSE,
-                                                                     na.rm = TRUE),
-                                                                mean(MAE,
-                                                                     na.rm = TRUE),
-                                                                mean(CVMAE,
-                                                                     na.rm = TRUE)),
-                                                      stdev = c(sd(RMSE),
-                                                                sd(MAE),
-                                                                sd(CVMAE)))
-                                  write.table(x = kfold,
-                                              file = file.path(table_directory,
-                                                               paste("kfold_",
-                                                                     ocean,
-                                                                     "_",
-                                                                     specie,
-                                                                     "_",
-                                                                     fishing_mode,
-                                                                     ".csv",
-                                                                     sep = "")),
-                                              row.names = FALSE,
-                                              sep = outputs_sep,
-                                              dec = outputs_dec)
-                                  current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
-                                                                                list("kfold" = kfold))
-                                  output_level3_process3 <- append(output_level3_process3,
-                                                                   list(current_output_level3_process3))
-                                  names(output_level3_process3)[length(output_level3_process3)] <- paste(ocean, specie, fishing_mode, sep = "_")
-                                }
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Process 3.3 successfull for ocean \"",
@@ -6895,7 +6933,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     "\"",
                                     ".\n",
                                     sep = "")
-                                }
+                              }
                               return(output_level3_process3)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - End process 3.3: models checking.\n",
@@ -6949,10 +6987,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
                               catch_set_lb <- dplyr::inner_join(act_chr,
-                                                        catch_set_lb,
-                                                        by = c("id_act",
-                                                               "date_act",
-                                                               "code_act_type"))
+                                                                catch_set_lb,
+                                                                by = c("id_act",
+                                                                       "date_act",
+                                                                       "code_act_type"))
                               ############################################################################
                               # catches remove discard
                               # changer pour le code espece et la colonne discard
@@ -7274,43 +7312,43 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           ".\n",
                                           sep = "")
 
-                                        if(nrow(sets_long_fishing_mode) > 0) {
-                                          # models
-                                          current_output_level3_process2 <- output_level3_process2[[paste(ocean,
-                                                                                                          species,
-                                                                                                          fishing_mode,
-                                                                                                          sep = "_")]]
-                                          # skip model prediction for BET only
-                                          if(species == "BET"){
-                                            # remove sample sets
-                                            sample_data = current_output_level3_process2[[1]]
-                                            sample_data$w_lb_t3 <- NULL
-                                            sample_data <- sample_data %>% mutate(fmod = factor(fmod),
-                                                                                  ocean = factor(ocean))
+                                      if(nrow(sets_long_fishing_mode) > 0) {
+                                        # models
+                                        current_output_level3_process2 <- output_level3_process2[[paste(ocean,
+                                                                                                        species,
+                                                                                                        fishing_mode,
+                                                                                                        sep = "_")]]
+                                        # skip model prediction for BET only
+                                        if(species == "BET"){
+                                          # remove sample sets
+                                          sample_data = current_output_level3_process2[[1]]
+                                          sample_data$w_lb_t3 <- NULL
+                                          sample_data <- sample_data %>% mutate(fmod = factor(fmod),
+                                                                                ocean = factor(ocean))
 
-                                            sets_long_fishing_mode_no_sample <- droplevels(sets_long_fishing_mode[!(sets_long_fishing_mode$id_act %in% unique(sample_data$id_act)),])
-                                            sets_long_fishing_mode_no_sample <- sets_long_fishing_mode_no_sample %>% mutate(year = factor(yr),
-                                                                                                                            yr = factor(yr),
-                                                                                                                            mon = factor(mon),
-                                                                                                                            fmod = factor(fmod),
-                                                                                                                            ocean = factor(ocean),
-                                                                                                                            vessel = factor(vessel),
-                                                                                                                            data_source = "not_fitted"
-                                            )
+                                          sets_long_fishing_mode_no_sample <- droplevels(sets_long_fishing_mode[!(sets_long_fishing_mode$id_act %in% unique(sample_data$id_act)),])
+                                          sets_long_fishing_mode_no_sample <- sets_long_fishing_mode_no_sample %>% mutate(year = factor(yr),
+                                                                                                                          yr = factor(yr),
+                                                                                                                          mon = factor(mon),
+                                                                                                                          fmod = factor(fmod),
+                                                                                                                          ocean = factor(ocean),
+                                                                                                                          vessel = factor(vessel),
+                                                                                                                          data_source = "not_fitted"
+                                          )
 
-                                            sampled_set <- unique(sample_data[sample_data$year %in% sets_long_fishing_mode_no_sample$yr[1],])
-                                            sampled_set$data_source <- "sample" # add flag
-                                            sampled_set <- dplyr::rename(sampled_set,
-                                                                         fit_prop = prop_t3)
-                                            all_set <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
+                                          sampled_set <- unique(sample_data[sample_data$year %in% sets_long_fishing_mode_no_sample$yr[1],])
+                                          sampled_set$data_source <- "sample" # add flag
+                                          sampled_set <- dplyr::rename(sampled_set,
+                                                                       fit_prop = prop_t3)
+                                          all_set <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
 
-                                            outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
-                                                                                   list(all_set))
-                                            names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
-                                                                                                                               species,
-                                                                                                                               fishing_mode,
-                                                                                                                               sep = "_")
-                                          } else {
+                                          outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
+                                                                                 list(all_set))
+                                          names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
+                                                                                                                             species,
+                                                                                                                             fishing_mode,
+                                                                                                                             sep = "_")
+                                        } else {
                                           res <- tunapredict(sample_data = current_output_level3_process2[[1]],
                                                              allset_data = sets_long_fishing_mode,
                                                              Ntree = 1000,
@@ -7358,7 +7396,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   #   ungroup()
 
                                   boot_tmp_element_wide <- boot_tmp_element %>% dplyr::select(id_act, fit_prop, sp) %>%
-                                  tidyr::pivot_wider(values_from = fit_prop, names_from = sp)
+                                    tidyr::pivot_wider(values_from = fit_prop, names_from = sp)
                                   # boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp", "data_source")],
                                   #                                        key = "sp",
                                   #                                        value = fit_prop)
@@ -7375,9 +7413,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   #                                        value = "fit_prop_t3_ST",
                                   #                                        "BET", "SKJ", "YFT")
                                   boot_tmp_element_long <- tidyr::pivot_longer(data = boot_tmp_element_wide,
-                                                                         names_to = "sp",
-                                                                         values_to = "fit_prop_t3_ST",
-                                                                         cols = c("BET", "SKJ", "YFT"))
+                                                                               names_to = "sp",
+                                                                               values_to = "fit_prop_t3_ST",
+                                                                               cols = c("BET", "SKJ", "YFT"))
                                   boot_tmp_element <- dplyr::left_join(boot_tmp_element_long,
                                                                        distinct(dplyr::select(.data = boot_tmp_element, -c(prop_lb, w_lb_t3)))) %>%
                                     group_by(id_act, sp)  %>% mutate(dupli = n())
@@ -7596,18 +7634,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
                               # unknown fishing mode
                               if(any(catch_mix_tuna$fmod == 3)){
-                              tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
-                                dplyr::mutate(fmod = as.factor(3))
-                              tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
+                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
+                                  dplyr::mutate(fmod = as.factor(3))
+                                tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
                               # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
                               catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
                                 dplyr::mutate(
-                                       catch_set_fit = round(fit_prop_t3_ST * w_lb_t3, digits = 4),
-                                       data_source = "tuna_mix",
-                                       mon =as.character(mon),
-                                       ocean = as.factor(ocean),
-                                       fit_prop_t3_ST = NULL)
+                                  catch_set_fit = round(fit_prop_t3_ST * w_lb_t3, digits = 4),
+                                  data_source = "tuna_mix",
+                                  mon =as.character(mon),
+                                  ocean = as.factor(ocean),
+                                  fit_prop_t3_ST = NULL)
 
                               catch_without_target_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_tuna %>%
                                 dplyr::mutate(data_source = "unchanged",
@@ -7647,7 +7685,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               name_to_trash <- c("code_act_type", "wcat","sp_code","status")
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
-                                                                                 !name_to_trash)) %>%
+                                                                                        !name_to_trash)) %>%
                                 tidyr::separate(id_act,into = c("text_tmp", "vessel_id_tmp", "numbers"),
                                                 sep = "#",
                                                 remove = FALSE) %>%
@@ -7668,7 +7706,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(set_all_output))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_set_detail"
-                                # format output
+                              # format output
                               # function to create every new column from a list
                               Add_multi_columns <- function(df, name_list){
                                 name_list_tmp <- dplyr::setdiff(name_list, names(df))
@@ -7683,16 +7721,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                               "catch_set_fit","ci_inf", "ci_sup")
 
                               name_list_ecd <- c("ocean","port","pays","engin","NUMBAT","type_bateau","categorie",
-                                                    "annee_de_debarquement","mois_de_debarquement",	"jour_de_debarquement",
-                                                    "annee_de_peche","mois_de_peche","jour_de_peche","heure_de_peche",
-                                                    "quinzaine","trimestre","quadrant","latitude_deg","latitude_min","longitude_deg",	"longitude_min",
-                                                    "cwp11","cwp55","zet","zee","heures_mer","heures_peche","heures_peche_standard","nombre_de_calees",
-                                                    "nombre_de_calees_pos","nombre_de_calees_neg","numero_activite","c_opera","flagexpert",
-                                                    "association1",	"association2","association3","association4","association5",
-                                                    "code_assoc_reduit","code_assoc_groupe",
-                                                    "temperature","direction_courant","vitesse_courant",
-                                                    "rf3","duree",
-                                                    "capture_YFT",	"capture_SKJ",	"capture_BET",	"capture_ALB",
+                                                 "annee_de_debarquement","mois_de_debarquement",	"jour_de_debarquement",
+                                                 "annee_de_peche","mois_de_peche","jour_de_peche","heure_de_peche",
+                                                 "quinzaine","trimestre","quadrant","latitude_deg","latitude_min","longitude_deg",	"longitude_min",
+                                                 "cwp11","cwp55","zet","zee","heures_mer","heures_peche","heures_peche_standard","nombre_de_calees",
+                                                 "nombre_de_calees_pos","nombre_de_calees_neg","numero_activite","c_opera","flagexpert",
+                                                 "association1",	"association2","association3","association4","association5",
+                                                 "code_assoc_reduit","code_assoc_groupe",
+                                                 "temperature","direction_courant","vitesse_courant",
+                                                 "rf3","duree",
+                                                 "capture_YFT",	"capture_SKJ",	"capture_BET",	"capture_ALB",
                                                  "capture_LTA",	"capture_FRZ",	"capture_SHX",	"capture_DSC",
                                                  "capture_YOU",	"capture_KAW",	"capture_LOT",	"capture_BLF",
                                                  "capture_YFT_categ1_corrigee", "capture_YFT_categ2_corrigee","capture_YFT_categ3_corrigee",
@@ -7714,10 +7752,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                flagexpert = 9,
                                                                                                zet = 99,
                                                                                                species = dplyr::case_when(status == "discard" ~ "DSC",
-                                                                                                                      species %in% SHX_group ~ "SHX",
-                                                                                                                      species %in% FRZ_group ~ "FRZ",
-                                                                                                                      !species %in% species_ecd_filter ~ "YOU",
-                                                                                                                      TRUE ~ species)) %>%
+                                                                                                                          species %in% SHX_group ~ "SHX",
+                                                                                                                          species %in% FRZ_group ~ "FRZ",
+                                                                                                                          !species %in% species_ecd_filter ~ "YOU",
+                                                                                                                          TRUE ~ species)) %>%
                                 dplyr::filter(species %in% species_ecd_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
                                 dplyr::group_by(across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
@@ -7752,8 +7790,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               })) %>% dplyr::rename(longitude_deg = "degrees",
                                                     longitude_min = "minutes")
                               set_all_output_wide <- dplyr::bind_cols(set_all_output_wide,
-                                                  dplyr::select(.data =latitude_tmp, -seconds),
-                                                  dplyr::select(.data =longitude_tmp, -seconds))
+                                                                      dplyr::select(.data =latitude_tmp, -seconds),
+                                                                      dplyr::select(.data =longitude_tmp, -seconds))
 
                               set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:n())) %>% dplyr::ungroup()
 
@@ -7840,8 +7878,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               t1_all <- bind_rows(t1_all, t1_all_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
                                 group_by(yr, sp, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
-                                                                                    ci_inf = sum(ci_inf),
-                                                                                    ci_sup = sum(ci_sup))
+                                                                              ci_inf = sum(ci_inf),
+                                                                              ci_sup = sum(ci_sup))
 
                               # format output
 
@@ -8055,14 +8093,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # add other species and mix tuna
                               t2_fmod_other <- catch_all_other %>% mutate(cwp = latlon2cwp(lat = lat,
-                                                                                          lon = lon,
-                                                                                          base = 1)) %>%
+                                                                                           lon = lon,
+                                                                                           base = 1)) %>%
                                 group_by(yr, sp, mon, cwp, fmod, status, ocean, ci_inf, ci_sup) %>% summarise(catch_set_fit = sum(catch_set_fit))
 
                               t2_fmod <- bind_rows(t2_fmod, t2_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
                                 group_by(yr, sp, mon, cwp, fmod, status, ocean) %>% summarise(catch_set_fit = sum(catch_set_fit),
-                                                                                        catch_ci_inf = sum(ci_inf),
-                                                                                        catch_ci_sup = sum(ci_sup))
+                                                                                              catch_ci_inf = sum(ci_inf),
+                                                                                              catch_ci_sup = sum(ci_sup))
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t2_fmod))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_effort_fishing_mode"
