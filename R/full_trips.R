@@ -6946,11 +6946,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
                             #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
+                            #' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
 
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        output_level3_process1,
                                                                        target_year,
                                                                        vessel_id_ignored = NULL,
+                                                                       country_flag = NULL,
                                                                        small_fish_only = FALSE) {
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -7192,10 +7194,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
+                            #' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
                             model_predictions = function(output_level3_process2,
                                                          output_level3_process4,
                                                          output_directory,
                                                          output_format = "eu",
+                                                         country_flag = NULL,
                                                          ci = FALSE,
                                                          ci_type = "all",
                                                          Nboot = 50,
@@ -7340,10 +7344,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           sampled_set$data_source <- "sample" # add flag
                                           sampled_set <- dplyr::rename(sampled_set,
                                                                        fit_prop = prop_t3)
-                                          all_set <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
+                                          all_set_bet <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
 
                                           outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
-                                                                                 list(all_set))
+                                                                                 list(all_set_bet))
                                           names(outputs_level3_process5[[1]])[length(outputs_level3_process5[[1]])] <- paste(ocean,
                                                                                                                              species,
                                                                                                                              fishing_mode,
@@ -7361,6 +7365,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
+                                          browser()
+                                          # remove bad flag in samples ----
+                                          # apply the filtering in one time on the  outputs_level3_process5[[1]] list
+                                          # res <- res %>% dplyr::filter()
+                                          ##############################
                                           cat(format(Sys.time(),
                                                      "%Y-%m-%d %H:%M:%S"),
                                               " - Process 3.5 (Predictions step) successfull for ocean \"",
@@ -7474,12 +7483,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   # bootstrap parameters
                                                                   Nboot = Nboot,
                                                                   target_period = dplyr::first(x = sets_long_fishing_mode$yr))
+
                                           outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
                                                                                  list(boot_output))
                                           names(outputs_level3_process5[[3]])[length(outputs_level3_process5[[3]])] <- paste(ocean,
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
+                                          browser()
+                                          # remove bad flag in samples ----
+                                          # maybe better to apply the filtering in one time on the outputs_level3_process5[[3]] L 7500
+                                          # boot_output <- boot_output %>% dplyr::filter()
+                                          ##############################
                                           cat(format(Sys.time(),
                                                      "%Y-%m-%d %H:%M:%S"),
                                               " - Process 3.5 (Bootstrap step) successfull for ocean \"",
