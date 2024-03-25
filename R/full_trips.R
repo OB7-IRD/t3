@@ -7365,7 +7365,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
-                                          browser()
                                           # remove bad flag in samples ----
                                           # apply the filtering in one time on the  outputs_level3_process5[[1]] list
                                           # res <- res %>% dplyr::filter()
@@ -7490,7 +7489,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
-                                          browser()
                                           # remove bad flag in samples ----
                                           # maybe better to apply the filtering in one time on the outputs_level3_process5[[3]] L 7500
                                           # boot_output <- boot_output %>% dplyr::filter()
@@ -8134,9 +8132,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               species_m11_filter <- c("ALB","BET","SKJ","YFT","FRZ","LTA","BLF")
 
                               name_to_remove_for_wide <- c("catch_ci_inf", "catch_ci_sup", "status")
-
                               t2_fmod_output_long <- t2_fmod %>% filter(status == "catch") %>%
-                                dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)]) %>%
+                                dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)][1]) %>%
                                 ungroup() %>%
                                 mutate(fmod = ifelse((fmod == 3 & max_sp == "SKJ"), 1, fmod),
                                        fmod = dplyr::case_when(fmod == 1 ~ "obj",
