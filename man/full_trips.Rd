@@ -723,6 +723,7 @@ Formatting data for model predictions.
   output_level3_process1,
   target_year,
   vessel_id_ignored = NULL,
+  country_flag = NULL,
   small_fish_only = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -737,6 +738,8 @@ Formatting data for model predictions.
 \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
+
+\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
 
 \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
@@ -754,6 +757,7 @@ Model predictions for the species composition and computing of catches.
   output_level3_process4,
   output_directory,
   output_format = "eu",
+  country_flag = NULL,
   ci = FALSE,
   ci_type = "all",
   Nboot = 50,
@@ -771,6 +775,8 @@ Model predictions for the species composition and computing of catches.
 \item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
