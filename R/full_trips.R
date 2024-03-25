@@ -5616,6 +5616,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
                             #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
+                            #' @ocean_target Object of type \code{\link[base]{integer}} expected. Ocean code of interest.
                             #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
                             #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
                             #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
@@ -5627,6 +5628,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         periode_reference_level3 = NULL,
                                                         target_year = as.integer(lubridate::year(Sys.time() - 1)),
                                                         period_duration = 4L,
+                                                        target_ocean = NULL,
                                                         distance_maximum = as.integer(5),
                                                         number_sets_maximum = as.integer(5),
                                                         set_weight_minimum = as.integer(6),
@@ -5721,14 +5723,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   periode_reference_level3 <- seq.int(from = target_year,
                                                                       to = target_year - period_duration)
                                 }
-                                if (! is.null(inputs_level3_path)) {
-                                  # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year ----
+                                if (!is.null(inputs_level3_path)) {
+                                  # load from t3 levels 1 and 2 outputs and merge accordingly to the target_year  and target_ocean----
+                                  if(is.null(target_ocean)) {
+                                    stop("target_ocean argument is missing")
+                                  }
                                   file_available <- list.files(path = inputs_level3_path,
                                                                pattern = "inputs_level3_")
-                                  file_year <-  as.numeric(do.call(rbind,
-                                                                   strsplit(x = file_available,
-                                                                            split = "_"))[, 3])
-                                  target_file <- file_available[file_year %in% target_year:(target_year - period_duration)]
+                                  file_year <- as.numeric(unlist(lapply(strsplit(x = file_available,
+                                                                                 split = "_"),
+                                                                        function(x){return(x[3])})))
+                                  file_ocean <- as.numeric(unlist(lapply(strsplit(x = file_available,
+                                                                             split = "[_|.]"),
+                                                                    function(x){return(x[5])})))
+
+                                  # target_file <- file_available[file_year %in% target_year:(target_year - period_duration) & file_ocean == target_ocean]
+                                  target_file <- file_available[file_year %in% periode_reference_level3 &
+                                                                  file_ocean == target_ocean]
                                   dataset_target <- vector("list",
                                                            length = 5)
                                   names(dataset_target) <- c("act_chr",
