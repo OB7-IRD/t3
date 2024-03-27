@@ -635,13 +635,15 @@ Data preparatory for the t3 modelling process (level 3).
 
 \item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
+\item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.}
+
 \item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
 
 \item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.}
 
 \item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
 
-\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.}
+\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.}
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
 }

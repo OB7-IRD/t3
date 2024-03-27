@@ -5616,11 +5616,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
                             #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
-                            #' @ocean_target Object of type \code{\link[base]{integer}} expected. Ocean code of interest.
+                            #' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
                             #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
                             #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
                             #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
-                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.
+                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.
                             data_preparatory = function(inputs_level3 = NULL,
                                                         inputs_level3_path = NULL,
@@ -5970,29 +5970,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp2 <- tmp[, names(tmp) %in% levels(samw$sp_cat)]
                                 tmp2 <- prop.table(as.matrix(tmp2), 1)
                                 tmp[, names(tmp) %in% colnames(tmp2)] <- tmp2
-                                samp_t3 <- tidyr::gather(data = tmp,
-                                                         key = "sp_cat",
-                                                         value = "prop_t3",
-                                                         "BET_m10",
-                                                         "BET_p10",
-                                                         "SKJ_m10",
-                                                         "YFT_m10",
-                                                         "YFT_p10")
+                                samp_t3 <- tmp %>%  tidyr::pivot_longer(cols = contains("10"),
+                                                                        names_to = "sp_cat",
+                                                                        values_to = "prop_t3" )
                                 tmp <- dplyr::left_join(x = samp_t3,
                                                         y = act_chr,
                                                         by = "id_act")
                                 data_sample_extract <- list(samw = samw,
                                                             samp_t3 = samp_t3)
                                 # fusion of the lb and sample composition ----
-                                lb_set_long <- tidyr::gather(data = lb_set,
-                                                             "BET_m10",
-                                                             "BET_p10",
-                                                             "SKJ_m10",
-                                                             "YFT_m10",
-                                                             "YFT_p10",
-                                                             key = "sp_cat",
-                                                             value = "prop_lb",
-                                                             -"code_act_type")
+                                lb_set_long <- lb_set %>% tidyr::pivot_longer(cols = contains("10"),
+                                                            names_to = "sp_cat",
+                                                            values_to = "prop_lb")
                                 lb_set_long <- dplyr::left_join(lb_set_long,
                                                                 catch_set_lb,
                                                                 by = c("id_act",
@@ -7704,7 +7693,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           w_lb_t3 = sum(w_lb_t3)) %>% ungroup()
 
                               # recover the weight declaration standardized
-                              weigth_declaration_ST <- tmp <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
+                              weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
                               set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = join_by("id_act", "sp"))
 
                               name_to_trash <- c("code_act_type", "wcat","sp_code","status")
@@ -7718,15 +7707,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               landing_date = lubridate::as_date(substr(numbers,1,8)),
                                               status = ifelse(data_source == "discard","discard", "catch"),
                                               fit_prop = NULL)
-
                               if(!(nrow(set_all)+nrow(catch_all_other)) == nrow(set_all_output)){
                                 warning("Duplicated detected in 'Catch_set_detail'")
                               }
-                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, status) %>% mutate(dupli = n())
+                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, data_source) %>% mutate(dupli = n())
                               if(any(test_dupli$dupli>1)){
                                 warning("Duplicated catch species data in activities, check 'Catch_set_detail'")
                               }
-
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(set_all_output))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_set_detail"
