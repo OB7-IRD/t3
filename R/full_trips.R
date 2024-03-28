@@ -5756,6 +5756,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     load(file.path(inputs_level3_path,
                                                    target_file[x],
                                                    fsep = "/"))
+                                    if(exists("process_level3") && is.list(get("process_level3"))){
+                                      data_level3 <- process_level3
+                                    }
                                     # sets characteristics
                                     dataset_target$act_chr[[x]] <- data_level3$act
                                     # catch by set, species and categories from logbook (t3 level 1)
@@ -5785,7 +5788,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sset <- inputs_level3[[4]]
                                 # well plan
                                 wp <- inputs_level3[[5]]
-
                                 # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
