@@ -7760,7 +7760,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "catch_LB_ST", "prop_fit_ST", "catch_set_total_ST","status")
                               SHX_group <- c("SHX","FAL","OCS","SHK","BSH","SRX")
                               FRZ_group <- c("FRZ", "FRI","BLT","RAV")
-                              species_ecd_filter <- c("ALB","BET","SKJ","YFT","DSC", "SHX","FRZ","YOU","KAW","LOT","BLF")
+                              species_ecd_filter <- c("ALB","BET", "SKJ", "YFT", "DSC", "SHX", "FRZ", "LTA", "YOU", "KAW", "LOT", "BLF")
                               set_all_output_long_tmp <- set_all_output_long %>% dplyr::mutate(rf3 = 1,
                                                                                                flagexpert = 9,
                                                                                                zet = 99,
