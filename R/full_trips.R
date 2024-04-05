@@ -4643,7 +4643,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_well_set <- current_wells_sets$extract(id = well_set_id)[[1]]
                                               current_activity <- current_well_set$.__enclos_env__$private$activity_id
                                               cat(format(Sys.time(),
-                                                           "%Y-%m-%d %H:%M:%S"), current_activities$filter_l1,
+                                                           "%Y-%m-%d %H:%M:%S"), current_activities,
                                                     sep = "")
                                               current_ocean <- current_activities$filter_l1(filter = paste0("$path$activity_id == \"", current_activity, "\""))[[1]]$.__enclos_env__$private$ocean
                                               if (is.null(current_ocean)) {
