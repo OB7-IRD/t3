@@ -2489,27 +2489,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
-                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                departure_date,
-                                                                                                "\""))) != 0) {
+                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"", departure_date, "\""))) != 0) {
                                           capture.output(current_activities_departure_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
-                                          capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                                                                       departure_date,
-                                                                                                                                                       "\""))),
+                                          capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"", departure_date, "\""))),
                                                          file = "NUL")
                                           current_activities_departure_date_time_at_sea <- sum(unlist(current_activities_departure_date$extract_l1_element_value(element = "time_at_sea")))
                                         } else {
                                           current_activities_departure_date_time_at_sea <- 0
                                         }
-                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                landing_date,
-                                                                                                "\""))) != 0) {
+                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"", landing_date,"\""))) != 0) {
                                           capture.output(current_activities_landing_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
-                                          capture.output(current_activities_landing_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                                                                     landing_date,
-                                                                                                                                                     "\""))),
+                                          capture.output(current_activities_landing_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"", landing_date, "\""))),
                                                          file = "NUL")
                                           current_activities_landing_date_time_at_sea <- sum(unlist(current_activities_landing_date$extract_l1_element_value(element = "time_at_sea")))
                                         } else {
@@ -2720,9 +2712,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           activities_date <- activities_dates[[activities_dates_id]]
                                           capture.output(current_activities_date <- object_r6(class_name = "activities"),
                                                          file = "NUL")
-                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                                                             activities_date,
-                                                                                                                                             "\""))),
+                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"", activities_date, "\""))),
                                                          file = "NUL")
                                           current_activities_code <- unique(unlist(current_activities_date$extract_l1_element_value(element = "activity_code")))
                                           if (any(! current_activities_code %in% c(4, 7, 10, 15, 100))) {
@@ -5483,15 +5473,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
                                                                              date_act = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
                                                                                                             FUN = function(a) {
-                                                                                                              current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
-                                                                                                                                                           a,
-                                                                                                                                                           "\""))[[1]]$.__enclos_env__$private$activity_date
+                                                                                                              current_activities$filter_l1(filter = paste0("$path$activity_id == \"", a,"\""))[[1]]$.__enclos_env__$private$activity_date
                                                                                                             })),
                                                                              code_act_type = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
                                                                                                                  FUN = function(a) {
-                                                                                                                   current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
-                                                                                                                                                                a,
-                                                                                                                                                                "\""))[[1]]$.__enclos_env__$private$activity_code
+                                                                                                                   current_activities$filter_l1(filter = paste0("$path$activity_id == \"", a, "\""))[[1]]$.__enclos_env__$private$activity_code
                                                                                                                  })))
                                       tmp_elementarycatch_final <- dplyr::bind_rows(tmp_elementarycatch) %>%
                                         dplyr::left_join(dplyr::bind_rows(tmp_elementarycatch_activities),
