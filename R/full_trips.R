@@ -2151,11 +2151,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "avdth"))
                               # 11.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 1.5 (set duration calculation) cancelled.\n",
-                                    sep = "")
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object.\n",
+                                     " - Process 1.5 (set duration calculation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -2392,114 +2391,119 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             time_at_sea = function(global_output_path = NULL,
                                                    output_format = "eu") {
-                              browser()
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 1.6 (set duration calculation) cancelled.\n",
-                                    sep = "")
-                              }
-                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                if (full_trip_id == 1) {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Start process 1.6: time at sea calculation.\n",
-                                      sep = "")
-                                }
-                                if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: full trip avoided because a least one trip inside is missing.\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                 file = "NUL")
-                                  capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                 file = "NUL")
-                                  current_trips$modification_l1(modification = "$path$time_at_sea <- NA")
-                                } else {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process 1.6 on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
-                                    current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                    departure_date <- current_trip$.__enclos_env__$private$departure_date
-                                    landing_date <- current_trip$.__enclos_env__$private$landing_date
-                                    time_departure_date <- lubridate::hms(format(departure_date,
-                                                                                 format = "%H:%M:%S"))
-                                    time_landing_date <- lubridate::hms(format(landing_date,
-                                                                               format = "%H:%M:%S"))
-                                    if (time_departure_date > lubridate::dseconds(x = 0)
-                                        & time_landing_date > lubridate::dseconds(x = 0)) {
-                                      # we have time for departure_date and landing_date
-                                      time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
-                                                                                               end = landing_date)) / 3600
-                                    } else {
-                                      if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                        capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                                       file = "NUL")
-                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                departure_date,
-                                                                                                "\""))) != 0) {
-                                          capture.output(current_activities_departure_date <- object_r6(class_name = "activities"),
-                                                         file = "NUL")
-                                          capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                                                                       departure_date,
-                                                                                                                                                       "\""))),
-                                                         file = "NUL")
-                                          current_activities_departure_date_time_at_sea <- sum(unlist(current_activities_departure_date$extract_l1_element_value(element = "time_at_sea")))
-                                        } else {
-                                          current_activities_departure_date_time_at_sea <- 0
-                                        }
-                                        if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                landing_date,
-                                                                                                "\""))) != 0) {
-                                          capture.output(current_activities_landing_date <- object_r6(class_name = "activities"),
-                                                         file = "NUL")
-                                          capture.output(current_activities_landing_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
-                                                                                                                                                     landing_date,
-                                                                                                                                                     "\""))),
-                                                         file = "NUL")
-                                          current_activities_landing_date_time_at_sea <- sum(unlist(current_activities_landing_date$extract_l1_element_value(element = "time_at_sea")))
-                                        } else {
-                                          current_activities_landing_date_time_at_sea <- 0
-                                        }
-                                        time_at_sea_tmp <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                     end = landing_date - lubridate::days(x = 1)))
-                                        time_at_sea <- (time_at_sea_tmp
-                                                        + lubridate::dhours(x = current_activities_departure_date_time_at_sea)
-                                                        + lubridate::dhours(x = current_activities_landing_date_time_at_sea))
-                                        time_at_sea <- time_at_sea@.Data
-                                      } else {
-                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                 end = landing_date - lubridate::days(x = 1)))
-                                      }
-                                    }
-                                    current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea / 3600
+                              # 12.1 - Arguments verification ----
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              # 12.2 - Global process ----
+                              if (is.null(x = private$data_selected)) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object.\n",
+                                     " - Process 1.6 (set duration calculation) cancelled.")
+                              } else {
+                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 1.6: time at sea calculation.")
                                   }
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Full trip avoided because a least one trip inside is missing.\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    current_trips$modification_l1(modification = "$path$time_at_sea <- NA")
+                                  } else {
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Ongoing process 1.6 on item \"",
+                                            names(x = private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
+                                    for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                      current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                      departure_date <- current_trip$.__enclos_env__$private$departure_date
+                                      trip_end_date <- current_trip$.__enclos_env__$private$trip_end_date
+                                      time_departure_date <- lubridate::hms(format(x = departure_date,
+                                                                                   format = "%H:%M:%S"))
+                                      time_trip_end_date <- lubridate::hms(format(x = trip_end_date,
+                                                                                  format = "%H:%M:%S"))
+                                      if (time_departure_date > lubridate::dseconds(x = 0)
+                                          & time_trip_end_date > lubridate::dseconds(x = 0)) {
+                                        # we have time for departure_date and landing_date
+                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
+                                                                                                 end = trip_end_date)) / 3600
+                                      } else {
+                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                         file = "NUL")
+                                          if (length(x = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                      departure_date,
+                                                                                                      "\""))) != 0) {
+                                            capture.output(current_activities_departure_date <- object_r6(class_name = "activities"),
+                                                           file = "NUL")
+                                            capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                                                                         departure_date,
+                                                                                                                                                         "\""))),
+                                                           file = "NUL")
+                                            current_activities_departure_date_time_at_sea <- sum(unlist(x = current_activities_departure_date$extract_l1_element_value(element = "time_at_sea")))
+                                          } else {
+                                            current_activities_departure_date_time_at_sea <- 0
+                                          }
+                                          if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                  trip_end_date,
+                                                                                                  "\""))) != 0) {
+                                            capture.output(current_activities_trip_end_date <- object_r6(class_name = "activities"),
+                                                           file = "NUL")
+                                            capture.output(current_activities_trip_end_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == \"",
+                                                                                                                                                        trip_end_date,
+                                                                                                                                                        "\""))),
+                                                           file = "NUL")
+                                            current_activities_trip_end_date_time_at_sea <- sum(unlist(current_activities_trip_end_date$extract_l1_element_value(element = "time_at_sea")))
+                                          } else {
+                                            current_activities_trip_end_date_time_at_sea <- 0
+                                          }
+                                          time_at_sea_tmp <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                       end = trip_end_date - lubridate::days(x = 1)))
+                                          time_at_sea <- (time_at_sea_tmp
+                                                          + lubridate::dhours(x = current_activities_departure_date_time_at_sea)
+                                                          + lubridate::dhours(x = current_activities_trip_end_date_time_at_sea))
+                                          time_at_sea <- time_at_sea@.Data
+                                        } else {
+                                          time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                   end = trip_end_date - lubridate::days(x = 1)))
+                                        }
+                                      }
+                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea / 3600
+                                    }
+                                  }
+                                  message(format(x = Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 1.6 successfull on item \"",
+                                          names(x = private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
                                 }
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Process 1.6 successfull on item \"",
-                                    names(private$data_selected)[full_trip_id],
-                                    "\".\n",
-                                    "[trip: ",
-                                    private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                    "]\n",
-                                    sep = "")
                               }
-                              # outputs extraction ----
+                              # 12.3 - Outputs extraction ----
                               # outputs manipulation
                               if (! is.null(x = global_output_path)) {
                                 full_trips_selected <- private$data_selected
@@ -2530,21 +2534,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                            }
                                                                                                          })),
                                                                         "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                        "landing_date" = do.call("c",
-                                                                                                 trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                        "year_landing_date" = sapply(do.call("c",
-                                                                                                             trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                     lubridate::year),
-                                                                        "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                        "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                                                        "trip_end_date" = do.call("c",
+                                                                                                  trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                        "year_trip_end_date" = sapply(do.call("c",
+                                                                                                              trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                      lubridate::year),
+                                                                        "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                        "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                 outputs_process_1_6_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
                                                                              "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
                                                                              "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                              "activity_date" = do.call("c",
                                                                                                        activities_selected$extract_l1_element_value(element = "activity_date")),
-                                                                             "ocean" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean")),
-                                                                             "school_type" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type")),
+                                                                             "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                             "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")))
                                 outputs_process_1_6 <- outputs_process_1_6_activities %>%
                                   dplyr::left_join(outputs_process_1_6_trips,
@@ -2552,16 +2556,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::relocate(full_trip_id,
                                                   full_trip_name,
                                                   trip_id,
-                                                  landing_date,
-                                                  year_landing_date,
-                                                  vessel_id,
-                                                  vessel_type,
+                                                  trip_end_date,
+                                                  year_trip_end_date,
+                                                  vessel_code,
+                                                  vessel_type_code,
                                                   activity_id,
                                                   activity_latitude,
                                                   activity_longitude,
                                                   activity_date,
-                                                  ocean,
-                                                  school_type,
+                                                  ocean_code,
+                                                  school_type_code,
                                                   time_at_sea)
                                 # extraction
                                 if (output_format == "us") {
@@ -2571,10 +2575,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_dec <- ","
                                   outputs_sep <- ";"
                                 } else {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Warning: wrong outputs format define, European format will be applied\n",
-                                      sep = "")
+                                  warning(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Warning: wrong outputs format define, European format will be applied.")
                                   outputs_dec <- ","
                                   outputs_sep <- ";"
                                 }
@@ -2586,20 +2589,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             row.names = FALSE,
                                             sep = outputs_sep,
                                             dec = outputs_dec)
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Outputs extracted in the following directory:\n",
-                                    file.path(global_output_path,
-                                              "level1",
-                                              "data"),
-                                    sep = "")
+                                message(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Outputs extracted in the following directory:\n",
+                                        file.path(global_output_path,
+                                                  "level1",
+                                                  "data"))
                               }
-                              cat(format(Sys.time(),
-                                         "%Y-%m-%d %H:%M:%S"),
-                                  " - End process 1.6: time at sea calculation.\n",
-                                  sep = "")
+                              message(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - End process 1.6: time at sea calculation.")
                             },
-                            # process 1.7: fishing_time ----
+                            # 13 - Process 1.7: fishing_time ----
                             #' @description Process for fishing time calculation (in hours).
                             #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
@@ -2627,6 +2628,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     sunset_schema = "sunset",
                                                     global_output_path = NULL,
                                                     output_format = "eu") {
+                              browser()
+                              # 13.1 - Arguments verification ----
                               if (is.null(private$data_selected)) {
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
