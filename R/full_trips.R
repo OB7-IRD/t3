@@ -2858,47 +2858,49 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             searching_time = function(global_output_path = NULL,
                                                       output_format = "eu") {
-                              browser()
                               # 14.1 - Arguments verification ----
-
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
                               # 14.2 - Global process ----
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 1.8 (fishing time calculation) cancelled.\n",
-                                    sep = "")
+                              if (is.null(x = private$data_selected)) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object.\n",
+                                     "Process 1.8 (fishing time calculation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.8: searching time calculation.\n",
-                                        sep = "")
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 1.8: searching time calculation.")
                                   }
-                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Warning: full trip avoided because a least one trip inside is missing.\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                     capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    current_trips$modification_l1(modification = "$path$searching_time <- NA")
+                                    current_trips$modification_l1(modification = "$path$searching_time <- NA_real_")
                                   } else {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process 1.8 on item \"",
-                                        names(private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Ongoing process 1.8 on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -2907,22 +2909,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
                                         activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
-                                        if (any(is.null(activities_set_duration))) {
-                                          cat(format(Sys.time(),
-                                                     "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: run process 1.5 (set duration calculation) before this process.\n",
-                                              sep = "")
-                                          stop()
+                                        if (any(is.null(x = activities_set_duration))) {
+                                          stop(format(Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Run process 1.5 (set duration calculation) before this process.")
                                         } else {
                                           sum_activities_set_duration <- sum(activities_set_duration,
                                                                              na.rm = TRUE)
                                         }
-                                        if (is.null(current_trip$.__enclos_env__$private$fishing_time)) {
-                                          cat(format(Sys.time(),
-                                                     "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: run process 1.7 (fishing time calculation) before this process.\n",
-                                              sep = "")
-                                          stop()
+                                        if (is.null(x = current_trip$.__enclos_env__$private$fishing_time)) {
+                                          stop(format(Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Error: run process 1.7 (fishing time calculation) before this process.")
                                         } else {
                                           current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
                                           searching_time <- lubridate::dhours(x = current_fishing_time) - lubridate::dminutes(x = sum_activities_set_duration)
@@ -2934,15 +2932,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       current_trip$.__enclos_env__$private$searching_time <- searching_time / 3600
                                     }
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Process 1.8 successfull on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 1.8 successfull on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
                                 }
                                 # 14.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -2971,13 +2968,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              }
                                                                                                            })),
                                                                           "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                          "landing_date" = do.call("c",
-                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                          "year_landing_date" = sapply(do.call("c",
-                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                       lubridate::year),
-                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))),
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                    trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                                trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                        lubridate::year),
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))),
                                                                           "searching_time" = unlist(x = (trips_selected$extract_l1_element_value(element = "searching_time"))))
                                   # extraction
                                   if (output_format == "us") {
@@ -2987,10 +2984,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   } else {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: wrong outputs format define, European format will be applied\n",
-                                        sep = "")
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Warning: wrong outputs format define, European format will be applied.")
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   }
@@ -3002,18 +2998,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               row.names = FALSE,
                                               sep = outputs_sep,
                                               dec = outputs_dec)
-                                  cat(format(x = Sys.time(),
-                                             format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Outputs extracted in the following directory:\n",
-                                      file.path(global_output_path,
-                                                "level1",
-                                                "data"),
-                                      sep = "")
+                                  message(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - Outputs extracted in the following directory:\n",
+                                          file.path(global_output_path,
+                                                    "level1",
+                                                    "data"))
                                 }
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - End process 1.8: searching time calculation.\n",
-                                    sep = "")
+                                message(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 1.8: searching time calculation.")
                               }
                             },
                             # process 2.1: sample length class conversion ld1 to lf ----
