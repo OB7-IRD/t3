@@ -27,4 +27,7 @@ where
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 	and t.logbookprogram is not null
+order by
+	vessel_code,
+	trip_end_date
 ;

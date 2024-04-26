@@ -23,10 +23,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               trip_id <- 1
                               while (trip_id <= object_trips$count()) {
                                 if (trip_id == 1) {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Start full trips creation.\n",
-                                      sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Start full trips creation.")
                                 }
                                 if (object_trips$view(trip_id)[[1]]$.__enclos_env__$private$landing_well_content_code == 1) {
                                   full_trips <- append(full_trips,
@@ -62,14 +61,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     full_trip_warning <- 0
                                     private$id_not_full_trip <- append(private$id_not_full_trip,
                                                                        length(full_trips) + 1)
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: missing trip(s) in item ",
-                                        length(full_trips) + 1,
-                                        ".\n[trip: ",
-                                        object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Missing trip(s) in item ",
+                                            length(full_trips) + 1,
+                                            ".\n[trip: ",
+                                            object_trips$view(sub_trip_id)[[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
                                   full_trips <- append(full_trips,
                                                        list(full_trips_tmp))
@@ -83,10 +81,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    input_trips = object_trips$count(),
                                                                    output_trips = length(x = unlist(x = full_trips)),
                                                                    output_full_trips = length(x = full_trips))
-                              cat(format(Sys.time(),
+                              message(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
-                                  " - End of full trips creation.\n",
-                                  sep = "")
+                                  " - End of full trips creation.")
                             },
                             # 2 - Add activities ----
                             #' @description Function for add activities in full trips object.
@@ -166,8 +163,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   " - End of add activity.\n",
                                   sep = "")
                             },
-                            # 3 - Filter full trips by time period ----
-                            #' @description Function for filter full trips by a time period.
+                            # 3 - Filter full trips by year(s) period ----
+                            #' @description Function for filter full trips by a year(s) period.
                             #' @param years_period Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
                             filter_by_years_period = function(years_period) {
                               # 3.1 - Arguments verifications ----
@@ -176,10 +173,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # 3.2 - Global process ----
                               for (full_trip_id in seq_len(length.out = length(x = private$data))) {
                                 if (full_trip_id == 1) {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of full trips filtering by reference periode.\n",
-                                      sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Start of full trips filtering by reference periode.")
                                 }
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
@@ -204,16 +200,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                               }
                               if (any(private$id_not_full_trip %in% names(private$data_selected))) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Warning: missing trip(s) in at least one full trip item selected.\n",
-                                    "[name(s)/id(s) of element(s): ",
-                                    paste0(private$id_not_full_trip,
-                                           "/",
-                                           which(x = names(private$data_selected) %in% private$id_not_full_trip),
-                                           collapse = ", "),
-                                    "]\n",
-                                    sep = "")
+                                warning(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Missing trip(s) in at least one full trip item selected.\n",
+                                        "[name(s)/id(s) of element(s): ",
+                                        paste0(private$id_not_full_trip,
+                                               "/",
+                                               which(x = names(private$data_selected) %in% private$id_not_full_trip),
+                                               collapse = ", "),
+                                        "]")
                                 private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
                               }
                               # 3.3 - Log summary annotation ----
@@ -243,9 +238,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                output_activities = current_activities_selected$count()) %>%
                                 dplyr::relocate(input_full_trips,
                                                 .before = output_trips)
-                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End of full trips filtering.\n",
-                                  sep = "")
+                              message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                      " - End of full trips filtering.")
                             },
                             # 4 - Add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.

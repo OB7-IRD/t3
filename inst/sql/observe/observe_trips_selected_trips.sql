@@ -23,4 +23,7 @@ from
 	left join ps_logbook.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)
 where
 	t.topiaid in (?trip_ids)
+order by
+	vessel_code,
+	trip_end_date
 ;
