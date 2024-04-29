@@ -82,8 +82,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    output_trips = length(x = unlist(x = full_trips)),
                                                                    output_full_trips = length(x = full_trips))
                               message(format(Sys.time(),
-                                         "%Y-%m-%d %H:%M:%S"),
-                                  " - End of full trips creation.")
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - End of full trips creation.")
                             },
                             # 2 - Add activities ----
                             #' @description Function for add activities in full trips object.
@@ -567,26 +567,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "eu"))
                               # 7.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 1.1 (Raising Factor level 1) cancelled.\n",
-                                    sep = "")
+                                stop(format(x = Sys.time(),
+                                            format = "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object. Process 1.1 (Raising Factor level 1) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
                                   if (full_trip_id == 1) {
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.1: Raising Factor level 1.\n",
-                                        sep = "")
+                                    message(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 1.1: Raising Factor level 1.")
                                   }
                                   if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: missing trip(s) in full trip element \"",
-                                        names(x = private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        sep = "")
+                                    warning(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Warning: missing trip(s) in full trip element \"",
+                                            names(x = private$data_selected)[full_trip_id],
+                                            "\".")
                                     stop <- 0
                                     for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                       # Case 1.1 ----
@@ -599,15 +595,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      current_trip$.__enclos_env__$private$logbook_availability_code)
                                       if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
                                         if (any(logbook_availability) == 0) {
-                                          cat(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Warning: missing logbook in trip element \"",
-                                              names(x = private$data_selected)[full_trip_id],
-                                              "\".\n",
-                                              "[trip: ",
-                                              current_trip$.__enclos_env__$private$trip_id,
-                                              "]\n",
-                                              sep = "")
+                                          warning(format(x = Sys.time(),
+                                                         format = "%Y-%m-%d %H:%M:%S"),
+                                                  " - Warning: missing logbook in trip element \"",
+                                                  names(x = private$data_selected)[full_trip_id],
+                                                  "\".\n",
+                                                  "[trip: ",
+                                                  current_trip$.__enclos_env__$private$trip_id,
+                                                  "]")
                                           capture.output(current_trips <- object_r6(class_name = "trips"),
                                                          file = "NUL")
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -661,15 +656,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           if (stop_bis == 1) {
                                             # Case 1.3 ----
                                             # at least one elementary landing is missing in not complete full trip item
-                                            cat(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: missing elementary landing in trip element \"",
-                                                names(x = private$data_selected)[full_trip_id],
-                                                "\".\n",
-                                                "[trip: ",
-                                                current_trip$.__enclos_env__$private$trip_id,
-                                                "]\n",
-                                                sep = "")
+                                            warning(format(x = Sys.time(),
+                                                           format = "%Y-%m-%d %H:%M:%S"),
+                                                    " - Missing elementary landing in trip element \"",
+                                                    names(x = private$data_selected)[full_trip_id],
+                                                    "\".\n",
+                                                    "[trip: ",
+                                                    current_trip$.__enclos_env__$private$trip_id,
+                                                    "]")
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -707,15 +701,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        current_trip$.__enclos_env__$private$logbook_availability_code)
                                         if (trip_id == length(x = private$data_selected[[full_trip_id]])) {
                                           if (any(logbook_availability) == 0) {
-                                            cat(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: missing logbook in trip element \"",
-                                                names(x = private$data_selected)[full_trip_id],
-                                                "\".\n",
-                                                "[trip: ",
-                                                current_trip$.__enclos_env__$private$trip_id,
-                                                "]\n",
-                                                sep = "")
+                                            warning(format(x = Sys.time(),
+                                                           format = "%Y-%m-%d %H:%M:%S"),
+                                                    " - Missing logbook in trip element \"",
+                                                    names(x = private$data_selected)[full_trip_id],
+                                                    "\".\n",
+                                                    "[trip: ",
+                                                    current_trip$.__enclos_env__$private$trip_id,
+                                                    "]")
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -741,11 +734,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                         if (current_elementarycatches$count() == 0
-                                            || (! any((paste(species_fao_codes_rf1,
-                                                             species_fate_codes_rf1,
-                                                             sep = "_") %in% paste(unique(x = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code"))),
-                                                                                   unique(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code"))),
-                                                                                   sep = "_"))))) {
+                                            || (! any((tidyr::crossing(species_fao_codes_rf1,
+                                                                       species_fate_codes_rf1) %>%
+                                                       dplyr::mutate(species_fao_fate_codes_rf1 = stringr::str_c(species_fao_codes_rf1,
+                                                                                                                 species_fate_codes_rf1,
+                                                                                                                 sep = "_")) %>%
+                                                       dplyr::pull(species_fao_fate_codes_rf1)) %in% (tidyr::crossing(species_fao_code = unique(x = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code"))),
+                                                                                                                      species_fate_code = unique(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")))) %>%
+                                                                                                      dplyr::mutate(species_fao_fate_codes = stringr::str_c(species_fao_code,
+                                                                                                                                                            species_fate_code,
+                                                                                                                                                            sep = "_")) %>%
+                                                                                                      dplyr::pull(species_fao_fate_codes))))) {
                                           # Case 2.2 ----
                                           # trips with no catches (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip item
                                           capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -767,24 +766,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                             "\")"))),
                                                          file = "NUL")
                                           current_elementarycatches_weight <- unlist(x = current_elementarycatches_final$extract_l1_element_value(element = "catch_weight"))
-                                          current_elementarylandings <- NULL
+                                          capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
+                                                         file = "NUL")
                                           for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                             current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                            current_elementarylandings <- append(current_elementarylandings,
-                                                                                 unlist(current_trip$.__enclos_env__$private$elementarylandings))
+                                            if (length(x = current_trip$.__enclos_env__$private$elementarylandings) != 0)
+                                              capture.output(current_elementarylandings$add(new_item = current_trip$.__enclos_env__$private$elementarylandings),
+                                                             file = "NUL")
                                           }
-                                          if (is.null(x = current_elementarylandings)) {
+                                          if (current_elementarylandings$count() == 0
+                                              || (! any(unique(x = unlist(x = current_elementarylandings$extract_l1_element_value(element = "species_fao_code"))) %in% species_fao_codes_rf1))) {
                                             # Case 2.3 ----
-                                            # no elementary landing in complete full trip item
-                                            cat(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Warning: missing elementary landing in trip element \"",
-                                                names(x = private$data_selected)[full_trip_id],
-                                                "\".\n",
-                                                "[trip: ",
-                                                current_trip$.__enclos_env__$private$trip_id,
-                                                "]\n",
-                                                sep = "")
+                                            # no elementary landing (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip item
+                                            warning(format(x = Sys.time(),
+                                                           format = "%Y-%m-%d %H:%M:%S"),
+                                                    " - Warning: missing elementary landing in trip element \"",
+                                                    names(x = private$data_selected)[full_trip_id],
+                                                    "\".\n",
+                                                    "[trip: ",
+                                                    current_trip$.__enclos_env__$private$trip_id,
+                                                    "]")
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -794,28 +795,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           } else {
                                             # Case 2.4 ----
                                             # everything rocks dude !
-                                            current_elementarylandings_weight <- vector(mode = "numeric")
-                                            for (elementarylanding_id in seq_len(length.out = length(x = current_elementarylandings))) {
-                                              if (current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$species_fao_code %in% species_fao_codes_rf1) {
-                                                current_elementarylandings_weight <- append(current_elementarylandings_weight,
-                                                                                            current_elementarylandings[[elementarylanding_id]]$.__enclos_env__$private$landing_weight)
-                                              }
-                                            }
+                                            capture.output(current_elementarylandings_rf1_species <- object_r6(class_name = "elementarylandings"),
+                                                           file = "NUL")
+                                            capture.output(current_elementarylandings_rf1_species$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
+                                                                                                                                                                      paste(species_fao_codes_rf1,
+                                                                                                                                                                            collapse = "\", \""),
+                                                                                                                                                                      "\")"))),
+                                                           file = "NUL")
+                                            current_elementarylandings_weight <- unlist(x = current_elementarylandings_rf1_species$extract_l1_element_value(element = "landing_weight"))
                                             current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
                                             if (current_rf1 < rf1_lowest_limit
                                                 | current_rf1 > rf1_highest_limit) {
-                                              cat(format(x = Sys.time(),
-                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                  " - Warning: rf1 value of full trip element \"",
-                                                  names(x = private$data_selected)[full_trip_id],
-                                                  "\" out of theorical boundaries: ",
-                                                  round(x = current_rf1,
-                                                        digits = 3),
-                                                  ".\n",
-                                                  "[trip: ",
-                                                  current_trip$.__enclos_env__$private$trip_id,
-                                                  "]\n",
-                                                  sep = "")
+                                              warning(format(x = Sys.time(),
+                                                             format = "%Y-%m-%d %H:%M:%S"),
+                                                      " - Rf1 value of full trip element \"",
+                                                      names(x = private$data_selected)[full_trip_id],
+                                                      "\" out of theorical boundaries: ",
+                                                      round(x = current_rf1,
+                                                            digits = 3),
+                                                      ".\n",
+                                                      "[trip: ",
+                                                      current_trip$.__enclos_env__$private$trip_id,
+                                                      "]")
                                             }
                                             capture.output(current_trips <- object_r6(class_name = "trips"),
                                                            file = "NUL")
@@ -1029,18 +1030,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               row.names = FALSE,
                                               sep = outputs_sep,
                                               dec = outputs_dec)
-                                  cat(format(x = Sys.time(),
-                                             format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Outputs extracted in the following directory:\n",
-                                      file.path(global_output_path,
-                                                "level1",
-                                                "data"),
-                                      sep = "")
+                                  message(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - Outputs extracted in the following directory:\n",
+                                          file.path(global_output_path,
+                                                    "level1",
+                                                    "data"),
+                                          sep = "")
                                 }
-                                cat(format(x = Sys.time(),
-                                           format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Successful process 1.1: Raising Factor level 1.\n",
-                                    sep = "")
+                                message(format(x = Sys.time(),
+                                               format = "%Y-%m-%d %H:%M:%S"),
+                                        " - Successful process 1.1: Raising Factor level 1.")
                               }
                             },
                             # 8 - Process 1.2: rf2 ----
