@@ -5,8 +5,8 @@ SELECT
 		& YEAR(m.D_DBQ)
 		& format(MONTH(m.D_DBQ), '00')
 		& format(DAY(m.D_DBQ), '00') AS trip_id
-	,p.C_PAYS AS fleet_code
-	,p.C_ISO3166_A3 AS fleet_label
+	,p.C_PAYS AS flag_code
+	,p.C_ISO3166_A3 AS flag_label
 	,Format(m.D_DEPART, "yyyy-mm-dd") & ' ' & Format(m.D_DEPART, "Long Time") AS departure_date
 	,Format(m.D_DBQ, "yyyy-mm-dd") & ' ' & Format(m.D_DBQ, "Long Time") AS trip_end_date
 	,m.F_ENQ AS logbook_availability_code
@@ -20,7 +20,7 @@ FROM
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	m.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-	AND p.C_PAYS IN (?fleet_codes)
+	AND p.C_PAYS IN (?flag_codes)
 	AND tb.C_TYP_B IN (?vessel_type_codes)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 		& format(b.C_BAT, '0000')
@@ -40,7 +40,7 @@ WHERE
 											INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 										WHERE
 											a.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-											AND p.C_PAYS IN (?fleet_codes)
+											AND p.C_PAYS IN (?flag_codes)
 											AND a.C_OCEA IN (?ocean_codes)
 											AND tb.C_TYP_B IN (?vessel_type_codes))
 ORDER BY

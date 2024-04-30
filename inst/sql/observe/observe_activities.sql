@@ -21,14 +21,14 @@ from
 	join ps_common.trip t on (t.topiaid = r.trip)
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
-	join common.country c on (v.fleetcountry = c.topiaid)
+	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)
 	join ps_common.vesselactivity va on (a.vesselactivity = va.topiaid)
 	left join ps_logbook.setsuccessstatus sss on (a.setsuccessstatus = sss.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
-	and c.code in (?fleet_codes)
+	and c.code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 ;

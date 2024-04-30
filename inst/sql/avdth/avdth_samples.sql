@@ -72,7 +72,7 @@ FROM
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	e.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-	AND p.C_PAYS IN (?fleet_codes)
+	AND p.C_PAYS IN (?flag_codes)
 	AND e.C_TYP_ECH IN (?sample_type_codes)
 	AND tb.C_TYP_B IN (?vessel_type_codes)
 	AND 'fr.ird.avdth.entities.data.Trip#'
@@ -93,7 +93,7 @@ WHERE
 												INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 											WHERE
 												a.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-												AND p.C_PAYS IN (?fleet_codes)
+												AND p.C_PAYS IN (?flag_codes)
 												AND a.C_OCEA IN (?ocean_codes))
 ORDER BY
 	trip_id

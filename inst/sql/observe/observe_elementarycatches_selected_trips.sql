@@ -19,7 +19,7 @@ from
 	join ps_common.trip t on (r.trip = t.topiaid)
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
-	join common.country co on (v.fleetcountry = co.topiaid)
+	join common.country co on (v.flagcountry = co.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)
 	left join ps_common.weightcategory w on (c.weightcategory = w.topiaid)

@@ -17,7 +17,7 @@ from
 	ps_common.trip t
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
-	join common.country c on (v.fleetcountry = c.topiaid)
+	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_common.acquisitionstatus acqs on (t.logbookacquisitionstatus = acqs.topiaid)
 	left join ps_logbook.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)

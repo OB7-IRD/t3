@@ -1,4 +1,4 @@
-year;fleet_code;fleet_code_iso_3;ocean_code;school_type_code;parameter_a;parameter_b;null_set_value
+year;flag_code;flag_code_iso_3;ocean_code;school_type_code;parameter_a;parameter_b;null_set_value
 1990;4;ESP;1;1;1.478;100.062;90
 1991;4;ESP;1;1;1.478;100.062;90
 1992;4;ESP;1;1;0.478;127.984;95

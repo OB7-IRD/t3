@@ -13,7 +13,7 @@ from
 	left join ps_common.weightcategory w on (l.weightcategory = w.topiaid)
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
-	join common.country co on (v.fleetcountry = co.topiaid)
+	join common.country co on (v.flagcountry = co.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 where
 	t.topiaid in (?trip_ids)

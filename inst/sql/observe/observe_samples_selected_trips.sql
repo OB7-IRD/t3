@@ -24,7 +24,7 @@ from
 	join ps_common.trip t on (s.trip = t.topiaid)
 	join common.vessel v on (t.vessel = v.topiaid)
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
-	join common.country c on (v.fleetcountry = c.topiaid)
+	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_logbook.samplespecies ss on (s.topiaid = ss.sample)
 	join ps_logbook.samplespeciesmeasure ssm on (ss.topiaid = ssm.samplespecies)

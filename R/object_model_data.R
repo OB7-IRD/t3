@@ -7,7 +7,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -16,7 +16,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    trips_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
                                                                     years_period = NULL,
-                                                                    fleet_codes = NULL,
+                                                                    flag_codes = NULL,
                                                                     ocean_codes = NULL,
                                                                     vessel_type_codes = NULL,
                                                                     trip_ids = NULL,
@@ -27,7 +27,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -87,8 +87,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                end_time_period = paste0((dplyr::last(years_period,
                                                                                                                      order_by = years_period) + 1),
                                                                                                         "-03-31"),
-                                                                               fleet_codes = DBI::SQL(paste0("'",
-                                                                                                             paste0(fleet_codes,
+                                                                               flag_codes = DBI::SQL(paste0("'",
+                                                                                                             paste0(flag_codes,
                                                                                                                     collapse = "', '"),
                                                                                                              "'")),
                                                                                ocean_codes = DBI::SQL(paste0("'",
@@ -146,7 +146,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                (dplyr::last(years_period,
                                                                                                                             order_by = years_period) + 1),
                                                                                                                "-03-31#")),
-                                                                             fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                             flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                   collapse = ", "))),
                                                                              ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                   collapse = ", "))),
@@ -159,7 +159,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        trip_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                   statement = trip_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(x = trip_id),
-                                                       fleet_code = as.integer(x = fleet_code),
+                                                       flag_code = as.integer(x = flag_code),
                                                        departure_date = as.character(x = departure_date),
                                                        trip_end_date = as.character(x = trip_end_date),
                                                        logbook_availability_code = as.integer(x = logbook_availability_code),
@@ -273,7 +273,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                    "]\n",
                                                                    sep = "")
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
-                                                                                fleet_code = trip_data$fleet_code[trip_id],
+                                                                                flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
                                                                                 trip_end_date = trip_data$trip_end_date[trip_id],
                                                                                 logbook_availability_code = trip_data$logbook_availability_code[trip_id],
@@ -294,7 +294,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -303,7 +303,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    activities_object_creation = function(data_source = "observe_database",
                                                                          database_connection = NULL,
                                                                          years_period = NULL,
-                                                                         fleet_codes = NULL,
+                                                                         flag_codes = NULL,
                                                                          ocean_codes = NULL,
                                                                          vessel_type_codes = NULL,
                                                                          trip_ids = NULL,
@@ -314,7 +314,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -374,8 +374,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                    end_time_period = paste0((dplyr::last(years_period,
                                                                                                                          order_by = years_period) + 1),
                                                                                                             "-03-31"),
-                                                                                   fleet_codes = DBI::SQL(paste0("'",
-                                                                                                                 paste0(fleet_codes,
+                                                                                   flag_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(flag_codes,
                                                                                                                         collapse = "', '"),
                                                                                                                  "'")),
                                                                                    ocean_codes = DBI::SQL(paste0("'",
@@ -433,7 +433,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    (dplyr::last(years_period,
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                 flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                       collapse = ", "))),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
@@ -602,7 +602,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -612,7 +612,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    elementarycatches_object_creation = function(data_source = "observe_database",
                                                                                 database_connection = NULL,
                                                                                 years_period = NULL,
-                                                                                fleet_codes = NULL,
+                                                                                flag_codes = NULL,
                                                                                 ocean_codes = NULL,
                                                                                 vessel_type_codes = NULL,
                                                                                 species_fate_codes = NULL,
@@ -624,7 +624,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -686,8 +686,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                           end_time_period = paste0((dplyr::last(years_period,
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31"),
-                                                                                          fleet_codes = DBI::SQL(paste0("'",
-                                                                                                                        paste0(fleet_codes,
+                                                                                          flag_codes = DBI::SQL(paste0("'",
+                                                                                                                        paste0(flag_codes,
                                                                                                                                collapse = "', '"),
                                                                                                                         "'")),
                                                                                           ocean_codes = DBI::SQL(paste0("'",
@@ -749,7 +749,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           (dplyr::last(years_period,
                                                                                                                                        order_by = years_period) + 1),
                                                                                                                           "-03-31#")),
-                                                                                        fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                        flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                              collapse = ", "))),
                                                                                         ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                              collapse = ", "))),
@@ -916,7 +916,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -925,7 +925,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    elementarylandings_object_creation = function(data_source = "observe_database",
                                                                                  database_connection = NULL,
                                                                                  years_period = NULL,
-                                                                                 fleet_codes = NULL,
+                                                                                 flag_codes = NULL,
                                                                                  ocean_codes = NULL,
                                                                                  vessel_type_codes = NULL,
                                                                                  trip_ids = NULL,
@@ -936,7 +936,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -996,8 +996,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             end_time_period = paste0((dplyr::last(years_period,
                                                                                                                                   order_by = years_period) + 1),
                                                                                                                      "-03-31"),
-                                                                                            fleet_codes = DBI::SQL(paste0("'",
-                                                                                                                          paste0(fleet_codes,
+                                                                                            flag_codes = DBI::SQL(paste0("'",
+                                                                                                                          paste0(flag_codes,
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")),
                                                                                             ocean_codes = DBI::SQL(paste0("'",
@@ -1055,7 +1055,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             (dplyr::last(years_period,
                                                                                                                                          order_by = years_period) + 1),
                                                                                                                             "-03-31#")),
-                                                                                          fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                          flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                                collapse = ", "))),
                                                                                           ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                                collapse = ", "))),
@@ -1201,7 +1201,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
@@ -1212,7 +1212,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    wells_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
                                                                     years_period = NULL,
-                                                                    fleet_codes = NULL,
+                                                                    flag_codes = NULL,
                                                                     ocean_codes = NULL,
                                                                     vessel_type_codes = NULL,
                                                                     sample_type_codes = NULL,
@@ -1225,7 +1225,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -1291,8 +1291,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                  end_time_period = paste0((dplyr::last(years_period,
                                                                                                                        order_by = years_period) + 1),
                                                                                                           "-03-31"),
-                                                                                 fleet_codes = DBI::SQL(paste0("'",
-                                                                                                               paste0(fleet_codes,
+                                                                                 flag_codes = DBI::SQL(paste0("'",
+                                                                                                               paste0(flag_codes,
                                                                                                                       collapse = "', '"),
                                                                                                                "'")),
                                                                                  ocean_codes = DBI::SQL(paste0("'",
@@ -1357,8 +1357,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                    end_time_period = paste0((dplyr::last(years_period,
                                                                                                                          order_by = years_period) + 1),
                                                                                                             "-03-31"),
-                                                                                   fleet_codes = DBI::SQL(paste0("'",
-                                                                                                                 paste0(fleet_codes,
+                                                                                   flag_codes = DBI::SQL(paste0("'",
+                                                                                                                 paste0(flag_codes,
                                                                                                                         collapse = "', '"),
                                                                                                                  "'")),
                                                                                    ocean_codes = DBI::SQL(paste0("'",
@@ -1416,7 +1416,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                  (dplyr::last(years_period,
                                                                                                                               order_by = years_period) + 1),
                                                                                                                  "-03-31#")),
-                                                                               fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                               flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                     collapse = ", "))),
                                                                                ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                     collapse = ", "))),
@@ -1479,7 +1479,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    (dplyr::last(years_period,
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                 flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                       collapse = ", "))),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
@@ -1850,8 +1850,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          set_duration_ref_data <- dplyr::mutate(.data = set_duration_ref_data,
                                                                                 year = as.integer(year),
-                                                                                fleet_code = as.integer(fleet_code),
-                                                                                fleet_code_iso_3 = as.character(fleet_code_iso_3),
+                                                                                flag_code = as.integer(flag_code),
+                                                                                flag_code_iso_3 = as.character(flag_code_iso_3),
                                                                                 ocean_code = as.integer(ocean_code),
                                                                                 school_type_code = as.integer(school_type_code),
                                                                                 parameter_a = as.numeric(parameter_a),
@@ -2041,7 +2041,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param fleet_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -2050,7 +2050,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    samplesets_data = function(data_source = "observe_database",
                                                               database_connection = NULL,
                                                               years_period = NULL,
-                                                              fleet_codes = NULL,
+                                                              flag_codes = NULL,
                                                               ocean_codes = NULL,
                                                               vessel_type_codes = NULL,
                                                               trip_ids = NULL,
@@ -2061,7 +2061,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
-                                       codama::r_type_checking(r_object = fleet_codes,
+                                       codama::r_type_checking(r_object = flag_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
@@ -2121,8 +2121,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                     end_time_period = paste0((dplyr::last(years_period,
                                                                                                                           order_by = years_period) + 1),
                                                                                                              "-03-31"),
-                                                                                    fleet_codes = DBI::SQL(paste0("'",
-                                                                                                                  paste0(fleet_codes,
+                                                                                    flag_codes = DBI::SQL(paste0("'",
+                                                                                                                  paste0(flag_codes,
                                                                                                                          collapse = "', '"),
                                                                                                                   "'")),
                                                                                     ocean_codes = DBI::SQL(paste0("'",
@@ -2180,7 +2180,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                     (dplyr::last(years_period,
                                                                                                                                  order_by = years_period) + 1),
                                                                                                                     "-03-31#")),
-                                                                                  fleet_codes = DBI::SQL(paste0(paste0(fleet_codes,
+                                                                                  flag_codes = DBI::SQL(paste0(paste0(flag_codes,
                                                                                                                        collapse = ", "))),
                                                                                   ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                        collapse = ", "))),
