@@ -2164,7 +2164,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                      & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                      & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                     & set_duration_ref$fleet_code == current_trip$.__enclos_env__$private$fleet_code, ])[1] != 1) {
+                                                                     & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, ])[1] != 1) {
                                               stop(format(Sys.time(),
                                                           "%Y-%m-%d %H:%M:%S"),
                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -2199,11 +2199,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$fleet_code == current_trip$.__enclos_env__$private$fleet_code, "parameter_a"]
+                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_a"]
                                                 parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$fleet_code == current_trip$.__enclos_env__$private$fleet_code, "parameter_b"]
+                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
                                               } else {
                                                 if ((referential_template == "observe"
@@ -2225,7 +2225,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                                                             & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                                                             & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                                                            & set_duration_ref$fleet_code == current_trip$.__enclos_env__$private$fleet_code, "null_set_value"]
+                                                                                                                            & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"]
                                                 }
                                               }
                                             }
@@ -2289,6 +2289,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                "set_duration" = unlist(x = activities_selected$extract_l1_element_value(element = "set_duration")))
@@ -2306,6 +2307,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_latitude,
                                                     activity_longitude,
                                                     activity_date,
+                                                    activity_code,
                                                     ocean_code,
                                                     school_type_code,
                                                     set_duration)
@@ -2509,6 +2511,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                              "activity_date" = do.call("c",
                                                                                                        activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                             "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                              "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                              "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")))
@@ -2526,6 +2529,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   activity_latitude,
                                                   activity_longitude,
                                                   activity_date,
+                                                  activity_code,
                                                   ocean_code,
                                                   school_type_code,
                                                   time_at_sea)
@@ -2689,28 +2693,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                              "\",",
                                                                                                                                              "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
                                                          file = "NUL")
-                                          current_activities_code <- unique(unlist(current_activities_date$extract_l1_element_value(element = "activity_code")))
-
-                                          if (any(! current_activities_code %in% (if (referential_template == "observe") c(0,
-                                                                                                                           1,
-                                                                                                                           8,
-                                                                                                                           9,
-                                                                                                                           10,
-                                                                                                                           11,
-                                                                                                                           18,
-                                                                                                                           22,
-                                                                                                                           24,
-                                                                                                                           36,
-                                                                                                                           37,
-                                                                                                                           38,
-                                                                                                                           39,
-                                                                                                                           50,
-                                                                                                                           101,
-                                                                                                                           102,
-                                                                                                                           103) else c(4,
-                                                                                                                                       7,
-                                                                                                                                       10,
-                                                                                                                                       15)))) {
+                                          current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
+                                          activities_code_referential <- if (referential_template == "observe") c(0,
+                                                                                                                  1,
+                                                                                                                  8,
+                                                                                                                  9,
+                                                                                                                  10,
+                                                                                                                  11,
+                                                                                                                  18,
+                                                                                                                  22,
+                                                                                                                  24,
+                                                                                                                  36,
+                                                                                                                  37,
+                                                                                                                  38,
+                                                                                                                  39,
+                                                                                                                  50,
+                                                                                                                  101,
+                                                                                                                  102,
+                                                                                                                  103) else c(4,
+                                                                                                                              7,
+                                                                                                                              10,
+                                                                                                                              15)
+                                          if (any(! unique(x = current_activities_code) %in% activities_code_referential)) {
                                             current_activities_latitudes <- unlist(current_activities_date$extract_l1_element_value(element = "activity_latitude"))
                                             current_activities_longitudes <- unlist(current_activities_date$extract_l1_element_value(element = "activity_longitude"))
                                             latitude_mean <- mean(x = current_activities_latitudes)
@@ -2723,7 +2727,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         lon = longitude_mean)[[sunset_schema]]
                                             fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
                                                                                                           end = current_sunset))
+                                            if (current_activities_date$count() == 1) {
+                                              current_activities_date$modification_l1(modification = paste0("$path$fishing_time <- ",
+                                                                                                            fishing_time_tmp / 3600))
+                                            } else {
+                                              capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
+                                              capture.output(current_activities_date_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("! ($path$activity_code %in% c(\"",
+                                                                                                                                                              paste(activities_code_referential,
+                                                                                                                                                                    collapse = "\", \""),
+                                                                                                                                                              "\"))"))),
+                                                             file = "NUL")
+                                              current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
+                                                                                                                    (fishing_time_tmp / 3600) / current_activities_date_fishing$count()))
+                                              if (current_activities_date$count() != current_activities_date$count()) {
+                                                capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
+                                                               file = "NUL")
+                                                capture.output(current_activities_date_no_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("$path$activity_code %in% c(\"",
+                                                                                                                                                                   paste(activities_code_referential,
+                                                                                                                                                                         collapse = "\", \""),
+                                                                                                                                                                   "\")"))),
+                                                               file = "NUL")
+                                                current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
+                                              }
+                                            }
                                             fishing_time <- fishing_time + fishing_time_tmp
+                                          } else {
+                                            current_activities_date$modification_l1(modification = "$path$fishing_time <- 0")
                                           }
                                         }
                                       }
@@ -2746,6 +2776,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   capture.output(trips_selected <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
                                                  file = "NUL")
                                   outputs_process_1_7_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -2772,8 +2806,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                 trips_selected$extract_l1_element_value(element = "trip_end_date")),
                                                                                                         lubridate::year),
                                                                           "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
-                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))),
-                                                                          "fishing_time" = unlist(x = (trips_selected$extract_l1_element_value(element = "fishing_time"))))
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
+                                  outputs_process_1_7_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                                 "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                 "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                                 "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
+                                                                                 "activity_date" = do.call("c",
+                                                                                                           activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                                 "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
+                                                                                 "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                                 "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                                 "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")))
+                                  outputs_process_1_7 <- outputs_process_1_7_activities %>%
+                                    dplyr::left_join(outputs_process_1_7_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code,
+                                                    activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
+                                                    activity_date,
+                                                    activity_code,
+                                                    ocean_code,
+                                                    school_type_code,
+                                                    fishing_time)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -2788,7 +2849,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   }
-                                  write.table(x = outputs_process_1_7_trips,
+                                  write.table(x = outputs_process_1_7,
                                               file = file.path(global_output_path,
                                                                "level1",
                                                                "data",
@@ -2831,6 +2892,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                      "Process 1.8 (fishing time calculation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                  browser()
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
