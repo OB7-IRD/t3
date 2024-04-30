@@ -41,8 +41,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -51,14 +50,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start trip(s) data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -88,9 +85,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      order_by = years_period) + 1),
                                                                                                         "-03-31"),
                                                                                flag_codes = DBI::SQL(paste0("'",
-                                                                                                             paste0(flag_codes,
-                                                                                                                    collapse = "', '"),
-                                                                                                             "'")),
+                                                                                                            paste0(flag_codes,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")),
                                                                                ocean_codes = DBI::SQL(paste0("'",
                                                                                                              paste0(ocean_codes,
                                                                                                                     collapse = "', '"),
@@ -100,10 +97,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           collapse = "', '"),
                                                                                                                    "'")))
                                        }
-                                       cat("[",
-                                           trip_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               trip_sql_final,
+                                               "]\n",
+                                               sep = "")
                                        trip_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                   statement = trip_sql_final))
                                        if (nrow(x = trip_data) == 0) {
@@ -111,10 +108,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful trip(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -123,14 +119,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start trip(s) data importation from an AVDTH database.")
                                        trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                               "avdth",
                                                                                               "avdth_trips.sql",
@@ -147,15 +141,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             order_by = years_period) + 1),
                                                                                                                "-03-31#")),
                                                                              flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                  collapse = ", "))),
+                                                                                                                 collapse = ", "))),
                                                                              ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                   collapse = ", "))),
                                                                              vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                         collapse = ", "))))
-                                       cat("[",
-                                           trip_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               trip_sql_final,
+                                               "]\n",
+                                               sep = "")
                                        trip_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                   statement = trip_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(x = trip_id),
@@ -171,37 +165,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from avdht database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful trip(s) data importation from avdht database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start trip(s) data importation from csv file.")
                                        trip_data <- dplyr::tibble(read.csv2(file = data_path,
                                                                             stringsAsFactors = FALSE))
                                        if (nrow(x = trip_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful trip(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start trip(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start trip(s) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "trips",
@@ -220,10 +210,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"trips\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful trip(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -235,10 +224,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "trip",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start trip(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start trip(s) data importation from R environment.")
                                          trip_data <- dplyr::tibble(get(x = "trip",
                                                                         envir = environment_name))
                                          if (paste0(class(x = trip_data),
@@ -246,32 +234,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = trip_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"trip\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful trip(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful trip(s) data importation R environment.")
                                      }
                                      # 7 - Common data design ----
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
                                      object_trips$add(lapply(X = seq_len(length.out = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
-                                                               cat(format(x = Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Start importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n",
-                                                                   "[trip: ",
-                                                                   trip_data$trip_id[trip_id],
-                                                                   "]\n",
-                                                                   sep = "")
+                                                               message(format(x = Sys.time(),
+                                                                              "%Y-%m-%d %H:%M:%S"),
+                                                                       " - Start importation of trip element ",
+                                                                       trip_id,
+                                                                       ".\n",
+                                                                       "[trip: ",
+                                                                       trip_data$trip_id[trip_id],
+                                                                       "]")
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
                                                                                 flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
@@ -280,12 +266,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 landing_well_content_code = trip_data$landing_well_content_code[trip_id],
                                                                                 vessel_code = trip_data$vessel_code[trip_id],
                                                                                 vessel_type_code = trip_data$vessel_type_code[trip_id])
-                                                               cat(format(x = Sys.time(),
-                                                                          format = "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Successful importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n",
-                                                                   sep = "")
+                                                               message(format(x = Sys.time(),
+                                                                              format = "%Y-%m-%d %H:%M:%S"),
+                                                                       " - Successful importation of trip element ",
+                                                                       trip_id,
+                                                                       ".")
                                                                return(trip)
                                                              }))
                                      private$trips <- object_trips
@@ -328,8 +313,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -338,14 +322,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activities data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activities data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -375,9 +357,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          order_by = years_period) + 1),
                                                                                                             "-03-31"),
                                                                                    flag_codes = DBI::SQL(paste0("'",
-                                                                                                                 paste0(flag_codes,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
+                                                                                                                paste0(flag_codes,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
                                                                                    ocean_codes = DBI::SQL(paste0("'",
                                                                                                                  paste0(ocean_codes,
                                                                                                                         collapse = "', '"),
@@ -387,10 +369,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")))
                                        }
-                                       cat("[",
-                                           activity_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               activity_sql_final,
+                                               "]")
                                        activity_data <- DBI::dbGetQuery(conn = database_connection,
                                                                         statement = activity_sql_final)
                                        if (nrow(x = activity_data) == 0) {
@@ -398,10 +379,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activity(ies) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful activity(ies) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -410,14 +390,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activities data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activities data importation from an AVDTH database.")
                                        activity_sql <- paste(readLines(con = system.file("sql",
                                                                                          "avdth",
                                                                                          "avdth_activities.sql",
@@ -434,15 +412,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
                                                                                  flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                      collapse = ", "))),
+                                                                                                                     collapse = ", "))),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
                                                                                  vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                             collapse = ", "))))
-                                       cat("[",
-                                           activity_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               activity_sql_final,
+                                               "]")
                                        activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                       statement = activity_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(x = trip_id),
@@ -474,37 +451,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activity(ies) data importation from an AVDTH database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful activity(ies) data importation from an AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activity(ies) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activity(ies) data importation from csv file.")
                                        activity_data <- dplyr::tibble(read.csv2(file = data_path,
                                                                                 stringsAsFactors = FALSE))
                                        if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful activity(ies) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful activity(ies) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start activity(ies) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activity(ies) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "activities",
@@ -523,10 +496,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"activities\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful activity(ies) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity(ies) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -538,10 +510,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "activity",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start activity(ies) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start activity(ies) data importation from R environment.")
                                          activity_data <- dplyr::tibble(get(x = "activity",
                                                                             envir = environment_name))
                                          if (paste0(class(x = activity_data),
@@ -549,31 +520,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = activity_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"activity\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful activity(ies) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity(ies) data importation R environment.")
                                      }
                                      # 7 - Common data design ----
                                      activity_data <- unclass(x = activity_data)
                                      object_activities <- object_r6(class_name = "activities")
                                      object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Start importation of activity element ",
-                                                                        activity_id,
-                                                                        ".\n",
-                                                                        "[activity: ",
-                                                                        activity_data[[2]][activity_id],
-                                                                        "]\n",
-                                                                        sep = "")
+                                                                    message(format(Sys.time(),
+                                                                                   "%Y-%m-%d %H:%M:%S"),
+                                                                            " - Start importation of activity element ",
+                                                                            activity_id,
+                                                                            ".\n",
+                                                                            "[activity: ",
+                                                                            activity_data[[2]][activity_id],
+                                                                            "]")
                                                                     activity <- activity$new(trip_id = activity_data$trip_id[activity_id],
                                                                                              activity_id = activity_data$activity_id[activity_id],
                                                                                              ocean_code = activity_data$ocean_code[activity_id],
@@ -588,12 +558,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              activity_code = activity_data$activity_code[activity_id],
                                                                                              activity_label = activity_data$activity_label[activity_id],
                                                                                              time_at_sea = activity_data$time_at_sea[activity_id])
-                                                                    cat(format(x = Sys.time(),
-                                                                               format = "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Successful importation of activity element ",
-                                                                        activity_id,
-                                                                        ".\n",
-                                                                        sep = "")
+                                                                    message(format(x = Sys.time(),
+                                                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                                                            " - Successful importation of activity element ",
+                                                                            activity_id,
+                                                                            ".")
                                                                     return(activity)
                                                                   }))
                                      private$activities <- object_activities
@@ -640,8 +609,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -650,14 +618,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary catches data importation from an Observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary catches data importation from an Observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -687,9 +653,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31"),
                                                                                           flag_codes = DBI::SQL(paste0("'",
-                                                                                                                        paste0(flag_codes,
-                                                                                                                               collapse = "', '"),
-                                                                                                                        "'")),
+                                                                                                                       paste0(flag_codes,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")),
                                                                                           ocean_codes = DBI::SQL(paste0("'",
                                                                                                                         paste0(ocean_codes,
                                                                                                                                collapse = "', '"),
@@ -703,10 +669,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                       collapse = "', '"),
                                                                                                                                "'")))
                                        }
-                                       cat("[",
-                                           elementarycatch_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               elementarycatch_sql_final,
+                                               "]")
                                        elementarycatch_data <- DBI::dbGetQuery(conn = database_connection,
                                                                                statement = elementarycatch_sql_final)
                                        if (nrow(x = elementarycatch_data) == 0) {
@@ -714,10 +679,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary catch(es) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary catch(es) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -726,14 +690,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary catches data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary catches data importation from an observe database.")
                                        elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = system.file("sql",
                                                                                                              "avdth",
                                                                                                              "avdth_elementarycatches.sql",
@@ -750,15 +712,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                        order_by = years_period) + 1),
                                                                                                                           "-03-31#")),
                                                                                         flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                             collapse = ", "))),
+                                                                                                                            collapse = ", "))),
                                                                                         ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                              collapse = ", "))),
                                                                                         vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                                    collapse = ", "))))
-                                       cat("[",
-                                           elementarycatch_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               elementarycatch_sql_final,
+                                               "]")
                                        elementarycatch_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                              statement = elementarycatch_sql_final)) %>%
                                          dplyr::mutate(species_fate_code = dplyr::case_when(
@@ -792,37 +753,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary catch(es) data importation from an AVDTH database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary catch(es) data importation from an AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary catch(es) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary catch(es) data importation from csv file.")
                                        elementarycatch_data <- dplyr::tibble(read.csv2(file = data_path,
                                                                                        stringsAsFactors = FALSE))
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary catch(es) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary catch(es) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary catch(es) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary catch(es) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "elementarycatches",
@@ -841,10 +798,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"elementarycatches\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary catch(es) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary catch(es) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -856,10 +812,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "elementarycatch",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary catch(es) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start elementary catch(es) data importation from R environment.")
                                          elementarycatch_data <- dplyr::tibble(get(x = "elementarycatch",
                                                                                    envir = environment_name))
                                          if (paste0(class(x = elementarycatch_data),
@@ -867,31 +822,29 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = elementarycatch_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"elementarycatch\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary catch(es) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary catch(es) data importation R environment.")
                                      }
                                      # 7 - Common data design ----
                                      elementarycatch_data <- unclass(x = elementarycatch_data)
                                      object_elementarycatches <- object_r6(class_name = "elementarycatches")
                                      object_elementarycatches$add(lapply(X = seq_len(length.out = length(elementarycatch_data[[1]])),
                                                                          FUN = function(elementarycatch_id) {
-                                                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                               " - Start importation of elementary catch element ",
-                                                                               elementarycatch_id,
-                                                                               ".\n",
-                                                                               "[elementarycatch: ",
-                                                                               elementarycatch_data[[2]][elementarycatch_id],
-                                                                               "]\n",
-                                                                               sep = "")
+                                                                           message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                                                                   " - Start importation of elementary catch element ",
+                                                                                   elementarycatch_id,
+                                                                                   ".\n",
+                                                                                   "[elementarycatch: ",
+                                                                                   elementarycatch_data[[2]][elementarycatch_id],
+                                                                                   "]")
                                                                            elementarycatch <- elementarycatch$new(activity_id = elementarycatch_data$activity_id[elementarycatch_id],
                                                                                                                   elementarycatch_id = elementarycatch_data$elementarycatch_id[elementarycatch_id],
                                                                                                                   ocean_code = elementarycatch_data$ocean_code[elementarycatch_id],
@@ -902,12 +855,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                   species_fao_code = elementarycatch_data$species_fao_code[elementarycatch_id],
                                                                                                                   species_fate_code = elementarycatch_data$species_fate_code[elementarycatch_id],
                                                                                                                   catch_weight = elementarycatch_data$catch_weight[elementarycatch_id])
-                                                                           cat(format(x = Sys.time(),
-                                                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                                                               " - Successful importation of elementary catch element ",
-                                                                               elementarycatch_id,
-                                                                               ".\n",
-                                                                               sep = "")
+                                                                           message(format(x = Sys.time(),
+                                                                                          format = "%Y-%m-%d %H:%M:%S"),
+                                                                                   " - Successful importation of elementary catch element ",
+                                                                                   elementarycatch_id,
+                                                                                   ".")
                                                                            return(elementarycatch)
                                                                          }))
                                      private$elementarycatches <- object_elementarycatches
@@ -950,8 +902,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -960,14 +911,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landing(s) data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary landing(s) data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -997,9 +946,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                   order_by = years_period) + 1),
                                                                                                                      "-03-31"),
                                                                                             flag_codes = DBI::SQL(paste0("'",
-                                                                                                                          paste0(flag_codes,
-                                                                                                                                 collapse = "', '"),
-                                                                                                                          "'")),
+                                                                                                                         paste0(flag_codes,
+                                                                                                                                collapse = "', '"),
+                                                                                                                         "'")),
                                                                                             ocean_codes = DBI::SQL(paste0("'",
                                                                                                                           paste0(ocean_codes,
                                                                                                                                  collapse = "', '"),
@@ -1009,10 +958,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                        collapse = "', '"),
                                                                                                                                 "'")))
                                        }
-                                       cat("[",
-                                           elementarylanding_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               elementarylanding_sql_final,
+                                               "]")
                                        elementarylanding_data <- DBI::dbGetQuery(conn = database_connection,
                                                                                  statement = elementarylanding_sql_final)
                                        if (nrow(x = elementarylanding_data) == 0) {
@@ -1022,8 +970,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landing(s) data importation from an observe database.\n",
-                                             sep = "")
+                                             " - Successful elementary landing(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -1032,14 +979,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landing(s) data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary landing(s) data importation from an AVDTH database.")
                                        elementarylanding_sql <- paste(readLines(con = system.file("sql",
                                                                                                   "avdth",
                                                                                                   "avdth_elementarylandings.sql",
@@ -1056,15 +1001,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                          order_by = years_period) + 1),
                                                                                                                             "-03-31#")),
                                                                                           flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                               collapse = ", "))),
+                                                                                                                              collapse = ", "))),
                                                                                           ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                                collapse = ", "))),
                                                                                           vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                                      collapse = ", "))))
-                                       cat("[",
-                                           elementarylanding_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               elementarylanding_sql_final,
+                                               "]")
                                        elementarylanding_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                                statement = elementarylanding_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
@@ -1079,37 +1023,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landing(s) data importation from avdht database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary landing(s) data importation from avdht database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landing(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary landing(s) data importation from csv file.")
                                        elementarylanding_data <- read.csv2(file = data_path,
                                                                            stringsAsFactors = FALSE)
                                        if (nrow(x = elementarylanding_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landing(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary landing(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start elementary landing(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start elementary landing(s) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "elementarylandings",
@@ -1128,10 +1068,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"elementarylandings\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary landing(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary landing(s) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -1143,10 +1082,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "elementarylanding",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start elementary landing(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start elementary landing(s) data importation from R environment.")
                                          elementarylanding_data <- dplyr::tibble(get(x = "elementarylanding",
                                                                                      envir = environment_name))
                                          if (paste0(class(x = elementarylanding_data),
@@ -1154,32 +1092,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = elementarylanding_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"elementarylanding\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary landing(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful elementary landing(s) data importation R environment.")
                                      }
                                      # 7 - Common data design ----
                                      elementarylanding_data <- unclass(x = elementarylanding_data)
                                      object_elementarylandings <- object_r6(class_name = "elementarylandings")
                                      object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylanding_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Start importation of elementary landing element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n",
-                                                                                "[elementarylanding: ",
-                                                                                elementarylanding_data[[2]][elementarylanding_id],
-                                                                                "]\n",
-                                                                                sep = "")
+                                                                            message(format(x = Sys.time(),
+                                                                                           format = "%Y-%m-%d %H:%M:%S"),
+                                                                                    " - Start importation of elementary landing element ",
+                                                                                    elementarylanding_id,
+                                                                                    ".\n",
+                                                                                    "[elementarylanding: ",
+                                                                                    elementarylanding_data[[2]][elementarylanding_id],
+                                                                                    "]")
                                                                             elementarylanding <- elementarylanding$new(trip_id = elementarylanding_data$trip_id[elementarylanding_id],
                                                                                                                        elementarylanding_id = elementarylanding_data$elementarylanding_id[elementarylanding_id],
                                                                                                                        weight_category_code = elementarylanding_data$weight_category_code[elementarylanding_id],
@@ -1187,12 +1123,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        species_code = elementarylanding_data$species_code[elementarylanding_id],
                                                                                                                        species_fao_code = elementarylanding_data$species_fao_code[elementarylanding_id],
                                                                                                                        landing_weight = elementarylanding_data$landing_weight[elementarylanding_id])
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Successful importation of elementary landing(s) element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n",
-                                                                                sep = "")
+                                                                            message(format(x = Sys.time(),
+                                                                                           format = "%Y-%m-%d %H:%M:%S"),
+                                                                                    " - Successful importation of elementary landing(s) element ",
+                                                                                    elementarylanding_id,
+                                                                                    ".")
                                                                             return(elementarylanding)
                                                                           }))
                                      private$elementarylandings <- object_elementarylandings
@@ -1244,8 +1179,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -1254,15 +1188,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
                                        # sample(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample(s) data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample(s) data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -1292,9 +1224,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        order_by = years_period) + 1),
                                                                                                           "-03-31"),
                                                                                  flag_codes = DBI::SQL(paste0("'",
-                                                                                                               paste0(flag_codes,
-                                                                                                                      collapse = "', '"),
-                                                                                                               "'")),
+                                                                                                              paste0(flag_codes,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
                                                                                  ocean_codes = DBI::SQL(paste0("'",
                                                                                                                paste0(ocean_codes,
                                                                                                                       collapse = "', '"),
@@ -1308,10 +1240,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
                                        }
-                                       cat("[",
-                                           sample_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               sample_sql_final,
+                                               "]")
                                        sample_data <- DBI::dbGetQuery(conn = database_connection,
                                                                       statement = sample_sql_final)
                                        if (nrow(x = sample_data) == 0) {
@@ -1319,16 +1250,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample(s) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful sample(s) data importation from an observe database.")
                                        }
                                        # well plan(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plan(s) data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start well plan(s) data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -1358,9 +1287,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          order_by = years_period) + 1),
                                                                                                             "-03-31"),
                                                                                    flag_codes = DBI::SQL(paste0("'",
-                                                                                                                 paste0(flag_codes,
-                                                                                                                        collapse = "', '"),
-                                                                                                                 "'")),
+                                                                                                                paste0(flag_codes,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")),
                                                                                    ocean_codes = DBI::SQL(paste0("'",
                                                                                                                  paste0(ocean_codes,
                                                                                                                         collapse = "', '"),
@@ -1370,9 +1299,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")))
                                        }
-                                       cat("[",
-                                           wellplan_sql_final,
-                                           "]\n", sep = "")
+                                       message("[",
+                                               wellplan_sql_final,
+                                               "]")
                                        wellplan_data <- DBI::dbGetQuery(conn = database_connection,
                                                                         statement = wellplan_sql_final)
                                        if (nrow(x = wellplan_data) == 0) {
@@ -1380,10 +1309,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plan(s) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful well plan(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -1392,15 +1320,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
                                        # sample(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample(s) data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample(s) data importation from an AVDTH database.")
                                        sample_sql <- paste(readLines(con = system.file("sql",
                                                                                        "avdth",
                                                                                        "avdth_samples.sql",
@@ -1417,17 +1343,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                               order_by = years_period) + 1),
                                                                                                                  "-03-31#")),
                                                                                flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                    collapse = ", "))),
+                                                                                                                   collapse = ", "))),
                                                                                ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                     collapse = ", "))),
                                                                                vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                           collapse = ", "))),
                                                                                sample_type_codes = DBI::SQL(paste0(sample_type_codes,
                                                                                                                    collapse = ", ")))
-                                       cat("[",
-                                           sample_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               sample_sql_final,
+                                               "]")
                                        sample_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                     statement = sample_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
@@ -1454,16 +1379,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample(s) data importation from avdht database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful sample(s) data importation from avdht database.")
                                        }
                                        # well plan(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plan(s) data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start well plan(s) data importation from an AVDTH database.")
                                        wellplan_sql <- paste(readLines(con = system.file("sql",
                                                                                          "avdth",
                                                                                          "avdth_wellplans.sql",
@@ -1480,15 +1403,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
                                                                                  flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                      collapse = ", "))),
+                                                                                                                     collapse = ", "))),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
                                                                                  vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                             collapse = ", "))))
-                                       cat("[",
-                                           wellplan_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               wellplan_sql_final,
+                                               "]")
                                        wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                       statement = wellplan_sql_final)) %>%
                                          dplyr::mutate(wellplan_id = as.character(wellplan_id),
@@ -1505,54 +1427,48 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plan(s) data importation from avdht database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful well plan(s) data importation from avdht database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample(s) data importation from csv file.")
                                        sample_data <- read.csv2(file = data_path_sample,
                                                                 stringsAsFactors = FALSE)
                                        if (nrow(x = sample_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful samples(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful samples(s) data importation from csv file.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plan(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start well plan(s) data importation from csv file.")
                                        wellplan_data <- read.csv2(file = data_path_wellplan,
                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = wellplan_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful well plans(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful well plans(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
                                        # sample(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample(s) data importation from RData file.")
                                        load(file = data_path_sample,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "samples",
@@ -1571,15 +1487,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"samples\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample(s) data importation from RData file.")
                                        # well plan(s) importation
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start well plan(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start well plan(s) data importation from RData file.")
                                        load(file = data_path_wellplan,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "wellplans",
@@ -1598,10 +1512,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"wellplans\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful well plan(s) data importation from RData file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful well plan(s) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -1614,10 +1527,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # sample(s) importation
                                        if (exists(x = "sample",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start sample(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start sample(s) data importation from R environment.")
                                          sample_data <- dplyr::tibble(get(x = "sample",
                                                                           envir = environment_name))
                                          if (paste0(class(x = sample_data),
@@ -1625,24 +1537,22 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = sample_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"sample\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample(s) data importation R environment.")
                                        # well plan(s) importation
                                        if (exists(x = "wellplan",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start well plan(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start well plan(s) data importation from R environment.")
                                          wellplan_data <- dplyr::tibble(get(x = "wellplan",
                                                                             envir = environment_name))
                                          if (paste0(class(x = wellplan_data),
@@ -1650,59 +1560,54 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = wellplan_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"wellplan\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful well plan(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful well plan(s) data importation R environment.")
                                      }
                                      # 7 - Common data design ----
                                      object_wells <- object_r6(class_name = "wells")
                                      for (trip_id in unique(x = sample_data$trip_id)) {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start importation of well(s) data for trip element ",
+                                               which(x = unique(x = sample_data$trip_id) == trip_id),
+                                               ".\n",
+                                               "[trip: ",
+                                               trip_id,
+                                               "]")
                                        tmp_trip <- dplyr::filter(.data = sample_data,
                                                                  trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well data item ",
-                                             which(x = unique(tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start importation of well data item ",
+                                                 which(x = unique(tmp_trip$well_id) == well_id),
+                                                 ".\n",
+                                                 "[well: ",
+                                                 well_id,
+                                                 "]")
                                          if (is.na(x = well_id)) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: missing \"well_id\" argument in trip number: \"",
-                                               trip_id,
-                                               "\".\n",
-                                               sep = "")
+                                           warning(format(x = Sys.time(),
+                                                          format = "%Y-%m-%d %H:%M:%S"),
+                                                   " - Missing \"well_id\" argument in trip number: \"",
+                                                   trip_id,
+                                                   "\".")
                                            tmp_well <- dplyr::filter(.data = tmp_trip,
                                                                      is.na(well_id))
                                            if (length(x = unique(x = tmp_well$sample_id)) != 1) {
-                                             cat(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Warning: well unknown identify in trip number \"",
-                                                 trip_id,
-                                                 "\" have more than one sampling associated.\n",
-                                                 "Data avoided for model incrementation.\n",
-                                                 sep = "")
+                                             warning(format(x = Sys.time(),
+                                                            format = "%Y-%m-%d %H:%M:%S"),
+                                                     " - Well unknown identify in trip number \"",
+                                                     trip_id,
+                                                     "\" have more than one sampling associated.\n",
+                                                     "Data avoided for model incrementation.")
                                              next()
                                            }
                                          } else {
@@ -1712,15 +1617,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (length(unique(x = tmp_well$well_minus10_weigth)) != 1
                                              | length(unique(x = tmp_well$well_plus10_weigth)) != 1
                                              | length(unique(x = tmp_well$well_global_weigth)) != 1) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Warning: at least one well data (\"well_minus10_weigth\", \"well_plus10_weigth\" and \"well_global_weigth\") is different between well samples. Only the first element will use.\n",
-                                               "[trip: ",
-                                               trip_id,
-                                               ", well: ",
-                                               well_id,
-                                               "]\n",
-                                               sep = "")
+                                           warning(format(x = Sys.time(),
+                                                          format = "%Y-%m-%d %H:%M:%S"),
+                                                   " - At least one well data (\"well_minus10_weigth\", \"well_plus10_weigth\" and \"well_global_weigth\") is different between well samples. Only the first element will use.\n",
+                                                   "[trip: ",
+                                                   trip_id,
+                                                   ", well: ",
+                                                   well_id,
+                                                   "]")
                                          }
                                          object_well <- well$new(trip_id = trip_id,
                                                                  well_id = well_id,
@@ -1728,15 +1632,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                  well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
                                                                  well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
                                          for (sample_id in unique(x = tmp_well$sample_id)) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start importation of sample data item ",
-                                               which(x = unique(tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n",
-                                               sep = "")
+                                           message(format(x = Sys.time(),
+                                                          format = "%Y-%m-%d %H:%M:%S"),
+                                                   " - Start importation of sample data item ",
+                                                   which(x = unique(tmp_well$sample_id) == sample_id),
+                                                   ".\n",
+                                                   "[sample: ",
+                                                   sample_id,
+                                                   "]")
                                            tmp_sample <- dplyr::filter(.data = tmp_well,
                                                                        sample_id == !!sample_id)
                                            tmp_sample <- unclass(x = tmp_sample)
@@ -1758,25 +1661,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                    sample_number_measured = tmp_sample$sample_number_measured[i],
                                                                                                                                                    sample_length_class = tmp_sample$sample_length_class[i])
                                                                                                                          })))
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful importation of sample data item ",
-                                               which(x = unique(x = tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n",
-                                               sep = "")
+                                           message(format(x = Sys.time(),
+                                                          format = "%Y-%m-%d %H:%M:%S"),
+                                                   " - Successful importation of sample data item ",
+                                                   which(x = unique(x = tmp_well$sample_id) == sample_id),
+                                                   ".\n",
+                                                   "[sample: ",
+                                                   sample_id,
+                                                   "]")
                                          }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well plan data item ",
-                                             which(x = unique(x = wellplan_data$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start importation of well plan data item ",
+                                                 which(x = unique(x = wellplan_data$well_id) == well_id),
+                                                 ".\n",
+                                                 "[well: ",
+                                                 well_id,
+                                                 "]")
                                          tmp_wellplan <- dplyr::filter(.data = wellplan_data,
                                                                        well_id == !!well_id)
                                          tmp_wellplan <- unclass(x = tmp_wellplan)
@@ -1793,25 +1694,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          weight_category_label = tmp_wellplan$weight_category_label[j])
                                                                                                 })
                                          object_wells$add(object_well)
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful importation of well data item ",
-                                             which(x = unique(x = tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful importation of well data item ",
+                                                 which(x = unique(x = tmp_trip$well_id) == well_id),
+                                                 ".\n",
+                                                 "[well: ",
+                                                 well_id,
+                                                 "]")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful importation of well(s) data for trip element ",
+                                               which(x = unique(x = sample_data$trip_id) == trip_id),
+                                               ".\n",
+                                               "[trip: ",
+                                               trip_id,
+                                               "]")
                                      }
                                      private$wells <- object_wells
                                    },
@@ -1831,22 +1730,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      if (data_source == "csv_file") {
                                        # 2 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start set duration(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start set duration(s) data importation from csv file.")
                                        set_duration_ref_data <- read.csv2(file = data_path,
                                                                           stringsAsFactors = FALSE)
                                        if (nrow(x = set_duration_ref_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
                                          set_duration_ref_data <- dplyr::mutate(.data = set_duration_ref_data,
                                                                                 year = as.integer(year),
@@ -1857,18 +1754,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 parameter_a = as.numeric(parameter_a),
                                                                                 parameter_b = as.numeric(parameter_b),
                                                                                 null_set_value = as.numeric(null_set_value))
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful set duration(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful set duration(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 3 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start set duration(s) data importation from RData.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start set duration(s) data importation from RData.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "setdurationrefs",
@@ -1887,10 +1782,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"setdurationrefs\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful set duration(s) data importation from RData.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful set duration(s) data importation from RData.")
                                      } else if (data_source == "envir") {
                                        # 4 - R environment source ----
                                        # specific argument verification
@@ -1902,10 +1796,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "setdurationref",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start set duration(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start set duration(s) data importation from R environment.")
                                          set_duration_refs_data <- dplyr::tibble(get(x = "setdurationref",
                                                                                      envir = environment_name))
                                          if (paste0(class(x = set_duration_ref_data),
@@ -1913,17 +1806,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = set_duration_ref_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"setdurationref\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful set duration(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful set duration(s) data importation R environment.")
                                      }
                                      private$setdurationrefs <- set_duration_ref_data
                                    },
@@ -1943,22 +1835,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      if (data_source == "csv_file") {
                                        # 2 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length step(s) data importation from csv file.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start length step(s) data importation from csv file.")
                                        lengthstep_data <- read.csv2(file = data_path,
                                                                     stringsAsFactors = FALSE)
                                        if (nrow(x = lengthstep_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
                                          lengthstep_data <- dplyr::mutate(.data = lengthstep_data,
                                                                           ocean_code = as.integer(x = ocean_code),
@@ -1967,18 +1857,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                           ld1_class = as.numeric(x = ld1_class),
                                                                           lf_class = as.integer(x = lf_class),
                                                                           ratio = as.numeric(x = ratio))
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length step(s) data importation from csv file.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful length step(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 3 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length step(s) data importation from RData.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start length step(s) data importation from RData.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthsteps",
@@ -1997,10 +1885,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"lengthsteps\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length step(s) data importation from RData.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length step(s) data importation from RData.")
                                      } else if (data_source == "envir") {
                                        # 4 - R environment source ----
                                        # specific argument verification
@@ -2012,10 +1899,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "lengthstep",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length step(s) data importation from R environment.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start length step(s) data importation from R environment.")
                                          lengthstep_data <- dplyr::tibble(get(x = "lengthstep",
                                                                               envir = environment_name))
                                          if (paste0(class(x = lengthstep_data),
@@ -2023,17 +1909,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = lengthstep_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"lengthstep\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length step(s) data importation R environment.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length step(s) data importation R environment.")
                                      }
                                      private$lengthsteps <- lengthstep_data
                                    },
@@ -2075,8 +1960,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
@@ -2085,14 +1969,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from an observe database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample set(s) data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -2122,9 +2004,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           order_by = years_period) + 1),
                                                                                                              "-03-31"),
                                                                                     flag_codes = DBI::SQL(paste0("'",
-                                                                                                                  paste0(flag_codes,
-                                                                                                                         collapse = "', '"),
-                                                                                                                  "'")),
+                                                                                                                 paste0(flag_codes,
+                                                                                                                        collapse = "', '"),
+                                                                                                                 "'")),
                                                                                     ocean_codes = DBI::SQL(paste0("'",
                                                                                                                   paste0(ocean_codes,
                                                                                                                          collapse = "', '"),
@@ -2134,10 +2016,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                collapse = "', '"),
                                                                                                                         "'")))
                                        }
-                                       cat("[",
-                                           sampleset_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               sampleset_sql_final,
+                                               "]")
                                        sampleset_data <- DBI::dbGetQuery(conn = database_connection,
                                                                          statement = sampleset_sql_final)
                                        if (nrow(x = sampleset_data) == 0) {
@@ -2145,10 +2026,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample set(s) data importation from an observe database.\n",
-                                             sep = "")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful sample set(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -2157,14 +2037,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "JDBCConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"JDBCConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
                                        }
                                        # process beginning
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from an AVDTH database.\n",
-                                           sep = "")
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample set(s) data importation from an AVDTH database.")
                                        sampleset_sql <- paste(readLines(con = system.file("sql",
                                                                                           "avdth",
                                                                                           "avdth_samplesets.sql",
@@ -2181,15 +2059,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                  order_by = years_period) + 1),
                                                                                                                     "-03-31#")),
                                                                                   flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                       collapse = ", "))),
+                                                                                                                      collapse = ", "))),
                                                                                   ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                        collapse = ", "))),
                                                                                   vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
                                                                                                                              collapse = ", "))))
-                                       cat("[",
-                                           sampleset_sql_final,
-                                           "]\n",
-                                           sep = "")
+                                       message("[",
+                                               sampleset_sql_final,
+                                               "]")
                                        sampleset_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                        statement = sampleset_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
@@ -2202,37 +2079,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample set(s) data importation from avdht database.\n",
-                                             sep = "")
+                                             " - Successful sample set(s) data importation from avdht database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from csv file.\n",
-                                           sep = "")
+                                           " - Start sample set(s) data importation from csv file.")
                                        sampleset_data <- read.csv2(file = data_path,
                                                                    stringsAsFactors = FALSE)
                                        if (nrow(x = sampleset_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample set(s) data importation from csv file.\n",
-                                             sep = "")
+                                             " - Successful sample set(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from RData.\n",
-                                           sep = "")
+                                           " - Start sample set(s) data importation from RData.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "samplesets",
@@ -2251,10 +2124,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"samplesets\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample set(s) data importation from RData.\n",
-                                           sep = "")
+                                           " - Successful sample set(s) data importation from RData.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -2266,10 +2138,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "sampleset",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start sample set(s) data importation from R environment.\n",
-                                             sep = "")
+                                             " - Start sample set(s) data importation from R environment.")
                                          sampleset_data <- dplyr::tibble(get(x = "sampleset",
                                                                              envir = environment_name))
                                          if (paste0(class(x = sampleset_data),
@@ -2277,17 +2148,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = sampleset_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"sampleset\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample set(s) data importation R environment.\n",
-                                           sep = "")
+                                           " - Successful sample set(s) data importation R environment.")
                                      }
                                      private$samplesets <- sampleset_data
                                    },
@@ -2306,8 +2176,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   collapse = " ") != "PostgreSQLConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument.",
-                                              "\nClass \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
                                        }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -2317,24 +2186,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      } else if (data_source != "envir") {
                                        stop(format(x = Sys.time(),
                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument.",
-                                            "\nCheck function documention through ?object_model_data for more details.")
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from an observe database.\n",
-                                           sep = "")
+                                           " - Start length weight relationship(s) data importation from an observe database.")
                                        lengthweightrelationship_sql <- paste(readLines(con = system.file("sql",
                                                                                                          "observe",
                                                                                                          "observe_lengthweightrelationships.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
-                                       cat("[",
+                                       message("[",
                                            lengthweightrelationship_sql,
-                                           "]\n",
-                                           sep = "")
+                                           "]")
                                        lengthweightrelationship_data <- DBI::dbGetQuery(conn = database_connection,
                                                                                         statement = lengthweightrelationship_sql)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
@@ -2342,23 +2208,21 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship(s) data importation from an observe database.\n",
-                                             sep = "")
+                                             " - Successful length weight relationship(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from csv file.\n",
-                                           sep = "")
+                                           " - Start length weight relationship(s) data importation from csv file.")
                                        lengthweightrelationship_data <- read.csv2(file = data_path,
                                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.\n")
+                                              " - No data imported, check your csv file.")
                                        } else {
                                          lengthweightrelationship_data <- dplyr::mutate(.data = lengthweightrelationship_data,
                                                                                         ocean_code = as.integer(x = ocean_code),
@@ -2368,17 +2232,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                         length_weight_formula = as.character(x = length_weight_formula),
                                                                                         lwr_a = as.numeric(x = lwr_a),
                                                                                         lwr_b = as.numeric(x = lwr_b))
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship(s) data importation from csv file.\n",
-                                             sep = "")
+                                             " - Successful length weight relationship(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from RData file.\n",
-                                           sep = "")
+                                           " - Start length weight relationship(s) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthweightrelationships",
@@ -2397,10 +2259,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"lengthweightrelationships\" available in the R environment provided.")
                                        }
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length weight relationship(s) data importation from RData file.\n",
-                                           sep = "")
+                                           " - Successful length weight relationship(s) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        if (is.null(x = envir)) {
@@ -2411,10 +2272,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        if (exists(x = "lengthweightrelationship",
                                                   envir = environment_name)) {
-                                         cat(format(x = Sys.time(),
+                                         message(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationship(s) data importation from R environment.\n",
-                                             sep = "")
+                                             " - Start length weight relationship(s) data importation from R environment.")
                                          lengthweightrelationship_data <- dplyr::tibble(get(x = "lengthweightrelationship",
                                                                                             envir = environment_name))
                                          if (paste0(class(x = lengthweightrelationship_data),
@@ -2422,17 +2282,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                              || nrow(x = lengthweightrelationship_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.\n")
+                                                " - No data imported, check the class of your RData file or data inside.")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No R object named \"lengthweightrelationship\" available in the R environment.")
                                        }
-                                       cat(format(x = Sys.time(),
+                                       message(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length weight relationship(s) data importation R environment.\n",
-                                           sep = "")
+                                           " - Successful length weight relationship(s) data importation R environment.")
                                      }
                                      private$lengthweightrelationships <- lengthweightrelationship_data
                                    }
