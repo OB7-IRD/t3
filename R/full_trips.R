@@ -2808,15 +2808,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_1_7_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
-                                                                                 "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
-                                                                                 "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
-                                                                                 "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
-                                                                                 "activity_date" = do.call("c",
-                                                                                                           activities_selected$extract_l1_element_value(element = "activity_date")),
-                                                                                 "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
-                                                                                 "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
-                                                                                 "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
-                                                                                 "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")))
+                                                                               "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                               "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
+                                                                               "activity_date" = do.call("c",
+                                                                                                         activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
+                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                               "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")))
                                   outputs_process_1_7 <- outputs_process_1_7_activities %>%
                                     dplyr::left_join(outputs_process_1_7_trips,
                                                      by = "trip_id") %>%
@@ -2892,7 +2892,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                      "Process 1.8 (fishing time calculation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                  browser()
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -2926,28 +2925,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
-                                        activities_set_duration <- unlist(current_activities$extract_l1_element_value(element = "set_duration"))
-                                        if (any(is.null(x = activities_set_duration))) {
-                                          stop(format(Sys.time(),
-                                                      "%Y-%m-%d %H:%M:%S"),
-                                               " - Run process 1.5 (set duration calculation) before this process.")
-                                        } else {
-                                          sum_activities_set_duration <- sum(activities_set_duration,
-                                                                             na.rm = TRUE)
+                                        for (current_activity_id in seq_len(length.out = current_activities$count())) {
+                                          current_activity <- current_activities$extract(id = current_activity_id)[[1]]
+                                          current_fishing_time <- lubridate::dhours(x = current_activity$.__enclos_env__$private$fishing_time)
+                                          current_set_duration <- lubridate::dminutes(x = current_activity$.__enclos_env__$private$set_duration)
+                                          current_set_duration <- if (is.na(x = current_set_duration)) {0} else {current_set_duration}
+                                          current_searching_time <- current_fishing_time - current_set_duration
+                                          current_searching_time <- current_searching_time@.Data / 3600
+                                          current_activity$.__enclos_env__$private$searching_time <- current_searching_time
                                         }
-                                        if (is.null(x = current_trip$.__enclos_env__$private$fishing_time)) {
-                                          stop(format(Sys.time(),
-                                                      "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: run process 1.7 (fishing time calculation) before this process.")
-                                        } else {
-                                          current_fishing_time <- current_trip$.__enclos_env__$private$fishing_time
-                                          searching_time <- lubridate::dhours(x = current_fishing_time) - lubridate::dminutes(x = sum_activities_set_duration)
-                                          searching_time <- searching_time@.Data
-                                        }
+                                        searching_time <- sum(unlist(x = current_activities$extract_l1_element_value(element = "searching_time")))
                                       } else {
                                         searching_time <- 0
                                       }
-                                      current_trip$.__enclos_env__$private$searching_time <- searching_time / 3600
+                                      current_trip$.__enclos_env__$private$searching_time <- searching_time
                                     }
                                   }
                                   message(format(Sys.time(),
@@ -2966,6 +2957,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   capture.output(trips_selected <- object_r6(class_name = "trips"),
                                                  file = "NUL")
                                   capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(activities_selected <- object_r6(class_name = "activities"),
+                                                 file = "NUL")
+                                  capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
                                                  file = "NUL")
                                   outputs_process_1_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -2993,7 +2988,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                         lubridate::year),
                                                                           "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))),
-                                                                          "searching_time" = unlist(x = (trips_selected$extract_l1_element_value(element = "searching_time"))))
+                                                                          "searching_time_tot" = unlist(x = (trips_selected$extract_l1_element_value(element = "searching_time"))))
+                                  outputs_process_1_8_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
+                                                                               "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
+                                                                               "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
+                                                                               "activity_date" = do.call("c",
+                                                                                                         activities_selected$extract_l1_element_value(element = "activity_date")),
+                                                                               "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
+                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                               "searching_time" = unlist(x = activities_selected$extract_l1_element_value(element = "searching_time")))
+                                  outputs_process_1_8 <- outputs_process_1_8_activities %>%
+                                    dplyr::left_join(outputs_process_1_8_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code,
+                                                    activity_id,
+                                                    activity_latitude,
+                                                    activity_longitude,
+                                                    activity_date,
+                                                    activity_code,
+                                                    ocean_code,
+                                                    school_type_code,
+                                                    searching_time,
+                                                    searching_time_tot)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -3008,7 +3032,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   }
-                                  write.table(x = outputs_process_1_8_trips,
+                                  write.table(x = outputs_process_1_8,
                                               file = file.path(global_output_path,
                                                                "level1",
                                                                "data",
