@@ -719,11 +719,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                           }
                                         }
-                                        browser()
-
-
-
-
                                         if (current_elementarycatches$count() == 0
                                             || (! any((tidyr::crossing(species_fao_codes_rf1,
                                                                        species_fate_codes_rf1) %>%
