@@ -205,7 +205,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                which(x = names(private$data_selected) %in% private$id_not_full_trip),
                                                collapse = ", "),
                                         "]")
-                                private$id_not_full_trip_retained <- which(x = names(private$data_selected) %in% private$id_not_full_trip)
+                                private$id_not_full_trip_retained <- names(private$data_selected)[which(x = names(private$data_selected) %in% private$id_not_full_trip)]
                               }
                               # 3.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -719,18 +719,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                           }
                                         }
+                                        browser()
+
+
+
+
                                         if (current_elementarycatches$count() == 0
                                             || (! any((tidyr::crossing(species_fao_codes_rf1,
                                                                        species_fate_codes_rf1) %>%
                                                        dplyr::mutate(species_fao_fate_codes_rf1 = stringr::str_c(species_fao_codes_rf1,
                                                                                                                  species_fate_codes_rf1,
                                                                                                                  sep = "_")) %>%
-                                                       dplyr::pull(species_fao_fate_codes_rf1)) %in% (tidyr::crossing(species_fao_code = unique(x = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code"))),
-                                                                                                                      species_fate_code = unique(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")))) %>%
-                                                                                                      dplyr::mutate(species_fao_fate_codes = stringr::str_c(species_fao_code,
-                                                                                                                                                            species_fate_code,
-                                                                                                                                                            sep = "_")) %>%
-                                                                                                      dplyr::pull(species_fao_fate_codes))))) {
+                                                       dplyr::pull(species_fao_fate_codes_rf1)) %in% (unique(x = paste(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
+                                                                                                                       unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
+                                                                                                                       sep = "_")))))) {
                                           # Case 2.2 ----
                                           # trips with no catches (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip item
                                           capture.output(current_trips <- object_r6(class_name = "trips"),
