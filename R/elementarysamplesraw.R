@@ -1,7 +1,6 @@
 #' @name elementarysamplesraw
 #' @title R6 class elementarysamplesraw
 #' @description Create R6 reference object class elementarysamplesraw
-#' @importFrom R6 R6Class
 elementarysamplesraw <- R6::R6Class(classname = "elementarysamplesraw",
                                     inherit = list_t3,
                                     public = list(

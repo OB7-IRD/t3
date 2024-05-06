@@ -22,12 +22,13 @@ Initialize function for R6 activities class.
 \if{html}{\out{<div class="r">}}\preformatted{elementarycatch$new(
   activity_id,
   elementarycatch_id,
-  ocean,
-  school_type,
-  logbook_category,
-  logbook_category_name,
-  specie_code,
-  specie_code3l,
+  ocean_code,
+  school_type_code,
+  weight_category_code,
+  weight_category_label,
+  species_code,
+  species_fao_code,
+  species_fate_code,
   catch_weight
 )}\if{html}{\out{</div>}}
 }
@@ -39,17 +40,19 @@ Initialize function for R6 activities class.
 
 \item{\code{elementarycatch_id}}{Object of class {\link[base]{character}} expected. Elementary catch identification.}
 
-\item{\code{ocean}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
+\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
 
-\item{\code{school_type}}{Object of class {\link[base]{integer}} expected. School type identification.}
+\item{\code{school_type_code}}{Object of class {\link[base]{integer}} expected. School type identification.}
 
-\item{\code{logbook_category}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
+\item{\code{weight_category_code}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
 
-\item{\code{logbook_category_name}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
+\item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
 
-\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
+\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Species code identification.}
 
-\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
+\item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
+
+\item{\code{species_fate_code}}{Object of class {\link[base]{integer}} expected. Species fate code identification.}
 
 \item{\code{catch_weight}}{Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.}
 }

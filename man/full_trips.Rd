@@ -4,9 +4,7 @@
 \alias{full_trips}
 \title{R6 class full_trips}
 \description{
-R6 class full_trips
-
-R6 class full_trips
+Create R6 reference object class full_trips
 }
 \section{Super class}{
 \code{\link[t3:list_t3]{t3::list_t3}} -> \code{full_trips}
@@ -15,9 +13,8 @@ R6 class full_trips
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
-\item \href{#method-full_trips-filter_by_periode}{\code{full_trips$filter_by_periode()}}
 \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
-\item \href{#method-full_trips-filter_by_time_period_reference}{\code{full_trips$filter_by_time_period_reference()}}
+\item \href{#method-full_trips-filter_by_years_period}{\code{full_trips$filter_by_years_period()}}
 \item \href{#method-full_trips-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
@@ -32,7 +29,7 @@ R6 class full_trips
 \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-full_trips-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
+\item \href{#method-full_trips-elementarywellplanwell_set_weigth_categories}{\code{full_trips$elementarywellplanwell_set_weigth_categories()}}
 \item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
 \item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
@@ -82,23 +79,6 @@ Creation of full trip item from trips.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-filter_by_periode"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-filter_by_periode}{}}}
-\subsection{Method \code{filter_by_periode()}}{
-Function for filter full trips by a reference periode.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_periode(periode_reference)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-add_activities"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_activities}{}}}
 \subsection{Method \code{add_activities()}}{
@@ -116,18 +96,18 @@ Function for add activities in full trips object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-filter_by_time_period_reference"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-filter_by_time_period_reference}{}}}
-\subsection{Method \code{filter_by_time_period_reference()}}{
-Function for filter full trips by a reference time period.
+\if{html}{\out{<a id="method-full_trips-filter_by_years_period"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-filter_by_years_period}{}}}
+\subsection{Method \code{filter_by_years_period()}}{
+Function for filter full trips by a time period.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_time_period_reference(time_periode_reference)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_years_period(years_period)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{time_periode_reference}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
 }
 \if{html}{\out{</div>}}
 }
@@ -190,7 +170,9 @@ Function for add wells and samples caracteristics in full trips object.
 Process of Raising Factor level 1 (RF1).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
-  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
+  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   global_output_path = NULL,
@@ -201,7 +183,11 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{species_rf1}}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
+\item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected. By default YFT, SKJ, BET, ALB, MIX and LOT. Specie(s) FAO code(s) used for the RF1 process.}
+
+\item{\code{species_fate_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
+
+\item{\code{vessel_type_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
 
 \item{\code{rf1_lowest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
@@ -241,7 +227,8 @@ Process of logbook weigth categories conversion.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(
   global_output_path = NULL,
-  output_format = "eu"
+  output_format = "eu",
+  referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
 
@@ -251,6 +238,8 @@ Process of logbook weigth categories conversion.
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -261,7 +250,11 @@ Process of logbook weigth categories conversion.
 \subsection{Method \code{set_count()}}{
 Process for postive sets count.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(
+  global_output_path = NULL,
+  output_format = "eu",
+  referential_template = "observe"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -270,6 +263,8 @@ Process for postive sets count.
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -283,7 +278,8 @@ Process for set duration calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
   set_duration_ref,
   global_output_path = NULL,
-  output_format = "eu"
+  output_format = "eu",
+  referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
 
@@ -295,6 +291,8 @@ Process for set duration calculation (in hours).
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -458,12 +456,12 @@ Process for step standardisation of lf length class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-well_set_weigth_categories"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-well_set_weigth_categories}{}}}
-\subsection{Method \code{well_set_weigth_categories()}}{
+\if{html}{\out{<a id="method-full_trips-elementarywellplanwell_set_weigth_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-elementarywellplanwell_set_weigth_categories}{}}}
+\subsection{Method \code{elementarywellplanwell_set_weigth_categories()}}{
 Process for well set weigth categories definition.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$elementarywellplanwell_set_weigth_categories(
   sample_set,
   global_output_path = NULL,
   output_format = "eu"

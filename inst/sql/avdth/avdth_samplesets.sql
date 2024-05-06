@@ -35,16 +35,15 @@ SELECT
 		& e.N_ECH AS sample_id
 	,ec.V_POND AS well_set_weighted_weight
 FROM
-	(((((ECH_CALEE ec
+	((((ECH_CALEE ec
 	INNER JOIN ECHANTILLON e ON e.C_BAT = ec.C_BAT AND ec.D_DBQ = e.D_DBQ AND ec.N_ECH = e.N_ECH)
 	INNER JOIN BATEAU b ON ec.C_BAT = b.C_BAT)
 	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
-	INNER JOIN TYPE_TYPE_BATEAU ttb ON tb.C_TYP_TYP_B = ttb.C_TYP_TYPE_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
-	ec.D_DBQ BETWEEN ?begin_period AND ?end_period
-	AND p.C_ISO3166_A3 IN (?countries)
-	AND ttb.C_TYP_TYPE_B IN (1)
+	ec.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
+	AND p.C_PAYS IN (?flag_codes)
+	AND tb.C_TYP_B IN (?vessel_type_codes)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(ec.C_BAT, '0000')
 			& '#'
@@ -58,11 +57,13 @@ WHERE
 													& format(MONTH(a.D_DBQ), '00')
 													& format(DAY(a.D_DBQ), '00') AS trip_id
 											FROM
-												((ACTIVITE a
+												(((ACTIVITE a
 												INNER JOIN BATEAU b ON a.C_BAT = b.C_BAT)
+												INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
 												INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 											WHERE
-												a.D_DBQ BETWEEN ?begin_period AND ?end_period
-												AND p.C_ISO3166_A3 IN (?countries)
-												AND a.C_OCEA IN (?oceans))
+												a.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
+												AND p.C_PAYS IN (?flag_codes)
+												AND a.C_OCEA IN (?ocean_codes)
+												AND tb.C_TYP_B IN (?vessel_type_codes))
 ;

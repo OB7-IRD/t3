@@ -21,13 +21,13 @@ Initialize function for R6 trip class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trip$new(
   trip_id,
-  fleet,
-  landing_date,
+  fleet_code,
   departure_date,
-  logbook_availability,
-  fish_hold_empty,
-  vessel_id,
-  vessel_type
+  trip_end_date,
+  logbook_availability_code,
+  landing_well_content_code,
+  vessel_code,
+  vessel_type_code
 )}\if{html}{\out{</div>}}
 }
 
@@ -36,19 +36,19 @@ Initialize function for R6 trip class.
 \describe{
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{fleet}}{Object of class {\link[base]{character}} expected. Fleet identification.}
-
-\item{\code{landing_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
+\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. Fleet identification.}
 
 \item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
 
-\item{\code{logbook_availability}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
+\item{\code{trip_end_date}}{Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.}
 
-\item{\code{fish_hold_empty}}{Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
+\item{\code{logbook_availability_code}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
 
-\item{\code{vessel_id}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
+\item{\code{landing_well_content_code}}{Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
 
-\item{\code{vessel_type}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
+\item{\code{vessel_code}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
+
+\item{\code{vessel_type_code}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
 }
 \if{html}{\out{</div>}}
 }

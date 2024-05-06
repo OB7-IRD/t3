@@ -22,15 +22,17 @@ Initialize function for R6 activities class.
 \if{html}{\out{<div class="r">}}\preformatted{activity$new(
   trip_id,
   activity_id,
-  ocean,
+  ocean_code,
   activity_date,
   activity_number,
   activity_latitude,
   activity_longitude,
   set_count,
-  school_type,
+  set_success_status_code,
+  set_success_status_label,
+  school_type_code,
   activity_code,
-  activity_name,
+  activity_label,
   time_at_sea
 )}\if{html}{\out{</div>}}
 }
@@ -42,7 +44,7 @@ Initialize function for R6 activities class.
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{ocean}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
+\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
 
 \item{\code{activity_date}}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
 
@@ -54,11 +56,15 @@ Initialize function for R6 activities class.
 
 \item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
 
-\item{\code{school_type}}{Object of class {\link[base]{integer}} expected. School type identification.}
+\item{\code{set_success_status_code}}{Object of class {\link[base]{integer}} expected. Code status of the set.}
+
+\item{\code{set_success_status_label}}{Object of class {\link[base]{character}} expected. Label status of the set.}
+
+\item{\code{school_type_code}}{Object of class {\link[base]{integer}} expected. School type identification.}
 
 \item{\code{activity_code}}{Object of class {\link[base]{integer}} expected. Activity code identification.}
 
-\item{\code{activity_name}}{Object of class {\link[base]{character}} expected. Activity identification.}
+\item{\code{activity_label}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
 \item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
 }

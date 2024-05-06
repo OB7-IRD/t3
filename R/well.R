@@ -1,8 +1,6 @@
 #' @name well
 #' @title R6 class well
 #' @description Create R6 reference object class well
-#' @importFrom R6 R6Class
-# well ----
 well <- R6::R6Class(classname = "well",
                     public = list(
                       # initialize ----
@@ -17,17 +15,23 @@ well <- R6::R6Class(classname = "well",
                                             well_minus10_weigth,
                                             well_plus10_weigth,
                                             well_global_weigth) {
-                        # attribute "trip_id" verification
-                        check_trip_id(trip_id)
-                        # attribute "well_id" verification
-                        check_well_id(well_id)
-                        # attribute "well_minus10_weigth" verification
-                        check_well_minus10_weigth(well_minus10_weigth)
-                        # attribute "well_plus10_weigth" verification
-                        check_well_plus10_weigth(well_plus10_weigth)
-                        # attribute "well_global_weigth" verification
-                        check_well_global_weigth(well_global_weigth)
-                        # attributions
+                        # 1 - Arguments verifications ----
+                        codama::r_type_checking(r_object = trip_id,
+                                                type = "character",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = well_id,
+                                                type = "character",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = well_minus10_weigth,
+                                                type = "numeric",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = well_plus10_weigth,
+                                                type = "numeric",
+                                                length = 1L)
+                        codama::r_type_checking(r_object = well_global_weigth,
+                                                type = "numeric",
+                                                length = 1L)
+                        # 2 - Attributions ----
                         private$trip_id <- trip_id
                         private$well_id <- well_id
                         private$well_minus10_weigth <- well_minus10_weigth
