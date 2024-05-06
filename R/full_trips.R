@@ -1349,16 +1349,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                   file = "NUL")
-                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
-                                                   file = "NUL")
-                                    capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                   file = "NUL")
-                                    capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                   file = "NUL")
-                                    current_elementarycatches$modification_l1(modification = "$path$weight_category_code_corrected <- NA_character_")
-                                    current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_code_corrected <- NA_real_")
+                                    if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                     file = "NUL")
+                                      capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                     file = "NUL")
+                                      if (length(x = current_activities$extract_l1_element_value(element = "elementarycatches")) != 0) {
+                                        capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                       file = "NUL")
+                                        capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
+                                                       file = "NUL")
+                                        current_elementarycatches$modification_l1(modification = "$path$weight_category_code_corrected <- NA_character_")
+                                        current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_code_corrected <- NA_real_")
+                                      }
+                                    }
                                   } else {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -1913,11 +1917,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                   file = "NUL")
-                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
-                                                   file = "NUL")
-                                    current_activities$modification_l1(modification = "$path$positive_set_count <- NA_real_")
+                                    if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                     file = "NUL")
+                                      capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                     file = "NUL")
+                                      current_activities$modification_l1(modification = "$path$positive_set_count <- NA_real_")
+                                    }
                                   } else {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -2143,11 +2149,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
-                                    capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                   file = "NUL")
-                                    capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
-                                                   file = "NUL")
-                                    current_activities$modification_l1(modification = "$path$set_duration <- NA_integer_")
+                                    if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                     file = "NUL")
+                                      capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                     file = "NUL")
+                                      current_activities$modification_l1(modification = "$path$set_duration <- NA_integer_")
+                                    }
                                   } else {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -2672,6 +2680,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     current_trips$modification_l1(modification = "$path$fishing_time <- NA_real_")
+                                    if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                     file = "NUL")
+                                      capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                     file = "NUL")
+                                      current_activities$modification_l1(modification = "$path$fishing_time <- NA_real_")
+                                    }
                                   } else {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -2693,6 +2708,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         activities_dates <- unique(do.call(what = "c",
                                                                            args = activities_dates))
                                         activities_dates <- sort(x = activities_dates)
+                                        activities_code_referential <- if (referential_template == "observe") c(0,
+                                                                                                                1,
+                                                                                                                8,
+                                                                                                                9,
+                                                                                                                10,
+                                                                                                                11,
+                                                                                                                18,
+                                                                                                                22,
+                                                                                                                24,
+                                                                                                                36,
+                                                                                                                37,
+                                                                                                                38,
+                                                                                                                39,
+                                                                                                                50,
+                                                                                                                101,
+                                                                                                                102,
+                                                                                                                103) else c(4,
+                                                                                                                            7,
+                                                                                                                            10,
+                                                                                                                            15)
                                         for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
                                           activities_date <- activities_dates[[activities_dates_id]]
                                           capture.output(current_activities_date <- object_r6(class_name = "activities"),
@@ -2703,26 +2738,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                              "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
                                                          file = "NUL")
                                           current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
-                                          activities_code_referential <- if (referential_template == "observe") c(0,
-                                                                                                                  1,
-                                                                                                                  8,
-                                                                                                                  9,
-                                                                                                                  10,
-                                                                                                                  11,
-                                                                                                                  18,
-                                                                                                                  22,
-                                                                                                                  24,
-                                                                                                                  36,
-                                                                                                                  37,
-                                                                                                                  38,
-                                                                                                                  39,
-                                                                                                                  50,
-                                                                                                                  101,
-                                                                                                                  102,
-                                                                                                                  103) else c(4,
-                                                                                                                              7,
-                                                                                                                              10,
-                                                                                                                              15)
                                           if (any(! unique(x = current_activities_code) %in% activities_code_referential)) {
                                             capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                            file = "NUL")
@@ -2913,6 +2928,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                    file = "NUL")
                                     current_trips$modification_l1(modification = "$path$searching_time <- NA_real_")
+                                    if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
+                                      capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                     file = "NUL")
+                                      capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
+                                                     file = "NUL")
+                                      current_activities$modification_l1(modification = "$path$searching_time <- NA_real_")
+                                    }
                                   } else {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
