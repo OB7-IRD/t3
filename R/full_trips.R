@@ -4088,421 +4088,430 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - End process 2.3: sample length class step standardisation.")
                               }
                             },
-                            # process 2.4: well_set_weigth_categories ----
+                            # 18 - Process 2.4: well_set_weigth_categories ----
                             #' @description Process for well set weigth categories definition.
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            elementarywellplanwell_set_weigth_categories = function(sample_set,
-                                                                                    global_output_path = NULL,
-                                                                                    output_format = "eu") {
-                              browser()
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 2.4 (well-set weight categories definition) cancelled.\n",
-                                    sep = "")
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            well_set_weigth_categories = function(sample_set,
+                                                                  global_output_path = NULL,
+                                                                  output_format = "eu",
+                                                                  referential_template = "observe") {
+                              # 18.1 - Arguments verification ----
+                              if (! paste0(class(x = sample_set),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame")
+                                  || ncol(x = sample_set) != 5
+                                  || nrow(x = sample_set) == 0) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 5 columns and at least 1 row expected.")
+                              }
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              codama::r_type_checking(r_object = referential_template,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("observe",
+                                                                        "avdth"))
+                              # 18.2 - Global process ----
+                              if (is.null(x = private$data_selected)) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object. Process 2.4 (well-set weight categories definition) cancelled.")
                               } else {
-                                if (! paste0(class(sample_set),
-                                             collapse = "_") %in% c("data.frame",
-                                                                    "tbl_df_tbl_data.frame")
-                                    || ncol(sample_set) != 5
-                                    || nrow(sample_set) == 0) {
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Error: invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 5 columns and at least 1 row expected.\n",
-                                      sep = "")
-                                  stop()
-                                } else {
-                                  for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                    if (full_trip_id == 1) {
-                                      cat(format(Sys.time(),
+                                for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
+                                  if (full_trip_id == 1) {
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 2.4: well-set weight categories definition.")
+                                  }
+                                  message(format(Sys.time(),
                                                  "%Y-%m-%d %H:%M:%S"),
-                                          " - Start process 2.4: well-set weight categories definition.\n",
-                                          sep = "")
-                                    }
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process 2.4 on item \"",
-                                        names(private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
-                                    if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                      cat(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: full trip avoided because a least one trip inside is missing.\n",
+                                          " - Ongoing process 2.4 on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
                                           "[trip: ",
                                           private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]\n",
-                                          sep = "")
-                                      capture.output(current_trips <- object_r6(class_name = "trips"),
+                                          "]")
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Full trip avoided because a least one trip inside is missing.\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
+                                    capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                   file = "NUL")
+                                    capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                   file = "NUL")
+                                    if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
+                                      capture.output(current_wells <- object_r6(class_name = "wells"),
                                                      file = "NUL")
-                                      capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                      capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
                                                      file = "NUL")
-                                      if (length(x = unlist(current_trips$extract_l1_element_value(element = "wells"))) != 0) {
-                                        capture.output(current_wells <- object_r6(class_name = "wells"),
-                                                       file = "NUL")
-                                        capture.output(current_wells$add(new_item = unlist(current_trips$extract_l1_element_value(element = "wells"))),
-                                                       file = "NUL")
-                                        current_wells$modification_l1(modification = "$path$wellsets <- NA")
-                                      }
-                                    } else {
-                                      for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
-                                        current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
-                                        if (current_trip$.__enclos_env__$private$vessel_type == "Senneur") {
-                                          if (length(current_trip$.__enclos_env__$private$wells) != 0) {
-                                            capture.output(current_wells <- object_r6(class_name = "wells"),
-                                                           file = "NUL")
-                                            capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
-                                                           file = "NUL")
-                                            wells_activities_samples_id <- vector(mode = "list",
-                                                                                  length = current_wells$count())
-                                            for (well_id in seq_len(length.out = current_wells$count())) {
-                                              current_well <- current_wells$extract(id = well_id)[[1]]
-                                              if (length(current_well$.__enclos_env__$private$wellplan) != 0) {
-                                                capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
-                                                               file = "NUL")
-                                                capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
-                                                               file = "NUL")
-                                                activities_id <- unique(unlist(current_well_plans$extract_l1_element_value(element = "activity_id")))
-                                                wells_activities_samples_id[[well_id]][[1]] <- activities_id
-                                              } else {
-                                                wells_activities_samples_id[[well_id]][[1]] <- "no_well_plan_available"
-                                              }
-                                              if (length(current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
-                                                capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
-                                                               file = "NUL")
-                                                capture.output(current_elementarysamplesraw$add(new_item = unlist(current_well$.__enclos_env__$private$elementarysampleraw)),
-                                                               file = "NUL")
-                                                samples_id <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_id")))
-                                                wells_activities_samples_id[[well_id]][[2]] <- samples_id
-                                              } else {
-                                                wells_activities_samples_id[[well_id]][[2]] <- "well_not_sampled"
-                                              }
+                                      current_wells$modification_l1(modification = "$path$wellsets <- NA")
+                                    }
+                                  } else {
+                                    for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
+                                      current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
+                                      if (current_trip$.__enclos_env__$private$vessel_type_code %in% as.integer(x = c(4, 5, 6))) {
+                                        if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
+                                          capture.output(current_wells <- object_r6(class_name = "wells"),
+                                                         file = "NUL")
+                                          capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
+                                                         file = "NUL")
+                                          wells_activities_samples_id <- vector(mode = "list",
+                                                                                length = current_wells$count())
+                                          for (well_id in seq_len(length.out = current_wells$count())) {
+                                            current_well <- current_wells$extract(id = well_id)[[1]]
+                                            if (length(x = current_well$.__enclos_env__$private$wellplan) != 0) {
+                                              capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
+                                                             file = "NUL")
+                                              capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
+                                                             file = "NUL")
+                                              activities_id <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "activity_id")))
+                                              wells_activities_samples_id[[well_id]][[1]] <- activities_id
+                                            } else {
+                                              wells_activities_samples_id[[well_id]][[1]] <- "no_well_plan_available"
                                             }
-                                            for (well_id in seq_len(length.out = current_wells$count())) {
-                                              current_well <- current_wells$extract(id = well_id)[[1]]
-                                              # information from the well plan
-                                              # do we have a well plan associated to the current well ?
-                                              if (length(current_well$.__enclos_env__$private$wellplan) != 0) {
-                                                # yes
-                                                capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
-                                                               file = "NUL")
-                                                capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
-                                                               file = "NUL")
-                                                # calcul of proportion of minus and plus 10 kg
-                                                current_wellplan_weigth_category <- unique(unlist(current_well_plans$extract_l1_element_value(element = "wellplan_weigth_category_label")))
-                                                well_prop_minus10_weigth <- 0
-                                                well_prop_plus10_weigth <- 0
-                                                well_prop_global_weigth <- 0
-                                                if (! any(current_wellplan_weigth_category %in% c("inconnu",
-                                                                                                  "m\u00e9lange"))) {
-                                                  for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
-                                                    current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
-                                                    if (current_well_plan$.__enclos_env__$private$wellplan_weigth_category_label == "- 10 kg") {
-                                                      well_prop_minus10_weigth <- well_prop_minus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                      well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                    } else if (current_well_plan$.__enclos_env__$private$wellplan_weigth_category_label == "+ 10 kg") {
-                                                      well_prop_plus10_weigth <- well_prop_plus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                      well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                    } else {
-                                                      cat(format(Sys.time(),
-                                                                 "%Y-%m-%d %H:%M:%S"),
-                                                          " - Error: ",
-                                                          "Well plan weight category unknown.\n",
-                                                          "[trip: ",
-                                                          current_well$.__enclos_env__$private$trip_id,
-                                                          ", well: ",
-                                                          current_well$.__enclos_env__$private$well_id,
-                                                          "]\n",
-                                                          sep = "")
-                                                      stop()
-                                                    }
-                                                  }
-                                                } else {
-                                                  well_prop_minus10_weigth <- NA
-                                                  well_prop_plus10_weigth <- NA
-                                                  for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
-                                                    current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
+                                            if (length(x = current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
+                                              capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
+                                                             file = "NUL")
+                                              capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_well$.__enclos_env__$private$elementarysampleraw)),
+                                                             file = "NUL")
+                                              samples_id <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_id")))
+                                              wells_activities_samples_id[[well_id]][[2]] <- samples_id
+                                            } else {
+                                              wells_activities_samples_id[[well_id]][[2]] <- "well_not_sampled"
+                                            }
+                                          }
+                                          for (well_id in seq_len(length.out = current_wells$count())) {
+                                            current_well <- current_wells$extract(id = well_id)[[1]]
+                                            # information from the well plan
+                                            # do we have a well plan associated to the current well ?
+                                            if (length(x = current_well$.__enclos_env__$private$wellplan) != 0) {
+                                              # yes
+                                              capture.output(current_well_plans <- object_r6(class_name = "elementarywellplans"),
+                                                             file = "NUL")
+                                              capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
+                                                             file = "NUL")
+                                              # calcul of proportion of minus and plus 10 kg
+                                              current_wellplan_weigth_category <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "weight_category_code")))
+                                              if (referential_template == "observe") {
+                                                current_wellplan_weigth_category <- stringr::str_extract(string = current_wellplan_weigth_category,
+                                                                                                         pattern = "[:digit:]+$")
+                                              }
+                                              current_wellplan_weigth_category <- as.integer(x = current_wellplan_weigth_category)
+                                              well_prop_minus10_weigth <- 0
+                                              well_prop_plus10_weigth <- 0
+                                              well_prop_global_weigth <- 0
+                                              if (! any(current_wellplan_weigth_category %in% as.integer(x = c(8, 9)))) {
+                                                for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
+                                                  current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
+                                                  current_well_plan_weight_category_code <- if (referential_template == "observe") {as.integer(x = stringr::str_extract(string = current_well_plan$.__enclos_env__$private$weight_category_code,
+                                                                                                                                                                        pattern = "[:digit:]+$"))} else {as.integer(x = current_well_plan$.__enclos_env__$private$weight_category_code)}
+                                                  if (current_well_plan_weight_category_code == 1L) {
+                                                    well_prop_minus10_weigth <- well_prop_minus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
                                                     well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                  } else if (current_well_plan_weight_category_code == 2L) {
+                                                    well_prop_plus10_weigth <- well_prop_plus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                    well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                  } else {
+                                                    stop(format(Sys.time(),
+                                                                "%Y-%m-%d %H:%M:%S"),
+                                                         " - Well plan weight category unknown.\n",
+                                                         "[trip: ",
+                                                         current_well$.__enclos_env__$private$trip_id,
+                                                         ", well: ",
+                                                         current_well$.__enclos_env__$private$well_id,
+                                                         "]")
                                                   }
                                                 }
-                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- well_prop_minus10_weigth / well_prop_global_weigth
-                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- well_prop_plus10_weigth / well_prop_global_weigth
-                                                capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
-                                                               file = "NUL")
-                                                # do we have more than one well associated to the trip ?
-                                                if (length(wells_activities_samples_id) == 1) {
-                                                  # no, one unique well
-                                                  for (activity_id in wells_activities_samples_id[[1]][[1]]) {
+                                              } else {
+                                                well_prop_minus10_weigth <- NA_real_
+                                                well_prop_plus10_weigth <- NA_real_
+                                                for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
+                                                  current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
+                                                  well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                }
+                                              }
+
+
+
+                                              current_well$.__enclos_env__$private$well_prop_minus10_weigth <- well_prop_minus10_weigth / well_prop_global_weigth
+                                              current_well$.__enclos_env__$private$well_prop_plus10_weigth <- well_prop_plus10_weigth / well_prop_global_weigth
+                                              capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
+                                                             file = "NUL")
+                                              # do we have more than one well associated to the trip ?
+                                              if (length(x = wells_activities_samples_id) == 1) {
+                                                # no, one unique well
+                                                for (activity_id in wells_activities_samples_id[[1]][[1]]) {
+                                                  current_weighted_weight <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
+                                                                                        FUN = function(s) {
+                                                                                          if (current_well_plans$extract(id = s)[[1]]$.__enclos_env__$private$activity_id == activity_id) {
+                                                                                            current_well_plans$extract(id = s)[[1]]$.__enclos_env__$private$wellplan_weight
+                                                                                          } else {
+                                                                                            0
+                                                                                          }
+                                                                                        }))
+                                                  capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                              activity_id = activity_id,
+                                                                                                              well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                              weighted_weight = current_weighted_weight,
+                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                 file = "NUL")
+                                                }
+                                              } else {
+                                                # yes, at least two wells for the trip
+                                                current_well_activities_samples <- wells_activities_samples_id[[well_id]]
+                                                for (current_well_activitie_id in current_well_activities_samples[[1]]) {
+                                                  wells_associated <- as.integer()
+                                                  for (other_well_id in seq_len(length.out = length(x = wells_activities_samples_id))[seq_len(length.out = length(x = wells_activities_samples_id)) != well_id]) {
+                                                    if (current_well_activitie_id %in% wells_activities_samples_id[[other_well_id]][[1]]) {
+                                                      wells_associated <- append(wells_associated,
+                                                                                 other_well_id)
+                                                    }
+                                                  }
+                                                  # do we have at least one activity of the current well store in one or more other well(s) ?
+                                                  if (length(x = wells_associated) != 0) {
+                                                    # yes
+                                                    # the well of current well has been sample ?
+                                                    if (! current_well_activities_samples[[2]][1] == "well_not_sampled") {
+                                                      # yes
+                                                      w1 <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
+                                                                       FUN = function(x) {
+                                                                         if (current_well_plans$extract(id = x)[[1]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
+                                                                           current_well_plans$extract(id = x)[[1]]$.__enclos_env__$private$wellplan_weight
+                                                                         } else {
+                                                                           0
+                                                                         }
+                                                                       }))
+                                                      w2 <- w1
+                                                      wt <- w1
+                                                      for (well_associated_id in wells_associated) {
+                                                        current_well_activities_samples_tmp <- wells_activities_samples_id[[well_associated_id]]
+                                                        current_well_plan_tmp <- current_wells$extract(id = well_associated_id)[[1]]$.__enclos_env__$private$wellplan
+                                                        if (current_well_activities_samples_tmp[[2]][1] == "well_not_sampled") {
+                                                          for (elementarywellplan_id in seq_len(length.out = length(x = current_well_plan_tmp))) {
+                                                            if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
+                                                              wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
+                                                            }
+                                                          }
+                                                        } else {
+                                                          for (elementarywellplan_id in seq_len(length.out = length(current_well_plan_tmp))) {
+                                                            if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
+                                                              w2 <- w2 + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
+                                                              wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                      current_weighted_weight <- w1 / w2 * wt
+                                                    } else {
+                                                      # no
+                                                      current_weighted_weight <- 0
+                                                    }
+                                                  } else {
+                                                    # no
                                                     current_weighted_weight <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
-                                                                                          FUN = function(s) {
-                                                                                            if (current_well_plans$extract(id = s)[[1]]$.__enclos_env__$private$activity_id == activity_id) {
-                                                                                              current_well_plans$extract(id = s)[[1]]$.__enclos_env__$private$wellplan_weight
+                                                                                          FUN = function(w) {
+                                                                                            if (current_well_plans$extract(id = w)[[1]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
+                                                                                              current_well_plans$extract(id = w)[[1]]$.__enclos_env__$private$wellplan_weight
                                                                                             } else {
                                                                                               0
                                                                                             }
                                                                                           }))
-                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                activity_id = activity_id,
-                                                                                                                well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                                sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
-                                                                                                                weighted_weight = current_weighted_weight,
-                                                                                                                weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
-                                                                   file = "NUL")
                                                   }
-                                                } else {
-                                                  # yes, at least two wells for the trip
-                                                  current_well_activities_samples <- wells_activities_samples_id[[well_id]]
-                                                  for (current_well_activitie_id in current_well_activities_samples[[1]]) {
-                                                    wells_associated <- as.integer()
-                                                    for (other_well_id in seq_len(length.out = length(wells_activities_samples_id))[seq_len(length.out = length(wells_activities_samples_id)) != well_id]) {
-                                                      if (current_well_activitie_id %in% wells_activities_samples_id[[other_well_id]][[1]]) {
-                                                        wells_associated <- append(wells_associated,
-                                                                                   other_well_id)
-                                                      }
-                                                    }
-                                                    # do we have at least one activity of the current well store in one or more other well(s) ?
-                                                    if (length(wells_associated) != 0) {
-                                                      # yes
-                                                      # the well of current well has been sample ?
-                                                      if (! current_well_activities_samples[[2]][1] == "well_not_sampled") {
-                                                        # yes
-                                                        w1 <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
-                                                                         FUN = function(x) {
-                                                                           if (current_well_plans$extract(id = x)[[1]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
-                                                                             current_well_plans$extract(id = x)[[1]]$.__enclos_env__$private$wellplan_weight
-                                                                           } else {
-                                                                             0
-                                                                           }
-                                                                         }))
-                                                        w2 <- w1
-                                                        wt <- w1
-                                                        for (well_associated_id in wells_associated) {
-                                                          current_well_activities_samples_tmp <- wells_activities_samples_id[[well_associated_id]]
-                                                          current_well_plan_tmp <- current_wells$extract(id = well_associated_id)[[1]]$.__enclos_env__$private$wellplan
-                                                          if (current_well_activities_samples_tmp[[2]][1] == "well_not_sampled") {
-                                                            for (elementarywellplan_id in seq_len(length.out = length(current_well_plan_tmp))) {
-                                                              if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
-                                                                wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
-                                                              }
-                                                            }
-                                                          } else {
-                                                            for (elementarywellplan_id in seq_len(length.out = length(current_well_plan_tmp))) {
-                                                              if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
-                                                                w2 <- w2 + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
-                                                                wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                        current_weighted_weight <- w1 / w2 * wt
-                                                      } else {
-                                                        # no
-                                                        current_weighted_weight <- 0
-                                                      }
-                                                    } else {
-                                                      # no
-                                                      current_weighted_weight <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
-                                                                                            FUN = function(w) {
-                                                                                              if (current_well_plans$extract(id = w)[[1]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
-                                                                                                current_well_plans$extract(id = w)[[1]]$.__enclos_env__$private$wellplan_weight
-                                                                                              } else {
-                                                                                                0
-                                                                                              }
-                                                                                            }))
-                                                    }
-                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                activity_id = current_well_activitie_id,
-                                                                                                                well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                                sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
-                                                                                                                weighted_weight = current_weighted_weight,
-                                                                                                                weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
-                                                                   file = "NUL")
-                                                  }
+                                                  capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                              activity_id = current_well_activitie_id,
+                                                                                                              well_id = current_well$.__enclos_env__$private$well_id,
+                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                              weighted_weight = current_weighted_weight,
+                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                 file = "NUL")
                                                 }
-                                                current_well$.__enclos_env__$private$wellsets <- current_well_sets
-                                                sum_weighted_weight <- sum(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight")))
-                                                current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
-                                                                                                        sum_weighted_weight))
+                                              }
+                                              current_well$.__enclos_env__$private$wellsets <- current_well_sets
+                                              sum_weighted_weight <- sum(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight")))
+                                              current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
+                                                                                                      sum_weighted_weight))
+                                            } else {
+                                              # no well plan available for the current well
+                                              cat(format(Sys.time(),
+                                                         "%Y-%m-%d %H:%M:%S"),
+                                                  " - Warning: ",
+                                                  " No well plan availabe for this well.\n",
+                                                  "[trip: ",
+                                                  current_well$.__enclos_env__$private$trip_id,
+                                                  ", well: ",
+                                                  current_well$.__enclos_env__$private$well_id,
+                                                  "]\n",
+                                                  sep = "")
+                                              current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                              current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                              if (is.na(current_well$.__enclos_env__$private$well_id)) {
+                                                # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
+                                                sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                                 sample_id == current_well$.__enclos_env__$private$elementarysampleraw[[1]][[1]]$.__enclos_env__$private$sample_id)
                                               } else {
-                                                # no well plan available for the current well
-                                                cat(format(Sys.time(),
-                                                           "%Y-%m-%d %H:%M:%S"),
+                                                sample_set_well <- dplyr::filter(.data = sample_set,
+                                                                                 well_id == current_well$.__enclos_env__$private$well_id)
+                                              }
+                                              if (nrow(sample_set_well) == 0) {
+                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                     " - Warning: ",
-                                                    " No well plan availabe for this well.\n",
+                                                    " No weighted weight availabe for this well in the database.\n",
                                                     "[trip: ",
                                                     current_well$.__enclos_env__$private$trip_id,
                                                     ", well: ",
                                                     current_well$.__enclos_env__$private$well_id,
                                                     "]\n",
                                                     sep = "")
-                                                current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
-                                                current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
-                                                if (is.na(current_well$.__enclos_env__$private$well_id)) {
-                                                  # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
-                                                  sample_set_well <- dplyr::filter(.data = sample_set,
-                                                                                   sample_id == current_well$.__enclos_env__$private$elementarysampleraw[[1]][[1]]$.__enclos_env__$private$sample_id)
-                                                } else {
-                                                  sample_set_well <- dplyr::filter(.data = sample_set,
-                                                                                   well_id == current_well$.__enclos_env__$private$well_id)
-                                                }
-                                                if (nrow(sample_set_well) == 0) {
-                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: ",
-                                                      " No weighted weight availabe for this well in the database.\n",
-                                                      "[trip: ",
-                                                      current_well$.__enclos_env__$private$trip_id,
-                                                      ", well: ",
-                                                      current_well$.__enclos_env__$private$well_id,
-                                                      "]\n",
-                                                      sep = "")
-                                                  current_well$.__enclos_env__$private$wellsets <- NA
-                                                } else {
-                                                  capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
+                                                current_well$.__enclos_env__$private$wellsets <- NA
+                                              } else {
+                                                capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
+                                                               file = "NUL")
+                                                for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
+                                                  capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
+                                                                                                              activity_id = sample_set_well$activity_id[[sample_set_well_id]],
+                                                                                                              well_id = sample_set_well$well_id[[sample_set_well_id]],
+                                                                                                              sample_id = sample_set_well$sample_id[[sample_set_well_id]],
+                                                                                                              weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
+                                                                                                              weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
+                                                                                                              weighted_weight_plus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
                                                                  file = "NUL")
-                                                  for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
-                                                    capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
-                                                                                                                activity_id = sample_set_well$activity_id[[sample_set_well_id]],
-                                                                                                                well_id = sample_set_well$well_id[[sample_set_well_id]],
-                                                                                                                sample_id = sample_set_well$sample_id[[sample_set_well_id]],
-                                                                                                                weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
-                                                                                                                weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                                weighted_weight_plus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
-                                                                   file = "NUL")
-                                                  }
-                                                  current_well$.__enclos_env__$private$wellsets <- current_well_sets
-                                                  sum_weighted_weight <- sum(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight")))
-                                                  current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
-                                                                                                          sum_weighted_weight))
                                                 }
+                                                current_well$.__enclos_env__$private$wellsets <- current_well_sets
+                                                sum_weighted_weight <- sum(unlist(current_well_sets$extract_l1_element_value(element = "weighted_weight")))
+                                                current_well_sets$modification_l1(modification = paste0("$path$prop_weighted_weight <- $path$weighted_weight / ",
+                                                                                                        sum_weighted_weight))
                                               }
                                             }
                                           }
-                                        } else {
-                                          cat(format(Sys.time(),
-                                                     "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: process not available for this vessel type.\n",
-                                              "[trip: ",
-                                              current_trip$.__enclos_env__$private$trip_id,
-                                              "]\n",
-                                              sep = "")
-                                          stop()
                                         }
+                                      } else {
+                                        stop(format(Sys.time(),
+                                                    "%Y-%m-%d %H:%M:%S"),
+                                             " - Process not available for this vessel type.\n",
+                                             "[trip: ",
+                                             current_trip$.__enclos_env__$private$trip_id,
+                                             "]")
                                       }
                                     }
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Process 2.4 successfull on item \"",
-                                        names(private$data_selected)[full_trip_id],
-                                        "\".\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
                                   }
-                                  # outputs extraction ----
-                                  # outputs manipulation
-                                  if (! is.null(x = global_output_path)) {
-                                    full_trips_selected <- private$data_selected
-                                    capture.output(trips_selected <- object_r6(class_name = "trips"),
-                                                   file = "NUL")
-                                    capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
-                                                   file = "NUL")
-                                    capture.output(wells_selected <- object_r6(class_name = "wells"),
-                                                   file = "NUL")
-                                    capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
-                                                   file = "NUL")
-                                    capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
-                                                   file = "NUL")
-                                    capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
-                                                                                                  FUN = function(wellsets_id) {
-                                                                                                    wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
-                                                                                                  }))),
-                                                   file = "NUL")
-                                    outputs_process_2_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 2.4 successfull on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
+                                }
+                                # 18.3 - Outputs extraction ----
+                                # outputs manipulation
+                                if (! is.null(x = global_output_path)) {
+                                  full_trips_selected <- private$data_selected
+                                  capture.output(trips_selected <- object_r6(class_name = "trips"),
+                                                 file = "NUL")
+                                  capture.output(trips_selected$add(new_item = unlist(x = private$data_selected)),
+                                                 file = "NUL")
+                                  capture.output(wells_selected <- object_r6(class_name = "wells"),
+                                                 file = "NUL")
+                                  capture.output(wells_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "wells"))),
+                                                 file = "NUL")
+                                  capture.output(wellsets_selected <- object_r6(class_name = "wellsets"),
+                                                 file = "NUL")
+                                  capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
+                                                                                                FUN = function(wellsets_id) {
+                                                                                                  wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
+                                                                                                }))),
+                                                 file = "NUL")
+                                  outputs_process_2_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                            FUN = function(full_trip_id) {
                                                                                                              if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
-                                                                                                               return(rep(x = full_trip_id,
+                                                                                                               return(rep(x = names(x = full_trips_selected[full_trip_id]),
                                                                                                                           length(x = full_trips_selected[[full_trip_id]])))
                                                                                                              } else {
-                                                                                                               return(full_trip_id)
+                                                                                                               return(names(x = full_trips_selected[full_trip_id]))
                                                                                                              }
                                                                                                            })),
-                                                                            "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
-                                                                                                             FUN = function(full_trip_id) {
-                                                                                                               if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
-                                                                                                                 return(rep(x = names(x = full_trips_selected[full_trip_id]),
-                                                                                                                            length(x = full_trips_selected[[full_trip_id]])))
-                                                                                                               } else {
-                                                                                                                 return(names(x = full_trips_selected[full_trip_id]))
-                                                                                                               }
-                                                                                                             })),
-                                                                            "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                            "landing_date" = do.call("c",
-                                                                                                     trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                            "year_landing_date" = sapply(do.call("c",
-                                                                                                                 trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                         lubridate::year),
-                                                                            "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                            "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
-                                    outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
-                                                                               "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
-                                                                               "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
-                                                                               "weighted_weight_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_plus10")),
-                                                                               "weighted_weight" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight")))
-                                    outputs_process_2_4 <- outputs_process_2_4_wellsets %>%
-                                      dplyr::left_join(outputs_process_2_4_trips,
-                                                       by = "trip_id") %>%
-                                      dplyr::relocate(full_trip_id,
-                                                      full_trip_name,
-                                                      trip_id,
-                                                      landing_date,
-                                                      year_landing_date,
-                                                      vessel_id,
-                                                      vessel_type)
-                                    # extraction
-                                    if (output_format == "us") {
-                                      outputs_dec <- "."
-                                      outputs_sep <- ","
-                                    } else if (output_format == "eu") {
-                                      outputs_dec <- ","
-                                      outputs_sep <- ";"
-                                    } else {
-                                      cat(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Warning: wrong outputs format define, European format will be applied\n",
-                                          sep = "")
-                                      outputs_dec <- ","
-                                      outputs_sep <- ";"
-                                    }
-                                    write.table(x = outputs_process_2_4,
-                                                file = file.path(global_output_path,
-                                                                 "level2",
-                                                                 "data",
-                                                                 "process_2_4.csv"),
-                                                row.names = FALSE,
-                                                sep = outputs_sep,
-                                                dec = outputs_dec)
-                                    cat(format(x = Sys.time(),
-                                               format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Outputs extracted in the following directory:\n",
-                                        file.path(global_output_path,
-                                                  "level2",
-                                                  "data"),
-                                        sep = "")
+                                                                          "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                    trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                                trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                        lubridate::year),
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
+                                  outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
+                                                                             "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
+                                                                             "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
+                                                                             "weighted_weight_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_plus10")),
+                                                                             "weighted_weight" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight")))
+                                  outputs_process_2_4 <- outputs_process_2_4_wellsets %>%
+                                    dplyr::left_join(outputs_process_2_4_trips,
+                                                     by = "trip_id") %>%
+                                    dplyr::relocate(full_trip_id,
+                                                    full_trip_name,
+                                                    trip_id,
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code)
+                                  # extraction
+                                  if (output_format == "us") {
+                                    outputs_dec <- "."
+                                    outputs_sep <- ","
+                                  } else if (output_format == "eu") {
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
+                                  } else {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Wrong outputs format define, European format will be applied\n",
+                                            sep = "")
+                                    outputs_dec <- ","
+                                    outputs_sep <- ";"
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - End process 2.4 well-set weight categories definition.\n",
-                                      sep = "")
+                                  write.table(x = outputs_process_2_4,
+                                              file = file.path(global_output_path,
+                                                               "level2",
+                                                               "data",
+                                                               "process_2_4.csv"),
+                                              row.names = FALSE,
+                                              sep = outputs_sep,
+                                              dec = outputs_dec)
+                                  message(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - Outputs extracted in the following directory:\n",
+                                          file.path(global_output_path,
+                                                    "level2",
+                                                    "data"))
                                 }
+                                message(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 2.4 well-set weight categories definition.")
                               }
                             },
                             # process 2.5: standardised_sample_creation ----
