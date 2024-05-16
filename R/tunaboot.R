@@ -16,7 +16,6 @@
 #' @importFrom ranger ranger
 #' @importFrom dplyr sample_n bind_rows rename
 #' @importFrom stats predict
-#' @return TODO
 tunaboot <- function(sample_data,
                      allset_data,
                      Ntree = 1000,

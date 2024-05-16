@@ -52,7 +52,6 @@
 #'  \item{level2: }{you launch data model initialisation and the process level 2}
 #'  \item{until_level2: }{you launch data model initialisation, the process level 1 and 2}
 #' }
-#' @importFrom codama r_type_checking
 #' @export
 t3_process <- function(process = "all",
                        data_source = "t3_db",
@@ -98,29 +97,17 @@ t3_process <- function(process = "all",
                        Nboot = 50,
                        plot_predict = FALSE) {
   # 1 - Arguments verification ----
-  if (codama::r_type_checking(r_object = process,
-                              type = "character",
-                              length = 1L,
-                              allowed_value = c("all",
-                                                "level1",
-                                                "level2",
-                                                "until_level2"),
-                              output = "logical") != TRUE) {
-    stop(codama::r_type_checking(r_object = process,
-                                 type = "character",
-                                 length = 1L,
-                                 allowed_value = c("all",
-                                                   "level1",
-                                                   "level2",
-                                                   "until_level2"),
-                                 output = "message"))
-  }
+  codama::r_type_checking(r_object = process,
+                          type = "character",
+                          length = 1L,
+                          allowed_value = c("all",
+                                            "level1",
+                                            "level2",
+                                            "until_level2"))
   # 2 - Process ----
-  cat(format(x = Sys.time(),
-             "%Y-%m-%d %H:%M:%S"),
-      " - Ignition of the Tropical Tuna Treatment.\n",
-      "Process could be long. Until reach 88 mph, take a coffee.\n",
-      sep = "")
+  message(format(x = Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
+          " - Ignition of the Tropical Tuna Treatment. Process could be long. Until reach 88 mph, take a coffee.")
   t3_process <- data_model_initialisation(data_source = data_source,
                                           db_con = db_con,
                                           log_file = log_file,
@@ -243,8 +230,8 @@ t3_process <- function(process = "all",
                                  new_directory = new_directory_level3,
                                  integrated_process = integrated_process)
   }
-  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-      " - Successful process of the Tropical Tuna Treatment.\n",
-      sep = "")
+  message(format(Sys.time(),
+                 "%Y-%m-%d %H:%M:%S"),
+          " - Successful process of the Tropical Tuna Treatment.")
   return(t3_process)
 }

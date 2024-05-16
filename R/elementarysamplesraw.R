@@ -20,10 +20,9 @@ elementarysamplesraw <- R6::R6Class(classname = "elementarysamplesraw",
                                                 if (length(x = class(x = arguments[[i]][[i]])) == 2
                                                     && (! any(class(arguments[[i]][[i]]) == "R6")
                                                         & ! any(class(new_item[[i]]) == "elementarysampleraw"))) {
-                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Error: invalid \"data\" argument, class list or R6-elementarysampleraw expected.\n",
-                                                      sep = "")
-                                                  stop()
+                                                  stop(format(Sys.time(),
+                                                              "%Y-%m-%d %H:%M:%S"),
+                                                      " - Invalid \"data\" argument, class list or R6-elementarysampleraw expected.")
                                                 }
                                               }
                                               private$data <- append(private$data, arguments[[i]])
@@ -33,10 +32,9 @@ elementarysamplesraw <- R6::R6Class(classname = "elementarysamplesraw",
                                               private$data <- append(x = private$data,
                                                                      values = arguments[[i]])
                                             } else {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: invalid \"data\" argument, class list or R6-elementarysampleraw expected.\n",
-                                                  sep = "")
-                                              stop()
+                                              stop(format(Sys.time(),
+                                                         "%Y-%m-%d %H:%M:%S"),
+                                                  " - Invalid \"data\" argument, class list or R6-elementarysampleraw expected.")
                                             }
                                           }
                                         }
@@ -52,10 +50,9 @@ elementarysamplesraw <- R6::R6Class(classname = "elementarysamplesraw",
                                             if (length(x = class(x = new_item[[i]])) == 2
                                                 && (! any(class(x = new_item[[i]]) == "R6")
                                                     & ! any(class(x = new_item[[i]]) == "elementarysampleraw"))) {
-                                              cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                  " - Error: invalid \"data\" argument, class list or R6-elementarysampleraw expected.\n",
-                                                  sep = "")
-                                              stop()
+                                              stop(format(Sys.time(),
+                                                          "%Y-%m-%d %H:%M:%S"),
+                                                  " - Invalid \"data\" argument, class list or R6-elementarysampleraw expected.")
                                             }
                                           }
                                           super$add(new_item)
@@ -64,10 +61,9 @@ elementarysamplesraw <- R6::R6Class(classname = "elementarysamplesraw",
                                                        & any(class(x = new_item) == "elementarysampleraw"))) {
                                           super$add(new_item)
                                         } else {
-                                          cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: invalid \"data\" argument, class list or R6-elementarysampleraw expected.\n",
-                                              sep = "")
-                                          stop()
+                                          stop(format(Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"data\" argument, class list or R6-elementarysampleraw expected.")
                                         }
                                       },
                                       # filter by trip ----

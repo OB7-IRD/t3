@@ -1,7 +1,6 @@
 #' @name elementarysample
 #' @title R6 class trip
 #' @description Create R6 reference object class elementarysample
-#' @importFrom R6 R6Class
 elementarysample <- R6::R6Class(classname = "elementarysample",
                                   public = list(
                                     # initialize ----

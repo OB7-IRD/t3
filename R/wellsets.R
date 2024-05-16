@@ -1,7 +1,6 @@
 #' @name wellsets
 #' @title R6 class wellsets
 #' @description Create R6 reference object class wellsets
-#' @importFrom R6 R6Class
 wellsets <- R6::R6Class(classname = "wellsets",
                         inherit = list_t3,
                         public = list(
@@ -21,10 +20,9 @@ wellsets <- R6::R6Class(classname = "wellsets",
                                     if (length(x = class(x = arguments[[i]][[i]])) == 2
                                         && (! any(class(x = arguments[[i]][[i]]) == "R6")
                                             & ! any(class(x = new_item[[i]]) == "wellset"))) {
-                                      cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Error: invalid \"data\" argument, class list or R6-wellset expected.\n",
-                                          sep = "")
-                                      stop()
+                                      stop(format(Sys.time(),
+                                                  "%Y-%m-%d %H:%M:%S"),
+                                           " - Invalid \"data\" argument, class list or R6-wellset expected.")
                                     }
                                   }
                                   private$data <- append(x = private$data,
@@ -35,10 +33,9 @@ wellsets <- R6::R6Class(classname = "wellsets",
                                   private$data <- append(x = private$data,
                                                          values = arguments[[i]])
                                 } else {
-                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Error: invalid \"data\" argument, class list or R6-wellset expected.\n",
-                                      sep = "")
-                                  stop()
+                                  stop(format(Sys.time(),
+                                              "%Y-%m-%d %H:%M:%S"),
+                                       " - Invalid \"data\" argument, class list or R6-wellset expected.")
                                 }
                               }
                             }
@@ -56,11 +53,9 @@ wellsets <- R6::R6Class(classname = "wellsets",
                                                                   }))
                               if (length(x = class_new_item) != 1
                                   || class_new_item != "wellset_R6") {
-                                cat(format(x = Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"data\" argument, class wellset-R6 expected.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(x = Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"data\" argument, class wellset-R6 expected.")
                               } else {
                                 super$add(new_item = new_item)
                               }
@@ -68,11 +63,9 @@ wellsets <- R6::R6Class(classname = "wellsets",
                               class_new_item <- paste(class(x = new_item),
                                                       collapse = "_")
                               if (class_new_item != "wellset_R6") {
-                                cat(format(x = Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"data\" argument, class wellset-R6 expected.\n",
-                                    sep = "")
-                                stop()
+                                stop(format(x = Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"data\" argument, class wellset-R6 expected.")
                               } else {
                                 super$add(new_item = new_item)
                               }

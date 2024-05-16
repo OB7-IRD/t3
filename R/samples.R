@@ -1,7 +1,6 @@
 #' @name samples
 #' @title R6 class samples
 #' @description Create R6 reference object class samples
-#' @importFrom R6 R6Class
 samples <- R6::R6Class(classname = "samples",
                        inherit = list_t3,
                        public = list(
@@ -21,10 +20,9 @@ samples <- R6::R6Class(classname = "samples",
                                    if (length(x = class(x = arguments[[i]][[i]])) == 2
                                        && (! any(class(x = arguments[[i]][[i]]) == "R6")
                                            & ! any(class(x = new_item[[i]]) == "elementarysample"))) {
-                                     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                         " - Error: invalid \"data\" argument, class list or R6-elementarysample expected.\n",
-                                         sep = "")
-                                     stop()
+                                     stop(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Invalid \"data\" argument, class list or R6-elementarysample expected.")
                                    }
                                  }
                                  private$data <- append(private$data, arguments[[i]])
@@ -34,10 +32,9 @@ samples <- R6::R6Class(classname = "samples",
                                  private$data <- append(x = private$data,
                                                         values = arguments[[i]])
                                } else {
-                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                     " - Error: invalid \"data\" argument, class list or R6-elementarysample expected.\n",
-                                     sep = "")
-                                 stop()
+                                 stop(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - Invalid \"data\" argument, class list or R6-elementarysample expected.")
                                }
                              }
                            }
@@ -55,11 +52,9 @@ samples <- R6::R6Class(classname = "samples",
                                                                  }))
                              if (length(x = class_new_item) != 1
                                  || class_new_item != "elementarysample_R6") {
-                               cat(format(x = Sys.time(),
-                                          "%Y-%m-%d %H:%M:%S"),
-                                   " - Error: invalid \"data\" argument, class elementarysample-R6 expected.\n",
-                                   sep = "")
-                               stop()
+                               stop(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Invalid \"data\" argument, class elementarysample-R6 expected.")
                              } else {
                                super$add(new_item = new_item)
                              }
@@ -67,11 +62,9 @@ samples <- R6::R6Class(classname = "samples",
                              class_new_item <- paste(class(x = new_item),
                                                      collapse = "_")
                              if (class_new_item != "elementarysample_R6") {
-                               cat(format(x = Sys.time(),
-                                          "%Y-%m-%d %H:%M:%S"),
-                                   " - Error: invalid \"data\" argument, class elementarysample-R6 expected.\n",
-                                   sep = "")
-                               stop()
+                               stop(format(x = Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Invalid \"data\" argument, class elementarysample-R6 expected.")
                              } else {
                                super$add(new_item = new_item)
                              }

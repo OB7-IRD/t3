@@ -35,20 +35,14 @@ t3_level2 <- function(object_model_data,
                       integrated_process = FALSE) {
   if (paste0(class(object_model_data),
              collapse = " ") != "object_model_data R6") {
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalid \"object_model_data\" argument.\n",
-        "Classes \"object_model_data\" and \"R6\" expected.\n",
-        sep = "")
-    stop()
+    stop(format(x = Sys.time(),
+                format = "%Y-%m-%d %H:%M:%S"),
+         " - Invalid \"object_model_data\" argument. Classes \"object_model_data\" and \"R6\" expected.")
   } else if (paste0(class(object_full_trips),
                     collapse = " ") != "full_trips list_t3 R6") {
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalid \"object_full_trips\" argument.\n",
-        "Classes \"full_trips\", \"list_t3\" and \"R6\" expected.\n",
-        sep = "")
-    stop()
+    stop(format(x = Sys.time(),
+                format = "%Y-%m-%d %H:%M:%S"),
+         " - Invalid \"object_full_trips\" argument. Classes \"full_trips\", \"list_t3\" and \"R6\" expected.")
   } else {
     # log file initialisation ----
     initiate_log_file(log_file = log_file,
@@ -61,10 +55,9 @@ t3_level2 <- function(object_model_data,
                                         new_directory = new_directory,
                                         level = "level2")
     }
-    cat(format(x = Sys.time(),
-               "%Y-%m-%d %H:%M:%S"),
-        " - Start function t3 process level 2.\n",
-        sep = "")
+    message(format(x = Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
+            " - Start function t3 process level 2.")
     # level 2.1: sample length class ld1 to lf conversion ----
     object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
                                                     global_output_path = output_path,
@@ -102,10 +95,9 @@ t3_level2 <- function(object_model_data,
     if (log_file == TRUE) {
       closeAllConnections()
     }
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Successful function t3 process level 2.\n",
-        sep = "")
+    message(format(x = Sys.time(),
+                   format = "%Y-%m-%d %H:%M:%S"),
+            " - Successful function t3 process level 2.")
     return(object_full_trips)
   }
 }

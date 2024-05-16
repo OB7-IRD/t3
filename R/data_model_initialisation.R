@@ -37,7 +37,7 @@ data_model_initialisation <- function(data_source = "observe_database",
   initiate_log_file(log_file = log_file,
                     log_path = log_path,
                     log_name = log_name)
-  cat(format(Sys.time(),
+  message(format(Sys.time(),
              "%Y-%m-%d %H:%M:%S"),
       " - Start function data model initialisation.\n",
       "[time period: ",
@@ -59,8 +59,7 @@ data_model_initialisation <- function(data_source = "observe_database",
              no = paste0(", trip(s) id selected: ",
                          paste0(trip_id,
                                 collapse = ", "),
-                         "]\n")),
-      sep = "")
+                         "]")))
   # 3 - Data model initilization ----
   # initialisation object for data's object model
   object_model_data <- object_model_data$new()

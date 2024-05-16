@@ -1,7 +1,6 @@
 #' @name elementarycatches
 #' @title R6 class elementarycatches
 #' @description Create R6 reference object class elementarycatches
-#' @importFrom R6 R6Class
 elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                  inherit = list_t3,
                                  public = list(
@@ -19,20 +18,18 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                                          what = "list")) {
                                            for (i in length(arguments[[i]])) {
                                              if (length(class(arguments[[i]][[i]])) == 2 && (! any(class(arguments[[i]][[i]]) == "R6") & ! any(class(new_item[[i]]) == "elementarycatch"))) {
-                                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                   " - Error: invalid \"data\" argument, class list or R6-elementarycatch expected.\n",
-                                                   sep = "")
-                                               stop()
+                                               stop(format(Sys.time(),
+                                                           "%Y-%m-%d %H:%M:%S"),
+                                                    " - Invalid \"data\" argument, class list or R6-elementarycatch expected.")
                                              }
                                            }
                                            private$data <- append(private$data, arguments[[i]])
                                          } else if (length(class(arguments[[i]])) == 2 && (any(class(arguments[[i]]) == "R6") & any(class(arguments[[i]]) == "elementarycatch"))) {
                                            private$data <- append(private$data, arguments[[i]])
                                          } else {
-                                           cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                               " - Error: invalid \"data\" argument, class list or R6-elementarycatch expected.\n",
-                                               sep = "")
-                                           stop()
+                                           stop(format(Sys.time(),
+                                                       "%Y-%m-%d %H:%M:%S"),
+                                                " - Invalid \"data\" argument, class list or R6-elementarycatch expected.")
                                          }
                                        }
                                      }
@@ -50,11 +47,9 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                                                            }))
                                        if (length(x = class_new_item) != 1
                                            || class_new_item != "elementarycatch_R6") {
-                                         cat(format(x = Sys.time(),
-                                                    "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data\" argument, class elementarycatch-R6 expected.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid \"data\" argument, class elementarycatch-R6 expected.")
                                        } else {
                                          super$add(new_item = new_item)
                                        }
@@ -62,11 +57,9 @@ elementarycatches <- R6::R6Class(classname = "elementarycatches",
                                        class_new_item <- paste(class(x = new_item),
                                                                collapse = "_")
                                        if (class_new_item != "elementarycatch_R6") {
-                                         cat(format(x = Sys.time(),
-                                                    "%Y-%m-%d %H:%M:%S"),
-                                             " - Error: invalid \"data\" argument, class elementarycatch-R6 expected.\n",
-                                             sep = "")
-                                         stop()
+                                         stop(format(x = Sys.time(),
+                                                     "%Y-%m-%d %H:%M:%S"),
+                                              " - Error: invalid \"data\" argument, class elementarycatch-R6 expected.")
                                        } else {
                                          super$add(new_item = new_item)
                                        }
