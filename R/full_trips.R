@@ -4531,9 +4531,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "eu"))
                               # 19.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
-                                message(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Empty data selected in the R6 object. Process 2.5 (standardised sample creation) cancelled.")
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object. Process 2.5 (standardised sample creation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -4789,9 +4789,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "eu"))
                               # 20.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
-                                message(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Empty data selected in the R6 object. Process 2.6 (standardised sample set creation) cancelled.")
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object. Process 2.6 (standardised sample set creation) cancelled.")
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -5036,7 +5036,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - End process 2.6: standardised sample set creation.")
                               }
                             },
-                            # process 2.7: raised_factors_determination ----
+                            # 21 - Process 2.7: raised_factors_determination ----
                             #' @description Raised factors determination for weigth sample set to set.
                             #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
                             #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
@@ -5052,39 +5052,57 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_rf_total = as.integer(250),
                                                                     global_output_path = NULL,
                                                                     output_format = "eu") {
-                              browser()
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 2.7 (raised factors determination) cancelled.\n",
-                                    sep = "")
+                              # 21.1 - Arguments verification ----
+                              codama::r_type_checking(r_object = threshold_rf_minus10,
+                                                      type = "integer",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = threshold_rf_plus10,
+                                                      type = "integer",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = threshold_frequency_rf_minus10,
+                                                      type = "integer",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = threshold_frequency_rf_plus10,
+                                                      type = "integer",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = threshold_rf_total,
+                                                      type = "integer",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              # 21.2 - Global process ----
+                              if (is.null(x = private$data_selected)) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Empty data selected in the R6 object. Process 2.7 (raised factors determination) cancelled.")
                               } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
                                   if (full_trip_id == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.7: raised factors determination.\n",
-                                        sep = "")
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 2.7: raised factors determination.")
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process 2.7 on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
-
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Ongoing process 2.7 on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Full trip avoided because a least one trip inside is missing.\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                     capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -5111,9 +5129,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   } else {
-                                    for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                    for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
-                                      if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+                                      if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
                                         capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
@@ -5164,38 +5182,36 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 if (current_well_set$.__enclos_env__$private$weighted_samples_total == 0) {
                                                   # scenario 1
                                                   current_well_set$.__enclos_env__$private$rf_validation <- 1
-                                                  cat(format(Sys.time(),
-                                                             "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: well-set avoided because weighted samples total value egal to zero.\n",
-                                                      "[trip: ,",
-                                                      current_well_set$.__enclos_env__$private$trip_id,
-                                                      ", activity: ",
-                                                      current_well_set$.__enclos_env__$private$activity_id,
-                                                      ", well: ",
-                                                      current_well_set$.__enclos_env__$private$well_id,
-                                                      ", sample(s): ",
-                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
-                                                             collapse = " - "),
-                                                      "]\n",
-                                                      sep = "")
-                                                } else if (is.na(current_well_set$.__enclos_env__$private$weighted_weight)
+                                                  warning(format(Sys.time(),
+                                                                 "%Y-%m-%d %H:%M:%S"),
+                                                          " - Well-set avoided because weighted samples total value egal to zero.\n",
+                                                          "[trip: ,",
+                                                          current_well_set$.__enclos_env__$private$trip_id,
+                                                          ", activity: ",
+                                                          current_well_set$.__enclos_env__$private$activity_id,
+                                                          ", well: ",
+                                                          current_well_set$.__enclos_env__$private$well_id,
+                                                          ", sample(s): ",
+                                                          paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                                 collapse = " - "),
+                                                          "]")
+                                                } else if (is.na(x = current_well_set$.__enclos_env__$private$weighted_weight)
                                                            || current_well_set$.__enclos_env__$private$weighted_weight == 0) {
                                                   # scenario 2
                                                   current_well_set$.__enclos_env__$private$rf_validation <- 2
-                                                  cat(format(Sys.time(),
-                                                             "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: well-set avoided because invalid weighted weigth.\n",
-                                                      "[trip: ,",
-                                                      current_well_set$.__enclos_env__$private$trip_id,
-                                                      ", activity: ",
-                                                      current_well_set$.__enclos_env__$private$activity_id,
-                                                      ", well: ",
-                                                      current_well_set$.__enclos_env__$private$well_id,
-                                                      ", sample(s): ",
-                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
-                                                             collapse = " - "),
-                                                      "]\n",
-                                                      sep = "")
+                                                  warning(format(Sys.time(),
+                                                                 "%Y-%m-%d %H:%M:%S"),
+                                                          " - Well-set avoided because invalid weighted weigth.\n",
+                                                          "[trip: ,",
+                                                          current_well_set$.__enclos_env__$private$trip_id,
+                                                          ", activity: ",
+                                                          current_well_set$.__enclos_env__$private$activity_id,
+                                                          ", well: ",
+                                                          current_well_set$.__enclos_env__$private$well_id,
+                                                          ", sample(s): ",
+                                                          paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                                 collapse = " - "),
+                                                          "]")
                                                 } else {
                                                   if (current_well_set$.__enclos_env__$private$weighted_samples_minus10 == 0
                                                       || current_well_set$.__enclos_env__$private$weighted_samples_plus10 == 0) {
@@ -5205,8 +5221,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   } else {
                                                     current_well_set$.__enclos_env__$private$rf_minus10 <- current_well_set$.__enclos_env__$private$weighted_weight_minus10 / current_well_set$.__enclos_env__$private$weighted_samples_minus10
                                                     current_well_set$.__enclos_env__$private$rf_plus10 <- current_well_set$.__enclos_env__$private$weighted_weight_plus10 / current_well_set$.__enclos_env__$private$weighted_samples_plus10
-                                                    if (is.na(current_well_set$.__enclos_env__$private$rf_minus10)
-                                                        || is.na(current_well_set$.__enclos_env__$private$rf_plus10)
+                                                    if (is.na(x = current_well_set$.__enclos_env__$private$rf_minus10)
+                                                        || is.na(x = current_well_set$.__enclos_env__$private$rf_plus10)
                                                         || current_well_set$.__enclos_env__$private$rf_minus10 > threshold_rf_minus10
                                                         || current_well_set$.__enclos_env__$private$rf_plus10 > threshold_rf_plus10
                                                         || current_standardised_samples_sets_minus10_nb > threshold_frequency_rf_minus10
@@ -5222,21 +5238,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                                 if (current_well_set$.__enclos_env__$private$rf_validation %in% c(4, 3)
                                                     && current_well_set$.__enclos_env__$private$rf_total > threshold_rf_total) {
-                                                  cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                      " - Warning: well-set \"rf_total\" argument superior to ",
-                                                      threshold_rf_total,
-                                                      ".\n",
-                                                      "[trip: ,",
-                                                      current_well_set$.__enclos_env__$private$trip_id,
-                                                      ", activity: ",
-                                                      current_well_set$.__enclos_env__$private$activity_id,
-                                                      ", well: ",
-                                                      current_well_set$.__enclos_env__$private$well_id,
-                                                      ", sample(s): ",
-                                                      paste0(current_well_set$.__enclos_env__$private$sample_id,
-                                                             collapse = " - "),
-                                                      "]\n",
-                                                      sep = "")
+                                                  warning(format(Sys.time(),
+                                                                 "%Y-%m-%d %H:%M:%S"),
+                                                          " - Well-set \"rf_total\" argument superior to ",
+                                                          threshold_rf_total,
+                                                          ".\n",
+                                                          "[trip: ,",
+                                                          current_well_set$.__enclos_env__$private$trip_id,
+                                                          ", activity: ",
+                                                          current_well_set$.__enclos_env__$private$activity_id,
+                                                          ", well: ",
+                                                          current_well_set$.__enclos_env__$private$well_id,
+                                                          ", sample(s): ",
+                                                          paste0(current_well_set$.__enclos_env__$private$sample_id,
+                                                                 collapse = " - "),
+                                                          "]")
                                                 }
                                               } else {
                                                 current_well_set$.__enclos_env__$private$rf_validation <- NA
@@ -5247,16 +5263,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Process 2.7 successfull on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 2.7 successfull on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
                                 }
+                                # 21.3 - Outputs extraction ----
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
                                   capture.output(trips_selected <- object_r6(class_name = "trips"),
@@ -5325,10 +5341,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   } else {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: wrong outputs format define, European format will be applied\n",
-                                        sep = "")
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Wrong outputs format define, European format will be applied.")
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   }
@@ -5340,18 +5355,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               row.names = FALSE,
                                               sep = outputs_sep,
                                               dec = outputs_dec)
-                                  cat(format(x = Sys.time(),
-                                             format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Outputs extracted in the following directory:\n",
-                                      file.path(global_output_path,
-                                                "level2",
-                                                "data"),
-                                      sep = "")
+                                  message(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - Outputs extracted in the following directory:\n",
+                                          file.path(global_output_path,
+                                                    "level2",
+                                                    "data"))
                                 }
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - End process 2.7: raised factors determination.\n",
-                                    sep = "")
+                                message(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 2.7: raised factors determination.")
                               }
                             },
                             # process 2.8: raised standardised sample set ----
