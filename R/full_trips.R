@@ -4761,7 +4761,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - End process 2.5 standardised sample creation.")
                               }
                             },
-                            # process 2.6: standardised_sample_set_creation ----
+                            # 20 - Process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
                             #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
@@ -4769,38 +4769,51 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             standardised_sample_set_creation = function(length_weight_relationship_data,
                                                                         global_output_path = NULL,
                                                                         output_format = "eu") {
-                              browser()
-                              if (is.null(private$data_selected)) {
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - Empty data selected in the R6 object.\n",
-                                    " - Process 2.6 (standardised sample set creation) cancelled.\n",
-                                    sep = "")
+                              # 20.1 - Arguments verification ----
+                              if (! paste0(class(x = length_weight_relationship_data),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame")
+                                  || ncol(x = length_weight_relationship_data) != 7
+                                  || nrow(x = length_weight_relationship_data) == 0) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"sample_set\" argument, class \"data.frame\" or \"tibble\" with 7 columns and at least 1 row expected.")
+                              }
+                              codama::r_type_checking(r_object = global_output_path,
+                                                      type = "character",
+                                                      length = 1L)
+                              codama::r_type_checking(r_object = output_format,
+                                                      type = "character",
+                                                      length = 1L,
+                                                      allowed_value = c("us",
+                                                                        "eu"))
+                              # 20.2 - Global process ----
+                              if (is.null(x = private$data_selected)) {
+                                message(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Empty data selected in the R6 object. Process 2.6 (standardised sample set creation) cancelled.")
                               } else {
-                                for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
+                                for (full_trip_id in seq_len(length.out = length(x = private$data_selected))) {
                                   if (full_trip_id == 1) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 2.6: standardised sample set creation.\n",
-                                        sep = "")
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Start process 2.6: standardised sample set creation.")
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Ongoing process 2.6 on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
-                                  if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: full trip avoided because a least one trip inside is missing.\n",
-                                        "[trip: ",
-                                        private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n",
-                                        sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Ongoing process 2.6 on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
+                                  if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Full trip avoided because a least one trip inside is missing.\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                     capture.output(current_trips <- object_r6(class_name = "trips"),
                                                    file = "NUL")
                                     capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -4819,7 +4832,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      file = "NUL")
                                       capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                      file = "NUL")
-                                      if (length(current_trip$.__enclos_env__$private$wells) != 0) {
+                                      if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
                                         capture.output(current_wells <- object_r6(class_name = "wells"),
                                                        file = "NUL")
                                         capture.output(current_wells$add(new_item = current_trip$.__enclos_env__$private$wells),
@@ -4828,12 +4841,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_well <- current_wells$extract(id = well_id)[[1]]
                                           current_wells_sets <- current_well$.__enclos_env__$private$wellsets
                                           current_standardised_samples <- current_well$.__enclos_env__$private$standardisedsample
-                                          if (all(class(current_wells_sets) == c("wellsets",
-                                                                                 "list_t3",
-                                                                                 "R6"))
-                                              && all(class(current_standardised_samples) == c("standardisedsamples",
-                                                                                              "list_t3",
-                                                                                              "R6"))) {
+                                          if (all(class(x = current_wells_sets) == c("wellsets",
+                                                                                     "list_t3",
+                                                                                     "R6"))
+                                              && all(class(x = current_standardised_samples) == c("standardisedsamples",
+                                                                                                  "list_t3",
+                                                                                                  "R6"))) {
                                             capture.output(standardised_samples_sets <- object_r6(class_name = "standardisedsamplesets"),
                                                            file = "NUL")
                                             for (well_set_id in seq_len(length.out = current_wells_sets$count())) {
@@ -4841,35 +4854,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               current_activity <- current_well_set$.__enclos_env__$private$activity_id
                                               current_ocean <- current_activities$filter_l1(filter = paste0("$path$activity_id == \"",
                                                                                                             current_activity,
-                                                                                                            "\""))[[1]]$.__enclos_env__$private$ocean
-                                              if (is.null(current_ocean)) {
-                                                cat(format(Sys.time(),
-                                                           "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: sample activity missing from trip activities.\n",
-                                                    "[trip: ",
-                                                    private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                                    ", sample activity: ",
-                                                    current_activity,
-                                                    "]\n",
-                                                    sep = "")
-                                                stop()
+                                                                                                            "\""))[[1]]$.__enclos_env__$private$ocean_code
+                                              if (is.null(x = current_ocean)) {
+                                                stop(format(Sys.time(),
+                                                            "%Y-%m-%d %H:%M:%S"),
+                                                     " - Sample activity missing from trip activities.\n",
+                                                     "[trip: ",
+                                                     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                                     ", sample activity: ",
+                                                     current_activity,
+                                                     "]")
                                               }
                                               for (standardisedsample_id in seq_len(length.out = current_standardised_samples$count())) {
                                                 current_standardised_sample <- current_standardised_samples$extract(id = standardisedsample_id)[[1]]
                                                 current_length_weight_relationship <- dplyr::filter(.data = length_weight_relationship_data,
-                                                                                                    (ocean == current_ocean
-                                                                                                     & specie_code3l == current_standardised_sample$.__enclos_env__$private$specie_code3l))[4:5]
-                                                if (nrow(current_length_weight_relationship) == 1) {
-                                                  coef_a <- current_length_weight_relationship[1, 1]
-                                                  coef_b <- current_length_weight_relationship[1, 2]
-                                                  if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("SKJ",
-                                                                                                                               "LTA",
-                                                                                                                               "FRI")) {
+                                                                                                    (ocean_code == current_ocean
+                                                                                                     & species_fao_code == current_standardised_sample$.__enclos_env__$private$species_fao_code)) %>%
+                                                  dplyr::select(lwr_a,
+                                                                lwr_b)
+                                                if (nrow(x = current_length_weight_relationship) == 1) {
+                                                  coef_a <- as.numeric(x = current_length_weight_relationship$lwr_a)
+                                                  coef_b <- as.numeric(x = current_length_weight_relationship$lwr_b)
+                                                  if (current_standardised_sample$.__enclos_env__$private$species_fao_code %in% c("SKJ",
+                                                                                                                                  "LTA",
+                                                                                                                                  "FRI")) {
                                                     # step of 1 cm
                                                     length_class_lf <- current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf + 0.5
-                                                  } else if (current_standardised_sample$.__enclos_env__$private$specie_code3l %in% c("YFT",
-                                                                                                                                      "BET",
-                                                                                                                                      "ALB")) {
+                                                  } else if (current_standardised_sample$.__enclos_env__$private$species_fao_code %in% c("YFT",
+                                                                                                                                         "BET",
+                                                                                                                                         "ALB")) {
                                                     # step of 2 cm
                                                     length_class_lf <- current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf + 1
                                                   } else {
@@ -4895,10 +4908,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                activity_id = current_well_set$.__enclos_env__$private$activity_id,
                                                                                                                well_id = current_well_set$.__enclos_env__$private$well_id,
                                                                                                                sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
-                                                                                                               sample_quality = current_standardised_sample$.__enclos_env__$private$sample_quality,
-                                                                                                               sample_type = current_standardised_sample$.__enclos_env__$private$sample_type,
-                                                                                                               specie_code = current_standardised_sample$.__enclos_env__$private$specie_code,
-                                                                                                               specie_code3l = current_standardised_sample$.__enclos_env__$private$specie_code3l,
+                                                                                                               sample_quality_code = current_standardised_sample$.__enclos_env__$private$sample_quality_code,
+                                                                                                               sample_type_code = current_standardised_sample$.__enclos_env__$private$sample_type_code,
+                                                                                                               species_code = current_standardised_sample$.__enclos_env__$private$species_code,
+                                                                                                               species_fao_code = current_standardised_sample$.__enclos_env__$private$species_fao_code,
                                                                                                                sample_standardised_length_class_lf = current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
                                                                                                                sample_weigth = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
@@ -4918,17 +4931,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                     }
                                   }
-                                  cat(format(Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Process 2.6 successfull on item \"",
-                                      names(private$data_selected)[full_trip_id],
-                                      "\".\n",
-                                      "[trip: ",
-                                      private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n",
-                                      sep = "")
+                                  message(format(Sys.time(),
+                                                 "%Y-%m-%d %H:%M:%S"),
+                                          " - Process 2.6 successfull on item \"",
+                                          names(private$data_selected)[full_trip_id],
+                                          "\".\n",
+                                          "[trip: ",
+                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                          "]")
                                 }
-                                # outputs extraction ----
+                                # 20.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
                                   full_trips_selected <- private$data_selected
@@ -4966,13 +4978,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              }
                                                                                                            })),
                                                                           "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                          "landing_date" = do.call("c",
-                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                          "year_landing_date" = sapply(do.call("c",
-                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                       lubridate::year),
-                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                    trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                                trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                        lubridate::year),
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_6_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
@@ -4986,10 +4998,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(full_trip_id,
                                                     full_trip_name,
                                                     trip_id,
-                                                    landing_date,
-                                                    year_landing_date,
-                                                    vessel_id,
-                                                    vessel_type)
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -4998,10 +5010,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   } else {
-                                    cat(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Warning: wrong outputs format define, European format will be applied\n",
-                                        sep = "")
+                                    warning(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Wrong outputs format define, European format will be applied.")
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
                                   }
@@ -5013,18 +5024,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               row.names = FALSE,
                                               sep = outputs_sep,
                                               dec = outputs_dec)
-                                  cat(format(x = Sys.time(),
-                                             format = "%Y-%m-%d %H:%M:%S"),
-                                      " - Outputs extracted in the following directory:\n",
-                                      file.path(global_output_path,
-                                                "level2",
-                                                "data"),
-                                      sep = "")
+                                  message(format(x = Sys.time(),
+                                                 format = "%Y-%m-%d %H:%M:%S"),
+                                          " - Outputs extracted in the following directory:\n",
+                                          file.path(global_output_path,
+                                                    "level2",
+                                                    "data"))
                                 }
-                                cat(format(Sys.time(),
-                                           "%Y-%m-%d %H:%M:%S"),
-                                    " - End process 2.6: standardised sample set creation.\n",
-                                    sep = "")
+                                message(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - End process 2.6: standardised sample set creation.")
                               }
                             },
                             # process 2.7: raised_factors_determination ----
@@ -5284,13 +5293,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              }
                                                                                                            })),
                                                                           "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                          "landing_date" = do.call("c",
-                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                          "year_landing_date" = sapply(do.call("c",
-                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                       lubridate::year),
-                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                    trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                                trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                        lubridate::year),
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_7_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
                                                                              "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
@@ -5304,10 +5313,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(full_trip_id,
                                                     full_trip_name,
                                                     trip_id,
-                                                    landing_date,
-                                                    year_landing_date,
-                                                    vessel_id,
-                                                    vessel_type)
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -5542,13 +5551,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              }
                                                                                                            })),
                                                                           "trip_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "trip_id"))),
-                                                                          "landing_date" = do.call("c",
-                                                                                                   trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                          "year_landing_date" = sapply(do.call("c",
-                                                                                                               trips_selected$extract_l1_element_value(element = "landing_date")),
-                                                                                                       lubridate::year),
-                                                                          "vessel_id" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_id"))),
-                                                                          "vessel_type" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type"))))
+                                                                          "trip_end_date" = do.call("c",
+                                                                                                    trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                          "year_trip_end_date" = sapply(do.call("c",
+                                                                                                                trips_selected$extract_l1_element_value(element = "trip_end_date")),
+                                                                                                        lubridate::year),
+                                                                          "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
+                                                                          "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
@@ -5567,10 +5576,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(full_trip_id,
                                                     full_trip_name,
                                                     trip_id,
-                                                    landing_date,
-                                                    year_landing_date,
-                                                    vessel_id,
-                                                    vessel_type)
+                                                    trip_end_date,
+                                                    year_trip_end_date,
+                                                    vessel_code,
+                                                    vessel_type_code)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
