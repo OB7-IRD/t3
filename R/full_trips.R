@@ -4350,13 +4350,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             } else {
                                               # no well plan available for the current well
                                               warning(format(Sys.time(),
-                                                         "%Y-%m-%d %H:%M:%S"),
-                                                  " - No well plan availabe for this well.\n",
-                                                  "[trip: ",
-                                                  current_well$.__enclos_env__$private$trip_id,
-                                                  ", well: ",
-                                                  current_well$.__enclos_env__$private$well_id,
-                                                  "]")
+                                                             "%Y-%m-%d %H:%M:%S"),
+                                                      " - No well plan availabe for this well.\n",
+                                                      "[trip: ",
+                                                      current_well$.__enclos_env__$private$trip_id,
+                                                      ", well: ",
+                                                      current_well$.__enclos_env__$private$well_id,
+                                                      "]")
                                               current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
                                               current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
                                               if (is.na(current_well$.__enclos_env__$private$well_id)) {
@@ -4369,12 +4369,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                               if (nrow(sample_set_well) == 0) {
                                                 warning(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - No weighted weight availabe for this well in the database.\n",
-                                                    "[trip: ",
-                                                    current_well$.__enclos_env__$private$trip_id,
-                                                    ", well: ",
-                                                    current_well$.__enclos_env__$private$well_id,
-                                                    "]")
+                                                        " - No weighted weight availabe for this well in the database.\n",
+                                                        "[trip: ",
+                                                        current_well$.__enclos_env__$private$trip_id,
+                                                        ", well: ",
+                                                        current_well$.__enclos_env__$private$well_id,
+                                                        "]")
                                                 current_well$.__enclos_env__$private$wellsets <- NA
                                               } else {
                                                 capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
@@ -5624,13 +5624,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         " - End 2.8 process: raised standardised sample set.")
                               }
                             },
-                            # path to level 3 ----
+                            # 22 - Path to level 3 ----
                             #' @description Temporary link to the R object model with modelisation process.
                             path_to_level3 = function() {
-                              cat(format(Sys.time(),
-                                         "%Y-%m-%d %H:%M:%S"),
-                                  " - Start path creation for level 3.\n",
-                                  sep = "")
+                              message(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - Start path creation for level 3.")
                               data_level3 <- list()
                               raw_inputs_level3 <- vector(mode = "list",
                                                           length = 5)
@@ -5659,13 +5658,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     tmp_activity <- list(id_act = unlist(current_activities$extract_l1_element_value(element = "activity_id")),
                                                          lat = unlist(current_activities$extract_l1_element_value(element = "activity_latitude")),
                                                          lon = unlist(current_activities$extract_l1_element_value(element = "activity_longitude")),
-                                                         fmod = unlist(current_activities$extract_l1_element_value(element = "school_type")),
+                                                         fmod = unlist(current_activities$extract_l1_element_value(element = "school_type_code")),
                                                          date_act = do.call("c", current_activities$extract_l1_element_value(element = "activity_date")),
-                                                         vessel = rep(x = current_trip$.__enclos_env__$private$vessel_id,
+                                                         vessel = rep(x = current_trip$.__enclos_env__$private$vessel_code,
                                                                       current_activities$count()),
                                                          id_trip = unlist(current_activities$extract_l1_element_value(element = "trip_id")),
-                                                         landingdate = unlist(current_activities$extract_l1_element_value(element = "landing_date")),
-                                                         ocean = unlist(current_activities$extract_l1_element_value(element = "ocean")),
+                                                         landingdate = unlist(current_activities$extract_l1_element_value(element = "trip_end_date")),
+                                                         ocean = unlist(current_activities$extract_l1_element_value(element = "ocean_code")),
                                                          code_act_type = unlist(current_activities$extract_l1_element_value(element = "activity_code")))
                                     tmp_activity <- dplyr::bind_rows(tmp_activity)
                                     act <- rbind(act,
@@ -5676,10 +5675,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
                                                      file = "NUL")
                                       tmp_elementarycatch <- list(id_act = unlist(current_elementarycatches$extract_l1_element_value(element = "activity_id")),
-                                                                  w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_corrected")),
-                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code")),
-                                                                  sp = unlist(current_elementarycatches$extract_l1_element_value(element = "specie_code3l")),
-                                                                  wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "corrected_logbook_category")))
+                                                                  w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_code_corrected")),
+                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "species_code")),
+                                                                  sp = unlist(current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
+                                                                  wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "weight_category_code_corrected")))
                                       tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
                                                                              date_act = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
                                                                                                             FUN = function(a) {
@@ -5719,8 +5718,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       capture.output(current_standardisedsamplesets_data$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
                                                      file = "NUL")
                                       tmp_standardisedsampleset <- list(id_act = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "activity_id")),
-                                                                        sp_code = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code")),
-                                                                        sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "specie_code3l")),
+                                                                        sp_code = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "species_code")),
+                                                                        sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "species_fao_code")),
                                                                         wcat = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_category")),
                                                                         w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weigth_set")))
                                       tmp_standardisedsampleset <- dplyr::bind_rows(tmp_standardisedsampleset)
@@ -5733,8 +5732,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         tmp_standardisedsampleset_one_sample_qt <- list(id_act = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "activity_id")),
                                                                                         id_sample = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_id")),
-                                                                                        quality = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_quality")),
-                                                                                        type = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_type")))
+                                                                                        quality = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_quality_code")),
+                                                                                        type = unlist(current_standardisedsamplesets_data_one_sample$extract_l1_element_value(element = "sample_type_code")))
                                       }
                                       if (length(x = current_standardisedsamplesets_data$filter_l1(filter = "length($path$sample_id) != 1")) != 0) {
                                         capture.output(current_standardisedsamplesets_data_multi_samples <- object_r6(class_name = "standardisedsamplesets"),
@@ -5748,9 +5747,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                      tmp_standardisedsampleset_multi_samples_qt <- list(id_act = rep(x = current_standardisedsampleset$.__enclos_env__$private$activity_id,
                                                                                                                                                                      current_number_samples),
                                                                                                                                                         id_sample = current_standardisedsampleset$.__enclos_env__$private$sample_id,
-                                                                                                                                                        quality = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_quality,
+                                                                                                                                                        quality = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_quality_code,
                                                                                                                                                                       current_number_samples),
-                                                                                                                                                        type = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_type,
+                                                                                                                                                        type = rep(x = current_standardisedsampleset$.__enclos_env__$private$sample_type_code,
                                                                                                                                                                    current_number_samples))
                                                                                                    })
                                       }
@@ -5778,10 +5777,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       tmp_elementarywellplan <- list(id_well = unlist(current_wellplans$extract_l1_element_value(element = "well_id")),
                                                                      id_act = unlist(current_wellplans$extract_l1_element_value(element = "activity_id")),
                                                                      id_sample = unlist(current_wellplans$extract_l1_element_value(element = "sample_id")),
-                                                                     sp_code = unlist(current_wellplans$extract_l1_element_value(element = "specie_code")),
-                                                                     code3l = unlist(current_wellplans$extract_l1_element_value(element = "specie_code3l")),
+                                                                     sp_code = unlist(current_wellplans$extract_l1_element_value(element = "species_code")),
+                                                                     code3l = unlist(current_wellplans$extract_l1_element_value(element = "species_fao_code")),
                                                                      weight = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weight")),
-                                                                     wcat_well = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weigth_category_label")))
+                                                                     wcat_well = unlist(current_wellplans$extract_l1_element_value(element = "weight_category_label")))
                                       tmp_elementarywellplan <- dplyr::bind_rows(tmp_elementarywellplan)
                                       wp <- rbind(wp,
                                                   tmp_elementarywellplan)
@@ -5800,10 +5799,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         dplyr::ungroup())
                               raw_inputs_level3[[4]] <- sset
                               raw_inputs_level3[[5]] <- wp
-                              cat(format(Sys.time(),
-                                         "%Y-%m-%d %H:%M:%S"),
-                                  " - End path creation for level 3.\n",
-                                  sep = "")
+                              message(format(Sys.time(),
+                                             "%Y-%m-%d %H:%M:%S"),
+                                      " - End path creation for level 3.")
                               data_level3 <- append(data_level3,
                                                     list(raw_inputs_level3))
                               names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
