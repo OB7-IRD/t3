@@ -4,10 +4,12 @@
 \alias{object_r6}
 \title{R6 object}
 \usage{
-object_r6(class_name, ...)
+object_r6(class_name, silent = TRUE, ...)
 }
 \arguments{
 \item{class_name}{(character) Name of the R6 reference class.}
+
+\item{silent}{{\link[base]{logical}} expected. By default TRUE Display or not information when you run the process.}
 
 \item{...}{(empty, list or R6 object) Leave empty if you want to initialise the object or provide one or several item to add in the class.}
 }

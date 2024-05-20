@@ -2575,7 +2575,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @details
                             #' Available variables are:
                             #' \itemize{
@@ -4448,6 +4447,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
+                                                                             "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
                                                                              "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
                                                                              "weighted_weight_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_plus10")),
                                                                              "weighted_weight" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight")))
@@ -4968,6 +4968,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_2_6_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
+                                                                                           "species_fao_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "species_fao_code")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted")),
                                                                                            "sample_weigth" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth")),

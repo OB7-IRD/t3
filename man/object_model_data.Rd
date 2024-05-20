@@ -31,7 +31,7 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   trip_ids = NULL,
@@ -49,7 +49,7 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -74,7 +74,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   trip_ids = NULL,
@@ -92,7 +92,7 @@ Creation of a R6 reference object class activities which contain one or more R6 
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -117,7 +117,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   species_fate_codes = NULL,
@@ -136,7 +136,7 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -163,7 +163,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   trip_ids = NULL,
@@ -181,7 +181,7 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -206,7 +206,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   sample_type_codes = NULL,
@@ -226,7 +226,7 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -305,7 +305,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
-  fleet_codes = NULL,
+  flag_codes = NULL,
   ocean_codes = NULL,
   vessel_type_codes = NULL,
   trip_ids = NULL,
@@ -323,7 +323,7 @@ Creation of a data frame object with weighted weigth of each set sampled.
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{\code{fleet_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 

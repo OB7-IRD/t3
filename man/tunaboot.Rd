@@ -35,9 +35,6 @@ tunaboot(
 
 \item{target_period}{Time period for the predictions in year. Default is the year of the data to predict}
 }
-\value{
-TODO
-}
 \description{
 Bootstrap function which compute proportion by species fishing mode and ocean for confindence interval
 }

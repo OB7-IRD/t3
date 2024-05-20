@@ -1,7 +1,7 @@
 #' @name list_t3
 #' @title R6 class list_t3
 #' @description Create R6 reference object class list_t3.
-list_t3 <- R6Class(
+list_t3 <- R6::R6Class(
   classname = "list_t3",
   public = list(
     # initialize ----

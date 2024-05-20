@@ -6,19 +6,24 @@
 \usage{
 t3_process(
   process = "all",
-  data_source = "t3_db",
-  db_con,
+  data_source = "observe_database",
+  database_connection,
   log_file = FALSE,
   log_path = NULL,
   output_path = NULL,
   output_format = "eu",
+  referential_template = "observe",
   new_directory = TRUE,
-  periode_reference,
-  countries,
-  oceans,
-  sample_type,
-  trips_selected = NULL,
-  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  years_period,
+  flag_codes,
+  ocean_codes,
+  vessel_type_codes,
+  species_fate_codes,
+  sample_type_codes,
+  trip_ids = NULL,
+  species_fao_codes_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   sunrise_schema = "sunrise",
@@ -53,9 +58,9 @@ t3_process(
 \arguments{
 \item{process}{Object of class {\link[base]{character}} expected. Specify here if you want to run the whole process or just a part of it. By default "all". Check detail section below for more information.}
 
-\item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "t3_db" but you can switch to "avdth_db".}
+\item{data_source}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can to "avdth_database".}
 
-\item{db_con}{Database connection R object expected. Mandatory argument for data source "t3_db", "avdth_db" and "sql_query".}
+\item{database_connection}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
 
 \item{log_file}{Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
 
@@ -65,19 +70,29 @@ t3_process(
 
 \item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
+\item{referential_template}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
-\item{periode_reference}{Object of class {\link[base]{integer}} expected. Year(s) of the reference period coded on 4 digits. By default NULL.}
+\item{years_period}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{countries}{Object of class {\link[base]{character}} expected. ISO code on 3 letters related to one or more countries. By default NULL.}
+\item{flag_codes}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{oceans}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. By default NULL.}
+\item{ocean_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{sample_type}{(integer) Sample type identification (landing, observer, ...). By default NULL.}
+\item{vessel_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{trips_selected}{Object of class {\link[base]{character}} expected. Additional parameter only used with data source "t3_db". Use trip(s) identification(s) for selected trip(s) kept in the query (by periode of reference and countries). By default NULL.}
+\item{species_fate_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{species_rf1}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
+\item{sample_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
+
+\item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+
+\item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected. By default YFT, SKJ, BET, ALB, MIX and LOT. Specie(s) FAO code(s) used for the RF1 process.}
+
+\item{species_fate_codes_rf1}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
+
+\item{vessel_type_codes_rf1}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
 
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
@@ -141,7 +156,7 @@ t3_process(
 Run the t3 process, with the possibility to run all the process or stop.
 }
 \details{
-For the argument "process", you can choose between 5 modalities (descending size classification):
+For the argument "process", you can choose between 4 modalities (descending size classification):
 \itemize{
  \item{all: }{argument by default, you launch all the process}
  \item{level1: }{you launch data model initialisation and the process level 1}

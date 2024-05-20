@@ -29,7 +29,7 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-full_trips-elementarywellplanwell_set_weigth_categories}{\code{full_trips$elementarywellplanwell_set_weigth_categories()}}
+\item \href{#method-full_trips-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
 \item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
 \item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
@@ -99,7 +99,7 @@ Function for add activities in full trips object.
 \if{html}{\out{<a id="method-full_trips-filter_by_years_period"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-filter_by_years_period}{}}}
 \subsection{Method \code{filter_by_years_period()}}{
-Function for filter full trips by a time period.
+Function for filter full trips by a year(s) period.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$filter_by_years_period(years_period)}\if{html}{\out{</div>}}
 }
@@ -303,7 +303,11 @@ Process for set duration calculation (in hours).
 \subsection{Method \code{time_at_sea()}}{
 Process for time at sea calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(
+  global_output_path = NULL,
+  output_format = "eu",
+  referential_template = "observe"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -312,6 +316,8 @@ Process for time at sea calculation (in hours).
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -325,6 +331,7 @@ Process for fishing time calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
+  referential_template = "observe",
   global_output_path = NULL,
   output_format = "eu"
 )}\if{html}{\out{</div>}}
@@ -336,6 +343,8 @@ Process for fishing time calculation (in hours).
 \item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
 
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
@@ -392,7 +401,8 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$sample_length_class_ld1_to_lf(
   length_step,
   global_output_path = NULL,
-  output_format = "eu"
+  output_format = "eu",
+  referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
 
@@ -404,6 +414,8 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -456,15 +468,16 @@ Process for step standardisation of lf length class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-elementarywellplanwell_set_weigth_categories"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-elementarywellplanwell_set_weigth_categories}{}}}
-\subsection{Method \code{elementarywellplanwell_set_weigth_categories()}}{
+\if{html}{\out{<a id="method-full_trips-well_set_weigth_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-well_set_weigth_categories}{}}}
+\subsection{Method \code{well_set_weigth_categories()}}{
 Process for well set weigth categories definition.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$elementarywellplanwell_set_weigth_categories(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
   sample_set,
   global_output_path = NULL,
-  output_format = "eu"
+  output_format = "eu",
+  referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
 
@@ -476,6 +489,8 @@ Process for well set weigth categories definition.
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -590,7 +605,7 @@ Application of process 2.8 raised factors on standardised sample set.
 \if{html}{\out{<a id="method-full_trips-path_to_level3"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-path_to_level3}{}}}
 \subsection{Method \code{path_to_level3()}}{
-Temporary link to the R object model with Antoine D. modelisation process.
+Temporary link to the R object model with modelisation process.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
 }

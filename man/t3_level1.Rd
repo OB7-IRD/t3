@@ -7,7 +7,9 @@
 t3_level1(
   object_model_data,
   object_full_trips,
-  species_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  species_fao_codes_rf1 = as.integer(c(1, 2, 3, 4, 9, 11)),
+  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
   sunrise_schema = "sunrise",
@@ -18,7 +20,8 @@ t3_level1(
   output_path = NULL,
   output_format = "eu",
   new_directory = FALSE,
-  integrated_process = FALSE
+  integrated_process = FALSE,
+  referential_template = "observe"
 )
 }
 \arguments{
@@ -26,7 +29,11 @@ t3_level1(
 
 \item{object_full_trips}{Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.}
 
-\item{species_rf1}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
+\item{species_fao_codes_rf1}{Object of type \code{\link[base]{integer}} expected. Specie(s) code(s) used for the RF1 process. By default 1 (YFT), 2 (SKJ), 3 (BET), 4 (ALB), 9 (MIX) and 11 (LOT).}
+
+\item{species_fate_codes_rf1}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
+
+\item{vessel_type_codes_rf1}{Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).}
 
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
@@ -49,6 +56,8 @@ t3_level1(
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
 \item{integrated_process}{Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.}
+
+\item{referential_template}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

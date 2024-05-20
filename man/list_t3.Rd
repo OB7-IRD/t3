@@ -56,7 +56,7 @@ Function for display item's name(s) attribut.
 \subsection{Method \code{add()}}{
 Function for add new element in specific attribut.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{list_t3$add(new_item, attribut = "data")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{list_t3$add(new_item, attribut = "data", silent = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -65,6 +65,8 @@ Function for add new element in specific attribut.
 \item{\code{new_item}}{(all type) Item to add.}
 
 \item{\code{attribut}}{(character) Attribut's name. By default "data".}
+
+\item{\code{silent}}{{\link[base]{logical}} expected. By default TRUE Display or not information when you run the process.}
 }
 \if{html}{\out{</div>}}
 }
