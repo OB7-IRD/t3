@@ -2029,7 +2029,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
-                                                                               "set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "set_count")))
+                                                                               "positive_set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "positive_set_count")))
                                   outputs_process_1_4 <- outputs_process_1_4_activities %>%
                                     dplyr::left_join(outputs_process_1_4_trips,
                                                      by = "trip_id") %>%
@@ -2046,7 +2046,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_date,
                                                     ocean_code,
                                                     school_type_code,
-                                                    set_count)
+                                                    positive_set_count)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
@@ -2365,8 +2365,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for time at sea calculation (in hours).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             time_at_sea = function(global_output_path = NULL,
-                                                   output_format = "eu") {
+                                                   output_format = "eu",
+                                                   referential_template = "observe") {
                               # 12.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2417,60 +2419,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                    format = "%H:%M:%S"))
                                       time_trip_end_date <- lubridate::hms(format(x = trip_end_date,
                                                                                   format = "%H:%M:%S"))
-                                      if (time_departure_date > lubridate::dseconds(x = 0)
-                                          & time_trip_end_date > lubridate::dseconds(x = 0)) {
-                                        # we have time for departure_date and landing_date
-                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
-                                                                                                 end = trip_end_date)) / 3600
+                                      if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
+                                        activities_dates <- current_activities$extract_l1_element_value(element = "activity_date")
+                                        activities_dates <- unique(do.call(what = "c",
+                                                                           args = activities_dates))
+                                        activities_dates <- sort(x = activities_dates)
+                                        time_at_sea <- 0
+                                        for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
+                                          capture.output(current_activities_date <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
+                                                                                                                                             activities_dates[activities_dates_id],
+                                                                                                                                             "\",",
+                                                                                                                                             "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
+                                                         file = "NUL")
+                                          if (referential_template == "observe") {
+                                            current_activities_date_time_at_sea <- unique(x = unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea"))) / current_activities_date$count()
+                                          } else {
+                                            current_activities_date_time_at_sea <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea"))) / current_activities_date$count()
+                                          }
+                                          current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
+                                                                                                        current_activities_date_time_at_sea))
+                                          time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
+                                        }
                                       } else {
-                                        if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
-                                          capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                         file = "NUL")
-                                          capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                                         file = "NUL")
-                                          if (length(x = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                      departure_date,
-                                                                                                      "\",",
-                                                                                                      "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))) != 0) {
-                                            capture.output(current_activities_departure_date <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
-                                            capture.output(current_activities_departure_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                                                                         departure_date,
-                                                                                                                                                         "\",",
-                                                                                                                                                         "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                                           file = "NUL")
-                                            current_activities_departure_date_time_at_sea <- sum(unlist(x = current_activities_departure_date$extract_l1_element_value(element = "time_at_sea")))
-                                          } else {
-                                            current_activities_departure_date_time_at_sea <- 0
-                                          }
-                                          if (length(current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                  trip_end_date,
-                                                                                                  "\",",
-                                                                                                  "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))) != 0) {
-                                            capture.output(current_activities_trip_end_date <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
-                                            capture.output(current_activities_trip_end_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                                                                        trip_end_date,
-                                                                                                                                                        "\",",
-                                                                                                                                                        "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                                           file = "NUL")
-
-                                            current_activities_trip_end_date_time_at_sea <- sum(unlist(current_activities_trip_end_date$extract_l1_element_value(element = "time_at_sea")))
-                                          } else {
-                                            current_activities_trip_end_date_time_at_sea <- 0
-                                          }
-                                          time_at_sea_tmp <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                       end = trip_end_date - lubridate::days(x = 1)))
-                                          time_at_sea <- (time_at_sea_tmp
-                                                          + lubridate::dhours(x = current_activities_departure_date_time_at_sea)
-                                                          + lubridate::dhours(x = current_activities_trip_end_date_time_at_sea))
-                                          time_at_sea <- time_at_sea@.Data
+                                        if (time_departure_date > lubridate::dseconds(x = 0)
+                                            & time_trip_end_date > lubridate::dseconds(x = 0)) {
+                                          time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
+                                                                                                   end = trip_end_date)) / 3600
                                         } else {
                                           time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                   end = trip_end_date - lubridate::days(x = 1)))
+                                                                                                   end = trip_end_date - lubridate::days(x = 1))) / 3600
                                         }
                                       }
-                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea / 3600
+                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
                                     }
                                   }
                                   message(format(x = Sys.time(),
@@ -2723,7 +2709,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                 39,
                                                                                                                 50,
                                                                                                                 101,
-                                                                                                                102,
                                                                                                                 103) else c(4,
                                                                                                                             7,
                                                                                                                             10,
