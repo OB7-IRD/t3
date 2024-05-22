@@ -3988,7 +3988,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(elementarysamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "elementarysample"))),
                                                                                                          FUN = function(elementarysample_id) {
-                                                                                                           wells_selected$extract_l1_element_value(element = "elementarysample")[[elementarysample_id]]$extract()
+                                                                                                           if (paste(class(x = wells_selected$extract_l1_element_value(element = "elementarysample")[[elementarysample_id]]),
+                                                                                                                     collapse = " ") != "logical") {
+                                                                                                             wells_selected$extract_l1_element_value(element = "elementarysample")[[elementarysample_id]]$extract()
+                                                                                                           }
                                                                                                          }))),
                                                  file = "NUL")
                                   outputs_process_2_3_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
@@ -4416,7 +4419,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
                                                                                                 FUN = function(wellsets_id) {
-                                                                                                  wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
+                                                                                                  if (paste(class(x = wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]),
+                                                                                                            collapse = " ") != "logical") {
+                                                                                                    wells_selected$extract_l1_element_value(element = "wellsets")[[wellsets_id]]$extract()
+                                                                                                  }
                                                                                                 }))),
                                                  file = "NUL")
                                   outputs_process_2_4_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
@@ -4660,7 +4666,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamples_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsample"))),
                                                                                                            FUN = function(standardisedsample_id) {
-                                                                                                             wells_selected$extract_l1_element_value(element = "standardisedsample")[[standardisedsample_id]]$extract()
+                                                                                                             if (paste(class(x = wells_selected$extract_l1_element_value(element = "standardisedsample")[[standardisedsample_id]]),
+                                                                                                                       collapse = " ") != "logical") {
+                                                                                                               wells_selected$extract_l1_element_value(element = "standardisedsample")[[standardisedsample_id]]$extract()
+                                                                                                             }
                                                                                                            }))),
                                                  file = "NUL")
                                   outputs_process_2_5_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
@@ -4937,7 +4946,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
                                                                                                               FUN = function(standardisedsampleset_id) {
-                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                                if (paste(class(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]),
+                                                                                                                          collapse = " ") != "logical") {
+                                                                                                                  wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                                }
                                                                                                               }))),
                                                  file = "NUL")
                                   outputs_process_2_6_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
@@ -5270,7 +5282,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(wellsets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "wellsets"))),
                                                                                                 FUN = function(wellset_id) {
-                                                                                                  wells_selected$extract_l1_element_value(element = "wellsets")[[wellset_id]]$extract()
+                                                                                                  if (paste(class(x = wells_selected$extract_l1_element_value(element = "wellsets")[[wellset_id]]),
+                                                                                                            collapse = " ") != "logical") {
+                                                                                                    wells_selected$extract_l1_element_value(element = "wellsets")[[wellset_id]]$extract()
+                                                                                                  }
                                                                                                 }))),
                                                  file = "NUL")
                                   outputs_process_2_7_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
@@ -5526,7 +5541,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(standardisedsamplesets_selected$add(new_item = unlist(lapply(X = seq_len(length.out = length(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset"))),
                                                                                                               FUN = function(standardisedsampleset_id) {
-                                                                                                                wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                                if (paste(class(x = wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]),
+                                                                                                                          collapse = " ") != "logical") {
+                                                                                                                  wells_selected$extract_l1_element_value(element = "standardisedsampleset")[[standardisedsampleset_id]]$extract()
+                                                                                                                }
                                                                                                               }))),
                                                  file = "NUL")
                                   outputs_process_2_8_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
