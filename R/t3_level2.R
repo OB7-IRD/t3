@@ -16,6 +16,7 @@
 #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
+#' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
 #' @return The function a R6 reference object of class "object_full_trips".
 #' @export
 t3_level2 <- function(object_model_data,
@@ -32,23 +33,18 @@ t3_level2 <- function(object_model_data,
                       output_path = NULL,
                       output_format = "eu",
                       new_directory = FALSE,
-                      integrated_process = FALSE) {
+                      integrated_process = FALSE,
+                      referential_template = "observe") {
   if (paste0(class(object_model_data),
              collapse = " ") != "object_model_data R6") {
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalid \"object_model_data\" argument.\n",
-        "Classes \"object_model_data\" and \"R6\" expected.\n",
-        sep = "")
-    stop()
+    stop(format(x = Sys.time(),
+                format = "%Y-%m-%d %H:%M:%S"),
+         " - Invalid \"object_model_data\" argument. Classes \"object_model_data\" and \"R6\" expected.")
   } else if (paste0(class(object_full_trips),
                     collapse = " ") != "full_trips list_t3 R6") {
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Error: invalid \"object_full_trips\" argument.\n",
-        "Classes \"full_trips\", \"list_t3\" and \"R6\" expected.\n",
-        sep = "")
-    stop()
+    stop(format(x = Sys.time(),
+                format = "%Y-%m-%d %H:%M:%S"),
+         " - Invalid \"object_full_trips\" argument. Classes \"full_trips\", \"list_t3\" and \"R6\" expected.")
   } else {
     # log file initialisation ----
     initiate_log_file(log_file = log_file,
@@ -61,14 +57,14 @@ t3_level2 <- function(object_model_data,
                                         new_directory = new_directory,
                                         level = "level2")
     }
-    cat(format(x = Sys.time(),
-               "%Y-%m-%d %H:%M:%S"),
-        " - Start function t3 process level 2.\n",
-        sep = "")
+    message(format(x = Sys.time(),
+                   "%Y-%m-%d %H:%M:%S"),
+            " - Start function t3 process level 2.")
     # level 2.1: sample length class ld1 to lf conversion ----
     object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
                                                     global_output_path = output_path,
-                                                    output_format = output_format)
+                                                    output_format = output_format,
+                                                    referential_template = referential_template)
     # level 2.2: sample number measured extrapolation ----
     object_full_trips$sample_number_measured_extrapolation(global_output_path = output_path,
                                                            output_format = output_format)
@@ -79,7 +75,8 @@ t3_level2 <- function(object_model_data,
     # level 2.4: sample weight categories ----
     object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
                                                  global_output_path = output_path,
-                                                 output_format = output_format)
+                                                 output_format = output_format,
+                                                 referential_template = referential_template)
     # level 2.5: standardised sample creation ----
     object_full_trips$standardised_sample_creation(global_output_path = output_path,
                                                    output_format = output_format)
@@ -102,10 +99,9 @@ t3_level2 <- function(object_model_data,
     if (log_file == TRUE) {
       closeAllConnections()
     }
-    cat(format(x = Sys.time(),
-               format = "%Y-%m-%d %H:%M:%S"),
-        " - Successful function t3 process level 2.\n",
-        sep = "")
+    message(format(x = Sys.time(),
+                   format = "%Y-%m-%d %H:%M:%S"),
+            " - Successful function t3 process level 2.")
     return(object_full_trips)
   }
 }

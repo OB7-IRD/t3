@@ -24,7 +24,7 @@ SELECT
 		-(Int(a.V_LAT * POWER(10, -2)) + ((a.V_LAT * POWER(10, -2) - Int(a.V_LAT * POWER(10, -2))) / 60 * 100))) AS activity_latitude
 	,IIf(a.C_OPERA IN (0,1,2,14),
 		a.V_NB_OP,
-		0) AS set_count
+		NULL) AS set_count
 	,a.C_TBANC AS school_type_code
 	,a.C_OPERA AS activity_code
 	,o.L_OPERA AS activity_label

@@ -1,7 +1,6 @@
 #' @name elementarycatch
 #' @title R6 class elementarycatch
 #' @description Create R6 reference object class elementarycatch
-#' @importFrom R6 R6Class
 elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                public = list(
                                  # initialize ----

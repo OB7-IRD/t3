@@ -19,7 +19,8 @@ t3_level2(
   output_path = NULL,
   output_format = "eu",
   new_directory = FALSE,
-  integrated_process = FALSE
+  integrated_process = FALSE,
+  referential_template = "observe"
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ t3_level2(
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
 \item{integrated_process}{Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.}
+
+\item{referential_template}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \value{
 The function a R6 reference object of class "object_full_trips".

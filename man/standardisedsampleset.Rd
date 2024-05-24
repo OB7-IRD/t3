@@ -24,10 +24,10 @@ Initialize function for R6 standardisedsampleset class.
   activity_id,
   well_id,
   sample_id,
-  sample_quality,
-  sample_type,
-  specie_code,
-  specie_code3l,
+  sample_quality_code,
+  sample_type_code,
+  species_code,
+  species_fao_code,
   sample_standardised_length_class_lf,
   sample_number_weighted,
   sample_weigth,
@@ -47,13 +47,13 @@ Initialize function for R6 standardisedsampleset class.
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{sample_quality}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
+\item{\code{sample_quality_code}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
-\item{\code{sample_type}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
+\item{\code{sample_type_code}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
 
-\item{\code{specie_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
+\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
-\item{\code{specie_code3l}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
+\item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
 \item{\code{sample_standardised_length_class_lf}}{Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.}
 

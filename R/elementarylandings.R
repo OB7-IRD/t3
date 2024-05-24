@@ -1,7 +1,6 @@
 #' @name elementarylandings
 #' @title R6 class elementarylandings
 #' @description Create R6 reference object class elementarylandings
-#' @importFrom R6 R6Class
 elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                   inherit = list_t3,
                                   public = list(
@@ -21,20 +20,18 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                               if (length(x = class(x = arguments[[i]][[i]])) == 2
                                                   && (! any(class(x = arguments[[i]][[i]]) == "R6")
                                                       & ! any(class(x = new_item[[i]]) == "elementarylanding"))) {
-                                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                    " - Error: invalid \"data\" argument, class list or R6-elementarylanding expected.\n",
-                                                    sep = "")
-                                                stop()
+                                                stop(format(Sys.time(),
+                                                            "%Y-%m-%d %H:%M:%S"),
+                                                     " - Invalid \"data\" argument, class list or R6-elementarylanding expected.")
                                               }
                                             }
                                             private$data <- append(private$data, arguments[[i]])
                                           } else if (length(class(arguments[[i]])) == 2 && (any(class(arguments[[i]]) == "R6") & any(class(arguments[[i]]) == "elementarylanding"))) {
                                             private$data <- append(private$data, arguments[[i]])
                                           } else {
-                                            cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                " - Error: invalid \"data\" argument, class list or R6-elementarylanding expected.\n",
-                                                sep = "")
-                                            stop()
+                                            stop(format(Sys.time(),
+                                                        "%Y-%m-%d %H:%M:%S"),
+                                                 " - Invalid \"data\" argument, class list or R6-elementarylanding expected.")
                                           }
                                         }
                                       }
@@ -52,11 +49,9 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                                                             }))
                                         if (length(x = class_new_item) != 1
                                             || class_new_item != "elementarylanding_R6") {
-                                          cat(format(x = Sys.time(),
-                                                     "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: invalid \"data\" argument, class elementarylanding-R6 expected.\n",
-                                              sep = "")
-                                          stop()
+                                          stop(format(x = Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Invalid \"data\" argument, class elementarylanding-R6 expected.")
                                         } else {
                                           super$add(new_item = new_item)
                                         }
@@ -64,11 +59,9 @@ elementarylandings <- R6::R6Class(classname = "elementarylandings",
                                         class_new_item <- paste(class(x = new_item),
                                                                 collapse = "_")
                                         if (class_new_item != "elementarylanding_R6") {
-                                          cat(format(x = Sys.time(),
-                                                     "%Y-%m-%d %H:%M:%S"),
-                                              " - Error: invalid \"data\" argument, class elementarylanding-R6 expected.\n",
-                                              sep = "")
-                                          stop()
+                                          stop(format(x = Sys.time(),
+                                                      "%Y-%m-%d %H:%M:%S"),
+                                               " - Invalid \"data\" argument, class elementarylanding-R6 expected.")
                                         } else {
                                           super$add(new_item = new_item)
                                         }

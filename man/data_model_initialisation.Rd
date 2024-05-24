@@ -10,13 +10,13 @@ data_model_initialisation(
   log_file = FALSE,
   log_path = NULL,
   log_name = "data_model_initialisation",
-  time_period,
-  fleet_code,
-  ocean_code,
-  vessel_type_code,
-  species_fate_code,
-  sample_type_code,
-  trip_id = NULL
+  years_period,
+  flag_codes,
+  ocean_codes,
+  vessel_type_codes,
+  species_fate_codes,
+  sample_type_codes,
+  trip_ids = NULL
 )
 }
 \arguments{
@@ -30,19 +30,19 @@ data_model_initialisation(
 
 \item{log_name}{Object of class {\link[base]{character}} expected. By default "data_model_initialisation". Name of the log file.}
 
-\item{time_period}{Object of class {\link[base]{integer}} expected. Year(s) of the reference time period coded on 4 digits.}
+\item{years_period}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{fleet_code}{Object of class {\link[base]{character}} expected. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{flag_codes}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{ocean_code}{Object of class {\link[base]{integer}} expected. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{ocean_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{vessel_type_code}{Object of class {\link[base]{integer}} expected. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{vessel_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{species_fate_code}{Object of class {\link[base]{integer}} expected. Specie fate(s) related to data extraction.}
+\item{species_fate_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{sample_type_code}{Object of class {\link[base]{integer}} expected. Sample type identification.}
+\item{sample_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
 
-\item{trip_id}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "time_periode", "country" or "ocean".}
+\item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 }
 \value{
 The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".

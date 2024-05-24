@@ -1,7 +1,6 @@
 #' @name trips
 #' @title R6 class trips
 #' @description Create R6 reference object class trips
-#' @importFrom R6 R6Class
 trips <- R6::R6Class(classname = "trips",
                      inherit = list_t3,
                      public = list(
@@ -21,11 +20,9 @@ trips <- R6::R6Class(classname = "trips",
                                  if (length(x = class(x = arguments[[i]][[i]])) == 2
                                      && (! any(class(x = arguments[[i]][[i]]) == "R6")
                                          & ! any(class(x = new_item[[i]]) == "trip"))) {
-                                   cat(format(Sys.time(),
-                                              "%Y-%m-%d %H:%M:%S"),
-                                       " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
-                                       sep = "")
-                                   stop()
+                                   stop(format(Sys.time(),
+                                               "%Y-%m-%d %H:%M:%S"),
+                                        " - Invalid \"data\" argument, class list or R6-trip expected.")
                                  }
                                }
                                private$data <- append(x = private$data,
@@ -36,11 +33,9 @@ trips <- R6::R6Class(classname = "trips",
                                private$data <- append(x = private$data,
                                                       values = arguments[[i]])
                              } else {
-                               cat(format(Sys.time(),
-                                          "%Y-%m-%d %H:%M:%S"),
-                                   " - Error: invalid \"data\" argument, class list or R6-trip expected.\n",
-                                   sep = "")
-                               stop()
+                               stop(format(Sys.time(),
+                                           "%Y-%m-%d %H:%M:%S"),
+                                    " - Invalid \"data\" argument, class list or R6-trip expected.")
                              }
                            }
                          }
@@ -58,11 +53,9 @@ trips <- R6::R6Class(classname = "trips",
                                                                }))
                            if (length(x = class_new_item) != 1
                                || class_new_item != "trip_R6") {
-                             cat(format(x = Sys.time(),
-                                        "%Y-%m-%d %H:%M:%S"),
-                                 " - Error: invalid \"data\" argument, class trip-R6 expected.\n",
-                                 sep = "")
-                             stop()
+                             stop(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - Invalid \"data\" argument, class trip-R6 expected.")
                            } else {
                              super$add(new_item = new_item)
                            }
@@ -70,11 +63,9 @@ trips <- R6::R6Class(classname = "trips",
                            class_new_item <- paste(class(x = new_item),
                                                    collapse = "_")
                            if (class_new_item != "trip_R6") {
-                             cat(format(x = Sys.time(),
-                                        "%Y-%m-%d %H:%M:%S"),
-                                 " - Error: invalid \"data\" argument, class trip-R6 expected.\n",
-                                 sep = "")
-                             stop()
+                             stop(format(x = Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - Invalid \"data\" argument, class trip-R6 expected.")
                            } else {
                              super$add(new_item = new_item)
                            }

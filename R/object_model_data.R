@@ -4,7 +4,7 @@
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
-                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -968,9 +968,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful elementary landing(s) data importation from an observe database.")
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful elementary landing(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -2081,15 +2081,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample set(s) data importation from avdht database.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful sample set(s) data importation from avdht database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from csv file.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample set(s) data importation from csv file.")
                                        sampleset_data <- read.csv2(file = data_path,
                                                                    stringsAsFactors = FALSE)
                                        if (nrow(x = sampleset_data) == 0) {
@@ -2098,15 +2098,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - No data imported, check your csv file.")
                                        } else {
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful sample set(s) data importation from csv file.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful sample set(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start sample set(s) data importation from RData.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start sample set(s) data importation from RData.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "samplesets",
@@ -2126,8 +2126,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - Invalid RData, no R object named \"samplesets\" available in the R environment provided.")
                                        }
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample set(s) data importation from RData.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample set(s) data importation from RData.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
@@ -2140,8 +2140,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        if (exists(x = "sampleset",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start sample set(s) data importation from R environment.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start sample set(s) data importation from R environment.")
                                          sampleset_data <- dplyr::tibble(get(x = "sampleset",
                                                                              envir = environment_name))
                                          if (paste0(class(x = sampleset_data),
@@ -2157,8 +2157,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - No R object named \"sampleset\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful sample set(s) data importation R environment.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful sample set(s) data importation R environment.")
                                      }
                                      private$samplesets <- sampleset_data
                                    },
@@ -2192,16 +2192,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from an observe database.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start length weight relationship(s) data importation from an observe database.")
                                        lengthweightrelationship_sql <- paste(readLines(con = system.file("sql",
                                                                                                          "observe",
                                                                                                          "observe_lengthweightrelationships.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
                                        message("[",
-                                           lengthweightrelationship_sql,
-                                           "]")
+                                               lengthweightrelationship_sql,
+                                               "]")
                                        lengthweightrelationship_data <- DBI::dbGetQuery(conn = database_connection,
                                                                                         statement = lengthweightrelationship_sql)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
@@ -2210,14 +2210,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - No data imported, check the query and parameters associated.")
                                        } else {
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship(s) data importation from an observe database.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful length weight relationship(s) data importation from an observe database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from csv file.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start length weight relationship(s) data importation from csv file.")
                                        lengthweightrelationship_data <- read.csv2(file = data_path,
                                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
@@ -2234,14 +2234,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                         lwr_a = as.numeric(x = lwr_a),
                                                                                         lwr_b = as.numeric(x = lwr_b))
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful length weight relationship(s) data importation from csv file.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful length weight relationship(s) data importation from csv file.")
                                        }
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start length weight relationship(s) data importation from RData file.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start length weight relationship(s) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "lengthweightrelationships",
@@ -2261,8 +2261,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - Invalid RData, no R object named \"lengthweightrelationships\" available in the R environment provided.")
                                        }
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length weight relationship(s) data importation from RData file.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length weight relationship(s) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        if (is.null(x = envir)) {
@@ -2274,8 +2274,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        if (exists(x = "lengthweightrelationship",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start length weight relationship(s) data importation from R environment.")
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start length weight relationship(s) data importation from R environment.")
                                          lengthweightrelationship_data <- dplyr::tibble(get(x = "lengthweightrelationship",
                                                                                             envir = environment_name))
                                          if (paste0(class(x = lengthweightrelationship_data),
@@ -2291,8 +2291,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                               " - No R object named \"lengthweightrelationship\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful length weight relationship(s) data importation R environment.")
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful length weight relationship(s) data importation R environment.")
                                      }
                                      private$lengthweightrelationships <- lengthweightrelationship_data
                                    }

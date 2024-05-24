@@ -1,7 +1,6 @@
 #' @name activities
 #' @title R6 class activities
 #' @description Create R6 reference object class activities
-#' @importFrom R6 R6Class
 activities <- R6::R6Class(classname = "activities",
                           inherit = list_t3,
                           public = list(
@@ -19,20 +18,16 @@ activities <- R6::R6Class(classname = "activities",
                                                   what = "list")) {
                                     for (i in length(arguments[[i]])) {
                                       if (length(class(arguments[[i]][[i]])) == 2 && (! any(class(arguments[[i]][[i]]) == "R6") & ! any(class(new_item[[i]]) == "activity"))) {
-                                        cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                            " - Error: invalid \"data\" argument, class list or R6-activity expected.\n",
-                                            sep = "")
-                                        stop()
+                                        stop(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                             " - Invalid \"data\" argument, class list or R6-activity expected.")
                                       }
                                     }
                                     private$data <- append(private$data, arguments[[i]])
                                   } else if (length(class(arguments[[i]])) == 2 && (any(class(arguments[[i]]) == "R6") & any(class(arguments[[i]]) == "activity"))) {
                                     private$data <- append(private$data, arguments[[i]])
                                   } else {
-                                    cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Error: invalid \"data\" argument, class list or R6-activity expected.\n",
-                                        sep = "")
-                                    stop()
+                                    stop(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                         " - Invalid \"data\" argument, class list or R6-activity expected.")
                                   }
                                 }
                               }
@@ -50,11 +45,9 @@ activities <- R6::R6Class(classname = "activities",
                                                                     }))
                                 if (length(x = class_new_item) != 1
                                     || class_new_item != "activity_R6") {
-                                  cat(format(x = Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Error: invalid \"data\" argument, class activity-R6 expected.\n",
-                                      sep = "")
-                                  stop()
+                                  stop(format(x = Sys.time(),
+                                              "%Y-%m-%d %H:%M:%S"),
+                                       " - Invalid \"data\" argument, class activity-R6 expected.")
                                 } else {
                                   super$add(new_item = new_item)
                                 }
@@ -62,11 +55,9 @@ activities <- R6::R6Class(classname = "activities",
                                 class_new_item <- paste(class(x = new_item),
                                                         collapse = "_")
                                 if (class_new_item != "activity_R6") {
-                                  cat(format(x = Sys.time(),
-                                             "%Y-%m-%d %H:%M:%S"),
-                                      " - Error: invalid \"data\" argument, class activity-R6 expected.\n",
-                                      sep = "")
-                                  stop()
+                                  stop(format(x = Sys.time(),
+                                              "%Y-%m-%d %H:%M:%S"),
+                                       " - Invalid \"data\" argument, class activity-R6 expected.")
                                 } else {
                                   super$add(new_item = new_item)
                                 }

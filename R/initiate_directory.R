@@ -5,54 +5,29 @@
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new output directory of use an existing one. By default TRUE.
 #' @param level Object of class \code{\link[base]{character}} expected. Initiation of a full output directory ("all") or specific to a level (choose between "level1", "level2", "until_level2 or "level3").
 #' @return A list with output directory path, at least, and log path if requested.
-#' @importFrom codama r_type_checking
 #' @export
 initiate_directory <- function(output_path,
                                new_directory = TRUE,
                                level = "all") {
   # 1 - Arguments verification ----
-  if (codama::r_type_checking(r_object = output_path,
-                              type = "character",
-                              length = 1L,
-                              output = "logical") != TRUE) {
-    return(codama::r_type_checking(r_object = output_path,
-                                   type = "character",
-                                   length = 1L,
-                                   output = "message"))
-  }
-  if (codama::r_type_checking(r_object = new_directory,
-                              type = "logical",
-                              length = 1L,
-                              output = "logical") != TRUE) {
-    return(codama::r_type_checking(r_object = new_directory,
-                                   type = "logical",
-                                   length = 1L,
-                                   output = "message"))
-  }
-  if (codama::r_type_checking(r_object = level,
-                              type = "character",
-                              length = 1L,
-                              allowed_value = c("all",
-                                                "level1",
-                                                "level2",
-                                                "until_level2",
-                                                "level3"),
-                              output = "logical") != TRUE) {
-    return(codama::r_type_checking(r_object = level,
-                                   type = "character",
-                                   length = 1L,
-                                   allowed_value = c("all",
-                                                     "level1",
-                                                     "level2",
-                                                     "until_level2",
-                                                     "level3"),
-                                   output = "message"))
-  }
+  codama::r_type_checking(r_object = output_path,
+                          type = "character",
+                          length = 1L)
+  codama::r_type_checking(r_object = new_directory,
+                          type = "logical",
+                          length = 1L)
+  codama::r_type_checking(r_object = level,
+                          type = "character",
+                          length = 1L,
+                          allowed_value = c("all",
+                                            "level1",
+                                            "level2",
+                                            "until_level2",
+                                            "level3"))
   # 2 - Process ----
-  cat(format(x = Sys.time(),
-             format = "%Y-%m-%d %H:%M:%S"),
-      " - Start process for output directories creation.\n",
-      sep = "")
+  message(format(x = Sys.time(),
+                 format = "%Y-%m-%d %H:%M:%S"),
+          " - Start process for output directories creation.")
   if (new_directory == TRUE) {
     output_directory_name <- file.path(output_path,
                                        format(Sys.time(),
@@ -105,12 +80,10 @@ initiate_directory <- function(output_path,
       }
     }
   }
-  cat(format(x = Sys.time(),
-             format = "%Y-%m-%d %H:%M:%S"),
-      " - Successful process for output directories creation.\n",
-      "outputs availables here: ",
-      output_directory_name,
-      "\n",
-      sep = "")
+  message(format(x = Sys.time(),
+                 format = "%Y-%m-%d %H:%M:%S"),
+          " - Successful process for output directories creation.\n",
+          "outputs availables here: ",
+          output_directory_name)
   return(output_directory_name)
 }

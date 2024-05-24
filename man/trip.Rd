@@ -21,7 +21,7 @@ Initialize function for R6 trip class.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{trip$new(
   trip_id,
-  fleet_code,
+  flag_code,
   departure_date,
   trip_end_date,
   logbook_availability_code,
@@ -36,7 +36,7 @@ Initialize function for R6 trip class.
 \describe{
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{fleet_code}}{Object of class {\link[base]{character}} expected. Fleet identification.}
+\item{\code{flag_code}}{Object of class {\link[base]{character}} expected. Fleet identification.}
 
 \item{\code{departure_date}}{Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.}
 

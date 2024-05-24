@@ -1,8 +1,6 @@
 #' @name wellset
 #' @title R6 class wellset
 #' @description Create R6 reference object class wellset
-#' @importFrom R6 R6Class
-# wellset ----
 wellset <- R6::R6Class(classname = "wellset",
                        public = list(
                          # initialize ----
@@ -21,17 +19,29 @@ wellset <- R6::R6Class(classname = "wellset",
                                                weighted_weight,
                                                weighted_weight_minus10,
                                                weighted_weight_plus10) {
-                           # attribute "trip_id" verification
-                           check_trip_id(trip_id)
-                           # attribute "well_id" verification
-                           check_well_id(well_id)
-                           # attribute "activity_id" verification
-                           check_activity_id(activity_id)
-                           # attribute "sample_id" verification
-                           check_sample_id(sample_id)
-                           # attribute "weighted_weight" verification
-                           check_weighted_weight(weighted_weight)
-                           # attributions
+                           # 1 - Arguments verifications ----
+                           codama::r_type_checking(r_object = trip_id,
+                                                   type = "character",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = activity_id,
+                                                   type = "character",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = well_id,
+                                                   type = "character",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = sample_id,
+                                                   type = "character",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = weighted_weight,
+                                                   type = "numeric",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = weighted_weight_minus10,
+                                                   type = "numeric",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = weighted_weight_plus10,
+                                                   type = "numeric",
+                                                   length = 1L)
+                           # 2 - Attributions ----
                            private$trip_id <- trip_id
                            private$activity_id <- activity_id
                            private$well_id <- well_id
