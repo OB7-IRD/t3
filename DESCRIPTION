@@ -58,14 +58,20 @@ Authors@R:
            family = "Observatory of Exploited Tropical Pelagic Ecosystems",
            email = "ob7@ird.fr",
            role = c("cph", "fnd"),
-           comment = c(ORCID = "0000-0002-4642-3418")))
+           comment = c(ORCID = "0000-0002-4642-3418")),
+    person(given = "Jeanne",
+           family = "Clément",
+           email = "jeanne.clement@ird.fr",
+           role = c("aut"),
+           comment = c(ORCID = "0000-0002-5228-5015")),
+           
 Description: The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics.
     The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal).
     Is aims are to correct biases of the logbook data on species composition and provide more accurate catch estimations per species for the purse seiner fleet, especially European and Seychelles fleet.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 URL: https://github.com/OB7-IRD/t3, https://ob7-ird.github.io/t3
 BugReports: https://github.com/OB7-IRD/t3/issues
