@@ -2580,20 +2580,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @details
                             #' Available variables are:
                             #' \itemize{
-                            #'  \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
-                            #'  \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
-                            #'  \item{"goldenHourEnd"}{morning golden hour ends(soft light, best time for photography)}
-                            #'  \item{"solarNoon"}{solar noon (sun is in the highest position)}
-                            #'  \item{"goldenHour"}{evening golden hour starts}
-                            #'  \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
-                            #'  \item{"sunset"}{sunset (sun disappears below the horizon, evening civil twilight starts)}
-                            #'  \item{"dusk"}{dusk (evening nautical twilight starts)}
-                            #'  \item{"nauticalDusk"}{nautical dusk (evening astronomical twilight starts)}
-                            #'  \item{"night"}{night starts (dark enough for astronomical observations)}
-                            #'  \item{"nadir"}{nadir (darkest moment of the night, sun is in the lowest position)}
-                            #'  \item{"nightEnd"}{night ends (morning astronomical twilight starts)}
-                            #'  \item{"nauticalDawn"}{nautical dawn (morning nautical twilight starts)}
-                            #'  \item{"dawn"}{dawn (morning nautical twilight ends, morning civil twilight starts)}
+                            #'  \item{"sunrise": } sunrise (top edge of the sun appears on the horizon)
+                            #'  \item{"sunriseEnd": } sunrise ends (bottom edge of the sun touches the horizon)
+                            #'  \item{"goldenHourEnd": } morning golden hour ends(soft light, best time for photography)
+                            #'  \item{"solarNoon": } solar noon (sun is in the highest position)
+                            #'  \item{"goldenHour": } evening golden hour starts
+                            #'  \item{"sunsetStart": } sunset starts (bottom edge of the sun touches the horizon)
+                            #'  \item{"sunset": } sunset (sun disappears below the horizon, evening civil twilight starts)
+                            #'  \item{"dusk": } dusk (evening nautical twilight starts)
+                            #'  \item{"nauticalDusk": } nautical dusk (evening astronomical twilight starts)
+                            #'  \item{"night": } night starts (dark enough for astronomical observations)
+                            #'  \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
+                            #'  \item{"nightEnd": } night ends (morning astronomical twilight starts)
+                            #'  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
+                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
                             #' }
                             fishing_time = function(sunrise_schema = "sunrise",
                                                     sunset_schema = "sunset",

@@ -28,6 +28,7 @@ Authors:
   \item Pascal Cauquil \email{pascal.cauquil@ird.fr} (\href{https://orcid.org/0000-0003-0718-8950}{ORCID})
   \item Laurent Floc'h \email{laurent.floch@ird.fr} (\href{https://orcid.org/0000-0003-4764-9766}{ORCID})
   \item Julien Lebranchu \email{julien.lebranchu@ird.fr} (\href{https://orcid.org/0000-0002-7759-0534}{ORCID})
+  \item Jeanne Clément \email{jeanne.clement@ird.fr} (\href{https://orcid.org/0000-0002-5228-5015}{ORCID})
 }
 
 Other contributors:

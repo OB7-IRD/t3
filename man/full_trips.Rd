@@ -355,20 +355,20 @@ Process for fishing time calculation (in hours).
 \subsection{Details}{
 Available variables are:
 \itemize{
- \item{"sunrise"}{sunrise (top edge of the sun appears on the horizon)}
- \item{"sunriseEnd"}{sunrise ends (bottom edge of the sun touches the horizon)}
- \item{"goldenHourEnd"}{morning golden hour ends(soft light, best time for photography)}
- \item{"solarNoon"}{solar noon (sun is in the highest position)}
- \item{"goldenHour"}{evening golden hour starts}
- \item{"sunsetStart"}{sunset starts (bottom edge of the sun touches the horizon)}
- \item{"sunset"}{sunset (sun disappears below the horizon, evening civil twilight starts)}
- \item{"dusk"}{dusk (evening nautical twilight starts)}
- \item{"nauticalDusk"}{nautical dusk (evening astronomical twilight starts)}
- \item{"night"}{night starts (dark enough for astronomical observations)}
- \item{"nadir"}{nadir (darkest moment of the night, sun is in the lowest position)}
- \item{"nightEnd"}{night ends (morning astronomical twilight starts)}
- \item{"nauticalDawn"}{nautical dawn (morning nautical twilight starts)}
- \item{"dawn"}{dawn (morning nautical twilight ends, morning civil twilight starts)}
+ \item{"sunrise": } sunrise (top edge of the sun appears on the horizon)
+ \item{"sunriseEnd": } sunrise ends (bottom edge of the sun touches the horizon)
+ \item{"goldenHourEnd": } morning golden hour ends(soft light, best time for photography)
+ \item{"solarNoon": } solar noon (sun is in the highest position)
+ \item{"goldenHour": } evening golden hour starts
+ \item{"sunsetStart": } sunset starts (bottom edge of the sun touches the horizon)
+ \item{"sunset": } sunset (sun disappears below the horizon, evening civil twilight starts)
+ \item{"dusk": } dusk (evening nautical twilight starts)
+ \item{"nauticalDusk": } nautical dusk (evening astronomical twilight starts)
+ \item{"night": } night starts (dark enough for astronomical observations)
+ \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
+ \item{"nightEnd": } night ends (morning astronomical twilight starts)
+ \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
+ \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
 }
 }
 
@@ -624,7 +624,6 @@ Data preparatory for the t3 modelling process (level 3).
   periode_reference_level3 = NULL,
   target_year = as.integer(lubridate::year(Sys.time() - 1)),
   period_duration = 4L,
-  target_ocean = NULL,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -648,15 +647,13 @@ Data preparatory for the t3 modelling process (level 3).
 
 \item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
-\item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.}
-
 \item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
 
 \item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.}
 
 \item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
 
-\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.}
+\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.}
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
 }
@@ -739,7 +736,6 @@ Formatting data for model predictions.
   output_level3_process1,
   target_year,
   vessel_id_ignored = NULL,
-  country_flag = NULL,
   small_fish_only = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -754,8 +750,6 @@ Formatting data for model predictions.
 \item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.}
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
-
-\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
 
 \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
@@ -773,7 +767,6 @@ Model predictions for the species composition and computing of catches.
   output_level3_process4,
   output_directory,
   output_format = "eu",
-  country_flag = NULL,
   ci = FALSE,
   ci_type = "all",
   Nboot = 50,
@@ -791,8 +784,6 @@ Model predictions for the species composition and computing of catches.
 \item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Outputs directory path.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
-\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 

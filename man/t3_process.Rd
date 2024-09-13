@@ -158,9 +158,9 @@ Run the t3 process, with the possibility to run all the process or stop.
 \details{
 For the argument "process", you can choose between 4 modalities (descending size classification):
 \itemize{
- \item{all: }{argument by default, you launch all the process}
- \item{level1: }{you launch data model initialisation and the process level 1}
- \item{level2: }{you launch data model initialisation and the process level 2}
- \item{until_level2: }{you launch data model initialisation, the process level 1 and 2}
+ \item{all: } argument by default, you launch all the process
+ \item{level1: } you launch data model initialisation and the process level 1
+ \item{level2: } you launch data model initialisation and the process level 2
+ \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 }
 }
