@@ -46,6 +46,6 @@ The level 3 process of the T3R package aim at modelling species composition befo
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.4.png'/>
 
-### Process 3.5: Modelling speices composition and estimating catch
+### Process 3.5: Modelling species composition and estimating catch
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.5.png'/>
