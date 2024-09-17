@@ -95,7 +95,7 @@ This process aim to calcul a weighted weigth, which represent the weight of a se
 
 $$WW = \displaystyle \frac{W1}{W2} \times WT$$
 
-Where WW is the Weighted weight, W1 is the weight of the set in the well, W2 is the weight of the set in the others sampled wells and WT the total set weight.
+Where WW is the Weighted weight, W1 is the weight of the set in the well, W2 is the weight of the set in all the sampled wells and WT the total set weight.
 
 So far, the process is developed for the purse seiner. To better understand what the process do, take a look to an example. A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one. The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).
 
