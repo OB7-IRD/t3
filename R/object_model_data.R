@@ -1,6 +1,10 @@
 #' @title R6 class object_model_data
 #' @name object_model_data
 #' @description Create R6 reference object class object_model_data
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
+#' @importFrom dplyr  first last tibble mutate case_when row_number filter
+#' @importFrom DBI SQL sqlInterpolate dbGetQuery
 object_model_data <- R6::R6Class(classname = "object_model_data",
                                  public = list(
                                    #' @description Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
@@ -10,7 +14,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
+                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    trips_object_creation = function(data_source = "observe_database",

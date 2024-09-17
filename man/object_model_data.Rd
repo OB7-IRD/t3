@@ -55,7 +55,7 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
 
 \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
 
