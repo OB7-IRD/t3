@@ -5,7 +5,7 @@
 #' @param allset_data (data frame) Data used for prediction.Output table from process 3.4.
 # @param schooltype (integer) Fishing mode of the catch.
 # @param ocean (integer) Target ocean.
-# @param species (character) Target species. 'SKJ' for kipjack and 'YFT' for yellowfin.
+# @param species (character) Target species. 'SKJ' for skipjack and 'YFT' for yellowfin.
 #' @param Ntree (integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
 #' @param Nmtry (integer) Number of variables randomly sampled as candidates at each split. The default value is 2.
 #' @param Nseed (integer) Set the initial seed for the modelling. The default value is 7.
