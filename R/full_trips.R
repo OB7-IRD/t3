@@ -1,6 +1,11 @@
 #' @title R6 class full_trips
 #' @name full_trips
 #' @description Create R6 reference object class full_trips
+#' @importFrom R6 R6Class
+#' @importFrom dplyr tibble add_row mutate relocate group_by summarise ungroup pull arrange full_join left_join inner_join distinct select
+#' @importFrom stringr str_c str_extract
+#' @importFrom tidyr crossing tibble spread gather
+#' @importFrom lubridate year month days dhours dminutes dseconds hms parse_date_time int_length interval
 full_trips <- R6::R6Class(classname = "full_trips",
                           inherit = list_t3,
                           public = list(
@@ -240,6 +245,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # 4 - Add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.
                             #' @param object_elementarycatches Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.
+                            #' @importFrom  future.apply future_lapply
                             add_elementarycatches = function(object_elementarycatches) {
                               # 4.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
@@ -523,6 +529,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @importFrom codama r_type_checking
                             rf1 = function(species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
                                            species_fate_codes_rf1 = as.integer(c(6, 11)),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
@@ -1030,6 +1037,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process of Raising Factor level 2 (rf2).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @importFrom lubridate year
                             rf2 = function(global_output_path = NULL,
                                            output_format = "eu") {
                               # 8.1 - Arguments verification ----
@@ -2577,6 +2585,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @importFrom suncalc getSunlightTimes
                             #' @details
                             #' Available variables are:
                             #' \itemize{
@@ -6380,6 +6389,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
                             #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
+                            #' @importFrom sp coordinates fullgrid gridded SpatialPoints CRS proj4string spTransform
+                            #' @importFrom ranger ranger predictions importance
+                            #' @importFrom adehabitatHR kernelUD getvolumeUD
+                            #' @importFrom automap autoKrige
+                            #' @importFrom sf st_as_sf
+                            #' @import ggplot2
                             models_checking = function(output_level3_process2,
                                                        output_directory,
                                                        output_format = "eu",
