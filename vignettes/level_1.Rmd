@@ -72,7 +72,7 @@ The core of the t3 process is to consider that the species composition of the lo
 This process aims to homogenise these weight categories and create simplify categories divided in function of the fishing school and the ocean:
 
 - < 10kg and > 10kg for the floating object school in the Atlantic and Indian Ocean,
-- < 10kg, 10-30kg and > 10kg for undetermined and free school in the Atlantic Ocean,
+- < 10kg, 10-30kg and > 30kg for undetermined and free school in the Atlantic Ocean,
 - < 10kg and > 10kg for undetermined and free school in the Indian Ocean.
 
 For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribution key is applied for conversion to standardised weight categories. Details of the distribution key is available in tables below.
