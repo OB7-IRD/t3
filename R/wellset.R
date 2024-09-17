@@ -1,6 +1,8 @@
 #' @name wellset
 #' @title R6 class wellset
 #' @description Create R6 reference object class wellset
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 wellset <- R6::R6Class(classname = "wellset",
                        public = list(
                          # initialize ----

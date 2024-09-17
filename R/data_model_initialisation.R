@@ -14,6 +14,7 @@
 #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
 #' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
+#' @importFrom codama r_type_checking
 #' @export
 data_model_initialisation <- function(data_source = "observe_database",
                                       database_connection,

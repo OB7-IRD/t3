@@ -1,6 +1,8 @@
 #' @name standardisedsampleset
 #' @title R6 class standardisedsampleset
 #' @description Create R6 reference object class standardisedsampleset
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                   public = list(
                                     # initialize ----

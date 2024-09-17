@@ -1,6 +1,8 @@
 #' @name activity
 #' @title R6 class activity
 #' @description Create R6 reference object class activity
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 activity <- R6::R6Class(classname = "activity",
                         public = list(
                           # initialize ----

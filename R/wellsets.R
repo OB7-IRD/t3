@@ -1,6 +1,7 @@
 #' @name wellsets
 #' @title R6 class wellsets
 #' @description Create R6 reference object class wellsets
+#' @importFrom R6 R6Class
 wellsets <- R6::R6Class(classname = "wellsets",
                         inherit = list_t3,
                         public = list(

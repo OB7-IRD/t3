@@ -57,6 +57,7 @@
 #'  \item{level2: } you launch data model initialisation and the process level 2
 #'  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 #' }
+#' @importFrom codama r_type_checking
 #' @export
 t3_process <- function(process = "all",
                        data_source = "observe_database",

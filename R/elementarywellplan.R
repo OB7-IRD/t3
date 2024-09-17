@@ -1,6 +1,8 @@
 #' @name elementarywellplan
 #' @title R6 class elementarywellplan
 #' @description Create R6 reference object class elementarywellplan
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                   public = list(
                                     #' @description Initialize function for R6 elementarywellplan class.

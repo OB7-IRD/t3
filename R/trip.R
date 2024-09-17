@@ -1,6 +1,9 @@
 #' @name trip
 #' @title R6 class trip
 #' @description Create R6 reference object class trip
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
+#' @importFrom lubridate parse_date_time
 trip <- R6::R6Class(classname = "trip",
                     public = list(
                       # initialize ----

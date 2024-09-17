@@ -5,6 +5,7 @@
 #' @param log_path Object of class \code{\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class \code{\link[base]{character}} expected. Name of the log file. By default "t3log".
 #' @return A log file in text format at the location define in the argument "log_path".
+#' @importFrom codama r_type_checking
 #' @export
 initiate_log_file <- function(log_file = FALSE,
                               log_path = NULL,

@@ -1,6 +1,8 @@
 #' @name elementarylanding
 #' @title R6 class elementarylanding
 #' @description Create R6 reference object class elementarylanding
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                  public = list(
                                    # initialize ----

@@ -1,6 +1,8 @@
 #' @name elementarysampleraw
 #' @title R6 class trip
 #' @description Create R6 reference object class elementarysampleraw
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                    public = list(
                                      # initialize ----

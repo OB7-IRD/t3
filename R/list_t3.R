@@ -1,6 +1,9 @@
 #' @name list_t3
 #' @title R6 class list_t3
 #' @description Create R6 reference object class list_t3.
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
+#' @importFrom future.apply future_sapply
 list_t3 <- R6::R6Class(
   classname = "list_t3",
   public = list(

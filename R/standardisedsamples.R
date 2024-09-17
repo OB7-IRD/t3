@@ -1,6 +1,7 @@
 #' @name standardisedsamples
 #' @title R6 class standardisedsamples
 #' @description Create R6 reference object class standardisedsamples
+#' @importFrom R6 R6Class
 standardisedsamples <- R6::R6Class(classname = "standardisedsamples",
                                    inherit = list_t3,
                                    public = list(

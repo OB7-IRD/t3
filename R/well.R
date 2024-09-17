@@ -1,6 +1,8 @@
 #' @name well
 #' @title R6 class well
 #' @description Create R6 reference object class well
+#' @importFrom R6 R6Class
+#' @importFrom codama r_type_checking
 well <- R6::R6Class(classname = "well",
                     public = list(
                       # initialize ----
