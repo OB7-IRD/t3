@@ -78,7 +78,7 @@ LF length classes used during the treatment are not necessary the same that fill
 
 According to that, this step aim to standardise sample length classes. So far, these specifications are integrate in the process:
 
-- a length classes step of 1cm for SKY (*Katsuwonus pelamis*), LTA (*Euthynnus alletteratus*) and FRI (*Auxis thazard*),
+- a length classes step of 1cm for SKJ (*Katsuwonus pelamis*), LTA (*Euthynnus alletteratus*) and FRI (*Auxis thazard*),
 - a length classes step of 2cm for YFT (*Thunnus albacares*), BET (*Thunnus obesus*) and ALB (*Thunnus alalunga*).
 
 The global process flowchart is available in the figure 3 below.
