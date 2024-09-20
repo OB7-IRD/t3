@@ -1775,9 +1775,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   envir = tmp_envir)) {
                                          set_duration_ref_data <- dplyr::tibble(get(x = "setdurationrefs",
                                                                                     envir = tmp_envir))
-                                         if (paste0(class(x = lengthstep_data),
+                                         if (paste0(class(x =  set_duration_ref_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
-                                             || nrow(x = lengthstep_data) == 0) {
+                                             || nrow(x =  set_duration_ref_data) == 0) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
