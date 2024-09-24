@@ -286,7 +286,7 @@ Process for set duration calculation (in hours).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).}
+\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).}
 
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
@@ -409,7 +409,7 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.}
+\item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.}
 
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
@@ -533,7 +533,7 @@ R6 object standardised sample set creation.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.}
+\item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.}
 
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 

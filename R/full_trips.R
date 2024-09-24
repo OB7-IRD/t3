@@ -2093,7 +2093,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 11 - Process 1.5: set_duration ----
                             #' @description Process for set duration calculation (in hours).
-                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
+                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
@@ -2102,16 +2102,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     output_format = "eu",
                                                     referential_template = "observe") {
                               # 11.1 - Arguments verification ----
-                              if (length(x = class(x = set_duration_ref)) != 1
-                                  || ! inherits(x = set_duration_ref,
-                                                what = "data.frame")
-                                  || dim(x = set_duration_ref)[2] != 9
-                                  || dim(x = set_duration_ref)[1] < 1) {
+                              if (! paste0(class(x = set_duration_ref),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame")
+                                  || ncol(x = set_duration_ref) != 9
+                                  || nrow(x = set_duration_ref) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Error: invalid \"set_duration_ref\" argument, ",
-                                     "class \"data.frame\" expected with 9 columns and at least 1 row.")
+                                     " - Invalid \"set_duration_ref\" argument, class \"data.frame\" or \"tibble\" with 9 columns and at least 1 row expected.")
                               }
+
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
@@ -3073,7 +3073,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 15 - Process 2.1: sample length class conversion ld1 to lf ----
                             #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
-                            #' @param length_step Object of type \code{\link[base]{data.frame}} expected. Data frame object with length ratio between ld1 and lf class.
+                            #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
@@ -3082,16 +3082,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       output_format = "eu",
                                                                       referential_template = "observe") {
                               # 15.1 - Arguments verification ----
-                              if (length(x = class(x = length_step)) != 1
-                                  || ! inherits(x = length_step,
-                                                what = "data.frame")
-                                  || dim(x = length_step)[2] != 6
-                                  || dim(x = length_step)[1] < 1) {
+                              if (! paste0(class(x = length_step),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame")
+                                  || ncol(x = length_step) != 6
+                                  || nrow(x = length_step) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"length_step\" argument, ",
-                                     "class \"data.frame\" expected with 6 columns and at least 1 row.")
+                                     " - Invalid d \"length_step\" argument, class \"data.frame\" or \"tibble\" with 6 columns and at least 1 row expected.")
                               }
+
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
@@ -4765,7 +4765,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 20 - Process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
-                            #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} expected. Data frame object with parameters for length weight relationship.
+                            #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             standardised_sample_set_creation = function(length_weight_relationship_data,
