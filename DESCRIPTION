@@ -97,7 +97,9 @@ Imports:
 Suggests: 
     furdeb (>= 0.0.0.9000),
     knitr (>= 1.46),
-    markdown (>= 1.12)
+    markdown (>= 1.12),
+    testthat (>= 3.0.0)
 Remotes: 
     OB7-IRD/codama,
     OB7-IRD/furdeb
+Config/testthat/edition: 3
