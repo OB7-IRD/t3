@@ -4321,6 +4321,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       current_weighted_weight <- 0
                                                     }
                                                   } else {
+                                                    # do we have at least one activity of the current well store in one or more other well(s) ?
                                                     # no
                                                     current_weighted_weight <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
                                                                                           FUN = function(w) {
