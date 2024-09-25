@@ -1,159 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ob7-ird.github.io/t3/404.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_1.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_2.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/level_3.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/model_initialisation.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/articles/running_processes_examples.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/activities.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/activity.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/catch_ci_calculator.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/data_model_initialisation.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/df2boot.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarycatch.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarycatches.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarylanding.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarylandings.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarysample.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarysampleraw.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarysamples.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarysamplesraw.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarywellplan.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/elementarywellplans.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/full_trips.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/initiate_directory.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/initiate_log_file.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/list_t3.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/object_model_data.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/object_r6.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/samples.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/standardisedsample.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/standardisedsamples.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/standardisedsampleset.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/standardisedsamplesets.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/t3-package.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/t3_level1.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/t3_level2.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/t3_level3.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/t3_process.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/trip.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/trips.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/tunaboot.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/tunapredict.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/well.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/wells.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/wellset.html</loc>
-  </url>
-  <url>
-    <loc>https://ob7-ird.github.io/t3/reference/wellsets.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://ob7-ird.github.io/t3/404.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/LICENSE-text.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/index.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/level_1.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/level_2.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/level_3.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/model_initialisation.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/articles/running_processes_examples.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/authors.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/index.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/news/index.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/activities.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/activity.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/catch_ci_calculator.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/data_model_initialisation.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/df2boot.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarycatch.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarycatches.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarylanding.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarylandings.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarysample.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarysampleraw.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarysamples.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarysamplesraw.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarywellplan.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/elementarywellplans.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/full_trips.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/index.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/initiate_directory.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/initiate_log_file.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/list_t3.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/object_model_data.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/object_r6.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/pipe.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/samples.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/standardisedsample.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/standardisedsamples.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/standardisedsampleset.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/standardisedsamplesets.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/t3-package.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/t3_level1.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/t3_level2.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/t3_level3.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/t3_process.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/trip.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/trips.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/tunaboot.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/tunapredict.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/well.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/wells.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/wellset.html</loc></url>
+<url><loc>https://ob7-ird.github.io/t3/reference/wellsets.html</loc></url>
 </urlset>
+
