@@ -740,6 +740,7 @@ Formatting data for model predictions.
   target_year,
   vessel_id_ignored = NULL,
   country_flag = NULL,
+  input_type = "observe_database",
   small_fish_only = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -756,6 +757,8 @@ Formatting data for model predictions.
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
 
 \item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
+
+\item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'.  Values can be 'observe_database' or 'avdth_database'.}
 
 \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }
