@@ -2230,7 +2230,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
                                                                                 & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
-                                                current_activity$.__enclos_env__$private$set_duration <- parameter_a * catch_weight_category_corrected + parameter_b
+                                                current_activity$.__enclos_env__$private$set_duration <- as.numeric(parameter_a * catch_weight_category_corrected + parameter_b)
                                               } else {
                                                 if ((referential_template == "observe"
                                                      && (current_activity$.__enclos_env__$private$activity_code == 6
