@@ -6,8 +6,13 @@ Authors@R:
     c(person(given = "Mathieu",
             family = "Depetris",
             email = "mathieu.depetris@ird.fr",
-            role = c("aut", "cre"),
+            role = c("aut"),
             comment = c(ORCID = "0000-0001-8080-0531")),
+    person(given = "Jeanne",
+           family = "Clément",
+           email = "jeanne.clement@ird.fr",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5228-5015")),
     person(given = "Antoine",
            family = "Duparc",
            email = "antoine.duparc@ird.fr",
@@ -58,12 +63,7 @@ Authors@R:
            family = "Observatory of Exploited Tropical Pelagic Ecosystems",
            email = "ob7@ird.fr",
            role = c("cph", "fnd"),
-           comment = c(ORCID = "0000-0002-4642-3418")),
-    person(given = "Jeanne",
-           family = "Clément",
-           email = "jeanne.clement@ird.fr",
-           role = c("aut"),
-           comment = c(ORCID = "0000-0002-5228-5015")))
+           comment = c(ORCID = "0000-0002-4642-3418")))
 Maintainer: Jeanne Clément <jeanne.clement@ird.fr>
 Description: The multi-species nature of tropical tuna surface fisheries highlights a series of difficulties when catches are estimated by species and size statistics.
     The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and is still today the result of a strong collaboration between several countries (notably France, Spain, the Seychelles and Senegal).
