@@ -366,7 +366,7 @@
 <div class="section">
 <h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>set_duration_ref</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data and parameters for set duration calculation (by year, country, ocean and school type).</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data and parameters for set duration calculation (by year, country, ocean and school type).</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
@@ -451,20 +451,20 @@
 </div>
 <div class="section">
 <h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
-<p>Available variables are:</p><ul><li><p>"sunrise"sunrise (top edge of the sun appears on the horizon)</p></li>
-<li><p>"sunriseEnd"sunrise ends (bottom edge of the sun touches the horizon)</p></li>
-<li><p>"goldenHourEnd"morning golden hour ends(soft light, best time for photography)</p></li>
-<li><p>"solarNoon"solar noon (sun is in the highest position)</p></li>
-<li><p>"goldenHour"evening golden hour starts</p></li>
-<li><p>"sunsetStart"sunset starts (bottom edge of the sun touches the horizon)</p></li>
-<li><p>"sunset"sunset (sun disappears below the horizon, evening civil twilight starts)</p></li>
-<li><p>"dusk"dusk (evening nautical twilight starts)</p></li>
-<li><p>"nauticalDusk"nautical dusk (evening astronomical twilight starts)</p></li>
-<li><p>"night"night starts (dark enough for astronomical observations)</p></li>
-<li><p>"nadir"nadir (darkest moment of the night, sun is in the lowest position)</p></li>
-<li><p>"nightEnd"night ends (morning astronomical twilight starts)</p></li>
-<li><p>"nauticalDawn"nautical dawn (morning nautical twilight starts)</p></li>
-<li><p>"dawn"dawn (morning nautical twilight ends, morning civil twilight starts)</p></li>
+<p>Available variables are:</p><ul><li><p>"sunrise":  sunrise (top edge of the sun appears on the horizon)</p></li>
+<li><p>"sunriseEnd":  sunrise ends (bottom edge of the sun touches the horizon)</p></li>
+<li><p>"goldenHourEnd":  morning golden hour ends(soft light, best time for photography)</p></li>
+<li><p>"solarNoon":  solar noon (sun is in the highest position)</p></li>
+<li><p>"goldenHour":  evening golden hour starts</p></li>
+<li><p>"sunsetStart":  sunset starts (bottom edge of the sun touches the horizon)</p></li>
+<li><p>"sunset":  sunset (sun disappears below the horizon, evening civil twilight starts)</p></li>
+<li><p>"dusk":  dusk (evening nautical twilight starts)</p></li>
+<li><p>"nauticalDusk":  nautical dusk (evening astronomical twilight starts)</p></li>
+<li><p>"night":  night starts (dark enough for astronomical observations)</p></li>
+<li><p>"nadir": nadir (darkest moment of the night, sun is in the lowest position)</p></li>
+<li><p>"nightEnd":  night ends (morning astronomical twilight starts)</p></li>
+<li><p>"nauticalDawn":  nautical dawn (morning nautical twilight starts)</p></li>
+<li><p>"dawn":  dawn (morning nautical twilight ends, morning civil twilight starts)</p></li>
 </ul></div>
 
 
@@ -503,7 +503,7 @@
 <div class="section">
 <h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>length_step</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data frame object with length ratio between ld1 and lf class.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data frame object with length ratio between ld1 and lf class.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
@@ -642,7 +642,7 @@
 <div class="section">
 <h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>length_weight_relationship_data</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Data frame object with parameters for length weight relationship.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data frame object with parameters for length weight relationship.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
@@ -1031,7 +1031,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Mathieu Depetris, Antoine Duparc, Pascal Cauquil, Laurent Floc’h, Julien Lebranchu, IRD - Ob7 Observatory of Exploited Tropical Pelagic Ecosystems.</p>
+  <p></p><p>Developed by Mathieu Depetris, Jeanne Clément, Antoine Duparc, Pascal Cauquil, Laurent Floc’h, Julien Lebranchu, IRD - Ob7 Observatory of Exploited Tropical Pelagic Ecosystems.</p>
 </div>
 
 <div class="pkgdown">
