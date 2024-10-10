@@ -80,7 +80,7 @@ wellsets <- R6::R6Class(classname = "wellsets",
                             for (i in seq_len(length(x = private[["data"]]))) {
                               current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
                               if (trip_id == current_trip_id) {
-                                current_elementarylandings <- append(x = current_wellsets,
+                                current_wellsets <- append(x = current_wellsets,
                                                                      values = list(private[["data"]][[i]]))
                               }
                             }

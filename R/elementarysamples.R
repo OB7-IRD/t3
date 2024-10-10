@@ -81,7 +81,7 @@ elementarysamples <- R6::R6Class(classname = "elementarysamples",
                                      for (i in seq_len(length(private[["data"]]))) {
                                        current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
                                        if (trip_id == current_trip_id) {
-                                         current_elementarylandings <- append(current_elementarysamples,
+                                         current_elementarysamples <- append(current_elementarysamples,
                                                                               list(private[["data"]][[i]]))
                                        }
                                      }

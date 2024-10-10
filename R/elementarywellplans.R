@@ -79,7 +79,7 @@ elementarywellplans <- R6::R6Class(classname = "elementarywellplans",
                                        for (i in seq_len(length(x = private[["data"]]))) {
                                          current_trip_id <- private[["data"]][[i]]$.__enclos_env__$private$trip_id
                                          if (trip_id == current_trip_id) {
-                                           current_elementarylandings <- append(x = current_elementarywellplans,
+                                           current_elementarywellplans <- append(x = current_elementarywellplans,
                                                                                 values = list(private[["data"]][[i]]))
                                          }
                                        }

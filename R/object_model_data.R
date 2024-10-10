@@ -171,7 +171,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful trip(s) data importation from avdht database.")
+                                                 " - Successful trip(s) data importation from AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
@@ -221,17 +221,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "trip")[1])
+                                         environment_name <- as.environment(find(what = "trips")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "trip",
+                                       if (exists(x = "trips",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start trip(s) data importation from R environment.")
-                                         trip_data <- dplyr::tibble(get(x = "trip",
+                                         trip_data <- dplyr::tibble(get(x = "trips",
                                                                         envir = environment_name))
                                          if (paste0(class(x = trip_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -243,7 +243,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"trip\" available in the R environment.")
+                                              " - No R object named \"trips\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -507,17 +507,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "activity")[1])
+                                         environment_name <- as.environment(find(what = "activities")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "activity",
+                                       if (exists(x = "activities",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start activity(ies) data importation from R environment.")
-                                         activity_data <- dplyr::tibble(get(x = "activity",
+                                         activity_data <- dplyr::tibble(get(x = "activities",
                                                                             envir = environment_name))
                                          if (paste0(class(x = activity_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -529,7 +529,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"activity\" available in the R environment.")
+                                              " - No R object named \"activities\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -627,7 +627,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catches data importation from an Observe database.")
+                                               " - Start elementary catches data importation from an observe database.")
                                        if (! is.null(x = trip_ids)) {
                                          codama::r_type_checking(r_object = trip_ids,
                                                                  type = "character")
@@ -699,7 +699,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catches data importation from an observe database.")
+                                               " - Start elementary catches data importation from an AVDTH database.")
                                        elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = system.file("sql",
                                                                                                              "avdth",
                                                                                                              "avdth_elementarycatches.sql",
@@ -809,17 +809,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "elementarycatch")[1])
+                                         environment_name <- as.environment(find(what = "elementarycatches")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "elementarycatch",
+                                       if (exists(x = "elementarycatches",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start elementary catch(es) data importation from R environment.")
-                                         elementarycatch_data <- dplyr::tibble(get(x = "elementarycatch",
+                                         elementarycatch_data <- dplyr::tibble(get(x = "elementarycatches",
                                                                                    envir = environment_name))
                                          if (paste0(class(x = elementarycatch_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -831,7 +831,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"elementarycatch\" available in the R environment.")
+                                              " - No R object named \"elementarycatches\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -1029,7 +1029,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful elementary landing(s) data importation from avdht database.")
+                                                 " - Successful elementary landing(s) data importation from AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
@@ -1079,17 +1079,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "elementarylanding")[1])
+                                         environment_name <- as.environment(find(what = "elementarylandings")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "elementarylanding",
+                                       if (exists(x = "elementarylandings",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start elementary landing(s) data importation from R environment.")
-                                         elementarylanding_data <- dplyr::tibble(get(x = "elementarylanding",
+                                         elementarylanding_data <- dplyr::tibble(get(x = "elementarylandings",
                                                                                      envir = environment_name))
                                          if (paste0(class(x = elementarylanding_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -1101,7 +1101,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"elementarylanding\" available in the R environment.")
+                                              " - No R object named \"elementarylandings\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -1385,7 +1385,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful sample(s) data importation from avdht database.")
+                                                 " - Successful sample(s) data importation from AVDTH database.")
                                        }
                                        # well plan(s) importation
                                        message(format(x = Sys.time(),
@@ -1433,7 +1433,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful well plan(s) data importation from avdht database.")
+                                                 " - Successful well plan(s) data importation from AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
@@ -1523,18 +1523,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "sample")[1])
+                                         environment_name <- as.environment(find(what = "samples")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
                                        # sample(s) importation
-                                       if (exists(x = "sample",
+                                       if (exists(x = "samples",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start sample(s) data importation from R environment.")
-                                         sample_data <- dplyr::tibble(get(x = "sample",
+                                         sample_data <- dplyr::tibble(get(x = "samples",
                                                                           envir = environment_name))
                                          if (paste0(class(x = sample_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -1546,18 +1546,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"sample\" available in the R environment.")
+                                              " - No R object named \"samples\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
                                                " - Successful sample(s) data importation R environment.")
                                        # well plan(s) importation
-                                       if (exists(x = "wellplan",
+                                       if (exists(x = "wellplans",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start well plan(s) data importation from R environment.")
-                                         wellplan_data <- dplyr::tibble(get(x = "wellplan",
+                                         wellplan_data <- dplyr::tibble(get(x = "wellplans",
                                                                             envir = environment_name))
                                          if (paste0(class(x = wellplan_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -1569,7 +1569,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"wellplan\" available in the R environment.")
+                                              " - No R object named \"wellplans\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2086,7 +2086,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful sample set(s) data importation from avdht database.")
+                                                 " - Successful sample set(s) data importation from AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
@@ -2136,12 +2136,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 6 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "sampleset")[1])
+                                         environment_name <- as.environment(find(what = "samplesets")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "sampleset",
+                                       if (exists(x = "samplesets",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -2158,7 +2158,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"sampleset\" available in the R environment.")
+                                              " - No R object named \"samplesets\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
