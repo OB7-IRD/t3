@@ -12,4 +12,3 @@ tests/testthat/testthat-problems.rds
 vignettes/*.html
 vignettes/*.md
 vignettes/*.R
-*.Rproj
