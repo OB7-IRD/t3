@@ -3629,7 +3629,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
                                                   rf4 <- sum_sub_sample_specie_total_count / sum_sub_sample_specie_number_measured_lf
                                                   # rf4 verification
-                                                  if (rf4 != 1 & sample_specie_id != "SKJ") {
+                                                  # pint console precision 7 digits by default
+                                                  if (round(rf4,6) != 1 & sample_specie_id != "SKJ") {
                                                     warning(format(Sys.time(),
                                                                    "%Y-%m-%d %H:%M:%S"),
                                                             " - Rf4 not egal to 1 (",
