@@ -337,7 +337,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (length(private$data_selected) == 0) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Argument \"data_selecetd\" empty, ",
+                                     " - Argument \"data_selected\" empty, ",
                                      "launch selection data before.")
                               } else if (! any(class(object_elementarylandings) == "elementarylandings")) {
                                 stop(format(Sys.time(),
@@ -427,7 +427,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (length(private$data_selected) == 0) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Argument \"data_selecetd\" empty.")
+                                     " - Argument \"data_selected\" empty.")
                               } else if (! any(class(object_wells) == "wells")) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
