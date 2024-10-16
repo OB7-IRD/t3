@@ -1,7 +1,7 @@
-select 
+select
 	t.topiaid::text as trip_id
-	,c.code::integer as fleet_code
-	,c.iso3code::text as fleet_label
+	,c.code::integer as flag_code
+	,c.iso3code::text as flag_label
 	,t.startdate::text as departure_date
 	,t.enddate::text as trip_end_date
 	,v.code::integer as vessel_code
@@ -16,7 +16,7 @@ select
 from
 	ps_common.trip t
 	join common.vessel v on (t.vessel = v.topiaid)
-	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
+	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_common.acquisitionstatus acqs on (t.logbookacquisitionstatus = acqs.topiaid)
