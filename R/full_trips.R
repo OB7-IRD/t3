@@ -223,6 +223,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               capture.output(current_trips_selected <- object_r6(class_name = "trips"),
                                              file = "NUL")
+                              if(is.null(private$data_selected)){
+                                  stop(format(x = Sys.time(),
+                                              format = "%Y-%m-%d %H:%M:%S"),
+                                       " - No full trips retained when filtering by years period : ",
+                                       paste0(years_period, collapse=", "),
+                                       ". Check if the imported data includes these years.")
+                              }
                               capture.output(current_trips_selected$add(new_item = unlist(x = private$data_selected)),
                                              file = "NUL")
                               capture.output(current_activities_selected <- object_r6(class_name = "activities"),
