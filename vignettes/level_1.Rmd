@@ -115,6 +115,7 @@ For each layer ocean/fishing school/specie/logbook weight category, a distributi
 | YFT, BET & ALB | 11                      | 1            | > 10kg                              |
 | YFT, BET & ALB | 12                      | 1            | > 10kg                              |
 | YFT, BET & ALB | 13                      | 1            | > 10kg                              |
+| YFT, BET & ALB | 14                      | 1            | > 10kg                              |
 | SKJ            | All                     | 1            | < 10kg                              |
 | Others         | All                     | 1            | Unknown                             |
 
