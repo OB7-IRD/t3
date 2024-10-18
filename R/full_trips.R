@@ -1437,7 +1437,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.5
                                                             private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                                                    current_elementarycatch_tmp)
-                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13)) {
+                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
                                                             current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_3
                                                             current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                           } else if (current_weight_category_code == 11) {

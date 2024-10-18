@@ -69,13 +69,13 @@ So far, this process is partially implemented in the source code and in our data
 
 The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.
 
-This process aims to homogenise these weight categories and create simplify categories divided in function of the fishing school and the ocean:
+This process aims to homogenize these weight categories and create simplify categories divided in function of the fishing school and the ocean:
 
 - < 10kg and > 10kg for the floating object school in the Atlantic and Indian Ocean,
 - < 10kg, 10-30kg and > 30kg for undetermined and free school in the Atlantic Ocean,
 - < 10kg and > 10kg for undetermined and free school in the Indian Ocean.
 
-For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribution key is applied for conversion to standardised weight categories. Details of the distribution key is available in tables below.
+For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories. Details of the distribution key is available in tables below.
 
 | Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
 |----------------|-------------------------|--------------|-------------------------------------|
@@ -94,6 +94,7 @@ For eatch layer ocean/fishing school/specie/logbook weigth categorie, a distribu
 | YFT, BET & ALB | 11                      | 0,9          | > 30kg                              |
 | YFT, BET & ALB | 12                      | 1            | 10-30kg                             |
 | YFT, BET & ALB | 13                      | 1            | > 30kg                              |
+| YFT, BET & ALB | 14                      | 1            | > 30kg                              |
 | SKJ            | All                     | 1            | < 10kg                              |
 | Others         | All                     | 1            | Unknown                             |
 
