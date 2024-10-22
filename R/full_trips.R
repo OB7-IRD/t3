@@ -2093,7 +2093,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 11 - Process 1.5: set_duration ----
                             #' @description Process for set duration calculation (in hours).
-                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
+                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type, durations in minutes in the reference table, converted into hours for subsequent processings).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
@@ -2230,7 +2230,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
                                                                                 & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
-                                                current_activity$.__enclos_env__$private$set_duration <- as.numeric(parameter_a * catch_weight_category_corrected + parameter_b)
+                                                current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(parameter_a * catch_weight_category_corrected + parameter_b)
                                               } else {
                                                 if ((referential_template == "observe"
                                                      && (current_activity$.__enclos_env__$private$activity_code == 6
@@ -2239,7 +2239,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        && current_activity$.__enclos_env__$private$activity_code == 1)) {
                                                   warning(format(Sys.time(),
                                                                  "%Y-%m-%d %H:%M:%S"),
-                                                          " - Set declared as fishing operation but without elementary catch associated.",
+                                                          " - Set declared as successful fishing operation but without elementary catch associated.",
                                                           " Set duration define as NA.",
                                                           "\n[trip: ",
                                                           current_trip$.__enclos_env__$private$trip_id,
@@ -2248,10 +2248,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           "]")
                                                   current_activity$.__enclos_env__$private$set_duration <- NA_integer_
                                                 } else {
-                                                  current_activity$.__enclos_env__$private$set_duration <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                                                            & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
-                                                                                                                            & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                                                            & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"]
+                                                  current_activity$.__enclos_env__$private$set_duration <- (1/60)*set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                                                                                                   & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
+                                                                                                                                   & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
+                                                                                                                                   & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"]
                                                 }
                                               }
                                             }
@@ -2949,9 +2949,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (current_activity_id in seq_len(length.out = current_activities$count())) {
                                           current_activity <- current_activities$extract(id = current_activity_id)[[1]]
                                           current_fishing_time <- lubridate::dhours(x = current_activity$.__enclos_env__$private$fishing_time)
-                                          current_set_duration <- lubridate::dminutes(x = current_activity$.__enclos_env__$private$set_duration)
+                                          current_set_duration <- lubridate::dhours(x = current_activity$.__enclos_env__$private$set_duration)
                                           current_set_duration <- if (is.na(x = current_set_duration)) {0} else {current_set_duration}
                                           current_searching_time <- current_fishing_time - current_set_duration
+                                          # return lubridate object with results in seconds in @.Data
                                           current_searching_time <- current_searching_time@.Data / 3600
                                           current_activity$.__enclos_env__$private$searching_time <- current_searching_time
                                         }
@@ -8026,7 +8027,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                        # annee_de_debarquement = lubridate::year(landing_date),
                                        # mois_de_debarquement = lubridate::month(landing_date),
                                        # jour_de_debarquement = lubridate::mday(landing_date)
-                                       )
+                                )
 
                               latitude_tmp <-dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
                                 dd2dms_posit(set_all_output_wide[x,]$latitude_dec)
