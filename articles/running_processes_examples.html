@@ -124,24 +124,24 @@
 manipulation of tropical tuna surface fisheries. This support can take
 many different forms and have various objectives associated. For that
 purpose, T3 can be processes in various ways, depending of what
-question(s) drive your reflexion. You will find below several examples
-for running process and help you regarding your personnal work.
+question(s) drive your reflection. You will find below several examples
+for running process and help you regarding your personal work.
 Furthermore, don’t hesitate to take a look on the issues webpage of the
 package (<a href="https://github.com/OB7-IRD/t3/issues" class="external-link uri">https://github.com/OB7-IRD/t3/issues</a>) or send a mail to
 <a href="mailto:ob7@ird.fr" class="email">ob7@ird.fr</a> if you need
 specific support.</p>
 <p>Furthermore, in the following functions the “database_con” argument
 refers to an R object which contains connection information with an
-avdth database. For more detail about connections available check the
-function documentation. In addition, the argument “output_path” refer to
-the output directory on your computer. The function associated,
-“initiate_directory”, will create the output structure for the
-process.</p>
+observe (or AVDTH) database. For more detail about connections available
+check the function documentation. In addition, the argument
+“output_path” refer to the output directory on your computer. The
+function associated, “initiate_directory”, will create the output
+structure for the process.</p>
 </div>
 <div class="section level2">
 <h2 id="running-the-process-step-by-step">Running the process step by step<a class="anchor" aria-label="anchor" href="#running-the-process-step-by-step"></a>
 </h2>
-<p>Globaly, the T3 process have 3 differents parts that you can run
+<p>Globaly, the T3 process have 3 different parts that you can run
 independently from each other. But in some case you could want to run
 the entire process step by step, for example to “follow” several
 particular data with accuracy. In the code below, you will find an
@@ -153,20 +153,28 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
-<span><span class="va">periode_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
-<span>                                  <span class="fl">2007</span>,</span>
-<span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
+<span>                             <span class="fl">2007</span>,</span>
+<span>                             <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
+<span><span class="va">flag_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">41</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># code 4,5 and 6 for Seiner with baits, Seiner without baits and Large seiner </span></span>
+<span><span class="va">vessel_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
-<span><span class="va">species_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes_rf1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Species fate codes</span></span>
+<span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
+<span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
@@ -178,55 +186,61 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># model creation ----</span></span>
 <span><span class="va">object_model_data</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">:::</span><span class="va"><a href="../reference/object_model_data.html">object_model_data</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># object trips creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                        periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                        countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                        oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                        db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                        years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                        flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                        vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                        database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object activities creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                             periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                             countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                             oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                             db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                             years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                             flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                             ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                             vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                             database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># object elementarycatches creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarycatches_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                                    periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                                    countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                                    oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                                    db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarycatches_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                                    years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                                    flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                                    ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                                    vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                                    species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                                    database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object elementarylandings creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                                     periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                                     countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                                     oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                                     db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                                     years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                                     flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                                     ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                                     vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                                     database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object wells creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                        periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                        countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                        oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                        sample_type <span class="op">=</span> <span class="va">sample_type</span>,</span>
-<span>                                        db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                        years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                        flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                        vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                        sample_type_codes <span class="op">=</span> <span class="va">sample_type</span>,</span>
+<span>                                        database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># model creation: set durations data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv"</span>,</span>
-<span>                                       data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"setdurationrefs.csv"</span>,</span>
-<span>                                                               package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span>,</span>
-<span>                                       periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                       countries <span class="op">=</span> <span class="va">countries</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
+<span>                                       data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"set_duration_ref.csv"</span>,</span>
+<span>                                                               package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># model creation: length steps data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv"</span>,</span>
-<span>                                   data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"lengthsteps.csv"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
+<span>                                   data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"length_step.csv"</span>,</span>
 <span>                                                           package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># model creation: sample sets data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                  periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                  countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                  oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                  db_con <span class="op">=</span> <span class="va">database_con</span><span class="op">)</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                  years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                  flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                  ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                  vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                  database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># model creation: length weight relationships data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthweightrelationships_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv"</span>,</span>
-<span>                                                 data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"lengthweightrelationships.csv"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthweightrelationships_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
+<span>                                                 data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"length_weight_relationship.csv"</span>,</span>
 <span>                                                                         package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># initialisation object for full trips class</span></span>
 <span><span class="va">object_full_trips</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">:::</span><span class="va"><a href="../reference/full_trips.html">full_trips</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
@@ -235,7 +249,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># add activities to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_activities</span><span class="op">(</span>object_activities <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activities</span><span class="op">)</span></span>
 <span><span class="co"># filter by reference year</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">filter_by_time_period_reference</span><span class="op">(</span>time_periode_reference <span class="op">=</span> <span class="va">periode_reference</span><span class="op">)</span></span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">filter_by_years_period</span><span class="op">(</span>years_period <span class="op">=</span> <span class="va">years_period</span><span class="op">)</span></span>
 <span><span class="co"># add elementarycatches to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_elementarycatches</span><span class="op">(</span>object_elementarycatches <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">elementarycatches</span><span class="op">)</span></span>
 <span><span class="co"># add elementarylandings to trips selected</span></span>
@@ -245,7 +259,8 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span></span>
 <span><span class="co"># level 1 ---</span></span>
 <span><span class="co"># level 1.1: rf1</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_rf1 <span class="op">=</span> <span class="va">species_rf1_fr</span>,</span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1_fr</span>,</span>
+<span>                      species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                      global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                      output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
 <span><span class="co"># level 1.2: rf2</span></span>
@@ -330,20 +345,28 @@ part of the treatment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
-<span><span class="va">periode_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
-<span>                                  <span class="fl">2007</span>,</span>
-<span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Reference period </span></span>
+<span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
+<span>                             <span class="fl">2007</span>,</span>
+<span>                             <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
+<span><span class="va">flag_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">41</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)</span></span>
+<span><span class="va">vessel_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
-<span><span class="va">species_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># For french fleet </span></span>
+<span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Species fate codes</span></span>
+<span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
+<span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
@@ -352,17 +375,20 @@ part of the treatment.</p>
 <span><span class="co"># generation of the confidence interval</span></span>
 <span><span class="va">confidence_interval</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span></span>
-<span><span class="co"># data model initialisation ----</span></span>
-<span><span class="va">t3_process</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/data_model_initialisation.html">data_model_initialisation</a></span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                            db_con <span class="op">=</span> <span class="va">database_con</span>,</span>
-<span>                                            periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                            countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                            oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                            sample_type <span class="op">=</span> <span class="va">sample_type</span><span class="op">)</span></span>
+<span><span class="co"># data model initialization ----</span></span>
+<span><span class="va">t3_process</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/data_model_initialisation.html">data_model_initialisation</a></span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                            database_connection <span class="op">=</span> <span class="va">observe_database_con</span>,</span>
+<span>                                            species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                            years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                            flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                            vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                            ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                            sample_type_codes <span class="op">=</span> <span class="va">sample_type</span><span class="op">)</span></span>
 <span><span class="co"># level 1 ----</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level1.html">t3_level1</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>                                 species_rf1 <span class="op">=</span> <span class="va">species_rf1</span>,</span>
+<span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
+<span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
@@ -371,7 +397,7 @@ part of the treatment.</p>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
 <span><span class="co"># level 3 ----</span></span>
-<span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">t3_process</span><span class="op">$</span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">t3_process</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"process_level3"</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level3.html">t3_level3</a></span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
@@ -385,25 +411,36 @@ part of the treatment.</p>
 </h2>
 <p>The last section presents an example of a function able to run all
 the t3 process through one command line. Like before, you can “play”
-with the arguments to customise the function, especially if you want to
+with the arguments to customize the function, especially if you want to
 skip part(s) of the process.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
-<span><span class="va">periode_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
-<span>                                  <span class="fl">2007</span>,</span>
-<span>                                  <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
+<span>                             <span class="fl">2007</span>,</span>
+<span>                             <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
 <span>               <span class="st">"MYT"</span><span class="op">)</span></span>
+<span><span class="va">flag_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">41</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)</span></span>
+<span><span class="va">vessel_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
-<span><span class="va">species_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># for french fleet </span></span>
+<span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="co"># Species fate codes</span></span>
+<span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
+<span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># output directories initiation</span></span>
+<span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
+<span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co"># output format</span></span>
 <span><span class="va">output_format</span> <span class="op">&lt;-</span> <span class="st">"eu"</span></span>
 <span><span class="co"># generation of the confidence interval</span></span>
@@ -411,15 +448,18 @@ skip part(s) of the process.</p>
 <span></span>
 <span><span class="co"># process ----</span></span>
 <span><span class="va">t3_process_all</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_process.html">t3_process</a></span><span class="op">(</span>process <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>                                 data_source <span class="op">=</span> <span class="st">"avdth_db"</span>,</span>
-<span>                                 db_con <span class="op">=</span> <span class="va">database_con</span>,</span>
+<span>                                 data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                 database_connection <span class="op">=</span> <span class="va">observe_database_con</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
-<span>                                 periode_reference <span class="op">=</span> <span class="va">periode_reference</span>,</span>
-<span>                                 countries <span class="op">=</span> <span class="va">countries</span>,</span>
-<span>                                 oceans <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                 years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                 flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                 ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                 sample_type <span class="op">=</span> <span class="va">sample_type</span>,</span>
-<span>                                 species_rf1 <span class="op">=</span> <span class="va">species_rf1</span>,</span>
+<span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                 vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1_fr</span>,</span>
+<span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span><span class="op">)</span></span></code></pre></div>
