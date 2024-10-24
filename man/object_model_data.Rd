@@ -18,6 +18,7 @@ Create R6 reference object class object_model_data
 \item \href{#method-object_model_data-lengthsteps_data}{\code{object_model_data$lengthsteps_data()}}
 \item \href{#method-object_model_data-samplesets_data}{\code{object_model_data$samplesets_data()}}
 \item \href{#method-object_model_data-lengthweightrelationships_data}{\code{object_model_data$lengthweightrelationships_data()}}
+\item \href{#method-object_model_data-activitycoderefs_data}{\code{object_model_data$activitycoderefs_data()}}
 \item \href{#method-object_model_data-clone}{\code{object_model_data$clone()}}
 }
 }
@@ -360,6 +361,32 @@ Creation of a data frame object with parameters for length weight relationship.
 \item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".}
 
 \item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.}
+
+\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-object_model_data-activitycoderefs_data"></a>}}
+\if{latex}{\out{\hypertarget{method-object_model_data-activitycoderefs_data}{}}}
+\subsection{Method \code{activitycoderefs_data()}}{
+Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+ and/or searching time and/or set duration..
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$activitycoderefs_data(
+  data_source = "csv_file",
+  data_path = NULL,
+  envir = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).}
+
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.}
 
 \item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
 }
