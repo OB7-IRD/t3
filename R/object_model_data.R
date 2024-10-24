@@ -2299,6 +2299,103 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                " - Successful length weight relationship(s) data importation R environment.")
                                      }
                                      private$lengthweightrelationships <- lengthweightrelationship_data
+                                   },
+                                   #' @description Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+                                   #'  and/or searching time and/or set duration..
+                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   activitycoderefs_data = function(data_source = "csv_file",
+                                                                    data_path = NULL,
+                                                                    envir = NULL) {
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("csv_file",
+                                                            "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
+                                     } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
+                                     }
+                                     if (data_source == "csv_file") {
+                                       # 2 - Process for csv file ----
+                                       # process beginning
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start set duration(s) data importation from csv file.")
+                                       activity_code_ref_data <- read.csv2(file = data_path,
+                                                                           stringsAsFactors = FALSE)
+                                       if (nrow(x = activity_code_ref_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.")
+                                       } else {
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful activity code referential data importation from csv file.")
+                                       }
+                                     } else if (data_source == "rdata_file") {
+                                       # 3 - Process for rdata file ----
+                                       # process beginning
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activity code referential data importation from RData.")
+                                       load(file = data_path,
+                                            envir = tmp_envir <- new.env())
+                                       if (exists(x = "setdurationrefs",
+                                                  envir = tmp_envir)) {
+                                         activity_code_ref_data <- dplyr::tibble(get(x = "setdurationrefs",
+                                                                                     envir = tmp_envir))
+                                         if (paste0(class(x =  activity_code_ref_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x =  activity_code_ref_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"setdurationrefs\" available in the R environment provided.")
+                                       }
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity code referential data importation from RData.")
+                                     } else if (data_source == "envir") {
+                                       # 4 - R environment source ----
+                                       # specific argument verification
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "setdurationref")[1])
+                                       } else {
+                                         environment_name <- as.environment(envir)
+                                       }
+                                       # process beginning
+                                       if (exists(x = "setdurationref",
+                                                  envir = environment_name)) {
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start activity code referential data importation from R environment.")
+                                         set_duration_refs_data <- dplyr::tibble(get(x = "setdurationref",
+                                                                                     envir = environment_name))
+                                         if (paste0(class(x = activity_code_ref_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_code_ref_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"setdurationref\" available in the R environment.")
+                                       }
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity code referential data importation R environment.")
+                                     }
+                                     private$activitycoderefs <- activity_code_ref_data
                                    }
                                  ),
                                  private = list(
@@ -2307,8 +2404,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    elementarycatches = NULL,
                                    elementarylandings = NULL,
                                    wells = NULL,
+                                   samplesets = NULL,
                                    setdurationrefs = NULL,
                                    lengthsteps = NULL,
                                    lengthweightrelationships = NULL,
-                                   samplesets = NULL
+                                   activitycoderefs = NULL
                                  ))
