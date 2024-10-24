@@ -7314,13 +7314,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sets_long <- sets_compo %>% select(id_act, sp_cat, prop_lb, w_lb_t3) %>%
                                 tidyr::complete(id_act, sp_cat, fill = list(prop_lb = 0, w_lb_t3 = 0))
                               sets_long <- dplyr::left_join(sets_long, distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat)))) %>%
-                                group_by(id_act, sp_cat) %>% mutate(dupli = n())
+                                group_by(id_act, sp_cat) %>% mutate(dupli = dplyr::n())
                               sets_wide <- sets_long %>% dplyr::select(-w_lb_t3) %>% tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
                               # sets_wide <- tidyr::spread(data = sets,
                               #                            key = sp_cat,
                               #                            value = w_lb_t3,
                               #                            fill = 0) %>%
-                              #   group_by(id_act) %>% mutate(dupli = n())
+                              #   group_by(id_act) %>% mutate(dupli = dplyr::n())
                               # sets_wide$wtot_lb_t3 <- rowSums(sets_wide[, c("YFT_p10",
                               #                                               "BET_p10",
                               #                                               "SKJ_m10",
@@ -7661,7 +7661,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                cols = c("BET", "SKJ", "YFT"))
                                   boot_tmp_element <- dplyr::left_join(boot_tmp_element_long,
                                                                        distinct(dplyr::select(.data = boot_tmp_element, -c(prop_lb, w_lb_t3)))) %>%
-                                    group_by(id_act, sp)  %>% mutate(dupli = n())
+                                    group_by(id_act, sp)  %>% mutate(dupli = dplyr::n())
                                   if(any(boot_tmp_element$dupli >1)){
                                     stop("Duplicated species catch in a set")
                                   }
@@ -7945,7 +7945,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if(!(nrow(set_all)+nrow(catch_all_other)) == nrow(set_all_output)){
                                 warning("Duplicated detected in 'Catch_set_detail'")
                               }
-                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, data_source) %>% mutate(dupli = n())
+                              test_dupli <- set_all_output %>% dplyr::group_by(id_act, sp, data_source) %>% mutate(dupli = dplyr::n())
                               if(any(test_dupli$dupli>1)){
                                 warning("Duplicated catch species data in activities, check 'Catch_set_detail'")
                               }
@@ -8041,7 +8041,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       dplyr::select(.data =latitude_tmp, -seconds),
                                                                       dplyr::select(.data =longitude_tmp, -seconds))
 
-                              set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:n())) %>% dplyr::ungroup()
+                              set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:dplyr::n())) %>% dplyr::ungroup()
 
                               set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
                                 dplyr::relocate(id_act, name_list_ecd) %>%
