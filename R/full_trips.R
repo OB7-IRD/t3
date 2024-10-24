@@ -2583,7 +2583,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param activity_code_referential Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+                            #'  and/or searching time and/or set duration.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory.
+                            #'  The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @importFrom suncalc getSunlightTimes
                             #' @details
@@ -2644,6 +2647,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "nightEnd",
                                                                         "nauticalDawn",
                                                                         "dawn"))
+                              if (! paste0(class(x = activity_code_referential),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame")
+                                  || ncol(x = set_duration_ref) != 8
+                                  || nrow(x = set_duration_ref) <1) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"activity_code_referential\" argument, class \"data.frame\" or \"tibble\" with 8 columns and at least 1 row expected.")
+                              }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
@@ -2657,6 +2669,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Empty data selected in the R6 object. Process 1.7 (fishing time calculation) cancelled.")
+                                if (referential_template == "observe") {
+                                  activity_code_referential <- dplyr::mutate(.data = activity_code_referential,
+                                                                             activity_code = activity_code_observe)
+                                } else {
+                                  activity_code_referential <- dplyr::mutate(.data = activity_code_referential,
+                                                                             activity_code = activity_code_avdth)
+                                }
+                                activity_code_referential <- dplyr::select(.data = activity_code_referential,
+                                                                           -activity_code_avdth,
+                                                                           -activity_code_observe)
                               } else {
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -2704,25 +2726,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         activities_dates <- unique(do.call(what = "c",
                                                                            args = activities_dates))
                                         activities_dates <- sort(x = activities_dates)
-                                        activities_code_referential <- if (referential_template == "observe") c(0,
-                                                                                                                1,
-                                                                                                                8,
-                                                                                                                9,
-                                                                                                                10,
-                                                                                                                11,
-                                                                                                                18,
-                                                                                                                22,
-                                                                                                                24,
-                                                                                                                36,
-                                                                                                                37,
-                                                                                                                38,
-                                                                                                                39,
-                                                                                                                50,
-                                                                                                                101,
-                                                                                                                103) else c(4,
-                                                                                                                            7,
-                                                                                                                            10,
-                                                                                                                            15)
+                                        # activities_code_referential <- if (referential_template == "observe") c(0,
+                                        #                                                                         1,
+                                        #                                                                         8,
+                                        #                                                                         9,
+                                        #                                                                         10,
+                                        #                                                                         11,
+                                        #                                                                         18,
+                                        #                                                                         22,
+                                        #                                                                         24,
+                                        #                                                                         36,
+                                        #                                                                         37,
+                                        #                                                                         38,
+                                        #                                                                         39,
+                                        #                                                                         50,
+                                        #                                                                         101,
+                                        #                                                                         103)
+                                        # else c(4,
+                                        #        7,
+                                        #        10,
+                                        #        15)
+                                        no_fishing_activity_codes <- unique(dplyr::filter(activity_code_referential,
+                                                                                          fishing_time==0)$activity_code)
+
+
                                         for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
                                           activities_date <- activities_dates[[activities_dates_id]]
                                           capture.output(current_activities_date <- object_r6(class_name = "activities"),
@@ -2733,11 +2760,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                              "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
                                                          file = "NUL")
                                           current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
-                                          if (any(! unique(x = current_activities_code) %in% activities_code_referential)) {
+                                          if (any(! unique(x = current_activities_code) %in% activity_code_referential)) {
                                             capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                            file = "NUL")
                                             capture.output(current_activities_date_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("! ($path$activity_code %in% c(\"",
-                                                                                                                                                            paste(activities_code_referential,
+                                                                                                                                                            paste(activity_code_referential,
                                                                                                                                                                   collapse = "\", \""),
                                                                                                                                                             "\"))"))),
                                                            file = "NUL")
@@ -2759,7 +2786,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
                                                              file = "NUL")
                                               capture.output(current_activities_date_no_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("$path$activity_code %in% c(\"",
-                                                                                                                                                                 paste(activities_code_referential,
+                                                                                                                                                                 paste(activity_code_referential,
                                                                                                                                                                        collapse = "\", \""),
                                                                                                                                                                  "\")"))),
                                                              file = "NUL")
@@ -7473,7 +7500,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_dec <- ","
                                 outputs_sep <- ";"
                               }
-                              browser()
+                              # browser()
                               figure_directory <- file.path(output_directory,
                                                             "level3",
                                                             "figure")
