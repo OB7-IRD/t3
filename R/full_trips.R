@@ -1437,7 +1437,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.5
                                                             private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                                                    current_elementarycatch_tmp)
-                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13)) {
+                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
                                                             current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_3
                                                             current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                           } else if (current_weight_category_code == 11) {
@@ -1491,7 +1491,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
                                                             private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                                                    current_elementarycatch_tmp)
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
                                                             current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_4
                                                             current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
@@ -1586,7 +1586,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
                                                             private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
                                                                                                                                                                                                                    current_elementarycatch_tmp)
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
                                                             current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_4
                                                             current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
@@ -1879,7 +1879,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                             },
                             # 10 - Process 1.4: set_count ----
-                            #' @description Process for postive sets count.
+                            #' @description Process for positive sets count.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
