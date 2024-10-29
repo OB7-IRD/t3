@@ -2324,7 +2324,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start set duration(s) data importation from csv file.")
+                                               " - Start activity codes referential data importation from csv file.")
                                        activity_code_ref_data <- read.csv2(file = data_path,
                                                                            stringsAsFactors = FALSE)
                                        if (nrow(x = activity_code_ref_data) == 0) {
@@ -2344,9 +2344,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                " - Start activity code referential data importation from RData.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
-                                       if (exists(x = "setdurationrefs",
+                                       if (exists(x = "activitycoderefs",
                                                   envir = tmp_envir)) {
-                                         activity_code_ref_data <- dplyr::tibble(get(x = "setdurationrefs",
+                                         activity_code_ref_data <- dplyr::tibble(get(x = "activitycoderefs",
                                                                                      envir = tmp_envir))
                                          if (paste0(class(x =  activity_code_ref_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -2358,7 +2358,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid RData, no R object named \"setdurationrefs\" available in the R environment provided.")
+                                              " - Invalid RData, no R object named \"activitycoderefs\" available in the R environment provided.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
@@ -2367,17 +2367,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # 4 - R environment source ----
                                        # specific argument verification
                                        if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "setdurationref")[1])
+                                         environment_name <- as.environment(find(what = "activitycoderefs")[1])
                                        } else {
                                          environment_name <- as.environment(envir)
                                        }
                                        # process beginning
-                                       if (exists(x = "setdurationref",
+                                       if (exists(x = "activitycoderefs",
                                                   envir = environment_name)) {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
                                                  " - Start activity code referential data importation from R environment.")
-                                         set_duration_refs_data <- dplyr::tibble(get(x = "setdurationref",
+                                         activity_code_ref_data <- dplyr::tibble(get(x = "activitycoderefs",
                                                                                      envir = environment_name))
                                          if (paste0(class(x = activity_code_ref_data),
                                                     collapse = " ") != "tbl_df tbl data.frame"
@@ -2389,7 +2389,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"setdurationref\" available in the R environment.")
+                                              " - No R object named \"activitycoderefs\" available in the R environment.")
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),

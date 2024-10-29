@@ -2100,6 +2100,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param activity_code_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
                             #'  and/or searching time and/or set duration.
                             set_duration = function(set_duration_ref,
+                                                    activity_code_ref,
                                                     global_output_path = NULL,
                                                     output_format = "eu",
                                                     referential_template = "observe") {
@@ -2113,7 +2114,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Invalid \"set_duration_ref\" argument, class \"data.frame\" or \"tibble\" with 9 columns and at least 1 row expected.")
                               }
-
+                              if (! paste0(class(x = activity_code_ref),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame",
+                                                                  "spec_tbl_df_tbl_df_tbl_data.frame")
+                                  || ncol(x = activity_code_ref) != 12
+                                  || nrow(x = activity_code_ref) <1) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
+                              }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
@@ -2136,13 +2146,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (referential_template == "observe") {
                                   set_duration_ref <- dplyr::mutate(.data = set_duration_ref,
                                                                     school_type_code = school_type_code_observe)
+                                  activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
+                                                                     code_activity = code_activity_observe,
+                                                                     set_success_status = setsuccessstatus_activity_observe,
+                                                                     code_objectoperation = code_objectoperation_floatingobject_observe,
+                                                                     label_objectoperation = label_objectoperation_floatingobject_observe,
+                                                                     label_activity = label_activity_observe,
+                                                                     status_active = status_active_observe)
+
                                 } else {
                                   set_duration_ref <- dplyr::mutate(.data = set_duration_ref,
                                                                     school_type_code = school_type_code_avdth)
+                                  activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
+                                                                     code_activity = code_activity_avdth,
+                                                                     label_activity = label_activity_avdth)
                                 }
                                 set_duration_ref <- dplyr::select(.data = set_duration_ref,
                                                                   -school_type_code_avdth,
                                                                   -school_type_code_observe)
+                                activity_code_ref <- dplyr::select(.data = activity_code_ref,
+                                                                  -code_activity_avdth,
+                                                                  -label_activity_avdth,
+                                                                  -code_activity_observe,
+                                                                  -label_activity_observe,
+                                                                  -setsuccessstatus_activity_observe,
+                                                                  -code_objectoperation_floatingobject_observe,
+                                                                  -label_objectoperation_floatingobject_observe,
+                                                                  -status_active_observe)
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),
@@ -2185,8 +2215,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         for (activity_id in seq_len(length.out = current_activities$count())) {
                                           current_activity <- current_activities$extract(id = activity_id)[[1]]
-                                          # for activity declared as null set (0), positive set (1), unknown set (2) or pocket capsizing (14)
-                                          if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6) else c(0, 1, 2, 14))) {
+                                          # for activity declared as Fishing (6) in observe or
+                                          # null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in AVDTH
+                                          fishing_activity_codes <- unique(activity_code_ref %>% dplyr::filter(set_duration==1 & !is.na(code_activity)) %>% dplyr::pull(code_activity))
+                                          if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% fishing_activity_codes){
                                             if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                      & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                      & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
@@ -2258,7 +2290,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                             }
                                           } else {
-                                            current_activity$.__enclos_env__$private$set_duration <- NA_integer_
+                                            # current_activity$.__enclos_env__$private$set_duration <- NA_integer_
+                                           current_activity$.__enclos_env__$private$set_duration <- 0.0
                                           }
                                         }
                                       }
@@ -2382,8 +2415,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  and/or searching time and/or set duration.
                             time_at_sea = function(global_output_path = NULL,
                                                    output_format = "eu",
+                                                   activity_code_ref,
                                                    referential_template = "observe") {
                               # 12.1 - Arguments verification ----
+                              if (! paste0(class(x = activity_code_ref),
+                                           collapse = "_") %in% c("data.frame",
+                                                                  "tbl_df_tbl_data.frame",
+                                                                  "spec_tbl_df_tbl_df_tbl_data.frame")
+                                  || ncol(x = activity_code_ref) != 12
+                                  || nrow(x = activity_code_ref) <1) {
+                                stop(format(Sys.time(),
+                                            "%Y-%m-%d %H:%M:%S"),
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
+                              }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
@@ -2396,8 +2440,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Empty data selected in the R6 object. Process 1.6 (set duration calculation) cancelled.")
+                                     " - Empty data selected in the R6 object. Process 1.6 (time at sea calculation) cancelled.")
                               } else {
+                                if (referential_template == "observe") {
+                                  activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
+                                                                     code_activity = code_activity_observe,
+                                                                     set_success_status = setsuccessstatus_activity_observe,
+                                                                     code_objectoperation = code_objectoperation_floatingobject_observe,
+                                                                     label_objectoperation = label_objectoperation_floatingobject_observe,
+                                                                     label_activity = label_activity_observe,
+                                                                     status_active = status_active_observe)
+
+                                } else {
+                                  activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
+                                                                     code_activity = code_activity_avdth,
+                                                                     label_activity = label_activity_avdth)
+                                }
+                                activity_code_ref <- dplyr::select(.data = activity_code_ref,
+                                                                   -code_activity_avdth,
+                                                                   -label_activity_avdth,
+                                                                   -code_activity_observe,
+                                                                   -label_activity_observe,
+                                                                   -setsuccessstatus_activity_observe,
+                                                                   -code_objectoperation_floatingobject_observe,
+                                                                   -label_objectoperation_floatingobject_observe,
+                                                                   -status_active_observe)
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),
@@ -2653,12 +2720,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "dawn"))
                               if (! paste0(class(x = activity_code_ref),
                                            collapse = "_") %in% c("data.frame",
-                                                                  "tbl_df_tbl_data.frame")
-                                  || ncol(x = set_duration_ref) != 8
-                                  || nrow(x = set_duration_ref) <1) {
+                                                                  "tbl_df_tbl_data.frame",
+                                                                  "spec_tbl_df_tbl_df_tbl_data.frame")
+                                  || ncol(x = activity_code_ref) != 12
+                                  || nrow(x = activity_code_ref) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 8 columns and at least 1 row expected.")
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
                               }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2673,17 +2741,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Empty data selected in the R6 object. Process 1.7 (fishing time calculation) cancelled.")
+                              } else {
                                 if (referential_template == "observe") {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
-                                                                             activity_code = activity_code_observe)
+                                                                     code_activity = code_activity_observe,
+                                                                     set_success_status = setsuccessstatus_activity_observe,
+                                                                     code_objectoperation = code_objectoperation_floatingobject_observe,
+                                                                     label_objectoperation = label_objectoperation_floatingobject_observe,
+                                                                     label_activity = label_activity_observe,
+                                                                     status_active = status_active_observe)
+
                                 } else {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
-                                                                             activity_code = activity_code_avdth)
+                                                                     code_activity = code_activity_avdth,
+                                                                     label_activity = label_activity_avdth)
                                 }
                                 activity_code_ref <- dplyr::select(.data = activity_code_ref,
-                                                                           -activity_code_avdth,
-                                                                           -activity_code_observe)
-                              } else {
+                                                                   -code_activity_avdth,
+                                                                   -label_activity_avdth,
+                                                                   -code_activity_observe,
+                                                                   -label_activity_observe,
+                                                                   -setsuccessstatus_activity_observe,
+                                                                   -code_objectoperation_floatingobject_observe,
+                                                                   -label_objectoperation_floatingobject_observe,
+                                                                   -status_active_observe)
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),

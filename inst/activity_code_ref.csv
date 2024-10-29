@@ -23,7 +23,7 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 99;99;;;1;1;0;0;Other (to detail in the comments);Other non-fishing activities;;
 98;13;;99;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Unknown;
 40;13;;11;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Loss of FOB;Loss;
-98;13;;10;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Other (to be precised);
+99;13;;10;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Other (to be precised);
 5;13;;1;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Deployment of FOB;Deployment;
 29;13;;2;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Visit to FOB equipped with beacon;Visit;
 1;13;;3;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Fishing on FOB;Fishing;The set_duration and fishing_time of fishing on FOB activity have already been taken into account via corresponding fishing activity (code 6 in observe and 0,1,2, or 14 in avdth database) and elementary catches associated. 
@@ -51,7 +51,7 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 19;29;;;1;1;1;0;Transshipment to a bait boat;Transshipment to a bait boat;;
 20;30;;;1;1;1;0;Transshipment from a bait boat;Transshipment from a bait boat;;
 35;31;;;1;1;1;0;Fish discard;Discard;;
-;32;;;0;1;1;1;Activity/set created from the well plan;;;fishing_time=set_duration  
+2;32;;;0;1;1;1;Activity/set created from the well plan;;;fishing_time=set_duration  
 0;6;0;;1;1;1;1;Fishing (skiff is deployed);Null set ;;fishing_time=set_duration  
 1;6;1;;1;1;1;1;Fishing (skiff is deployed);Positive set;;fishing_time=set_duration  
 2;6;2;;1;1;1;1;Fishing (skiff is deployed);Unknown set;;fishing_time=set_duration  
