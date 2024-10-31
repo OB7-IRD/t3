@@ -1,4 +1,4 @@
-code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code_objectoperation_floatingobject_observe;status_active_observe;time_at_sea;fishing_time;set_duration;label_activity_observe;label_activity_avdth;label_objectoperation_floatingobject_observe;comment 
+activity_code_avdth;activity_code_observe;set_success_status_code_observe;objectoperation_code_observe;status_active_observe;time_at_sea;fishing_time;set_duration;activity_label_observe;activity_label_avdth; objectoperation_label_observe;comment
 3;5;;;1;0;0;0;Arrival of vessel at the observed system;Searching;;
 3;16;;;1;0;0;0;End of searching;Searching;;
 15;0;;;1;0;0;0;At port;At port;;
@@ -26,7 +26,7 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 99;13;;10;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Other (to be precised);
 5;13;;1;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Deployment of FOB;Deployment;
 29;13;;2;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Visit to FOB equipped with beacon;Visit;
-1;13;;3;0;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Fishing on FOB;Fishing;The set_duration and fishing_time of fishing on FOB activity have already been taken into account via corresponding fishing activity (code 6 in observe and 0,1,2, or 14 in avdth database) and elementary catches associated. 
+1;13;;3;0;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Fishing on FOB;Fishing;The set_duration and fishing_time of fishing on FOB activity have already been taken into account via corresponding fishing activity (code 6 in observe and 0,1,2, or 14 in avdth database) and elementary catches associated.
 6;13;;4;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Recovery of FOB;Removal;
 32;13;;8;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Reinforced of a FOB with beacon;Modified or reinforced;
 23;13;;9;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Redeployment of FOB with beacon;Replacement;
@@ -52,8 +52,8 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 19;29;;;1;1;1;0;Transshipment to a bait boat;Transshipment to a bait boat;;
 20;30;;;1;1;1;0;Transshipment from a bait boat;Transshipment from a bait boat;;
 35;31;;;1;1;1;0;Fish discard;Discard;;
-2;32;;;0;1;1;1;Activity/set created from the well plan;;;fishing_time=set_duration  
-0;6;0;;1;1;1;1;Fishing (skiff is deployed);Null set ;;fishing_time=set_duration  
-1;6;1;;1;1;1;1;Fishing (skiff is deployed);Positive set;;fishing_time=set_duration  
-2;6;2;;1;1;1;1;Fishing (skiff is deployed);Unknown set;;fishing_time=set_duration  
-14;6;0;;1;1;1;1;Fishing (skiff is deployed);Pocket capsizing;;fishing_time=set_duration  
+2;32;;;0;1;1;1;Activity/set created from the well plan;Unknown set;;fishing_time=set_duration
+0;6;0;;1;1;1;1;Fishing (skiff is deployed);Null set ;;fishing_time=set_duration
+1;6;1;;1;1;1;1;Fishing (skiff is deployed);Positive set;;fishing_time=set_duration
+2;6;2;;1;1;1;1;Fishing (skiff is deployed);Unknown set;;fishing_time=set_duration
+14;6;0;;1;1;1;1;Fishing (skiff is deployed);Pocket capsizing;;fishing_time=set_duration
