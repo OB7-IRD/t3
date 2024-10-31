@@ -1361,7 +1361,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      file = "NUL")
                                       capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                      file = "NUL")
-                                      if (length(x = current_activities$extract_l1_element_value(element = "elementarycatches")) != 0) {
+                                      if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
                                         capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
                                                        file = "NUL")
                                         capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
@@ -2248,10 +2248,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           "]")
                                                   current_activity$.__enclos_env__$private$set_duration <- NA_integer_
                                                 } else {
-                                                  current_activity$.__enclos_env__$private$set_duration <- (1/60)*set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
+                                                  current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                                                                    & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                                                                    & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                                                                   & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"]
+                                                                                                                                   & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"])
                                                 }
                                               }
                                             }
