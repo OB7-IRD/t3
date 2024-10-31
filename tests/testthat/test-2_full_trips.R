@@ -44,13 +44,14 @@ capture.output(object_full_trips$set_count(),
                file = "NUL")
 
 # level 1.5: set duration ----
-capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs),
+capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                              activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.6: time at sea ----
-capture.output(object_full_trips$time_at_sea(),
+capture.output(object_full_trips$time_at_sea(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.7: fishing time ----
-capture.output(object_full_trips$fishing_time(),
+capture.output(object_full_trips$fishing_time(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.8: searching time ----
 capture.output(object_full_trips$searching_time(),

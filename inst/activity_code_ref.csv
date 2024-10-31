@@ -21,12 +21,12 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 39;39;;;1;1;0;0;Towing another vessel;Towing another vessel;;
 99;50;;;1;1;0;0;Training on board (priracy, fire, abandonment, etc);Other non-fishing activities;;
 99;99;;;1;1;0;0;Other (to detail in the comments);Other non-fishing activities;;
-98;13;;99;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Unknown;
+99;13;;99;0;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Unknown;
 40;13;;11;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Loss of FOB;Loss;
 99;13;;10;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Unknown operation on FOB;Other (to be precised);
 5;13;;1;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Deployment of FOB;Deployment;
 29;13;;2;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Visit to FOB equipped with beacon;Visit;
-1;13;;3;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Fishing on FOB;Fishing;The set_duration and fishing_time of fishing on FOB activity have already been taken into account via corresponding fishing activity (code 6 in observe and 0,1,2, or 14 in avdth database) and elementary catches associated. 
+1;13;;3;0;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Fishing on FOB;Fishing;The set_duration and fishing_time of fishing on FOB activity have already been taken into account via corresponding fishing activity (code 6 in observe and 0,1,2, or 14 in avdth database) and elementary catches associated. 
 6;13;;4;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Recovery of FOB;Removal;
 32;13;;8;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Reinforced of a FOB with beacon;Modified or reinforced;
 23;13;;9;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Redeployment of FOB with beacon;Replacement;
@@ -34,6 +34,7 @@ code_activity_avdth;code_activity_observe;setsuccessstatus_activity_observe;code
 6;13;;6;1;1;1;0;Operation on FOB only (visit, deployment, modification, retrieval);Recovery of FOB;Destruction;
 33;13;;7;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);Loss, end or controlled shutdown of FOB transmission;Sinking;
 ;13;;12;1;0;0;0;Operation on FOB only (visit, deployment, modification, retrieval);;Stranding;
+3;2;;;1;1;1;0;Searching (in general);Searching;;
 3;3;;;0;1;1;0;Searching for floating objects (logs or FADs);Searching;;
 3;4;;;1;1;1;0;Steaming towards observed system associated to the tuna school;Searching;;
 3;8;;;1;1;1;0;Drifting during the day near a tuna school, a log or a FAD;Searching;;

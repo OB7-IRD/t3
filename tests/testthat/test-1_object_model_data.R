@@ -66,3 +66,9 @@ testthat::test_that(desc = "110 - Comparison trips between data extracted and da
                                              expected = length(object_model_data$.__enclos_env__$private$trips$.__enclos_env__$private$data))
                     })
 
+# 111 - Comparison activity code referential data between data extracted and data model ----
+testthat::test_that(desc = "111 - Comparison activity code referential data between data extracted and data model",
+                    code = {
+                      testthat::expect_equal(object = dim(activitycoderefs),
+                                             expected = dim(object_model_data$.__enclos_env__$private$activitycoderefs))
+                    })
