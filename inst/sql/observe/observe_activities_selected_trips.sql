@@ -15,17 +15,22 @@ select
 	,va.code::integer as activity_code
 	,va.label1::text as activity_label
 	,r.timeatsea::integer as time_at_sea
+	,fob.code::integer as objectoperation_code
+	,fob.code::integer as objectoperation_label
 from
 	ps_logbook.activity a
 	join ps_logbook.route r on (a.route = r.topiaid)
 	join ps_common.trip t on (t.topiaid = r.trip)
 	join common.vessel v on (t.vessel = v.topiaid)
-	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
+	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)
+	left join ps_logbook.floatingobject fob on (fob.activity=a.topiaid)
+	left join ps_common.objectoperation obo on (obo.topiaid = fob.objectoperation)
 	join ps_common.vesselactivity va on (a.vesselactivity = va.topiaid)
 	left join ps_logbook.setsuccessstatus sss on (a.setsuccessstatus = sss.topiaid)
+
 where
 	t.topiaid in (?trip_ids)
 ;
