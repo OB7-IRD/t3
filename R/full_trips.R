@@ -8278,7 +8278,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::group_by(yr, sp, mon, cwp, status, ocean, ci_inf, ci_sup) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit))
 
                               t2_all <- dplyr::bind_rows(t2_all, t2_all_other) %>% dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
-                                dplyr::dplyr::group_by(yr, sp, mon, cwp, status, ocean) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
+                                dplyr::group_by(yr, sp, mon, cwp, status, ocean) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
                                                                                                              ci_inf = sum(ci_inf, na.rm = TRUE),
                                                                                                              ci_sup = sum(ci_sup, na.rm = TRUE))
                               # export dataset
