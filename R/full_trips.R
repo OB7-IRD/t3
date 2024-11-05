@@ -7263,7 +7263,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
-                                dplyr::group_by(across(c(-w_lb_t3))) %>%
+                                dplyr::group_by(dplyr::across(c(-w_lb_t3))) %>%
                                 dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
                                 dplyr::ungroup()
                               # set use for modeling to remove for prediction
@@ -7342,13 +7342,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                            "YFT_m10",
                               #                            "YFT_p10")
                               # Assign fishing mode to unknown
-                              if(input_type == "observe_database"){
+                              # observe_database fishing mode or school type unknown code = 0
                                 test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
-
-                              } else if(input_type == "avdth_database") {
+                              # avdth_database fishing mode unknown code = 3
                                 test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
-                              }
                               if(nrow(test) > 0) {
+                                # observe_database fishing mode or school type unknown code = 0
+                                train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
+                                # avdth_database fishing mode unknown code = 3
                                 train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
                                 ntree <- 1000
                                 set.seed(7)
@@ -7367,6 +7368,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp <- dplyr::left_join(sets_long,
                                                         test[, c("id_act","fmod2")],
                                                         by = "id_act")
+                                # observe_database fishing mode or school type unknown code = 0
+                                tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
+                                # avdth_database fishing mode unknown code = 3
                                 tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
                                 tmp$fmod2 <- NULL
                                 sets_long <- droplevels(tmp)
@@ -7638,7 +7642,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 if(nrow(boot_tmp_element) > 0){
                                   # boot_tmp_element_sum <- boot_tmp_element %>%
-                                  #   dplyr::group_by(across(c(-wtot_lb_t3, -prop_lb))) %>%
+                                  #   dplyr::group_by(dplyr::across(c(-wtot_lb_t3, -prop_lb))) %>%
                                   #   dplyr::summarise(wtot_lb_t3 = sum(wtot_lb_t3),
                                   #                    prop_lb_ave = mean(prop_lb)) %>%
                                   #   ungroup()
@@ -7907,14 +7911,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               ocean = as.factor(ocean))
 
                               catch_with_other_species <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_other_species %>%
-                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::group_by(dplyr::across(c(-wcat))) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
                                 dplyr::mutate(data_source = "unchanged",
                                               catch_set_fit  = round(w_lb_t3, digits = 4),
                                               mon =as.character(mon),
                                               ocean = as.factor(ocean))
 
                               catch_discard <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_discard  %>%
-                                dplyr::group_by(across(c(-wcat))) %>%  dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::group_by(dplyr::across(c(-wcat))) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
                                 dplyr::mutate(data_source = "discard",
                                               catch_set_fit  = round(w_lb_t3, digits = 4),
                                               mon = as.character(mon),
@@ -7926,7 +7932,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   catch_with_other_species, catch_discard, catch_with_mix_tuna) %>%
                                 dplyr::mutate(status = ifelse(data_source == "discard","discard", "catch"),
                                               ci_inf = catch_set_fit,
-                                              ci_sup = catch_set_fit)%>%  dplyr::group_by(across(-name_to_summarise)) %>%
+                                              ci_sup = catch_set_fit) %>%
+                                dplyr::group_by(dplyr::across(-name_to_summarise)) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit),
                                                  ci_inf = sum(ci_inf),
                                                  ci_sup = sum(ci_sup),
@@ -8010,7 +8017,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                           TRUE ~ species)) %>%
                                 dplyr::filter(species %in% species_ecd_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
-                                dplyr::group_by(across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
+                                dplyr::group_by(dplyr::across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
 
                               set_all_output_wide <- set_all_output_long_tmp %>%
                                 tidyr::pivot_wider(values_from = capture,
@@ -8386,7 +8393,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              TRUE ~ sp)) %>%
                                 dplyr::filter(sp %in% species_m11_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
-                                dplyr::group_by(across(-catch_set_fit)) %>%  dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE)) %>%
+                                dplyr::group_by(dplyr::across(-catch_set_fit)) %>%
+                                dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE)) %>%
                                 dplyr::ungroup() %>%
                                 dplyr::mutate(sp = dplyr::recode(sp, ALB = "alb", BET = "bet", SKJ = "skj", YFT = "yft",
                                                           FRZ = "frz", LTA = "lta_kaw", BLT = "blt_lot"))
@@ -8395,7 +8403,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tidyr::pivot_wider(values_from = catch_set_fit,
                                                    names_from = c(fmod,sp),
                                                    values_fill = 0) %>%
-                                rename(square = cwp,
+                                dplyr::rename(square = cwp,
                                        fishing_year = yr,
                                        month = mon)
 
@@ -8634,7 +8642,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {
-                              browser()
+                              #browser()
                             }),
                           private = list(
                             id_not_full_trip = NULL,
