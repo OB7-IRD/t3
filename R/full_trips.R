@@ -7309,13 +7309,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sets$sp <- NULL
                               sets$wcat <- NULL
                               # calculate proportion of weight from t3 level 1
-                              sets_compo <- sets %>% dplyr::group_by(id_act) %>% dplyr::mutate(wtot_lb_t3 = sum(w_lb_t3)) %>%
-                                dplyr::mutate(prop_lb = w_lb_t3 / wtot_lb_t3) %>%  dplyr::ungroup()
-                              sets_long <- sets_compo %>% dplyr::select(id_act, sp_cat, prop_lb, w_lb_t3) %>%
+                              sets_compo <- sets %>%
+                                dplyr::group_by(id_act) %>%
+                                dplyr::mutate(wtot_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(prop_lb = w_lb_t3 / wtot_lb_t3) %>%
+                                dplyr::ungroup()
+                              sets_long <- sets_compo %>%
+                                dplyr::select(id_act, sp_cat, prop_lb, w_lb_t3) %>%
                                 tidyr::complete(id_act, sp_cat, fill = list(prop_lb = 0, w_lb_t3 = 0))
                               sets_long <- dplyr::left_join(sets_long, dplyr::distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat)))) %>%
-                                dplyr::group_by(id_act, sp_cat) %>% dplyr::mutate(dupli = dplyr::n())
-                              sets_wide <- sets_long %>% dplyr::select(-w_lb_t3) %>% tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
+                                dplyr::group_by(id_act, sp_cat) %>%
+                                dplyr::mutate(dupli = dplyr::n())
+                              # Transform fishing mode unknown code = 3 (avdth_database)
+                              # To school type unknown code = 0 (observe_database)
+                              if(any(sets_long$fmod == 3)){
+                                sets_long <- dplyr::mutate(.data = sets_long,
+                                                           fmod = ifelse(fmod == 3, 0, fmod))
+                              }
+                              sets_wide <- sets_long %>%
+                                dplyr::select(-w_lb_t3) %>%
+                                tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
                               # sets_wide <- tidyr::spread(data = sets,
                               #                            key = sp_cat,
                               #                            value = w_lb_t3,
@@ -7342,17 +7355,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                            "YFT_m10",
                               #                            "YFT_p10")
                               # Assign fishing mode to unknown
-                              # observe_database fishing mode or school type unknown code = 0
                               if(any(sets_wide$fmod == 0)){
                                 test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
                               }
-                              # avdth_database fishing mode unknown code = 3
-                              if(any(sets_wide$fmod == 3)){
-                                test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
-                              }
                               if(nrow(test) > 0) {
-                                train <- droplevels(sets_wide[!(sets_wide$fmod %in% c(0,3)), ])
-                              ntree <- 1000
+                                train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
+                                ntree <- 1000
                                 set.seed(7)
                                 rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
                                                       data = train,
@@ -7371,8 +7379,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         by = "id_act")
                                 # observe_database fishing mode or school type unknown code = 0
                                 tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
-                                # avdth_database fishing mode unknown code = 3
-                                tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
                                 tmp$fmod2 <- NULL
                                 sets_long <- droplevels(tmp)
                               }
@@ -7571,8 +7577,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           # remove sample sets
                                           sample_data = current_output_level3_process2[[1]]
                                           sample_data$w_lb_t3 <- NULL
-                                          sample_data <- sample_data %>% dplyr::mutate(fmod = factor(fmod),
-                                                                                       ocean = factor(ocean))
+                                          sample_data <- sample_data %>%
+                                            dplyr::mutate(fmod = factor(fmod),
+                                                          ocean = factor(ocean))
 
                                           sets_long_fishing_mode_no_sample <- droplevels(sets_long_fishing_mode[!(sets_long_fishing_mode$id_act %in% unique(sample_data$id_act)),])
                                           sets_long_fishing_mode_no_sample <- sets_long_fishing_mode_no_sample %>% dplyr::mutate(year = factor(yr),
@@ -7882,30 +7889,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # MIX with other tuna should have been corrected in process 1.3 (issue #98)
                               # only sets with only MIX should remained here
                               catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                filter(sp != "MIX") %>%dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
-                                                                     data_source = "tuna_mix",
-                                                                     mon =as.character(mon),
-                                                                     ocean = as.factor(ocean),
-                                                                     wcat = NULL)
+                                dplyr::filter(sp != "MIX") %>%
+                                dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
+                                              data_source = "tuna_mix",
+                                              mon = as.character(mon),
+                                              ocean = as.factor(ocean),
+                                              wcat = NULL)
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                filter(sp == "MIX") %>% dplyr::mutate(sp = NULL,
-                                                                      wcat = NULL)
-                              tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>%
+                                dplyr::filter(sp == "MIX")
+                              %>% dplyr::mutate(sp = NULL,
+                                                wcat = NULL)
+                              tuna_compo_ave_sp_fmod <- set_all %>%
+                                dplyr::group_by(sp, fmod) %>%
                                 dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
                               # unknown fishing mode
-                              # avdth
-                              if(any(catch_mix_tuna$fmod == 3)){
-                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>%
-                                  dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
-                                  dplyr::mutate(fmod = as.factor(3))
-                                tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
-                              }
                               if(any(catch_mix_tuna$fmod == 0)){
-                                # observe
-                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>%
+                                tuna_compo_ave_sp <- set_all %>%
+                                  dplyr::group_by(sp) %>%
                                   dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
                                   dplyr::mutate(fmod = as.factor(0))
-                                tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
+                                tuna_compo_ave_sp_fmod <- dplyr::bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
                               # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
                               catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
@@ -8038,20 +8041,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    names_prefix = "capture_",
                                                    values_fill = 0) %>%
                                 dplyr::mutate(cwp11 = latlon2cwp(lat = latitude_dec,
-                                                          lon = longitude_dec,
-                                                          base = 1),
-                                       cwp55 = latlon2cwp(lat = latitude_dec,
-                                                          lon = longitude_dec,
-                                                          base = 5),
-                                       quadrant = substr(cwp11,1,1),
-                                       annee_de_peche = lubridate::year(date_act),
-                                       mois_de_peche = lubridate::month(date_act),
-                                       jour_de_peche = lubridate::mday(date_act),
-                                       heure_de_peche = lubridate::hour(date_act),
-                                       trimestre = lubridate::quarter(date_act),
-                                       # annee_de_debarquement = lubridate::year(landing_date),
-                                       # mois_de_debarquement = lubridate::month(landing_date),
-                                       # jour_de_debarquement = lubridate::mday(landing_date)
+                                                                 lon = longitude_dec,
+                                                                 base = 1),
+                                              cwp55 = latlon2cwp(lat = latitude_dec,
+                                                                 lon = longitude_dec,
+                                                                 base = 5),
+                                              quadrant = substr(cwp11,1,1),
+                                              annee_de_peche = lubridate::year(date_act),
+                                              mois_de_peche = lubridate::month(date_act),
+                                              jour_de_peche = lubridate::mday(date_act),
+                                              heure_de_peche = lubridate::hour(date_act),
+                                              trimestre = lubridate::quarter(date_act),
+                                              # annee_de_debarquement = lubridate::year(landing_date),
+                                              # mois_de_debarquement = lubridate::month(landing_date),
+                                              # jour_de_debarquement = lubridate::mday(landing_date)
                                 )
 
                               latitude_tmp <-dplyr::bind_rows(lapply(1:nrow(set_all_output_wide), function(x){
@@ -8220,12 +8223,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # add other species and mix tuna
                               t1_fmod_other <- catch_all_other %>%
-                                dplyr::group_by(yr, sp, fmod, status, ocean, ci_inf, ci_sup) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit))
+                                dplyr::group_by(yr, sp, fmod, status, ocean, ci_inf, ci_sup) %>%
+                                dplyr::summarise(catch_set_fit = sum(catch_set_fit))
 
-                              t1_fmod <- bind_rows(t1_fmod, t1_fmod_other) %>% dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
-                                dplyr::group_by(yr, sp, fmod, status, ocean) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit),
-                                                                                    ci_inf = sum(ci_inf),
-                                                                                    ci_sup = sum(ci_sup))
+                              t1_fmod <- bind_rows(t1_fmod, t1_fmod_other) %>%
+                                dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                dplyr::group_by(yr, sp, fmod, status, ocean) %>%
+                                dplyr::summarise(catch_set_fit = sum(catch_set_fit),
+                                                 ci_inf = sum(ci_inf),
+                                                 ci_sup = sum(ci_sup))
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t1_fmod))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Nominal_catch_fishing_mode"
@@ -8302,8 +8308,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               t2_all <- dplyr::bind_rows(t2_all, t2_all_other) %>% dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
                                 dplyr::group_by(yr, sp, mon, cwp, status, ocean) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
-                                                                                                             ci_inf = sum(ci_inf, na.rm = TRUE),
-                                                                                                             ci_sup = sum(ci_sup, na.rm = TRUE))
+                                                                                                      ci_inf = sum(ci_inf, na.rm = TRUE),
+                                                                                                      ci_sup = sum(ci_sup, na.rm = TRUE))
                               # export dataset
                               write.table(x = t2_all,
                                           file = file.path(table_directory,
@@ -8369,14 +8375,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # add other species and mix tuna
                               t2_fmod_other <- catch_all_other %>% dplyr::mutate(cwp = latlon2cwp(lat = lat,
-                                                                                           lon = lon,
-                                                                                           base = 1)) %>%
-                                dplyr::group_by(yr, sp, mon, cwp, fmod, status, ocean, ci_inf, ci_sup) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE))
+                                                                                                  lon = lon,
+                                                                                                  base = 1)) %>%
+                                dplyr::group_by(yr, sp, mon, cwp, fmod, status, ocean, ci_inf, ci_sup) %>%
+                                dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE))
 
-                              t2_fmod <- dplyr::bind_rows(t2_fmod, t2_fmod_other) %>% mutate(status = ifelse(is.na(status), "catch", status)) %>%
-                                dplyr::group_by(yr, sp, mon, cwp, fmod, status, ocean) %>% dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
-                                                                                              catch_ci_inf = sum(ci_inf, na.rm = TRUE),
-                                                                                              catch_ci_sup = sum(ci_sup, na.rm = TRUE))
+                              t2_fmod <- dplyr::bind_rows(t2_fmod, t2_fmod_other) %>%
+                                dplyr::mutate(status = ifelse(is.na(status), "catch", status)) %>%
+                                dplyr::group_by(yr, sp, mon, cwp, fmod, status, ocean) %>%
+                                dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE),
+                                                 catch_ci_inf = sum(ci_inf, na.rm = TRUE),
+                                                 catch_ci_sup = sum(ci_sup, na.rm = TRUE))
                               outputs_level3_process5[[5]] <- append(outputs_level3_process5[[5]],
                                                                      list(t2_fmod))
                               names(outputs_level3_process5[[5]])[length(outputs_level3_process5[[5]])] <- "Catch_effort_fishing_mode"
@@ -8398,30 +8407,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t2_fmod_output_long <- t2_fmod %>% filter(status == "catch") %>%
                                 dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)][1]) %>%
                                 dplyr::ungroup() %>%
-                                dplyr::mutate(fmod = ifelse(((fmod == 3 || fmod=0) & max_sp == "SKJ"), 1, fmod),
-                                       fmod = dplyr::case_when(fmod == 1 ~ "obj",
-                                                               fmod == 2 ~ "fsc",
-                                                               TRUE ~ "unk"),
-                                       sp = dplyr::case_when(sp %in% FRZ_group ~ "FRZ",
-                                                             sp %in% LTA_KAW_group ~ "LTA",
-                                                             sp %in% BLT_LOT_group ~ "BLT",
-                                                             !sp %in% species_m11_filter ~ "OTH",
-                                                             TRUE ~ sp)) %>%
+                                dplyr::mutate(fmod = ifelse((fmod == 0 & max_sp == "SKJ"), 1, fmod),
+                                              fmod = dplyr::case_when(fmod == 1 ~ "obj",
+                                                                      fmod == 2 ~ "fsc",
+                                                                      TRUE ~ "unk"),
+                                              sp = dplyr::case_when(sp %in% FRZ_group ~ "FRZ",
+                                                                    sp %in% LTA_KAW_group ~ "LTA",
+                                                                    sp %in% BLT_LOT_group ~ "BLT",
+                                                                    !sp %in% species_m11_filter ~ "OTH",
+                                                                    TRUE ~ sp)) %>%
                                 dplyr::filter(sp %in% species_m11_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
                                 dplyr::group_by(dplyr::across(-catch_set_fit)) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit, na.rm = TRUE)) %>%
                                 dplyr::ungroup() %>%
                                 dplyr::mutate(sp = dplyr::recode(sp, ALB = "alb", BET = "bet", SKJ = "skj", YFT = "yft",
-                                                          FRZ = "frz", LTA = "lta_kaw", BLT = "blt_lot"))
+                                                                 FRZ = "frz", LTA = "lta_kaw", BLT = "blt_lot"))
 
                               t2_fmod_output_wide <- t2_fmod_output_long %>%
                                 tidyr::pivot_wider(values_from = catch_set_fit,
                                                    names_from = c(fmod,sp),
                                                    values_fill = 0) %>%
                                 dplyr::rename(square = cwp,
-                                       fishing_year = yr,
-                                       month = mon)
+                                              fishing_year = yr,
+                                              month = mon)
 
                               t2_fmod_output_wide <- Add_multi_columns(df = t2_fmod_output_wide, name_list = name_list_m11) %>%
                                 dplyr::relocate(name_list_m11) %>%
