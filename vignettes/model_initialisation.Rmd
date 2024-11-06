@@ -1,6 +1,10 @@
 ---
 title: "Model initialisation and data selection"
-output: rmarkdown::html_vignette
+output: 
+  html_document:
+  #base_format: rmarkdown::html_vignette
+    toc: true
+    toc_float: true
 description: |
   T3 data model initialisation and selection.
 vignette: |

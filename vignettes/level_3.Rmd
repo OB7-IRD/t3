@@ -1,6 +1,10 @@
 ---
 title: "Level 3 process"
-output: rmarkdown::html_vignette
+output: 
+  html_document:
+  #base_format: rmarkdown::html_vignette
+    toc: true
+    toc_float: true
 description: |
   Description of the t3 level 3 and how initialise it.
 vignette: |

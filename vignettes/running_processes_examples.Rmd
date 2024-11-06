@@ -1,6 +1,10 @@
 ---
 title: "Running processes examples"
-output: rmarkdown::html_vignette
+output: 
+  html_document:
+  #base_format: rmarkdown::html_vignette
+    toc: true
+    toc_float: true
 description: |
   Description of running processes examples.
 vignette: |
