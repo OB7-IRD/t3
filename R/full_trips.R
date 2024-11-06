@@ -7343,15 +7343,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                            "YFT_p10")
                               # Assign fishing mode to unknown
                               # observe_database fishing mode or school type unknown code = 0
+                              if(any(sets_wide$fmod == 0)){
                                 test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
+                              }
                               # avdth_database fishing mode unknown code = 3
+                              if(any(sets_wide$fmod == 3)){
                                 test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
+                              }
                               if(nrow(test) > 0) {
-                                # observe_database fishing mode or school type unknown code = 0
-                                train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
-                                # avdth_database fishing mode unknown code = 3
-                                train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
-                                ntree <- 1000
+                                train <- droplevels(sets_wide[!(sets_wide$fmod %in% c(0,3)), ])
+                              ntree <- 1000
                                 set.seed(7)
                                 rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
                                                       data = train,
@@ -8397,7 +8398,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t2_fmod_output_long <- t2_fmod %>% filter(status == "catch") %>%
                                 dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)][1]) %>%
                                 dplyr::ungroup() %>%
-                                dplyr::mutate(fmod = ifelse((fmod == 3 & max_sp == "SKJ"), 1, fmod),
+                                dplyr::mutate(fmod = ifelse(((fmod == 3 || fmod=0) & max_sp == "SKJ"), 1, fmod),
                                        fmod = dplyr::case_when(fmod == 1 ~ "obj",
                                                                fmod == 2 ~ "fsc",
                                                                TRUE ~ "unk"),
