@@ -7,10 +7,12 @@ output:
     toc_float: true
 description: |
   Description of running processes examples.
+pkgdown:
+  as_is: true
 vignette: |
   %\VignetteIndexEntry{Running processes examples}
   %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---

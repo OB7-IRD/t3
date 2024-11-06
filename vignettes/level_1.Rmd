@@ -7,9 +7,11 @@ output:
     toc_float: true
 description: |
   Description of the t3 level 1 and how initialise it.
+pkgdown:
+  as_is: true
 vignette: |
   %\VignetteIndexEntry{Level 1 process}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

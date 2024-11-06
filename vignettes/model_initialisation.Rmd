@@ -7,9 +7,11 @@ output:
     toc_float: true
 description: |
   T3 data model initialisation and selection.
+pkgdown:
+  as_is: true
 vignette: |
   %\VignetteIndexEntry{Model initialisation and data selection}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
