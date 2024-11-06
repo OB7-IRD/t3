@@ -7482,7 +7482,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 outputs_dec <- ","
                                 outputs_sep <- ";"
                               }
-                              #browser()
                               figure_directory <- file.path(output_directory,
                                                             "level3",
                                                             "figure")
@@ -7637,8 +7636,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                    x = names(outputs_level3_process5[[1]]))]
                                 boot_tmp_element <- dplyr::bind_rows(outputs_level3_process5_ocean)
 
-                                boot_tmp_element <- boot_tmp_element %>% dplyr::mutate(year = lubridate::year(date_act),
-                                                                                       yr = lubridate::year(date_act))
+                                boot_tmp_element <- boot_tmp_element %>%
+                                  dplyr::mutate(year = lubridate::year(date_act),
+                                                yr = lubridate::year(date_act))
 
                                 if(nrow(boot_tmp_element) > 0){
                                   # boot_tmp_element_sum <- boot_tmp_element %>%
@@ -7647,7 +7647,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   #                    prop_lb_ave = mean(prop_lb)) %>%
                                   #   ungroup()
 
-                                  boot_tmp_element_wide <- boot_tmp_element %>% dplyr::select(id_act, fit_prop, sp) %>%
+                                  boot_tmp_element_wide <- boot_tmp_element %>%
+                                    dplyr::select(id_act, fit_prop, sp) %>%
                                     tidyr::pivot_wider(values_from = fit_prop, names_from = sp)
                                   # boot_tmp_element_wide <- tidyr::spread(data = boot_tmp_element[,!names(boot_tmp_element) %in%  c("w_lb_t3","prop_lb","tlb","year","resp", "data_source")],
                                   #                                        key = "sp",
@@ -7888,11 +7889,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
                                 filter(sp == "MIX") %>% dplyr::mutate(sp = NULL,
                                                                       wcat = NULL)
-                              tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
+                              tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>%
+                                dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
                               # unknown fishing mode
+                              # avdth
                               if(any(catch_mix_tuna$fmod == 3)){
-                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
+                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>%
+                                  dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
                                   dplyr::mutate(fmod = as.factor(3))
+                                tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
+                              }
+                              if(any(catch_mix_tuna$fmod == 0)){
+                                # observe
+                                tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>%
+                                  dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
+                                  dplyr::mutate(fmod = as.factor(0))
                                 tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
                               # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
@@ -8000,7 +8011,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::rename(species = sp, latitude_dec = lat, longitude_dec = lon, NUMBAT = vessel, code_assoc_groupe = fmod,
                                               capture = catch_set_fit, capture_ci_inf = ci_inf, capture_ci_sup = ci_sup,
                                               catch_LB_ST = w_lb_t3, prop_fit_ST = fit_prop_t3_ST,
-                                              catch_set_total_ST = wtot_lb_t3) %>%  ungroup()
+                                              catch_set_total_ST = wtot_lb_t3) %>%  dplyr::ungroup()
 
                               # format and filtering for ecd
                               name_to_remove_for_wide <- c("capture_ci_inf", "capture_ci_sup", "catch_LB_ST", "prop_fit_ST", "catch_set_total_ST","status")
@@ -8017,7 +8028,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                           TRUE ~ species)) %>%
                                 dplyr::filter(species %in% species_ecd_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
-                                dplyr::group_by(dplyr::across(-capture)) %>%  dplyr::summarise(capture = sum(capture))
+                                dplyr::group_by(dplyr::across(-capture)) %>%
+                                dplyr::summarise(capture = sum(capture))
 
                               set_all_output_wide <- set_all_output_long_tmp %>%
                                 tidyr::pivot_wider(values_from = capture,
@@ -8053,12 +8065,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       dplyr::select(.data =latitude_tmp, -seconds),
                                                                       dplyr::select(.data =longitude_tmp, -seconds))
 
-                              set_all_output_wide <- set_all_output_wide %>% dplyr::group_by(NUMBAT,date_act) %>% dplyr::mutate(numero_activite = seq(1:dplyr::n())) %>% dplyr::ungroup()
+                              set_all_output_wide <- set_all_output_wide %>%
+                                dplyr::group_by(NUMBAT,date_act) %>%
+                                dplyr::mutate(numero_activite = seq(1:dplyr::n())) %>%
+                                dplyr::ungroup()
 
                               set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
                                 dplyr::relocate(id_act, name_list_ecd) %>%
                                 dplyr::mutate(date_act = NULL, latitude_dec = NULL,	longitude_dec = NULL) %>%
-                                replace(is.na(.), 0)
+                                dplyr::replace(is.na(.), 0)
                               # export dataset
                               write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
@@ -8642,7 +8657,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # browser ----
                             #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {
-                              #browser()
+                              browser()
                             }),
                           private = list(
                             id_not_full_trip = NULL,
