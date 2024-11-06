@@ -7901,9 +7901,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               ocean = as.factor(ocean),
                                               wcat = NULL)
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                dplyr::filter(sp == "MIX")
-                              %>% dplyr::mutate(sp = NULL,
-                                                wcat = NULL)
+                                dplyr::filter(sp == "MIX") %>%
+                                dplyr::mutate(sp = NULL,
+                                              wcat = NULL)
                               tuna_compo_ave_sp_fmod <- set_all %>%
                                 dplyr::group_by(sp, fmod) %>%
                                 dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
