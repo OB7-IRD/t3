@@ -7231,15 +7231,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               ###########################################################################
 
                               target_tuna <- c("BET", "SKJ", "YFT")
-                              set_with_target_tuna <- catch_set_lb %>% dplyr::filter(sp %in% target_tuna) %>%
+                              set_with_target_tuna <- catch_set_lb %>%
+                                dplyr::filter(sp %in% target_tuna) %>%
                                 dplyr::distinct(id_act)
-                              set_with_mix_tuna <- catch_set_lb %>% dplyr::filter(sp %in% c("MIX")) %>%
+                              set_with_mix_tuna <- catch_set_lb %>%
+                                dplyr::filter(sp %in% c("MIX")) %>%
                                 dplyr::distinct(id_act)
-                              catch_without_target_tuna <- catch_set_lb %>% dplyr::filter(!id_act %in% c(set_with_target_tuna$id_act,set_with_mix_tuna$id_act))
+                              catch_without_target_tuna <- catch_set_lb %>%
+                                dplyr::filter(!id_act %in% c(set_with_target_tuna$id_act,set_with_mix_tuna$id_act))
 
-                              catch_with_mix_tuna <- catch_set_lb %>% dplyr::filter(id_act %in% set_with_mix_tuna$id_act)
-                              catch_with_target_tuna <- catch_set_lb %>% dplyr::filter(id_act %in% set_with_target_tuna$id_act,
-                                                                                       !id_act %in% set_with_mix_tuna$id_act)
+                              catch_with_mix_tuna <- catch_set_lb %>%
+                                dplyr::filter(id_act %in% set_with_mix_tuna$id_act)
+                              catch_with_target_tuna <- catch_set_lb %>%
+                                dplyr::filter(id_act %in% set_with_target_tuna$id_act,
+                                              !id_act %in% set_with_mix_tuna$id_act)
                               catch_with_other_species <- catch_with_target_tuna %>%
                                 dplyr::filter(!sp %in% target_tuna)
 
@@ -7405,9 +7410,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::ungroup()
                               } else {
                                 sets_long <- sets_long %>%
-                                  dplyr::mutate(prop_lb = replace (prop_lb,
-                                                                   wcat == "p10",
-                                                                   value = 0)) %>%
+                                  dplyr::mutate(prop_lb = dplyr::replace (prop_lb,
+                                                                          wcat == "p10",
+                                                                          value = 0)) %>%
                                   dplyr::group_by(id_act,
                                                   id_trip,
                                                   date_act,
