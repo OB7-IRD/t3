@@ -248,7 +248,7 @@ Process of logbook weigth categories conversion.
 \if{html}{\out{<a id="method-full_trips-set_count"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-set_count}{}}}
 \subsection{Method \code{set_count()}}{
-Process for postive sets count.
+Process for positive sets count.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(
   global_output_path = NULL,
