@@ -7,8 +7,8 @@ activity <- R6::R6Class(classname = "activity",
                         public = list(
                           # initialize ----
                           #' @description Initialize function for R6 activities class.
-                          #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
-                          #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                          #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification (unique topiaid from database).
+                          #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).
                           #' @param ocean_code Object of class {\link[base]{integer}} expected. Ocean identification.
                           #' @param activity_date Object of class {\link[base]{character}} expected. Activity date in format year month day.
                           #' @param activity_number Object of class {\link[base]{integer}} expected. Activity number.
@@ -20,6 +20,9 @@ activity <- R6::R6Class(classname = "activity",
                           #' @param school_type_code Object of class {\link[base]{integer}} expected. School type identification.
                           #' @param activity_code Object of class {\link[base]{integer}} expected. Activity code identification.
                           #' @param activity_label Object of class {\link[base]{character}} expected. Activity identification.
+                          #' @param objectoperation_code Object of class {\link[base]{integer}} expected. Operation on floating object code identification.
+                          #' @param objectoperation_label Object of class {\link[base]{character}} expected. Operation on floating object identification.
+                          #' @param objectoperation_id Object of class {\link[base]{character}} expected. Operation on floating object identification (unique topiaid from database).
                           #' @param time_at_sea Object of class {\link[base]{integer}} expected. Time at sea in hours.
                           initialize = function(trip_id,
                                                 activity_id,
@@ -36,6 +39,7 @@ activity <- R6::R6Class(classname = "activity",
                                                 activity_label,
                                                 objectoperation_code,
                                                 objectoperation_label,
+                                                objectoperation_id,
                                                 time_at_sea) {
                             # 1 - Arguments verifications ----
                             codama::r_type_checking(r_object = trip_id,
@@ -83,6 +87,9 @@ activity <- R6::R6Class(classname = "activity",
                             codama::r_type_checking(r_object = objectoperation_label,
                                                     type = "character",
                                                     length = 1L)
+                            codama::r_type_checking(r_object = objectoperation_id,
+                                                    type = "character",
+                                                    length = 1L)
                             codama::r_type_checking(r_object = time_at_sea,
                                                     type = "integer",
                                                     length = 1L)
@@ -106,6 +113,7 @@ activity <- R6::R6Class(classname = "activity",
                             private$activity_label <- activity_label
                             private$objectoperation_code <- objectoperation_code
                             private$objectoperation_label <- objectoperation_label
+                            private$objectoperation_label <- objectoperation_id
                             private$time_at_sea <- time_at_sea}),
                         private = list(
                           trip_id = NULL,
@@ -123,6 +131,7 @@ activity <- R6::R6Class(classname = "activity",
                           activity_label = NULL,
                           objectoperation_code = NULL,
                           objectoperation_label = NULL,
+                          objectoperation_id = NULL,
                           time_at_sea = NULL,
                           fishing_time = NULL,
                           searching_time = NULL,

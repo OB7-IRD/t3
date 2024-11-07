@@ -17,6 +17,7 @@ select
 	,r.timeatsea::integer as time_at_sea
 	,obo.code::integer as objectoperation_code
 	,obo.label1::text as objectoperation_label
+	,obo.topiaid::text as objectoperation_id
 from
 	ps_logbook.activity a
 	join ps_logbook.route r on (a.route = r.topiaid)
