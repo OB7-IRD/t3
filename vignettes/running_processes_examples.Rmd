@@ -1,18 +1,12 @@
 ---
 title: "Running processes examples"
-output: 
-  rmarkdown::html_document:
-  #base_format: rmarkdown::html_vignette
-    toc: true
-    toc_float: true
+output: rmarkdown::html_vignette
 description: |
   Description of running processes examples.
-pkgdown:
-  as_is: true
 vignette: |
   %\VignetteIndexEntry{Running processes examples}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -20,7 +14,8 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  highlight = TRUE
 )
 ```
 

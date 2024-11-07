@@ -1,24 +1,19 @@
 ---
 title: "Level 2 process"
-output: 
-  rmarkdown::html_document:
-  #base_format: rmarkdown::html_vignette
-    toc: true
-    toc_float: true
+output: rmarkdown::html_vignette
 description: |
   Description of the t3 level 2 and how initialise it.
-pkgdown:
-  as_is: true
 vignette: |
   %\VignetteIndexEntry{Level 2 process}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+ highlight = TRUE
 )
 ```
 
