@@ -185,7 +185,7 @@ The step aim to check relevance of the object standardised sample set by calcula
 
 5 diffetents scenarios are explain in the global flowchart of this process (figure 7). If it's possible regarding data available, three raising factors are calculated related to the weighted weight of the set and sample weight (total and display by weight categories <= 10kg and > 10kg).
 
-Verification thresholds could be modify in the function parameters throught the arguments `threshold_rf_minus10` (by default at 500), `threshold_rf_plus10` (by default at 500), `threshold_frequency_rf_minus10` (by default at 75), `threshold_frequency_rf_plus10` (by default at 75) and `threshold_rf_total` (by default at 250).
+Verification thresholds could be modify in the function parameters through the arguments `threshold_rf_minus10` (by default at 500), `threshold_rf_plus10` (by default at 500), `threshold_frequency_rf_minus10` (by default at 75), `threshold_frequency_rf_plus10` (by default at 75) and `threshold_rf_total` (by default at 250).
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
 
@@ -193,10 +193,13 @@ Verification thresholds could be modify in the function parameters throught the 
 
 ### Process 2.8: samples number standardisation at set scale
 
-This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculed in the process 2.7.
+This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process 2.7.
 
 The global process flowchart is available in the figure 8 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>
 
 <div style="text-align: center">Figure 8: Samples number standardisation at set scale flowchart.</div>
+
+</div>
+
