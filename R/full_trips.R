@@ -7410,9 +7410,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::ungroup()
                               } else {
                                 sets_long <- sets_long %>%
-                                  dplyr::mutate(prop_lb = dplyr::replace (prop_lb,
-                                                                          wcat == "p10",
-                                                                          value = 0)) %>%
+                                  dplyr::mutate(prop_lb = replace (prop_lb,
+                                                                   wcat == "p10",
+                                                                   value = 0)) %>%
                                   dplyr::group_by(id_act,
                                                   id_trip,
                                                   date_act,
@@ -8082,7 +8082,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               set_all_output_wide <- Add_multi_columns(df = set_all_output_wide, name_list = name_list_ecd) %>%
                                 dplyr::relocate(id_act, name_list_ecd) %>%
                                 dplyr::mutate(date_act = NULL, latitude_dec = NULL,	longitude_dec = NULL) %>%
-                                dplyr::replace(is.na(.), 0)
+                                replace(is.na(.), 0)
                               # export dataset
                               write.table(x = set_all_output_long,
                                           file = file.path(table_directory,
