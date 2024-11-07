@@ -34,6 +34,8 @@ activity <- R6::R6Class(classname = "activity",
                                                 school_type_code,
                                                 activity_code,
                                                 activity_label,
+                                                objectoperation_code,
+                                                objectoperation_label,
                                                 time_at_sea) {
                             # 1 - Arguments verifications ----
                             codama::r_type_checking(r_object = trip_id,
@@ -75,6 +77,12 @@ activity <- R6::R6Class(classname = "activity",
                             codama::r_type_checking(r_object = activity_label,
                                                     type = "character",
                                                     length = 1L)
+                            codama::r_type_checking(r_object = objectoperation_code,
+                                                    type = "integer",
+                                                    length = 1L)
+                            codama::r_type_checking(r_object = objectoperation_label,
+                                                    type = "character",
+                                                    length = 1L)
                             codama::r_type_checking(r_object = time_at_sea,
                                                     type = "integer",
                                                     length = 1L)
@@ -96,6 +104,8 @@ activity <- R6::R6Class(classname = "activity",
                             private$school_type_code <- school_type_code
                             private$activity_code <- activity_code
                             private$activity_label <- activity_label
+                            private$objectoperation_code <- objectoperation_code
+                            private$objectoperation_label <- objectoperation_label
                             private$time_at_sea <- time_at_sea}),
                         private = list(
                           trip_id = NULL,
@@ -111,6 +121,8 @@ activity <- R6::R6Class(classname = "activity",
                           school_type_code = NULL,
                           activity_code = NULL,
                           activity_label = NULL,
+                          objectoperation_code = NULL,
+                          objectoperation_label = NULL,
                           time_at_sea = NULL,
                           fishing_time = NULL,
                           searching_time = NULL,
