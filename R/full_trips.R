@@ -7961,7 +7961,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # recover the weight declaration standardized
                               weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
-                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = join_by("id_act", "sp"))
+                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = dplyr::join_by("id_act", "sp"))
 
                               name_to_trash <- c("code_act_type", "wcat","sp_code","status")
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
