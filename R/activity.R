@@ -113,7 +113,7 @@ activity <- R6::R6Class(classname = "activity",
                             private$activity_label <- activity_label
                             private$objectoperation_code <- objectoperation_code
                             private$objectoperation_label <- objectoperation_label
-                            private$objectoperation_label <- objectoperation_id
+                            private$objectoperation_id <- objectoperation_id
                             private$time_at_sea <- time_at_sea}),
                         private = list(
                           trip_id = NULL,
