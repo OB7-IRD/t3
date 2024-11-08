@@ -446,9 +446,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          activity_code == 2 ~ "Unknown success status",
                                                          TRUE ~ NA_character_
                                                        ),
-                                                       school_type_code = as.integer(x = school_type_code),
+                                                       school_type_code = dplyr::case_when(
+                                                         school_type_code == 1 ~ 1,
+                                                         school_type_code == 1 ~ 2,
+                                                         # Unknown code=0 in observe database
+                                                         activity_code == 3 ~ 0,
+                                                         TRUE ~ NA_character_
+                                                       ),
+                                                       activity_id = activity_data$activity_id[activity_id],
                                                        activity_code = as.integer(x = activity_code),
                                                        activity_label = as.character(x = activity_label),
+                                                       objectoperation_code = NA_integer_,
+                                                       objectoperation_label = NA_character_,
+                                                       objectoperation_id = NA_character_,
                                                        time_at_sea = as.integer(x = time_at_sea))
                                        if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
@@ -561,6 +571,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              school_type_code = activity_data$school_type_code[activity_id],
                                                                                              activity_code = activity_data$activity_code[activity_id],
                                                                                              activity_label = activity_data$activity_label[activity_id],
+                                                                                             objectoperation_code = activity_data$objectoperation_code[activity_id],
+                                                                                             objectoperation_label = activity_data$objectoperation_label[activity_id],
+                                                                                             objectoperation_id = activity_data$objectoperation_id[activity_id],
                                                                                              time_at_sea = activity_data$time_at_sea[activity_id])
                                                                     message(format(x = Sys.time(),
                                                                                    format = "%Y-%m-%d %H:%M:%S"),

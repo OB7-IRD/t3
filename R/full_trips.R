@@ -2149,9 +2149,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     school_type_code = school_type_code_observe)
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_observe,
-                                                                     set_success_status = setsuccessstatus_activity_observe,
-                                                                     code_objectoperation = objectoperation_code_observe,
-                                                                     label_objectoperation = objectoperation_label_observe,
+                                                                     set_success_status = set_success_status_code_observe,
+                                                                     objectoperation_code = objectoperation_code_observe,
+                                                                     objectoperation_label = objectoperation_label_observe,
+                                                                     objectoperation_id = objectoperation_id_observe,
                                                                      activity_label = activity_label_observe,
                                                                      status_active = status_active_observe)
 
@@ -2170,9 +2171,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -activity_label_avdth,
                                                                    -activity_code_observe,
                                                                    -activity_label_observe,
-                                                                   -setsuccessstatus_activity_observe,
+                                                                   -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -objectoperation_id_observe,
                                                                    -status_active_observe)
                                 catch_activity_codes <- unique(activity_code_ref %>%
                                                                  dplyr::filter(set_duration==1) %>%
@@ -2449,10 +2451,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (referential_template == "observe") {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_observe,
-                                                                     set_success_status = setsuccessstatus_activity_observe,
-                                                                     code_objectoperation = objectoperation_code_observe,
-                                                                     label_objectoperation = objectoperation_label_observe,
                                                                      activity_label = activity_label_observe,
+                                                                     set_success_status = set_success_status_code_observe,
+                                                                     objectoperation_code = objectoperation_code_observe,
+                                                                     objectoperation_label = objectoperation_label_observe,
+                                                                     objectoperation_id = objectoperation_id_observe,
                                                                      status_active = status_active_observe)
 
                                 } else {
@@ -2465,9 +2468,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -activity_label_avdth,
                                                                    -activity_code_observe,
                                                                    -activity_label_observe,
-                                                                   -setsuccessstatus_activity_observe,
+                                                                   -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -objectoperation_label_id,
                                                                    -status_active_observe)
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -2754,10 +2758,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (referential_template == "observe") {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_observe,
-                                                                     set_success_status = setsuccessstatus_activity_observe,
+                                                                     activity_label = activity_label_observe,
+                                                                     set_success_status = set_success_status_code_observe,
                                                                      objectoperation_code = objectoperation_code_observe,
                                                                      objectoperation_label = objectoperation_label_observe,
-                                                                     activity_label = activity_label_observe,
+                                                                     objectoperation_id=objectoperation_id_observe,
                                                                      status_active = status_active_observe)
 
                                 } else {
@@ -2770,9 +2775,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -activity_label_avdth,
                                                                    -activity_code_observe,
                                                                    -activity_label_observe,
-                                                                   -setsuccessstatus_activity_observe,
+                                                                   -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -objectoperation_id_observe,
                                                                    -status_active_observe)
                                 # No fishing activity codes
                                 no_fishing_activity_codes <- unique(activity_code_ref
@@ -7484,9 +7490,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                            "YFT_m10",
                               #                            "YFT_p10")
                               # Assign fishing mode to unknown
-                              test <- droplevels(sets_wide[sets_wide$fmod == 3, ])
+                              test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
                               if(nrow(test) > 0) {
-                                train <- droplevels(sets_wide[sets_wide$fmod != 3, ])
+                                train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
                                 ntree <- 1000
                                 set.seed(7)
                                 rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
@@ -7504,7 +7510,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp <- dplyr::left_join(sets_long,
                                                         test[, c("id_act","fmod2")],
                                                         by = "id_act")
-                                tmp$fmod[tmp$fmod == 3] <- tmp$fmod2[tmp$fmod == 3]
+                                tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
                                 tmp$fmod2 <- NULL
                                 sets_long <- droplevels(tmp)
                               }
@@ -8023,9 +8029,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                       wcat = NULL)
                               tuna_compo_ave_sp_fmod <- set_all %>% dplyr::group_by(sp, fmod) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST))
                               # unknown fishing mode
-                              if(any(catch_mix_tuna$fmod == 3)){
+                              if(any(catch_mix_tuna$fmod == 0)){
                                 tuna_compo_ave_sp <- set_all %>% dplyr::group_by(sp) %>% dplyr::summarise(fit_prop_t3_ST = mean(fit_prop_t3_ST)) %>%
-                                  dplyr::mutate(fmod = as.factor(3))
+                                  dplyr::mutate(fmod = as.factor(0))
                                 tuna_compo_ave_sp_fmod <- bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
                               # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
@@ -8512,7 +8518,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t2_fmod_output_long <- t2_fmod %>% filter(status == "catch") %>%
                                 dplyr::group_by(cwp, mon, fmod) %>% dplyr::mutate(max_sp = sp[catch_set_fit == max(catch_set_fit)][1]) %>%
                                 ungroup() %>%
-                                mutate(fmod = ifelse((fmod == 3 & max_sp == "SKJ"), 1, fmod),
+                                mutate(fmod = ifelse((fmod == 0 & max_sp == "SKJ"), 1, fmod),
                                        fmod = dplyr::case_when(fmod == 1 ~ "obj",
                                                                fmod == 2 ~ "fsc",
                                                                TRUE ~ "unk"),
