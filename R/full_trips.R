@@ -2561,7 +2561,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                             else{
                                             print("No activity code to which allocate time at sea, case to implement ")
-                                              current_activities_date_time_at_sea <- NA_real_
+                                              current_activities_date_time_at_sea <- 0
                                               }
                                           } else {
                                             current_activities_count <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "activity_code")) %in% activity_codes)
@@ -2955,6 +2955,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                             }
                                             else{
+                                              print("No activities to which allocate fishing_time, except catch activities, case to implement ")
                                               fishing_time_tmp <- 0
                                             }
                                             ## Implement case with only activities with elementary catch => create searching activity
