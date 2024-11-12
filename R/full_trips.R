@@ -2452,8 +2452,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      activity_label = activity_label_observe,
                                                                      set_success_status = set_success_status_code_observe,
                                                                      objectoperation_code = objectoperation_code_observe,
-                                                                     objectoperation_label = objectoperation_label_observe,
-)
+                                                                     objectoperation_label = objectoperation_label_observe)
                                   # objectoperation codes to take into account for time at sea allocation
                                   objectoperation_codes <- unique(activity_code_ref %>% dplyr::filter(time_at_sea==1) %>%
                                                                     dplyr::filter(!is.na(objectoperation_code))%>%
@@ -2462,7 +2461,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_avdth,
-                                                                     activity_label = activity_label_avdth)
+                                                                     activity_label = activity_label_avdth,
+                                                                     objectoperation_code = NA,
+                                                                     objectoperation_label = NA)
                                 }
                                 activity_code_ref <- dplyr::select(.data = activity_code_ref,
                                                                    -activity_code_avdth,
@@ -2477,7 +2478,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # activity codes to take into account for time at sea allocation
                                 activity_codes <- unique(activity_code_ref
                                                          %>% dplyr::filter(time_at_sea==1,
-                                                                           activity_code!=13)
+                                                                           is.na(objectoperation_code))
                                                          %>% dplyr::pull(activity_code))
 
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
@@ -2805,7 +2806,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 } else {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_avdth,
-                                                                     activity_label = activity_label_avdth)
+                                                                     activity_label = activity_label_avdth,
+                                                                     objectoperation_code = NA,
+                                                                     objectoperation_label = NA)
                                 }
                                 activity_code_ref <- dplyr::select(.data = activity_code_ref,
                                                                    -activity_code_avdth,
@@ -2819,7 +2822,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -comment)
                                 # No fishing activity codes
                                 no_fishing_activity_codes <- unique(activity_code_ref
-                                                                    %>% dplyr::filter(fishing_time==0)
+                                                                    %>% dplyr::filter(fishing_time==0,
+                                                                                      is.na(objectoperation_code))
                                                                     %>% dplyr::pull(activity_code))
                                 # Fishing activity codes except special cases :
                                 # activities with elementary catch (6,32)
@@ -2827,7 +2831,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 fishing_activity_codes <- unique(activity_code_ref
                                                                  %>% dplyr::filter(fishing_time==1,
                                                                                    set_duration==0,
-                                                                                   activity_code!=13)
+                                                                                   is.na(objectoperation_code))
                                                                  %>% dplyr::pull(activity_code))
                                 # Activity codes associated to elementary catch (6,32)
                                 catch_activity_codes <- unique(activity_code_ref
