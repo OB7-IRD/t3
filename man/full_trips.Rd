@@ -248,7 +248,7 @@ Process of logbook weigth categories conversion.
 \if{html}{\out{<a id="method-full_trips-set_count"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-set_count}{}}}
 \subsection{Method \code{set_count()}}{
-Process for postive sets count.
+Process for positive sets count.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_count(
   global_output_path = NULL,
@@ -277,6 +277,7 @@ Process for set duration calculation (in hours).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
   set_duration_ref,
+  activity_code_ref,
   global_output_path = NULL,
   output_format = "eu",
   referential_template = "observe"
@@ -286,16 +287,17 @@ Process for set duration calculation (in hours).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type, durations in minutes in the reference table, converted into hours for subsequent processings).}
+\item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
+Duration in minutes in the reference table, converted into hours in output for subsequent processing).}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+and/or searching time and/or set duration.}
+
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-
-\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
-and/or searching time and/or set duration.}
 }
 \if{html}{\out{</div>}}
 }
@@ -309,6 +311,7 @@ Process for time at sea calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(
   global_output_path = NULL,
   output_format = "eu",
+  activity_code_ref,
   referential_template = "observe"
 )}\if{html}{\out{</div>}}
 }
@@ -320,10 +323,10 @@ Process for time at sea calculation (in hours).
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-
 \item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
 and/or searching time and/or set duration.}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -337,6 +340,7 @@ Process for fishing time calculation (in hours).
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
+  activity_code_ref,
   referential_template = "observe",
   global_output_path = NULL,
   output_format = "eu"
@@ -346,9 +350,12 @@ Process for fishing time calculation (in hours).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
+\item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
 
-\item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+\item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
+
+\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+and/or searching time and/or set duration.}
 
 \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 
@@ -356,9 +363,6 @@ Process for fishing time calculation (in hours).
 The function will create subsection if necessary.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
-\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
-and/or searching time and/or set duration.}
 }
 \if{html}{\out{</div>}}
 }

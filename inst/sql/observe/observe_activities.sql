@@ -15,9 +15,10 @@ select
 	,va.code::integer as activity_code
 	,va.label1::text as activity_label
 	,r.timeatsea::integer as time_at_sea
+	,r.fishingtime::integer as fishing_time
 	,obo.code::integer as objectoperation_code
 	,obo.label1::text as objectoperation_label
-	,obo.topiaid::text as objectoperation_id
+	,fob.topiaid::text as objectoperation_id
 from
 	ps_logbook.activity a
 	join ps_logbook.route r on (a.route = r.topiaid)

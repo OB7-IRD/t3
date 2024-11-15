@@ -87,16 +87,19 @@ t3_level1 <- function(object_model_data,
                                 referential_template = referential_template)
     # level 1.5: set duration ----
     object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                   activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
                                    global_output_path = output_path,
                                    output_format = output_format,
                                    referential_template = referential_template)
     # level 1.6: time at sea ----
     object_full_trips$time_at_sea(global_output_path = output_path,
+                                  activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
                                   output_format = output_format,
                                   referential_template = referential_template)
     # level 1.7: fishing time ----
     object_full_trips$fishing_time(sunrise_schema = "sunrise",
                                    sunset_schema = "sunset",
+                                   activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
                                    global_output_path = output_path,
                                    output_format = output_format,
                                    referential_template = referential_template)
