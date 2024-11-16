@@ -2544,10 +2544,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                         collapse = "\", \""),
                                                                                                                                   "\"))"))
 
-                                            fishing_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$objectoperation_code %in% c(\"",
+                                            fishing_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("$path$objectoperation_code %in% c(\"",
                                                                                                                            paste(objectoperation_codes,
                                                                                                                                  collapse = "\", \""),
-                                                                                                                           "\"))"))
+                                                                                                                           "\")"))
                                             if(length(fishing_except_on_FOB_activities)!=0) {
                                               capture.output(current_activities_date_sea$add(new_item = fishing_except_on_FOB_activities),
                                                              file = "NUL")
