@@ -5,8 +5,8 @@ description: |
   Description of running processes examples.
 vignette: |
   %\VignetteIndexEntry{Running processes examples}
-  %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   chunk_output_type: console
 ---
@@ -14,39 +14,48 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  highlight = TRUE
 )
 ```
 
 <div style="text-align: justify">
 
-## Process philosophy
+# Process philosophy
 
-The Topical Tuna Treatment (T3) aim to provide a support for the data manipulation of tropical tuna surface fisheries. This support can take many different forms and have various objectives associated. For that purpose, T3 can be processes in various ways, depending of what question(s) drive your reflexion. You will find below several examples for running process and help you regarding your personnal work. Furthermore, don't hesitate to take a look on the issues webpage of the package (https://github.com/OB7-IRD/t3/issues) or send a mail to ob7@ird.fr if you need specific support.
+The Topical Tuna Treatment (T3) aim to provide a support for the data manipulation of tropical tuna surface fisheries. This support can take many different forms and have various objectives associated. For that purpose, T3 can be processes in various ways, depending of what question(s) drive your reflection. You will find below several examples for running process and help you regarding your personal work. Furthermore, don't hesitate to take a look on the issues webpage of the package (https://github.com/OB7-IRD/t3/issues) or send a mail to ob7@ird.fr if you need specific support.
 
-Furthermore, in the following functions the "database_con" argument refers to an R object which contains connection information with an avdth database. For more detail about connections available check the function documentation. In addition, the argument "output_path" refer to the output directory on your computer. The function associated, "initiate_directory", will create the output structure for the process.
+Furthermore, in the following functions the "database_con" argument refers to an R object which contains connection information with an observe (or AVDTH) database. For more detail about connections available check the function documentation. In addition, the argument "output_path" refer to the output directory on your computer. The function associated, "initiate_directory", will create the output structure for the process.
 
-## Running the process step by step
+# Running the process step by step
 
-Globaly, the T3 process have 3 differents parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to "follow" several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called "setup". You can modified them to customize the example. If you more information regarding functions arguments take à look to the R function documentation (or in the reference website section https://ob7-ird.github.io/t3/reference/index.html)
+Globaly, the T3 process have 3 different parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to "follow" several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called "setup". You can modified them to customize the example. If you more information regarding functions arguments take à look to the R function documentation (or in the reference website section https://ob7-ird.github.io/t3/reference/index.html)
 
 ```{r echo=TRUE, eval=FALSE}
 # setup ----
 library(t3)
-periode_reference <- as.integer(c(2006,
-                                  2007,
-                                  2008))
+years_period <- as.integer(c(2006,
+                             2007,
+                             2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
 # countries for the France fleet
 countries <- c("FRA",
                "MYT")
+flag_codes <- as.integer(c(1,41))
+# code 4,5 and 6 for Seiner with baits, Seiner without baits and Large seiner 
+vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
 sample_type <- as.integer(1)
 # for french fleet YFT, SKJ, BET, ALB, MIX and LOT
-species_rf1_fr <- as.integer(c(1, 2, 3, 4, 9, 11))
+species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+species_fate_codes_rf1 = as.integer(c(6, 11))
+# Species fate codes
+# Retained, presumably destined for the cannery : 6,
+# Discarded status unknown (only for EMS and logbook) : 11,
+species_fate_codes <- as.integer(c(6,11))
 # output directories initiation
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
@@ -58,55 +67,61 @@ confidence_interval <- TRUE
 # model creation ----
 object_model_data <- t3:::object_model_data$new()
 # object trips creation
-object_model_data$trips_object_creation(data_source = "avdth_db",
-                                        periode_reference = periode_reference,
-                                        countries = countries,
-                                        oceans = ocean,
-                                        db_con = database_con)
+object_model_data$trips_object_creation(data_source = "observe_database",
+                                        years_period = years_period,
+                                        flag_codes = flag_codes,
+                                        ocean_codes = ocean,
+                                        vessel_type_codes = vessel_type_codes,
+                                        database_connection = observe_database_con)
 # object activities creation
-object_model_data$activities_object_creation(data_source = "avdth_db",
-                                             periode_reference = periode_reference,
-                                             countries = countries,
-                                             oceans = ocean,
-                                             db_con = database_con)
+object_model_data$activities_object_creation(data_source = "observe_database",
+                                             years_period = years_period,
+                                             flag_codes = flag_codes,
+                                             ocean_codes = ocean,
+                                             vessel_type_codes = vessel_type_codes,
+                                             database_connection = observe_database_con)
+
 # object elementarycatches creation
-object_model_data$elementarycatches_object_creation(data_source = "avdth_db",
-                                                    periode_reference = periode_reference,
-                                                    countries = countries,
-                                                    oceans = ocean,
-                                                    db_con = database_con)
+object_model_data$elementarycatches_object_creation(data_source = "observe_database",
+                                                    years_period = years_period,
+                                                    flag_codes = flag_codes,
+                                                    ocean_codes = ocean,
+                                                    vessel_type_codes = vessel_type_codes,
+                                                    species_fate_codes = species_fate_codes,
+                                                    database_connection = observe_database_con)
 # object elementarylandings creation
-object_model_data$elementarylandings_object_creation(data_source = "avdth_db",
-                                                     periode_reference = periode_reference,
-                                                     countries = countries,
-                                                     oceans = ocean,
-                                                     db_con = database_con)
+object_model_data$elementarylandings_object_creation(data_source = "observe_database",
+                                                     years_period = years_period,
+                                                     flag_codes = flag_codes,
+                                                     ocean_codes = ocean,
+                                                     vessel_type_codes = vessel_type_codes,
+                                                     database_connection = observe_database_con)
 # object wells creation
-object_model_data$wells_object_creation(data_source = "avdth_db",
-                                        periode_reference = periode_reference,
-                                        countries = countries,
-                                        oceans = ocean,
-                                        sample_type = sample_type,
-                                        db_con = database_con)
+object_model_data$wells_object_creation(data_source = "observe_database",
+                                        years_period = years_period,
+                                        flag_codes = flag_codes,
+                                        ocean_codes = ocean,
+                                        vessel_type_codes = vessel_type_codes,
+                                        sample_type_codes = sample_type,
+                                        database_connection = observe_database_con)
 # model creation: set durations data
-object_model_data$setdurationrefs_data(data_source = "csv",
-                                       data_path = system.file("setdurationrefs.csv",
-                                                               package = "t3"),
-                                       periode_reference = periode_reference,
-                                       countries = countries)
+object_model_data$setdurationrefs_data(data_source = "csv_file",
+                                       data_path = system.file("set_duration_ref.csv",
+                                                               package = "t3"))
 # model creation: length steps data
-object_model_data$lengthsteps_data(data_source = "csv",
-                                   data_path = system.file("lengthsteps.csv",
+object_model_data$lengthsteps_data(data_source = "csv_file",
+                                   data_path = system.file("length_step.csv",
                                                            package = "t3"))
 # model creation: sample sets data
-object_model_data$samplesets_data(data_source = "avdth_db",
-                                  periode_reference = periode_reference,
-                                  countries = countries,
-                                  oceans = ocean,
-                                  db_con = database_con)
+object_model_data$samplesets_data(data_source = "observe_database",
+                                  years_period = years_period,
+                                  flag_codes = flag_codes,
+                                  ocean_codes = ocean,
+                                  vessel_type_codes = vessel_type_codes,
+                                  database_connection = observe_database_con)
 # model creation: length weight relationships data
-object_model_data$lengthweightrelationships_data(data_source = "csv",
-                                                 data_path = system.file("lengthweightrelationships.csv",
+object_model_data$lengthweightrelationships_data(data_source = "csv_file",
+                                                 data_path = system.file("length_weight_relationship.csv",
                                                                          package = "t3"))
 # initialisation object for full trips class
 object_full_trips <- t3:::full_trips$new()
@@ -115,7 +130,7 @@ object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_e
 # add activities to trips selected
 object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
 # filter by reference year
-object_full_trips$filter_by_time_period_reference(time_periode_reference = periode_reference)
+object_full_trips$filter_by_years_period(years_period = years_period)
 # add elementarycatches to trips selected
 object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
 # add elementarylandings to trips selected
@@ -125,7 +140,8 @@ object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_e
 
 # level 1 ---
 # level 1.1: rf1
-object_full_trips$rf1(species_rf1 = species_rf1_fr,
+object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1_fr,
+                      species_fate_codes_rf1 = species_fate_codes_rf1,
                       global_output_path = final_output_path,
                       output_format = output_format)
 # level 1.2: rf2
@@ -203,27 +219,35 @@ process_level3$output_level3_process5 <- object_full_trips$model_predictions(out
                                                                              ci = confidence_interval)
 ```
 
-## Shortcut functions
+# Shortcut functions
 
 Through the following codes, you will be able to run separely each part of the treatment. 
 
 ```{r echo=TRUE, eval=FALSE}
 # setup ----
 library(t3)
-periode_reference <- as.integer(c(2006,
-                                  2007,
-                                  2008))
+# Reference period 
+years_period <- as.integer(c(2006,
+                             2007,
+                             2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
-# countries for the France fleet
 countries <- c("FRA",
                "MYT")
+flag_codes <- as.integer(c(1,41))
+# Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)
+vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
 sample_type <- as.integer(1)
-# for french fleet YFT, SKJ, BET, ALB, MIX and LOT
-species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
+# For french fleet 
+species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+species_fate_codes = as.integer(c(6, 11))
+# Species fate codes
+# Retained, presumably destined for the cannery : 6,
+# Discarded status unknown (only for EMS and logbook) : 11,
+species_fate_codes <- as.integer(c(6,11))
 # output directories initiation
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
@@ -232,17 +256,20 @@ output_format <- "eu"
 # generation of the confidence interval
 confidence_interval <- TRUE
 
-# data model initialisation ----
-t3_process <- t3::data_model_initialisation(data_source = "avdth_db",
-                                            db_con = database_con,
-                                            periode_reference = periode_reference,
-                                            countries = countries,
-                                            oceans = ocean,
-                                            sample_type = sample_type)
+# data model initialization ----
+t3_process <- t3::data_model_initialisation(data_source = "observe_database",
+                                            database_connection = observe_database_con,
+                                            species_fate_codes = species_fate_codes,
+                                            years_period = years_period,
+                                            flag_codes = flag_codes,
+                                            vessel_type_codes = vessel_type_codes,
+                                            ocean_codes = ocean,
+                                            sample_type_codes = sample_type)
 # level 1 ----
 t3_process[[2]] <- t3::t3_level1(object_model_data = t3_process[[1]],
                                  object_full_trips = t3_process[[2]],
-                                 species_rf1 = species_rf1,
+                                 species_fao_codes_rf1 = species_fao_codes_rf1,
+                                 species_fate_codes = species_fate_codes,
                                  output_path = final_output_path,
                                  output_format = output_format)
 # level 2 ----
@@ -251,7 +278,7 @@ t3_process[[2]] <- t3::t3_level2(object_model_data = t3_process[[1]],
                                  output_path = final_output_path,
                                  output_format = output_format)
 # level 3 ----
-t3_process[[3]] <- t3_process$object_full_trips$path_to_level3()
+t3_process[[3]] <- t3_process[[2]]$path_to_level3()
 names(t3_process)[3] <- "process_level3"
 t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  target_year = target_year,
@@ -261,27 +288,38 @@ t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  output_format = output_format)
 ```
 
-## Global shortcut function
+# Global shortcut function
 
-The last section presents an example of a function able to run all the t3 process through one command line. Like before, you can "play" with the arguments to customise the function, especially if you want to skip part(s) of the process.
+The last section presents an example of a function able to run all the t3 process through one command line. Like before, you can "play" with the arguments to customize the function, especially if you want to skip part(s) of the process.
 
 ```{r echo=TRUE, eval=FALSE}
 # setup ----
 library(t3)
-periode_reference <- as.integer(c(2006,
-                                  2007,
-                                  2008))
+years_period <- as.integer(c(2006,
+                             2007,
+                             2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
 # countries for the France fleet
 countries <- c("FRA",
                "MYT")
+flag_codes <- as.integer(c(1,41))
+# Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)
+vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
 sample_type <- as.integer(1)
-# for french fleet YFT, SKJ, BET, ALB, MIX and LOT
-species_rf1 <- as.integer(c(1, 2, 3, 4, 9, 11))
+# for french fleet 
+species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+# Species fate codes
+# Retained, presumably destined for the cannery : 6,
+# Discarded status unknown (only for EMS and logbook) : 11,
+species_fate_codes <- as.integer(c(6,11))
+species_fate_codes_rf1 <- as.integer(c(6, 11))
+# output directories initiation
+final_output_path <- initiate_directory(output_path = output_path,
+                                        level = "all")
 # output format
 output_format <- "eu"
 # generation of the confidence interval
@@ -289,15 +327,18 @@ confidence_interval <- TRUE
 
 # process ----
 t3_process_all <- t3::t3_process(process = "all",
-                                 data_source = "avdth_db",
-                                 db_con = database_con,
+                                 data_source = "observe_database",
+                                 database_connection = observe_database_con,
                                  output_path = output_path,
                                  output_format = "eu",
-                                 periode_reference = periode_reference,
-                                 countries = countries,
-                                 oceans = ocean,
+                                 years_period = years_period,
+                                 flag_codes = flag_codes,
+                                 ocean_codes = ocean,
                                  sample_type = sample_type,
-                                 species_rf1 = species_rf1,
+                                 species_fate_codes = species_fate_codes,
+                                 vessel_type_codes = vessel_type_codes,
+                                 species_fao_codes_rf1 = species_fao_codes_rf1_fr,
+                                 species_fate_codes_rf1 = species_fate_codes_rf1,
                                  target_year = target_year,
                                  period_duration = period_duration,
                                  ci = confidence_interval)

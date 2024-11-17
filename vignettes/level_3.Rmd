@@ -12,7 +12,8 @@ vignette: |
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  highlight = TRUE
 )
 ```
 
@@ -49,3 +50,6 @@ The level 3 process of the T3R package aim at modelling species composition befo
 ### Process 3.5: Modelling species composition and estimating catch
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.5.png'/>
+
+</div>
+
