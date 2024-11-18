@@ -22,7 +22,11 @@ data_model_initialisation(
 \arguments{
 \item{data_source}{Object of class {\link[base]{character}} expected. Identification of data source. By default "observe_database" but you can switch to "avdth_database".}
 
-\item{database_connection}{Database connection R object expected.  Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{database_connection}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{log_file}{Object of class {\link[base]{logical}} expected. By default FALSE. Initiation or not for log file creation.}
 

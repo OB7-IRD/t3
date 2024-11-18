@@ -48,7 +48,7 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # for french fleet YFT, SKJ, BET, ALB, MIX and LOT
 species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 species_fate_codes_rf1 = as.integer(c(6, 11))
@@ -102,7 +102,7 @@ object_model_data$wells_object_creation(data_source = "observe_database",
                                         flag_codes = flag_codes,
                                         ocean_codes = ocean,
                                         vessel_type_codes = vessel_type_codes,
-                                        sample_type_codes = sample_type,
+                                        sample_type_codes = sample_type_codes,
                                         database_connection = observe_database_con)
 # model creation: set durations data
 object_model_data$setdurationrefs_data(data_source = "csv_file",
@@ -240,7 +240,7 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # For french fleet 
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 species_fate_codes = as.integer(c(6, 11))
@@ -264,7 +264,7 @@ t3_process <- t3::data_model_initialisation(data_source = "observe_database",
                                             flag_codes = flag_codes,
                                             vessel_type_codes = vessel_type_codes,
                                             ocean_codes = ocean,
-                                            sample_type_codes = sample_type)
+                                            sample_type_codes = sample_type_codes)
 # level 1 ----
 t3_process[[2]] <- t3::t3_level1(object_model_data = t3_process[[1]],
                                  object_full_trips = t3_process[[2]],
@@ -309,7 +309,7 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # for french fleet 
 species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 # Species fate codes
@@ -334,7 +334,7 @@ t3_process_all <- t3::t3_process(process = "all",
                                  years_period = years_period,
                                  flag_codes = flag_codes,
                                  ocean_codes = ocean,
-                                 sample_type = sample_type,
+                                 sample_type_codes = sample_type_codes,
                                  species_fate_codes = species_fate_codes,
                                  vessel_type_codes = vessel_type_codes,
                                  species_fao_codes_rf1 = species_fao_codes_rf1_fr,
