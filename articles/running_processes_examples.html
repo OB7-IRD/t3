@@ -167,7 +167,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
-<span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
 <span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="va">species_fate_codes_rf1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
@@ -221,7 +221,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span>                                        flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                        vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
-<span>                                        sample_type_codes <span class="op">=</span> <span class="va">sample_type</span>,</span>
+<span>                                        sample_type_codes <span class="op">=</span> <span class="va">sample_type_codes</span>,</span>
 <span>                                        database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># model creation: set durations data</span></span>
 <span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
@@ -359,7 +359,7 @@ part of the treatment.</p>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
-<span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># For french fleet </span></span>
 <span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="va">species_fate_codes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
@@ -383,7 +383,7 @@ part of the treatment.</p>
 <span>                                            flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                            vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                            ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                            sample_type_codes <span class="op">=</span> <span class="va">sample_type</span><span class="op">)</span></span>
+<span>                                            sample_type_codes <span class="op">=</span> <span class="va">sample_type_codes</span><span class="op">)</span></span>
 <span><span class="co"># level 1 ----</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level1.html">t3_level1</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
@@ -430,7 +430,7 @@ skip part(s) of the process.</p>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
 <span><span class="va">ocean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for landing data</span></span>
-<span><span class="va">sample_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet </span></span>
 <span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
@@ -455,7 +455,7 @@ skip part(s) of the process.</p>
 <span>                                 years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                 flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                 ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
-<span>                                 sample_type <span class="op">=</span> <span class="va">sample_type</span>,</span>
+<span>                                 sample_type_codes <span class="op">=</span> <span class="va">sample_type_codes</span>,</span>
 <span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1_fr</span>,</span>
