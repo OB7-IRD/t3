@@ -169,7 +169,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
-<span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="va">species_fate_codes_rf1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
@@ -259,7 +259,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span></span>
 <span><span class="co"># level 1 ---</span></span>
 <span><span class="co"># level 1.1: rf1</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1_fr</span>,</span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
 <span>                      species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                      global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                      output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
@@ -362,7 +362,6 @@ part of the treatment.</p>
 <span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># For french fleet </span></span>
 <span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
-<span><span class="va">species_fate_codes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
@@ -388,7 +387,8 @@ part of the treatment.</p>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level1.html">t3_level1</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
-<span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                 vessel_type_codes_rf1 <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
@@ -432,7 +432,7 @@ skip part(s) of the process.</p>
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet </span></span>
-<span><span class="va">species_fao_codes_rf1_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
@@ -458,7 +458,7 @@ skip part(s) of the process.</p>
 <span>                                 sample_type_codes <span class="op">=</span> <span class="va">sample_type_codes</span>,</span>
 <span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
-<span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1_fr</span>,</span>
+<span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
 <span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
