@@ -5,8 +5,8 @@ description: |
   Description of running processes examples.
 vignette: |
   %\VignetteIndexEntry{Running processes examples}
-  %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   chunk_output_type: console
 ---
@@ -14,19 +14,20 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  highlight = TRUE
 )
 ```
 
 <div style="text-align: justify">
 
-## Process philosophy
+# Process philosophy
 
 The Topical Tuna Treatment (T3) aim to provide a support for the data manipulation of tropical tuna surface fisheries. This support can take many different forms and have various objectives associated. For that purpose, T3 can be processes in various ways, depending of what question(s) drive your reflection. You will find below several examples for running process and help you regarding your personal work. Furthermore, don't hesitate to take a look on the issues webpage of the package (https://github.com/OB7-IRD/t3/issues) or send a mail to ob7@ird.fr if you need specific support.
 
 Furthermore, in the following functions the "database_con" argument refers to an R object which contains connection information with an observe (or AVDTH) database. For more detail about connections available check the function documentation. In addition, the argument "output_path" refer to the output directory on your computer. The function associated, "initiate_directory", will create the output structure for the process.
 
-## Running the process step by step
+# Running the process step by step
 
 Globaly, the T3 process have 3 different parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to "follow" several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called "setup". You can modified them to customize the example. If you more information regarding functions arguments take à look to the R function documentation (or in the reference website section https://ob7-ird.github.io/t3/reference/index.html)
 
@@ -47,9 +48,9 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # for french fleet YFT, SKJ, BET, ALB, MIX and LOT
-species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 species_fate_codes_rf1 = as.integer(c(6, 11))
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
@@ -101,7 +102,7 @@ object_model_data$wells_object_creation(data_source = "observe_database",
                                         flag_codes = flag_codes,
                                         ocean_codes = ocean,
                                         vessel_type_codes = vessel_type_codes,
-                                        sample_type_codes = sample_type,
+                                        sample_type_codes = sample_type_codes,
                                         database_connection = observe_database_con)
 # model creation: set durations data
 object_model_data$setdurationrefs_data(data_source = "csv_file",
@@ -143,7 +144,7 @@ object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_e
 
 # level 1 ---
 # level 1.1: rf1
-object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1_fr,
+object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
                       species_fate_codes_rf1 = species_fate_codes_rf1,
                       global_output_path = final_output_path,
                       output_format = output_format)
@@ -225,7 +226,7 @@ process_level3$output_level3_process5 <- object_full_trips$model_predictions(out
                                                                              ci = confidence_interval)
 ```
 
-## Shortcut functions
+# Shortcut functions
 
 Through the following codes, you will be able to run separely each part of the treatment. 
 
@@ -246,10 +247,9 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # For french fleet 
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
-species_fate_codes = as.integer(c(6, 11))
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,
@@ -270,12 +270,13 @@ t3_process <- t3::data_model_initialisation(data_source = "observe_database",
                                             flag_codes = flag_codes,
                                             vessel_type_codes = vessel_type_codes,
                                             ocean_codes = ocean,
-                                            sample_type_codes = sample_type)
+                                            sample_type_codes = sample_type_codes)
 # level 1 ----
 t3_process[[2]] <- t3::t3_level1(object_model_data = t3_process[[1]],
                                  object_full_trips = t3_process[[2]],
                                  species_fao_codes_rf1 = species_fao_codes_rf1,
-                                 species_fate_codes = species_fate_codes,
+                                 species_fate_codes_rf1 = species_fate_codes,
+                                 vessel_type_codes_rf1 = vessel_type_codes,
                                  output_path = final_output_path,
                                  output_format = output_format)
 # level 2 ----
@@ -294,7 +295,7 @@ t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  output_format = output_format)
 ```
 
-## Global shortcut function
+# Global shortcut function
 
 The last section presents an example of a function able to run all the t3 process through one command line. Like before, you can "play" with the arguments to customize the function, especially if you want to skip part(s) of the process.
 
@@ -315,9 +316,9 @@ vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
 ocean <- as.integer(1)
 # code 1 for landing data
-sample_type <- as.integer(1)
+sample_type_codes <- as.integer(1)
 # for french fleet 
-species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,
@@ -340,10 +341,10 @@ t3_process_all <- t3::t3_process(process = "all",
                                  years_period = years_period,
                                  flag_codes = flag_codes,
                                  ocean_codes = ocean,
-                                 sample_type = sample_type,
+                                 sample_type_codes = sample_type_codes,
                                  species_fate_codes = species_fate_codes,
                                  vessel_type_codes = vessel_type_codes,
-                                 species_fao_codes_rf1 = species_fao_codes_rf1_fr,
+                                 species_fao_codes_rf1 = species_fao_codes_rf1,
                                  species_fate_codes_rf1 = species_fate_codes_rf1,
                                  target_year = target_year,
                                  period_duration = period_duration,

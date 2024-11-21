@@ -46,7 +46,11 @@ Creation of an R6 reference object class trips which contains one or more R6 ref
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
@@ -89,7 +93,11 @@ Creation of a R6 reference object class activities which contain one or more R6 
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
@@ -133,7 +141,11 @@ Creation of a R6 reference object class elementarycatches which contain one or m
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
@@ -178,7 +190,11 @@ Creation of a R6 reference object class elementarylandings which contain one or 
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
@@ -223,7 +239,11 @@ Creation of a R6 reference object class wells which contain one or more R6 refer
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
@@ -320,7 +340,11 @@ Creation of a data frame object with weighted weigth of each set sampled.
 \describe{
 \item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database" and "avdth_database".}
+\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
+Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 

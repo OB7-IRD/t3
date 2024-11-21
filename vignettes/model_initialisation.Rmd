@@ -9,11 +9,19 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  highlight = TRUE
+)
+```
+
 <div style="text-align: justify">
 
-## Data model description
+# Data model description
 
-### R's R6 reference classes
+## R's R6 reference classes
 
 The t3 process was built under [R’s R6 reference classes](https://r6.r-lib.org/). R6 is an implementation of encapsulated object-oriented programming for R. This style of programming is also sometimes referred to as classical object-oriented programming. An online documentation was available at [https://r6.r-lib.org](https://r6.r-lib.org) and you can find a brief introduction and overview in the chapter 14 of the book “Advanced R” written by Hadley Wickham (online view was available [here](https://adv-r.hadley.nz/index.html)).
 
@@ -29,11 +37,11 @@ Just to sum up, among other things we choose R6 for the t3 process because:
 
 * you can optimise and increase the running speed of your process, especially related to the R's memory usage and the identification of treatments/functions associated.
 
-### Class and methods documentations
+## Class and methods documentations
 
 All documentation regarding class and methods associated are available thought the navigation bar `Reference` in the section `R6 class`. For example, if you search the main t3 process you can find them in the documentation of the class `full_trip`. This documentation, like the other one, is also available when the call the function help in the R console (for example above `?full_trip`).
 
-## Model initialisation
+# Model initialisation
 
 You have three different ways to launch the model creation:
 
