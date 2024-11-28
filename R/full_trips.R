@@ -2126,11 +2126,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            collapse = "_") %in% c("data.frame",
                                                                   "tbl_df_tbl_data.frame",
                                                                   "spec_tbl_df_tbl_df_tbl_data.frame")
-                                  || ncol(x = activity_code_ref) != 12
+                                  || ncol(x = activity_code_ref) !=14
                                   || nrow(x = activity_code_ref) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 14 columns and at least 1 row expected.")
                               }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2179,6 +2179,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -schooltype_code_observe,
+                                                                   -schooltype_label_observe,
                                                                    -status_active_observe,
                                                                    -comment)
                                 catch_activity_codes <- unique(activity_code_ref %>%
@@ -2230,10 +2232,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           # for activity declared as Fishing (6, 32) in observe or
                                           # null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in AVDTH
                                           if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% catch_activity_codes){
-                                            if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                     & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
-                                                                     & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                     & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, ])[1] != 1) {
+                                            current_set_duration_ref <- set_duration_ref %>%
+                                              dplyr::filter(year == lubridate::year(current_activity$.__enclos_env__$private$activity_date),
+                                                            ocean_code == current_activity$.__enclos_env__$private$ocean_code,
+                                                            school_type_code == current_activity$.__enclos_env__$private$school_type_code,
+                                                            flag_code == current_trip$.__enclos_env__$private$flag_code)
+                                            if (dim(current_set_duration_ref)[1] != 1) {
                                               stop(format(Sys.time(),
                                                           "%Y-%m-%d %H:%M:%S"),
                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -2267,15 +2271,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected
                                                                                                 }
                                                                                               }))
-                                                parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
-                                                                                & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_a"]
-                                                parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
-                                                                                & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
-                                                current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(parameter_a * catch_weight_category_corrected + parameter_b)
+                                                parameter_a <- current_set_duration_ref$parameter_a
+                                                parameter_b <- current_set_duration_ref$parameter_b
+                                                current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b), digits=3)
                                               } else {
                                                 if ((referential_template == "observe"
                                                      && (current_activity$.__enclos_env__$private$activity_code == 6
@@ -2293,10 +2291,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           "]")
                                                   current_activity$.__enclos_env__$private$set_duration <- NA_integer_
                                                 } else {
-                                                  current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
-                                                                                                                                              & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
-                                                                                                                                              & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                                                                              & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"])
+                                                  current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value, digits=3)
                                                 }
                                               }
                                             }
@@ -2433,11 +2428,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            collapse = "_") %in% c("data.frame",
                                                                   "tbl_df_tbl_data.frame",
                                                                   "spec_tbl_df_tbl_df_tbl_data.frame")
-                                  || ncol(x = activity_code_ref) != 12
+                                  || ncol(x = activity_code_ref) !=14
                                   || nrow(x = activity_code_ref) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 14 columns and at least 1 row expected.")
                               }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2459,18 +2454,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      activity_label = activity_label_observe,
                                                                      set_success_status = set_success_status_code_observe,
                                                                      objectoperation_code = objectoperation_code_observe,
-                                                                     objectoperation_label = objectoperation_label_observe)
-                                  # objectoperation codes to take into account for time at sea allocation
-                                  objectoperation_codes <- unique(activity_code_ref %>% dplyr::filter(time_at_sea==1) %>%
-                                                                    dplyr::filter(!is.na(objectoperation_code))%>%
-                                                                    dplyr::pull(objectoperation_code))
-
+                                                                     objectoperation_label = objectoperation_label_observe,
+                                                                     code=paste(activity_code, objectoperation_code, sep="_"))
                                 } else {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_avdth,
                                                                      activity_label = activity_label_avdth,
                                                                      objectoperation_code = NA,
-                                                                     objectoperation_label = NA)
+                                                                     objectoperation_label = NA,
+                                                                     code=paste(activity_code, objectoperation_code,
+                                                                                sep="_"))
                                 }
                                 activity_code_ref <- dplyr::select(.data = activity_code_ref,
                                                                    -activity_code_avdth,
@@ -2480,15 +2473,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -schooltype_code_observe,
+                                                                   -schooltype_label_observe,
                                                                    -status_active_observe,
                                                                    -comment)
-                                # Activity codes to take into account for time at sea allocation
-                                # Except special case for activities on FOB (13)
-                                activity_codes <- unique(activity_code_ref
-                                                         %>% dplyr::filter(time_at_sea==1,
-                                                                           is.na(objectoperation_code))
-                                                         %>% dplyr::pull(activity_code))
-
+                                # activity_objectoperation codes to take into account for time at sea allocation
+                                activity_objectoperation_codes <- unique(activity_code_ref %>%
+                                                                           dplyr::filter(time_at_sea==1) %>%
+                                                                           dplyr::pull(code))
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
                                     message(format(Sys.time(),
@@ -2543,55 +2535,52 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                              "\",",
                                                                                                                                              "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
                                                          file = "NUL")
+                                          current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
+                                          current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
+                                          current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
+                                          if (referential_template == "observe") {
+                                            current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
+                                          } else {
+                                            current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
+                                          }
                                           capture.output(current_activities_date_sea <- object_r6(class_name = "activities"),
                                                          file = "NUL")
-                                          if (referential_template == "observe") {
-                                            fishing_except_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
-                                                                                                                                  paste(activity_codes,
-                                                                                                                                        collapse = "\", \""),
-                                                                                                                                  "\"))"))
-
-                                            fishing_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("$path$objectoperation_code %in% c(\"",
-                                                                                                                           paste(objectoperation_codes,
-                                                                                                                                 collapse = "\", \""),
-                                                                                                                           "\")"))
-                                            if(length(fishing_except_on_FOB_activities)!=0) {
-                                              capture.output(current_activities_date_sea$add(new_item = fishing_except_on_FOB_activities),
+                                          if(any(unique(x=current_code) %in% activity_objectoperation_codes)){
+                                            capture.output(current_activities_date_sea$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                                                                                                                                  $path$objectoperation_code,
+                                                                                                                                                  sep='_') %in% c(\"",
+                                                                                                                                                        paste(activity_objectoperation_codes,
+                                                                                                                                                              collapse = "\", \""),"\")"))),
+                                                           file = "NUL")
+                                            current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared/current_activities_date_sea$count()
+                                          } else{
+                                            if(current_activities_date_time_at_sea_declared!=0){
+                                              new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                              new_activity$.__enclos_env__$private$objectoperation_code <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_label <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_id <- NA
+                                              new_activity$.__enclos_env__$private$activity_code <- 104
+                                              new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
+                                              new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
+                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                              capture.output(current_activities_date_sea$add(new_item = new_activity),
                                                              file = "NUL")
+                                              current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
+                                              message(" - Add transit activity to allocate time at sea, on date ",
+                                                      activities_dates[activities_dates_id], ":",
+                                                      "\n", "   [activity: ",
+                                                      current_activities_date_sea$extract_l1_element_value(element="activity_id")[[1]], "]")
                                             }
-                                            # Add activities on FOB (13) with objectoperation_code included in fishing time allocation
-                                            if(length(fishing_on_FOB_activities)!=0) {
-                                              capture.output(current_activities_date_sea$add(new_item = fishing_on_FOB_activities),
-                                                             file = "NUL")
-                                            }
-                                            if(current_activities_date_sea$count() !=0){
-                                              current_activities_date_time_at_sea <- unique(x = unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea"))) / current_activities_date_sea$count()
-                                            }
-                                            else{
-                                              print("No activity code to which allocate time at sea, case to implement")
-                                              current_activities_date_time_at_sea <- 0
-                                            }
-                                          } else {
-                                            current_activities_date_sea <- current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
-                                                                                                                             paste(activity_codes,
-                                                                                                                                   collapse = "\", \""),
-                                                                                                                             "\"))"))
-                                            if(current_activities_date_sea$count() !=0){
-                                              current_activities_date_time_at_sea <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea"))) / current_activities_date_sea$count()
-                                            }
-                                            else{
-                                              print("No activity code to which allocate time at sea, case to implement")
-                                              current_activities_date_time_at_sea <- 0
-                                            }
+                                            current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared
                                           }
-                                          current_activities_date_time_at_sea_obs <- current_activities_date$extract_l1_element_value(element="time_at_sea")
                                           current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
                                                                                                         0))
-                                          if(current_activities_date_sea$count() !=0){
+                                          if(current_activities_date_sea$count()!=0){
                                             current_activities_date_sea$modification_l1(modification = paste0("$path$time_at_sea = ",
                                                                                                               current_activities_date_time_at_sea))
+                                            time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
+
                                           }
-                                          time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
                                         }
                                       } else {
                                         if (time_departure_date > lubridate::dseconds(x = 0)
@@ -2656,13 +2645,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                         "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                 outputs_process_1_6_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "objectoperation_id" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_id")),
                                                                              "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
                                                                              "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                              "activity_date" = do.call("c",
                                                                                                        activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                              "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                              "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
-                                                                             "objectoperation_id" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_id")),
                                                                              "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                              "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")))
@@ -2793,11 +2782,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            collapse = "_") %in% c("data.frame",
                                                                   "tbl_df_tbl_data.frame",
                                                                   "spec_tbl_df_tbl_df_tbl_data.frame")
-                                  || ncol(x = activity_code_ref) != 12
+                                  || ncol(x = activity_code_ref) !=14
                                   || nrow(x = activity_code_ref) <1) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 12 columns and at least 1 row expected.")
+                                     " - Invalid \"activity_code_ref\" argument, class \"data.frame\" or \"tibble\" with 14 columns and at least 1 row expected.")
                               }
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2819,23 +2808,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      activity_label = activity_label_observe,
                                                                      set_success_status = set_success_status_code_observe,
                                                                      objectoperation_code = objectoperation_code_observe,
-                                                                     objectoperation_label = objectoperation_label_observe)
-                                  # For activities on FOB (13), objectoperation codes to take into account for fishing time allocation
-                                  objectoperation_codes <- unique(activity_code_ref %>%
-                                                                    dplyr::filter(fishing_time==1,
-                                                                                  !is.na(objectoperation_code),
-                                                                                  set_duration==0)%>%
-                                                                    dplyr::pull(objectoperation_code))
-                                  no_fishing_objectoperation_codes <-  unique(activity_code_ref %>%
-                                                                                dplyr::filter(fishing_time==0,
-                                                                                              !is.na(objectoperation_code)) %>%
-                                                                                dplyr::pull(objectoperation_code))
+                                                                     objectoperation_label = objectoperation_label_observe,
+                                                                     code=paste(activity_code, objectoperation_code, sep="_"))
                                 } else {
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_avdth,
                                                                      activity_label = activity_label_avdth,
                                                                      objectoperation_code = NA,
-                                                                     objectoperation_label = NA)
+                                                                     objectoperation_label = NA,
+                                                                     code=paste(activity_code, objectoperation_code,
+                                                                                sep="_"))
                                 }
                                 activity_code_ref <- dplyr::select(.data = activity_code_ref,
                                                                    -activity_code_avdth,
@@ -2845,22 +2827,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    -set_success_status_code_observe,
                                                                    -objectoperation_code_observe,
                                                                    -objectoperation_label_observe,
+                                                                   -schooltype_code_observe,
+                                                                   -schooltype_label_observe,
                                                                    -status_active_observe,
                                                                    -comment)
-                                # No fishing activity codes
-                                no_fishing_activity_codes <- unique(activity_code_ref
-                                                                    %>% dplyr::filter(fishing_time==0)
-                                                                    %>% dplyr::pull(activity_code))
-                                # Fishing activity codes except special cases :
-                                # activities with elementary catch (6,32)
-                                fishing_activity_codes <- unique(activity_code_ref
-                                                                 %>% dplyr::filter(fishing_time==1,
-                                                                                   set_duration==0)
-                                                                 %>% dplyr::pull(activity_code))
+                                # No fishing activity_objectoperation codes
+                                no_fishing_codes <- unique(activity_code_ref %>%
+                                                             dplyr::filter(fishing_time==0) %>%
+                                                             dplyr::pull(code))
+                                # Fishing activity_objectoperation codes
+                                # to take into account for fishing time allocation
+                                # except special case : activities with elementary catch (6,32)
+                                fishing_codes <- unique(activity_code_ref %>%
+                                                          dplyr::filter(fishing_time==1,
+                                                                        set_duration==0) %>%
+                                                          dplyr::pull(code))
+
                                 # Activity codes associated to elementary catch (6,32)
                                 catch_activity_codes <- unique(activity_code_ref
                                                                %>% dplyr::filter(set_duration==1)
                                                                %>% dplyr::pull(activity_code))
+                                # activity_objectoperation codes associated to elementary catch (6,32)
+                                catch_codes <- unique(activity_code_ref %>%
+                                                        dplyr::filter(set_duration==1) %>%
+                                                        dplyr::pull(code))
 
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
@@ -2919,15 +2909,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          file = "NUL")
                                           current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
                                           current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
+                                          current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
                                           catch_time <- 0
                                           # Only no fishing activities
-                                          if(all(current_activities_code %in% no_fishing_activity_codes) && !any(current_objectoperation_code %in% objectoperation_codes)) {
+                                          if(all(current_code %in% no_fishing_codes)) {
                                             current_activities_date$modification_l1(modification = "$path$fishing_time <- 0")
-                                          }
+                                            # If only no fishing activities and fishing_time_declared >0 create searching activity
+                                            # to allocate fishing time recorded in observe after get it via activities query (not done yet)
+                                            }
                                           # Date including fishing activities
                                           else {
+                                            # No fishing activities
+                                            if(any(unique(x = current_code) %in% no_fishing_codes)) {
+                                              capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
+                                              capture.output(current_activities_date_no_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                                                                                                                                  $path$objectoperation_code,
+                                                                                                                                                  sep='_') %in% c(\"",
+                                                                                                                                                                 paste(no_fishing_codes,
+                                                                                                                                                                       collapse = "\", \""),"\")"))),
+                                                             file = "NUL")
+                                              current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
+                                            }
                                             # Activity corresponding to catch (6,32) with fishing_time=set_duration
-                                            if (any(current_activities_code %in% catch_activity_codes)){
+                                            if (any(current_code %in% catch_codes)){
                                               capture.output(current_activities_date_catch <- object_r6(class_name = "activities"),
                                                              file = "NUL")
                                               capture.output(current_activities_date_catch$add(new_item = current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
@@ -2944,28 +2949,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                             }
                                             # Fishing activities except activities with elementary catch
-                                            if (any(unique(x = current_activities_code) %in% fishing_activity_codes)) {
+                                            if (any(unique(x = current_code) %in% fishing_codes)) {
                                               capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                              file = "NUL")
 
-                                              fishing_except_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
-                                                                                                                                    paste(fishing_activity_codes[fishing_activity_codes!=13],
-                                                                                                                                          collapse = "\", \""),
-                                                                                                                                    "\"))"))
-
-                                              fishing_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$objectoperation_code %in% c(\"",
-                                                                                                                             paste(objectoperation_codes,
-                                                                                                                                   collapse = "\", \""),
-                                                                                                                             "\"))"))
-                                              if(length(fishing_except_on_FOB_activities)!=0) {
-                                                capture.output(current_activities_date_fishing$add(new_item = fishing_except_on_FOB_activities),
-                                                               file = "NUL")
-                                              }
-                                              # Add activities on FOB (13) with objectoperation_code included in fishing time allocation
-                                              if(length(fishing_on_FOB_activities)!=0) {
-                                                capture.output(current_activities_date_fishing$add(new_item = fishing_on_FOB_activities),
-                                                               file = "NUL")
-                                              }
+                                              capture.output(current_activities_date_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                                                                                                                                  $path$objectoperation_code,
+                                                                                                                                                  sep='_') %in% c(\"",
+                                                                                                                                                              paste(fishing_codes,
+                                                                                                                                                                    collapse = "\", \""),"\")"))),
+                                                             file = "NUL")
                                               current_activities_latitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_latitude"))
                                               current_activities_longitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_longitude"))
                                               latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
@@ -2981,48 +2974,61 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # Subtract the duration of activities with elementary catches from the total fishing time.
                                               fishing_time_tmp2 <- fishing_time_tmp - catch_time
                                               current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
-                                                                                                                    fishing_time_tmp2/current_activities_date_fishing$count()))
+                                                                                                                    round(fishing_time_tmp2/current_activities_date_fishing$count(),
+                                                                                                                          digits=2)))
 
                                             } else if(all(unique(x=current_activities_code) %in% catch_activity_codes)){
-                                              # Date with only activities with elementary catch
-                                              # Create searching activity code=2 searching in general
-                                              # topiaid : like observe with #666#rand(20)
-                                              print("No activities to which allocate fishing_time, except catch activities, case to implement ")
-                                              fishing_time_tmp <- 0
-                                            }
-                                            # No fishing activities
-                                            if(any(unique(x = current_activities_code) %in% no_fishing_activity_codes[no_fishing_activity_codes!=13]) ||
-                                               any(unique(x = current_objectoperation_code) %in% no_fishing_objectoperation_codes)) {
-                                              capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
-                                                             file = "NUL")
-
-                                              no_fishing_except_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
-                                                                                                                                       paste(no_fishing_activity_codes[no_fishing_activity_codes!=13],
-                                                                                                                                             collapse = "\", \""),
-                                                                                                                                       "\"))"))
-
-                                              no_fishing_on_FOB_activities <- current_activities_date$filter_l1(filter = paste0("($path$objectoperation_code %in% c(\"",
-                                                                                                                                paste(no_fishing_objectoperation_codes[no_fishing_objectoperation_codes!=99],
-                                                                                                                                      collapse = "\", \""),
-                                                                                                                                "\"))"))
-                                              if(length(no_fishing_except_on_FOB_activities)!=0) {
-                                                capture.output(current_activities_date_no_fishing$add(new_item = no_fishing_except_on_FOB_activities),
+                                                new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                                new_activity$.__enclos_env__$private$elementarycatches <- list()
+                                                new_activity$.__enclos_env__$private$objectoperation_code <- NA
+                                                new_activity$.__enclos_env__$private$objectoperation_label <- NA
+                                                new_activity$.__enclos_env__$private$objectoperation_id <- NA
+                                                new_activity$.__enclos_env__$private$positive_set_count <- NA
+                                                new_activity$.__enclos_env__$private$set_duration <- 0
+                                                new_activity$.__enclos_env__$private$school_type_code <- NA
+                                                new_activity$.__enclos_env__$private$set_count <- NA
+                                                new_activity$.__enclos_env__$private$set_success_status_code <- NA
+                                                new_activity$.__enclos_env__$private$set_success_status_label <- NA
+                                                new_activity$.__enclos_env__$private$activity_code <- 105
+                                                new_activity$.__enclos_env__$private$activity_label <- "Searching (added by t3R)"
+                                                new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
+                                                new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                                capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                                file = "NUL")
-                                              }
-                                              # Add activities on FOB (13) with objectoperation_code not included in fishing time allocation
-                                              if(length(no_fishing_on_FOB_activities)!=0) {
-                                                capture.output(current_activities_date_no_fishing$add(new_item = no_fishing_on_FOB_activities),
+                                                capture.output(current_activities_date_fishing$add(new_item = new_activity),
                                                                file = "NUL")
-                                              }
-                                              # If only no fishing activities create transit activity
-                                              # to allocate fishing time recorded in observe after get it via activities query (not done yet)
-                                              current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
+                                                # Compute fishing time according to localisation of catch activities declared
+                                                current_activities_latitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_latitude"))
+                                                current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
+                                                latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
+                                                longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
+                                                current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                             lat = latitude_mean,
+                                                                                             lon = longitude_mean)[[sunrise_schema]]
+                                                current_sunset <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                            lat = latitude_mean,
+                                                                                            lon = longitude_mean)[[sunset_schema]]
+                                                fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
+                                                                                                              end = current_sunset))/3600
+                                                # Subtract the duration of activities with elementary catches from the total fishing time.
+                                                fishing_time_tmp2 <- fishing_time_tmp - catch_time
+                                                current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
+                                                                                                                      round(fishing_time_tmp2,
+                                                                                                                            digits=2)))
+                                                # Add new activity to current_trip
+                                                current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
+                                                message(" - Add searching activity to allocate fishing time, on date ",
+                                                        activities_dates[activities_dates_id], ":",
+                                                        "\n", "   [activity: ",
+                                                        current_activities_date_fishing$extract_l1_element_value(element="activity_id")[[1]], "]")
                                             }
+
                                             fishing_time <- fishing_time + fishing_time_tmp
                                           }
                                         }
                                       }
-                                      current_trip$.__enclos_env__$private$fishing_time <- fishing_time
+                                      current_trip$.__enclos_env__$private$fishing_time <- round(fishing_time,
+                                                                                                 digits=2)
                                     }
                                   }
                                   message(format(Sys.time(),
@@ -3074,13 +3080,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_1_7_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "objectoperation_id" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_id")),
                                                                                "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
                                                                                "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                                "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
-                                                                               "objectoperation_id" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_id")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")))
@@ -3267,6 +3273,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))))
                                   outputs_process_1_8_activities <- data.frame("trip_id" = unlist(x = activities_selected$extract_l1_element_value(element = "trip_id")),
                                                                                "activity_id" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_id")),
+                                                                               "objectoperation_id" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_id")),
                                                                                "activity_latitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_latitude")),
                                                                                "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
@@ -3274,6 +3281,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                               "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
                                                                                "searching_time" = unlist(x = activities_selected$extract_l1_element_value(element = "searching_time")))
                                   outputs_process_1_8 <- outputs_process_1_8_activities %>%
                                     dplyr::left_join(outputs_process_1_8_trips,
