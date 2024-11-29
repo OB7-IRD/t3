@@ -126,6 +126,16 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                 label = paste0("issue with the full trip ", full_trip_id,
                                                                " and the partial trip ", partial_trip_id))
                         })
+    # 225 - Checking if activities added to allocate time in process 1.6 and 1.7 are in the correct format ----
+    testthat::test_that(desc = "225 - Checking if activities added to allocate time in process 1.6 and 1.7 are in the correct format",
+                        code = {
+                          testthat::expect_equal(object = length(current_trip$.__enclos_env__$private$activities),
+                                                 expected = length(object_model_data$.__enclos_env__$private$activities$filter_by_trip(current_trip$.__enclos_env__$private$trip_id))+
+                                                   sum(unlist(lapply(current_trip$.__enclos_env__$private$activities,
+                                                                     function(x) {x$.__enclos_env__$private$activity_code %in% c(104,105)}))),
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
+                        })
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
     current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
     current_rf1 <- current_trip$.__enclos_env__$private$rf1
