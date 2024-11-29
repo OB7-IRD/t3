@@ -1,20 +1,37 @@
-# T3 1.0.0 - 2022-04-21
+# t3 2.0.0 - 2024-11-29
+
+## Added
+* Add data source observe_database.
+* Add weight category + 60kg (code 14).
+* Add functionality for querying multiple databases, for example the main and acquisition observe databases to simultaneously import and process ‘recent’ data from acquisition database, not yet imported into the main database, and older data from the main database.
+* Add activity code referential to allocate time at sea and fishing time and set duration.
+
+## Changed
+* Update vignettes. 
+* Update unit tests.
+* Use of [codama](https://ob7-ird.github.io/codama/) for checking arguments.
+* Update referential tables : set_duration_ref, length_step and length_weight_relationship.
+
+## Removed 
+* Remove data source t3_db. 
+
+# t3 1.0.0 - 2022-04-21
 
 ## Added
 * Implementation of unit tests
 * Implementation of the documentation for the level 3
 * Development of output extraction functions for process 1.1
-* Adding an output directory intilisation function and integrating it into the processes
+* Adding an output directory initialization function and integrating it into the processes
 
 ## Changed
-* Fix minor bugs and optimisation of the code and regarding the overall process
+* Fix minor bugs and optimization of the code and regarding the overall process
 * Update of the level 3 process
 
-# T3 0.9.1 - 2020-09-21
+# t3 0.9.1 - 2020-09-21
 
 ## Added
 * Implementation for the import of annual dataset from outputs of the level 1 and 2 (period length customizable)
-* Implementation of boostrap method as base for all confidence intervals
+* Implementation of bootstrap method as base for all confidence intervals
 * Computation of confidence interval (bootstrap interval) for the nominal catches by species and by fishing mode
 * Implementation of outputs for the he nominal catches by species and by fishing mode
 * Fix minor bugs in all different processes (P1, P2, P3)
@@ -28,7 +45,7 @@
 * Disabling task and effort computation while waiting for confident interval implementation
 * Remove the documentation from the package. Stay available at https://ob7-ird.github.io/t3/index.html
 
-# T3 0.9.0 - 2020-06-05
+# t3 0.9.0 - 2020-06-05
 
 ## Added
 * Implentation of the model layer in R6class
