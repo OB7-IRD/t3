@@ -113,6 +113,9 @@ data_model_initialisation <- function(data_source = "observe_database",
   # model creation: set durations data
   object_model_data$setdurationrefs_data(data_path = system.file("set_duration_ref.csv",
                                                                  package = "t3"))
+  # model creation: activity code data
+  object_model_data$activitycoderefs_data(data_path = system.file("activity_code_ref.csv",
+                                                                 package = "t3"))
   # model creation: length steps data
   object_model_data$lengthsteps_data(data_path = system.file("length_step.csv",
                                                              package = "t3"))

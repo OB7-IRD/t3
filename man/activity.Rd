@@ -33,6 +33,9 @@ Initialize function for R6 activities class.
   school_type_code,
   activity_code,
   activity_label,
+  objectoperation_code,
+  objectoperation_label,
+  objectoperation_id,
   time_at_sea
 )}\if{html}{\out{</div>}}
 }
@@ -40,9 +43,9 @@ Initialize function for R6 activities class.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
+\item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification (unique topiaid from database).}
 
-\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
+\item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).}
 
 \item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
 
@@ -65,6 +68,12 @@ Initialize function for R6 activities class.
 \item{\code{activity_code}}{Object of class {\link[base]{integer}} expected. Activity code identification.}
 
 \item{\code{activity_label}}{Object of class {\link[base]{character}} expected. Activity identification.}
+
+\item{\code{objectoperation_code}}{Object of class {\link[base]{integer}} expected. Operation on floating object code identification.}
+
+\item{\code{objectoperation_label}}{Object of class {\link[base]{character}} expected. Operation on floating object identification.}
+
+\item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Operation on floating object identification (unique topiaid from database).}
 
 \item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
 }

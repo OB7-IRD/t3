@@ -44,13 +44,14 @@ capture.output(object_full_trips$set_count(),
                file = "NUL")
 
 # level 1.5: set duration ----
-capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs),
+capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                              activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.6: time at sea ----
-capture.output(object_full_trips$time_at_sea(),
+capture.output(object_full_trips$time_at_sea(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.7: fishing time ----
-capture.output(object_full_trips$fishing_time(),
+capture.output(object_full_trips$fishing_time(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 1.8: searching time ----
 capture.output(object_full_trips$searching_time(),
@@ -122,6 +123,16 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                           testthat::expect_true(object = (is.na(current_time_at_sea)
                                                           || (is.numeric(current_searching_time)
                                                               & current_searching_time > 0)),
+                                                label = paste0("issue with the full trip ", full_trip_id,
+                                                               " and the partial trip ", partial_trip_id))
+                        })
+    # 225 - Checking if activities added to allocate time in process 1.6 and 1.7 are in the correct format ----
+    testthat::test_that(desc = "225 - Checking if activities added to allocate time in process 1.6 and 1.7 are in the correct format",
+                        code = {
+                          testthat::expect_equal(object = length(current_trip$.__enclos_env__$private$activities),
+                                                 expected = length(object_model_data$.__enclos_env__$private$activities$filter_by_trip(current_trip$.__enclos_env__$private$trip_id))+
+                                                   sum(unlist(lapply(current_trip$.__enclos_env__$private$activities,
+                                                                     function(x) {x$.__enclos_env__$private$activity_code %in% c(104,105)}))),
                                                 label = paste0("issue with the full trip ", full_trip_id,
                                                                " and the partial trip ", partial_trip_id))
                         })

@@ -60,6 +60,7 @@ You have three different ways to launch the model creation:
 | Create elementary landings object               | `elementarylandings_object_creation()` | object_model_data, elementarylanding, elementarylandings    |
 | Create wells object                             | `wells_object_creation()`              | object_model_data, wells, well, samples, elementarywellplan |
 | Create set durations object                     | `setdurationrefs_data()`               | object_model_data                                           |
+| Create activity code referential object                     | `activitycoderefs_data()`               | object_model_data                                           |
 | Create length steps object                      | `lengthsteps_data()`                   | object_model_data                                           |
 | Create sample sets object                       | `samplesets_data()`                    | object_model_data                                           |
 | Create length weight relationships object       | `lengthweightrelationships_data()`     | object_model_data                                           |

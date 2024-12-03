@@ -11,7 +11,7 @@ object_r6(class_name, silent = TRUE, ...)
 
 \item{silent}{{\link[base]{logical}} expected. By default TRUE Display or not information when you run the process.}
 
-\item{...}{(empty, list or R6 object) Leave empty if you want to initialise the object or provide one or several item to add in the class.}
+\item{...}{(empty, list or R6 object) Leave empty if you want to initialize the object or provide one or several item to add in the class.}
 }
 \value{
 A R6 reference object.

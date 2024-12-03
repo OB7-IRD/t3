@@ -59,8 +59,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -92,14 +92,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   "observe_trips_selected_trips.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n"))
-                                           
+
                                            trip_sql_final <- DBI::sqlInterpolate(conn = database_conn,
                                                                                  sql = trip_sql,
                                                                                  trip_ids = DBI::SQL(paste0("'",
                                                                                                             paste0(trip_ids,
                                                                                                                    collapse = "', '"),
                                                                                                             "'")))
-                                           
+
                                          } else {
                                            trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                   "observe",
@@ -369,8 +369,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -447,7 +447,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                           statement = activity_sql_final))
                                          }
                                        }
-                                       
+
                                        if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -516,9 +516,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          activity_code == 2 ~ "Unknown success status",
                                                          TRUE ~ NA_character_
                                                        ),
-                                                       school_type_code = as.integer(x = school_type_code),
+                                                       school_type_code = dplyr::case_when(
+                                                         school_type_code == 1 ~ 1,
+                                                         school_type_code == 1 ~ 2,
+                                                         # Unknown code=0 in observe database
+                                                         activity_code == 3 ~ 0,
+                                                         TRUE ~ NA_character_
+                                                       ),
+                                                       activity_id = activity_data$activity_id[activity_id],
                                                        activity_code = as.integer(x = activity_code),
                                                        activity_label = as.character(x = activity_label),
+                                                       objectoperation_code = NA_integer_,
+                                                       objectoperation_label = NA_character_,
+                                                       objectoperation_id = NA_character_,
                                                        time_at_sea = as.integer(x = time_at_sea))
                                        if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
@@ -631,6 +641,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              school_type_code = activity_data$school_type_code[activity_id],
                                                                                              activity_code = activity_data$activity_code[activity_id],
                                                                                              activity_label = activity_data$activity_label[activity_id],
+                                                                                             objectoperation_code = activity_data$objectoperation_code[activity_id],
+                                                                                             objectoperation_label = activity_data$objectoperation_label[activity_id],
+                                                                                             objectoperation_id = activity_data$objectoperation_id[activity_id],
                                                                                              time_at_sea = activity_data$time_at_sea[activity_id])
                                                                     message(format(x = Sys.time(),
                                                                                    format = "%Y-%m-%d %H:%M:%S"),
@@ -697,8 +710,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -1021,8 +1034,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -1329,8 +1342,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -1437,7 +1450,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            database_conn <- database_connection
                                          }
-                                         
+
                                          if (! is.null(x = trip_ids)) {
                                            codama::r_type_checking(r_object = trip_ids,
                                                                    type = "character")
@@ -2161,8 +2174,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -2511,6 +2524,103 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                " - Successful length weight relationship(s) data importation R environment.")
                                      }
                                      private$lengthweightrelationships <- lengthweightrelationship_data
+                                   },
+                                   #' @description Creation of reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+                                   #'  and/or searching time and/or set duration..
+                                   #' @param data_source Object of class {\link[base]{character}} expected. Identification of data source. By default "csv_file" (with separator character ";" and decimal ","). Identification of data source. You can switch to "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Mandatory argument for data source "csv_file", "rdata_file" or "envir". Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   activitycoderefs_data = function(data_source = "csv_file",
+                                                                    data_path = NULL,
+                                                                    envir = NULL) {
+                                     # 1 - Arguments verifications ----
+                                     if (data_source %in% c("csv_file",
+                                                            "rdata_file")) {
+                                       codama::r_type_checking(r_object = data_path,
+                                                               type = "character",
+                                                               length = 1L)
+                                     } else if (data_source != "envir") {
+                                       stop(format(x = Sys.time(),
+                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
+                                     }
+                                     if (data_source == "csv_file") {
+                                       # 2 - Process for csv file ----
+                                       # process beginning
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activity codes referential data importation from csv file.")
+                                       activity_code_ref_data <- read.csv2(file = data_path,
+                                                                           stringsAsFactors = FALSE)
+                                       if (nrow(x = activity_code_ref_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check your csv file.")
+                                       } else {
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Successful activity code referential data importation from csv file.")
+                                       }
+                                     } else if (data_source == "rdata_file") {
+                                       # 3 - Process for rdata file ----
+                                       # process beginning
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Start activity code referential data importation from RData.")
+                                       load(file = data_path,
+                                            envir = tmp_envir <- new.env())
+                                       if (exists(x = "activitycoderefs",
+                                                  envir = tmp_envir)) {
+                                         activity_code_ref_data <- dplyr::tibble(get(x = "activitycoderefs",
+                                                                                     envir = tmp_envir))
+                                         if (paste0(class(x =  activity_code_ref_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x =  activity_code_ref_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"activitycoderefs\" available in the R environment provided.")
+                                       }
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity code referential data importation from RData.")
+                                     } else if (data_source == "envir") {
+                                       # 4 - R environment source ----
+                                       # specific argument verification
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "activitycoderefs")[1])
+                                       } else {
+                                         environment_name <- as.environment(envir)
+                                       }
+                                       # process beginning
+                                       if (exists(x = "activitycoderefs",
+                                                  envir = environment_name)) {
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start activity code referential data importation from R environment.")
+                                         activity_code_ref_data <- dplyr::tibble(get(x = "activitycoderefs",
+                                                                                     envir = environment_name))
+                                         if (paste0(class(x = activity_code_ref_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_code_ref_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"activitycoderefs\" available in the R environment.")
+                                       }
+                                       message(format(x = Sys.time(),
+                                                      format = "%Y-%m-%d %H:%M:%S"),
+                                               " - Successful activity code referential data importation R environment.")
+                                     }
+                                     private$activitycoderefs <- activity_code_ref_data
                                    }
                                  ),
                                  private = list(
@@ -2519,8 +2629,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    elementarycatches = NULL,
                                    elementarylandings = NULL,
                                    wells = NULL,
+                                   samplesets = NULL,
                                    setdurationrefs = NULL,
                                    lengthsteps = NULL,
                                    lengthweightrelationships = NULL,
-                                   samplesets = NULL
+                                   activitycoderefs = NULL
                                  ))
