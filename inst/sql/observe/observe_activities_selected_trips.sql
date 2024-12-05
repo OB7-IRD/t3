@@ -1,6 +1,7 @@
 select
 	t.topiaid::text as trip_id
 	,a.topiaid:: text as activity_id
+	,fob.topiaid::text as objectoperation_id
 	,o.code::integer as ocean_code
 	,o.label1::text as ocean_label
 	,r.date::text as activity_date
@@ -14,10 +15,9 @@ select
 	,s.label1::text as school_type_label
 	,va.code::integer as activity_code
 	,va.label1::text as activity_label
-	,r.timeatsea::integer as time_at_sea
 	,obo.code::integer as objectoperation_code
 	,obo.label1::text as objectoperation_label
-	,fob.topiaid::text as objectoperation_id
+	,r.timeatsea::integer as time_at_sea
 from
 	ps_logbook.activity a
 	join ps_logbook.route r on (a.route = r.topiaid)
