@@ -110,8 +110,8 @@ object_model_data$setdurationrefs_data(data_source = "csv_file",
                                                                package = "t3"))
 # model creation: activity code data
 object_model_data$activitycoderefs_data(data_source = "csv_file",
-                                       data_path = system.file("activity_code_ref.csv",
-                                                               package = "t3"))
+                                       data_path = system.file("time_allocation_activity_code_ref.csv",
+                                                               package = "furdeb"))
 # model creation: length steps data
 object_model_data$lengthsteps_data(data_source = "csv_file",
                                    data_path = system.file("length_step.csv",

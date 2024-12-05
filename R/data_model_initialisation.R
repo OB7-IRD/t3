@@ -19,6 +19,7 @@
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
 #' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 #' @importFrom codama r_type_checking
+#' @import furdeb
 #' @export
 data_model_initialisation <- function(data_source = "observe_database",
                                       database_connection,
@@ -114,8 +115,8 @@ data_model_initialisation <- function(data_source = "observe_database",
   object_model_data$setdurationrefs_data(data_path = system.file("set_duration_ref.csv",
                                                                  package = "t3"))
   # model creation: activity code data
-  object_model_data$activitycoderefs_data(data_path = system.file("activity_code_ref.csv",
-                                                                 package = "t3"))
+  object_model_data$activitycoderefs_data(data_path = system.file("time_allocation_activity_code_ref.csv",
+                                                                  package = "furdeb"))
   # model creation: length steps data
   object_model_data$lengthsteps_data(data_path = system.file("length_step.csv",
                                                              package = "t3"))
