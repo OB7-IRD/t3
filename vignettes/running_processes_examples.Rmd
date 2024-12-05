@@ -29,7 +29,7 @@ Furthermore, in the following functions the "database_con" argument refers to an
 
 # Running the process step by step
 
-Globaly, the T3 process have 3 different parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to "follow" several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called "setup". You can modified them to customize the example. If you more information regarding functions arguments take à look to the R function documentation (or in the reference website section https://ob7-ird.github.io/t3/reference/index.html)
+Globaly, the T3 process have 3 different parts that you can run independently from each other. But in some case you could want to run the entire process step by step, for example to "follow" several particular data with accuracy. In the code below, you will find an example of all the process run step by step. The parameters associated are display in the section called "setup". You can modified them to customize the example. If you more information regarding functions arguments take a look to the R function documentation (or in the reference website section https://ob7-ird.github.io/t3/reference/index.html)
 
 ```{r echo=TRUE, eval=FALSE}
 # setup ----
