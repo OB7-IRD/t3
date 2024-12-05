@@ -17,6 +17,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  #' @param species_fao_code Object of class {\link[base]{character}} expected. Species code identification on 3 characters.
                                  #' @param species_fate_code Object of class {\link[base]{integer}} expected. Species fate code identification.
                                  #' @param catch_weight Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.
+                                 #' @param catch_count Object of class {\link[base]{numeric}} expected. Catch count in number of fishes.
                                  initialize = function(activity_id,
                                                        elementarycatch_id,
                                                        ocean_code,
@@ -26,7 +27,8 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        species_code,
                                                        species_fao_code,
                                                        species_fate_code,
-                                                       catch_weight) {
+                                                       catch_weight,
+                                                       catch_count) {
                                    # 1 - Arguments verifications ----
                                    codama::r_type_checking(r_object = activity_id,
                                                            type = "character",
@@ -58,6 +60,9 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    codama::r_type_checking(r_object = catch_weight,
                                                            type = "numeric",
                                                            length = 1L)
+                                   codama::r_type_checking(r_object = catch_count,
+                                                           type = "numeric",
+                                                           length = 1L)
                                    # 2 - Attributions ----
                                    private$activity_id <- activity_id
                                    private$elementarycatch_id <- elementarycatch_id
@@ -69,6 +74,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    private$species_fao_code <- species_fao_code
                                    private$species_fate_code <- species_fate_code
                                    private$catch_weight <- catch_weight
+                                   private$catch_count <- catch_count
                                  }),
                                private = list(
                                  activity_id = NULL,
@@ -81,6 +87,7 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  species_fao_code = NULL,
                                  species_fate_code = NULL,
                                  catch_weight = NULL,
+                                 catch_count = NULL,
                                  catch_weight_rf1 = NULL,
                                  catch_weight_rf2 = NULL,
                                  weight_category_code_corrected = NULL,

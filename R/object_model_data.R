@@ -865,7 +865,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        species_code = as.integer(x = species_code),
                                                        species_fao_code = as.character(x = species_fao_code),
                                                        species_fate_code = as.integer(x = species_fate_code),
-                                                       catch_weight = as.numeric(x = catch_weight))
+                                                       catch_weight = as.numeric(x = catch_weight),
+                                                       catch_count=NA_real_)
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -972,7 +973,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                   species_code = elementarycatch_data$species_code[elementarycatch_id],
                                                                                                                   species_fao_code = elementarycatch_data$species_fao_code[elementarycatch_id],
                                                                                                                   species_fate_code = elementarycatch_data$species_fate_code[elementarycatch_id],
-                                                                                                                  catch_weight = elementarycatch_data$catch_weight[elementarycatch_id])
+                                                                                                                  catch_weight = elementarycatch_data$catch_weight[elementarycatch_id],
+                                                                                                                  catch_count = elementarycatch_data$catch_count[elementarycatch_id])
                                                                            message(format(x = Sys.time(),
                                                                                           format = "%Y-%m-%d %H:%M:%S"),
                                                                                    " - Successful importation of elementary catch element ",

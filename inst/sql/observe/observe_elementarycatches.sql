@@ -10,15 +10,16 @@ select
 	,sp.code::integer as species_code
 	,sp.faocode::text as species_fao_code
 	,c.weight::numeric as catch_weight
+	,c.count::numeric as catch_count
 	,sf.code::integer as species_fate_code
 	,sf.label1::text as species_fate_label
 from
-	ps_logbook.catch c 
+	ps_logbook.catch c
 	join ps_logbook.activity a on (c.activity = a.topiaid)
 	join ps_logbook.route r on (a.route = r.topiaid)
 	join ps_common.trip t on (r.trip = t.topiaid)
 	join common.vessel v on (t.vessel = v.topiaid)
-	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
+	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country co on (v.flagcountry = co.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	left join ps_common.schooltype s on (s.topiaid = a.schooltype)

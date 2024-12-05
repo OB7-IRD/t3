@@ -29,7 +29,8 @@ Initialize function for R6 activities class.
   species_code,
   species_fao_code,
   species_fate_code,
-  catch_weight
+  catch_weight,
+  catch_count
 )}\if{html}{\out{</div>}}
 }
 
@@ -55,6 +56,8 @@ Initialize function for R6 activities class.
 \item{\code{species_fate_code}}{Object of class {\link[base]{integer}} expected. Species fate code identification.}
 
 \item{\code{catch_weight}}{Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.}
+
+\item{\code{catch_count}}{Object of class {\link[base]{numeric}} expected. Catch count in number of fishes.}
 }
 \if{html}{\out{</div>}}
 }
