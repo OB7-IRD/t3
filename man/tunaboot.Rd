@@ -29,7 +29,7 @@ tunaboot(
 
 \item{min_node}{Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.}
 
-\item{Nboot}{The number of bootstrap samples desired. The fefault value is 10}
+\item{Nboot}{The number of bootstrap samples desired. The default value is 10}
 
 \item{Nseed_boot}{Set the initial seed for the modelling. The default value is equal to Nseed parameter}
 
