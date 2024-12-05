@@ -36,7 +36,7 @@ The first level of the t3 process aim to standardize logbook data. These standar
 
 ### Process 1.1: Raising Factor level 1
 
-Catches filled in logbooks are based on visual estimations when they rise from the purse senner salabarde. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a peson located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
+Catches filled in logbooks are based on visual estimations when they rise from the purse seiner salabard. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
 Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
 
@@ -58,9 +58,9 @@ By the way, there are several cases when the RF level 1 can't be calculated. Tak
 
 ### Process 1.2: Raising Factor level 2
 
-In some cases, especially for historial data, several logbooks trips were not collected or available. Therefore it's impossible to apply the process 1.1. Don't do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypostesis that all the landings were know and available.
+In some cases, especially for historical data, several logbooks trips were not collected or available. Therefore it's impossible to apply the process 1.1. Don't do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypothesis that all the landings were know and available.
 
-So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven't been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalise it when we run our process on the whole time serie (and when we manipulated historical data). The figure below show the actual development of the process. 
+So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven't been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalize it when we run our process on the whole time series (and when we manipulated historical data). The figure below show the actual development of the process. 
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src='process_1.2.png'/>
 
@@ -78,7 +78,7 @@ This process aims to homogenize these weight categories and create simplify cate
 
 For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories. Details of the distribution key is available in tables below.
 
-| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+| Specie         | Logbook weight category | Weight ratio | Standardized logbook weight category |
 |----------------|-------------------------|--------------|-------------------------------------|
 | YFT, BET & ALB | 1                       | 1            | < 10kg                              |
 | YFT, BET & ALB | 2                       | 1            | < 10kg                              |
@@ -101,7 +101,7 @@ For each layer ocean/fishing school/specie/logbook weight category, a distributi
 
 <div style="text-align: center">Table 1: Distribution conversion key for undetermined and free school in the Atlantic Ocean.</div>
 
-| Specie         | Logbook weight category | Weight ratio | Standarised logbook weigth category |
+| Specie         | Logbook weight category | Weight ratio | Standardized logbook weight category |
 |----------------|-------------------------|--------------|-------------------------------------|
 | YFT, BET & ALB | 1                       | 1            | < 10kg                              |
 | YFT, BET & ALB | 2                       | 1            | < 10kg                              |
@@ -127,15 +127,15 @@ Among the process, there are two major step:
 - the first one for conversion of all categories except for unknown category (9),
 - the second one for conversion of category unknown if it's possible.
 
-During the first part, all logbook weight categories except the category unknow are standardised following the distribution conversion key display above. Each catch weight associated is multiply by the weight ratio associated. For several logbook weight category, like the categories 4 or 11 according to strata, this standardisation create new data because the initial logbook weight category is divied into several standardised logbook weight categories. It's normal that at the end of the process you could have more catch items than before.
+During the first part, all logbook weight categories except the category unknown are standardized following the distribution conversion key display above. Each catch weight associated is multiply by the weight ratio associated. For several logbook weight category, like the categories 4 or 11 according to strata, this standardization create new data because the initial logbook weight category is divided into several standardized logbook weight categories. It's normal that at the end of the process you could have more catch items than before.
 
-For the second part, the process try to make the conversion of catches filled in the unknown category. For each trip and at the scale of an ocean/fishing school/specie, proportion of standardised logbook weight categories will be applied on items filled as unknown logbook weight categories. For example, in a common stratum, if proportion weight of standardised logbook weight category are divided by 60% for the category < 10kg and 40% for the category > 10kg, catches weight of unknown logbook weight category will display in standardised logbook weight category with 60% of < 10kg category and 40% of > 10kg category. 
+For the second part, the process try to make the conversion of catches filled in the unknown category. For each trip and at the scale of an ocean/fishing school/specie, proportion of standardized logbook weight categories will be applied on items filled as unknown logbook weight categories. For example, in a common stratum, if proportion weight of standardized logbook weight category are divided by 60% for the category < 10kg and 40% for the category > 10kg, catches weight of unknown logbook weight category will display in standardized logbook weight category with 60% of < 10kg category and 40% of > 10kg category. 
 
 The global process flowchart is available in the figure 3 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.3.png'/>
 
-<div style="text-align: center">Figure 3: Logbook weigth categories conversion flowchart.</div>
+<div style="text-align: center">Figure 3: Logbook weight categories conversion flowchart.</div>
  
 ### Process 1.4: postive sets count
 
@@ -143,7 +143,7 @@ In this process, for each activity filled as null set (0), positive set (1), unk
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.4.png'/>
 
-<div style="text-align: center">Figure 4: Postive sets count flowchart.</div>
+<div style="text-align: center">Figure 4: Positive sets count flowchart.</div>
 
 ### Process 1.5: set duration calculation
 
@@ -200,7 +200,7 @@ The global process flowchart is available in the figure 6 below.
 
 ### Process 1.7: fishing time determination
 
-This process calculated the fishing time value in hours. Historialcaly, this process use a constant parameter according to the theorical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
+This process calculated the fishing time value in hours. Historically, this process use a constant parameter according to the theoretical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
 
 These parameters could be modify in the parameters `sunrise_schema` and `sunset_schema` and use in background the R package [suncalc](https://CRAN.R-project.org/package=suncalc). The function associated use latitude and longitude data to provide sunrise and sunset times of the selected day. Furthermore, you can switch between several values for these two parameters to adjust the process:
 
@@ -219,7 +219,7 @@ These parameters could be modify in the parameters `sunrise_schema` and `sunset_
 - nauticalDawn: nautical dawn (morning nautical twilight starts),
 - dawn: dawn (morning nautical twilight ends, morning civil twilight starts).
 
-At the trip scale and related to all the activities related, the fishing time value is the sum of each fishing time day if in the day activites associated at least one is different of no-wake road (4), damage (7), on hold (10), at the harbour (15) or fictive activity for trip without logbook (100).
+At the trip scale and related to all the activities related, the fishing time value is the sum of each fishing time day, if in the day activities associated, at least one is different of no-wake road (4), damage (7), on hold (10), at the harbour (15) or fictive activity for trip without logbook (100).
 
 The global process flowchart is available in the figure 7 below.
 
