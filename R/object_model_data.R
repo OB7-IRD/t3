@@ -866,7 +866,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        species_fao_code = as.character(x = species_fao_code),
                                                        species_fate_code = as.integer(x = species_fate_code),
                                                        catch_weight = as.numeric(x = catch_weight),
-                                                       catch_count=NA_real_)
+                                                       catch_count=NA_integer_)
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
