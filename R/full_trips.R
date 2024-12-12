@@ -3486,7 +3486,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             names(private$data_selected)[full_trip_id],
                                             "\".\n",
                                             "[trip: ",
-                                            private$data_selectewd[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
