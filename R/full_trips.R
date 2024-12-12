@@ -204,7 +204,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 warning(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
                                         " - Missing trip(s) in at least one full trip item selected.\n",
-                                        "[name(s)/id(s) of element(s): ",
+                                        "[name(s)/id(s) in data selected of element(s): ",
                                         paste0(private$id_not_full_trip,
                                                "/",
                                                which(x = names(private$data_selected) %in% private$id_not_full_trip),
@@ -3732,15 +3732,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.1 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.1 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 15.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -4023,15 +4023,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.2 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.2 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 16.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -4307,15 +4308,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.3 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.3 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 17.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -4741,15 +4742,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              "]")
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.4 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.4 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 18.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -4990,15 +4991,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.5 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.5 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 19.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -5272,15 +5273,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.6 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.6 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 20.3 - Outputs extraction ----
                                 # outputs manipulation
@@ -5611,15 +5612,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.7 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.7 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 21.3 - Outputs extraction ----
                                 if (! is.null(x = global_output_path)) {
@@ -5872,15 +5873,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     }
+                                    message(format(Sys.time(),
+                                                   "%Y-%m-%d %H:%M:%S"),
+                                            " - Process 2.8 successfull on item \"",
+                                            names(private$data_selected)[full_trip_id],
+                                            "\".\n",
+                                            "[trip: ",
+                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
+                                            "]")
                                   }
-                                  message(format(Sys.time(),
-                                                 "%Y-%m-%d %H:%M:%S"),
-                                          " - Process 2.8 successfull on item \"",
-                                          names(private$data_selected)[full_trip_id],
-                                          "\".\n",
-                                          "[trip: ",
-                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                          "]")
                                 }
                                 # 22.3 - Outputs extraction ----
                                 if (! is.null(x = global_output_path)) {
