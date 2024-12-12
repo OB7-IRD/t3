@@ -2260,7 +2260,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful sample set(s) data importation from an AVDTH database.")
+                                                 " - Successful sample set(s) data importation from observe database(s).")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
