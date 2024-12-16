@@ -7237,7 +7237,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
                               catch_set_lb$sp_code <- NULL
                               ###########################################################################
-
                               target_tuna <- c("BET", "SKJ", "YFT")
                               set_with_target_tuna <- catch_set_lb %>%
                                 dplyr::filter(sp %in% target_tuna) %>%
@@ -7370,30 +7369,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Assign fishing mode to unknown
                               if(any(sets_wide$fmod == 0)){
                                 test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
-                              }
-                              if(nrow(test) > 0) {
-                                train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
-                                ntree <- 1000
-                                set.seed(7)
-                                rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
-                                                      data = train,
-                                                      mtry=2L,
-                                                      num.trees = ntree,
-                                                      min.node.size = 5L,
-                                                      splitrule = "gini",
-                                                      importance = "impurity",
-                                                      replace = TRUE,
-                                                      quantreg = FALSE,
-                                                      keep.inbag= FALSE)
-                                test$fmod2 <- predict(rfg,
-                                                      data = test)$predictions
-                                tmp <- dplyr::left_join(sets_long,
-                                                        test[, c("id_act","fmod2")],
-                                                        by = "id_act")
-                                # observe_database fishing mode or school type unknown code = 0
-                                tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
-                                tmp$fmod2 <- NULL
-                                sets_long <- droplevels(tmp)
+                                if(nrow(test) > 0) {
+                                  train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
+                                  ntree <- 1000
+                                  set.seed(7)
+                                  rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
+                                                        data = train,
+                                                        mtry=2L,
+                                                        num.trees = ntree,
+                                                        min.node.size = 5L,
+                                                        splitrule = "gini",
+                                                        importance = "impurity",
+                                                        replace = TRUE,
+                                                        quantreg = FALSE,
+                                                        keep.inbag= FALSE)
+                                  test$fmod2 <- predict(rfg,
+                                                        data = test)$predictions
+                                  tmp <- dplyr::left_join(sets_long,
+                                                          test[, c("id_act","fmod2")],
+                                                          by = "id_act")
+                                  # observe_database fishing mode or school type unknown code = 0
+                                  tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
+                                  tmp$fmod2 <- NULL
+                                  sets_long <- droplevels(tmp)
+                                }
                               }
                               sets_long <- tidyr::separate(data = sets_long,
                                                            col = sp_cat,
