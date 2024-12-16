@@ -7237,7 +7237,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
                               catch_set_lb$sp_code <- NULL
                               ###########################################################################
-                              browser()
                               target_tuna <- c("BET", "SKJ", "YFT")
                               set_with_target_tuna <- catch_set_lb %>%
                                 dplyr::filter(sp %in% target_tuna) %>%
