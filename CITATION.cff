@@ -8,7 +8,7 @@ message: 'To cite package "t3" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 't3: Tropical Tuna Treatment'
-version: 1.0.0
+version: 2.0.0
 abstract: The multi-species nature of tropical tuna surface fisheries highlights a
   series of difficulties when catches are estimated by species and size statistics.
   The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and
@@ -17,6 +17,10 @@ abstract: The multi-species nature of tropical tuna surface fisheries highlights
   logbook data on species composition and provide more accurate catch estimations
   per species for the purse seiner fleet, especially European and Seychelles fleet.
 authors:
+- family-names: Clément
+  given-names: Jeanne
+  email: jeanne.clement@ird.fr
+  orcid: https://orcid.org/0000-0002-5228-5015
 - family-names: Depetris
   given-names: Mathieu
   email: mathieu.depetris@ird.fr
@@ -37,17 +41,13 @@ authors:
   given-names: Julien
   email: julien.lebranchu@ird.fr
   orcid: https://orcid.org/0000-0002-7759-0534
+repository-code: https://github.com/OB7-IRD/t3
+url: https://ob7-ird.github.io/t3
+contact:
 - family-names: Clément
   given-names: Jeanne
   email: jeanne.clement@ird.fr
   orcid: https://orcid.org/0000-0002-5228-5015
-repository-code: https://github.com/OB7-IRD/t3
-url: https://ob7-ird.github.io/t3
-contact:
-- family-names: Depetris
-  given-names: Mathieu
-  email: mathieu.depetris@ird.fr
-  orcid: https://orcid.org/0000-0001-8080-0531
 keywords:
 - pkgdown
 - r
