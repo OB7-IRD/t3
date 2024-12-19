@@ -3,16 +3,16 @@ Type: Package
 Title: Tropical Tuna Treatment
 Version: 2.0.0
 Authors@R:
-    c(person(given = "Mathieu",
-            family = "Depetris",
-            email = "mathieu.depetris@ird.fr",
-            role = c("aut"),
-            comment = c(ORCID = "0000-0001-8080-0531")),
-    person(given = "Jeanne",
+    c(person(given = "Jeanne",
            family = "Clément",
            email = "jeanne.clement@ird.fr",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5228-5015")),
+      person(given = "Mathieu",
+            family = "Depetris",
+            email = "mathieu.depetris@ird.fr",
+            role = c("aut"),
+            comment = c(ORCID = "0000-0001-8080-0531")),
     person(given = "Antoine",
            family = "Duparc",
            email = "antoine.duparc@ird.fr",
@@ -80,7 +80,7 @@ Depends:
 Imports: 
     adehabitatHR (>= 0.4.21),
     automap (>= 1.1.9),
-    boot (>= 1.3.28.1),
+    boot (>= 1.3.28),
     codama (>= 0.9.0),
     DBI (>= 1.2.2),
     dplyr (>= 1.1.4),
@@ -101,6 +101,6 @@ Suggests:
     markdown (>= 1.12),
     testthat (>= 3.0.0)
 Remotes: 
-    OB7-IRD/codama,
-    OB7-IRD/furdeb
+    github::OB7-IRD/codama,
+    github::OB7-IRD/furdeb
 Config/testthat/edition: 3
