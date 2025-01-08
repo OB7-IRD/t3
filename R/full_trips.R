@@ -6232,7 +6232,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   "year",
                                                                                                   "mon",
                                                                                                   "ocean",
-                                                                                                  "vessel")],
+                                                                                                  "vessel",
+                                                                                                  "flag_code")],
                                                               by = c("id_act", "year"))
                                 data_lb_sample_screened <- list(data4mod = data4mod)
                                 # export ----
@@ -6280,7 +6281,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # select for small fish catch only if parameter = T
                               if (small_fish_only == FALSE) {
                                 data4mod <- data4mod %>%
-                                  dplyr::group_by(id_act, date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::group_by(id_act, date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, flag_code, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
@@ -6291,7 +6292,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 prop_t3 = replace (prop_t3,
                                                                    wcat == "p10",
                                                                    value = 0)) %>%
-                                  dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, wtot_lb_t3) %>%
+                                  dplyr::group_by(id_act,date_act, year, mon, lat, lon, sp, fmod, ocean, vessel, flag_code, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
                                                    prop_t3 = sum(prop_t3),
                                                    w_lb_t3 = sum(w_lb_t3)) %>%
@@ -6557,30 +6558,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             dec = outputs_dec)
                                 current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
                                                                               list("covariance_matrix" = covariance_matrix))
-                                multi_collinearity_test <- rfUtilities::multi.collinear(x = current_model_data[, c("lat",
-                                                                                                                   "lon",
-                                                                                                                   "resp",
-                                                                                                                   "tlb",
-                                                                                                                   "wtot_lb_t3",
-                                                                                                                   "mon",
-                                                                                                                   "year")],
-                                                                                        perm = TRUE,
-                                                                                        leave.out = TRUE)
-                                write.table(x = multi_collinearity_test,
-                                            file = file.path(table_directory,
-                                                             paste("multi_collinearity_test_",
-                                                                   ocean,
-                                                                   "_",
-                                                                   specie,
-                                                                   "_",
-                                                                   fishing_mode,
-                                                                   ".csv",
-                                                                   sep = "")),
-                                            row.names = FALSE,
-                                            sep = outputs_sep,
-                                            dec = outputs_dec)
-                                current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
-                                                                              list("multi_collinearity_test" = multi_collinearity_test))
+
+                                # rfUtilities remove from CRAN - need to test collinearity with another method ----
+                                # multi_collinearity_test <- rfUtilities::multi.collinear(x = current_model_data[, c("lat",
+                                #                                                                                    "lon",
+                                #                                                                                    "resp",
+                                #                                                                                    "tlb",
+                                #                                                                                    "wtot_lb_t3",
+                                #                                                                                    "mon",
+                                #                                                                                    "year")],
+                                #                                                         perm = TRUE,
+                                #                                                         leave.out = TRUE)
+                                # write.table(x = multi_collinearity_test,
+                                #             file = file.path(table_directory,
+                                #                              paste("multi_collinearity_test_",
+                                #                                    ocean,
+                                #                                    "_",
+                                #                                    specie,
+                                #                                    "_",
+                                #                                    fishing_mode,
+                                #                                    ".csv",
+                                #                                    sep = "")),
+                                #             row.names = FALSE,
+                                #             sep = outputs_sep,
+                                #             dec = outputs_dec)
+                                # current_output_level3_process3[[2]] <- append(current_output_level3_process3[[2]],
+                                #                                               list("multi_collinearity_test" = multi_collinearity_test))
                                 # figure on logbook vs sample set
                                 logbook_vs_sample_1 <- ggplot2::ggplot(data = current_model_data,
                                                                        ggplot2::aes(y = prop_t3,
@@ -7215,15 +7218,30 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$mon <- lubridate::month(x = act_chr$date_act)
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
-                              # reduce data to the period considered in the modeling and check data availability
-                              act_chr <- act_chr %>% dplyr::filter(yr %in% target_year)
+                              # WARNING temporary flag_code converter to fao three letter code----
+                              country_flag_number <- vector()
+                              for(i in country_flag){
+                                country_flag_number_tmp <- switch (i,
+                                                                   "FRA" = 1,
+                                                                   "SEN" = 2,
+                                                                   "ESP" = 4,
+                                                                   "ITA" = 32,
+                                                                   "SYC" = 23,
+                                                                   "MYT" = 41
+                                )
+                                country_flag_number <- append(country_flag_number, country_flag_number_tmp)
+                              }
+                              # reduce dataset to the period and flag considered in the modeling and check data availability
+                              act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
+                                                                   flag_code %in% country_flag_number)
                               if (nrow(act_chr) == 0) {
                                 cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: NO data available for the selected target_year.\n",
+                                    " - Error: No data available for the selected target_year and/or country_flag\n",
                                     sep = "")
                                 stop()
                               }
+
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
                               catch_set_lb <- dplyr::inner_join(act_chr,
                                                                 catch_set_lb,
@@ -7231,7 +7249,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        "date_act",
                                                                        "code_act_type"))
                               ############################################################################
-                              # catches remove discard
+                              # WARNING catches remove discard----
                               # changer pour le code espece et la colonne discard
                               catch_discard <- catch_set_lb %>% dplyr::filter(sp_code %in% c(8, 800:899))
                               catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
@@ -7279,33 +7297,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
                                 dplyr::ungroup()
                               # set use for modeling to remove for prediction
-                              data4mod <- output_level3_process1
-                              sampleset <- unique(data4mod[, c("id_act",
-                                                               "fmod",
-                                                               "ocean",
-                                                               "year")])
+                              ##############################################################
+                              # WARNING - data are not filtered. sample data were so also predicted #----
+                              ##############################################################
+                              # data4mod <- output_level3_process1
+                              # sampleset <- unique(data4mod[, c("id_act",
+                              #                                  "fmod",
+                              #                                  "ocean",
+                              #                                  "year")])
 
-                              # act_chr$yr <- lubridate::year(x = act_chr$date_act)
-                              # act_chr$mon <- lubridate::month(x = act_chr$date_act)
-                              # act_chr$fmod <- as.factor(act_chr$fmod)
-                              # act_chr$vessel <- as.factor(act_chr$vessel)
-                              # non sampled set
-                              # reduce data to the period considered in the modeling and check data availability
-                              # act_chr <- act_chr %>% dplyr::filter(yr %in% target_year)
-                              # if (nrow(act_chr) == 0) {
-                              #   cat(format(x = Sys.time(),
-                              #              "%Y-%m-%d %H:%M:%S"),
-                              #       " - Error: NO data available for the selected target_year.\n",
-                              #       sep = "")
-                              #   stop()
-                              # }
-                              # add the weight by categories, species from logbook (corrected by t3 level 1)
-                              # sets <- dplyr::inner_join(act_chr,
-                              #                           catch_set_lb,
-                              #                           by = c("id_act",
-                              #                                  "date_act",
-                              #                                  "code_act_type"))
                               # catches keep onboard only = set
+                              # WARNING - fix the activity code according to the dev in level 1 and 2----
                               if(input_type == "observe_database"){
                                 sets <- catch_set_lb %>% dplyr::filter(code_act_type %in% c(6))
 
@@ -7412,6 +7414,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   fmod,
                                                   ocean,
                                                   vessel,
+                                                  flag_code,
                                                   wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
@@ -7431,6 +7434,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   fmod,
                                                   ocean,
                                                   vessel,
+                                                  flag_code,
                                                   wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
@@ -7514,6 +7518,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               options(warn = 1)
                               load(file = system.file("wrld_simpl.RData",
                                                       package = "t3"))
+
+                              # WARNING temporary flag_code converter to fao three letter code----
+                              country_flag_number <- vector()
+                              for(i in country_flag){
+                                country_flag_number_tmp <- switch (i,
+                                                                   "FRA" = 1,
+                                                                   "SEN" = 2,
+                                                                   "ESP" = 4,
+                                                                   "ITA" = 32,
+                                                                   "SYC" = 23,
+                                                                   "MYT" = 41
+                                )
+                                country_flag_number <- append(country_flag_number, country_flag_number_tmp)
+                              }
+
                               # function to add empty levels for the prediction with randomforest::predict.randomforest
                               addmissinglevel <- function(df, a){
                                 if (is.factor(df[, a])) {
@@ -7628,7 +7647,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                              species,
                                                                                                                              fishing_mode,
                                                                                                                              sep = "_")
-                                          # remove bad flag in samples ----
+                                          browser()
+                                          # WARNING remove bad flag in samples ----
                                           # apply the filtering in one time on the  outputs_level3_process5[[1]] list
                                           # res <- res %>% dplyr::filter()
                                           ##############################
@@ -7900,6 +7920,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # compute average tuna proportion in sets by fishing mode
                               # MIX with other tuna should have been corrected in process 1.3 (issue #98)
                               # only sets with only MIX should remained here
+                              browser()
                               catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
                                 dplyr::filter(sp != "MIX") %>%
                                 dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
@@ -7922,7 +7943,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::mutate(fmod = as.factor(0))
                                 tuna_compo_ave_sp_fmod <- dplyr::bind_rows(tuna_compo_ave_sp_fmod, tuna_compo_ave_sp)
                               }
-                              # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same speceis id_act. to remove when issue #98 fix
+                              # fit_prop_t3_ST = NULL is due to the fact that we have to sum with other weight for the same specis id_act. to remove when issue #98 fix
                               catch_mix_tuna_ST <- dplyr::left_join(catch_mix_tuna, tuna_compo_ave_sp_fmod, by = dplyr::join_by(fmod)) %>%
                                 dplyr::mutate(
                                   catch_set_fit = round(fit_prop_t3_ST * w_lb_t3, digits = 4),
@@ -8022,7 +8043,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  "capture_BET_categ1_corrigee","capture_BET_categ2_corrigee",	"capture_BET_categ3_corrigee")
 
                               # selection, renaming and new column
-
+                              browser()
                               set_all_output_long <- set_all_output %>% dplyr::select(name_select_columns_output) %>%
                                 dplyr::rename(species = sp, latitude_dec = lat, longitude_dec = lon, NUMBAT = vessel, code_assoc_groupe = fmod,
                                               capture = catch_set_fit, capture_ci_inf = ci_inf, capture_ci_sup = ci_sup,
