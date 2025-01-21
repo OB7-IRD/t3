@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -181,7 +181,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 
 <dt id="arg-flag-codes">flag_codes<a class="anchor" aria-label="anchor" href="#arg-flag-codes"></a></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
 
 <dt id="arg-ocean-codes">ocean_codes<a class="anchor" aria-label="anchor" href="#arg-ocean-codes"></a></dt>
@@ -225,11 +225,11 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 
 <dt id="arg-sunrise-schema">sunrise_schema<a class="anchor" aria-label="anchor" href="#arg-sunrise-schema"></a></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.</p></dd>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.</p></dd>
 
 
 <dt id="arg-sunset-schema">sunset_schema<a class="anchor" aria-label="anchor" href="#arg-sunset-schema"></a></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.</p></dd>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.</p></dd>
 
 
 <dt id="arg-maximum-lf-class">maximum_lf_class<a class="anchor" aria-label="anchor" href="#arg-maximum-lf-class"></a></dt>
@@ -237,23 +237,23 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 
 <dt id="arg-threshold-rf-minus-">threshold_rf_minus10<a class="anchor" aria-label="anchor" href="#arg-threshold-rf-minus-"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.</p></dd>
 
 
 <dt id="arg-threshold-rf-plus-">threshold_rf_plus10<a class="anchor" aria-label="anchor" href="#arg-threshold-rf-plus-"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.</p></dd>
 
 
 <dt id="arg-threshold-frequency-rf-minus-">threshold_frequency_rf_minus10<a class="anchor" aria-label="anchor" href="#arg-threshold-frequency-rf-minus-"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
 
 
 <dt id="arg-threshold-frequency-rf-plus-">threshold_frequency_rf_plus10<a class="anchor" aria-label="anchor" href="#arg-threshold-frequency-rf-plus-"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
 
 
 <dt id="arg-threshold-rf-total">threshold_rf_total<a class="anchor" aria-label="anchor" href="#arg-threshold-rf-total"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor (all categories). By default 250.</p></dd>
 
 
 <dt id="arg-periode-reference-level-">periode_reference_level3<a class="anchor" aria-label="anchor" href="#arg-periode-reference-level-"></a></dt>
@@ -281,7 +281,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 
 <dt id="arg-minimum-set-frequency">minimum_set_frequency<a class="anchor" aria-label="anchor" href="#arg-minimum-set-frequency"></a></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.</p></dd>
 
 
 <dt id="arg-vessel-id-ignored">vessel_id_ignored<a class="anchor" aria-label="anchor" href="#arg-vessel-id-ignored"></a></dt>
