@@ -33,13 +33,13 @@ from
 	join common.species sp on (ss.species = sp.topiaid)
 	join common.sizemeasuretype smt on (ss.sizemeasuretype = smt.topiaid)
 	left join ps_logbook.well w on (t.topiaid = w.trip and s.well = w.well)
-where 
+where
 	t.enddate between ?begin_time_period and ?end_time_period
-	and c.code in (?flag_codes)
+	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 	and st.code in (?sample_type_codes)
-order by 
+order by
 	trip_id
 	,sample_id
 	,well_id
