@@ -8,7 +8,7 @@ on:
   release:
     types: [published]
   push:
-    branches: [master, main]
+    branches: [master, main, development]
     paths:
       - DESCRIPTION
       - inst/CITATION
@@ -42,7 +42,14 @@ jobs:
           mykeys <- list()
 
           # Create your CITATION.cff file
+<<<<<<< HEAD
           cff_write(keys = mykeys)
+=======
+          cff_write(keys = mykeys,
+                    dependencies = FALSE,
+                    validate = TRUE,
+                    authors_roles = c("aut", "cre"))
+>>>>>>> development
 
         shell: Rscript {0}
 

@@ -33,7 +33,7 @@ from
 	left join ps_logbook.setsuccessstatus sss on (a.setsuccessstatus = sss.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
-	and c.code in (?flag_codes)
+	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 ;

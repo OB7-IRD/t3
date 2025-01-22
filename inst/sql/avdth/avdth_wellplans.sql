@@ -31,7 +31,7 @@ SELECT
 		& '.'
 		& cc.N_CUVE
 		& cc.F_POS_CUVE
-		& '.' 
+		& '.'
 		& e.N_ECH AS sample_id
 	,es.C_ESP AS species_code
 	,es.C_ESP_3L AS species_fao_code
@@ -49,14 +49,14 @@ FROM
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 WHERE
 	cc.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-	AND p.C_PAYS IN (?flag_codes)
+	AND p.C_ISO3166_A3 IN (?flag_codes)
 	AND tb.C_TYP_B IN (?vessel_type_codes)
 	AND 'fr.ird.avdth.entities.data.Trip#'
 			& format(cc.C_BAT, '0000')
 			& '#'
 			& YEAR(cc.D_DBQ)
 			& format(MONTH(cc.D_DBQ), '00')
-			& format(DAY(cc.D_DBQ), '00') IN (SELECT DISTINCT 
+			& format(DAY(cc.D_DBQ), '00') IN (SELECT DISTINCT
 												'fr.ird.avdth.entities.data.Trip#'
 													& format(a.C_BAT, '0000')
 													& '#'
@@ -69,7 +69,7 @@ WHERE
 												INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
 											WHERE
 												a.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
-												AND p.C_PAYS IN (?flag_codes)
+												AND p.C_ISO3166_A3 IN (?flag_codes)
 												AND a.C_OCEA IN (?ocean_codes))
 ORDER BY
 	wellplan_id

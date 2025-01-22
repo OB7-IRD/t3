@@ -40,9 +40,8 @@ years_period <- as.integer(c(2006,
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
 # countries for the France fleet
-countries <- c("FRA",
+flag_codes <- c("FRA",
                "MYT")
-flag_codes <- as.integer(c(1,41))
 # code 4,5 and 6 for Seiner with baits, Seiner without baits and Large seiner 
 vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
@@ -239,9 +238,8 @@ years_period <- as.integer(c(2006,
                              2008))
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
-countries <- c("FRA",
+flag_codes <- c("FRA",
                "MYT")
-flag_codes <- as.integer(c(1,41))
 # Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)
 vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean
@@ -308,9 +306,8 @@ years_period <- as.integer(c(2006,
 target_year <- as.integer(2008)
 period_duration <- as.integer(2)
 # countries for the France fleet
-countries <- c("FRA",
-               "MYT")
-flag_codes <- as.integer(c(1,41))
+flag_codes  <- c("FRA",
+                 "MYT")
 # Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)
 vessel_type_codes <- as.integer(c(4,5,6))
 # code 1 for the Atlantic Ocean

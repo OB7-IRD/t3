@@ -15,7 +15,7 @@
 #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-#' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+#' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -26,21 +26,21 @@
 #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
 #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
 #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
-#' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.
-#' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.
+#' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.
+#' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.
 #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
-#' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
-#' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
-#' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
-#' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
-#' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
+#' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.
+#' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.
+#' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.
+#' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.
+#' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
 #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
-#' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.
+#' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.
 #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.
 #' @param num.trees Object of type \code{\link[base]{integer}} expected. Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.
 #' @param mtry Object of type \code{\link[base]{integer}} expected. Number of variables randomly sampled as candidates at each split. The default value is 2.

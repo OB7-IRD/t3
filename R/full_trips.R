@@ -2306,20 +2306,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     } else {
                                                       catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
                                                     }
-                                                  if(catch_count == 0){
-                                                    current_activity$.__enclos_env__$private$set_duration  <- 0
-                                                  } else {
-                                                    current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
-                                                                                                                    digits=4)
+                                                    if(catch_count == 0){
+                                                      current_activity$.__enclos_env__$private$set_duration  <- 0
+                                                    } else {
+                                                      current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                                      digits=4)
+                                                    }
+                                                  } else{
+                                                    parameter_a <- current_set_duration_ref$parameter_a
+                                                    parameter_b <- current_set_duration_ref$parameter_b
+                                                    current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
+                                                                                                                   digits=4)
                                                   }
-                                                } else{
-                                                  parameter_a <- current_set_duration_ref$parameter_a
-                                                  parameter_b <- current_set_duration_ref$parameter_b
-                                                  current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
-                                                                                                                 digits=4)
-                                                }
-
-                                              } else {
+                                                  } else {
                                                 if ((referential_template == "observe"
                                                      && (current_activity$.__enclos_env__$private$activity_code == 6
                                                          & current_activity$.__enclos_env__$private$set_success_status_code == 1))
@@ -2338,7 +2337,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 } else {
                                                   current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
                                                                                                                  digits=4)
-                                                }
+                                               }
                                               }
                                             }
                                           } else {
@@ -7563,7 +7562,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
                               catch_set_lb$sp_code <- NULL
                               ###########################################################################
-
                               target_tuna <- c("BET", "SKJ", "YFT")
                               set_with_target_tuna <- catch_set_lb %>%
                                 dplyr::filter(sp %in% target_tuna) %>%
@@ -7685,6 +7683,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               #                            "YFT_m10",
                               #                            "YFT_p10")
                               # Assign fishing mode to unknown
+<<<<<<< HEAD
                               test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
                               if(nrow(test) > 0) {
                                 train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
@@ -7710,6 +7709,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
                                 tmp$fmod2 <- NULL
                                 sets_long <- droplevels(tmp)
+=======
+                              if(any(sets_wide$fmod == 0)){
+                                test <- droplevels(sets_wide[sets_wide$fmod == 0, ])
+                                if(nrow(test) > 0) {
+                                  train <- droplevels(sets_wide[sets_wide$fmod != 0, ])
+                                  ntree <- 1000
+                                  set.seed(7)
+                                  rfg <- ranger::ranger(fmod ~ YFT_p10 + BET_p10 + SKJ_m10 + YFT_m10 + BET_m10,
+                                                        data = train,
+                                                        mtry=2L,
+                                                        num.trees = ntree,
+                                                        min.node.size = 5L,
+                                                        splitrule = "gini",
+                                                        importance = "impurity",
+                                                        replace = TRUE,
+                                                        quantreg = FALSE,
+                                                        keep.inbag= FALSE)
+                                  test$fmod2 <- predict(rfg,
+                                                        data = test)$predictions
+                                  tmp <- dplyr::left_join(sets_long,
+                                                          test[, c("id_act","fmod2")],
+                                                          by = "id_act")
+                                  # observe_database fishing mode or school type unknown code = 0
+                                  tmp$fmod[tmp$fmod == 0] <- tmp$fmod2[tmp$fmod == 0]
+                                  tmp$fmod2 <- NULL
+                                  sets_long <- droplevels(tmp)
+                                }
+>>>>>>> development
                               }
                               sets_long <- tidyr::separate(data = sets_long,
                                                            col = sp_cat,

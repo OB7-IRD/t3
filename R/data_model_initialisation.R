@@ -11,7 +11,7 @@
 #' @param log_path Object of class {\link[base]{character}} expected. By default NULL. Path of the log file directory.
 #' @param log_name Object of class {\link[base]{character}} expected. By default "data_model_initialisation". Name of the log file.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-#' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+#' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
