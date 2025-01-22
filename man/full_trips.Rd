@@ -118,13 +118,13 @@ Function for filter full trips by a year(s) period.
 \subsection{Method \code{add_elementarycatches()}}{
 Function for add elementary catches in full trips object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarycatches(object_elementarycatches)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarycatches(elementarycatches)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{object_elementarycatches}}{Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.}
+\item{\code{elementarycatches}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected with elementarycatch(es) data.}
 }
 \if{html}{\out{</div>}}
 }

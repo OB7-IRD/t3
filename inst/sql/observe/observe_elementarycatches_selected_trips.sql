@@ -10,7 +10,7 @@ select
 	,sp.code::integer as species_code
 	,sp.faocode::text as species_fao_code
 	,c.weight::numeric as catch_weight
-	,c.count::numeric as catch_count
+	,c.count::integer as catch_count
 	,sf.code::integer as species_fate_code
 	,sf.label1::text as species_fate_label
 from

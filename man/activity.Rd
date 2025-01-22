@@ -27,6 +27,7 @@ Initialize function for R6 activities class.
   activity_number,
   activity_latitude,
   activity_longitude,
+  time_at_sea,
   set_count,
   set_success_status_code,
   set_success_status_label,
@@ -36,7 +37,7 @@ Initialize function for R6 activities class.
   objectoperation_code,
   objectoperation_label,
   objectoperation_id,
-  time_at_sea
+  elementarycatches = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -57,6 +58,8 @@ Initialize function for R6 activities class.
 
 \item{\code{activity_longitude}}{Object of class {\link[base]{numeric}} expected. Longitude, in decimal degree, of the activity.}
 
+\item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
+
 \item{\code{set_count}}{Object of class {\link[base]{integer}} expected. Number of set associated to the activity.}
 
 \item{\code{set_success_status_code}}{Object of class {\link[base]{integer}} expected. Code status of the set.}
@@ -75,10 +78,26 @@ Initialize function for R6 activities class.
 
 \item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Operation on floating object identification (unique topiaid from database).}
 
-\item{\code{time_at_sea}}{Object of class {\link[base]{integer}} expected. Time at sea in hours.}
+\item{\code{elementarycatches}}{Object of type \link[base]{data.frame} or \link[tibble]{tbl_df} with elementarycatch(es) data expected for catch activities and NULL for other activities (default).}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Mandatory column names and types of elementarycatch(es) data:
+\itemize{
+\item{elementarycatch_id: } Elementary catch identification (class{\link[base]{character}}).
+\item{ocean_code: } Ocean identification (class {\link[base]{integer}}).
+\item{school_type_code: } School type identification (class {\link[base]{integer}}).
+\item{weight_category_code: } Logbook weight category (class {\link[base]{integer}}).
+\item{weight_category_label: } Logbook weight category name identification (class{\link[base]{character}}).
+\item{species_code: } Species code identification (class {\link[base]{integer}}).
+\item{species_fao_code: } Species code identification on 3 characters (class{\link[base]{character}}).
+\item{species_fate_code: } Species fate code identification (class {\link[base]{integer}}).
+\item{catch_weight:} Catch weight in tonnes (class {\link[base]{numeric}}).
+\item{catch_count:} Catch count in number of specimens caught (class {\link[base]{integer}}).
+}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-activity-clone"></a>}}

@@ -654,7 +654,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                   }))
                                      private$activities <- object_activities
                                    },
-                                   #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
+                                   #' @description  Creation of a data frame object with elementarycatch(es).
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
                                    #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
@@ -669,7 +669,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
-                                   elementarycatches_object_creation = function(data_source = "observe_database",
+                                   elementarycatches_data = function(data_source = "observe_database",
                                                                                 database_connection = NULL,
                                                                                 years_period = NULL,
                                                                                 flag_codes = NULL,
@@ -950,39 +950,35 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful elementary catch(es) data importation R environment.")
+                                               " - Successful elementary catch(es) data importation from R environment.")
                                      }
                                      # 7 - Common data design ----
-                                     elementarycatch_data <- unclass(x = elementarycatch_data)
-                                     object_elementarycatches <- object_r6(class_name = "elementarycatches")
-                                     object_elementarycatches$add(lapply(X = seq_len(length.out = length(elementarycatch_data[[1]])),
-                                                                         FUN = function(elementarycatch_id) {
-                                                                           message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                                                                   " - Start importation of elementary catch element ",
-                                                                                   elementarycatch_id,
-                                                                                   ".\n",
-                                                                                   "[elementarycatch: ",
-                                                                                   elementarycatch_data[[2]][elementarycatch_id],
-                                                                                   "]")
-                                                                           elementarycatch <- elementarycatch$new(activity_id = elementarycatch_data$activity_id[elementarycatch_id],
-                                                                                                                  elementarycatch_id = elementarycatch_data$elementarycatch_id[elementarycatch_id],
-                                                                                                                  ocean_code = elementarycatch_data$ocean_code[elementarycatch_id],
-                                                                                                                  school_type_code = elementarycatch_data$school_type_code[elementarycatch_id],
-                                                                                                                  weight_category_code = elementarycatch_data$weight_category_code[elementarycatch_id],
-                                                                                                                  weight_category_label = elementarycatch_data$weight_category_label[elementarycatch_id],
-                                                                                                                  species_code = elementarycatch_data$species_code[elementarycatch_id],
-                                                                                                                  species_fao_code = elementarycatch_data$species_fao_code[elementarycatch_id],
-                                                                                                                  species_fate_code = elementarycatch_data$species_fate_code[elementarycatch_id],
-                                                                                                                  catch_weight = elementarycatch_data$catch_weight[elementarycatch_id],
-                                                                                                                  catch_count = elementarycatch_data$catch_count[elementarycatch_id])
-                                                                           message(format(x = Sys.time(),
-                                                                                          format = "%Y-%m-%d %H:%M:%S"),
-                                                                                   " - Successful importation of elementary catch element ",
-                                                                                   elementarycatch_id,
-                                                                                   ".")
-                                                                           return(elementarycatch)
-                                                                         }))
-                                     private$elementarycatches <- object_elementarycatches
+                                     # Check elementarycatches data column names and types
+                                     codama::r_table_checking(r_table=as.data.frame(elementarycatch_data),
+                                                              type="data.frame",
+                                                              column_name=c("activity_id",
+                                                                            "elementarycatch_id",
+                                                                            "ocean_code",
+                                                                            "school_type_code",
+                                                                            "weight_category_code",
+                                                                            "weight_category_label",
+                                                                            "species_code",
+                                                                            "species_fao_code",
+                                                                            "catch_weight",
+                                                                            "catch_count",
+                                                                            "species_fate_code"),
+                                                              column_type=c("character",
+                                                                            "character",
+                                                                            "integer",
+                                                                            "integer",
+                                                                            "character",
+                                                                            "character",
+                                                                            "integer",
+                                                                            "character",
+                                                                            "numeric",
+                                                                            "integer",
+                                                                            "integer"))
+                                     private$elementarycatches <- elementarycatch_data
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
@@ -2124,7 +2120,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      private$lengthsteps <- lengthstep_data
                                    },
-                                   #' @description Creation of a data frame object with weighted weigth of each set sampled.
+                                   #' @description Creation of a data frame object with weighted weight of each set sampled.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
                                    #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.

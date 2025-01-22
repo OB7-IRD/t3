@@ -251,18 +251,19 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 4 - Add elementary catches ----
                             #' @description Function for add elementary catches in full trips object.
-                            #' @param object_elementarycatches Object of type R6-elementarycatches expected. A R6 reference object of class elementarycatches.
+                            #' @param elementarycatches  Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected with elementarycatch(es) data.
                             #' @importFrom  future.apply future_lapply
-                            add_elementarycatches = function(object_elementarycatches) {
+                            add_elementarycatches = function(elementarycatches) {
                               # 4.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Argument \"data_selected\" empty.")
-                              } else if (! any(class(x = object_elementarycatches) == "elementarycatches")) {
+                              } else if (paste0(class(x =  elementarycatches),
+                                                collapse = " ") != "tbl_df tbl data.frame") {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"object_elementarycatches\" argument.")
+                                     " - Invalid \"elementarycatches\" argument.")
                               }
                               # 4.2 - Global process ----
                               for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
@@ -290,10 +291,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                           current_activity_id <- current_activities$extract(attribut_l1 = "data",
                                                                                                                                                                             attribut_l2 = "activity_id",
                                                                                                                                                                             id = activity_id)
-                                                                                                                          current_elementarycatches <- object_elementarycatches$filter_l1(filter = paste0("$path$activity_id == \"",
-                                                                                                                                                                                                          current_activity_id,
-                                                                                                                                                                                                          "\""),
-                                                                                                                                                                                          clone = TRUE)
+                                                                                                                          current_elementarycatches <- elementarycatches %>% dplyr::filter(activity_id==current_activity_id)
+                                                                                                                          if(nrow(current_elementarycatches)==0){ current_elementarycatches <- NULL}
                                                                                                                           current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
                                                                                                                         }))
                                                                             }
@@ -313,10 +312,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
                                              file = "NUL")
-                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                              capture.output(current_elementarycatches <- current_activities$extract_l1_element_value(element="elementarycatches"),
                                              file = "NUL")
-                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                             file = "NUL")
+                              current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
                               private$log_summary <- private$log_summary %>%
                                 dplyr::mutate(input_elementary_catches = NA_integer_,
                                               output_elementary_catches = NA_integer_,
@@ -325,12 +323,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                input_trips = length(x = unlist(x = private$data_selected)),
                                                input_full_trips = length(x = private$data_selected),
                                                input_activities = current_activities$count(),
-                                               input_elementary_catches = object_elementarycatches$count(),
+                                               input_elementary_catches = nrow(elementarycatches),
                                                output_trips = input_trips,
                                                output_full_trips = input_full_trips,
                                                output_activities = input_activities,
-                                               output_elementary_catches = current_elementarycatches$count(),
-                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")))) %>%
+                                               output_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
+                                               output_catch_weight_elementary_catches = current_elementarycatches %>%
+                                                 sapply(dplyr::summarize, catch_weight=sum(catch_weight, na.rm=TRUE)) %>%
+                                                 unlist() %>%
+                                                 sum()) %>%
                                 dplyr::relocate(input_elementary_catches,
                                                 .before = output_trips)
                               message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
@@ -395,10 +396,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
                                              file = "NUL")
-                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                              capture.output(current_elementarycatches <- current_activities$extract_l1_element_value(element="elementarycatches"),
                                              file = "NUL")
-                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                             file = "NUL")
+                              current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
                               capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
                                              file = "NUL")
                               capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
@@ -411,13 +411,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                input_trips = length(x = unlist(x = private$data_selected)),
                                                input_full_trips = length(x = private$data_selected),
                                                input_activities = current_activities$count(),
-                                               input_elementary_catches = current_elementarycatches$count(),
+                                               input_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
                                                input_elementary_landings = object_elementarylandings$count(),
                                                output_trips = input_trips,
                                                output_full_trips = input_full_trips,
                                                output_activities = input_activities,
                                                output_elementary_catches = input_elementary_catches,
-                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                               output_catch_weight_elementary_catches = sum(unlist(sapply(current_elementarycatches,
+                                                                                                          dplyr::summarize,
+                                                                                                          catch_weight=sum(catch_weight,
+                                                                                                                           na.rm=TRUE))))
+                                               ,
                                                output_elementary_landings = current_elementarylandings$count(),
                                                output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight")))) %>%
                                 dplyr::relocate(input_elementary_landings,
@@ -482,10 +486,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
                                              file = "NUL")
-                              capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                              capture.output(current_elementarycatches <- current_activities$extract_l1_element_value(element="elementarycatches"),
                                              file = "NUL")
-                              capture.output(current_elementarycatches$add(new_item = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                             file = "NUL")
+                              current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
                               capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
                                              file = "NUL")
                               capture.output(current_elementarylandings$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "elementarylandings"))),
@@ -507,7 +510,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                input_trips = length(x = unlist(x = private$data_selected)),
                                                input_full_trips = length(x = private$data_selected),
                                                input_activities = current_activities$count(),
-                                               input_elementary_catches = current_elementarycatches$count(),
+                                               input_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
                                                input_elementary_landings = current_elementarylandings$count(),
                                                input_wells = object_wells$count(),
                                                input_elementarysamplesraw = length(x = unlist(x = object_wells$extract_l1_element_value(element = "elementarysampleraw"))),
@@ -515,7 +518,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                output_full_trips = input_full_trips,
                                                output_activities = input_activities,
                                                output_elementary_catches = input_elementary_catches,
-                                               output_catch_weight_elementary_catches = sum(unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight"))),
+                                               output_catch_weight_elementary_catches = sum(unlist(sapply(current_elementarycatches,
+                                                                                                          dplyr::summarize,
+                                                                                                          catch_weight=sum(catch_weight,
+                                                                                                                           na.rm=TRUE)))),
                                                output_elementary_landings = input_elementary_landings,
                                                output_landing_weight_elementary_landings = sum(unlist(x = current_elementarylandings$extract_l1_element_value(element = "landing_weight"))),
                                                output_wells = current_wells$count(),
@@ -621,8 +627,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                            current_elementarycatches <- append(current_elementarycatches,
-                                                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
+                                            current_elementarycatches <- rbind(current_elementarycatches,
+                                                                               current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
                                           }
                                         }
                                       }
@@ -720,27 +726,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                       if (stop != 1) {
-                                        capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                        capture.output(current_elementarycatches <- NULL,
                                                        file = "NUL")
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                              if (length(x = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches) != 0) {
-                                                capture.output(current_elementarycatches$add(new_item = current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches),
-                                                               file = "NUL")
-                                              }
+                                              capture.output(current_elementarycatches <- rbind(current_elementarycatches,
+                                                                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches),
+                                                             file = "NUL")
                                             }
                                           }
                                         }
-                                        if (current_elementarycatches$count() == 0
+                                        if (nrow(current_elementarycatches) == 0
                                             || (! any((tidyr::crossing(species_fao_codes_rf1,
                                                                        species_fate_codes_rf1) %>%
                                                        dplyr::mutate(species_fao_fate_codes_rf1 = stringr::str_c(species_fao_codes_rf1,
                                                                                                                  species_fate_codes_rf1,
                                                                                                                  sep = "_")) %>%
-                                                       dplyr::pull(species_fao_fate_codes_rf1)) %in% (unique(x = paste(unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
-                                                                                                                       unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
+                                                       dplyr::pull(species_fao_fate_codes_rf1)) %in% (unique(x = paste(current_elementarycatches$species_fao_code,
+                                                                                                                       current_elementarycatches$species_fate_code,
                                                                                                                        sep = "_")))))) {
                                           # Case 2.2 ----
                                           # trips with no catches (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip item
@@ -752,17 +757,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
                                         } else {
                                           current_elementarycatches_weight <- vector(mode = "numeric")
-                                          capture.output(current_elementarycatches_final <- object_r6(class_name = "elementarycatches"),
+                                          capture.output(current_elementarycatches_final <- current_elementarycatches %>%  dplyr::filter(species_fao_code %in% species_fao_codes_rf1,
+                                                                                                                                         species_fate_code %in% species_fate_codes_rf1),
                                                          file = "NUL")
-                                          capture.output(current_elementarycatches_final$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
-                                                                                                                                                            paste0(species_fao_codes_rf1,
-                                                                                                                                                                   collapse = "\", \""),
-                                                                                                                                                            "\") & $path$species_fate_code %in% c(\"",
-                                                                                                                                                            paste0(species_fate_codes_rf1,
-                                                                                                                                                                   collapse = "\", \""),
-                                                                                                                                                            "\")"))),
-                                                         file = "NUL")
-                                          current_elementarycatches_weight <- unlist(x = current_elementarycatches_final$extract_l1_element_value(element = "catch_weight"))
+                                          current_elementarycatches_weight <- current_elementarycatches_final %>% dplyr::pull(catch_weight)
                                           capture.output(current_elementarylandings <- object_r6(class_name = "elementarylandings"),
                                                          file = "NUL")
                                           for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
@@ -826,7 +824,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                     } else {
-                                      # Case 3.1 ----
+                                      # Case 3.1 ----d
                                       current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
                                       current_trips$modification_l1(modification = "$path$statut_rf1 <- 3.1")
                                     }
@@ -840,12 +838,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                         current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                         if (! is.null(x = current_elementarycatches)) {
-                                          for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                            if (current_vessel_type_code %in% vessel_type_codes_rf1) {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight * current_rf1
-                                            } else {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1 <- NA_real_
-                                            }
+                                          if(current_vessel_type_code %in% vessel_type_codes_rf1){
+                                            current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                              dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
+                                          } else{
+                                            current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                              dplyr::mutate(catch_weight_rf1=NA_real_)
                                           }
                                         }
                                       }
@@ -886,24 +884,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                           current_activities_latitude_longitude <- dplyr::tibble(activity_id = unlist(x = current_activities$extract_l1_element_value(element = "activity_id")),
                                                                                                                                                  activity_latitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_latitude")),
                                                                                                                                                  activity_longitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_longitude")))
-                                                                                          if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                                                                            capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                                                                           file = "NUL")
-                                                                                            capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                                                                           file = "NUL")
-                                                                                            current_total_catches_species_activities <- tidyr::tibble(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
-                                                                                                                                                      species = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
-                                                                                                                                                      species_fate_code = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
-                                                                                                                                                      catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
-                                                                                                                                                      catch_count = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_count")),
-                                                                                                                                                      catch_weight_rf1 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf1"))) %>%
+                                                                                          capture.output(current_elementarycatches <- do.call(rbind,
+                                                                                                                                              current_activities$extract_l1_element_value(element = "elementarycatches")),
+                                                                                                         file = "NUL")
+                                                                                          if (length(current_elementarycatches) == 0) {
+                                                                                            elementarycatches <- FALSE
+                                                                                          } else {
+                                                                                            current_total_catches_species_activities <- current_elementarycatches %>%
+                                                                                              dplyr::select(activity_id,
+                                                                                                            species_fao_code,
+                                                                                                            species_fate_code,
+                                                                                                            catch_weight,
+                                                                                                            catch_count,
+                                                                                                            catch_weight_rf1) %>%
+                                                                                              dplyr::rename(species = species_fao_code) %>%
                                                                                               dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
                                                                                               dplyr::relocate(trip_id,
                                                                                                               .before = activity_id) %>%
                                                                                               dplyr::arrange(activity_id)
                                                                                             elementarycatches <- TRUE
-                                                                                          } else {
-                                                                                            elementarycatches <- FALSE
                                                                                           }
                                                                                         } else {
                                                                                           elementarycatches <- FALSE
@@ -1100,16 +1099,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_rf2 <- 1
                                           current_trip$.__enclos_env__$private$rf2 <- current_rf2
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 2
-                                          current_elementarycatches <- NULL
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                              current_elementarycatches <- append(current_elementarycatches,
-                                                                                  current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
-                                            }
-                                          }
-                                          if (length(x = current_elementarycatches) != 0) {
-                                            for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1
+                                              current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
+                                              if (length(x = current_elementarycatches) != 0) {
+                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                  dplyr::mutate(catch_weight_rf2 = catch_weight_rf1)
+                                              }
                                             }
                                           }
                                         }
@@ -1120,16 +1116,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                           current_trip$.__enclos_env__$private$rf2 <- NA_real_
                                           current_trip$.__enclos_env__$private$statut_rf2 <- 3
-                                          current_elementarycatches <- NULL
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
-                                              current_elementarycatches <- append(current_elementarycatches,
-                                                                                  current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
-                                            }
-                                          }
-                                          if (length(x = current_elementarycatches) != 0) {
-                                            for (elementarycatch_id in seq_len(length.out = length(x = current_elementarycatches))) {
-                                              current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf2 <- current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$catch_weight_rf1
+                                              current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
+                                              if (length(x = current_elementarycatches) != 0) {
+                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                  dplyr::mutate(catch_weight_rf2 = catch_weight_rf1)
+                                              }
                                             }
                                           }
                                         }
@@ -1171,22 +1164,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                current_activities_latitude_longitude <- dplyr::tibble(activity_id = unlist(x = current_activities$extract_l1_element_value(element = "activity_id")),
                                                                                                                                       activity_latitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_latitude")),
                                                                                                                                       activity_longitude = unlist(x = current_activities$extract_l1_element_value(element = "activity_longitude")))
-                                                                               if (length(x = unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                                                                 capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                                                                file = "NUL")
-                                                                                 capture.output(current_elementarycatches$add(unlist(x = current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                                                                file = "NUL")
-                                                                                 current_total_catches_species_activities <- data.frame(activity_id = unlist(x = current_elementarycatches$extract_l1_element_value(element = "activity_id")),
-                                                                                                                                        species = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
-                                                                                                                                        species_fate_code = unlist(x = current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
-                                                                                                                                        catch_weight = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight")),
-                                                                                                                                        catch_count = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_count")),
-                                                                                                                                        catch_weight_rf2 = unlist(x = current_elementarycatches$extract_l1_element_value(element = "catch_weight_rf2"))) %>%
+                                                                               capture.output(current_elementarycatches <- do.call(rbind,
+                                                                                                                                   current_activities$extract_l1_element_value(element = "elementarycatches")),
+                                                                                              file = "NUL")
+                                                                               if (length(current_elementarycatches) == 0) {
+                                                                                 elementarycatches <- FALSE
+                                                                               } else {
+                                                                                 current_total_catches_species_activities <- current_elementarycatches %>%
+                                                                                   dplyr::select(activity_id,
+                                                                                                 species_fao_code,
+                                                                                                 species_fate_code,
+                                                                                                 catch_weight,
+                                                                                                 catch_count,
+                                                                                                 catch_weight_rf2) %>%
+                                                                                   dplyr::rename(species = species_fao_code) %>%
                                                                                    dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
                                                                                    dplyr::arrange(activity_id)
                                                                                  elementarycatches <- TRUE
-                                                                               } else {
-                                                                                 elementarycatches <- FALSE
                                                                                }
                                                                              } else {
                                                                                elementarycatches <- FALSE
@@ -1283,9 +1277,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (output_format == "us") {
                                     outputs_dec <- "."
                                     outputs_sep <- ","
+                                    output_fileEncoding = ""
                                   } else if (output_format == "eu") {
                                     outputs_dec <- ","
                                     outputs_sep <- ";"
+                                    output_fileEncoding = "UTF-16LE"
                                   } else {
                                     warning(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -1379,13 +1375,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      file = "NUL")
                                       capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
                                                      file = "NUL")
-                                      if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                        capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
-                                                       file = "NUL")
-                                        capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                       file = "NUL")
-                                        current_elementarycatches$modification_l1(modification = "$path$weight_category_code_corrected <- NA_character_")
-                                        current_elementarycatches$modification_l1(modification = "$path$catch_weight_category_code_corrected <- NA_real_")
+                                      capture.output(current_elementarycatches <- do.call(rbind,
+                                                                                          current_activities$extract_l1_element_value(element = "elementarycatches")),
+                                                     file = "NUL")
+                                      if (length(current_elementarycatches) != 0) {
+                                        for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
+                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                          if (length(current_trip$.__enclos_env__$private$activities) != 0) {
+                                            for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
+                                              current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
+                                              if (length(current_elementarycatches) != 0) {
+                                              current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                dplyr::mutate(weight_category_code_corrected=NA_character_,
+                                                              catch_weight_category_code_corrected=NA_real_)
+                                              }
+                                            }
+                                          }
+                                        }
                                       }
                                     }
                                   } else {
@@ -1408,67 +1414,63 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                            "]")
                                     } else {
-                                      # first stage: conversion of all categories except for unknown (category 9)
+                                      # first stage: conversion of all categories except for unknown (category 9) ----
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6) else c(0, 1, 2, 14))) {
+                                            current_elementarycatches_corrected <- NULL
+                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean_code
                                                 school_type_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$school_type_code
-                                                for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches))) {
-                                                  current_elementarycatch <- current_elementarycatches[[elementarycatch_id]]
+
+                                                for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
+                                                  current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
                                                   current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
-                                                                                                        yes = stringr::str_extract(string = current_elementarycatch$.__enclos_env__$private$weight_category_code,
+                                                                                                        yes = stringr::str_extract(string = current_elementarycatch$weight_category_code,
                                                                                                                                    pattern = "[:digit:]+$"),
-                                                                                                        no = current_elementarycatch$.__enclos_env__$private$weight_category_code))
-                                                  if ( ! is.na(x = current_weight_category_code)) {
+                                                                                                        no = current_elementarycatch$weight_category_code))
+                                                  if ( !is.na(x = current_weight_category_code)){
                                                     if (ocean_activity == 1) {
                                                       # for atlantic ocean
                                                       if (school_type_activity %in% (if (referential_template == "observe") c(2, 0) else c(2, 3))) {
                                                         # for free school and undetermined school
-                                                        if (current_elementarycatch$.__enclos_env__$private$species_fao_code %in% c("YFT",
-                                                                                                                                    "BET",
-                                                                                                                                    "ALB")) {
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT",
+                                                                                                            "BET",
+                                                                                                            "ALB")) {
                                                           # for YFT, BET and ALB
                                                           if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_2
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
                                                           } else if (current_weight_category_code %in% c(3, 12)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_2
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 6) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_2
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.5
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_3
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.5
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
                                                           } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_3
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 11) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_2
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.1
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_3
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.9
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
+                                                            current_elementarycatch$weight_category_code_corrected[2]  <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
                                                           } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
                                                             stop(format(Sys.time(),
                                                                         "%Y-%m-%d %H:%M:%S"),
@@ -1478,43 +1480,40 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "[trip: ",
                                                                  current_trip$.__enclos_env__$private$trip_id,
                                                                  ", activity: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                                 current_elementarycatch$activity_id,
                                                                  ", elementarycatch: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                                 current_elementarycatch$elementarycatch_id,
                                                                  "]")
                                                           }
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$species_fao_code == "SKJ") {
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
                                                           if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                         }
                                                       } else {
                                                         # for floating object school
-                                                        if (current_elementarycatch$.__enclos_env__$private$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
                                                           if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2 * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2 * 0.8
                                                           } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
                                                             stop(format(Sys.time(),
                                                                         "%Y-%m-%d %H:%M:%S"),
@@ -1524,46 +1523,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "[trip: ",
                                                                  current_trip$.__enclos_env__$private$trip_id,
                                                                  ", activity: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                                 current_elementarycatch$activity_id,
                                                                  ", elementarycatch: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                                 current_elementarycatch$elementarycatch_id,
                                                                  "]")
                                                           }
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$species_fao_code == "SKJ") {
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
                                                           if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                         }
                                                       }
                                                     } else if (ocean_activity == 2) {
                                                       # for indian ocean
                                                       if (school_type_activity %in% (if (referential_template == "observe") c(2, 0) else c(2, 3))) {
                                                         # for free school and undetermined school
-                                                        if (current_elementarycatch$.__enclos_env__$private$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
                                                           if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
                                                           } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
                                                             stop(format(Sys.time(),
                                                                         "%Y-%m-%d %H:%M:%S"),
@@ -1573,43 +1570,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "[trip: ",
                                                                  current_trip$.__enclos_env__$private$trip_id,
                                                                  ", activity: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                                 current_elementarycatch$activity_id,
                                                                  ", elementarycatch: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                                 current_elementarycatch$elementarycatch_id,
                                                                  "]")
                                                           }
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$species_fao_code == "SKJ") {
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
                                                           if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                         }
                                                       } else {
                                                         # for floating object school
-                                                        if (current_elementarycatch$.__enclos_env__$private$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
                                                           if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch_tmp <- current_elementarycatch$clone()
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2 * 0.2
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch_tmp$.__enclos_env__$private$catch_weight_rf2 * 0.8
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_elementarycatch_tmp)
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
                                                           } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
                                                             stop(format(Sys.time(),
                                                                         "%Y-%m-%d %H:%M:%S"),
@@ -1619,22 +1614,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "[trip: ",
                                                                  current_trip$.__enclos_env__$private$trip_id,
                                                                  ", activity: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$activity_id,
+                                                                 current_elementarycatch$activity_id,
                                                                  ", elementarycatch: ",
-                                                                 current_elementarycatch$.__enclos_env__$private$elementarycatch_id,
+                                                                 current_elementarycatch$elementarycatch_id,
                                                                  "]")
                                                           }
-                                                        } else if (current_elementarycatch$.__enclos_env__$private$species_fao_code == "SKJ") {
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
                                                           if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
-                                                            current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                         }
                                                       }
                                                     } else {
@@ -1650,39 +1645,45 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            "]")
                                                     }
                                                   } else {
-                                                    current_elementarycatch$.__enclos_env__$private$weight_category_code_corrected <- category_5
-                                                    current_elementarycatch$.__enclos_env__$private$catch_weight_category_code_corrected <- current_elementarycatch$.__enclos_env__$private$catch_weight_rf2
+                                                    current_elementarycatch$weight_category_code_corrected <- category_5
+                                                    current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                   }
+                                                  current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected ,
+                                                                                               current_elementarycatch)
                                                 }
+                                                private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
                                               }
                                             }
                                           }
                                         }
                                       }
-                                      # second stage: conversion of category unknown (category 9) if possible
+                                      # second stage: conversion of category unknown (category 9) if possible ----
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
-                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        current_elementarycatches <- vector(mode = "list")
-                                        if (length(current_trip$.__enclos_env__$private$activities) != 0) {
-                                          for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
-                                            current_elementarycatches <- append(current_elementarycatches,
-                                                                                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches)
-                                          }
+                                        capture.output(current_trip <- object_r6(class_name = "trips"),
+                                                       file = "NUL")
+                                        capture.output(current_trip$add(new_item = private$data_selected[[full_trip_id]]),
+                                                       file = "NUL")
+                                        if (length(x=current_trip$extract_l1_element_value(element = "activities")) != 0) {
+                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities$add(new_item = unlist(current_trip$extract_l1_element_value(element = "activities"))),
+                                                         file = "NUL")
+                                          current_elementarycatches <- do.call(rbind, current_activities$extract_l1_element_value(element = "elementarycatches"))
                                         }
                                         if (length(current_elementarycatches) != 0) {
                                           category_9 <- FALSE
                                           names(x = category_9) <- 0
                                           other_category <- FALSE
                                           names(x = other_category) <- 0
-                                          for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches))) {
+                                          for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
                                             #find NA weight_category_code
                                             current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
-                                                                                                  yes = stringr::str_extract(string = current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$weight_category_code,
+                                                                                                  yes = stringr::str_extract(string = current_elementarycatches$weight_category_code[elementarycatch_id],
                                                                                                                              pattern = "[:digit:]+$"),
-                                                                                                  no = current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$weight_category_code))
+                                                                                                  no = current_elementarycatches$weight_category_code[elementarycatch_id]))
                                             if ((is.na(x = current_weight_category_code)
                                                  | current_weight_category_code == 9)
-                                                & current_elementarycatches[[elementarycatch_id]]$.__enclos_env__$private$species_fao_code %in% c("YFT", "BET", "ALB", "SKJ")) {
+                                                & current_elementarycatches$species_fao_code[elementarycatch_id] %in% c("YFT", "BET", "ALB", "SKJ")) {
                                               category_9 <- append(category_9,
                                                                    TRUE)
                                               names(x = category_9)[length(category_9)] <- elementarycatch_id
@@ -1697,9 +1698,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               strate_category_9 <- vector(mode = "character")
                                               for (names_category_9_id in as.numeric(x = names(x = category_9))) {
                                                 strate_category_9 <- append(strate_category_9,
-                                                                            paste(current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$school_type_code,
-                                                                                  current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$ocean_code,
-                                                                                  current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$species_fao_code,
+                                                                            paste(current_elementarycatches$school_type_code[names_category_9_id],
+                                                                                  current_elementarycatches$ocean_code[names_category_9_id],
+                                                                                  current_elementarycatches$species_fao_code[names_category_9_id],
                                                                                   sep = "_"))
                                               }
                                               other_category <- other_category[-1]
@@ -1712,37 +1713,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                            split = "_"))[3]
                                                 current_other_category <- vector(mode = "list")
                                                 for (names_other_category_id in as.numeric(x = names(x = other_category))) {
-                                                  if (current_elementarycatches[[names_other_category_id]]$.__enclos_env__$private$school_type_code == school_type &
-                                                      current_elementarycatches[[names_other_category_id]]$.__enclos_env__$private$ocean_code == ocean &
-                                                      current_elementarycatches[[names_other_category_id]]$.__enclos_env__$private$species_fao_code == species) {
-                                                    current_other_category <- append(current_other_category,
-                                                                                     current_elementarycatches[[names_other_category_id]])
+                                                  if (current_elementarycatches$school_type_code[names_other_category_id] == school_type &
+                                                      current_elementarycatches$ocean_code[names_other_category_id] == ocean &
+                                                      current_elementarycatches$species_fao_code[names_other_category_id] == species) {
+                                                    current_other_category <-  rbind(current_other_category,
+                                                                                     current_elementarycatches[names_other_category_id,])
                                                   }
                                                 }
                                                 if (length(current_other_category) != 0) {
                                                   current_category_9 <- vector(mode = "list")
                                                   for (names_category_9_id in as.numeric(x = names(x = category_9))) {
-                                                    if (current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$school_type_code == school_type &
-                                                        current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$ocean_code == ocean &
-                                                        current_elementarycatches[[names_category_9_id]]$.__enclos_env__$private$species_fao_code == species) {
-                                                      current_category_9 <- append(current_category_9,
-                                                                                   current_elementarycatches[[names_category_9_id]])
+                                                    if (current_elementarycatches$school_type_code[names_category_9_id]  == school_type &
+                                                        current_elementarycatches$ocean_code[names_category_9_id] == ocean &
+                                                        current_elementarycatches$species_fao_code[names_category_9_id] == species) {
+                                                      current_category_9 <- rbind(current_category_9,
+                                                                                   current_elementarycatches[names_category_9_id,])
                                                     }
                                                   }
-                                                  total_catch_weight_category_code_corrected <- sum(sapply(seq_len(length.out = length(current_other_category)),
-                                                                                                           function(i) {
-                                                                                                             current_other_category[[i]]$.__enclos_env__$private$catch_weight_category_code_corrected
-                                                                                                           }))
-                                                  other_category_names <- unique(sapply(X = seq_len(length.out = length(current_other_category)),
-                                                                                        FUN = function(i) {
-                                                                                          current_other_category[[i]]$.__enclos_env__$private$weight_category_code_corrected
-                                                                                        }))
+                                                  total_catch_weight_category_code_corrected <- sum(current_other_category$catch_weight_category_code_corrected)
+                                                  other_category_names <- unique(current_other_category$weight_category_code_corrected)
                                                   proportion <- vector(mode = "numeric")
                                                   for (other_category_names_id in other_category_names) {
-                                                    weight_category_corrected <- sum(sapply(X = seq_len(length.out = length(x = current_other_category)),
+                                                    weight_category_corrected <- sum(sapply(X = seq_len(length.out = nrow(x = current_other_category)),
                                                                                             FUN = function(i) {
-                                                                                              if (current_other_category[[i]]$.__enclos_env__$private$weight_category_code_corrected == other_category_names_id) {
-                                                                                                current_other_category[[i]]$.__enclos_env__$private$catch_weight_category_code_corrected
+                                                                                              if (current_other_category$weight_category_code_corrected[i] == other_category_names_id) {
+                                                                                                current_other_category$catch_weight_category_code_corrected[i]
                                                                                               } else {
                                                                                                 0
                                                                                               }
@@ -1751,20 +1746,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                          weight_category_corrected / total_catch_weight_category_code_corrected)
                                                     names(x = proportion)[length(x = proportion)] <- other_category_names_id
                                                   }
-                                                  for (category_9_id in seq_len(length.out = length(x = current_category_9))) {
+                                                  for (category_9_id in seq_len(length.out =nrow(x = current_category_9))) {
                                                     for (proportion_id in seq_len(length.out = length(x = proportion))) {
                                                       if (proportion_id == length(x = proportion)) {
-                                                        current_category_9[[category_9_id]]$.__enclos_env__$private$weight_category_code_corrected <- names(x = proportion)[proportion_id]
-                                                        current_category_9[[category_9_id]]$.__enclos_env__$private$catch_weight_category_code_corrected <- current_category_9[[category_9_id]]$.__enclos_env__$private$catch_weight_rf2 * as.numeric(x = proportion[proportion_id])
-                                                      } else {
-                                                        current_category_9_tmp <- current_category_9[[category_9_id]]$clone()
-                                                        current_category_9_tmp$.__enclos_env__$private$weight_category_code_corrected <- names(x = proportion)[proportion_id]
-                                                        current_category_9_tmp$.__enclos_env__$private$catch_weight_category_code_corrected <- current_category_9_tmp$.__enclos_env__$private$catch_weight_rf2 * as.numeric(x = proportion[proportion_id])
-                                                        for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
-                                                          if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id == current_category_9_tmp$.__enclos_env__$private$activity_id) {
-                                                            private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- append(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches,
-                                                                                                                                                                                                                   current_category_9_tmp)
-                                                          }
+                                                        current_category_9$weight_category_code_corrected[category_9_id] <- names(x = proportion)[proportion_id]
+                                                        current_category_9$catch_weight_category_code_corrected[category_9_id] <- current_category_9$catch_weight_rf2[category_9_id] * as.numeric(x = proportion[proportion_id])
+                                                      }
+                                                      for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
+                                                        if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id %in% current_category_9$activity_id) {
+                                                          private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
+                                                                                                                                                                                                                  dplyr::filter(!elementarycatch_id %in% current_category_9$elementarycatch_id),
+                                                                                                                                                                                                                current_category_9)
                                                         }
                                                       }
                                                     }
@@ -1797,9 +1789,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(activities_selected$add(new_item = unlist(x = trips_selected$extract_l1_element_value(element = "activities"))),
                                                  file = "NUL")
-                                  capture.output(elementarycatches_selected <- object_r6(class_name = "elementarycatches"),
-                                                 file = "NUL")
-                                  capture.output(elementarycatches_selected$add(new_item = unlist(x = activities_selected$extract_l1_element_value(element = "elementarycatches"))),
+                                  capture.output(elementarycatches_selected <- do.call(rbind, activities_selected$extract_l1_element_value(element = "elementarycatches")),
                                                  file = "NUL")
                                   outputs_process_1_3_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                          FUN = function(full_trip_id) {
@@ -1835,15 +1825,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")))
-                                  outputs_process_1_3_elementarycatches <- data.frame("activity_id" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "activity_id")),
-                                                                                      "elementarycatch_id" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "elementarycatch_id")),
-                                                                                      "species_fao_code" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "species_fao_code")),
-                                                                                      "weight_category_code" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "weight_category_code")),
-                                                                                      "weight_category_label" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "weight_category_label")),
-                                                                                      "catch_weight_rf2" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "catch_weight_rf2")),
-                                                                                      "weight_category_code_corrected" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "weight_category_code_corrected")),
-                                                                                      "catch_weight_category_code_corrected" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "catch_weight_category_code_corrected")),
-                                                                                      "catch_count" = unlist(x = elementarycatches_selected$extract_l1_element_value(element = "catch_count")))
+                                  outputs_process_1_3_elementarycatches <- data.frame("activity_id" = elementarycatches_selected$activity_id,
+                                                                                      "elementarycatch_id" = elementarycatches_selected$elementarycatch_id,
+                                                                                      "species_fao_code" = elementarycatches_selected$species_fao_code,
+                                                                                      "weight_category_code" = elementarycatches_selected$weight_category_code,
+                                                                                      "weight_category_label" = elementarycatches_selected$weight_category_label,
+                                                                                      "catch_weight_rf2" = elementarycatches_selected$catch_weight_rf2,
+                                                                                      "weight_category_code_corrected" = elementarycatches_selected$weight_category_code_corrected,
+                                                                                      "catch_weight_category_code_corrected" = elementarycatches_selected$catch_weight_category_code_corrected,
+                                                                                      "catch_count" = elementarycatches_selected$catch_count)
                                   outputs_process_1_3 <- outputs_process_1_3_elementarycatches %>%
                                     dplyr::left_join(outputs_process_1_3_activities,
                                                      by = "activity_id") %>%
@@ -1884,7 +1874,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                "process_1_3.csv"),
                                               row.names = FALSE,
                                               sep = outputs_sep,
-                                              dec = outputs_dec)
+                                              dec = outputs_dec,
+                                              fileEncoding=output_fileEncoding)
                                   message(format(x = Sys.time(),
                                                  format = "%Y-%m-%d %H:%M:%S"),
                                           " - Outputs extracted in the following directory:\n",
@@ -1968,48 +1959,40 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]
                                           if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in%
                                               (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
-                                            capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                            capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
                                                            file = "NUL")
-                                            if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
-                                              capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
-                                                             file = "NUL")
-                                              catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
-                                                                                            FUN = function(l) {
-                                                                                              if (is.null(x = current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected)) {
-                                                                                                stop(format(Sys.time(),
-                                                                                                            "%Y-%m-%d %H:%M:%S"),
-                                                                                                     " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
-                                                                                                     "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
-                                                                                                     "\n[trip: ",
-                                                                                                     current_activity$.__enclos_env__$private$trip_id,
-                                                                                                     ", activity: ",
-                                                                                                     current_activity$.__enclos_env__$private$activity_id,
-                                                                                                     "]")
-                                                                                              } else {
-                                                                                                current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected
-                                                                                              }
-                                                                                            }), na.rm=TRUE)
-
+                                            if (length(current_elementarycatches) != 0) {
+                                              if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                                stop(format(Sys.time(),
+                                                            "%Y-%m-%d %H:%M:%S"),
+                                                     " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                     "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                     "\n[trip: ",
+                                                     current_activity$.__enclos_env__$private$trip_id,
+                                                     ", activity: ",
+                                                     current_activity$.__enclos_env__$private$activity_id,
+                                                     "]")
+                                              }
+                                              else{
+                                                catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
+                                                                                       na.rm=TRUE)
+                                              }
 
                                               if (catch_weight_category_corrected == 0) {
-                                                catch_count <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
-                                                                          FUN = function(l) {
-                                                                            if (is.na(x = current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected)
-                                                                                & is.na(x = current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_count)) {
-                                                                              stop(format(Sys.time(),
-                                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                                   " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
-                                                                                   "Check the data.",
-                                                                                   "\n[trip: ",
-                                                                                   current_activity$.__enclos_env__$private$trip_id,
-                                                                                   ", activity: ",
-                                                                                   current_activity$.__enclos_env__$private$activity_id,
-                                                                                   "]")
-                                                                            } else {
-                                                                              current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_count
-                                                                            }
-                                                                          }), na.rm=TRUE)
-
+                                                if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
+                                                    && is.na(x = current_elementarycatches$catch_count))) {
+                                                  stop(format(Sys.time(),
+                                                              "%Y-%m-%d %H:%M:%S"),
+                                                       " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
+                                                       "Check the data.",
+                                                       "\n[trip: ",
+                                                       current_activity$.__enclos_env__$private$trip_id,
+                                                       ", activity: ",
+                                                       current_activity$.__enclos_env__$private$activity_id,
+                                                       "]")
+                                                } else {
+                                                  catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
+                                                }
                                                 current_activity$.__enclos_env__$private$positive_set_count <- ifelse(catch_count==0, 0, current_activity$.__enclos_env__$private$set_count)
 
                                               } else {
@@ -2289,33 +2272,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    current_activity$.__enclos_env__$private$activity_id,
                                                    "]")
                                             } else {
-                                              if (length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
-                                                capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                                capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
                                                                file = "NUL")
-                                                capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
-                                                               file = "NUL")
-                                                catch_weight_category_corrected <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
-                                                                                              FUN = function(l) {
-                                                                                                if (is.null(x = current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected)) {
-                                                                                                  stop(format(Sys.time(),
-                                                                                                              "%Y-%m-%d %H:%M:%S"),
-                                                                                                       " - Error: invalid \"set_duration_ref\" argument.\n",
-                                                                                                       "No correspondance with activity parameters (ocean and/or school type).\n",
-                                                                                                       "[trip: ",
-                                                                                                       current_trip$.__enclos_env__$private$trip_id,
-                                                                                                       ", activity: ",
-                                                                                                       current_activity$.__enclos_env__$private$activity_id,
-                                                                                                       "]")
-                                                                                                } else {
-                                                                                                  current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_weight_category_code_corrected
-                                                                                                }
-                                                                                              }), na.rm=TRUE)
-                                                if (catch_weight_category_corrected == 0) {
-                                                  catch_count <- sum(sapply(X = seq_len(length.out = current_elementarycatches$count()),
-                                                                            FUN = function(l) {
-                                                                              current_elementarycatches$extract(id = l)[[1]]$.__enclos_env__$private$catch_count
-                                                                            }), na.rm=TRUE)
-                                                  if(catch_count == 0){ current_activity$.__enclos_env__$private$set_duration  <- 0
+                                                if (length(current_elementarycatches) != 0) {
+                                                  if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                                    stop(format(Sys.time(),
+                                                                "%Y-%m-%d %H:%M:%S"),
+                                                         " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                         "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                         "\n[trip: ",
+                                                         current_activity$.__enclos_env__$private$trip_id,
+                                                         ", activity: ",
+                                                         current_activity$.__enclos_env__$private$activity_id,
+                                                         "]")
+                                                  }
+                                                  else{
+                                                    catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
+                                                                                           na.rm=TRUE)
+                                                  }
+
+                                                  if (catch_weight_category_corrected == 0) {
+                                                    if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
+                                                            && is.na(x = current_elementarycatches$catch_count))) {
+                                                      stop(format(Sys.time(),
+                                                                  "%Y-%m-%d %H:%M:%S"),
+                                                           " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
+                                                           "Check the data.",
+                                                           "\n[trip: ",
+                                                           current_activity$.__enclos_env__$private$trip_id,
+                                                           ", activity: ",
+                                                           current_activity$.__enclos_env__$private$activity_id,
+                                                           "]")
+                                                    } else {
+                                                      catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
+                                                    }
+                                                  if(catch_count == 0){
+                                                    current_activity$.__enclos_env__$private$set_duration  <- 0
                                                   } else {
                                                     current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
                                                                                                                     digits=4)
@@ -3033,12 +3025,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               # Subtract the duration of activities with elementary catches from the total fishing time.
                                               fishing_time_tmp2 <- fishing_time_tmp - catch_time
                                               current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
-                                                                                                                    round(fishing_time_tmp2/current_activities_date_fishing$count()),
-                                                                                                                    digits=4))
+                                                                                                                    round(fishing_time_tmp2/current_activities_date_fishing$count(),
+                                                                                                                    digits=4)))
 
                                             } else if(all(unique(x=current_activities_code) %in% catch_activity_codes)){
                                               new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
-                                              new_activity$.__enclos_env__$private$elementarycatches <- list()
+                                              new_activity$.__enclos_env__$private$elementarycatches <- NULL
                                               new_activity$.__enclos_env__$private$objectoperation_code <- NA
                                               new_activity$.__enclos_env__$private$objectoperation_label <- NA
                                               new_activity$.__enclos_env__$private$objectoperation_id <- NA
@@ -3507,26 +3499,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             oceans_activities <- unique(unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "ocean_code")))
                                             if (length(oceans_activities) != 1) {
-                                              capture.output(current_elementary_catches <- object_r6(class_name = "elementarycatches"),
+                                              capture.output(current_elementary_catches <- do.call(rbind,
+                                                                                                   current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches")),
                                                              file = "NUL")
-                                              capture.output(current_elementary_catches$add(new_item = unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches"))),
-                                                             file = "NUL")
-                                              if (any(is.null(x = unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_code_corrected"))))) {
+                                              if (any(is.null(x = current_elementary_catches$catch_weight_category_code_corrected))) {
                                                 stop(format(Sys.time(),
                                                             "%Y-%m-%d %H:%M:%S"),
                                                      " - Variable \"catch_weight_category_code_corrected\" not calculated. Run steps 1.1 to 1.3 of level 1 before this step.")
                                               } else {
-                                                total_current_elementary_catches <- sum(unlist(current_elementary_catches$extract_l1_element_value(element = "catch_weight_category_code_corrected")))
+                                                total_current_elementary_catches <- sum(current_elementary_catches$catch_weight_category_code_corrected)
                                                 oceans_activities_weight <- as.numeric()
                                                 for (current_ocean_activites in oceans_activities) {
-                                                  capture.output(current_elementary_catches_ocean <- object_r6(class_name = "elementarycatches"),
+                                                  capture.output(current_elementary_catches_ocean <- dplyr::filter(.data=current_elementary_catches,
+                                                                                                                   current_elementary_catches$ocean_code == current_ocean_activites),
                                                                  file = "NUL")
-                                                  capture.output(current_elementary_catches_ocean$add(new_item = current_elementary_catches$filter_l1(filter = paste0("$path$ocean_code == ",
-                                                                                                                                                                      current_ocean_activites))),
-                                                                 file = "NUL")
-                                                  current_oceans_activities_weight <- sum(unlist(current_elementary_catches_ocean$extract_l1_element_value(element = "catch_weight_category_code_corrected"))) / total_current_elementary_catches
-                                                  oceans_activities_weight <- append(oceans_activities_weight,
-                                                                                     current_oceans_activities_weight)
+                                                  current_oceans_activities_weight <- sum(current_elementary_catches_ocean$catch_weight_category_code_corrected) / total_current_elementary_catches
+                                                  oceans_activities_weight <- rbind(oceans_activities_weight,
+                                                                                    current_oceans_activities_weight)
                                                   names(oceans_activities_weight)[length(oceans_activities_weight)] <- current_ocean_activites
                                                 }
                                                 major_ocean_activities <- as.integer(names(which(x = oceans_activities_weight == max(oceans_activities_weight))))
@@ -3954,7 +3943,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   rf4 <- sum_sub_sample_specie_total_count / sum_sub_sample_specie_number_measured_lf
                                                   # rf4 verification
                                                   # pint console precision 7 digits by default
-                                                  if (round(rf4,6) != 1 & sample_specie_id != "SKJ") {
+                                                  options(digits=9)
+                                                  if (round(rf4,10) != 1 & sample_specie_id != "SKJ") {
                                                     warning(format(Sys.time(),
                                                                    "%Y-%m-%d %H:%M:%S"),
                                                             " - Rf4 not egal to 1 (",
@@ -6034,16 +6024,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     act <- rbind(act,
                                                  tmp_activity)
                                     if (length(x = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))) != 0) {
-                                      capture.output(current_elementarycatches <- object_r6(class_name = "elementarycatches"),
+                                      capture.output(current_elementarycatches <- do.call(rbind,
+                                                                                          current_activities$extract_l1_element_value(element = "elementarycatches")),
                                                      file = "NUL")
-                                      capture.output(current_elementarycatches$add(new_item = unlist(current_activities$extract_l1_element_value(element = "elementarycatches"))),
-                                                     file = "NUL")
-                                      tmp_elementarycatch <- list(id_act = unlist(current_elementarycatches$extract_l1_element_value(element = "activity_id")),
-                                                                  w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_code_corrected")),
-                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "species_code")),
-                                                                  sp = unlist(current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
-                                                                  count = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_count")),
-                                                                  wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "weight_category_code_corrected")))
+                                      tmp_elementarycatch <- list(id_act = current_elementarycatches$activity_id,
+                                                                  w_lb_t3 = current_elementarycatches$catch_weight_category_code_corrected,
+                                                                  sp_code = current_elementarycatches$species_code,
+                                                                  sp = current_elementarycatches$species_fao_code,
+                                                                  count = current_elementarycatches$catch_count,
+                                                                  wcat = current_elementarycatches$weight_category_code_corrected)
                                       tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
                                                                              date_act = do.call("c", lapply(X = unique(tmp_elementarycatch$id_act),
                                                                                                             FUN = function(a) {

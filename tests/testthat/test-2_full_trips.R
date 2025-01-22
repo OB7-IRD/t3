@@ -18,7 +18,7 @@ capture.output(object_full_trips$filter_by_years_period(years_period = as.intege
                                                                                     1885))),
                file = "NUL")
 # add elementarycatches to trips selected
-capture.output(object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches),
+capture.output(object_full_trips$add_elementarycatches(elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches),
                file = "NUL")
 # add elementarylandings to trips selected
 capture.output(object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings),

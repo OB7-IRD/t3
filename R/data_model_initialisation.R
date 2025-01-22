@@ -86,14 +86,14 @@ data_model_initialisation <- function(data_source = "observe_database",
                                                vessel_type_codes = vessel_type_codes,
                                                trip_ids = trip_ids)
   # model creation: object elementarycatches creation
-  object_model_data$elementarycatches_object_creation(data_source = data_source,
-                                                      database_connection = database_connection,
-                                                      years_period = years_period,
-                                                      flag_codes = flag_codes,
-                                                      ocean_codes = ocean_codes,
-                                                      vessel_type_codes = vessel_type_codes,
-                                                      species_fate_codes = species_fate_codes,
-                                                      trip_ids = trip_ids)
+  object_model_data$elementarycatches_data(data_source = data_source,
+                                           database_connection = database_connection,
+                                           years_period = years_period,
+                                           flag_codes = flag_codes,
+                                           ocean_codes = ocean_codes,
+                                           vessel_type_codes = vessel_type_codes,
+                                           species_fate_codes = species_fate_codes,
+                                           trip_ids = trip_ids)
   # model creation: object elementarylandings creation
   object_model_data$elementarylandings_object_creation(data_source = data_source,
                                                        database_connection = database_connection,

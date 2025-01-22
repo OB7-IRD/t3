@@ -11,7 +11,7 @@ Create R6 reference object class object_model_data
 \itemize{
 \item \href{#method-object_model_data-trips_object_creation}{\code{object_model_data$trips_object_creation()}}
 \item \href{#method-object_model_data-activities_object_creation}{\code{object_model_data$activities_object_creation()}}
-\item \href{#method-object_model_data-elementarycatches_object_creation}{\code{object_model_data$elementarycatches_object_creation()}}
+\item \href{#method-object_model_data-elementarycatches_data}{\code{object_model_data$elementarycatches_data()}}
 \item \href{#method-object_model_data-elementarylandings_object_creation}{\code{object_model_data$elementarylandings_object_creation()}}
 \item \href{#method-object_model_data-wells_object_creation}{\code{object_model_data$wells_object_creation()}}
 \item \href{#method-object_model_data-setdurationrefs_data}{\code{object_model_data$setdurationrefs_data()}}
@@ -117,12 +117,12 @@ For example, a list of two database connection arguments for "observe_main" and 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-object_model_data-elementarycatches_object_creation"></a>}}
-\if{latex}{\out{\hypertarget{method-object_model_data-elementarycatches_object_creation}{}}}
-\subsection{Method \code{elementarycatches_object_creation()}}{
-Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
+\if{html}{\out{<a id="method-object_model_data-elementarycatches_data"></a>}}
+\if{latex}{\out{\hypertarget{method-object_model_data-elementarycatches_data}{}}}
+\subsection{Method \code{elementarycatches_data()}}{
+Creation of a data frame object with elementarycatch(es).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_object_creation(
+\if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_data(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -320,7 +320,7 @@ Creation of a data frame object with length ratio between ld1 and lf class.
 \if{html}{\out{<a id="method-object_model_data-samplesets_data"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-samplesets_data}{}}}
 \subsection{Method \code{samplesets_data()}}{
-Creation of a data frame object with weighted weigth of each set sampled.
+Creation of a data frame object with weighted weight of each set sampled.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$samplesets_data(
   data_source = "observe_database",
