@@ -2195,7 +2195,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if (dim(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                      & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                      & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                     & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, ])[1] != 1) {
+                                                                     & set_duration_ref$flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code, ])[1] != 1) {
                                               stop(format(Sys.time(),
                                                           "%Y-%m-%d %H:%M:%S"),
                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -2232,11 +2232,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 parameter_a <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_a"]
+                                                                                & set_duration_ref$flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code, "parameter_a"]
                                                 parameter_b <- set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                 & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                 & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
+                                                                                & set_duration_ref$flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code, "parameter_b"]
                                                 current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(parameter_a * catch_weight_category_corrected + parameter_b)
                                               } else {
                                                 if ((referential_template == "observe"
@@ -2258,7 +2258,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_activity$.__enclos_env__$private$set_duration <- (1/60)*as.numeric(set_duration_ref[set_duration_ref$year == lubridate::year(current_activity$.__enclos_env__$private$activity_date)
                                                                                                                                               & set_duration_ref$ocean_code == current_activity$.__enclos_env__$private$ocean_code
                                                                                                                                               & set_duration_ref$school_type_code == current_activity$.__enclos_env__$private$school_type_code
-                                                                                                                                              & set_duration_ref$flag_code == current_trip$.__enclos_env__$private$flag_code, "null_set_value"])
+                                                                                                                                              & set_duration_ref$flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code, "null_set_value"])
                                                 }
                                               }
                                             }

@@ -1,3 +1,8 @@
+# t3 2.0.1 - 2025-01-21
+
+## Changed
+* Change the type of the `flag_codes` parameter of [`object_model_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html) function from integer to character (three-letter FAO code(s) for the country(ies)).  
+
 # t3 2.0.0 - 2024-11-29
 
 ## Added

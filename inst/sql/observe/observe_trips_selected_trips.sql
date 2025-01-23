@@ -1,7 +1,6 @@
 select
 	t.topiaid::text as trip_id
-	,c.code::integer as flag_code
-	,c.iso3code::text as flag_label
+	,c.iso3code::text as flag_code
 	,t.startdate::text as departure_date
 	,t.enddate::text as trip_end_date
 	,v.code::integer as vessel_code

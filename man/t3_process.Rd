@@ -80,7 +80,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{years_period}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 
-\item{flag_codes}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{flag_codes}{Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{ocean_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
 
@@ -102,21 +102,21 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{rf1_highest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
 
-\item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise caracteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
+\item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
 
-\item{sunset_schema}{Object of class {\link[base]{character}} expected. Sunset caracteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.}
+\item{sunset_schema}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.}
 
 \item{maximum_lf_class}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 
-\item{threshold_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.}
+\item{threshold_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.}
 
-\item{threshold_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.}
+\item{threshold_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.}
 
-\item{threshold_frequency_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
+\item{threshold_frequency_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.}
 
-\item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
+\item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.}
 
-\item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
+\item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.}
 
 \item{periode_reference_level3}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
 
@@ -130,7 +130,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{set_weight_minimum}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
 
-\item{minimum_set_frequency}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in awell to be used for model training in the process. By default 0.1.}
+\item{minimum_set_frequency}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.}
 
 \item{vessel_id_ignored}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
 

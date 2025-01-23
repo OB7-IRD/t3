@@ -15,7 +15,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
@@ -36,7 +36,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -59,8 +59,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -92,14 +92,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   "observe_trips_selected_trips.sql",
                                                                                                   package = "t3")),
                                                                       collapse = "\n"))
-                                           
+
                                            trip_sql_final <- DBI::sqlInterpolate(conn = database_conn,
                                                                                  sql = trip_sql,
                                                                                  trip_ids = DBI::SQL(paste0("'",
                                                                                                             paste0(trip_ids,
                                                                                                                    collapse = "', '"),
                                                                                                             "'")))
-                                           
+
                                          } else {
                                            trip_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                   "observe",
@@ -182,8 +182,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                (dplyr::last(years_period,
                                                                                                                             order_by = years_period) + 1),
                                                                                                                "-03-31#")),
-                                                                             flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                 collapse = ", "))),
+                                                                             flag_codes = DBI::SQL(paste0("'",
+                                                                                                          paste0(flag_codes,
+                                                                                                                 collapse = "', '"),
+                                                                                                          "'")),
                                                                              ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                   collapse = ", "))),
                                                                              vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -195,7 +197,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        trip_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                   statement = trip_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(x = trip_id),
-                                                       flag_code = as.integer(x = flag_code),
+                                                       flag_code = as.character(x = flag_code),
                                                        departure_date = as.character(x = departure_date),
                                                        trip_end_date = as.character(x = trip_end_date),
                                                        logbook_availability_code = as.integer(x = logbook_availability_code),
@@ -346,7 +348,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -369,8 +371,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -447,7 +449,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                           statement = activity_sql_final))
                                          }
                                        }
-                                       
+
                                        if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -485,8 +487,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    (dplyr::last(years_period,
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                     collapse = ", "))),
+                                                                                 flag_codes = DBI::SQL(paste0("'",
+                                                                                                              paste0(flag_codes,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
                                                                                  vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -672,7 +676,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -697,8 +701,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -816,8 +820,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           (dplyr::last(years_period,
                                                                                                                                        order_by = years_period) + 1),
                                                                                                                           "-03-31#")),
-                                                                                        flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                            collapse = ", "))),
+                                                                                        flag_codes = DBI::SQL(paste0("'",
+                                                                                                                     paste0(flag_codes,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")),
                                                                                         ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                              collapse = ", "))),
                                                                                         vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -998,7 +1004,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -1021,8 +1027,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -1136,8 +1142,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                             (dplyr::last(years_period,
                                                                                                                                          order_by = years_period) + 1),
                                                                                                                             "-03-31#")),
-                                                                                          flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                              collapse = ", "))),
+                                                                                          flag_codes = DBI::SQL(paste0("'",
+                                                                                                                       paste0(flag_codes,
+                                                                                                                              collapse = "', '"),
+                                                                                                                       "'")),
                                                                                           ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                                collapse = ", "))),
                                                                                           vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -1301,7 +1309,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -1329,8 +1337,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -1437,7 +1445,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          } else {
                                            database_conn <- database_connection
                                          }
-                                         
+
                                          if (! is.null(x = trip_ids)) {
                                            codama::r_type_checking(r_object = trip_ids,
                                                                    type = "character")
@@ -1528,8 +1536,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                  (dplyr::last(years_period,
                                                                                                                               order_by = years_period) + 1),
                                                                                                                  "-03-31#")),
-                                                                               flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                   collapse = ", "))),
+                                                                               flag_codes = DBI::SQL(paste0("'",
+                                                                                                            paste0(flag_codes,
+                                                                                                                   collapse = "', '"),
+                                                                                                            "'")),
                                                                                ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                     collapse = ", "))),
                                                                                vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -1588,8 +1598,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                    (dplyr::last(years_period,
                                                                                                                                 order_by = years_period) + 1),
                                                                                                                    "-03-31#")),
-                                                                                 flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                     collapse = ", "))),
+                                                                                 flag_codes = DBI::SQL(paste0("'",
+                                                                                                              paste0(flag_codes,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
                                                                                  ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                       collapse = ", "))),
                                                                                  vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
@@ -2138,7 +2150,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
-                                                               type = "integer")
+                                                               type = "character")
                                        codama::r_type_checking(r_object = ocean_codes,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = vessel_type_codes,
@@ -2161,8 +2173,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-                                           
-                                           
+
+
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
@@ -2275,8 +2287,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                     (dplyr::last(years_period,
                                                                                                                                  order_by = years_period) + 1),
                                                                                                                     "-03-31#")),
-                                                                                  flag_codes = DBI::SQL(paste0(paste0(flag_codes,
-                                                                                                                      collapse = ", "))),
+                                                                                  flag_codes = DBI::SQL(paste0("'",
+                                                                                                               paste0(flag_codes,
+                                                                                                                      collapse = "', '"),
+                                                                                                               "'")),
                                                                                   ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
                                                                                                                        collapse = ", "))),
                                                                                   vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,

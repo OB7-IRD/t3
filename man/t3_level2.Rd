@@ -30,15 +30,15 @@ t3_level2(
 
 \item{maximum_lf_class}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 
-\item{threshold_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.}
+\item{threshold_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.}
 
-\item{threshold_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.}
+\item{threshold_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.}
 
-\item{threshold_frequency_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.}
+\item{threshold_frequency_rf_minus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.}
 
-\item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.}
+\item{threshold_frequency_rf_plus10}{Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.}
 
-\item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
+\item{threshold_rf_total}{Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.}
 
 \item{log_file}{Object of type \code{\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).}
 
