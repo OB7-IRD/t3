@@ -133,8 +133,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                  expected = length(object_model_data$.__enclos_env__$private$activities$filter_by_trip(current_trip$.__enclos_env__$private$trip_id))+
                                                    sum(unlist(lapply(current_trip$.__enclos_env__$private$activities,
                                                                      function(x) {x$.__enclos_env__$private$activity_code %in% c(104,105)}))),
-                                                label = paste0("issue with the full trip ", full_trip_id,
-                                                               " and the partial trip ", partial_trip_id))
+                                                 label = paste0("issue with the full trip ", full_trip_id,
+                                                                " and the partial trip ", partial_trip_id))
                         })
     current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
     current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
@@ -401,10 +401,10 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                         code = {
                           testthat::expect_true(object = (all(apply(X =  as.matrix(unlist(current_activities_set_duration)),
                                                                     MARGIN=1,
-                                                                            FUN = function(x) (! is.null(x)
-                                                                                               && ((is.na(x)
-                                                                                                    || (is.numeric(x)
-                                                                                                        & x >= 0))))))),
+                                                                    FUN = function(x) (! is.null(x)
+                                                                                       && ((is.na(x)
+                                                                                            || (is.numeric(x)
+                                                                                                & x >= 0))))))),
                                                 label = paste0("issue with the full trip ", full_trip_id,
                                                                " and the partial trip ", partial_trip_id))
                         })
@@ -429,26 +429,19 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
         current_activity <- current_activities$extract(id = activity_id)[[1]]
         if (! is.null(current_activity$.__enclos_env__$private$elementarycatches)
             & length(current_activity$.__enclos_env__$private$elementarycatches) != 0) {
-          capture.output(current_elementarycatches <- t3::object_r6(class_name = "elementarycatches"),
-                         file = "NUL")
-          capture.output(current_elementarycatches$add(new_item = current_activity$.__enclos_env__$private$elementarycatches),
-                         file = "NUL")
-          elementarycatches_ids <- unique(unlist(current_elementarycatches$extract_l1_element_value(element = "elementarycatch_id")))
-          current_sum_catch_weight_category_corrected <- current_sum_catch_weight_category_corrected + sum(unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_code_corrected")))
+        current_elementarycatches <- dplyr::bind_rows(current_activity$.__enclos_env__$private$elementarycatches)
+        elementarycatches_ids <- unique(current_elementarycatches$elementarycatch_id)
+          current_sum_catch_weight_category_corrected <- current_sum_catch_weight_category_corrected + sum(current_elementarycatches$catch_weight_category_code_corrected)
           for (elementarycatches_id in seq_len(length.out = length(elementarycatches_ids))) {
             elementarycatches_id <- elementarycatches_ids[elementarycatches_id]
-            capture.output(current_elementarycatches_by_id <- t3::object_r6(class_name = "elementarycatches"),
-                           file = "NUL")
-            capture.output(current_elementarycatches_by_id$add(new_item = current_elementarycatches$filter_l1(filter = paste0("$path$elementarycatch_id == \"",
-                                                                                                                              elementarycatches_id,
-                                                                                                                              "\""))),
-                           file = "NUL")
-            if (unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "species_code"))) %in% species_rf1) {
-              current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf1")))
-              current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
+            current_elementarycatches_by_id=current_elementarycatches %>%
+                             dplyr::filter(elementarycatch_id == elementarycatches_id)
+            if (unique(current_elementarycatches_by_id$species_code) %in% species_rf1) {
+              current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(current_elementarycatches_by_id$catch_weight_rf1)
+              current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(current_elementarycatches_by_id$catch_weight_rf2)
             }
-            current_sum_elementarycatches_rf2_all <- current_sum_elementarycatches_rf2_all + unique(unlist(current_elementarycatches_by_id$extract_l1_element_value(element = "catch_weight_rf2")))
-            current_weight_category_code_corrected <- current_elementarycatches_by_id$extract_l1_element_value(element = "weight_category_code_corrected")
+            current_sum_elementarycatches_rf2_all <- current_sum_elementarycatches_rf2_all + unique(current_elementarycatches_by_id$catch_weight_rf2)
+            current_weight_category_code_corrected <- current_elementarycatches_by_id$weight_category_code_corrected
             # 205 - Checking if variable "weight_category_code_corrected" is equal to "<10kg", ">30kg", ">10kg" or "unknown" ----
             testthat::test_that(desc = "205 - Checking if variable \"weight_category_code_corrected\" is equal to \"<10kg\", \">30kg\", \">10kg\" or \"unknown\"",
                                 code = {
@@ -507,4 +500,3 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                         })
   }
 }
-

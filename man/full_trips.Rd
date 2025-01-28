@@ -223,7 +223,7 @@ Process of Raising Factor level 2 (rf2).
 \if{html}{\out{<a id="method-full_trips-conversion_weigth_category"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-conversion_weigth_category}{}}}
 \subsection{Method \code{conversion_weigth_category()}}{
-Process of logbook weigth categories conversion.
+Process of logbook weight categories conversion.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(
   global_output_path = NULL,
