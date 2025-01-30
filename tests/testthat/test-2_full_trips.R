@@ -10,15 +10,12 @@ object_full_trips <- t3:::full_trips$new()
 # object full_trip creation
 capture.output(object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips),
                file = "NUL")
-# add activities to trips selected
+# add activities and elementarycatches to trips selected
 capture.output(object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities),
                file = "NUL")
 # filter on reference year
 capture.output(object_full_trips$filter_by_years_period(years_period = as.integer(c(1884,
                                                                                     1885))),
-               file = "NUL")
-# add elementarycatches to trips selected
-capture.output(object_full_trips$add_elementarycatches(elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches),
                file = "NUL")
 # add elementarylandings to trips selected
 capture.output(object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings),

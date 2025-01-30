@@ -72,22 +72,14 @@ object_model_data$trips_object_creation(data_source = "observe_database",
                                         ocean_codes = ocean,
                                         vessel_type_codes = vessel_type_codes,
                                         database_connection = observe_database_con)
-# object activities creation
+# object activities and elementarycatches creation
 object_model_data$activities_object_creation(data_source = "observe_database",
                                              years_period = years_period,
                                              flag_codes = flag_codes,
                                              ocean_codes = ocean,
                                              vessel_type_codes = vessel_type_codes,
+                                             species_fate_codes = species_fate_codes,
                                              database_connection = observe_database_con)
-
-# object elementarycatches creation
-object_model_data$elementarycatches_object_creation(data_source = "observe_database",
-                                                    years_period = years_period,
-                                                    flag_codes = flag_codes,
-                                                    ocean_codes = ocean,
-                                                    vessel_type_codes = vessel_type_codes,
-                                                    species_fate_codes = species_fate_codes,
-                                                    database_connection = observe_database_con)
 # object elementarylandings creation
 object_model_data$elementarylandings_object_creation(data_source = "observe_database",
                                                      years_period = years_period,
@@ -130,12 +122,10 @@ object_model_data$lengthweightrelationships_data(data_source = "csv_file",
 object_full_trips <- t3:::full_trips$new()
 # object full_trip creation
 object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
-# add activities to trips selected
+# add activities and elementarycatches to trips selected
 object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
 # filter by reference year
 object_full_trips$filter_by_years_period(years_period = years_period)
-# add elementarycatches to trips selected
-object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
 # add elementarylandings to trips selected
 object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings)
 # add well(s) and sample(s) to trip(s) selected

@@ -56,7 +56,6 @@ You have three different ways to launch the model creation:
 | Initialisation R object for data's object model | `object_model_data$new()`         | object_model_data                                           |
 | Create trips object                             | `trips_object_creation()`              | object_model_data, trip, trips                              |
 | Create activities object                        | `activities_object_creation()`         | object_model_data, activity, activities                     |
-| Create elementary catches object                | `elementarycatches_object_creation()`  | object_model_data, elementarycatch, elementarycatches       |
 | Create elementary landings object               | `elementarylandings_object_creation()` | object_model_data, elementarylanding, elementarylandings    |
 | Create wells object                             | `wells_object_creation()`              | object_model_data, wells, well, samples, elementarywellplan |
 | Create set durations object                     | `setdurationrefs_data()`               | object_model_data                                           |

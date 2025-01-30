@@ -160,6 +160,32 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::relocate(input_full_trips,
                                                 input_activities,
                                                 .before = output_trips)
+                              capture.output(current_activities <- object_r6(class_name = "activities"),
+                                             file = "NUL")
+                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
+                                             file = "NUL")
+                              capture.output(current_elementarycatches <- current_activities$extract_l1_element_value(element="elementarycatches"),
+                                             file = "NUL")
+                                current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
+                                private$log_summary <- private$log_summary %>%
+                                  dplyr::mutate(input_elementary_catches = NA_integer_,
+                                                output_elementary_catches = NA_integer_,
+                                                output_catch_weight_elementary_catches = NA_real_) %>%
+                                  dplyr::add_row(step = "add_elementarycatches",
+                                                 input_trips = length(x = unlist(x = private$data_selected)),
+                                                 input_full_trips = length(x = private$data_selected),
+                                                 input_activities = current_activities$count(),
+                                                 input_elementary_catches = nrow(dplyr::bind_rows(object_activities$extract_l1_element_value(element="elementarycatches"))),
+                                                 output_trips = input_trips,
+                                                 output_full_trips = input_full_trips,
+                                                 output_activities = input_activities,
+                                                 output_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
+                                                 output_catch_weight_elementary_catches = current_elementarycatches %>%
+                                                   sapply(dplyr::summarize, catch_weight=sum(catch_weight, na.rm=TRUE)) %>%
+                                                   unlist() %>%
+                                                   sum()) %>%
+                                  dplyr::relocate(input_elementary_catches,
+                                                  .before = output_trips)
                               message(format(Sys.time(),
                                              "%Y-%m-%d %H:%M:%S"),
                                       " - End of add activity.")
@@ -248,94 +274,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 .before = output_trips)
                               message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                       " - End of full trips filtering.")
-                            },
-                            # 4 - Add elementary catches ----
-                            #' @description Function for add elementary catches in full trips object.
-                            #' @param elementarycatches  Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected with elementarycatch(es) data.
-                            #' @importFrom  future.apply future_lapply
-                            add_elementarycatches = function(elementarycatches) {
-                              # 4.1 - Arguments verifications ----
-                              if (length(private$data_selected) == 0) {
-                                stop(format(Sys.time(),
-                                            "%Y-%m-%d %H:%M:%S"),
-                                     " - Argument \"data_selected\" empty.")
-                              } else if (paste0(class(x =  elementarycatches),
-                                                collapse = " ") != "tbl_df tbl data.frame") {
-                                stop(format(Sys.time(),
-                                            "%Y-%m-%d %H:%M:%S"),
-                                     " - Invalid \"elementarycatches\" argument.")
-                              }
-                              # 4.2 - Global process ----
-                              for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
-                                if (full_trip_id == 1) {
-                                  message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                          " - Start of add elementary catches.")
-                                }
-                                message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                        " - Ongoing process of adding elementary catches on full trip \"",
-                                        names(private$data_selected)[[full_trip_id]],
-                                        "\".")
-                                capture.output(current_trips <- object_r6(class_name = "trips"),
-                                               file = "NUL")
-                                capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                               file = "NUL")
-                                invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_trips$count()),
-                                                                          FUN = function(trip_id) {
-                                                                            if (length(x = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities) != 0) {
-                                                                              capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                                                             file = "NUL")
-                                                                              capture.output(current_activities$add(new_item = current_trips$extract(id = trip_id)[[1]]$.__enclos_env__$private$activities),
-                                                                                             file = "NUL")
-                                                                              invisible(x = future.apply::future_lapply(X = seq_len(length.out = current_activities$count()),
-                                                                                                                        FUN = function(activity_id) {
-                                                                                                                          current_activity_id <- current_activities$extract(attribut_l1 = "data",
-                                                                                                                                                                            attribut_l2 = "activity_id",
-                                                                                                                                                                            id = activity_id)
-                                                                                                                          current_elementarycatches <- elementarycatches %>% dplyr::filter(activity_id==current_activity_id)
-                                                                                                                          if(nrow(current_elementarycatches)==0){ current_elementarycatches <- NULL}
-                                                                                                                          current_trips$.__enclos_env__$private$data[[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
-                                                                                                                        }))
-                                                                            }
-                                                                          }))
-                                message(format(Sys.time(),
-                                               "%Y-%m-%d %H:%M:%S"),
-                                        " - Successful process of adding elementary catches on full trip \"",
-                                        names(private$data_selected)[[full_trip_id]],
-                                        "\".")
-                              }
-                              # 4.3 - Log summary annotation ----
-                              capture.output(current_trips <- object_r6(class_name = "trips"),
-                                             file = "NUL")
-                              capture.output(current_trips$add(new_item = unlist(x = private$data_selected)),
-                                             file = "NUL")
-                              capture.output(current_activities <- object_r6(class_name = "activities"),
-                                             file = "NUL")
-                              capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
-                                             file = "NUL")
-                              capture.output(current_elementarycatches <- current_activities$extract_l1_element_value(element="elementarycatches"),
-                                             file = "NUL")
-                              current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
-                              private$log_summary <- private$log_summary %>%
-                                dplyr::mutate(input_elementary_catches = NA_integer_,
-                                              output_elementary_catches = NA_integer_,
-                                              output_catch_weight_elementary_catches = NA_real_) %>%
-                                dplyr::add_row(step = "add_elementarycatches",
-                                               input_trips = length(x = unlist(x = private$data_selected)),
-                                               input_full_trips = length(x = private$data_selected),
-                                               input_activities = current_activities$count(),
-                                               input_elementary_catches = nrow(elementarycatches),
-                                               output_trips = input_trips,
-                                               output_full_trips = input_full_trips,
-                                               output_activities = input_activities,
-                                               output_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
-                                               output_catch_weight_elementary_catches = current_elementarycatches %>%
-                                                 sapply(dplyr::summarize, catch_weight=sum(catch_weight, na.rm=TRUE)) %>%
-                                                 unlist() %>%
-                                                 sum()) %>%
-                                dplyr::relocate(input_elementary_catches,
-                                                .before = output_trips)
-                              message(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - End of add elementary catches.")
                             },
                             # 5 - Add elementary landings ----
                             #' @description Function for add elementary landings in full trips object.

@@ -15,7 +15,6 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-create_full_trips}{\code{full_trips$create_full_trips()}}
 \item \href{#method-full_trips-add_activities}{\code{full_trips$add_activities()}}
 \item \href{#method-full_trips-filter_by_years_period}{\code{full_trips$filter_by_years_period()}}
-\item \href{#method-full_trips-add_elementarycatches}{\code{full_trips$add_elementarycatches()}}
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
 \item \href{#method-full_trips-rf1}{\code{full_trips$rf1()}}
@@ -108,23 +107,6 @@ Function for filter full trips by a year(s) period.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-add_elementarycatches"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-add_elementarycatches}{}}}
-\subsection{Method \code{add_elementarycatches()}}{
-Function for add elementary catches in full trips object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$add_elementarycatches(elementarycatches)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{elementarycatches}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected with elementarycatch(es) data.}
 }
 \if{html}{\out{</div>}}
 }
