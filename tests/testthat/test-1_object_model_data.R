@@ -12,7 +12,7 @@ testthat::test_that(desc = "101. Comparison activities between data extracted an
 testthat::test_that(desc = "102 - Comparison elementary catches between data extracted and data model",
                     code = {
                       testthat::expect_equal(object = length(unique(elementarycatches$elementarycatch_id)),
-                                             expected = length(unique(object_model_data$.__enclos_env__$private$elementarycatches$elementarycatch_id)))
+                                             expected = length(unique(dplyr::bind_rows(object_model_data$.__enclos_env__$private$activities$extract_l1_element_value(element="elementarycatches"))$elementarycatch_id)))
                     })
 # 103 - Comparison elementary landings between data extracted and data model ----
 testthat::test_that(desc = "103 - Comparison elementary landings between data extracted and data model",

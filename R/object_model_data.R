@@ -10,9 +10,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
                                    #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -55,10 +55,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -68,10 +68,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -319,17 +319,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                              }))
                                      private$trips <- object_trips
                                    },
-                                   #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
+                                   #' @description Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
@@ -339,351 +340,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          flag_codes = NULL,
                                                                          ocean_codes = NULL,
                                                                          vessel_type_codes = NULL,
+                                                                         species_fate_codes = NULL,
                                                                          trip_ids = NULL,
                                                                          data_path = NULL,
                                                                          envir = NULL) {
                                      # 1 - Arguments verifications ----
-                                     if (data_source %in% c("observe_database",
-                                                            "avdth_database")) {
-                                       codama::r_type_checking(r_object = years_period,
-                                                               type = "integer")
-                                       codama::r_type_checking(r_object = flag_codes,
-                                                               type = "character")
-                                       codama::r_type_checking(r_object = ocean_codes,
-                                                               type = "integer")
-                                       codama::r_type_checking(r_object = vessel_type_codes,
-                                                               type = "integer")
-                                     } else if (data_source %in% c("csv_file",
-                                                                   "rdata_file")) {
-                                       codama::r_type_checking(r_object = data_path,
-                                                               type = "character",
-                                                               length = 1L)
-                                     } else if (data_source != "envir") {
-                                       stop(format(x = Sys.time(),
-                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                            " - Invalid \"data_source\" argument. Check function documention through ?object_model_data for more details.")
-                                     }
-                                     # 2 - Process for observe database ----
-                                     if (data_source == "observe_database") {
-                                       # specific argument verification for multiple query
-                                       if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
-                                           stop(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
-
-
-                                         }
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Start activity(ies) data importation from ", length(database_connection)  ," observe databases.")
-                                       } else {
-                                         # specific argument verification for simple query
-                                         if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
-                                           stop(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
-                                         }
-                                         # process beginning
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Start activity(ies) data importation from an observe database.")
-                                       }
-                                       for(i in  1:length(database_connection)){
-                                         if(length(database_connection)>1){
-                                           database_conn <- database_connection[[i]]
-                                         } else {
-                                           database_conn <- database_connection
-                                         }
-                                         if (! is.null(x = trip_ids)) {
-                                           codama::r_type_checking(r_object = trip_ids,
-                                                                   type = "character")
-                                           activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
-                                                                                                      "observe",
-                                                                                                      "observe_activities_selected_trips.sql",
-                                                                                                      package = "t3")),
-                                                                          collapse = "\n"))
-                                           activity_sql_final <- DBI::sqlInterpolate(conn = database_conn,
-                                                                                     sql = activity_sql,
-                                                                                     trip_ids = DBI::SQL(paste0("'",
-                                                                                                                paste0(trip_ids,
-                                                                                                                       collapse = "', '"),
-                                                                                                                "'")))
-                                         } else {
-                                           activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
-                                                                                                      "observe",
-                                                                                                      "observe_activities.sql",
-                                                                                                      package = "t3")),
-                                                                          collapse = "\n"))
-                                           activity_sql_final <- DBI::sqlInterpolate(conn = database_conn,
-                                                                                     sql = activity_sql,
-                                                                                     begin_time_period = paste0((dplyr::first(years_period,
-                                                                                                                              order_by = years_period) - 1),
-                                                                                                                "-10-01"),
-                                                                                     end_time_period = paste0((dplyr::last(years_period,
-                                                                                                                           order_by = years_period) + 1),
-                                                                                                              "-03-31"),
-                                                                                     flag_codes = DBI::SQL(paste0("'",
-                                                                                                                  paste0(flag_codes,
-                                                                                                                         collapse = "', '"),
-                                                                                                                  "'")),
-                                                                                     ocean_codes = DBI::SQL(paste0("'",
-                                                                                                                   paste0(ocean_codes,
-                                                                                                                          collapse = "', '"),
-                                                                                                                   "'")),
-                                                                                     vessel_type_codes = DBI::SQL(paste0("'",
-                                                                                                                         paste0(vessel_type_codes,
-                                                                                                                                collapse = "', '"),
-                                                                                                                         "'")))
-                                         }
-                                         message("[",
-                                                 activity_sql_final,
-                                                 "]")
-                                         if(i >1){
-                                           activity_data <- dplyr::full_join(activity_data,
-                                                                             dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
-                                                                                                           statement = activity_sql_final)))
-                                         } else {
-                                           activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
-                                                                                          statement = activity_sql_final))
-                                         }
-                                       }
-
-                                       if (nrow(x = activity_data) == 0) {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check the query and parameters associated.")
-                                       } else {
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful activity(ies) data importation from observe database(s).")
-                                       }
-                                     } else if (data_source == "avdth_database") {
-                                       # 3 - Process for AVDTH database ----
-                                       # specific argument verification
-                                       if (paste0(class(x = database_connection),
-                                                  collapse = " ") != "JDBCConnection") {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument. Class \"JDBCConnection\" expected.")
-                                       }
-                                       # process beginning
-                                       message(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start activities data importation from an AVDTH database.")
-                                       activity_sql <- paste(readLines(con = system.file("sql",
-                                                                                         "avdth",
-                                                                                         "avdth_activities.sql",
-                                                                                         package = "t3")),
-                                                             collapse = "\n")
-                                       activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
-                                                                                 sql = activity_sql,
-                                                                                 begin_time_period  = DBI::SQL(paste0("#",
-                                                                                                                      (dplyr::first(years_period,
-                                                                                                                                    order_by = years_period) - 1),
-                                                                                                                      "-10-01#")),
-                                                                                 end_time_period = DBI::SQL(paste0("#",
-                                                                                                                   (dplyr::last(years_period,
-                                                                                                                                order_by = years_period) + 1),
-                                                                                                                   "-03-31#")),
-                                                                                 flag_codes = DBI::SQL(paste0("'",
-                                                                                                              paste0(flag_codes,
-                                                                                                                     collapse = "', '"),
-                                                                                                              "'")),
-                                                                                 ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
-                                                                                                                      collapse = ", "))),
-                                                                                 vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
-                                                                                                                            collapse = ", "))))
-                                       message("[",
-                                               activity_sql_final,
-                                               "]")
-                                       activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
-                                                                                      statement = activity_sql_final)) %>%
-                                         dplyr::mutate(trip_id = as.character(x = trip_id),
-                                                       activity_id = as.character(x = activity_id),
-                                                       ocean_code = as.integer(x = ocean_code),
-                                                       activity_date = as.character(x = activity_date),
-                                                       activity_number = as.integer(x = activity_number),
-                                                       activity_longitude = as.numeric(x = activity_longitude),
-                                                       activity_latitude = as.numeric(x = activity_latitude),
-                                                       set_count = as.integer(x = set_count),
-                                                       set_success_status_code = as.integer(x = dplyr::case_when(
-                                                         activity_code == 0 ~ 0,
-                                                         activity_code == 1 ~ 1,
-                                                         activity_code == 2 ~ 2,
-                                                         TRUE ~ NA_integer_
-                                                       )),
-                                                       set_success_status_label = dplyr::case_when(
-                                                         activity_code == 0 ~ "Null",
-                                                         activity_code == 1 ~ "Positive",
-                                                         activity_code == 2 ~ "Unknown success status",
-                                                         TRUE ~ NA_character_
-                                                       ),
-                                                       school_type_code = dplyr::case_when(
-                                                         school_type_code == 1 ~ 1,
-                                                         school_type_code == 1 ~ 2,
-                                                         # Unknown code=0 in observe database
-                                                         activity_code == 3 ~ 0,
-                                                         TRUE ~ NA_character_
-                                                       ),
-                                                       activity_id = activity_data$activity_id[activity_id],
-                                                       activity_code = as.integer(x = activity_code),
-                                                       activity_label = as.character(x = activity_label),
-                                                       objectoperation_code = NA_integer_,
-                                                       objectoperation_label = NA_character_,
-                                                       objectoperation_id = NA_character_,
-                                                       time_at_sea = as.integer(x = time_at_sea))
-                                       if (nrow(x = activity_data) == 0) {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check the query and query's parameters.")
-                                       } else {
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful activity(ies) data importation from an AVDTH database.")
-                                       }
-                                     } else if (data_source == "csv_file") {
-                                       # 4 - Process for csv file ----
-                                       # process beginning
-                                       message(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start activity(ies) data importation from csv file.")
-                                       activity_data <- dplyr::tibble(read.csv2(file = data_path,
-                                                                                stringsAsFactors = FALSE))
-                                       if (nrow(x = activity_data) == 0) {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.")
-                                       } else {
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful activity(ies) data importation from csv file.")
-                                       }
-                                     } else if (data_source == "rdata_file") {
-                                       # 5 - Process for rdata file ----
-                                       # process beginning
-                                       message(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start activity(ies) data importation from RData file.")
-                                       load(file = data_path,
-                                            envir = tmp_envir <- new.env())
-                                       if (exists(x = "activities",
-                                                  envir = tmp_envir)) {
-                                         activity_data <- dplyr::tibble(get(x = "activities",
-                                                                            envir = tmp_envir))
-                                         if (paste0(class(x = activity_data),
-                                                    collapse = " ") != "tbl_df tbl data.frame"
-                                             || nrow(x = activity_data) == 0) {
-                                           stop(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.")
-                                         }
-                                       } else {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid RData, no R object named \"activities\" available in the R environment provided.")
-                                       }
-                                       message(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activity(ies) data importation from RData file.")
-                                     } else if (data_source == "envir") {
-                                       # 6 - R environment source ----
-                                       # specific argument verification
-                                       if (is.null(x = envir)) {
-                                         environment_name <- as.environment(find(what = "activity")[1])
-                                       } else {
-                                         environment_name <- as.environment(envir)
-                                       }
-                                       # process beginning
-                                       if (exists(x = "activity",
-                                                  envir = environment_name)) {
-                                         message(format(x = Sys.time(),
-                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Start activity(ies) data importation from R environment.")
-                                         activity_data <- dplyr::tibble(get(x = "activity",
-                                                                            envir = environment_name))
-                                         if (paste0(class(x = activity_data),
-                                                    collapse = " ") != "tbl_df tbl data.frame"
-                                             || nrow(x = activity_data) == 0) {
-                                           stop(format(x = Sys.time(),
-                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                " - No data imported, check the class of your RData file or data inside.")
-                                         }
-                                       } else {
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No R object named \"activity\" available in the R environment.")
-                                       }
-                                       message(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful activity(ies) data importation R environment.")
-                                     }
-                                     # 7 - Common data design ----
-                                     activity_data <- unclass(x = activity_data)
-                                     object_activities <- object_r6(class_name = "activities")
-                                     object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
-                                                                  FUN = function(activity_id) {
-                                                                    message(format(Sys.time(),
-                                                                                   "%Y-%m-%d %H:%M:%S"),
-                                                                            " - Start importation of activity element ",
-                                                                            activity_id,
-                                                                            ".\n",
-                                                                            "[activity: ",
-                                                                            activity_data[[2]][activity_id],
-                                                                            "]")
-                                                                    activity <- activity$new(trip_id = activity_data$trip_id[activity_id],
-                                                                                             activity_id = activity_data$activity_id[activity_id],
-                                                                                             ocean_code = activity_data$ocean_code[activity_id],
-                                                                                             activity_date = activity_data$activity_date[activity_id],
-                                                                                             activity_number = activity_data$activity_number[activity_id],
-                                                                                             activity_longitude = activity_data$activity_longitude[activity_id],
-                                                                                             activity_latitude = activity_data$activity_latitude[activity_id],
-                                                                                             set_count = activity_data$set_count[activity_id],
-                                                                                             set_success_status_code = activity_data$set_success_status_code[activity_id],
-                                                                                             set_success_status_label = activity_data$set_success_status_label[activity_id],
-                                                                                             school_type_code = activity_data$school_type_code[activity_id],
-                                                                                             activity_code = activity_data$activity_code[activity_id],
-                                                                                             activity_label = activity_data$activity_label[activity_id],
-                                                                                             objectoperation_code = activity_data$objectoperation_code[activity_id],
-                                                                                             objectoperation_label = activity_data$objectoperation_label[activity_id],
-                                                                                             objectoperation_id = activity_data$objectoperation_id[activity_id],
-                                                                                             time_at_sea = activity_data$time_at_sea[activity_id])
-                                                                    message(format(x = Sys.time(),
-                                                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                                                            " - Successful importation of activity element ",
-                                                                            activity_id,
-                                                                            ".")
-                                                                    return(activity)
-                                                                  }))
-                                     private$activities <- object_activities
-                                   },
-                                   #' @description  Creation of a data frame object with elementarycatch(es).
-                                   #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
-                                   #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
-                                   #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
-                                   #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
-                                   #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
-                                   #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
-                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
-                                   #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
-                                   elementarycatches_data = function(data_source = "observe_database",
-                                                                                database_connection = NULL,
-                                                                                years_period = NULL,
-                                                                                flag_codes = NULL,
-                                                                                ocean_codes = NULL,
-                                                                                vessel_type_codes = NULL,
-                                                                                species_fate_codes = NULL,
-                                                                                trip_ids = NULL,
-                                                                                data_path = NULL,
-                                                                                envir = NULL) {
-                                     # 1 - Arguments verification ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
                                        codama::r_type_checking(r_object = years_period,
@@ -710,28 +371,28 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Start elementary catch(es) data importation from ", length(database_connection)  ," observe databases.")
+                                                 " - Start activity(ies) and elementary catch(es) data importation from ", length(database_connection)  ," observe databases.")
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Start elementary catch(es) data importation from an observe database.")
+                                                 " - Start activity(ies) and elementary catch(es) data importation from an observe database.")
                                        }
                                        for(i in  1:length(database_connection)){
                                          if(length(database_connection)>1){
@@ -742,6 +403,17 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          if (! is.null(x = trip_ids)) {
                                            codama::r_type_checking(r_object = trip_ids,
                                                                    type = "character")
+                                           activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                      "observe",
+                                                                                                      "observe_activities_selected_trips.sql",
+                                                                                                      package = "t3")),
+                                                                          collapse = "\n"))
+                                           activity_sql_final <- DBI::sqlInterpolate(conn = database_conn,
+                                                                                     sql = activity_sql,
+                                                                                     trip_ids = DBI::SQL(paste0("'",
+                                                                                                                paste0(trip_ids,
+                                                                                                                       collapse = "', '"),
+                                                                                                                "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
                                                                                                              "observe_elementarycatches_selected_trips.sql",
@@ -754,6 +426,31 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")))
                                          } else {
+                                           activity_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
+                                                                                                      "observe",
+                                                                                                      "observe_activities.sql",
+                                                                                                      package = "t3")),
+                                                                          collapse = "\n"))
+                                           activity_sql_final <- DBI::sqlInterpolate(conn = database_conn,
+                                                                                     sql = activity_sql,
+                                                                                     begin_time_period = paste0((dplyr::first(years_period,
+                                                                                                                              order_by = years_period) - 1),
+                                                                                                                "-10-01"),
+                                                                                     end_time_period = paste0((dplyr::last(years_period,
+                                                                                                                           order_by = years_period) + 1),
+                                                                                                              "-03-31"),
+                                                                                     flag_codes = DBI::SQL(paste0("'",
+                                                                                                                  paste0(flag_codes,
+                                                                                                                         collapse = "', '"),
+                                                                                                                  "'")),
+                                                                                     ocean_codes = DBI::SQL(paste0("'",
+                                                                                                                   paste0(ocean_codes,
+                                                                                                                          collapse = "', '"),
+                                                                                                                   "'")),
+                                                                                     vessel_type_codes = DBI::SQL(paste0("'",
+                                                                                                                         paste0(vessel_type_codes,
+                                                                                                                                collapse = "', '"),
+                                                                                                                         "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
                                                                                                              "observe_elementarycatches.sql",
@@ -783,15 +480,24 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                  paste0(species_fate_codes,
                                                                                                                                         collapse = "', '"),
                                                                                                                                  "'")))
+
                                          }
+                                         message("[",
+                                                 activity_sql_final,
+                                                 "]")
                                          message("[",
                                                  elementarycatch_sql_final,
                                                  "]")
                                          if(i >1){
+                                           activity_data <- dplyr::full_join(activity_data,
+                                                                             dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
+                                                                                                           statement = activity_sql_final)))
                                            elementarycatch_data <- dplyr::full_join(elementarycatch_data,
                                                                                     dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
                                                                                                                   statement = elementarycatch_sql_final)))
                                          } else {
+                                           activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
+                                                                                          statement = activity_sql_final))
                                            elementarycatch_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
                                                                                                  statement = elementarycatch_sql_final))
                                          }
@@ -799,11 +505,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check the query and parameters associated.")
+                                              " - No elementary catch(es) data imported, check the query and parameters associated.")
+                                       }
+                                       if (nrow(x = activity_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No activity(ies) data imported, check the query and parameters associated.")
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful elementary catch(es) data importation from observe database(s).")
+                                                 " - Successful activity(ies) and elementary catch(es) data importation from observe database(s).")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -817,7 +528,33 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catches data importation from an AVDTH database.")
+                                               " - Start activity(ies) and elementary catch(es) data importation from an AVDTH database.")
+                                       activity_sql <- paste(readLines(con = system.file("sql",
+                                                                                         "avdth",
+                                                                                         "avdth_activities.sql",
+                                                                                         package = "t3")),
+                                                             collapse = "\n")
+                                       activity_sql_final <- DBI::sqlInterpolate(conn = database_connection,
+                                                                                 sql = activity_sql,
+                                                                                 begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                      (dplyr::first(years_period,
+                                                                                                                                    order_by = years_period) - 1),
+                                                                                                                      "-10-01#")),
+                                                                                 end_time_period = DBI::SQL(paste0("#",
+                                                                                                                   (dplyr::last(years_period,
+                                                                                                                                order_by = years_period) + 1),
+                                                                                                                   "-03-31#")),
+                                                                                 flag_codes = DBI::SQL(paste0("'",
+                                                                                                              paste0(flag_codes,
+                                                                                                                     collapse = "', '"),
+                                                                                                              "'")),
+                                                                                 ocean_codes = DBI::SQL(paste0(paste0(ocean_codes,
+                                                                                                                      collapse = ", "))),
+                                                                                 vessel_type_codes = DBI::SQL(paste0(paste0(vessel_type_codes,
+                                                                                                                            collapse = ", "))))
+                                       message("[",
+                                               activity_sql_final,
+                                               "]")
                                        elementarycatch_sql <- DBI::SQL(x = paste(readLines(con = system.file("sql",
                                                                                                              "avdth",
                                                                                                              "avdth_elementarycatches.sql",
@@ -873,38 +610,86 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        species_fate_code = as.integer(x = species_fate_code),
                                                        catch_weight = as.numeric(x = catch_weight),
                                                        catch_count=NA_integer_)
+
+                                       activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
+                                                                                      statement = activity_sql_final)) %>%
+                                         dplyr::mutate(trip_id = as.character(x = trip_id),
+                                                       activity_id = as.character(x = activity_id),
+                                                       ocean_code = as.integer(x = ocean_code),
+                                                       activity_date = as.character(x = activity_date),
+                                                       activity_number = as.integer(x = activity_number),
+                                                       activity_longitude = as.numeric(x = activity_longitude),
+                                                       activity_latitude = as.numeric(x = activity_latitude),
+                                                       set_count = as.integer(x = set_count),
+                                                       set_success_status_code = as.integer(x = dplyr::case_when(
+                                                         activity_code == 0 ~ 0,
+                                                         activity_code == 1 ~ 1,
+                                                         activity_code == 2 ~ 2,
+                                                         TRUE ~ NA_integer_
+                                                       )),
+                                                       set_success_status_label = dplyr::case_when(
+                                                         activity_code == 0 ~ "Null",
+                                                         activity_code == 1 ~ "Positive",
+                                                         activity_code == 2 ~ "Unknown success status",
+                                                         TRUE ~ NA_character_
+                                                       ),
+                                                       school_type_code = dplyr::case_when(
+                                                         school_type_code == 1 ~ 1,
+                                                         school_type_code == 1 ~ 2,
+                                                         # Unknown code=0 in observe database
+                                                         activity_code == 3 ~ 0,
+                                                         TRUE ~ NA_character_
+                                                       ),
+                                                       activity_id = activity_data$activity_id[activity_id],
+                                                       activity_code = as.integer(x = activity_code),
+                                                       activity_label = as.character(x = activity_label),
+                                                       objectoperation_code = NA_integer_,
+                                                       objectoperation_label = NA_character_,
+                                                       objectoperation_id = NA_character_,
+                                                       time_at_sea = as.integer(x = time_at_sea))
                                        if (nrow(x = elementarycatch_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No data imported, check the query and query's parameters.")
+                                       } else if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful elementary catch(es) data importation from an AVDTH database.")
+                                                 " - Successful activity(ies) and elementary catch(es) data importation from an AVDTH database.")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catch(es) data importation from csv file.")
+                                               " - Start activity(ies) and elementary catch(es) data importation from csv file.")
+                                       activity_data <- dplyr::tibble(read.csv2(file = data_path,
+                                                                                stringsAsFactors = FALSE))
                                        elementarycatch_data <- dplyr::tibble(read.csv2(file = data_path,
                                                                                        stringsAsFactors = FALSE))
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - No data imported, check your csv file.")
+                                              " - No elementary catch(es) data imported, check your csv file.")
+                                       } else if (nrow(x = activity_data) == 0) {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No activity(ies) data imported, check your csv file.")
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful elementary catch(es) data importation from csv file.")
+                                                 " - Successful activity(ies) and elementary catch(es) data importation from csv file.")
                                        }
+
                                      } else if (data_source == "rdata_file") {
                                        # 5 - Process for rdata file ----
                                        # process beginning
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start elementary catch(es) data importation from RData file.")
+                                               " - Start activity(ies) and elementary catch(es) data importation from RData file.")
                                        load(file = data_path,
                                             envir = tmp_envir <- new.env())
                                        if (exists(x = "elementarycatches",
@@ -923,12 +708,53 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Invalid RData, no R object named \"elementarycatches\" available in the R environment provided.")
                                        }
+                                       if (exists(x = "activities",
+                                                  envir = tmp_envir)) {
+                                         activity_data <- dplyr::tibble(get(x = "activities",
+                                                                            envir = tmp_envir))
+                                         if (paste0(class(x = activity_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Invalid RData, no R object named \"activities\" available in the R environment provided.")
+                                       }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful elementary catch(es) data importation from RData file.")
+                                               " - Successful activity(ies) and elementary catch(es) data importation from RData file.")
                                      } else if (data_source == "envir") {
                                        # 6 - R environment source ----
                                        # specific argument verification
+                                       if (is.null(x = envir)) {
+                                         environment_name <- as.environment(find(what = "activity")[1])
+                                       } else {
+                                         environment_name <- as.environment(envir)
+                                       }
+                                       # process beginning
+                                       if (exists(x = "activity",
+                                                  envir = environment_name)) {
+                                         message(format(x = Sys.time(),
+                                                        format = "%Y-%m-%d %H:%M:%S"),
+                                                 " - Start activity(ies) data importation from R environment.")
+                                         activity_data <- dplyr::tibble(get(x = "activity",
+                                                                            envir = environment_name))
+                                         if (paste0(class(x = activity_data),
+                                                    collapse = " ") != "tbl_df tbl data.frame"
+                                             || nrow(x = activity_data) == 0) {
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - No data imported, check the class of your RData file or data inside.")
+                                         }
+                                       } else {
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - No R object named \"activity\" available in the R environment.")
+                                       }
                                        if (is.null(x = envir)) {
                                          environment_name <- as.environment(find(what = "elementarycatch")[1])
                                        } else {
@@ -956,42 +782,59 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        message(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful elementary catch(es) data importation from R environment.")
+                                               " - Successful activity(ies) and elementary catch(es) data importation from R environment.")
                                      }
                                      # 7 - Common data design ----
-                                     # Check elementarycatches data column names and types
-                                     codama::r_table_checking(r_table=as.data.frame(elementarycatch_data),
-                                                              type="data.frame",
-                                                              column_name=c("activity_id",
-                                                                            "elementarycatch_id",
-                                                                            "ocean_code",
-                                                                            "school_type_code",
-                                                                            "weight_category_code",
-                                                                            "weight_category_label",
-                                                                            "species_code",
-                                                                            "species_fao_code",
-                                                                            "catch_weight",
-                                                                            "catch_count",
-                                                                            "species_fate_code"),
-                                                              column_type=c("character",
-                                                                            "character",
-                                                                            "integer",
-                                                                            "integer",
-                                                                            "character",
-                                                                            "character",
-                                                                            "integer",
-                                                                            "character",
-                                                                            "numeric",
-                                                                            "integer",
-                                                                            "integer"))
-                                     private$elementarycatches <- elementarycatch_data
+                                     # Check elementarycatches data column names and types done in activity.R
+                                     activity_data <- unclass(x = activity_data)
+                                     object_activities <- object_r6(class_name = "activities")
+                                     object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
+                                                                  FUN = function(activity_id) {
+                                                                    message(format(Sys.time(),
+                                                                                   "%Y-%m-%d %H:%M:%S"),
+                                                                            " - Start importation of activity and elementary catche(s) element ",
+                                                                            activity_id,
+                                                                            ".\n",
+                                                                            "[activity: ",
+                                                                            activity_data[[2]][activity_id],
+                                                                            "]")
+                                                                    elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],]
+                                                                    if(nrow(elementarycatches_data)==0){
+                                                                       elementarycatches_data <- NULL
+                                                                       }
+                                                                    activity <- activity$new(trip_id = activity_data$trip_id[activity_id],
+                                                                                             activity_id = activity_data$activity_id[activity_id],
+                                                                                             ocean_code = activity_data$ocean_code[activity_id],
+                                                                                             activity_date = activity_data$activity_date[activity_id],
+                                                                                             activity_number = activity_data$activity_number[activity_id],
+                                                                                             activity_longitude = activity_data$activity_longitude[activity_id],
+                                                                                             activity_latitude = activity_data$activity_latitude[activity_id],
+                                                                                             set_count = activity_data$set_count[activity_id],
+                                                                                             set_success_status_code = activity_data$set_success_status_code[activity_id],
+                                                                                             set_success_status_label = activity_data$set_success_status_label[activity_id],
+                                                                                             school_type_code = activity_data$school_type_code[activity_id],
+                                                                                             activity_code = activity_data$activity_code[activity_id],
+                                                                                             activity_label = activity_data$activity_label[activity_id],
+                                                                                             objectoperation_code = activity_data$objectoperation_code[activity_id],
+                                                                                             objectoperation_label = activity_data$objectoperation_label[activity_id],
+                                                                                             objectoperation_id = activity_data$objectoperation_id[activity_id],
+                                                                                             elementarycatches = elementarycatches_data,
+                                                                                             time_at_sea = activity_data$time_at_sea[activity_id])
+                                                                    message(format(x = Sys.time(),
+                                                                                   format = "%Y-%m-%d %H:%M:%S"),
+                                                                            " - Successful importation of activity and elementary catche(s) element ",
+                                                                            activity_id,
+                                                                            ".")
+                                                                    return(activity)
+                                                                  }))
+                                     private$activities <- object_activities
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -1034,10 +877,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -1047,10 +890,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -1290,9 +1133,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -1344,10 +1187,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -1357,10 +1200,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -2135,9 +1978,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a data frame object with weighted weight of each set sampled.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -2180,10 +2023,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -2193,10 +2036,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -2415,10 +2258,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source == "observe_database") {
                                        if (paste0(class(x = database_connection),
-                                                  collapse = " ") != "PostgreSQLConnection") {
+                                                  collapse = " ") != "PqConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                        }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -2638,7 +2481,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                  private = list(
                                    trips = NULL,
                                    activities = NULL,
-                                   elementarycatches = NULL,
                                    elementarylandings = NULL,
                                    wells = NULL,
                                    samplesets = NULL,

@@ -56,7 +56,7 @@ activity <- R6::R6Class(classname = "activity",
                                                 objectoperation_code,
                                                 objectoperation_label,
                                                 objectoperation_id,
-                                                elementarycatches=NULL) {
+                                                elementarycatches) {
                             # 1 - Arguments verifications ----
                             codama::r_type_checking(r_object = trip_id,
                                                     type = "character",

@@ -11,7 +11,6 @@ Create R6 reference object class object_model_data
 \itemize{
 \item \href{#method-object_model_data-trips_object_creation}{\code{object_model_data$trips_object_creation()}}
 \item \href{#method-object_model_data-activities_object_creation}{\code{object_model_data$activities_object_creation()}}
-\item \href{#method-object_model_data-elementarycatches_data}{\code{object_model_data$elementarycatches_data()}}
 \item \href{#method-object_model_data-elementarylandings_object_creation}{\code{object_model_data$elementarylandings_object_creation()}}
 \item \href{#method-object_model_data-wells_object_creation}{\code{object_model_data$wells_object_creation()}}
 \item \href{#method-object_model_data-setdurationrefs_data}{\code{object_model_data$setdurationrefs_data()}}
@@ -73,56 +72,9 @@ For example, a list of two database connection arguments for "observe_main" and 
 \if{html}{\out{<a id="method-object_model_data-activities_object_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-object_model_data-activities_object_creation}{}}}
 \subsection{Method \code{activities_object_creation()}}{
-Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
+Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
-  data_source = "observe_database",
-  database_connection = NULL,
-  years_period = NULL,
-  flag_codes = NULL,
-  ocean_codes = NULL,
-  vessel_type_codes = NULL,
-  trip_ids = NULL,
-  data_path = NULL,
-  envir = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
-
-\item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
-Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
-Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
-For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
-
-\item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
-
-\item{\code{flag_codes}}{Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{ocean_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
-
-\item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
-
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.}
-
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-object_model_data-elementarycatches_data"></a>}}
-\if{latex}{\out{\hypertarget{method-object_model_data-elementarycatches_data}{}}}
-\subsection{Method \code{elementarycatches_data()}}{
-Creation of a data frame object with elementarycatch(es).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{object_model_data$elementarycatches_data(
   data_source = "observe_database",
   database_connection = NULL,
   years_period = NULL,
@@ -155,7 +107,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{\code{vessel_type_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{\code{species_fate_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{\code{species_fate_codes}}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{\code{trip_ids}}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 

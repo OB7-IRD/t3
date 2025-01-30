@@ -37,7 +37,7 @@ Initialize function for R6 activities class.
   objectoperation_code,
   objectoperation_label,
   objectoperation_id,
-  elementarycatches = NULL
+  elementarycatches
 )}\if{html}{\out{</div>}}
 }
 

@@ -77,23 +77,15 @@ data_model_initialisation <- function(data_source = "observe_database",
                                           ocean_codes = ocean_codes,
                                           vessel_type_codes = vessel_type_codes,
                                           trip_ids = trip_ids)
-  # model creation: object activites creation
+  # model creation: object activites and elementarycatches creation
   object_model_data$activities_object_creation(data_source = data_source,
                                                database_connection = database_connection,
                                                years_period = years_period,
                                                flag_codes = flag_codes,
                                                ocean_codes = ocean_codes,
                                                vessel_type_codes = vessel_type_codes,
+                                               species_fate_codes = species_fate_codes,
                                                trip_ids = trip_ids)
-  # model creation: object elementarycatches creation
-  object_model_data$elementarycatches_data(data_source = data_source,
-                                           database_connection = database_connection,
-                                           years_period = years_period,
-                                           flag_codes = flag_codes,
-                                           ocean_codes = ocean_codes,
-                                           vessel_type_codes = vessel_type_codes,
-                                           species_fate_codes = species_fate_codes,
-                                           trip_ids = trip_ids)
   # model creation: object elementarylandings creation
   object_model_data$elementarylandings_object_creation(data_source = data_source,
                                                        database_connection = database_connection,
@@ -137,12 +129,10 @@ data_model_initialisation <- function(data_source = "observe_database",
   object_full_trips <- full_trips$new()
   # model creation: object full_trip creation
   object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips)
-  # model creation: add activities to trips selected
+  # model creation: add activities and elementarycatches to trips selected
   object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities)
   # model creation: filter by reference year
   object_full_trips$filter_by_years_period(years_period = years_period)
-  # model creation: add elementarycatches to trips selected
-  object_full_trips$add_elementarycatches(object_elementarycatches = object_model_data$.__enclos_env__$private$elementarycatches)
   # model creation: add elementarylandings to trips selected
   object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings)
   # model creation: add well(s) and sample(s) to trip(s) selected
