@@ -460,8 +460,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
     if (current_elementarylandings$count() != 0) {
       capture.output(current_elementarylandings_rf1 <- t3::object_r6(class_name = "elementarylandings"),
                      file = "NUL")
-      capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(",
-                                                                                                                        paste0("\"", species_fao_codes_rf1_fr, collapse = "\", \""),
+      capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
+                                                                                                                        paste0(species_fao_codes_rf1_fr, collapse = "\", \""),
                                                                                                                         "\")"))),
                      file = "NUL")
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))
