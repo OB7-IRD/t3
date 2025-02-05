@@ -11,14 +11,12 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                    #' @param elementarylanding_id Object of class {\link[base]{character}} expected. Elementary landing identification.
                                    #' @param weight_category_code Object of class {\link[base]{integer}} expected. Logbook weight category.
                                    #' @param weight_category_label Object of class {\link[base]{character}} expected. Logbook category name identification.
-                                   #' @param species_code Object of class {\link[base]{integer}} expected. Species code identification.
                                    #' @param species_fao_code Object of class {\link[base]{character}} expected. Species code identification on 3 characters.
                                    #' @param landing_weight Object of class {\link[base]{numeric}} expected. Landing weight in tonnes.
                                    initialize = function(trip_id,
                                                          elementarylanding_id,
                                                          weight_category_code,
                                                          weight_category_label,
-                                                         species_code,
                                                          species_fao_code,
                                                          landing_weight) {
                                      # 1 - Arguments verifications ----
@@ -34,9 +32,6 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                      codama::r_type_checking(r_object = weight_category_label,
                                                              type = "character",
                                                              length = 1L)
-                                     codama::r_type_checking(r_object = species_code,
-                                                             type = "integer",
-                                                             length = 1L)
                                      codama::r_type_checking(r_object = species_fao_code,
                                                              type = "character",
                                                              length = 1L)
@@ -48,7 +43,6 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                      private$elementarylanding_id <- elementarylanding_id
                                      private$weight_category_code <- weight_category_code
                                      private$weight_category_label <- weight_category_label
-                                     private$species_code <- species_code
                                      private$species_fao_code <- species_fao_code
                                      private$landing_weight <- landing_weight
                                    }),
@@ -57,7 +51,6 @@ elementarylanding <- R6::R6Class(classname = "elementarylanding",
                                    elementarylanding_id = NULL,
                                    weight_category_code = NULL,
                                    weight_category_label = NULL,
-                                   species_code = NULL,
                                    species_fao_code = NULL,
                                    landing_weight = NULL
                                  ))

@@ -26,7 +26,6 @@ Initialize function for R6 activities class.
   school_type_code,
   weight_category_code,
   weight_category_label,
-  species_code,
   species_fao_code,
   species_fate_code,
   catch_weight
@@ -47,8 +46,6 @@ Initialize function for R6 activities class.
 \item{\code{weight_category_code}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
 
 \item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
-
-\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Species code identification.}
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
 

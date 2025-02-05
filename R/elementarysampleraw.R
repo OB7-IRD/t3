@@ -15,7 +15,6 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      #' @param elementarysampleraw_id Object of class {\link[base]{character}} expected. Elementary sample raw identification.
                                      #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                      #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
-                                     #' @param species_code Object of class {\link[base]{integer}} expected. Specie code identification.
                                      #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
                                      #' @param size_measure_type_code Object of class {\link[base]{integer}} expected. Length type identification.
                                      #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
@@ -29,7 +28,6 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                            elementarysampleraw_id,
                                                            sample_quality_code,
                                                            sample_type_code,
-                                                           species_code,
                                                            species_fao_code,
                                                            size_measure_type_code,
                                                            sample_total_count,
@@ -60,9 +58,6 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        codama::r_type_checking(r_object = sample_type_code,
                                                                type = "integer",
                                                                length = 1L)
-                                       codama::r_type_checking(r_object = species_code,
-                                                               type = "integer",
-                                                               length = 1L)
                                        codama::r_type_checking(r_object = species_fao_code,
                                                                type = "character",
                                                                length = 1L)
@@ -87,7 +82,6 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        private$elementarysampleraw_id <- elementarysampleraw_id
                                        private$sample_quality_code <- sample_quality_code
                                        private$sample_type_code <- sample_type_code
-                                       private$species_code <- species_code
                                        private$species_fao_code <- species_fao_code
                                        private$size_measure_type_code <- size_measure_type_code
                                        private$sample_total_count <- sample_total_count
@@ -103,7 +97,6 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      elementarysampleraw_id = NULL,
                                      sample_quality_code = NULL,
                                      sample_type_code = NULL,
-                                     species_code = NULL,
                                      species_fao_code = NULL,
                                      size_measure_type_code  = NULL,
                                      sample_total_count = NULL,

@@ -28,7 +28,6 @@ Initialize function for R6 elementarysampleraw class.
   elementarysampleraw_id,
   sample_quality_code,
   sample_type_code,
-  species_code,
   species_fao_code,
   size_measure_type_code,
   sample_total_count,
@@ -55,8 +54,6 @@ Initialize function for R6 elementarysampleraw class.
 \item{\code{sample_quality_code}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
 \item{\code{sample_type_code}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
-
-\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
