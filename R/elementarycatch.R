@@ -13,7 +13,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  #' @param school_type_code Object of class {\link[base]{integer}} expected. School type identification.
                                  #' @param weight_category_code Object of class {\link[base]{integer}} expected. Logbook weight category.
                                  #' @param weight_category_label Object of class {\link[base]{character}} expected. Logbook category name identification.
-                                 #' @param species_code Object of class {\link[base]{integer}} expected. Species code identification.
                                  #' @param species_fao_code Object of class {\link[base]{character}} expected. Species code identification on 3 characters.
                                  #' @param species_fate_code Object of class {\link[base]{integer}} expected. Species fate code identification.
                                  #' @param catch_weight Object of class {\link[base]{numeric}} expected. Catch weight in tonnes.
@@ -23,7 +22,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                                        school_type_code,
                                                        weight_category_code,
                                                        weight_category_label,
-                                                       species_code,
                                                        species_fao_code,
                                                        species_fate_code,
                                                        catch_weight) {
@@ -46,9 +44,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    codama::r_type_checking(r_object = weight_category_label,
                                                            type = "character",
                                                            length = 1L)
-                                   codama::r_type_checking(r_object = species_code,
-                                                           type = "integer",
-                                                           length = 1L)
                                    codama::r_type_checking(r_object = species_fao_code,
                                                            type = "character",
                                                            length = 1L)
@@ -65,7 +60,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                    private$school_type_code <- school_type_code
                                    private$weight_category_code <- weight_category_code
                                    private$weight_category_label <- weight_category_label
-                                   private$species_code <- species_code
                                    private$species_fao_code <- species_fao_code
                                    private$species_fate_code <- species_fate_code
                                    private$catch_weight <- catch_weight
@@ -77,7 +71,6 @@ elementarycatch <- R6::R6Class(classname = "elementarycatch",
                                  school_type_code = NULL,
                                  weight_category_code = NULL,
                                  weight_category_label = NULL,
-                                 species_code = NULL,
                                  species_fao_code = NULL,
                                  species_fate_code = NULL,
                                  catch_weight = NULL,

@@ -24,7 +24,6 @@ Initialize function for R6 elementarylanding class.
   elementarylanding_id,
   weight_category_code,
   weight_category_label,
-  species_code,
   species_fao_code,
   landing_weight
 )}\if{html}{\out{</div>}}
@@ -40,8 +39,6 @@ Initialize function for R6 elementarylanding class.
 \item{\code{weight_category_code}}{Object of class {\link[base]{integer}} expected. Logbook weight category.}
 
 \item{\code{weight_category_label}}{Object of class {\link[base]{character}} expected. Logbook category name identification.}
-
-\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Species code identification.}
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
 

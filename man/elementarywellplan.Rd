@@ -24,7 +24,6 @@ Initialize function for R6 elementarywellplan class.
   well_id,
   activity_id,
   sample_id,
-  species_code,
   species_fao_code,
   wellplan_weight,
   wellplan_count,
@@ -43,8 +42,6 @@ Initialize function for R6 elementarywellplan class.
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
-
-\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identifiation.}
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 

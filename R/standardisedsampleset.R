@@ -13,7 +13,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                     #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                     #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
-                                    #' @param species_code Object of class {\link[base]{integer}} expected. Specie code identification.
                                     #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
                                     #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
                                     #' @param sample_number_weighted Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
@@ -26,7 +25,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                           sample_id,
                                                           sample_quality_code,
                                                           sample_type_code,
-                                                          species_code,
                                                           species_fao_code,
                                                           sample_standardised_length_class_lf,
                                                           sample_number_weighted,
@@ -50,9 +48,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                               type = "integer",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = sample_type_code,
-                                                              type = "integer",
-                                                              length = 1L)
-                                      codama::r_type_checking(r_object = species_code,
                                                               type = "integer",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = species_fao_code,
@@ -80,7 +75,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                       private$sample_id <- sample_id
                                       private$sample_quality_code <- sample_quality_code
                                       private$sample_type_code <- sample_type_code
-                                      private$species_code <- species_code
                                       private$species_fao_code <- species_fao_code
                                       private$sample_standardised_length_class_lf <- sample_standardised_length_class_lf
                                       private$sample_number_weighted <- sample_number_weighted
@@ -95,7 +89,6 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     sample_id = NULL,
                                     sample_quality_code = NULL,
                                     sample_type_code = NULL,
-                                    species_code = NULL,
                                     species_fao_code = NULL,
                                     sample_standardised_length_class_lf = NULL,
                                     sample_number_weighted = NULL,

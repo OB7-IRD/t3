@@ -26,7 +26,6 @@ Initialize function for R6 standardisedsampleset class.
   sample_id,
   sample_quality_code,
   sample_type_code,
-  species_code,
   species_fao_code,
   sample_standardised_length_class_lf,
   sample_number_weighted,
@@ -50,8 +49,6 @@ Initialize function for R6 standardisedsampleset class.
 \item{\code{sample_quality_code}}{Object of class {\link[base]{integer}} expected. Sample quality identification.}
 
 \item{\code{sample_type_code}}{Object of class {\link[base]{integer}} expected. Sample type identification.}
-
-\item{\code{species_code}}{Object of class {\link[base]{integer}} expected. Specie code identification.}
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.}
 
