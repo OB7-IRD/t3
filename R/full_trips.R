@@ -3121,7 +3121,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               } else {
                                 length_step_count <- length_step %>%
                                   dplyr::group_by(ocean_code,
-                                                  species_code,
                                                   species_fao_code,
                                                   ld1_class) %>%
                                   dplyr::summarise(nb = dplyr::n(),
@@ -3921,7 +3920,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                     sub_sample_id = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                     sample_quality_code = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_quality_code,
                                                                                                     sample_type_code = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_type_code,
-                                                                                                    species_code = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$species_code,
                                                                                                     species_fao_code = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$species_fao_code,
                                                                                                     sample_standardised_length_class_lf = current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_length_class_lf,
                                                                                                     sample_number_measured_extrapolated_lf = as.numeric(current_sample_specie$extract(id = elementarysamplesraw_id)[[1]]$.__enclos_env__$private$sample_number_measured_extrapolated_lf),
@@ -3962,7 +3960,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                       sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
                                                                                                       sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
                                                                                                       sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
-                                                                                                      species_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_code,
                                                                                                       species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
                                                                                                       sample_standardised_length_class_lf = lower_border,
                                                                                                       sample_number_measured_extrapolated_lf = sum(unlist(current_sample_specie_by_step_by_subid$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
@@ -4604,15 +4601,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_elementarysamples$add(new_item = current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data),
                                                            file = "NUL")
-                                            current_elementarysamples_species <- unique(paste(unlist(current_elementarysamples$extract_l1_element_value(element = "species_code")),
-                                                                                              unlist(current_elementarysamples$extract_l1_element_value(element = "species_fao_code")),
-                                                                                              sep = "_"))
+                                            current_elementarysamples_species <- unique(unlist(current_elementarysamples$extract_l1_element_value(element = "species_fao_code")))
                                             for (elementarysamples_species_id in current_elementarysamples_species) {
                                               capture.output(current_elementarysamples_specie <- object_r6(class_name = "elementarysamples"),
                                                              file = "NUL")
                                               capture.output(current_elementarysamples_specie$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$species_fao_code == \"",
-                                                                                                                                                                 stringr::str_extract(string = elementarysamples_species_id,
-                                                                                                                                                                                      pattern = "[:alpha:]*$"),
+                                                                                                                                                                 elementarysamples_species_id,
                                                                                                                                                                  "\""))),
                                                              file = "NUL")
                                               current_elementarysamples_specie_classes <- unique(x = unlist(x = current_elementarysamples_specie$extract_l1_element_value(element = "sample_standardised_length_class_lf")))
@@ -4641,10 +4635,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          sample_id = unique(x = unlist(x = current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_id"))),
                                                                                                          sample_quality_code = as.integer(x = current_elementarysamples_sample_quality_id),
                                                                                                          sample_type_code = as.integer(x = current_elementarysamples_sample_type_id),
-                                                                                                         species_code = as.integer(x = stringr::str_extract(string = elementarysamples_species_id,
-                                                                                                                                                            pattern = "^[:digit:]*")),
-                                                                                                         species_fao_code = stringr::str_extract(string = elementarysamples_species_id,
-                                                                                                                                                 pattern = "[:alpha:]*$"),
+                                                                                                         species_fao_code = elementarysamples_species_id,
                                                                                                          sample_standardised_length_class_lf = as.integer(current_elementarysamples_specie_class_id),
                                                                                                          sample_number_measured_extrapolated_lf = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
                                                                                                          sample_total_count = sum(unlist(x = current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_total_count"))))
@@ -4921,7 +4912,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
                                                                                                                sample_quality_code = current_standardised_sample$.__enclos_env__$private$sample_quality_code,
                                                                                                                sample_type_code = current_standardised_sample$.__enclos_env__$private$sample_type_code,
-                                                                                                               species_code = current_standardised_sample$.__enclos_env__$private$species_code,
                                                                                                                species_fao_code = current_standardised_sample$.__enclos_env__$private$species_fao_code,
                                                                                                                sample_standardised_length_class_lf = current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
@@ -5704,7 +5694,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      file = "NUL")
                                       tmp_elementarycatch <- list(id_act = unlist(current_elementarycatches$extract_l1_element_value(element = "activity_id")),
                                                                   w_lb_t3 = unlist(current_elementarycatches$extract_l1_element_value(element = "catch_weight_category_code_corrected")),
-                                                                  sp_code = unlist(current_elementarycatches$extract_l1_element_value(element = "species_code")),
+                                                                  sp_fate_code = unlist(current_elementarycatches$extract_l1_element_value(element = "species_fate_code")),
                                                                   sp = unlist(current_elementarycatches$extract_l1_element_value(element = "species_fao_code")),
                                                                   wcat = unlist(current_elementarycatches$extract_l1_element_value(element = "weight_category_code_corrected")))
                                       tmp_elementarycatch_activities <- list(id_act = unique(tmp_elementarycatch$id_act),
@@ -5746,7 +5736,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       capture.output(current_standardisedsamplesets_data$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
                                                      file = "NUL")
                                       tmp_standardisedsampleset <- list(id_act = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "activity_id")),
-                                                                        sp_code = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "species_code")),
                                                                         sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "species_fao_code")),
                                                                         wcat = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_category")),
                                                                         w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weigth_set")))
@@ -5805,7 +5794,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       tmp_elementarywellplan <- list(id_well = unlist(current_wellplans$extract_l1_element_value(element = "well_id")),
                                                                      id_act = unlist(current_wellplans$extract_l1_element_value(element = "activity_id")),
                                                                      id_sample = unlist(current_wellplans$extract_l1_element_value(element = "sample_id")),
-                                                                     sp_code = unlist(current_wellplans$extract_l1_element_value(element = "species_code")),
                                                                      code3l = unlist(current_wellplans$extract_l1_element_value(element = "species_fao_code")),
                                                                      weight = unlist(current_wellplans$extract_l1_element_value(element = "wellplan_weight")),
                                                                      wcat_well = unlist(current_wellplans$extract_l1_element_value(element = "weight_category_label")))
@@ -5820,7 +5808,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               raw_inputs_level3[[2]] <- act3
                               raw_inputs_level3[[3]] <- dplyr::tibble(dplyr::group_by(.data = samw,
                                                                                       id_act,
-                                                                                      sp_code,
                                                                                       sp,
                                                                                       wcat) %>%
                                                                         dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
