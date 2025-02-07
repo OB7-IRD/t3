@@ -5970,6 +5970,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     load(file.path(inputs_level3_path,
                                                    target_file[x],
                                                    fsep = "/"))
+                                    # WARNING line to cancel when name standardization done----
                                     if(exists("process_level3") && is.list(get("process_level3"))){
                                       data_level3 <- process_level3
                                     }
@@ -6002,6 +6003,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 sset <- inputs_level3[[4]]
                                 # well plan
                                 wp <- inputs_level3[[5]]
+                                # parameters
+                                target_species <- c("BET","SKJ","YFT")
                                 # standardize weight category
                                 catch_set_lb$wcat <- gsub("kg",
                                                           "",
@@ -6061,9 +6064,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # compute total set weight
                                 sset2 <- droplevels(sset2)
                                 tmp <- catch_set_lb
-                                tmp <- tmp[tmp$sp %in% c("YFT",
-                                                         "BET",
-                                                         "SKJ"), ]
+                                tmp <- tmp[tmp$sp %in% target_species, ]
                                 agg3 <- aggregate(x = cbind(w_lb_t3 = w_lb_t3) ~ id_act,
                                                   data = tmp,
                                                   FUN = function(x) {
@@ -6122,12 +6123,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 # name change
                                 catch_set_lb$mon <- lubridate::month(x = catch_set_lb$date_act)
                                 # select and rename species
-                                catch_set_lb$sp[!catch_set_lb$sp %in% c("YFT",
-                                                                        "BET",
-                                                                        "SKJ")] <- "OTH"
+                                catch_set_lb$sp[!catch_set_lb$sp %in% target_species] <- "OTH"
                                 catch_set_lb <- droplevels(catch_set_lb)
                                 # remove other species from lb before calculate species composition (to be compare to sample)
-                                catch_set_lb <- catch_set_lb[catch_set_lb$sp_code %in% c(1, 2, 3), ]
+                                catch_set_lb <- catch_set_lb[catch_set_lb$sp %in% target_species, ]
                                 catch_set_lb <- droplevels(catch_set_lb)
                                 # calculate total catch for thonidae only
                                 tot <- aggregate(x = cbind(wtot_lb_t3 = w_lb_t3) ~ id_act,
@@ -6156,10 +6155,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 tmp[, names(tmp) %in% colnames(tmp2)] <- tmp2
                                 lb_set <- tmp
                                 # compute proportion from t3 step 2 ----
-                                samw$sp[!samw$sp %in% c("YFT",
-                                                        "BET",
-                                                        "SKJ")] <- "OTH"
-                                samw <- samw[samw$sp_code %in% c(1, 2, 3), ]
+                                samw$sp[!samw$sp %in% target_species] <- "OTH"
+                                samw <- samw[samw$sp %in% target_species, ]
                                 samw$wcat <- gsub("kg",
                                                   "",
                                                   samw$wcat)
