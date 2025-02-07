@@ -7203,21 +7203,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
                               # WARNING temporary flag_code converter to fao three letter code----
-                              country_flag_number <- vector()
-                              for(i in country_flag){
-                                country_flag_number_tmp <- switch (i,
-                                                                   "FRA" = 1,
-                                                                   "SEN" = 2,
-                                                                   "ESP" = 4,
-                                                                   "ITA" = 32,
-                                                                   "SYC" = 23,
-                                                                   "MYT" = 41
-                                )
-                                country_flag_number <- append(country_flag_number, country_flag_number_tmp)
-                              }
+                              browser()
+                              # country_flag_number <- vector()
+                              # for(i in country_flag){
+                              #   country_flag_number_tmp <- switch (i,
+                              #                                      "FRA" = 1,
+                              #                                      "SEN" = 2,
+                              #                                      "ESP" = 4,
+                              #                                      "ITA" = 32,
+                              #                                      "SYC" = 23,
+                              #                                      "MYT" = 41
+                              #   )
+                              #   country_flag_number <- append(country_flag_number, country_flag_number_tmp)
+                              # }
                               # reduce dataset to the period and flag considered in the modeling and check data availability
                               act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
-                                                                   flag_code %in% country_flag_number)
+                                                                   flag_code %in% country_flag)
+
+                              # act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
+                              #                                      flag_code %in% country_flag_number)
                               if (nrow(act_chr) == 0) {
                                 cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -7235,35 +7239,37 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               ############################################################################
                               # WARNING catches remove discard----
                               # changer pour le code espece et la colonne discard
-                              catch_discard <- catch_set_lb %>% dplyr::filter(sp_code %in% c(8, 800:899))
-                              catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
-                              catch_set_lb$sp_code <- NULL
+                              # catch_discard <- catch_set_lb %>% dplyr::filter(sp_code %in% c(8, 800:899))
+                              # catch_set_lb <- catch_set_lb %>% dplyr::filter(!sp_code %in% c(8, 800:899))
+                              # catch_set_lb$sp_code <- NULL
+                              catch_discard <- catch_set_lb %>% dplyr::filter(sp_fate_code != 6)
+                              catch_set_lb <- catch_set_lb %>% dplyr::filter(sp_fate_code == 6)
                               ###########################################################################
-                              target_tuna <- c("BET", "SKJ", "YFT")
-                              set_with_target_tuna <- catch_set_lb %>%
-                                dplyr::filter(sp %in% target_tuna) %>%
-                                dplyr::distinct(id_act)
+                              target_species <- c("BET", "SKJ", "YFT")
+                              set_with_target_species <- catch_set_lb %>%
+                                dplyr::filter(sp %in% target_species) %>%
+                              dplyr::distinct(id_act)
                               set_with_mix_tuna <- catch_set_lb %>%
                                 dplyr::filter(sp %in% c("MIX")) %>%
                                 dplyr::distinct(id_act)
-                              catch_without_target_tuna <- catch_set_lb %>%
-                                dplyr::filter(!id_act %in% c(set_with_target_tuna$id_act,set_with_mix_tuna$id_act))
+                              catch_without_target_species <- catch_set_lb %>%
+                                dplyr::filter(!id_act %in% c(set_with_target_species$id_act,set_with_mix_tuna$id_act))
 
                               catch_with_mix_tuna <- catch_set_lb %>%
                                 dplyr::filter(id_act %in% set_with_mix_tuna$id_act)
-                              catch_with_target_tuna <- catch_set_lb %>%
-                                dplyr::filter(id_act %in% set_with_target_tuna$id_act,
+                              catch_with_target_species <- catch_set_lb %>%
+                                dplyr::filter(id_act %in% set_with_target_species$id_act,
                                               !id_act %in% set_with_mix_tuna$id_act)
-                              catch_with_other_species <- catch_with_target_tuna %>%
-                                dplyr::filter(!sp %in% target_tuna)
+                              catch_with_other_species <- catch_with_target_species %>%
+                                dplyr::filter(!sp %in% target_species)
 
                               catch_data_not_corrected <- list(catch_with_mix_tuna = catch_with_mix_tuna,
-                                                               catch_without_target_tuna =  catch_without_target_tuna,
+                                                               catch_without_target_species =  catch_without_target_species,
                                                                catch_with_other_species = catch_with_other_species,
                                                                catch_discard = catch_discard)
 
-                              catch_set_lb <- catch_with_target_tuna %>%
-                                dplyr::filter(sp %in% target_tuna)
+                              catch_set_lb <- catch_with_target_species %>%
+                                dplyr::filter(sp %in% target_species)
                               catch_set_lb <- droplevels(catch_set_lb)
                               # standardize weight category
                               catch_set_lb$wcat <- gsub("kg",
@@ -7934,7 +7940,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   ocean = as.factor(ocean),
                                   fit_prop_t3_ST = NULL)
 
-                              catch_without_target_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_tuna %>%
+                              catch_without_target_species <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_without_target_species %>%
                                 dplyr::mutate(data_source = "unchanged",
                                               catch_set_fit  = round(w_lb_t3, digits = 4),
                                               mon =as.character(mon),
@@ -7958,7 +7964,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               name_to_summarise <- c("catch_set_fit", "ci_inf","ci_sup", "w_lb_t3")
                               # remove catch_with_mix_tuna when issue #98 will be corrected
-                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_tuna,
+                              catch_all_other <- dplyr::bind_rows(catch_mix_tuna_ST, catch_without_target_species,
                                                                   catch_with_other_species, catch_discard, catch_with_mix_tuna) %>%
                                 dplyr::mutate(status = ifelse(data_source == "discard","discard", "catch"),
                                               ci_inf = catch_set_fit,
