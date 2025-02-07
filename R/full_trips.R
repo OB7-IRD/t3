@@ -7202,26 +7202,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               act_chr$mon <- lubridate::month(x = act_chr$date_act)
                               act_chr$fmod <- as.factor(act_chr$fmod)
                               act_chr$vessel <- as.factor(act_chr$vessel)
-                              # WARNING temporary flag_code converter to fao three letter code----
-                              browser()
-                              # country_flag_number <- vector()
-                              # for(i in country_flag){
-                              #   country_flag_number_tmp <- switch (i,
-                              #                                      "FRA" = 1,
-                              #                                      "SEN" = 2,
-                              #                                      "ESP" = 4,
-                              #                                      "ITA" = 32,
-                              #                                      "SYC" = 23,
-                              #                                      "MYT" = 41
-                              #   )
-                              #   country_flag_number <- append(country_flag_number, country_flag_number_tmp)
-                              # }
+
                               # reduce dataset to the period and flag considered in the modeling and check data availability
                               act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
                                                                    flag_code %in% country_flag)
-
-                              # act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
-                              #                                      flag_code %in% country_flag_number)
                               if (nrow(act_chr) == 0) {
                                 cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
