@@ -7492,20 +7492,20 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               options(warn = 1)
                               load(file = system.file("wrld_simpl.RData",
                                                       package = "t3"))
-
+                              browser()
                               # WARNING temporary flag_code converter to fao three letter code----
-                              country_flag_number <- vector()
-                              for(i in country_flag){
-                                country_flag_number_tmp <- switch (i,
-                                                                   "FRA" = 1,
-                                                                   "SEN" = 2,
-                                                                   "ESP" = 4,
-                                                                   "ITA" = 32,
-                                                                   "SYC" = 23,
-                                                                   "MYT" = 41
-                                )
-                                country_flag_number <- append(country_flag_number, country_flag_number_tmp)
-                              }
+                              # country_flag_number <- vector()
+                              # for(i in country_flag){
+                              #   country_flag_number_tmp <- switch (i,
+                              #                                      "FRA" = 1,
+                              #                                      "SEN" = 2,
+                              #                                      "ESP" = 4,
+                              #                                      "ITA" = 32,
+                              #                                      "SYC" = 23,
+                              #                                      "MYT" = 41
+                              #   )
+                              #   country_flag_number <- append(country_flag_number, country_flag_number_tmp)
+                              # }
 
                               # function to add empty levels for the prediction with randomforest::predict.randomforest
                               addmissinglevel <- function(df, a){
@@ -7962,8 +7962,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # recover the weight declaration standardized
                               weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
                               set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = dplyr::join_by("id_act", "sp"))
-
-                              name_to_trash <- c("code_act_type", "wcat","sp_code","status")
+                              name_to_trash <- c("code_act_type", "wcat", "status") #"sp_code"
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
                                                                                         !name_to_trash)) %>%
                                 tidyr::separate(id_act,into = c("text_tmp", "vessel_id_tmp", "numbers"),
@@ -8045,7 +8044,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               set_all_output_long_tmp <- set_all_output_long_tmp %>%  dplyr::rename(NUMBAT = vessel_id, pays = flag_code,
                                                                                                      code_assoc_groupe = fishing_mode,
                                                                                                      capture = catch)
-
                               set_all_output_wide <- set_all_output_long_tmp %>%
                                 tidyr::pivot_wider(values_from = capture,
                                                    names_from = c(species),
