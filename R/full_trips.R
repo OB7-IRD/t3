@@ -7685,7 +7685,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               # bootstrap CI
                               # bootstrap step 1 - bootstrap on models and predicts ----
-                              browser()
                               if (ci == TRUE){
                                 for (ocean in ocean_level) {
                                   sets_long_ocean <- sets_long[sets_long$ocean == ocean, ]
@@ -7714,6 +7713,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "\"",
                                             ".\n",
                                             sep = "")
+                                        # filter flag
+                                        sets_long_fishing_mode <- sets_long_fishing_mode %>% dplyr::filter(flag_code == country_flag)
                                         if(nrow(sets_long_fishing_mode) > 0) {
                                           current_output_level3_process2 <- output_level3_process2[[paste(ocean,
                                                                                                           species,
@@ -7728,8 +7729,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   # bootstrap parameters
                                                                   Nboot = Nboot,
                                                                   target_period = dplyr::first(x = sets_long_fishing_mode$yr))
-                                          # filter flag
-                                          boot_output <- boot_output %>% dplyr::filter(flag_code == country_flag)
+
 
                                           outputs_level3_process5[[3]] <- append(outputs_level3_process5[[3]],
                                                                                  list(boot_output))
@@ -7789,7 +7789,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                              value = "fit_prop_t3_ST",
                                                                              "BET", "SKJ", "YFT")
                                       boot_tmp_element <- dplyr::left_join(boot_tmp_element_long, boot_tmp_element,
-                                                                           by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel", "id_trip",
+                                                                           by = c("id_act", "date_act", "lat", "lon", "fmod",  "vessel","flag_code", "id_trip",
                                                                                   "ocean", "yr", "mon", "wtot_lb_t3", "sp","data_source"))
                                       boot_tmp_element$catch_set_fit <- round(boot_tmp_element$wtot_lb_t3 * boot_tmp_element$fit_prop_t3_ST, digits = 4)
                                       list_boot_ST_ocean[[element]] <- boot_tmp_element
@@ -7879,7 +7879,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 #                                                                             digits = 4)
                                 set_all <- set_all_final_ocean
                               }
-                              browser()
                               # add other species and mix tuna
                               # compute average tuna proportion in sets by fishing mode
                               # MIX with other tuna should have been corrected in process 1.3 (issue #98)
@@ -8133,7 +8132,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               t1_all <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::group_by(across(t1_column_names)) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit)) %>% ungroup()
-
                               # compute final CI
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
                                                  || length(which(ci_type == "t1")) > 0 )) {
@@ -8186,6 +8184,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "_",
                                                                  paste(unique(t1_all$yr),
                                                                        collapse = "-"),
+                                                                 "_",
+                                                                 country_flag,
+                                                                 "_",
+                                                                 paste(strsplit(as.character(Sys.time()),split = "-|:| ")[[1]], collapse = ""),
                                                                  ".csv",
                                                                  sep = "")),
                                           row.names = FALSE,
@@ -8261,6 +8263,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "_",
                                                                  paste(unique(t1_fmod$yr),
                                                                        collapse = "-"),
+                                                                 "_",
+                                                                 country_flag,
+                                                                 "_",
+                                                                 paste(strsplit(as.character(Sys.time()),split = "-|:| ")[[1]], collapse = ""),
                                                                  ".csv",
                                                                  sep = "")),
                                           row.names = FALSE,
@@ -8344,6 +8350,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "_",
                                                                  paste(unique(t2_all$yr),
                                                                        collapse = "-"),
+                                                                 "_",
+                                                                 country_flag,
+                                                                 "_",
+                                                                 paste(strsplit(as.character(Sys.time()),split = "-|:| ")[[1]], collapse = ""),
                                                                  ".csv",
                                                                  sep = "")),
                                           row.names = FALSE,
@@ -8481,6 +8491,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "_",
                                                                  paste(unique(t2_fmod$yr),
                                                                        collapse = "-"),
+                                                                 "_",
+                                                                 country_flag,
+                                                                 "_",
+                                                                 paste(strsplit(as.character(Sys.time()),split = "-|:| ")[[1]], collapse = ""),
                                                                  ".csv",
                                                                  sep = "")),
                                           row.names = FALSE,
@@ -8495,6 +8509,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  "_",
                                                                  paste(unique(t2_fmod$yr),
                                                                        collapse = "-"),
+                                                                 "_",
+                                                                 country_flag,
+                                                                 "_",
+                                                                 paste(strsplit(as.character(Sys.time()),split = "-|:| ")[[1]], collapse = ""),
                                                                  ".csv",
                                                                  sep = "")),
                                           row.names = FALSE,
