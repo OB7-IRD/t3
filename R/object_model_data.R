@@ -10,9 +10,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of an R6 reference object class trips which contains one or more R6 reference object class trip.
                                    #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -55,10 +55,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -68,10 +68,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -322,9 +322,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class activities which contain one or more R6 reference object class activity.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -367,10 +367,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -380,10 +380,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -648,9 +648,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class elementarycatches which contain one or more R6 reference object class elementarycatch.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -697,10 +697,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -710,10 +710,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -976,9 +976,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -1021,10 +1021,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -1034,10 +1034,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -1275,9 +1275,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a R6 reference object class wells which contain one or more R6 reference object class well, wellset, samples and elementarywellplan.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -1329,10 +1329,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -1342,10 +1342,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -2115,9 +2115,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @description Creation of a data frame object with weighted weigth of each set sampled.
                                    #' @param data_source  Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch between "observe_database", "avdth_database", "csv_file" (with separator ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
                                    #' @param database_connection Database connection, list of one or more R object(s) expected. By default NULL.
-                                   #' Mandatory argument for data source "observe_database" ("PostgreSQLConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
+                                   #' Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
-                                   #' For data source "observe_database", a list of "PostgreSQLConnection" R objects can be specified to query data from different observe databases.
+                                   #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -2160,10 +2160,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      if (data_source == "observe_database") {
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
-                                         if( any(unlist(lapply(database_connection, class)) !=  "PostgreSQLConnection")) {
+                                         if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. List of objects of class \"PostgreSQLConnection\" expected for multiple observe databases query.")
+                                                " - Invalid \"database_connection\" argument. List of objects of class \"PqConnection\" expected for multiple observe databases query.")
 
 
                                          }
@@ -2173,10 +2173,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          # specific argument verification for simple query
                                          if (paste0(class(x = database_connection),
-                                                    collapse = " ") != "PostgreSQLConnection") {
+                                                    collapse = " ") != "PqConnection") {
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
-                                                " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                                " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                          }
                                          # process beginning
                                          message(format(x = Sys.time(),
@@ -2248,7 +2248,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          message(format(x = Sys.time(),
                                                         format = "%Y-%m-%d %H:%M:%S"),
-                                                 " - Successful sample set(s) data importation from an AVDTH database.")
+                                                 " - Successful sample set(s) data importation from observe database(s).")
                                        }
                                      } else if (data_source == "avdth_database") {
                                        # 3 - Process for AVDTH database ----
@@ -2395,10 +2395,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source == "observe_database") {
                                        if (paste0(class(x = database_connection),
-                                                  collapse = " ") != "PostgreSQLConnection") {
+                                                  collapse = " ") != "PqConnection") {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Invalid \"database_connection\" argument. Class \"PostgreSQLConnection\" expected.")
+                                              " - Invalid \"database_connection\" argument. Class \"PqConnection\" expected.")
                                        }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
