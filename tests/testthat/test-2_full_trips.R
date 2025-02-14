@@ -2,7 +2,6 @@
 load(file = system.file("test_data",
                         "observe_data_test.RData",
                         package = "t3"))
-species_rf1 <- c(1, 2, 3, 4, 9, 11)
 species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 # model creation ----
 # initialisation object for full trips class
@@ -276,17 +275,17 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                            file = "NUL")
             capture.output(current_elementarysamples$add(new_item = current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data),
                            file = "NUL")
-            current_elementarysamplesraw_species <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "species_code")))
-            for (specie in current_elementarysamplesraw_species) {
+            current_elementarysamplesraw_species_list <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "species_fao_code")))
+            for (specie in current_elementarysamplesraw_species_list) {
               capture.output(current_elementarysamplesraw_species <- t3::object_r6(class_name = "elementarysamplesraw"),
                              file = "NUL")
-              capture.output(current_elementarysamplesraw_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$species_code == ",
-                                                                                                                                        specie))),
+              capture.output(current_elementarysamplesraw_species$add(new_item = current_elementarysamplesraw$filter_l1(filter = paste0("$path$species_fao_code == \"",
+                                                                                                                                         specie, "\""))),
                              file = "NUL")
               capture.output(current_elementarysamples_species <- t3::object_r6(class_name = "elementarysamples"),
                              file = "NUL")
-              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$species_code == ",
-                                                                                                                                  specie))),
+              capture.output(current_elementarysamples_species$add(new_item = current_elementarysamples$filter_l1(filter = paste0("$path$species_fao_code == \"",
+                                                                                                                                  specie, "\""))),
                              file = "NUL")
               # 217 - Checking if sum "sample_number_measured_extrapolated_lf" in object "elementarysamplesraw" is equal to "sample_number_measured" in object "elementarysamples" ----
               testthat::test_that(desc = "217 - Checking if sum \"sample_number_measured_extrapolated_lf\" in object \"elementarysamplesraw\" is equal to \"sample_number_measured\" in object \"elementarysamples\"",
@@ -433,7 +432,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
             elementarycatches_id <- elementarycatches_ids[elementarycatches_id]
             current_elementarycatches_by_id=current_elementarycatches %>%
                              dplyr::filter(elementarycatch_id == elementarycatches_id)
-            if (unique(current_elementarycatches_by_id$species_code) %in% species_rf1) {
+            if (unique(current_elementarycatches_by_id$species_fao_code) %in% species_fao_codes_rf1) {
               current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(current_elementarycatches_by_id$catch_weight_rf1)
               current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(current_elementarycatches_by_id$catch_weight_rf2)
             }
@@ -462,9 +461,9 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
     if (current_elementarylandings$count() != 0) {
       capture.output(current_elementarylandings_rf1 <- t3::object_r6(class_name = "elementarylandings"),
                      file = "NUL")
-      capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_code %in% c(",
-                                                                                                                        paste0(species_rf1, collapse = ", "),
-                                                                                                                        ")"))),
+      capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
+                                                                                                                        paste0(species_fao_codes_rf1_fr, collapse = "\", \""),
+                                                                                                                        "\")"))),
                      file = "NUL")
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))
     }
