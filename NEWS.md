@@ -1,3 +1,14 @@
+# t3 2.1.0
+
+## Added
+* catch_count
+
+## Changed
+* Optimization : 
+  - R6 Object to data.frame for elementary catch(es) and samples 
+  - Gather function to create and add activities and elementary catches
+* duration computation
+
 # t3 2.0.1 - 2025-01-21
 
 ## Changed
