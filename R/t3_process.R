@@ -12,7 +12,6 @@
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
 #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-#' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
 #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -70,7 +69,6 @@ t3_process <- function(process = "all",
                        log_path = NULL,
                        output_path = NULL,
                        output_format = "eu",
-                       referential_template = "observe",
                        new_directory = TRUE,
                        years_period,
                        flag_codes,
@@ -135,6 +133,7 @@ t3_process <- function(process = "all",
                                           species_fate_codes = species_fate_codes,
                                           sample_type_codes = sample_type_codes,
                                           trip_ids = trip_ids)
+  referential_template <- sub("_database", "",  data_source)
   if (process == "level1") {
     new_directory_level1 <- new_directory
     output_path_level1 <- output_path
@@ -227,6 +226,8 @@ t3_process <- function(process = "all",
                                  periode_reference_level3 = NULL,
                                  target_year,
                                  period_duration,
+                                 country_flag = flag_codes,
+                                 input_type = data_source,
                                  distance_maximum = distance_maximum,
                                  number_sets_maximum = number_sets_maximum,
                                  set_weight_minimum = set_weight_minimum,

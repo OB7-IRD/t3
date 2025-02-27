@@ -754,7 +754,7 @@ Formatting data for model predictions.
 
 \item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
 
-\item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'.  Values can be 'observe_database' or 'avdth_database'.}
+\item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
 
 \item{\code{small_fish_only}}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 }

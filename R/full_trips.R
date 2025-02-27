@@ -30,7 +30,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (trip_id == 1) {
                                   cat(format(Sys.time(),
                                              "%Y-%m-%d %H:%M:%S"),
-                                      " - Start full trips creation.\n")
+                                      " - Start full trips creation.\n", sep="")
                                 }
                                 if (object_trips$view(trip_id)[[1]]$.__enclos_env__$private$landing_well_content_code == 1) {
                                   full_trips <- append(full_trips,
@@ -117,7 +117,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Ongoing process of adding activities elementarycatches on full trip \"",
                                     names(x = private$data)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
                                 capture.output(current_trips$add(new_item = private$data[[full_trip_id]]),
@@ -140,7 +140,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Successful process of adding activities and elementarycatches on full trip \"",
                                     names(private$data)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                               }
                               # 2.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -189,7 +189,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 .before = output_trips)
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
-                                  " - End of add activities and elementarycatches.\n")
+                                  " - End of add activities and elementarycatches.\n", sep="")
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 3 - Filter full trips by year(s) period ----
@@ -204,7 +204,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 if (full_trip_id == 1) {
                                   cat(format(Sys.time(),
                                              "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of full trips filtering by reference periode.\n")
+                                      " - Start of full trips filtering by reference periode.\n", sep="")
                                 }
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
@@ -275,7 +275,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::relocate(input_full_trips,
                                                 .before = output_trips)
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                  " - End of full trips filtering.\n")
+                                  " - End of full trips filtering.\n", sep="")
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 5 - Add elementary landings ----
@@ -298,12 +298,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                 if (full_trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of add elementary landings.\n")
+                                      " - Start of add elementary landings.\n", sep="")
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Ongoing process of adding elementary landings on full trip \"",
                                     names(private$data_selected)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
                                 capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -326,7 +326,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - Successful process of adding elementary landings on full trip \"",
                                     names(private$data_selected)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                               }
                               # 5.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -369,7 +369,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 .before = output_trips)
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
-                                  " - End of add elementary landings.\n")
+                                  " - End of add elementary landings.\n", sep="")
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 6 - Add wells and samples ----
@@ -390,12 +390,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                 if (full_trip_id == 1) {
                                   cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                      " - Start of add well(s) - sample(s). \n")
+                                      " - Start of add well(s) - sample(s). \n", sep="")
                                 }
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Ongoing process of adding well(s) - sample(s) on full trip \"",
                                     names(private$data_selected)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                                 capture.output(current_trips <- object_r6(class_name = "trips"),
                                                file = "NUL")
                                 capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -417,7 +417,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Successful process of adding well(s) - sample(s) on full trip \"",
                                     names(private$data_selected)[[full_trip_id]],
-                                    "\".\n")
+                                    "\".\n", sep="")
                               }
                               # 6.3 - Log summary annotation ----
                               capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -473,7 +473,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 .before = output_trips)
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
-                                  " - End of add well(s) - sample(s).\n")
+                                  " - End of add well(s) - sample(s).\n", sep="")
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 7 - Process 1.1: rf1 ----
@@ -524,7 +524,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (full_trip_id == 1) {
                                     cat(format(x = Sys.time(),
                                                format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.1: Raising Factor level 1.\n")
+                                        " - Start process 1.1: Raising Factor level 1.\n", sep="")
                                   }
                                   if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     warning(format(x = Sys.time(),
@@ -984,7 +984,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 }
                                 cat(format(x = Sys.time(),
                                            format = "%Y-%m-%d %H:%M:%S"),
-                                    " - Successful process 1.1: Raising Factor level 1.\n")
+                                    " - Successful process 1.1: Raising Factor level 1.\n", sep="")
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
@@ -1015,7 +1015,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (full_trip_id == 1) {
                                     cat(format(x = Sys.time(),
                                                format = "%Y-%m-%d %H:%M:%S"),
-                                        " - Start process 1.2: raising factor level 2.\n")
+                                        " - Start process 1.2: raising factor level 2.\n", sep="")
                                   }
                                   if (is.null(x = private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1)) {
                                     stop(format(Sys.time(),
@@ -1347,7 +1347,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     if (is.null(x = private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$rf2)) {
                                       stop(format(Sys.time(),
                                                   "%Y-%m-%d %H:%M:%S"),
@@ -1725,7 +1725,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 9.3 - Outputs extraction ----
@@ -1902,7 +1902,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -1966,7 +1966,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 10.3 - Outputs extraction ----
@@ -2135,7 +2135,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 } else {
                                   set_duration_ref <- dplyr::mutate(.data = set_duration_ref,
-                                                                    school_type_code = school_type_code_avdth)
+                                                                    # Conversion from school_type_code_avdth to school_type_code_observe
+                                                                    # Done by object_model_data$activities_object_creation()
+                                                                    school_type_code = school_type_code_observe)
                                   activity_code_ref <- dplyr::mutate(.data = activity_code_ref,
                                                                      activity_code = activity_code_avdth,
                                                                      activity_label = activity_label_avdth)
@@ -2193,7 +2195,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -2307,7 +2309,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 11.3 - Outputs extraction ----
@@ -2508,7 +2510,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       departure_date <- current_trip$.__enclos_env__$private$departure_date
@@ -2603,7 +2605,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                               }
@@ -2890,7 +2892,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       fishing_time <- 0
@@ -2916,16 +2918,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
                                           current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
                                           if(!all(unique(x = current_code) %in% unique(x=activity_code_ref$code))) {
-                                            wrong_code <- unique(current_code[!(current_code %in% unique(x=activity_code_ref$code))])
-                                            activity_id <-  current_activities_date_fishing$extract_l1_element_value(element="activity_id")[[!(current_code %in% unique(x=activity_code_ref$code))]]
-                                            warning(format(Sys.time(),
+                                            wrong_codes <- unique(current_code[!(current_code %in% unique(x=activity_code_ref$code))])
+                                            activity_id <-  unlist(current_activities_date_fishing$extract_l1_element_value(element="activity_id"))
+                                            stop(format(Sys.time(),
                                                            "%Y-%m-%d %H:%M:%S"),
-                                                    "Association of activity code and objectoperation code not supported: ", wrong_code,
+                                                    " - Association of activity code and objectoperation code not supported: ",
+                                                    paste0(wrong_codes, collapse=", "),
                                                     "\n[trip: ",
                                                     current_trip$.__enclos_env__$private$trip_id,
-                                                    ", activity: ",
-                                                    activity_id,
-                                                    "]")
+                                                    "]\n",
+                                                    paste0("[activity: ",
+                                                    activity_id, collapse="];\n"),
+                                                    "].")
                                           }
                                           catch_time <- 0
                                           # Only no fishing activities
@@ -3080,7 +3084,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 13.3 - Outputs extraction ----
@@ -3245,7 +3249,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -3276,7 +3280,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 14.3 - Outputs extraction ----
@@ -3472,7 +3476,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -3721,7 +3725,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 15.3 - Outputs extraction ----
@@ -3883,7 +3887,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -4015,7 +4019,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 16.3 - Outputs extraction ----
@@ -4179,7 +4183,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -4298,7 +4302,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 17.3 - Outputs extraction ----
@@ -4458,7 +4462,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "\".\n",
                                       "[trip: ",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                      "]\n")
+                                      "]\n", sep="")
                                   if (names(x = private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     message(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -4733,7 +4737,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 18.3 - Outputs extraction ----
@@ -4891,7 +4895,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -4977,7 +4981,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 19.3 - Outputs extraction ----
@@ -5149,7 +5153,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       capture.output(current_activities <- object_r6(class_name = "activities"),
@@ -5259,7 +5263,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 20.3 - Outputs extraction ----
@@ -5458,7 +5462,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -5599,7 +5603,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 21.3 - Outputs extraction ----
@@ -5767,7 +5771,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                     for (partial_trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                       current_trip <- private$data_selected[[full_trip_id]][[partial_trip_id]]
                                       if (length(x = current_trip$.__enclos_env__$private$wells) != 0) {
@@ -5861,7 +5865,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "\".\n",
                                         "[trip: ",
                                         private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                        "]\n")
+                                        "]\n", sep="")
                                   }
                                 }
                                 # 22.3 - Outputs extraction ----
@@ -7499,7 +7503,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
                             #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
                             #' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
-                            #' @param input_type Type of coding use in different databases. Default value is 'observe_database'.  Values can be 'observe_database' or 'avdth_database'.
+                            #' @param input_type Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.
 
                             data_formatting_for_predictions = function(inputs_level3,
                                                                        output_level3_process1,
