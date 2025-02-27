@@ -6,6 +6,8 @@
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
+#' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
+#' @param input_type Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
 #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
@@ -35,6 +37,8 @@ t3_level3 <- function(inputs_level3,
                       periode_reference_level3 = NULL,
                       target_year,
                       period_duration,
+                      country_flag = NULL,
+                      input_type = "observe_database",
                       distance_maximum = as.integer(5),
                       number_sets_maximum = as.integer(5),
                       set_weight_minimum = as.integer(6),
@@ -105,7 +109,9 @@ t3_level3 <- function(inputs_level3,
                                                                                              output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod,
                                                                                              target_year = target_year,
                                                                                              vessel_id_ignored = vessel_id_ignored,
-                                                                                             small_fish_only = small_fish_only)
+                                                                                             small_fish_only = small_fish_only,
+                                                                                             country_flag = country_flag,
+                                                                                             input_type = input_type)
   # level 3.5: predictions
   process_level3$output_level3_process5 <- object_full_trips$model_predictions(output_level3_process2 = process_level3$output_level3_process2,
                                                                                output_level3_process4 = process_level3$output_level3_process4,
@@ -114,7 +120,8 @@ t3_level3 <- function(inputs_level3,
                                                                                ci = ci,
                                                                                ci_type = ci_type,
                                                                                Nboot = Nboot,
-                                                                               plot_predict = plot_predict)
+                                                                               plot_predict = plot_predict,
+                                                                               country_flag = country_flag)
   # close, if necessary log file connection
   if (log_file == TRUE) {
     closeAllConnections()

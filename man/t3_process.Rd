@@ -12,7 +12,6 @@ t3_process(
   log_path = NULL,
   output_path = NULL,
   output_format = "eu",
-  referential_template = "observe",
   new_directory = TRUE,
   years_period,
   flag_codes,
@@ -73,8 +72,6 @@ For example, a list of two database connection arguments for "observe_main" and 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
 
 \item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
-\item{referential_template}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 

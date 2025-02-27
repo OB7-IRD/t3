@@ -10,6 +10,8 @@ t3_level3(
   periode_reference_level3 = NULL,
   target_year,
   period_duration,
+  country_flag = NULL,
+  input_type = "observe_database",
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -45,6 +47,10 @@ t3_level3(
 \item{target_year}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
 \item{period_duration}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
+
+\item{country_flag}{Three letters FAO flag code of country or countries to estimate catches.}
+
+\item{input_type}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
 
 \item{distance_maximum}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
 

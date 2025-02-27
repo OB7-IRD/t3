@@ -148,20 +148,25 @@ object_full_trips$rf2(global_output_path = final_output_path,
                       output_format = output_format)
 # level 1.3: logbook weigth categories conversion ----
 object_full_trips$conversion_weigth_category(global_output_path = final_output_path,
-                                             output_format = output_format)
+                                             output_format = output_format,
+                                             referential_template = "observe")
 # level 1.4: set count
 object_full_trips$set_count(global_output_path = final_output_path,
-                            output_format = output_format)
+                            output_format = output_format,
+                            referential_template = "observe")
 # level 1.5: set duration
 object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
                                global_output_path = final_output_path,
-                               output_format = output_format)
+                               output_format = output_format,
+                               referential_template = "observe")
 # level 1.6: time at sea
 object_full_trips$time_at_sea(global_output_path = final_output_path,
-                              output_format = output_format)
+                              output_format = output_format,
+                              referential_template = "observe")
 # level 1.7: fishing time
 object_full_trips$fishing_time(global_output_path = final_output_path,
-                               output_format = output_format)
+                               output_format = output_format,
+                               referential_template = "observe")
 # level 1.8: searching time
 object_full_trips$searching_time(global_output_path = final_output_path,
                                  output_format = output_format)
@@ -170,7 +175,8 @@ object_full_trips$searching_time(global_output_path = final_output_path,
 # level 2.1: sample length class ld1 to lf conversion
 object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
                                                 global_output_path = final_output_path,
-                                                output_format = output_format)
+                                                output_format = output_format,
+                                                referential_template = "observe")
 # level 2.2: sample number measured extrapolation
 object_full_trips$sample_number_measured_extrapolation(global_output_path = final_output_path,
                                                        output_format = output_format)
@@ -180,7 +186,8 @@ object_full_trips$sample_length_class_step_standardisation(global_output_path = 
 # level 2.4: well set weight categories
 object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
                                              global_output_path = final_output_path,
-                                             output_format = output_format)
+                                             output_format = output_format,
+                                             referential_template = "observe")
 # level 2.5: standardised sample creation
 object_full_trips$standardised_sample_creation(global_output_path = final_output_path,
                                                output_format = output_format)
@@ -210,12 +217,15 @@ process_level3$output_level3_process3 <- object_full_trips$models_checking(outpu
 # level 3.4: data formatting for predictions ----
 process_level3$output_level3_process4 <- object_full_trips$data_formatting_for_predictions(inputs_level3 = process_level3$raw_inputs_level3,
                                                                                            output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod,
-                                                                                           target_year = target_year)
+                                                                                           target_year = target_year,
+                                                                                           country_flag=flag_codes,
+                                                                                           input_type = "observe_database")
 # level 3.5: predictions ----
 process_level3$output_level3_process5 <- object_full_trips$model_predictions(output_level3_process2 = process_level3$output_level3_process2,
                                                                              output_level3_process4 = process_level3$output_level3_process4,
                                                                              output_directory = process_level3$output_directory,
-                                                                             ci = confidence_interval)
+                                                                             ci = confidence_interval,
+                                                                             country_flag=flag_codes)
 ```
 
 # Shortcut functions
@@ -269,21 +279,26 @@ t3_process[[2]] <- t3::t3_level1(object_model_data = t3_process[[1]],
                                  species_fate_codes_rf1 = species_fate_codes,
                                  vessel_type_codes_rf1 = vessel_type_codes,
                                  output_path = final_output_path,
-                                 output_format = output_format)
+                                 output_format = output_format,
+                                 referential_template = "observe")
 # level 2 ----
 t3_process[[2]] <- t3::t3_level2(object_model_data = t3_process[[1]],
                                  object_full_trips = t3_process[[2]],
                                  output_path = final_output_path,
-                                 output_format = output_format)
+                                 output_format = output_format,
+                                 referential_template = "observe")
 # level 3 ----
 t3_process[[3]] <- t3_process[[2]]$path_to_level3()
 names(t3_process)[3] <- "process_level3"
 t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  target_year = target_year,
                                  period_duration = period_duration,
+                                 country_flag = flag_codes,
+                                 input_type = "observe_database",
                                  ci = confidence_interval,
                                  output_path = final_output_path,
-                                 output_format = output_format)
+                                 output_format = output_format,
+                                 )
 ```
 
 # Global shortcut function
