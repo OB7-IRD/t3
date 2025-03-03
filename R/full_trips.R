@@ -147,20 +147,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               capture.output(current_trips$add(new_item = unlist(x = private$data)),
                                              file = "NUL")
-                              private$log_summary <- private$log_summary %>%
-                                dplyr::mutate(input_full_trips = NA_integer_,
-                                              input_activities = NA_integer_,
-                                              output_activities = NA_integer_) %>%
-                                dplyr::add_row(step = "add_activities",
-                                               input_trips = length(x = unlist(x = private$data)),
-                                               input_full_trips = length(x = private$data),
-                                               output_full_trips = input_full_trips,
-                                               output_trips = input_trips,
-                                               input_activities = object_activities$count(),
-                                               output_activities = length(x = unlist(x = current_trips$extract_l1_element_value(element = "activities")))) %>%
-                                dplyr::relocate(input_full_trips,
-                                                input_activities,
-                                                .before = output_trips)
                               capture.output(current_activities <- object_r6(class_name = "activities"),
                                              file = "NUL")
                               capture.output(current_activities$add(new_item = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
@@ -169,22 +155,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                              file = "NUL")
                               current_elementarycatches <- current_elementarycatches[-which(sapply(current_elementarycatches, is.null))]
                               private$log_summary <- private$log_summary %>%
-                                dplyr::mutate(input_elementary_catches = NA_integer_,
+                                dplyr::mutate(input_full_trips = NA_integer_,
+                                              input_activities = NA_integer_,
+                                              output_activities = NA_integer_,
+                                              input_elementary_catches = NA_integer_,
                                               output_elementary_catches = NA_integer_,
                                               output_catch_weight_elementary_catches = NA_real_) %>%
-                                dplyr::add_row(step = "add_elementarycatches",
-                                               input_trips = length(x = unlist(x = private$data_selected)),
-                                               input_full_trips = length(x = private$data_selected),
-                                               input_activities = current_activities$count(),
-                                               input_elementary_catches = nrow(dplyr::bind_rows(object_activities$extract_l1_element_value(element="elementarycatches"))),
-                                               output_trips = input_trips,
+                                dplyr::add_row(step = "add_activities",
+                                               input_trips = length(x = unlist(x = private$data)),
+                                               input_full_trips = length(x = private$data),
                                                output_full_trips = input_full_trips,
-                                               output_activities = input_activities,
+                                               output_trips = input_trips,
+                                               input_activities = object_activities$count(),
+                                               input_elementary_catches = nrow(dplyr::bind_rows(object_activities$extract_l1_element_value(element="elementarycatches"))),
+                                               output_activities = length(x = unlist(x = current_trips$extract_l1_element_value(element = "activities"))),
                                                output_elementary_catches = sum(sapply(current_elementarycatches, nrow)),
                                                output_catch_weight_elementary_catches = current_elementarycatches %>%
                                                  sapply(dplyr::summarize, catch_weight=sum(catch_weight, na.rm=TRUE)) %>%
                                                  unlist() %>%
                                                  sum()) %>%
+                                dplyr::relocate(input_full_trips,
+                                                input_activities,
+                                                .before = output_trips) %>%
                                 dplyr::relocate(input_elementary_catches,
                                                 .before = output_trips)
                               cat(format(Sys.time(),
@@ -741,7 +733,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                       "\")"))),
                                                            file = "NUL")
                                             current_elementarylandings_weight <- unlist(x = current_elementarylandings_rf1_species$extract_l1_element_value(element = "landing_weight"))
-                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight)
+                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight, na.rm=TRUE)
                                             if (current_rf1 < rf1_lowest_limit
                                                 | current_rf1 > rf1_highest_limit) {
                                               warning(format(x = Sys.time(),
@@ -7915,7 +7907,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                        fit_prop = prop_t3)
                                           all_set_bet <- dplyr::bind_rows(sampled_set, sets_long_fishing_mode_no_sample)
                                           # filter flag
-                                          all_set_bet <- all_set_bet %>% dplyr::filter(flag_code == country_flag)
+                                          all_set_bet <- all_set_bet %>% dplyr::filter(flag_code %in% country_flag)
 
                                           outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
                                                                                  list(all_set_bet))
@@ -7930,7 +7922,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              Nmtry = 2,
                                                              Nseed = 7)
                                           # filter flag
-                                          res <- res %>% dplyr::filter(flag_code == country_flag)
+                                          res <- res %>% dplyr::filter(flag_code %in% country_flag)
 
                                           outputs_level3_process5[[1]] <- append(outputs_level3_process5[[1]],
                                                                                  list(res))
@@ -8043,7 +8035,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             ".\n",
                                             sep = "")
                                         # filter flag
-                                        sets_long_fishing_mode <- sets_long_fishing_mode %>% dplyr::filter(flag_code == country_flag)
+                                        sets_long_fishing_mode <- sets_long_fishing_mode %>% dplyr::filter(flag_code %in% country_flag)
                                         if(nrow(sets_long_fishing_mode) > 0) {
                                           current_output_level3_process2 <- output_level3_process2[[paste(ocean,
                                                                                                           species,
