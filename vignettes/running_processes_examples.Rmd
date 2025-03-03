@@ -290,7 +290,7 @@ names(t3_process)[3] <- "process_level3"
 t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  target_year = target_year,
                                  period_duration = period_duration,
-                                 country_flag=flag_codes,
+                                 country_flag = flag_codes,
                                  input_type = "observe_database",
                                  ci = confidence_interval,
                                  output_path = final_output_path,
