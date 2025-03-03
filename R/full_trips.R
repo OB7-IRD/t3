@@ -1376,7 +1376,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   if ( !is.na(x = current_weight_category_code)){
                                                     if (ocean_activity == 1) {
                                                       # for atlantic ocean
-                                                      if (school_type_activity %in% (if (referential_template == "observe") c(2, 0) else c(2, 3))) {
+                                                      if (school_type_activity %in% c(2, 0)) {
                                                         # for free school and undetermined school
                                                         if (current_elementarycatch$species_fao_code %in% c("YFT",
                                                                                                             "BET",
@@ -1485,7 +1485,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       }
                                                     } else if (ocean_activity == 2) {
                                                       # for indian ocean
-                                                      if (school_type_activity %in% (if (referential_template == "observe") c(2, 0) else c(2, 3))) {
+                                                      if (school_type_activity %in% c(2, 0)) {
                                                         # for free school and undetermined school
                                                         if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
                                                           if (current_weight_category_code %in% c(1, 2, 10)) {
@@ -1497,7 +1497,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
                                                             current_elementarycatch$weight_category_code_corrected[2] <- category_4
                                                             current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 6, 11)) {
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
                                                             current_elementarycatch$weight_category_code_corrected <- category_4
                                                             current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else if (current_weight_category_code == 9) {
