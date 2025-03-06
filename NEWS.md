@@ -1,24 +1,40 @@
 # t3 2.1.0
 
 ## Added
-* catch_count
+* Add a `catch_count` column to elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of `catch_weight` for by-catch species, in the new version of observe database.  
+* Add method ([`object_model_data$activitycoderefs_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activitycoderefs_data)) to import activity code referential for time allocation (time_allocation_activity_code_ref.csv).
+* Add argument `species_fate_codes` in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to import activities and elementarycatch(es) with the same function. 
+* Add argument `activity_code_ref` in [level_1](https://ob7-ird.github.io/t3/articles/level_1.html), process 1.5 [`set_duration()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-set_duration-), 1.6 [`time_at_sea()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-time-at-sea-) and 1.7 [`fishing_time()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-fishing-time-).
 
 ## Changed
 * Optimization : 
-  - R6 Object to data.frame for elementary catch(es) and samples 
-  - Gather function to create and add activities and elementary catches
-* duration computation
+  - Change elementary catch(es) type from R6 Object to data.frame included into activity R6 Object.
+  - Gather function to create ([`object_model_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html)) and add ([`full_trips$add_elementarycatches()`](https://ob7-ird.github.io/t3/reference/full_trips.html)) activities and elementary catches.
+* Update the activity code referential for time allocation (time_allocation_activity_code_ref.csv)
+* Improve fishing effort evaluation. The duration of activities is now calculated according to the activity code referential, in order to allocate time only to significant activities:
+ - set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
+ - time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
+ - fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
+ - searching_time = fishing_time - set_duration.
+ 
+## Removed 
+* Remove method [`object_model_data$elementarycatches_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-elementarycatches_object_creation).
+* Remove method [`full_trips$add_elementarycatches()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-add_elementarycatches).
+* Remove [`elementarycatches`](https://ob7-ird.github.io/t3/reference/elementarycatches.html) and [`elementarycatch`](https://ob7-ird.github.io/t3/reference/elementarycatch.html) R6 Object definition and methods. 
 
 # t3 2.0.1 - 2025-01-21
 
 ## Changed
-* Change the type of the `flag_codes` parameter of [`object_model_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html) function from integer to character (three-letter FAO code(s) for the country(ies)).  
+* Change the type of the `flag_codes` parameter of [`object_model_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html) function from integer to character (three-letter FAO code(s) for the country(ies)). 
+
+## Added
+* Add arguments `country_flag` and `input_type = "observe_database"` by default, in [`level_3`](https://ob7-ird.github.io/t3/articles/level_3.html) process 3.4 `data_formatting_for_predictions()` and 3.5 `model_predictions()` and in function [`t3_level3()`](https://ob7-ird.github.io/t3/reference/t3_level3.html).
 
 # t3 2.0.0 - 2024-11-29
 
 ## Added
 * Add data source observe_database.
-* Add weight category + 60kg (code 14).
+* Add weight category + 60kg (code 14) for free school, undetermined school and floating object school in Atlantic ocean and Indian ocean.
 * Add functionality for querying multiple databases, for example the main and acquisition observe databases to simultaneously import and process ‘recent’ data from acquisition database, not yet imported into the main database, and older data from the main database.
 * Add activity code referential to allocate time at sea and fishing time and set duration.
 
