@@ -1,7 +1,7 @@
 # t3 2.1.0
 
 ## Added
-* Add a `catch_count` column to elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of `catch_weight` for by-catch species, in the new version of observe database.  
+* Add a `catch_count` column in elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of `catch_weight` for by-catch species, in the new version of observe database.  
 * Add method ([`object_model_data$activitycoderefs_data()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activitycoderefs_data)) to import activity code referential for time allocation (time_allocation_activity_code_ref.csv).
 * Add argument `species_fate_codes` in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to import activities and elementarycatch(es) with the same function. 
 * Add argument `activity_code_ref` in [level_1](https://ob7-ird.github.io/t3/articles/level_1.html), process 1.5 [`set_duration()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-set_duration-), 1.6 [`time_at_sea()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-time-at-sea-) and 1.7 [`fishing_time()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-fishing-time-).

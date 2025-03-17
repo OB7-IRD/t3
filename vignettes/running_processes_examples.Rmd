@@ -227,7 +227,7 @@ process_level3$output_level3_process5 <- object_full_trips$model_predictions(out
 
 # Shortcut functions
 
-Through the following codes, you will be able to run separely each part of the treatment. 
+Through the following codes, you will be able to run separately each part of the treatment. 
 
 ```{r echo=TRUE, eval=FALSE}
 # setup ----

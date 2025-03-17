@@ -48,7 +48,7 @@ t3_level3(
 
 \item{period_duration}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
-\item{country_flag}{Three letters FAO flag code of country or countries to estimate catches.}
+\item{country_flag}{Three letters FAO flag code of country to estimate catches.}
 
 \item{input_type}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
 

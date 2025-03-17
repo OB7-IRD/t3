@@ -3616,12 +3616,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     " and LD1 class ",
                                                                     current_elementary_sample$.__enclos_env__$private$sample_length_class,
                                                                     ".\n",
-                                                                    "Sample  detected with length class measured in LD1<",
+                                                                    "  Sample  detected with length class measured in LD1<",
                                                                     min(length_step$ld1_class),
                                                                     " or LD1>",
                                                                     max(length_step$ld1_class),
-                                                                    ". \n ",
-                                                                    "Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                    ".\n ",
+                                                                    "  Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
                                                                     "[trip_id: ",
                                                                     current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                     " (full trip item id ",
@@ -6275,7 +6275,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       id_act,
                                                                                       sp,
                                                                                       wcat) %>%
-                                                                        dplyr::summarise(w_fit_t3 = sum(w_fit_t3)) %>%
+                                                                        dplyr::summarise(w_fit_t3 = sum(w_fit_t3, na.rm=TRUE)) %>%
                                                                         dplyr::ungroup())
                               raw_inputs_level3[[4]] <- sset
                               raw_inputs_level3[[5]] <- wp
@@ -7634,7 +7634,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param target_year Object of type \code{\link[base]{integer}} expected. The year of interest for the model estimation and prediction.
                             #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.
                             #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
-                            #' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
+                            #' @param country_flag Three letters FAO flag code of country to estimate catches.
                             #' @param input_type Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.
 
                             data_formatting_for_predictions = function(inputs_level3,
@@ -7735,7 +7735,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
                                 dplyr::group_by(dplyr::across(c(-w_lb_t3))) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3, na.rm=TRUE)) %>%
                                 dplyr::ungroup()
                               # set use for modeling to remove for prediction
                               ##############################################################
@@ -7766,14 +7766,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # calculate proportion of weight from t3 level 1
                               sets_compo <- sets %>%
                                 dplyr::group_by(id_act) %>%
-                                dplyr::mutate(wtot_lb_t3 = sum(w_lb_t3)) %>%
+                                dplyr::mutate(wtot_lb_t3 = sum(w_lb_t3, na.rm=TRUE)) %>%
                                 dplyr::mutate(prop_lb = w_lb_t3 / wtot_lb_t3) %>%
                                 dplyr::ungroup()
                               sets_long <- sets_compo %>%
                                 dplyr::select(id_act, sp_cat, prop_lb, w_lb_t3) %>%
                                 tidyr::complete(id_act, sp_cat, fill = list(prop_lb = 0, w_lb_t3 = 0))
-                              sets_long <- dplyr::left_join(sets_long, distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat)))) %>%
-                                group_by(id_act, sp_cat) %>% mutate(dupli = dplyr::n())
+                              sets_long <- dplyr::left_join(sets_long, dplyr::distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat)))) %>%
+                                dplyr::group_by(id_act, sp_cat) %>% dplyr::mutate(dupli = dplyr::n())
                               sets_wide <- sets_long %>% dplyr::select(-w_lb_t3) %>% tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
                               # sets_wide <- tidyr::spread(data = sets,
                               #                            key = sp_cat,
@@ -7891,7 +7891,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
                             #' @param plot_predict Object of type \code{\link[base]{logical}} expected. Logical indicating whether maps of catch at size have to be done.
-                            #' @param country_flag Three letters FAO flag code of country or countries to estimate catches.
+                            #' @param country_flag Three letters FAO flag code of country to estimate catches.
                             model_predictions = function(output_level3_process2,
                                                          output_level3_process4,
                                                          output_directory,
@@ -8411,12 +8411,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  w_lb_t3 = sum(w_lb_t3)) %>% dplyr::ungroup()
 
                               # recover the weight declaration standardized
-                              weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","wtot_lb_t3","prop_lb") %>%
-                                mutate(w_lb_t3 = wtot_lb_t3*prop_lb,
+                              weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>%
+                                dplyr::select("id_act", "sp","wtot_lb_t3","prop_lb") %>%
+                                dplyr::mutate(w_lb_t3 = wtot_lb_t3*prop_lb,
                                        wtot_lb_t3 = NULL)
                               # weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
 
-                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST, by = dplyr::join_by("id_act", "sp"))
+                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST,
+                                                          by = dplyr::join_by("id_act", "sp"))
                               name_to_trash <- c("code_act_type", "wcat", "status") #"sp_code"
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
                                                                                         !name_to_trash)) %>%

@@ -752,7 +752,7 @@ Formatting data for model predictions.
 
 \item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify here vessel(s) id(s) if you want to ignore it in the model estimation and prediction .By default NULL.}
 
-\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
+\item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
 
 \item{\code{input_type}}{Type of coding use in different databases. Default value is 'observe_database'. Values can be 'observe_database' or 'avdth_database'.}
 
@@ -791,7 +791,7 @@ Model predictions for the species composition and computing of catches.
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
-\item{\code{country_flag}}{Three letters FAO flag code of country or countries to estimate catches.}
+\item{\code{country_flag}}{Three letters FAO flag code of country to estimate catches.}
 
 \item{\code{ci}}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
