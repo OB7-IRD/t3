@@ -3580,8 +3580,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   " and LD1 class ",
                                                                   current_elementary_sample$.__enclos_env__$private$sample_length_class,
                                                                   ".\n",
-                                                                  " Sample detected with length class measured in LD1 for SKJ specie.
-                                                                   Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                  "  Sample detected with length class measured in LD1 for SKJ specie.
+                                                                     Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
                                                                   "[trip_id: ",
                                                                   current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                   " (full trip item id ",
