@@ -39,7 +39,9 @@ jobs:
           # See https://docs.ropensci.org/cffr/articles/cffr.html
 
           # Write your own keys
-          mykeys <- list()
+          mykeys <- list(doi="10.5281/zenodo.3878124",
+                        url="https://zenodo.org/badge/latestdoi/210599699",
+                        'date-released'=Sys.Date())
 
           # Create your CITATION.cff file
           cff_write(keys = mykeys,

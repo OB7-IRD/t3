@@ -9,6 +9,7 @@ type: software
 license: GPL-3.0-only
 title: 't3: Tropical Tuna Treatment'
 version: 2.1.0
+doi: '10.5281'
 abstract: The multi-species nature of tropical tuna surface fisheries highlights a
   series of difficulties when catches are estimated by species and size statistics.
   The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and
@@ -42,7 +43,8 @@ authors:
   email: julien.lebranchu@ird.fr
   orcid: https://orcid.org/0000-0002-7759-0534
 repository-code: https://github.com/OB7-IRD/t3
-url: https://ob7-ird.github.io/t3
+url: https://zenodo.org/badge/latestdoi/210599699
+date-released: '2025-03-19'
 contact:
 - family-names: Clément
   given-names: Jeanne
