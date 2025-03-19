@@ -35,9 +35,9 @@ science:
   repository [t3](https://github.com/OB7-IRD/t3/) under a GPL version 3
   license. In the end, it would be available on the Comprehensive R
   Archive Network (CRAN).
-- Referencing of the software : enable result reproducibility and
-  versioning (Depetris et al., 2020) : version 0.9.0 - [DOI:
-  10.5281/zenodo.3878125](https://zenodo.org/badge/latestdoi/210599699).
+- Referencing of the software enable result reproducibility and
+  versioning: version 2.0.1 [DOI:
+  10.5281/zenodo.14947393](https://zenodo.org/badge/latestdoi/210599699).
 
 ## Installation
 

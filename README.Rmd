@@ -34,7 +34,7 @@ The new version of Tropical Tuna Treatment (T3) process is developed in R langua
 
 * Process transparency: the code is fully documented and the [documentation](https://ob7-ird.github.io/t3) of how works the program will be available.
 * Open access and Open source: the code source is hosted on a github repository [t3](https://github.com/OB7-IRD/t3/) under a GPL version 3 license. In the end, it would be available on the Comprehensive R Archive Network (CRAN).
-* Referencing of the software : enable result reproducibility and versioning (Depetris et al., 2025) : version 2.0.1 - [DOI: 10.5281/zenodo.14947393](https://zenodo.org/badge/latestdoi/210599699).
+* Referencing of the software enable result reproducibility and versioning: version 2.0.1 [DOI: 10.5281/zenodo.14947393](https://zenodo.org/badge/latestdoi/210599699).
 
 ## Installation
 
