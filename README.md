@@ -42,8 +42,7 @@ science:
 ## Installation
 
 ``` r
-devtools::install_github("https://github.com/OB7-IRD/t3",
-                         INSTALL_opts=c("--no-multiarch"))
+devtools::install_github("https://github.com/OB7-IRD/t3")
 ```
 
 ### Development version
@@ -53,8 +52,7 @@ can install the development version of t3 from GitHub.
 
 ``` r
 devtools::install_github("https://github.com/OB7-IRD/t3",
-                         ref = "development",
-                         INSTALL_opts=c("--no-multiarch"))
+                         ref = "development")
 ```
 
 ## Cheatsheet

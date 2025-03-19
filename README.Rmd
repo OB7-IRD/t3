@@ -38,19 +38,17 @@ The new version of Tropical Tuna Treatment (T3) process is developed in R langua
 
 ## Installation
 
-```{r, eval = FALSE}
-devtools::install_github("https://github.com/OB7-IRD/t3",
-                         INSTALL_opts=c("--no-multiarch"))
+```{r install, eval = FALSE}
+devtools::install_github("https://github.com/OB7-IRD/t3")
 ```
 
 ### Development version
 
 To get a bug fix or to use a feature from the development version, you can install the development version of t3 from GitHub.
 
-```{r, eval = FALSE}
+```{r install_dev, eval = FALSE}
 devtools::install_github("https://github.com/OB7-IRD/t3",
-                         ref = "development",
-                         INSTALL_opts=c("--no-multiarch"))
+                         ref = "development")
 ```
 
 ## Cheatsheet
@@ -59,7 +57,7 @@ Working in progress for this section. Be patient.
 
 ## Usage
 
-```{r, message = FALSE}
+```{r library, eval=FALSE, message = FALSE}
 library(t3)
 ```
 
