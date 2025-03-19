@@ -7671,7 +7671,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # reduce dataset to the period and flag considered in the modeling and check data availability
                               act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
-                                                                   flag_code %in% country_flag)
+                                                                   flag_code == country_flag)
                               if (nrow(act_chr) == 0) {
                                 cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
