@@ -334,14 +334,14 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process4</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">data_formatting_for_predictions</span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">raw_inputs_level3</span>,</span>
 <span>                                                                                           output_level3_process1 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process1</span><span class="op">$</span><span class="va">data_lb_sample_screened</span><span class="op">$</span><span class="va">data4mod</span>,</span>
 <span>                                                                                           target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
-<span>                                                                                           country_flag<span class="op">=</span><span class="va">flag_codes</span>,</span>
+<span>                                                                                           country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                                                                                           input_type <span class="op">=</span> <span class="st">"observe_database"</span><span class="op">)</span></span>
 <span><span class="co"># level 3.5: predictions ----</span></span>
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process5</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">model_predictions</span><span class="op">(</span>output_level3_process2 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process2</span>,</span>
 <span>                                                                             output_level3_process4 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process4</span>,</span>
 <span>                                                                             output_directory <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_directory</span>,</span>
 <span>                                                                             ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
-<span>                                                                             country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">)</span></span></code></pre></div>
+<span>                                                                             country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="shortcut-functions">Shortcut functions<a class="anchor" aria-label="anchor" href="#shortcut-functions"></a>
@@ -409,7 +409,7 @@ part of the treatment.</p>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level3.html">t3_level3</a></span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
-<span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                                 input_type <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
