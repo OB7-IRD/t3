@@ -8,7 +8,7 @@ message: 'To cite package "t3" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 't3: Tropical Tuna Treatment'
-version: 2.0.1
+version: 2.1.0
 abstract: The multi-species nature of tropical tuna surface fisheries highlights a
   series of difficulties when catches are estimated by species and size statistics.
   The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and
