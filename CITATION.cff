@@ -9,7 +9,7 @@ type: software
 license: GPL-3.0-only
 title: 't3: Tropical Tuna Treatment'
 version: 2.1.0
-doi: '10.5281'
+doi: 10.5281/zenodo.3878124
 abstract: The multi-species nature of tropical tuna surface fisheries highlights a
   series of difficulties when catches are estimated by species and size statistics.
   The Tropical Tuna Treatment (T3) process was initiated more than 30 years ago and
