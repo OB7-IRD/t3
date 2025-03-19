@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Level 1 process</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/2.0.1/vignettes/level_1.Rmd" class="external-link"><code>vignettes/level_1.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/level_1.Rmd" class="external-link"><code>vignettes/level_1.Rmd</code></a></small>
       <div class="hidden name"><code>level_1.Rmd</code></div>
 
     </div>
@@ -189,12 +189,12 @@ These standardization was divided into 8 steps:</p>
 <h3 id="process-1-1-raising-factor-level-1">Process 1.1: Raising Factor level 1<a class="anchor" aria-label="anchor" href="#process-1-1-raising-factor-level-1"></a>
 </h3>
 <p>Catches filled in logbooks are based on visual estimations when they
-rise from the purse senner salabarde. This is the only technical way
+rise from the purse seiner salabard. This is the only technical way
 available at this moment to have an estimation by species. Thereafter,
 catches will be stored in one or several wells. During the landing
-process, well catches will be weighed, generally through a peson located
-under the unloading crane. By move from set to well(s) we lost the exact
-information about catch location.</p>
+process, well catches will be weighed, generally through a person
+located under the unloading crane. By move from set to well(s) we lost
+the exact information about catch location.</p>
 <p>Regarding this process, for each full trip we will calculate a
 Raising Factor (RF), ratio of landing weight on catch weight. To recall,
 one full trip should be composed of one or several partial trip, for
@@ -249,17 +249,17 @@ Figure 1: Raising Factor level 1 flowchart.
 <div class="section level3">
 <h3 id="process-1-2-raising-factor-level-2">Process 1.2: Raising Factor level 2<a class="anchor" aria-label="anchor" href="#process-1-2-raising-factor-level-2"></a>
 </h3>
-<p>In some cases, especially for historial data, several logbooks trips
+<p>In some cases, especially for historical data, several logbooks trips
 were not collected or available. Therefore it’s impossible to apply the
 process 1.1. Don’t do anything for this trips would result in an
 under-estimation of catches among the global process. Of course and like
-the process 1.1, we made the hypostesis that all the landings were know
+the process 1.1, we made the hypothesis that all the landings were know
 and available.</p>
 <p>So far, this process is partially implemented in the source code and
 in our data simulation since 2000 we haven’t been faced with trips with
 missing logbooks. Due to time constraints, the development of this
-process has been postponed, but it will be essential to finalise it when
-we run our process on the whole time serie (and when we manipulated
+process has been postponed, but it will be essential to finalize it when
+we run our process on the whole time series (and when we manipulated
 historical data). The figure below show the actual development of the
 process.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="process_1.2.png"></p>
@@ -303,7 +303,7 @@ below.</p>
 <th>Specie</th>
 <th>Logbook weight category</th>
 <th>Weight ratio</th>
-<th>Standarised logbook weigth category</th>
+<th>Standardized logbook weight category</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -431,7 +431,7 @@ the Atlantic Ocean.
 <th>Specie</th>
 <th>Logbook weight category</th>
 <th>Weight ratio</th>
-<th>Standarised logbook weigth category</th>
+<th>Standardized logbook weight category</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -545,27 +545,27 @@ category (9),</li>
 possible.</li>
 </ul>
 <p>During the first part, all logbook weight categories except the
-category unknow are standardised following the distribution conversion
+category unknown are standardized following the distribution conversion
 key display above. Each catch weight associated is multiply by the
 weight ratio associated. For several logbook weight category, like the
-categories 4 or 11 according to strata, this standardisation create new
-data because the initial logbook weight category is divied into several
-standardised logbook weight categories. It’s normal that at the end of
+categories 4 or 11 according to strata, this standardization create new
+data because the initial logbook weight category is divided into several
+standardized logbook weight categories. It’s normal that at the end of
 the process you could have more catch items than before.</p>
 <p>For the second part, the process try to make the conversion of
 catches filled in the unknown category. For each trip and at the scale
-of an ocean/fishing school/specie, proportion of standardised logbook
+of an ocean/fishing school/specie, proportion of standardized logbook
 weight categories will be applied on items filled as unknown logbook
 weight categories. For example, in a common stratum, if proportion
-weight of standardised logbook weight category are divided by 60% for
+weight of standardized logbook weight category are divided by 60% for
 the category &lt; 10kg and 40% for the category &gt; 10kg, catches
-weight of unknown logbook weight category will display in standardised
+weight of unknown logbook weight category will display in standardized
 logbook weight category with 60% of &lt; 10kg category and 40% of &gt;
 10kg category.</p>
 <p>The global process flowchart is available in the figure 3 below.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src="process_1.3.png"></p>
 <div style="text-align: center">
-Figure 3: Logbook weigth categories conversion flowchart.
+Figure 3: Logbook weight categories conversion flowchart.
 </div>
 </div>
 <div class="section level3">
@@ -577,7 +577,7 @@ of set is done according to the catches associated. Like before, the
 global process flowchart is available below in figure 4.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.4.png"></p>
 <div style="text-align: center">
-Figure 4: Postive sets count flowchart.
+Figure 4: Positive sets count flowchart.
 </div>
 </div>
 <div class="section level3">
@@ -871,8 +871,8 @@ Figure 6: Time at sea estimation flowchart.
 <h3 id="process-1-7-fishing-time-determination">Process 1.7: fishing time determination<a class="anchor" aria-label="anchor" href="#process-1-7-fishing-time-determination"></a>
 </h3>
 <p>This process calculated the fishing time value in hours.
-Historialcaly, this process use a constant parameter according to the
-theorical day duration working time (12 or 13 hours according to the
+Historically, this process use a constant parameter according to the
+theoretical day duration working time (12 or 13 hours according to the
 ocean and related to the global sunrise and sunset). Now, the process
 was modified to bring more accuracy in the calculation and module the
 duration of a working day according to the real sunrise and sunset of
@@ -909,8 +909,8 @@ position),</li>
 starts).</li>
 </ul>
 <p>At the trip scale and related to all the activities related, the
-fishing time value is the sum of each fishing time day if in the day
-activites associated at least one is different of no-wake road (4),
+fishing time value is the sum of each fishing time day, if in the day
+activities associated, at least one is different of no-wake road (4),
 damage (7), on hold (10), at the harbour (15) or fictive activity for
 trip without logbook (100).</p>
 <p>The global process flowchart is available in the figure 7 below.</p>
