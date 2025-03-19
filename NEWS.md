@@ -1,4 +1,4 @@
-# t3 2.1.0
+# t3 2.1.0 - 2025-03-19
 
 ## Added
 * Add a `catch_count` column in elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of `catch_weight` for by-catch species, in the new version of observe database.  
