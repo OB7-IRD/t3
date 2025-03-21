@@ -21,9 +21,9 @@ activity <- R6::R6Class(classname = "activity",
                           #' @param school_type_code Object of class {\link[base]{integer}} expected. School type identification.
                           #' @param activity_code Object of class {\link[base]{integer}} expected. Activity code identification.
                           #' @param activity_label Object of class {\link[base]{character}} expected. Activity identification.
-                          #' @param objectoperation_code Object of class {\link[base]{integer}} expected. Operation on floating object code identification.
-                          #' @param objectoperation_label Object of class {\link[base]{character}} expected. Operation on floating object identification.
-                          #' @param objectoperation_id Object of class {\link[base]{character}} expected. Operation on floating object identification (unique topiaid from database).
+                          #' @param objectoperation_code Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) code(s) identification, comma-separated if more than one.
+                          #' @param objectoperation_label Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) identification, comma-separated if more than one.
+                          #' @param objectoperation_id Object of class {\link[base]{character}} expected. Floating object(s) identification (unique topiaid from database), comma-separated if more than one.
                           #' @param elementarycatches Object of type \link[base]{data.frame} or \link[tibble]{tbl_df} with elementarycatch(es) data expected for catch activities and NULL for other activities (default).
                           #' @details
                           #' Mandatory column names and types of elementarycatch(es) data:
@@ -98,7 +98,7 @@ activity <- R6::R6Class(classname = "activity",
                                                     type = "character",
                                                     length = 1L)
                             codama::r_type_checking(r_object = objectoperation_code,
-                                                    type = "integer",
+                                                    type = "character",
                                                     length = 1L)
                             codama::r_type_checking(r_object = objectoperation_label,
                                                     type = "character",

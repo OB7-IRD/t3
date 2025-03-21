@@ -15,7 +15,7 @@ select
 	,s.label1::text as school_type_label
 	,va.code::integer as activity_code
 	,va.label1::text as activity_label
-	,obo.code::integer as objectoperation_code
+	,obo.code::text as objectoperation_code
 	,obo.label1::text as objectoperation_label
 	,r.timeatsea::integer as time_at_sea
 from

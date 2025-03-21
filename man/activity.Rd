@@ -72,11 +72,11 @@ Initialize function for R6 activities class.
 
 \item{\code{activity_label}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
-\item{\code{objectoperation_code}}{Object of class {\link[base]{integer}} expected. Operation on floating object code identification.}
+\item{\code{objectoperation_code}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) code(s) identification, comma-separated if more than one.}
 
-\item{\code{objectoperation_label}}{Object of class {\link[base]{character}} expected. Operation on floating object identification.}
+\item{\code{objectoperation_label}}{Object of class {\link[base]{character}} expected. Operation(s) on floating object(s) identification, comma-separated if more than one.}
 
-\item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Operation on floating object identification (unique topiaid from database).}
+\item{\code{objectoperation_id}}{Object of class {\link[base]{character}} expected. Floating object(s) identification (unique topiaid from database), comma-separated if more than one.}
 
 \item{\code{elementarycatches}}{Object of type \link[base]{data.frame} or \link[tibble]{tbl_df} with elementarycatch(es) data expected for catch activities and NULL for other activities (default).}
 }

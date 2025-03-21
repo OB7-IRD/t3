@@ -504,16 +504,31 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            elementarycatch_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
                                                                                                  statement = elementarycatch_sql_final))
                                          }
+                                         # Format data to to obtain a single line for each activity_id
+                                         # Gather on the same row FloatingObjects and objectoperation_codes associated to the same activity
+                                         activity_data <- activity_data %>%
+                                           dplyr::group_by(activity_id) %>%
+                                           dplyr::mutate(objectoperation_id=paste0(objectoperation_id, collapse = ", "),
+                                                         objectoperation_code=paste0(objectoperation_code, collapse = ", "),
+                                                         objectoperation_label=paste0(objectoperation_label, collapse = ", ")) %>%
+                                           dplyr::distinct()
                                        }
                                        if (nrow(x = elementarycatch_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No elementary catch(es) data imported, check the query and parameters associated.")
-                                       }
-                                       if (nrow(x = activity_data) == 0) {
+                                       } else if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No activity(ies) data imported, check the query and parameters associated.")
+                                       } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
+                                         activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
+                                              paste0("[activity: ",
+                                                     activity_id, collapse="];\n"),
+                                              "].")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
@@ -658,6 +673,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
+                                       } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
+                                         activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
+                                              paste0("[activity: ",
+                                                     activity_id, collapse="];\n"),
+                                              "].")
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
@@ -725,6 +748,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
+                                         } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
+                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
+                                                paste0("[activity: ",
+                                                       activity_id, collapse="];\n"),
+                                                "].")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),
@@ -756,6 +787,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
+                                         } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
+                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                           stop(format(x = Sys.time(),
+                                                       format = "%Y-%m-%d %H:%M:%S"),
+                                                " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
+                                                paste0("[activity: ",
+                                                       activity_id, collapse="];\n"),
+                                                "].")
                                          }
                                        } else {
                                          stop(format(x = Sys.time(),

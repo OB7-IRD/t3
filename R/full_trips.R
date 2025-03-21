@@ -2474,6 +2474,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 activity_objectoperation_codes <- unique(activity_code_ref %>%
                                                                            dplyr::filter(time_at_sea==1) %>%
                                                                            dplyr::pull(code))
+                                # No fishing activity_objectoperation codes
+                                no_fishing_codes <- unique(activity_code_ref %>%
+                                                             dplyr::filter(fishing_time==0) %>%
+                                                             dplyr::pull(code))
+                                # Fishing activity_objectoperation codes
+                                # to take into account for fishing time allocation
+                                # except special case : activities with elementary catch (6,32)
+                                fishing_codes <- unique(activity_code_ref %>%
+                                                          dplyr::filter(fishing_time==1,
+                                                                        set_duration==0) %>%
+                                                          dplyr::pull(code))
+                                # activity_objectoperation codes associated to elementary catch (6,32)
+                                catch_codes <- unique(activity_code_ref %>%
+                                                        dplyr::filter(set_duration==1) %>%
+                                                        dplyr::pull(code))
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   if (full_trip_id == 1) {
                                     cat(format(Sys.time(),
@@ -2532,6 +2547,40 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                          file = "NUL")
                                           current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
                                           current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
+
+                                          # Special case of multiple objectoperation_codes associated to the same activity
+                                          if(length(unlist(strsplit(current_objectoperation_code, split=", "))) != length(current_objectoperation_code)){
+                                            for (i in 1:length(current_activities_code)){
+                                              current_objectoperation_multiple_codes <- unique(unlist(strsplit(current_objectoperation_code[i], split=", ")))
+                                              if (length(current_objectoperation_multiple_codes)==1){
+                                                # If same objectoperation_code declared
+                                                current_objectoperation_code[i] <-  current_objectoperation_multiple_codes
+                                              } else{
+                                                # If diffrent objectoperation_codes declared
+                                                objectoperation_multiple_codes <- paste(current_activities_code[i], current_objectoperation_multiple_codes, sep='_')
+                                                # If all objectoperation_codes allow to compute set_duration=fishing_time
+                                                if(all(objectoperation_multiple_codes %in% catch_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code declared
+                                                  current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
+                                                }
+                                                # If all objectoperation_codes don't allow to allocate fishing time and time at sea
+                                                else if(all(objectoperation_multiple_codes %in% no_fishing_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code declared
+                                                current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
+                                                }
+                                                # If any objectoperation_codes allow to allocate fishing time and time at sea
+                                                else if(any(objectoperation_multiple_codes %in% fishing_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code allowing to allocate fishing time and time at sea declared
+                                                  current_objectoperation_code[i] <- objectoperation_multiple_codes[objectoperation_multiple_codes %in% fishing_codes][1]
+                                                }
+                                              }
+                                              current_activity <- current_activities_date$extract(id = i)[[1]]
+                                              current_activity$.__enclos_env__$private$objectoperation_code <- sub(pattern="[0-9]+_", "",
+                                                                                                                   current_objectoperation_code[i])
+                                              # current_activity_date$modification_l1(modification = paste0("$path$objectoperation_code <- ",
+                                              #                                                               as.character(current_objectoperation_code[i])))
+                                            }
+                                          }
                                           current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
                                           if (referential_template == "observe") {
                                             current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))

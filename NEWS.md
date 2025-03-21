@@ -16,6 +16,7 @@
  - time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
  - fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
  - searching_time = fishing_time - set_duration.
+* Manage  fishing effort calculation for activities with multiple floating objects or object operation code declared.
  
 ## Removed 
 * Remove method [`object_model_data$elementarycatches_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-elementarycatches_object_creation).
