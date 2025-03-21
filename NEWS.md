@@ -1,3 +1,8 @@
+# t3 2.1.0 - 2025-03-21
+
+## Changed
+* Manage  fishing effort calculation for activities with multiple floating objects or object operation code declared.
+
 # t3 2.1.0 - 2025-03-19
 
 ## Added
