@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Running processes examples</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/2.1.0/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/2.0.1/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
       <div class="hidden name"><code>running_processes_examples.Rmd</code></div>
 
     </div>
@@ -148,7 +148,7 @@ particular data with accuracy. In the code below, you will find an
 example of all the process run step by step. The parameters associated
 are display in the section called “setup”. You can modified them to
 customize the example. If you more information regarding functions
-arguments take a look to the R function documentation (or in the
+arguments take à look to the R function documentation (or in the
 reference website section <a href="https://ob7-ird.github.io/t3/reference/index.html" class="uri">https://ob7-ird.github.io/t3/reference/index.html</a>)</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
@@ -160,7 +160,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co"># countries for the France fleet</span></span>
 <span><span class="va">flag_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
-<span>                <span class="st">"MYT"</span><span class="op">)</span></span>
+<span>               <span class="st">"MYT"</span><span class="op">)</span></span>
 <span><span class="co"># code 4,5 and 6 for Seiner with baits, Seiner without baits and Large seiner </span></span>
 <span><span class="va">vessel_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
@@ -191,14 +191,22 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                        vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                        database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
-<span><span class="co"># object activities and elementarycatches creation</span></span>
+<span><span class="co"># object activities creation</span></span>
 <span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
 <span>                                             years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                             flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                             ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                             vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
-<span>                                             species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                             database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># object elementarycatches creation</span></span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarycatches_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                                    years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
+<span>                                                    flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
+<span>                                                    ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
+<span>                                                    vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
+<span>                                                    species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                                    database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object elementarylandings creation</span></span>
 <span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
 <span>                                                     years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
@@ -218,10 +226,6 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">setdurationrefs_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
 <span>                                       data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"set_duration_ref.csv"</span>,</span>
 <span>                                                               package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># model creation: activity code data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activitycoderefs_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
-<span>                                        data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"time_allocation_activity_code_ref.csv"</span>,</span>
-<span>                                                                package <span class="op">=</span> <span class="st">"furdeb"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># model creation: length steps data</span></span>
 <span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">lengthsteps_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"csv_file"</span>,</span>
 <span>                                   data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"length_step.csv"</span>,</span>
@@ -241,10 +245,12 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">object_full_trips</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">:::</span><span class="va"><a href="../reference/full_trips.html">full_trips</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># object full_trip creation</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">create_full_trips</span><span class="op">(</span>object_trips <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">trips</span><span class="op">)</span></span>
-<span><span class="co"># add activities and elementarycatches to trips selected</span></span>
+<span><span class="co"># add activities to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_activities</span><span class="op">(</span>object_activities <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activities</span><span class="op">)</span></span>
 <span><span class="co"># filter by reference year</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">filter_by_years_period</span><span class="op">(</span>years_period <span class="op">=</span> <span class="va">years_period</span><span class="op">)</span></span>
+<span><span class="co"># add elementarycatches to trips selected</span></span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_elementarycatches</span><span class="op">(</span>object_elementarycatches <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">elementarycatches</span><span class="op">)</span></span>
 <span><span class="co"># add elementarylandings to trips selected</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_elementarylandings</span><span class="op">(</span>object_elementarylandings <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">elementarylandings</span><span class="op">)</span></span>
 <span><span class="co"># add well(s) and sample(s) to trip(s) selected</span></span>
@@ -269,18 +275,15 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span>                            referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 1.5: set duration</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">set_duration</span><span class="op">(</span>set_duration_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">setdurationrefs</span>,</span>
-<span>                               activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
 <span>                               global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                               output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
 <span>                               referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 1.6: time at sea</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">time_at_sea</span><span class="op">(</span>activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
-<span>                              global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">time_at_sea</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                              output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
 <span>                              referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 1.7: fishing time</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">fishing_time</span><span class="op">(</span>activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
-<span>                               global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">fishing_time</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                               output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
 <span>                               referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 1.8: searching time</span></span>
@@ -334,19 +337,19 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process4</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">data_formatting_for_predictions</span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">raw_inputs_level3</span>,</span>
 <span>                                                                                           output_level3_process1 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process1</span><span class="op">$</span><span class="va">data_lb_sample_screened</span><span class="op">$</span><span class="va">data4mod</span>,</span>
 <span>                                                                                           target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
-<span>                                                                                           country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>                                                                                           country_flag<span class="op">=</span><span class="va">flag_codes</span>,</span>
 <span>                                                                                           input_type <span class="op">=</span> <span class="st">"observe_database"</span><span class="op">)</span></span>
 <span><span class="co"># level 3.5: predictions ----</span></span>
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process5</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">model_predictions</span><span class="op">(</span>output_level3_process2 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process2</span>,</span>
 <span>                                                                             output_level3_process4 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process4</span>,</span>
 <span>                                                                             output_directory <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_directory</span>,</span>
 <span>                                                                             ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
-<span>                                                                             country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span>                                                                             country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="shortcut-functions">Shortcut functions<a class="anchor" aria-label="anchor" href="#shortcut-functions"></a>
 </h2>
-<p>Through the following codes, you will be able to run separately each
+<p>Through the following codes, you will be able to run separely each
 part of the treatment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
@@ -358,7 +361,7 @@ part of the treatment.</p>
 <span><span class="va">target_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2008</span><span class="op">)</span></span>
 <span><span class="va">period_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">flag_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FRA"</span>,</span>
-<span>                <span class="st">"MYT"</span><span class="op">)</span></span>
+<span>               <span class="st">"MYT"</span><span class="op">)</span></span>
 <span><span class="co"># Seiner with baits, Seiner without baits and Large seiner (code 4,5 and 6)</span></span>
 <span><span class="va">vessel_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># code 1 for the Atlantic Ocean</span></span>
@@ -395,25 +398,26 @@ part of the treatment.</p>
 <span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 vessel_type_codes_rf1 <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>, </span>
-<span>                                 referential_template<span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
+<span>                                 referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level2.html">t3_level2</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
-<span>                                 referential_template<span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                 referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 3 ----</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">t3_process</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"process_level3"</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level3.html">t3_level3</a></span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
-<span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                 input_type <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span></code></pre></div>
+<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
+<span>                                 <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="global-shortcut-function">Global shortcut function<a class="anchor" aria-label="anchor" href="#global-shortcut-function"></a>

@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Model initialisation and data selection</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/2.1.0/vignettes/model_initialisation.Rmd" class="external-link"><code>vignettes/model_initialisation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/2.0.1/vignettes/model_initialisation.Rmd" class="external-link"><code>vignettes/model_initialisation.Rmd</code></a></small>
       <div class="hidden name"><code>model_initialisation.Rmd</code></div>
 
     </div>
@@ -172,7 +172,7 @@ above <code>?full_trip</code>).</p>
 can run all the t3 process or just a part of it. Use this way if you
 planned to run the process at least until the level 1. This function not
 allow switching with several data sources and work only with a t3
-database as data source. If you want to customize or change this kind of
+database as data source. If you want to customise or change this kind of
 parameter prefer to use the basic functions (see the third
 option).</p></li>
 <li><p>the second possibility is thought the function
@@ -187,7 +187,7 @@ data model creation process. All the sub-functions, and documentations
 associated, were available under methods of the class
 <code>?t3::object_model_data()</code> for the data importation process
 and under several methods of the class <code>?t3::full_trips()</code>
-for the model creation and data selection. The table below summarize all
+for the model creation and data selection. The table below summarise all
 different processes and code/method associated.</p></li>
 </ul>
 <table class="table">
@@ -218,23 +218,23 @@ different processes and code/method associated.</p></li>
 <td>object_model_data, activity, activities</td>
 </tr>
 <tr class="even">
+<td>Create elementary catches object</td>
+<td><code>elementarycatches_object_creation()</code></td>
+<td>object_model_data, elementarycatch, elementarycatches</td>
+</tr>
+<tr class="odd">
 <td>Create elementary landings object</td>
 <td><code>elementarylandings_object_creation()</code></td>
 <td>object_model_data, elementarylanding, elementarylandings</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Create wells object</td>
 <td><code>wells_object_creation()</code></td>
 <td>object_model_data, wells, well, samples, elementarywellplan</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Create set durations object</td>
 <td><code>setdurationrefs_data()</code></td>
-<td>object_model_data</td>
-</tr>
-<tr class="odd">
-<td>Create activity code referential object</td>
-<td><code>activitycoderefs_data()</code></td>
 <td>object_model_data</td>
 </tr>
 <tr class="even">

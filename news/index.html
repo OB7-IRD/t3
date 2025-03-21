@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -71,47 +71,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/2.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/2.0.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.0" id="t3-210">t3 2.1.0<a class="anchor" aria-label="anchor" href="#t3-210"></a></h2>
-<div class="section level3">
-<h3 id="added-2-1-0">Added<a class="anchor" aria-label="anchor" href="#added-2-1-0"></a></h3>
-<ul><li>Add a <code>catch_count</code> column in elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of <code>catch_weight</code> for by-catch species, in the new version of observe database.<br></li>
-<li>Add method (<a href="https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activitycoderefs_data"><code>object_model_data$activitycoderefs_data()</code></a>) to import activity code referential for time allocation (time_allocation_activity_code_ref.csv).</li>
-<li>Add argument <code>species_fate_codes</code> in method <a href="https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation"><code>object_model_data$activities_object_creation()</code></a> to import activities and elementarycatch(es) with the same function.</li>
-<li>Add argument <code>activity_code_ref</code> in <a href="https://ob7-ird.github.io/t3/articles/level_1.html">level_1</a>, process 1.5 <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-set_duration-"><code>set_duration()</code></a>, 1.6 <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-time-at-sea-"><code>time_at_sea()</code></a> and 1.7 <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-fishing-time-"><code>fishing_time()</code></a>.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="changed-2-1-0">Changed<a class="anchor" aria-label="anchor" href="#changed-2-1-0"></a></h3>
-<ul><li>Optimization :
-<ul><li>Change elementary catch(es) type from R6 Object to data.frame included into activity R6 Object.</li>
-<li>Gather function to create (<a href="https://ob7-ird.github.io/t3/reference/object_model_data.html"><code>object_model_data()</code></a>) and add (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html"><code>full_trips$add_elementarycatches()</code></a>) activities and elementary catches.</li>
-</ul></li>
-<li>Update the activity code referential for time allocation (time_allocation_activity_code_ref.csv)</li>
-<li>Improve fishing effort evaluation. The duration of activities is now calculated according to the activity code referential, in order to allocate time only to significant activities:</li>
-<li>set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country.</li>
-<li>time_at_sea : the process divides the day’s time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the time ate sea of that date.</li>
-<li>fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day’s fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the fishing time of that date.</li>
-<li>searching_time = fishing_time - set_duration.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="removed-2-1-0">Removed<a class="anchor" aria-label="anchor" href="#removed-2-1-0"></a></h3>
-<ul><li>Remove method <a href="https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-elementarycatches_object_creation"><code>object_model_data$elementarycatches_object_creation()</code></a>.</li>
-<li>Remove method <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-add_elementarycatches"><code>full_trips$add_elementarycatches()</code></a>.</li>
-<li>Remove <a href="https://ob7-ird.github.io/t3/reference/elementarycatches.html"><code>elementarycatches</code></a> and <a href="https://ob7-ird.github.io/t3/reference/elementarycatch.html"><code>elementarycatch</code></a> R6 Object definition and methods.</li>
-</ul></div>
-</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.1" id="t3-201---2025-01-21">t3 2.0.1 - 2025-01-21<a class="anchor" aria-label="anchor" href="#t3-201---2025-01-21"></a></h2>
 <div class="section level3">
 <h3 id="changed-2-0-1">Changed<a class="anchor" aria-label="anchor" href="#changed-2-0-1"></a></h3>
 <ul><li>Change the type of the <code>flag_codes</code> parameter of <a href="https://ob7-ird.github.io/t3/reference/object_model_data.html"><code>object_model_data()</code></a> function from integer to character (three-letter FAO code(s) for the country(ies)).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="added-2-0-1">Added<a class="anchor" aria-label="anchor" href="#added-2-0-1"></a></h3>
-<ul><li>Add arguments <code>country_flag</code> and <code>input_type = "observe_database"</code> by default, in <a href="https://ob7-ird.github.io/t3/articles/level_3.html"><code>level_3</code></a> process 3.4 <code>data_formatting_for_predictions()</code> and 3.5 <code>model_predictions()</code> and in function <a href="https://ob7-ird.github.io/t3/reference/t3_level3.html"><code>t3_level3()</code></a>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -119,7 +86,7 @@
 <div class="section level3">
 <h3 id="added-2-0-0">Added<a class="anchor" aria-label="anchor" href="#added-2-0-0"></a></h3>
 <ul><li>Add data source observe_database.</li>
-<li>Add weight category + 60kg (code 14) for free school, undetermined school and floating object school in Atlantic ocean and Indian ocean.</li>
+<li>Add weight category + 60kg (code 14).</li>
 <li>Add functionality for querying multiple databases, for example the main and acquisition observe databases to simultaneously import and process ‘recent’ data from acquisition database, not yet imported into the main database, and older data from the main database.</li>
 <li>Add activity code referential to allocate time at sea and fishing time and set duration.</li>
 </ul></div>
