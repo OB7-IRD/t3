@@ -95,6 +95,7 @@
 <li>time_at_sea : the process divides the day’s time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the time ate sea of that date.</li>
 <li>fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day’s fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the fishing time of that date.</li>
 <li>searching_time = fishing_time - set_duration.</li>
+<li>Manage fishing effort calculation for activities with multiple floating objects or object operation code declared.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="removed-2-1-0">Removed<a class="anchor" aria-label="anchor" href="#removed-2-1-0"></a></h3>
