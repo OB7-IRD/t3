@@ -71,11 +71,11 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/development/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/2.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.0" id="t3-210---2025-03-19">t3 2.1.0 - 2025-03-19<a class="anchor" aria-label="anchor" href="#t3-210---2025-03-19"></a></h2>
+<h2 class="page-header" data-toc-text="2.1.0" id="t3-210">t3 2.1.0<a class="anchor" aria-label="anchor" href="#t3-210"></a></h2>
 <div class="section level3">
 <h3 id="added-2-1-0">Added<a class="anchor" aria-label="anchor" href="#added-2-1-0"></a></h3>
 <ul><li>Add a <code>catch_count</code> column in elementarycatches data, recording the number of individuals caught in a set, which can be recorded in place of <code>catch_weight</code> for by-catch species, in the new version of observe database.<br></li>
@@ -95,7 +95,6 @@
 <li>time_at_sea : the process divides the day’s time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the time ate sea of that date.</li>
 <li>fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day’s fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the fishing time of that date.</li>
 <li>searching_time = fishing_time - set_duration.</li>
-<li>Manage fishing effort calculation for activities with multiple floating objects or object operation code declared.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="removed-2-1-0">Removed<a class="anchor" aria-label="anchor" href="#removed-2-1-0"></a></h3>
