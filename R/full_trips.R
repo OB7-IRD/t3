@@ -6490,15 +6490,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       data_level3 <- process_level3
                                     }
                                     # sets characteristics
-                                    dataset_target$act_chr[[x]] <- data_level3$act
+                                    dataset_target$act_chr[[x]] <- data_level3[[1]]$act
                                     # catch by set, species and categories from logbook (t3 level 1)
-                                    dataset_target$catch_set_lb[[x]] <- data_level3$act3
+                                    dataset_target$catch_set_lb[[x]] <- data_level3[[1]]$act3
                                     # catch by set, species and categories (t3 level 2)
-                                    dataset_target$samw[[x]] <- data_level3$samw
+                                    dataset_target$samw[[x]] <- data_level3[[1]]$samw
                                     # link between sample and set, + sample quality and type
-                                    dataset_target$sset[[x]] <- data_level3$sset
+                                    dataset_target$sset[[x]] <- data_level3[[1]]$sset
                                     # well plan
-                                    dataset_target$wp[[x]] <- data_level3$wp
+                                    dataset_target$wp[[x]] <- data_level3[[1]]$wp
                                   }
                                   dataset_target <- lapply(X = dataset_target,
                                                            FUN = function(x) {
