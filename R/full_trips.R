@@ -6491,14 +6491,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     }
                                     # sets characteristics
                                     dataset_target$act_chr[[x]] <- data_level3[[1]]$act
+
                                     # catch by set, species and categories from logbook (t3 level 1)
                                     dataset_target$catch_set_lb[[x]] <- data_level3[[1]]$act3
+
                                     # catch by set, species and categories (t3 level 2)
                                     dataset_target$samw[[x]] <- data_level3[[1]]$samw
                                     # link between sample and set, + sample quality and type
                                     dataset_target$sset[[x]] <- data_level3[[1]]$sset
                                     # well plan
                                     dataset_target$wp[[x]] <- data_level3[[1]]$wp
+
+                                    # hamonize activity code between avdth and observe new_catch code = 906
+                                    # DEV need to be remove when activity code is standardized previously to level3 ----
+                                    if(dataset_target$catch_set_lb[[x]]$code_act_type[1] == 1){
+                                      dataset_target$catch_set_lb[[x]]$code_act_type = 906
+
+                                      dataset_target$act_chr[[x]] <-  dataset_target$act_chr[[x]] %>%
+                                        mutate(code_act_type = dplyr::case_when(
+                                          code_act_type == 0 ~ 900,
+                                          code_act_type == 1 ~ 906,
+                                          code_act_type == 2 ~ 902,
+                                          .default = code_act_type))
+                                    } else if (dataset_target$catch_set_lb[[x]]$code_act_type[1] == 6){
+                            dataset_target$catch_set_lb[[x]]$code_act_type = 906
+                            dataset_target$act_chr[[x]] <-  dataset_target$act_chr[[x]] %>%
+                              mutate(code_act_type = dplyr::case_when(
+                                code_act_type == 6 ~ 906,
+                                .default = code_act_type))
+                          }
                                   }
                                   dataset_target <- lapply(X = dataset_target,
                                                            FUN = function(x) {
@@ -7749,7 +7770,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::distinct(id_act)
 
                               set_with_mix_tuna <- catch_set_lb %>%
-                                dplyr::filter(sp %in% c("MIX")) %>%
+                                dplyr::filter(sp %in% c("MIX", "TUN")) %>%
                                 dplyr::distinct(id_act)
                               catch_without_target_species <- catch_set_lb %>%
                                 dplyr::filter(!id_act %in% c(set_with_target_species$id_act,set_with_mix_tuna$id_act))
@@ -7798,10 +7819,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # catches keep onboard only = set
                               # WARNING - fix the activity code according to the dev in level 1 and 2----
                               if(input_type == "observe_database"){
-                                sets <- catch_set_lb %>% dplyr::filter(code_act_type %in% c(6))
+                                sets <- catch_set_lb %>% dplyr::filter(code_act_type %in% c(6, 906))
 
                               }else if(input_type == "avdth_database") {
-                                sets <- catch_set_lb %>% dplyr::filter(code_act_type %in% c(0,1,2))
+                                sets <- catch_set_lb %>% dplyr::filter(code_act_type %in% c(0,1,2, 900, 901, 906))
                               }
                               sets$sp <- factor(sets$sp)
                               sets$ocean <- factor(sets$ocean)
@@ -8397,15 +8418,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # compute average tuna proportion in sets by fishing mode
                               # MIX with other tuna should have been corrected in process 1.3 (issue #98)
                               # only sets with only MIX should remained here
+                              browser()
+                              # DEV replace MIX by TUN and apply correction to TUN
+                              # problem avec avdth le MIX semble disparaitre
                               catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                dplyr::filter(sp != "MIX") %>%
+                                dplyr::filter(!sp %in% c("MIX","TUN")) %>%
                                 dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
                                               data_source = "tuna_mix",
                                               mon = as.character(mon),
                                               ocean = as.factor(ocean),
                                               wcat = NULL)
                               catch_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
-                                dplyr::filter(sp == "MIX") %>%
+                                dplyr::filter(sp %in% c("MIX", "TUN")) %>%
                                 dplyr::mutate(sp = NULL,
                                               wcat = NULL)
                               tuna_compo_ave_sp_fmod <- set_all %>%
