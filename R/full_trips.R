@@ -7728,7 +7728,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     sep = "")
                                 stop()
                               }
-
                               # add the weight by categories, species from logbook (corrected by t3 level 1)
                               catch_set_lb <- dplyr::inner_join(act_chr,
                                                                 catch_set_lb,
@@ -7781,10 +7780,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # only one category (called less 10) use for SKJ
                               catch_set_lb$wcat[catch_set_lb$sp == "SKJ"] <- "m10"
 
-                              # sum duplicated
                               catch_set_lb <- catch_set_lb %>%
-                                dplyr::group_by(dplyr::across(c(-w_lb_t3))) %>%
-                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3, na.rm=TRUE)) %>%
+                                dplyr::group_by(dplyr::across(-c(w_lb_t3, count))) %>%
+                                dplyr::summarise(w_lb_t3 = sum(w_lb_t3, na.rm=TRUE),
+                                                 count = sum(count,na.rm = TRUE)) %>%
                                 dplyr::ungroup()
                               # set use for modeling to remove for prediction
                               ##############################################################
@@ -7821,9 +7820,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               sets_long <- sets_compo %>%
                                 dplyr::select(id_act, sp_cat, prop_lb, w_lb_t3) %>%
                                 tidyr::complete(id_act, sp_cat, fill = list(prop_lb = 0, w_lb_t3 = 0))
-                              sets_long <- dplyr::left_join(sets_long, dplyr::distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat)))) %>%
-                                dplyr::group_by(id_act, sp_cat) %>% dplyr::mutate(dupli = dplyr::n())
-                              sets_wide <- sets_long %>% dplyr::select(-w_lb_t3) %>% tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
+                              sets_long <- dplyr::left_join(sets_long,
+                                                            dplyr::distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat, count)))) %>%
+                                dplyr::group_by(id_act, sp_cat) %>% dplyr::mutate(dupli = dplyr::n()) %>% ungroup()
+                              if(length(unique(sets_long$dupli))>1) {
+                               stop("Duplicated in sets_long : bug to fix!")
+                              }
+                              sets_wide <- sets_long %>% dplyr::select(-c(w_lb_t3, wtot_lb_t3)) %>%
+                                tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
                               # sets_wide <- tidyr::spread(data = sets,
                               #                            key = sp_cat,
                               #                            value = w_lb_t3,
