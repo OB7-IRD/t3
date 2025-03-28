@@ -661,7 +661,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        ),
                                                        activity_code = as.integer(x = activity_code),
                                                        activity_label = as.character(x = activity_label),
-                                                       objectoperation_code = NA_integer_,
+                                                       objectoperation_code = NA_character_,
                                                        objectoperation_label = NA_character_,
                                                        objectoperation_id = NA_character_,
                                                        time_at_sea = as.integer(x = time_at_sea))
