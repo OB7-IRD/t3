@@ -35,6 +35,7 @@
 #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
+#' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
@@ -92,6 +93,7 @@ t3_process <- function(process = "all",
                        threshold_rf_total = as.integer(250),
                        periode_reference_level3 = NULL,
                        target_year,
+                       target_ocean = NULL,
                        period_duration,
                        distance_maximum = as.integer(5),
                        number_sets_maximum = as.integer(5),
@@ -224,8 +226,9 @@ t3_process <- function(process = "all",
     t3_process[[3]] <- t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  inputs_level3_path = NULL,
                                  periode_reference_level3 = NULL,
-                                 target_year,
-                                 period_duration,
+                                 target_year=target_year,
+                                 target_ocean = target_ocean,,
+                                 period_duration=period_duration,
                                  country_flag = flag_codes,
                                  input_type = data_source,
                                  distance_maximum = distance_maximum,
