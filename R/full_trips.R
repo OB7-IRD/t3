@@ -8418,9 +8418,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # compute average tuna proportion in sets by fishing mode
                               # MIX with other tuna should have been corrected in process 1.3 (issue #98)
                               # only sets with only MIX should remained here
-                              browser()
-                              # DEV replace MIX by TUN and apply correction to TUN
-                              # problem avec avdth le MIX semble disparaitre
                               catch_with_mix_tuna <- output_level3_process4$nonsampled_sets$catch_data_not_corrected$catch_with_mix_tuna %>%
                                 dplyr::filter(!sp %in% c("MIX","TUN")) %>%
                                 dplyr::mutate(catch_set_fit  = round(w_lb_t3, digits = 4),
@@ -8566,7 +8563,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                species = dplyr::case_when(status == "discard" ~ "DSC",
                                                                                                                           species %in% SHX_group ~ "SHX",
                                                                                                                           species %in% FRZ_group ~ "FRZ",
-                                                                                                                          !species %in% species_ecd_filter ~ "YOU",
+                                                                                                                          !species %in% species_ecd_filter ~ "OTH",
                                                                                                                           TRUE ~ species)) %>%
                                 dplyr::filter(species %in% species_ecd_filter) %>%
                                 dplyr::select(-name_to_remove_for_wide) %>%
