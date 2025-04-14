@@ -1,3 +1,16 @@
+# t3 2.1.2 - 2025-04-14
+
+## Changed
+* Add year 2025 in the set duration referential (set_duration_ref.csv).
+* Fix typo (weight instead of weigth) in (**Warning: you will need to correct your scripts**) :
+  _ R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
+  - R6 reference object class [standardisedsampleset](https://ob7-ird.github.io/t3/reference/standardisedsampleset.html), 
+  - process 1.3 [conversion_weight_categories](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion),
+  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).
+
+## Added
+* Possibility of considering AVDTH and Observe data as input for model fitting at level 3. 
+
 # t3 2.1.1 - 2025-03-21
 
 ## Changed
