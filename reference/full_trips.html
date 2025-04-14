@@ -97,7 +97,7 @@
 <li><p><a href="#method-full_trips-add_wells_samples"><code>full_trips$add_wells_samples()</code></a></p></li>
 <li><p><a href="#method-full_trips-rf1"><code>full_trips$rf1()</code></a></p></li>
 <li><p><a href="#method-full_trips-rf2"><code>full_trips$rf2()</code></a></p></li>
-<li><p><a href="#method-full_trips-conversion_weigth_category"><code>full_trips$conversion_weigth_category()</code></a></p></li>
+<li><p><a href="#method-full_trips-conversion_weight_category"><code>full_trips$conversion_weight_category()</code></a></p></li>
 <li><p><a href="#method-full_trips-set_count"><code>full_trips$set_count()</code></a></p></li>
 <li><p><a href="#method-full_trips-set_duration"><code>full_trips$set_duration()</code></a></p></li>
 <li><p><a href="#method-full_trips-time_at_sea"><code>full_trips$time_at_sea()</code></a></p></li>
@@ -106,7 +106,7 @@
 <li><p><a href="#method-full_trips-sample_length_class_ld1_to_lf"><code>full_trips$sample_length_class_ld1_to_lf()</code></a></p></li>
 <li><p><a href="#method-full_trips-sample_number_measured_extrapolation"><code>full_trips$sample_number_measured_extrapolation()</code></a></p></li>
 <li><p><a href="#method-full_trips-sample_length_class_step_standardisation"><code>full_trips$sample_length_class_step_standardisation()</code></a></p></li>
-<li><p><a href="#method-full_trips-well_set_weigth_categories"><code>full_trips$well_set_weigth_categories()</code></a></p></li>
+<li><p><a href="#method-full_trips-well_set_weight_categories"><code>full_trips$well_set_weight_categories()</code></a></p></li>
 <li><p><a href="#method-full_trips-standardised_sample_creation"><code>full_trips$standardised_sample_creation()</code></a></p></li>
 <li><p><a href="#method-full_trips-standardised_sample_set_creation"><code>full_trips$standardised_sample_set_creation()</code></a></p></li>
 <li><p><a href="#method-full_trips-raised_factors_determination"><code>full_trips$raised_factors_determination()</code></a></p></li>
@@ -280,11 +280,11 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-full_trips-conversion_weigth_category"></a><div class="section">
-<h3 id="method-conversion-weigth-category-">Method <code>conversion_weigth_category()</code><a class="anchor" aria-label="anchor" href="#method-conversion-weigth-category-"></a></h3>
+</div><p></p><hr><a id="method-full_trips-conversion_weight_category"></a><div class="section">
+<h3 id="method-conversion-weight-category-">Method <code>conversion_weight_category()</code><a class="anchor" aria-label="anchor" href="#method-conversion-weight-category-"></a></h3>
 <p>Process of logbook weight categories conversion.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">conversion_weigth_category</span><span class="op">(</span></span>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">conversion_weight_category</span><span class="op">(</span></span>
 <span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
 <span>  referential_template <span class="op">=</span> <span class="st">"observe"</span></span>
@@ -577,11 +577,11 @@ The function will create subsection if necessary.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-full_trips-well_set_weigth_categories"></a><div class="section">
-<h3 id="method-well-set-weigth-categories-">Method <code>well_set_weigth_categories()</code><a class="anchor" aria-label="anchor" href="#method-well-set-weigth-categories-"></a></h3>
-<p>Process for well set weigth categories definition.</p><div class="section">
+</div><p></p><hr><a id="method-full_trips-well_set_weight_categories"></a><div class="section">
+<h3 id="method-well-set-weight-categories-">Method <code>well_set_weight_categories()</code><a class="anchor" aria-label="anchor" href="#method-well-set-weight-categories-"></a></h3>
+<p>Process for well set weight categories definition.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">well_set_weigth_categories</span><span class="op">(</span></span>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">well_set_weight_categories</span><span class="op">(</span></span>
 <span>  <span class="va">sample_set</span>,</span>
 <span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_format <span class="op">=</span> <span class="st">"eu"</span>,</span>
@@ -663,7 +663,7 @@ The function will create subsection if necessary.</p></dd>
 
 </div><p></p><hr><a id="method-full_trips-raised_factors_determination"></a><div class="section">
 <h3 id="method-raised-factors-determination-">Method <code>raised_factors_determination()</code><a class="anchor" aria-label="anchor" href="#method-raised-factors-determination-"></a></h3>
-<p>Raised factors determination for weigth sample set to set.</p><div class="section">
+<p>Raised factors determination for weight sample set to set.</p><div class="section">
 <h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">raised_factors_determination</span><span class="op">(</span></span>
 <span>  threshold_rf_minus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
