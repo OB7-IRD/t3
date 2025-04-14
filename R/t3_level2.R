@@ -73,7 +73,7 @@ t3_level2 <- function(object_model_data,
                                                                global_output_path = output_path,
                                                                output_format = output_format)
     # level 2.4: sample weight categories ----
-    object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
+    object_full_trips$well_set_weight_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
                                                  global_output_path = output_path,
                                                  output_format = output_format,
                                                  referential_template = referential_template)

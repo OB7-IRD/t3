@@ -79,8 +79,8 @@ t3_level1 <- function(object_model_data,
     # level 1.2: rf2 ----
     object_full_trips$rf2(global_output_path = output_path,
                           output_format = output_format)
-    # level 1.3: logbook weigth categories conversion ----
-    object_full_trips$conversion_weigth_category(global_output_path = output_path,
+    # level 1.3: logbook weight categories conversion ----
+    object_full_trips$conversion_weight_category(global_output_path = output_path,
                                                  output_format = output_format,
                                                  referential_template = referential_template)
     # level 1.4: set count ----

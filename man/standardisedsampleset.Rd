@@ -29,7 +29,7 @@ Initialize function for R6 standardisedsampleset class.
   species_fao_code,
   sample_standardised_length_class_lf,
   sample_number_weighted,
-  sample_weigth,
+  sample_weight,
   sample_weight_unit,
   sample_category
 )}\if{html}{\out{</div>}}
@@ -56,7 +56,7 @@ Initialize function for R6 standardisedsampleset class.
 
 \item{\code{sample_number_weighted}}{Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus and weighted by set weight.}
 
-\item{\code{sample_weigth}}{Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).}
+\item{\code{sample_weight}}{Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).}
 
 \item{\code{sample_weight_unit}}{Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).}
 

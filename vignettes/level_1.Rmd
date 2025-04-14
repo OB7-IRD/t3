@@ -27,7 +27,7 @@ The first level of the t3 process aim to standardize logbook data. These standar
 |---------------------------------------------------|--------------------------------|----------------------|--------------|
 | Process 1.1: Raising Factor level 1               | `rf1()`                        | full_trips           |              |
 | Process 1.2: Raising Factor level 2               | `rf2()`                        | full_trips           |              |
-| Process 1.3: logbook weight categories conversion | `conversion_weigth_category()` | full_trips           |              |
+| Process 1.3: logbook weight categories conversion | `conversion_weight_category()` | full_trips           |              |
 | Process 1.4: positive sets count                   | `set_count()`                  | full_trips           |              |
 | Process 1.5: set duration calculation             | `set_duration()`               | full_trips           | In hours     |
 | Process 1.6: time at sea calculation              | `time_at_sea()`                | full_trips           | In hours     |
@@ -66,7 +66,7 @@ So far, this process is partially implemented in the source code and in our data
 
 <div style="text-align: center">Figure 2: Raising Factor level 2 flowchart.</div>
 
-### Process 1.3: logbook weigth categories conversion
+### Process 1.3: logbook weight categories conversion
 
 The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.
 

@@ -22,9 +22,9 @@ Initialize function for R6 well class.
 \if{html}{\out{<div class="r">}}\preformatted{well$new(
   trip_id,
   well_id,
-  well_minus10_weigth,
-  well_plus10_weigth,
-  well_global_weigth
+  well_minus10_weight,
+  well_plus10_weight,
+  well_global_weight
 )}\if{html}{\out{</div>}}
 }
 
@@ -35,11 +35,11 @@ Initialize function for R6 well class.
 
 \item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{well_minus10_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).}
+\item{\code{well_minus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).}
 
-\item{\code{well_plus10_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
+\item{\code{well_plus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).}
 
-\item{\code{well_global_weigth}}{Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
+\item{\code{well_global_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).}
 }
 \if{html}{\out{</div>}}
 }

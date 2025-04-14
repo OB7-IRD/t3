@@ -19,7 +19,7 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
 \item \href{#method-full_trips-rf1}{\code{full_trips$rf1()}}
 \item \href{#method-full_trips-rf2}{\code{full_trips$rf2()}}
-\item \href{#method-full_trips-conversion_weigth_category}{\code{full_trips$conversion_weigth_category()}}
+\item \href{#method-full_trips-conversion_weight_category}{\code{full_trips$conversion_weight_category()}}
 \item \href{#method-full_trips-set_count}{\code{full_trips$set_count()}}
 \item \href{#method-full_trips-set_duration}{\code{full_trips$set_duration()}}
 \item \href{#method-full_trips-time_at_sea}{\code{full_trips$time_at_sea()}}
@@ -28,7 +28,7 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
-\item \href{#method-full_trips-well_set_weigth_categories}{\code{full_trips$well_set_weigth_categories()}}
+\item \href{#method-full_trips-well_set_weight_categories}{\code{full_trips$well_set_weight_categories()}}
 \item \href{#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}
 \item \href{#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}
 \item \href{#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}
@@ -204,12 +204,12 @@ Process of Raising Factor level 2 (rf2).
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-conversion_weigth_category"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-conversion_weigth_category}{}}}
-\subsection{Method \code{conversion_weigth_category()}}{
+\if{html}{\out{<a id="method-full_trips-conversion_weight_category"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-conversion_weight_category}{}}}
+\subsection{Method \code{conversion_weight_category()}}{
 Process of logbook weight categories conversion.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weigth_category(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weight_category(
   global_output_path = NULL,
   output_format = "eu",
   referential_template = "observe"
@@ -466,12 +466,12 @@ Process for step standardisation of lf length class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-well_set_weigth_categories"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-well_set_weigth_categories}{}}}
-\subsection{Method \code{well_set_weigth_categories()}}{
-Process for well set weigth categories definition.
+\if{html}{\out{<a id="method-full_trips-well_set_weight_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-well_set_weight_categories}{}}}
+\subsection{Method \code{well_set_weight_categories()}}{
+Process for well set weight categories definition.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weigth_categories(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$well_set_weight_categories(
   sample_set,
   global_output_path = NULL,
   output_format = "eu",
@@ -544,7 +544,7 @@ R6 object standardised sample set creation.
 \if{html}{\out{<a id="method-full_trips-raised_factors_determination"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-raised_factors_determination}{}}}
 \subsection{Method \code{raised_factors_determination()}}{
-Raised factors determination for weigth sample set to set.
+Raised factors determination for weight sample set to set.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_factors_determination(
   threshold_rf_minus10 = as.integer(500),

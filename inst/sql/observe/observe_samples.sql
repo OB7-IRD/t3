@@ -1,9 +1,9 @@
 select
 	t.topiaid::text as trip_id
 	,w.topiaid::text as well_id
-	,s.smallsweight::numeric as well_minus10_weigth
-	,s.bigsweight::numeric as well_plus10_weigth
-	,s.totalweight::numeric as well_global_weigth
+	,s.smallsweight::numeric as well_minus10_weight
+	,s.bigsweight::numeric as well_plus10_weight
+	,s.totalweight::numeric as well_global_weight
 	,s.topiaid::text as sample_id
 	,ss.subsamplenumber::integer as sub_sample_id
 	,ss.topiaid::text as sub_sample_total_count_id

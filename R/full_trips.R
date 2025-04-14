@@ -1262,7 +1262,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
-                            conversion_weigth_category = function(global_output_path = NULL,
+                            conversion_weight_category = function(global_output_path = NULL,
                                                                   output_format = "eu",
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
@@ -4593,13 +4593,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
-                            # 18 - Process 2.4: well_set_weigth_categories ----
-                            #' @description Process for well set weigth categories definition.
+                            # 18 - Process 2.4: well_set_weight_categories ----
+                            #' @description Process for well set weight categories definition.
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
-                            well_set_weigth_categories = function(sample_set,
+                            well_set_weight_categories = function(sample_set,
                                                                   global_output_path = NULL,
                                                                   output_format = "eu",
                                                                   referential_template = "observe") {
@@ -4711,26 +4711,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
                                                              file = "NUL")
                                               # calcul of proportion of minus and plus 10 kg
-                                              current_wellplan_weigth_category <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "weight_category_code")))
+                                              current_wellplan_weight_category <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "weight_category_code")))
                                               if (referential_template == "observe") {
-                                                current_wellplan_weigth_category <- stringr::str_extract(string = current_wellplan_weigth_category,
+                                                current_wellplan_weight_category <- stringr::str_extract(string = current_wellplan_weight_category,
                                                                                                          pattern = "[:digit:]+$")
                                               }
-                                              current_wellplan_weigth_category <- as.integer(x = current_wellplan_weigth_category)
-                                              well_prop_minus10_weigth <- 0
-                                              well_prop_plus10_weigth <- 0
-                                              well_prop_global_weigth <- 0
-                                              if (! any(current_wellplan_weigth_category %in% as.integer(x = c(8, 9)))) {
+                                              current_wellplan_weight_category <- as.integer(x = current_wellplan_weight_category)
+                                              well_prop_minus10_weight <- 0
+                                              well_prop_plus10_weight <- 0
+                                              well_prop_global_weight <- 0
+                                              if (! any(current_wellplan_weight_category %in% as.integer(x = c(8, 9)))) {
                                                 for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                   current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
                                                   current_well_plan_weight_category_code <- if (referential_template == "observe") {as.integer(x = stringr::str_extract(string = current_well_plan$.__enclos_env__$private$weight_category_code,
                                                                                                                                                                         pattern = "[:digit:]+$"))} else {as.integer(x = current_well_plan$.__enclos_env__$private$weight_category_code)}
                                                   if (current_well_plan_weight_category_code == 1L) {
-                                                    well_prop_minus10_weigth <- well_prop_minus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                    well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                    well_prop_minus10_weight <- well_prop_minus10_weight + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                    well_prop_global_weight <- well_prop_global_weight + current_well_plan$.__enclos_env__$private$wellplan_weight
                                                   } else if (current_well_plan_weight_category_code == 2L) {
-                                                    well_prop_plus10_weigth <- well_prop_plus10_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
-                                                    well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                    well_prop_plus10_weight <- well_prop_plus10_weight + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                    well_prop_global_weight <- well_prop_global_weight + current_well_plan$.__enclos_env__$private$wellplan_weight
                                                   } else {
                                                     stop(format(Sys.time(),
                                                                 "%Y-%m-%d %H:%M:%S"),
@@ -4743,18 +4743,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
                                                 }
                                               } else {
-                                                well_prop_minus10_weigth <- NA_real_
-                                                well_prop_plus10_weigth <- NA_real_
+                                                well_prop_minus10_weight <- NA_real_
+                                                well_prop_plus10_weight <- NA_real_
                                                 for (well_plan_id in seq_len(length.out = current_well_plans$count())) {
                                                   current_well_plan <- current_well_plans$extract(id = well_plan_id)[[1]]
-                                                  well_prop_global_weigth <- well_prop_global_weigth + current_well_plan$.__enclos_env__$private$wellplan_weight
+                                                  well_prop_global_weight <- well_prop_global_weight + current_well_plan$.__enclos_env__$private$wellplan_weight
                                                 }
                                               }
 
 
 
-                                              current_well$.__enclos_env__$private$well_prop_minus10_weigth <- well_prop_minus10_weigth / well_prop_global_weigth
-                                              current_well$.__enclos_env__$private$well_prop_plus10_weigth <- well_prop_plus10_weigth / well_prop_global_weigth
+                                              current_well$.__enclos_env__$private$well_prop_minus10_weight <- well_prop_minus10_weight / well_prop_global_weight
+                                              current_well$.__enclos_env__$private$well_prop_plus10_weight <- well_prop_plus10_weight / well_prop_global_weight
                                               capture.output(current_well_sets <- object_r6(class_name = "wellsets"),
                                                              file = "NUL")
                                               # do we have more than one well associated to the trip ?
@@ -4774,8 +4774,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                               well_id = current_well$.__enclos_env__$private$well_id,
                                                                                                               sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                               weighted_weight = current_weighted_weight,
-                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
+                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weight)),
                                                                  file = "NUL")
                                                 }
                                               } else {
@@ -4845,8 +4845,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                               well_id = current_well$.__enclos_env__$private$well_id,
                                                                                                               sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                               weighted_weight = current_weighted_weight,
-                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                                                              weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
+                                                                                                              weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weight)),
                                                                  file = "NUL")
                                                 }
                                               }
@@ -4864,8 +4864,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       ", well: ",
                                                       current_well$.__enclos_env__$private$well_id,
                                                       "]")
-                                              current_well$.__enclos_env__$private$well_prop_minus10_weigth <- current_well$.__enclos_env__$private$well_minus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
-                                              current_well$.__enclos_env__$private$well_prop_plus10_weigth <- current_well$.__enclos_env__$private$well_plus10_weigth / (current_well$.__enclos_env__$private$well_minus10_weigth + current_well$.__enclos_env__$private$well_plus10_weigth)
+                                              current_well$.__enclos_env__$private$well_prop_minus10_weight <- current_well$.__enclos_env__$private$well_minus10_weight / (current_well$.__enclos_env__$private$well_minus10_weight + current_well$.__enclos_env__$private$well_plus10_weight)
+                                              current_well$.__enclos_env__$private$well_prop_plus10_weight <- current_well$.__enclos_env__$private$well_plus10_weight / (current_well$.__enclos_env__$private$well_minus10_weight + current_well$.__enclos_env__$private$well_plus10_weight)
                                               if (is.na(current_well$.__enclos_env__$private$well_id)) {
                                                 # for now, if a well_id is na, you can only have one sample inside (if more than 1, the well is avoid in model incrementation, check "R6 object wells creation")
                                                 sample_set_well <- dplyr::filter(.data = sample_set,
@@ -4892,8 +4892,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                               well_id = sample_set_well$well_id[[sample_set_well_id]],
                                                                                                               sample_id = sample_set_well$sample_id[[sample_set_well_id]],
                                                                                                               weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
-                                                                                                              weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weigth,
-                                                                                                              weighted_weight_plus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_plus10_weigth)),
+                                                                                                              weighted_weight_minus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_minus10_weight,
+                                                                                                              weighted_weight_plus10 =  sample_set_well$well_set_weighted_weight[[sample_set_well_id]] * current_well$.__enclos_env__$private$well_prop_plus10_weight)),
                                                                  file = "NUL")
                                                 }
                                                 current_well$.__enclos_env__$private$wellsets <- current_well_sets
@@ -5423,7 +5423,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                species_fao_code = current_standardised_sample$.__enclos_env__$private$species_fao_code,
                                                                                                                sample_standardised_length_class_lf = current_standardised_sample$.__enclos_env__$private$sample_standardised_length_class_lf,
                                                                                                                sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
-                                                                                                               sample_weigth = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
+                                                                                                               sample_weight = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
                                                                                                                sample_weight_unit = lwr,
                                                                                                                sample_category = ifelse(test = lwr <= 10,
                                                                                                                                         yes = "- 10kg",
@@ -5503,7 +5503,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                            "species_fao_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "species_fao_code")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted")),
-                                                                                           "sample_weigth" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth")),
+                                                                                           "sample_weight" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weight")),
                                                                                            "sample_weight_unit" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weight_unit")),
                                                                                            "sample_category" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_category")))
                                   outputs_process_2_6 <- outputs_process_2_6_standardisedsamplesets %>%
@@ -5552,7 +5552,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 21 - Process 2.7: raised_factors_determination ----
-                            #' @description Raised factors determination for weigth sample set to set.
+                            #' @description Raised factors determination for weight sample set to set.
                             #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
                             #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
                             #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
@@ -5678,7 +5678,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
                                                                  file = "NUL")
-                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_weight"))) / 1000
                                                   current_standardised_samples_sets_minus10_nb <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_number_weighted")))
                                                 } else {
                                                   current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- 0
@@ -5689,13 +5689,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
                                                                  file = "NUL")
-                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_weight"))) / 1000
                                                   current_standardised_samples_sets_plus10_nb <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_number_weighted")))
                                                 } else {
                                                   current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- 0
                                                   current_standardised_samples_sets_plus10_nb <- 0
                                                 }
-                                                current_well_set$.__enclos_env__$private$weighted_samples_total <- sum(unlist(current_standardised_samples_sets$extract_l1_element_value(element = "sample_weigth"))) / 1000
+                                                current_well_set$.__enclos_env__$private$weighted_samples_total <- sum(unlist(current_standardised_samples_sets$extract_l1_element_value(element = "sample_weight"))) / 1000
                                                 if (current_well_set$.__enclos_env__$private$weighted_samples_total == 0) {
                                                   # scenario 1
                                                   current_well_set$.__enclos_env__$private$rf_validation <- 1L
@@ -5718,7 +5718,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   current_well_set$.__enclos_env__$private$rf_validation <- 2L
                                                   warning(format(Sys.time(),
                                                                  "%Y-%m-%d %H:%M:%S"),
-                                                          " - Well-set avoided because invalid weighted weigth.\n",
+                                                          " - Well-set avoided because invalid weighted weight.\n",
                                                           "[trip: ,",
                                                           current_well_set$.__enclos_env__$private$trip_id,
                                                           ", activity: ",
@@ -5943,7 +5943,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         capture.output(current_standardisedsamplesets_bis$add(new_item = unlist(current_standardisedsamplesets$extract_l1_element_value(element = "data"))),
                                                        file = "NUL")
                                         current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
-                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                        current_standardisedsamplesets_bis$modification_l1(modification = "$path$sample_weight_set <- NA")
                                       }
                                     }
                                   } else {
@@ -5998,12 +5998,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  collapse = " - "),
                                                           "]")
                                                   current_standardised_samples_sets$modification_l1(modification = "$path$sample_number_weighted_set <- NA")
-                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- NA")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weight_set <- NA")
                                                 } else if (current_well_set$.__enclos_env__$private$rf_validation %in% as.integer(x = c(3, 4))) {
                                                   current_rf_total <- current_well_set$.__enclos_env__$private$rf_total
                                                   current_standardised_samples_sets$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
                                                                                                                           current_rf_total))
-                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weight_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                                 } else if (current_well_set$.__enclos_env__$private$rf_validation == 5L) {
                                                   current_rf_minus10 <- current_well_set$.__enclos_env__$private$rf_minus10
                                                   current_rf_plus10 <- current_well_set$.__enclos_env__$private$rf_plus10
@@ -6019,7 +6019,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                  file = "NUL")
                                                   current_standardised_samples_sets_plus10$modification_l1(modification = paste0("$path$sample_number_weighted_set <- $path$sample_number_weighted * ",
                                                                                                                                  current_rf_plus10))
-                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weigth_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
+                                                  current_standardised_samples_sets$modification_l1(modification = "$path$sample_weight_set <- $path$sample_weight_unit * $path$sample_number_weighted_set / 1000")
                                                 } else {
                                                   stop(format(Sys.time(),
                                                               "%Y-%m-%d %H:%M:%S"),
@@ -6109,7 +6109,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                            "species_fao_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "species_fao_code")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted_set")),
-                                                                                           "sample_weigth_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weigth_set")))
+                                                                                           "sample_weight_set" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_weight_set")))
                                   outputs_process_2_8 <- outputs_process_2_8_standardisedsamplesets %>%
                                     dplyr::left_join(outputs_process_2_8_trips,
                                                      by = "trip_id") %>%
@@ -6266,7 +6266,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       tmp_standardisedsampleset <- list(id_act = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "activity_id")),
                                                                         sp = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "species_fao_code")),
                                                                         wcat = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_category")),
-                                                                        w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weigth_set")))
+                                                                        w_fit_t3 = unlist(current_standardisedsamplesets_data$extract_l1_element_value(element = "sample_weight_set")))
                                       tmp_standardisedsampleset <- dplyr::bind_rows(tmp_standardisedsampleset)
                                       samw <- rbind(samw,
                                                     tmp_standardisedsampleset)
@@ -8499,12 +8499,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  w_lb_t3 = sum(w_lb_t3)) %>% dplyr::ungroup()
 
                               # recover the weight declaration standardized
-                              weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>%
+                              weight_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>%
                                 dplyr::select("id_act", "sp","wtot_lb_t3","prop_lb") %>%
                                 dplyr::mutate(w_lb_t3 = wtot_lb_t3*prop_lb,
                                        wtot_lb_t3 = NULL)
-                              # weigth_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
-                              set_all <- dplyr::left_join(set_all, weigth_declaration_ST,
+
+                              # weight_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
+                              set_all <- dplyr::left_join(set_all, weight_declaration_ST,
                                                           by = dplyr::join_by("id_act", "sp"))
                               name_to_trash <- c("code_act_type", "status") #"sp_code"
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,

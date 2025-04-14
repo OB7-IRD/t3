@@ -32,8 +32,8 @@ capture.output(object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_r
 # level 1.2: rf2
 capture.output(object_full_trips$rf2(),
                file = "NUL")
-# level 1.3: logbook weigth categories conversion ----
-capture.output(object_full_trips$conversion_weigth_category(),
+# level 1.3: logbook weight categories conversion ----
+capture.output(object_full_trips$conversion_weight_category(),
                file = "NUL")
 # level 1.4: set count ----
 capture.output(object_full_trips$set_count(),
@@ -62,7 +62,7 @@ capture.output(object_full_trips$sample_number_measured_extrapolation(),
 capture.output(object_full_trips$sample_length_class_step_standardisation(),
                file = "NUL")
 # level 2.4: well set weight categories ----
-capture.output(object_full_trips$well_set_weigth_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets),
+capture.output(object_full_trips$well_set_weight_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets),
                file = "NUL")
 # level 2.5: standardised sample creation ----
 capture.output(object_full_trips$standardised_sample_creation(),
@@ -257,8 +257,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                               code = {
                                 testthat::expect_true(object = (all(is.na(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_number_weighted_set")))
                                                                     | is.numeric(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_number_weighted_set"))))
-                                                                & all(is.na(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_weigth_set")))
-                                                                      | is.numeric(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_weigth_set"))))),
+                                                                & all(is.na(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_weight_set")))
+                                                                      | is.numeric(x = unlist(current_standardisedsampleset$extract_l1_element_value(element = "sample_weight_set"))))),
                                                       label = paste0("issue with the full trip ", full_trip_id,
                                                                      ", the partial trip ", partial_trip_id,
                                                                      " and the well ", well_id))

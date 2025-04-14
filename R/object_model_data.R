@@ -1471,9 +1471,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                     statement = sample_sql_final)) %>%
                                          dplyr::mutate(trip_id = as.character(trip_id),
                                                        well_id = as.character(well_id),
-                                                       well_minus10_weigth = as.numeric(well_minus10_weigth),
-                                                       well_plus10_weigth = as.numeric(well_plus10_weigth),
-                                                       well_global_weigth = as.numeric(well_global_weigth),
+                                                       well_minus10_weight = as.numeric(well_minus10_weight),
+                                                       well_plus10_weight = as.numeric(well_plus10_weight),
+                                                       well_global_weight = as.numeric(well_global_weight),
                                                        sample_id = as.character(sample_id),
                                                        sub_sample_id = as.integer(sub_sample_id),
                                                        sub_sample_total_count_id = as.character(sub_sample_total_count_id),
@@ -1728,12 +1728,12 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            tmp_well <- dplyr::filter(.data = tmp_trip,
                                                                      well_id == !!well_id)
                                          }
-                                         if (length(unique(x = tmp_well$well_minus10_weigth)) != 1
-                                             | length(unique(x = tmp_well$well_plus10_weigth)) != 1
-                                             | length(unique(x = tmp_well$well_global_weigth)) != 1) {
+                                         if (length(unique(x = tmp_well$well_minus10_weight)) != 1
+                                             | length(unique(x = tmp_well$well_plus10_weight)) != 1
+                                             | length(unique(x = tmp_well$well_global_weight)) != 1) {
                                            warning(format(x = Sys.time(),
                                                           format = "%Y-%m-%d %H:%M:%S"),
-                                                   " - At least one well data (\"well_minus10_weigth\", \"well_plus10_weigth\" and \"well_global_weigth\") is different between well samples. Only the first element will use.\n",
+                                                   " - At least one well data (\"well_minus10_weight\", \"well_plus10_weight\" and \"well_global_weight\") is different between well samples. Only the first element will use.\n",
                                                    "[trip: ",
                                                    trip_id,
                                                    ", well: ",
@@ -1742,9 +1742,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          }
                                          object_well <- well$new(trip_id = trip_id,
                                                                  well_id = well_id,
-                                                                 well_minus10_weigth = unique(x = tmp_well$well_minus10_weigth)[[1]],
-                                                                 well_plus10_weigth = unique(x = tmp_well$well_plus10_weigth)[[1]],
-                                                                 well_global_weigth = unique(x = tmp_well$well_global_weigth[[1]]))
+                                                                 well_minus10_weight = unique(x = tmp_well$well_minus10_weight)[[1]],
+                                                                 well_plus10_weight = unique(x = tmp_well$well_plus10_weight)[[1]],
+                                                                 well_global_weight = unique(x = tmp_well$well_global_weight[[1]]))
                                          for (sample_id in unique(x = tmp_well$sample_id)) {
                                            cat(format(x = Sys.time(),
                                                       format = "%Y-%m-%d %H:%M:%S"),
