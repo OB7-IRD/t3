@@ -9,9 +9,9 @@ well <- R6::R6Class(classname = "well",
                       #' @description Initialize function for R6 well class.
                       #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
                       #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
-                      #' @param well_minus10_weight Object of class {\link[base]{integer}} expected. Catch weight of individus less than 10 tonnes (by well, in tonne, all species considerated).
-                      #' @param well_plus10_weight Object of class {\link[base]{integer}} expected. Catch weight of individus more than 10 tonnes (by well, in tonne, all species considerated).
-                      #' @param well_global_weight Object of class {\link[base]{integer}} expected. Catch weight of individus (less and more 10 tonnes categories, by well, in tonne, all species considerated).
+                      #' @param well_minus10_weight Object of class {\link[base]{integer}} expected. Catch weight of individuals less than 10 tonnes (by well, in tonne, considering all species).
+                      #' @param well_plus10_weight Object of class {\link[base]{integer}} expected. Catch weight of individuals more than 10 tonnes (by well, in tonne, considering all species).
+                      #' @param well_global_weight Object of class {\link[base]{integer}} expected. Catch weight of individuals (less and more 10 tonnes categories, by well, in tonne, considering all species).
                       initialize = function(trip_id,
                                             well_id,
                                             well_minus10_weight,
