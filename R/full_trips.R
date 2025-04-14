@@ -470,7 +470,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 7 - Process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1).
-                            #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected. By default YFT, SKJ, BET, ALB, MIX and LOT. Specie(s) FAO code(s) used for the RF1 process.
+                            #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
+                            #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
+                            #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
                             #' @param species_fate_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.
                             #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
@@ -478,7 +480,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @importFrom codama r_type_checking
-                            rf1 = function(species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
+                            rf1 = function(species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
                                            species_fate_codes_rf1 = as.integer(c(6, 11)),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
@@ -6227,6 +6229,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       tmp_elementarycatch_final <- dplyr::bind_rows(tmp_elementarycatch) %>%
                                         dplyr::left_join(dplyr::bind_rows(tmp_elementarycatch_activities),
                                                          by = "id_act")
+
+                                      # Sum catch weight of elementarycatches
+                                      # of same species with the same standardized weight category, by activity.
+                                      tmp_elementarycatch_final <- tmp_elementarycatch_final %>%
+                                        dplyr::group_by(id_act, sp, wcat,
+                                                        date_act, code_act_type,
+                                                        sp_fate_code) %>%
+                                        dplyr::summarise(w_lb_t3=sum(w_lb_t3, na.rm=TRUE),
+                                                         count=sum(count, na.rm=TRUE),
+                                                         .groups="keep") %>%
+                                        dplyr::ungroup()
+                                      # Add trip's data in act3
                                       act3 <- rbind(act3,
                                                     tmp_elementarycatch_final)
                                     }

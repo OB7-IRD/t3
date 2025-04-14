@@ -85,13 +85,13 @@ Initialize function for R6 activities class.
 \subsection{Details}{
 Mandatory column names and types of elementarycatch(es) data:
 \itemize{
-\item{elementarycatch_id: } Elementary catch identification (class{\link[base]{character}}).
+\item{elementarycatch_id: } Elementary catch identification (class {\link[base]{character}}).
 \item{ocean_code: } Ocean identification (class {\link[base]{integer}}).
 \item{school_type_code: } School type identification (class {\link[base]{integer}}).
 \item{weight_category_code: } Logbook weight category (class {\link[base]{integer}}).
-\item{weight_category_label: } Logbook weight category name identification (class{\link[base]{character}}).
+\item{weight_category_label: } Logbook weight category name identification (class {\link[base]{character}}).
 \item{species_code: } Species code identification (class {\link[base]{integer}}).
-\item{species_fao_code: } Species code identification on 3 characters (class{\link[base]{character}}).
+\item{species_fao_code: } Species code identification on 3 characters (class {\link[base]{character}}).
 \item{species_fate_code: } Species fate code identification (class {\link[base]{integer}}).
 \item{catch_weight:} Catch weight in tonnes (class {\link[base]{numeric}}).
 \item{catch_count:} Catch count in number of specimens caught (class {\link[base]{integer}}).

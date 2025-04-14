@@ -44,9 +44,9 @@ Be careful, so far in the process all RF level 1 values will be applied to the l
 
 Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, these species should be different for each fleet, especially because canneries don't purchased through the same rules according to the fleet. This raising factor will be estimated only on theses species. Species list could be modified through the function parameter `species_rf1`. For now theses following selections were validated since several years:
 
-* for French (French and Mayotte fleets), use codes 1 (*Thunnus albacares*), 2 (*Katsuwonus pelamis*), 3 (*Thunnus obesus*), 4 (*Thunnus alalunga*), 9 (mix of tunas species) and 11 (*Thunnus tonggol*).
+* for French (French and Mayotte fleets), use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*), LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database).
 
-* for Spain (Spanish and Seychelles fleets), use codes 1 (*Thunnus albacares*), 2 (*Katsuwonus pelamis*), 3 (*Thunnus obesus*), 4 (*Thunnus alalunga*), 5 (*Euthynnus alletteratus*), 6 (*Auxis thazard*),  9 (mix of tunas species) and 11 (*Thunnus tonggol*).
+* for Spain (Spanish and Seychelles fleets), use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*), LTA (*Euthynnus alletteratus*), FRI (*Auxis thazard*), LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database).
 
 In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process `rf2()`).
 

@@ -7,7 +7,7 @@
 t3_level1(
   object_model_data,
   object_full_trips,
-  species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT"),
+  species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "TUN", "MIX", "LOT"),
   species_fate_codes_rf1 = as.integer(c(6, 11)),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
@@ -29,7 +29,9 @@ t3_level1(
 
 \item{object_full_trips}{Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.}
 
-\item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected. By default YFT, SKJ, BET, ALB, MIX and LOT. Specie(s) FAO code(s) used for the RF1 process.}
+\item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
+By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
+LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}
 
 \item{species_fate_codes_rf1}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
 
