@@ -132,42 +132,25 @@ object_full_trips$add_elementarylandings(object_elementarylandings = object_mode
 object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_env__$private$wells)
 
 # level 1 ---
-# level 1.1: rf1
+# level 1.1: rf1 and rf2
 object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
                       species_fate_codes_rf1 = species_fate_codes_rf1,
                       global_output_path = final_output_path,
                       output_format = output_format)
-# level 1.2: rf2
-object_full_trips$rf2(global_output_path = final_output_path,
-                      output_format = output_format)
-# level 1.3: logbook weight categories conversion ----
+# level 1.2: logbook weight categories conversion ----
 object_full_trips$conversion_weight_category(global_output_path = final_output_path,
                                              output_format = output_format,
                                              referential_template = "observe")
-# level 1.4: set count
+# level 1.3: set count
 object_full_trips$set_count(global_output_path = final_output_path,
                             output_format = output_format,
                             referential_template = "observe")
-# level 1.5: set duration
-object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
-                               activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                               global_output_path = final_output_path,
-                               output_format = output_format,
-                               referential_template = "observe")
-# level 1.6: time at sea
-object_full_trips$time_at_sea(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                              global_output_path = final_output_path,
-                              output_format = output_format,
-                              referential_template = "observe")
-# level 1.7: fishing time
-object_full_trips$fishing_time(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                               global_output_path = final_output_path,
-                               output_format = output_format,
-                               referential_template = "observe")
-# level 1.8: searching time
-object_full_trips$searching_time(global_output_path = final_output_path,
-                                 output_format = output_format)
-
+# level 1.4: Fishing effort indicators calculation (set duration, time at sea, fishing and searching time)
+object_full_trips$fishing_effort(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                 activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
+                                 global_output_path = final_output_path,
+                                 output_format = output_format,
+                                 referential_template = "observe")
 # level 2 ----
 # level 2.1: sample length class ld1 to lf conversion
 object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,

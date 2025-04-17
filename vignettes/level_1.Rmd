@@ -25,30 +25,26 @@ The first level of the t3 process aim to standardize logbook data. These standar
 
 | Process                                           | Code/method associated         | Class(es) associated | Observations |
 |---------------------------------------------------|--------------------------------|----------------------|--------------|
-| Process 1.1: Raising Factor level 1               | `rf1()`                        | full_trips           |              |
-| Process 1.2: Raising Factor level 2               | `rf2()`                        | full_trips           |              |
-| Process 1.3: logbook weight categories conversion | `conversion_weight_category()` | full_trips           |              |
-| Process 1.4: positive sets count                   | `set_count()`                  | full_trips           |              |
-| Process 1.5: set duration calculation             | `set_duration()`               | full_trips           | In hours     |
-| Process 1.6: time at sea calculation              | `time_at_sea()`                | full_trips           | In hours     |
-| Process 1.7: fishing time calculation             | `fishing_time()`               | full_trips           | In hours     |
-| Process 1.8: searching time calculation           | `searching_time()`             | full_trips           | In hours     |
+| Process 1.1: Raising Factors level 1              | `rf1()`                        | full_trips           |              |
+| Process 1.2: logbook weight categories conversion | `conversion_weight_category()` | full_trips           |              |
+| Process 1.3: positive sets count                  | `set_count()`                  | full_trips           |              |
+| Process 1.4: Fishing effort indicators calculation | `fishing_effort()`            | full_trips           | In hours     |
 
-### Process 1.1: Raising Factor level 1
+### Process 1.1: Raising Factors level 1
+
+#### Raising Factor  (rf1) ratio of landing weight on catch weight
 
 Catches filled in logbooks are based on visual estimations when they rise from the purse seiner salabard. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
 Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
 
-Be careful, so far in the process all RF level 1 values will be applied to the logbook catches associated, even if values are out of range. It's up to the user to check the log file and correct data, if necessary, before moving to the next process.
+**Be careful, so far in the process all RF level 1 values will be applied to the logbook catches associated, even if values are out of range. It's up to the user to check the log file and correct data, if necessary, before moving to the next process**.
 
-Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, these species should be different for each fleet, especially because canneries don't purchased through the same rules according to the fleet. This raising factor will be estimated only on theses species. Species list could be modified through the function parameter `species_rf1`. For now theses following selections were validated since several years:
+Furthermore, not all the well species are weighted during the landing process. Only several tunas species are purchased (and weighted by association). In addition, these species should be different for each fleet, especially because canneries don't purchased through the same rules according to the fleet. This raising factor will be estimated only on theses species. Species list could be modified through the function parameter `species_fao_codes_rf1`. For now theses following selections were validated since several years:
 
 * for French (French and Mayotte fleets), use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*), LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database).
 
 * for Spain (Spanish and Seychelles fleets), use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*), LTA (*Euthynnus alletteratus*), FRI (*Auxis thazard*), LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database).
-
-In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process `rf2()`).
 
 By the way, there are several cases when the RF level 1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
 
@@ -56,7 +52,9 @@ By the way, there are several cases when the RF level 1 can't be calculated. Tak
 
 <div style="text-align: center">Figure 1: Raising Factor level 1 flowchart.</div>
 
-### Process 1.2: Raising Factor level 2
+In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process `rf2()`).
+
+#### Raising Factor for missing logbooks (rf2)
 
 In some cases, especially for historical data, several logbooks trips were not collected or available. Therefore it's impossible to apply the process 1.1. Don't do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypothesis that all the landings were know and available.
 
@@ -66,7 +64,7 @@ So far, this process is partially implemented in the source code and in our data
 
 <div style="text-align: center">Figure 2: Raising Factor level 2 flowchart.</div>
 
-### Process 1.3: logbook weight categories conversion
+### Process 1.2: logbook weight categories conversion
 
 The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.
 
@@ -137,7 +135,7 @@ The global process flowchart is available in the figure 3 below.
 
 <div style="text-align: center">Figure 3: Logbook weight categories conversion flowchart.</div>
  
-### Process 1.4: postive sets count
+### Process 1.3: postive sets count
 
 In this process, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in the data, a count of set is done according to the catches associated. Like before, the global process flowchart is available below in figure 4.
 
@@ -145,7 +143,9 @@ In this process, for each activity filled as null set (0), positive set (1), unk
 
 <div style="text-align: center">Figure 4: Positive sets count flowchart.</div>
 
-### Process 1.5: set duration calculation
+### Process 1.4: Fishing effort indicators calculation
+
+#### Set duration calculation
 
 The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.
 
@@ -184,7 +184,7 @@ In addition the global process flowchart is available in the figure 5 below.
 
 <div style="text-align: center">Figure 5: Set duration calculation flowchart.</div>
 
-### Process 1.6: time at sea estimation
+#### Time at sea estimation
 
 This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:
 
@@ -198,7 +198,7 @@ The global process flowchart is available in the figure 6 below.
 
 <div style="text-align: center">Figure 6: Time at sea estimation flowchart.</div>
 
-### Process 1.7: fishing time determination
+#### Fishing time determination
 
 This process calculated the fishing time value in hours. Historically, this process use a constant parameter according to the theoretical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
 
@@ -227,7 +227,7 @@ The global process flowchart is available in the figure 7 below.
 
 <div style="text-align: center">Figure 7: Time at sea estimation flowchart.</div>
 
-### Process 1.8: searching time process
+#### Searching time process
 
 The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.
 

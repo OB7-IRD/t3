@@ -76,38 +76,23 @@ t3_level1 <- function(object_model_data,
                           rf1_highest_limit = rf1_highest_limit,
                           global_output_path = output_path,
                           output_format = output_format)
-    # level 1.2: rf2 ----
-    object_full_trips$rf2(global_output_path = output_path,
-                          output_format = output_format)
-    # level 1.3: logbook weight categories conversion ----
+    # level 1.2: logbook weight categories conversion ----
     object_full_trips$conversion_weight_category(global_output_path = output_path,
                                                  output_format = output_format,
                                                  referential_template = referential_template)
-    # level 1.4: set count ----
+    # level 1.3: set count ----
     object_full_trips$set_count(global_output_path = output_path,
                                 output_format = output_format,
                                 referential_template = referential_template)
-    # level 1.5: set duration ----
-    object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
-                                   activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                                   global_output_path = output_path,
-                                   output_format = output_format,
-                                   referential_template = referential_template)
-    # level 1.6: time at sea ----
-    object_full_trips$time_at_sea(global_output_path = output_path,
-                                  activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                                  output_format = output_format,
-                                  referential_template = referential_template)
-    # level 1.7: fishing time ----
-    object_full_trips$fishing_time(sunrise_schema = "sunrise",
-                                   sunset_schema = "sunset",
-                                   activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
-                                   global_output_path = output_path,
-                                   output_format = output_format,
-                                   referential_template = referential_template)
-    # level 1.8: searching time ----
-    object_full_trips$searching_time(global_output_path = output_path,
-                                     output_format = output_format)
+    # level 1.4:  ----
+    object_full_trips$fishing_effort(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                     activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
+                                     sunrise_schema =  sunrise_schema,
+                                     sunset_schema = sunset_schema,
+                                     global_output_path = output_path,
+                                     output_format = output_format,
+                                     referential_template = referential_template)
+
     # close, if necessary log file connection ----
     if (log_file == TRUE) {
       closeAllConnections()
