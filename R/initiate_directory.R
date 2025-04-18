@@ -72,7 +72,10 @@ initiate_directory <- function(output_path,
     current_directory <- list_directories[level_directory]
     for (directory in c("data",
                         "figure")) {
-      if (all(list.dirs(path = current_directory,
+      if(new_directory){
+        dir.create(path = file.path(current_directory,
+                                    directory))
+      } else if (all(list.dirs(path = current_directory,
                         recursive = FALSE) != file.path(current_directory,
                                                         directory))) {
         dir.create(path = file.path(current_directory,
