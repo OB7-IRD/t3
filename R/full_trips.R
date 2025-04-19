@@ -2543,6 +2543,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           fishing_time <- fishing_time + fishing_time_tmp
                                         }
                                         # Add new activity created during the process in current_activities_date object
+                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                        capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                       file = "NUL")
+                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                       file = "NUL")
                                         capture.output(current_activities_date <- object_r6(class_name = "activities"),
                                                        file = "NUL")
                                         capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
