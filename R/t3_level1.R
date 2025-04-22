@@ -3,6 +3,8 @@
 #' @description Level 1 of t3 process (logbooks standardisation).
 #' @param object_model_data Object of classes \code{\link[t3]{object_model_data}} and \code{\link[R6]{R6}} expected.
 #' @param object_full_trips Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.
+#' @param rf1_computation Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+#' By default TRUE, the rf1 is calculated for each trip.
 #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
 #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
@@ -24,6 +26,7 @@
 #' @export
 t3_level1 <- function(object_model_data,
                       object_full_trips,
+                      rf1_computation = TRUE,
                       species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "TUN", "MIX", "LOT"),
                       species_fate_codes_rf1 = as.integer(c(6, 11)),
                       vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
@@ -69,7 +72,8 @@ t3_level1 <- function(object_model_data,
                                         level = "level1")
     }
     # level 1.1: rf1 ----
-    object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
+    object_full_trips$rf1(rf1_computation = rf1_computation,
+                          species_fao_codes_rf1 = species_fao_codes_rf1,
                           species_fate_codes_rf1 = species_fate_codes_rf1,
                           vessel_type_codes_rf1 = vessel_type_codes_rf1,
                           rf1_lowest_limit = rf1_lowest_limit,

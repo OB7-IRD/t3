@@ -149,6 +149,7 @@ Process of Raising Factor level 1 (RF1 and RF2) calculation.
 Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
+  rf1_computation = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
   species_fate_codes_rf1 = as.integer(c(6, 11)),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
@@ -162,6 +163,9 @@ Raising Factor level 2 (RF2) not implemented yet but will be computed at this st
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{rf1_computation}}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+By default TRUE, the rf1 is calculated for each trip.}
+
 \item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
 LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}

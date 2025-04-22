@@ -471,6 +471,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             # 7 - Process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1 and RF2) calculation.
                             #' Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.
+                            #' @param rf1_computation Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+                            #' By default TRUE, the rf1 is calculated for each trip.
                             #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
                             #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
                             #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
@@ -482,7 +484,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @importFrom codama r_type_checking
-                            rf1 = function(species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
+                            rf1 = function(rf1_computation = TRUE,
+                                           species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
                                            species_fate_codes_rf1 = as.integer(c(6, 11)),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
@@ -560,7 +563,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           stop <- 1
                                         }
                                       }
-
                                     }
                                     if (stop != 1) {
                                       for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
@@ -739,6 +741,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_trips$modification_l1(modification = "$path$rf1 <- 1")
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
                                           } else {
+                                            if(!rf1_computation){
+                                              current_rf1 <- 1
+                                            } else {
                                             # Case 2.4 ----
                                             # everything rocks dude !
                                             capture.output(current_elementarylandings_rf1_species <- object_r6(class_name = "elementarylandings"),
@@ -768,6 +773,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
+                                            }
                                             current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
                                                                                                 current_rf1))
                                             current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
