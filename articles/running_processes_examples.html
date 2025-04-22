@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.0</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Running processes examples</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
       <div class="hidden name"><code>running_processes_examples.Rmd</code></div>
 
     </div>
@@ -251,42 +251,25 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">add_wells_samples</span><span class="op">(</span>object_wells <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">wells</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># level 1 ---</span></span>
-<span><span class="co"># level 1.1: rf1</span></span>
+<span><span class="co"># level 1.1: rf1 and rf2</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
 <span>                      species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                      global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                      output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
-<span><span class="co"># level 1.2: rf2</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf2</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                      output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
-<span><span class="co"># level 1.3: logbook weight categories conversion ----</span></span>
+<span><span class="co"># level 1.2: logbook weight categories conversion ----</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">conversion_weight_category</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                             output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
 <span>                                             referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
-<span><span class="co"># level 1.4: set count</span></span>
+<span><span class="co"># level 1.3: set count</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">set_count</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                            output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
 <span>                            referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
-<span><span class="co"># level 1.5: set duration</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">set_duration</span><span class="op">(</span>set_duration_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">setdurationrefs</span>,</span>
-<span>                               activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
-<span>                               global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                               output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
-<span>                               referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
-<span><span class="co"># level 1.6: time at sea</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">time_at_sea</span><span class="op">(</span>activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
-<span>                              global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                              output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
-<span>                              referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
-<span><span class="co"># level 1.7: fishing time</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">fishing_time</span><span class="op">(</span>activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
-<span>                               global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                               output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
-<span>                               referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
-<span><span class="co"># level 1.8: searching time</span></span>
-<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">searching_time</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
-<span></span>
+<span><span class="co"># level 1.4: Fishing effort indicators calculation (set duration, time at sea, fishing and searching time)</span></span>
+<span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">fishing_effort</span><span class="op">(</span>set_duration_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">setdurationrefs</span>,</span>
+<span>                                 activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
+<span>                                 global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
+<span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>,</span>
+<span>                                 referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
 <span><span class="co"># level 2.1: sample length class ld1 to lf conversion</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">sample_length_class_ld1_to_lf</span><span class="op">(</span>length_step <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">lengthsteps</span>,</span>
