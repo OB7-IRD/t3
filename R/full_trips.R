@@ -2222,6 +2222,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             school_type_code == current_activity$.__enclos_env__$private$school_type_code,
                                                             flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code)
                                             if (dim(current_set_duration_ref)[1] != 1) {
+                                              if(!(lubridate::year(activities_date) %in% set_duration_ref$year)){
+                                                current_set_duration_ref <- set_duration_ref %>%
+                                                  dplyr::filter(ocean_code == current_activity$.__enclos_env__$private$ocean_code,
+                                                                school_type_code == current_activity$.__enclos_env__$private$school_type_code,
+                                                                flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code,
+                                                                year == max(year))
+                                              warning(format(Sys.time(),
+                                                          "%Y-%m-%d %H:%M:%S"),
+                                                   " - Warning: invalid \"set_duration_ref\" argument.\n",
+                                                   "No correspondance with activity date (year: , \"",
+                                                   lubridate::year(activities_date),
+                                                   "\") in referential table.\"",
+                                                   activity_id,
+                                                   "\".\n",
+                                                   "[trip: ",
+                                                   current_trip$.__enclos_env__$private$trip_id,
+                                                   ", activity: ",
+                                                   current_activity$.__enclos_env__$private$activity_id,
+                                                   "]\n",
+                                                   "The set duration of the most recent year in the reference table is then considered: \"",
+                                                   current_set_duration_ref$year, ".\n")
+                                              } else{
                                               stop(format(Sys.time(),
                                                           "%Y-%m-%d %H:%M:%S"),
                                                    " - Error: invalid \"set_duration_ref\" argument.\n",
@@ -2233,6 +2255,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                    ", activity: ",
                                                    current_activity$.__enclos_env__$private$activity_id,
                                                    "]")
+                                              }
                                             } else {
                                               capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
                                                              file = "NUL")
