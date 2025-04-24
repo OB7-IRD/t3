@@ -521,9 +521,18 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 \subsection{Method \code{path_to_level3()}}{
 Temporary link to the R object model with modelisation process.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(global_output_path = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-data_preparatory"></a>}}

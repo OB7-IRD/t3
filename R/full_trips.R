@@ -5456,7 +5456,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 22 - Path to level 3 ----
                             #' @description Temporary link to the R object model with modelisation process.
-                            path_to_level3 = function() {
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+                            #' Path of the global outputs directory. The function will create subsection if necessary.
+                            #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            path_to_level3 = function(global_output_path=NULL) {
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3.\n")
@@ -5647,6 +5650,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               data_level3 <- append(data_level3,
                                                     list(raw_inputs_level3))
                               names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
+
+                              if(!is.null(global_output_path)){
+                                target_year <- data.frame(year=lubridate::year(act$date_act)) %>%
+                                  dplyr::group_by(year) %>%
+                                  dplyr::summarize(n=dplyr::n()) %>%
+                                  dplyr::filter(n==max(n)) %>%
+                                  dplyr::pull(year)
+                                ocean <- unique(act$ocean)
+                                flag_codes <- unique(act$flag_code)
+                                save(process_level3,
+                                     file=paste0(global_output_path,"/",
+                                                 paste( "inputs_level3", target_year, "ocean",
+                                                        ocean, paste(flag_codes, collapse="_"),
+                                                        sep="_"), ".RData"))
+                              }
                               return(data_level3)
                               capture.output(gc(full=TRUE), file="NUL")
                             },
