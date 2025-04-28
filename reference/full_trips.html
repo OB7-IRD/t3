@@ -642,9 +642,19 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <h3 id="method-path-to-level-">Method <code>path_to_level3()</code><a class="anchor" aria-label="anchor" href="#method-path-to-level-"></a></h3>
 <p>Temporary link to the R object model with modelisation process.</p><div class="section">
 <h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+<div class="section">
+<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>global_output_path</code></dt>
+<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
+
+
+</dl><p></p></div>
+</div>
 
 </div><p></p><hr><a id="method-full_trips-data_preparatory"></a><div class="section">
 <h3 id="method-data-preparatory-">Method <code>data_preparatory()</code><a class="anchor" aria-label="anchor" href="#method-data-preparatory-"></a></h3>
@@ -667,7 +677,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-17">Arguments<a class="anchor" aria-label="anchor" href="#arguments-17"></a></h4>
+<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>inputs_level3</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Inputs of levels 3 (see function path to level 3).</p></dd>
 
@@ -734,7 +744,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-18">Arguments<a class="anchor" aria-label="anchor" href="#arguments-18"></a></h4>
+<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>output_level3_process1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Output table data_lb_sample_screened from process 3.1.</p></dd>
 
@@ -776,7 +786,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-19">Arguments<a class="anchor" aria-label="anchor" href="#arguments-19"></a></h4>
+<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>output_level3_process2</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> expected. Outputs models and data from process 3.2.</p></dd>
 
@@ -816,7 +826,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-20">Arguments<a class="anchor" aria-label="anchor" href="#arguments-20"></a></h4>
+<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>inputs_level3</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> expected. Inputs of levels 3 (see function path to level 3).</p></dd>
 
@@ -866,7 +876,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-21">Arguments<a class="anchor" aria-label="anchor" href="#arguments-21"></a></h4>
+<h4 id="arguments-22">Arguments<a class="anchor" aria-label="anchor" href="#arguments-22"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>output_level3_process2</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></code> expected. Outputs from level 3 process 2 (random forest models).</p></dd>
 
@@ -922,7 +932,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 
 <div class="section">
-<h4 id="arguments-22">Arguments<a class="anchor" aria-label="anchor" href="#arguments-22"></a></h4>
+<h4 id="arguments-23">Arguments<a class="anchor" aria-label="anchor" href="#arguments-23"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
