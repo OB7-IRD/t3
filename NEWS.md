@@ -10,6 +10,7 @@
 **Warning: you will need to correct this typo in your scripts**
 
 ## Added
+* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
 * Add method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation) gathering methods 1.5 to 1.8:
 - set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
 - time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
