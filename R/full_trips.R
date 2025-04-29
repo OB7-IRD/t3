@@ -1680,6 +1680,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       "species_fao_code" = elementarycatches_selected$species_fao_code,
                                                                                       "weight_category_code" = elementarycatches_selected$weight_category_code,
                                                                                       "weight_category_label" = elementarycatches_selected$weight_category_label,
+                                                                                      "weight_category_min" = elementarycatches_selected$weight_category_min,
+                                                                                      "weight_category_max" = elementarycatches_selected$weight_category_max,
                                                                                       "catch_weight_rf2" = elementarycatches_selected$catch_weight_rf2,
                                                                                       "weight_category_code_corrected" = elementarycatches_selected$weight_category_code_corrected,
                                                                                       "catch_weight_category_code_corrected" = elementarycatches_selected$catch_weight_category_code_corrected,
@@ -2845,7 +2847,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               if (any(is.null(x = current_elementary_catches$catch_weight_category_code_corrected))) {
                                                 stop(format(Sys.time(),
                                                             "%Y-%m-%d %H:%M:%S"),
-                                                     " - Variable \"catch_weight_category_code_corrected\" not calculated.\n Run steps 1.1 to 1.2 of level 1 before this step.")
+                                                     " - Variable \"catch_weight_category_code_corrected\" not calculated.\n Run steps 1.1 of level 1 before this step.")
                                               } else {
                                                 total_current_elementary_catches <- sum(current_elementary_catches$catch_weight_category_code_corrected,
                                                                                         na.rm=TRUE)
