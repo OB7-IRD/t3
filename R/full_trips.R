@@ -5832,7 +5832,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dataset_target$sset[[x]] <- data_level3[[1]]$sset
                                     # well plan
                                     dataset_target$wp[[x]] <- data_level3[[1]]$wp
-
                                     # hamonize activity code between avdth and observe new_catch code = 906
                                     # DEV need to be remove when activity code is standardized previously to level3 ----
                                     if(dataset_target$catch_set_lb[[x]]$code_act_type[1] == 1){
@@ -7072,7 +7071,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                               # reduce dataset to the period and flag considered in the modeling and check data availability
                               act_chr <- act_chr %>% dplyr::filter(yr %in% target_year,
-                                                                   flag_code == country_flag)
+                                                                   flag_code %in% country_flag)
                               if (nrow(act_chr) == 0) {
                                 cat(format(x = Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
@@ -7275,6 +7274,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::summarise(prop_lb = sum(prop_lb)) %>%
                                   dplyr::ungroup()
                               }
+
+                              # DEV ajouter la correction de mode de peche dans sets_wide et catch_data_not_corrected
+
                               output_level3_process4 <- append(output_level3_process4,
                                                                list(list("sets_long" = sets_long,
                                                                          "sets_wide" = sets_wide,
@@ -7820,7 +7822,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::select("id_act", "sp","wtot_lb_t3","prop_lb") %>%
                                 dplyr::mutate(w_lb_t3 = wtot_lb_t3*prop_lb,
                                        wtot_lb_t3 = NULL)
-
                               # weight_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
                               set_all <- dplyr::left_join(set_all, weight_declaration_ST,
                                                           by = dplyr::join_by("id_act", "sp"))
