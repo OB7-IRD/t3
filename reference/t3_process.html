@@ -102,6 +102,7 @@
 <span>  vessel_type_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  rf1_lowest_limit <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>,</span>
+<span>  fishing_effort_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  sunrise_schema <span class="op">=</span> <span class="st">"sunrise"</span>,</span>
 <span>  sunset_schema <span class="op">=</span> <span class="st">"sunset"</span>,</span>
 <span>  maximum_lf_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
@@ -226,6 +227,10 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 
 <dt id="arg-rf-highest-limit">rf1_highest_limit<a class="anchor" aria-label="anchor" href="#arg-rf-highest-limit"></a></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Verification value for the highest limit of the RF1. By default 1.2.</p></dd>
+
+
+<dt id="arg-fishing-effort-computation">fishing_effort_computation<a class="anchor" aria-label="anchor" href="#arg-fishing-effort-computation"></a></dt>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).</p></dd>
 
 
 <dt id="arg-sunrise-schema">sunrise_schema<a class="anchor" aria-label="anchor" href="#arg-sunrise-schema"></a></dt>
