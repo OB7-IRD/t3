@@ -85,7 +85,6 @@ Imports:
     furdeb (>= 1.0.0),
     codama (>= 0.9.0),
     DBI (>= 1.2.2),
-    future.apply (>= 1.11.2),
     ggplot2 (>= 3.5.1),
     lubridate (>= 1.9.3),
     magrittr (>= 2.0.3),
