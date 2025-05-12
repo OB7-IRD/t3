@@ -12,6 +12,7 @@
 #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
 #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
 #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
+#' @param fishing_effort_computation Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).
 #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.
 #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
@@ -32,6 +33,7 @@ t3_level1 <- function(object_model_data,
                       vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                       rf1_lowest_limit = 0.8,
                       rf1_highest_limit = 1.2,
+                      fishing_effort_computation = TRUE,
                       sunrise_schema = "sunrise",
                       sunset_schema = "sunset",
                       log_file = FALSE,
@@ -88,6 +90,7 @@ t3_level1 <- function(object_model_data,
     object_full_trips$set_count(global_output_path = output_path,
                                 output_format = output_format,
                                 referential_template = referential_template)
+    if(fishing_effort_computation){
     # level 1.4:  ----
     object_full_trips$fishing_effort(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
                                      activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs,
@@ -96,7 +99,7 @@ t3_level1 <- function(object_model_data,
                                      global_output_path = output_path,
                                      output_format = output_format,
                                      referential_template = referential_template)
-
+    }
     # close, if necessary log file connection ----
     if (log_file == TRUE) {
       closeAllConnections()
