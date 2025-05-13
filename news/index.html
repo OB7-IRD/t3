@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.1</span>
       </span>
     </div>
 
@@ -75,6 +75,22 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="3.0.1" id="t3-301---2025-05-13">t3 3.0.1 - 2025-05-13<a class="anchor" aria-label="anchor" href="#t3-301---2025-05-13"></a></h2>
+<div class="section level3">
+<h3 id="changed-3-0-1">Changed<a class="anchor" aria-label="anchor" href="#changed-3-0-1"></a></h3>
+<ul><li>Important calculation time reduction by replacing <a href="https://rdrr.io/cran/future.apply/man/future_lapply.html" class="external-link"><code>future.apply::future_sapply()</code></a> by <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/lapply.html" class="external-link"><code>sapply()</code></a> in method <a href="https://ob7-ird.github.io/t3/reference/list_t3.html#method-list_t3-extract">extract()</a>.</li>
+<li>Fix typo (weight instead of weigth) in “inst/avdth_samples.sql”.</li>
+<li>In method <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation">fishing_effort()</a>:
+<ul><li>For set declared as positive but with no elementary catch associated, the set duration is now set to the null set duration value, taken from the “inst/set_duration_ref.csv” table, and not to NA as before and a warning is generated.</li>
+<li>If there is no adjusted set duration model for the year corresponding to the activity date in the reference table (“inst/set_duration_ref.csv”), t3 now allows considering the adjusted set duration model for the year closest to the activity date in the reference table, generating a warning.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="added-3-0-1">Added<a class="anchor" aria-label="anchor" href="#added-3-0-1"></a></h3>
+<ul><li>Add <code>global_output_path</code> argument in function <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3">path_to_level3</a> to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if <code>global_output_path</code> is not NULL.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="3.0.0" id="t3-300---2025-04-15">t3 3.0.0 - 2025-04-15<a class="anchor" aria-label="anchor" href="#t3-300---2025-04-15"></a></h2>
 <div class="section level3">
 <h3 id="changed-3-0-0">Changed<a class="anchor" aria-label="anchor" href="#changed-3-0-0"></a></h3>
@@ -100,7 +116,7 @@
 <div class="section level3">
 <h3 id="removed-3-0-0">Removed<a class="anchor" aria-label="anchor" href="#removed-3-0-0"></a></h3>
 <ul><li>Methods 1.5 to 1.8 and 1.2 (rf2).</li>
-</ul><p><strong>Warning: you will need to correct this typo in your scripts</strong></p>
+</ul><p><strong>Warning: you will need to correct this in your scripts</strong></p>
 </div>
 </div>
     <div class="section level2">
