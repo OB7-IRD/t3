@@ -230,7 +230,7 @@ t3_process <- function(process = "all",
                                  referential_template = referential_template)
   }
   if (process == "all") {
-    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3()
+    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3(global_output_path = output_path)
     names(t3_process)[3] <- "process_level3"
     t3_process[[3]] <- t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  inputs_level3_path = NULL,

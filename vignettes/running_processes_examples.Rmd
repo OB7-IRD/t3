@@ -183,7 +183,7 @@ object_full_trips$raised_standardised_sample_set(global_output_path = final_outp
                                                  output_format = output_format)
 
 # level 3 ----
-process_level3 <- object_full_trips$path_to_level3()
+process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
 # level 3.1: data preparatory
 process_level3 <- object_full_trips$data_preparatory(inputs_level3 = process_level3[[1]],
                                                      output_directory = final_output_path,
@@ -268,7 +268,7 @@ t3_process[[2]] <- t3::t3_level2(object_model_data = t3_process[[1]],
                                  output_format = output_format,
                                  referential_template= "observe")
 # level 3 ----
-t3_process[[3]] <- t3_process[[2]]$path_to_level3()
+t3_process[[3]] <- t3_process[[2]]$path_to_level3(global_output_path = final_output_path)
 names(t3_process)[3] <- "process_level3"
 t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  target_year = target_year,
