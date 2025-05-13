@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.0</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>T3 process compilation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/t3_process.R" class="external-link"><code>R/t3_process.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/t3_process.R" class="external-link"><code>R/t3_process.R</code></a></small>
     <div class="hidden name"><code>t3_process.Rd</code></div>
     </div>
 
@@ -96,11 +96,13 @@
 <span>  <span class="va">species_fate_codes</span>,</span>
 <span>  <span class="va">sample_type_codes</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rf1_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  species_fao_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span>,</span>
 <span>  species_fate_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  vessel_type_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  rf1_lowest_limit <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>,</span>
+<span>  fishing_effort_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  sunrise_schema <span class="op">=</span> <span class="st">"sunrise"</span>,</span>
 <span>  sunset_schema <span class="op">=</span> <span class="st">"sunset"</span>,</span>
 <span>  maximum_lf_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
@@ -200,6 +202,11 @@ For example, a list of two database connection arguments for "observe_main" and 
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
 
+<dt id="arg-rf-computation">rf1_computation<a class="anchor" aria-label="anchor" href="#arg-rf-computation"></a></dt>
+<dd><p>Object of class <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+By default TRUE, the rf1 is calculated for each trip.</p></dd>
+
+
 <dt id="arg-species-fao-codes-rf-">species_fao_codes_rf1<a class="anchor" aria-label="anchor" href="#arg-species-fao-codes-rf-"></a></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
@@ -220,6 +227,10 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 
 <dt id="arg-rf-highest-limit">rf1_highest_limit<a class="anchor" aria-label="anchor" href="#arg-rf-highest-limit"></a></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code> expected. Verification value for the highest limit of the RF1. By default 1.2.</p></dd>
+
+
+<dt id="arg-fishing-effort-computation">fishing_effort_computation<a class="anchor" aria-label="anchor" href="#arg-fishing-effort-computation"></a></dt>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).</p></dd>
 
 
 <dt id="arg-sunrise-schema">sunrise_schema<a class="anchor" aria-label="anchor" href="#arg-sunrise-schema"></a></dt>
