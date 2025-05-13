@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.2</span>
       </span>
     </div>
 
@@ -71,46 +71,16 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/development/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="3.0.0" id="t3-300---2025-04-15">t3 3.0.0 - 2025-04-15<a class="anchor" aria-label="anchor" href="#t3-300---2025-04-15"></a></h2>
-<div class="section level3">
-<h3 id="changed-3-0-0">Changed<a class="anchor" aria-label="anchor" href="#changed-3-0-0"></a></h3>
-<ul><li>Level 1 optimization gather methods 1.1 and 1.2 for <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-1-1-https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">raising factors computation</a>
-</li>
-<li>Fix typo (weight instead of weigth) in :
-<ul><li>R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/well.html">well</a>,</li>
-<li>R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/standardisedsampleset.html">standardisedsampleset</a>,</li>
-<li>process 1.3 <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion">conversion_weight_categories</a>,</li>
-<li>process 2.4 <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories">well_set_weight_categories()</a>. <strong>Warning: you will need to correct this typo in your scripts</strong>
-</li>
-</ul></li>
-</ul></div>
-<div class="section level3">
-<h3 id="added-3-0-0">Added<a class="anchor" aria-label="anchor" href="#added-3-0-0"></a></h3>
-<ul><li>Add <code>global_output_path</code> argument in function <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3">path_to_level3</a> to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if <code>global_output_path</code> is not NULL.</li>
-<li>Add method <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation">fishing_effort()</a> gathering methods 1.5 to 1.8:</li>
-<li>set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country.</li>
-<li>time_at_sea : the process divides the day’s time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the time ate sea of that date.</li>
-<li>fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day’s fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains <a href="https://github.com/OB7-IRD/t3/issues/666" class="external-link">#666</a>#) to allocate the fishing time of that date.</li>
-<li>searching_time = fishing_time - set_duration.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="removed-3-0-0">Removed<a class="anchor" aria-label="anchor" href="#removed-3-0-0"></a></h3>
-<ul><li>Methods 1.5 to 1.8 and 1.2 (rf2).</li>
-</ul><p><strong>Warning: you will need to correct this typo in your scripts</strong></p>
-</div>
-</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1.2" id="t3-212---2025-04-14">t3 2.1.2 - 2025-04-14<a class="anchor" aria-label="anchor" href="#t3-212---2025-04-14"></a></h2>
 <div class="section level3">
 <h3 id="changed-2-1-2">Changed<a class="anchor" aria-label="anchor" href="#changed-2-1-2"></a></h3>
 <ul><li>Add year 2025 in the set duration referential (set_duration_ref.csv).</li>
-<li>Fix typo (weight instead of weigth) in :
-<ul><li>R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/well.html">well</a>,</li>
-<li>R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/standardisedsampleset.html">standardisedsampleset</a>,</li>
+<li>Fix typo (weight instead of weigth) in : _ R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/well.html">well</a>,
+<ul><li>R6 reference object class <a href="https://ob7-ird.github.io/t3/reference/standardisedsampleset.html">standardisedsampleset</a>,</li>
 <li>process 1.3 <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion">conversion_weight_categories</a>,</li>
 <li>process 2.4 <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories">well_set_weight_categories()</a>. <strong>Warning: you will need to correct this typo in your scripts</strong>
 </li>

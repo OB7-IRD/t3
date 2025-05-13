@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.2</span>
       </span>
     </div>
 
@@ -108,7 +108,7 @@
       <h1 data-toc-skip>Level 1 process</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/level_1.Rmd" class="external-link"><code>vignettes/level_1.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/vignettes/level_1.Rmd" class="external-link"><code>vignettes/level_1.Rmd</code></a></small>
       <div class="hidden name"><code>level_1.Rmd</code></div>
 
     </div>
@@ -135,37 +135,58 @@ These standardization was divided into 8 steps:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Process 1.1: Raising Factors level 1</td>
+<td>Process 1.1: Raising Factor level 1</td>
 <td><code>rf1()</code></td>
 <td>full_trips</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>Process 1.2: logbook weight categories conversion</td>
-<td><code>conversion_weight_category()</code></td>
+<td>Process 1.2: Raising Factor level 2</td>
+<td><code>rf2()</code></td>
 <td>full_trips</td>
 <td></td>
 </tr>
 <tr class="odd">
-<td>Process 1.3: positive sets count</td>
-<td><code>set_count()</code></td>
+<td>Process 1.3: logbook weight categories conversion</td>
+<td><code>conversion_weight_category()</code></td>
 <td>full_trips</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>Process 1.4: Fishing effort indicators calculation</td>
-<td><code>fishing_effort()</code></td>
+<td>Process 1.4: positive sets count</td>
+<td><code>set_count()</code></td>
+<td>full_trips</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Process 1.5: set duration calculation</td>
+<td><code>set_duration()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="even">
+<td>Process 1.6: time at sea calculation</td>
+<td><code>time_at_sea()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="odd">
+<td>Process 1.7: fishing time calculation</td>
+<td><code>fishing_time()</code></td>
+<td>full_trips</td>
+<td>In hours</td>
+</tr>
+<tr class="even">
+<td>Process 1.8: searching time calculation</td>
+<td><code>searching_time()</code></td>
 <td>full_trips</td>
 <td>In hours</td>
 </tr>
 </tbody>
 </table>
 <div class="section level3">
-<h3 id="process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1<a class="anchor" aria-label="anchor" href="#process-1-1-raising-factors-level-1"></a>
+<h3 id="process-1-1-raising-factor-level-1">Process 1.1: Raising Factor level 1<a class="anchor" aria-label="anchor" href="#process-1-1-raising-factor-level-1"></a>
 </h3>
-<div class="section level4">
-<h4 id="raising-factor-rf1-ratio-of-landing-weight-on-catch-weight">Raising Factor (rf1) ratio of landing weight on catch weight<a class="anchor" aria-label="anchor" href="#raising-factor-rf1-ratio-of-landing-weight-on-catch-weight"></a>
-</h4>
 <p>Catches filled in logbooks are based on visual estimations when they
 rise from the purse seiner salabard. This is the only technical way
 available at this moment to have an estimation by species. Thereafter,
@@ -185,18 +206,18 @@ through function parameters <code>rf1_lowest_limit</code> (by default at
 addition, you will find in the function log a warning for each RF level
 1 value out of range. This ratio will be applied to logbook catches to
 adjust declared values (by rising or lower them).</p>
-<p><strong>Be careful, so far in the process all RF level 1 values will
-be applied to the logbook catches associated, even if values are out of
+<p>Be careful, so far in the process all RF level 1 values will be
+applied to the logbook catches associated, even if values are out of
 range. It’s up to the user to check the log file and correct data, if
-necessary, before moving to the next process</strong>.</p>
+necessary, before moving to the next process.</p>
 <p>Furthermore, not all the well species are weighted during the landing
 process. Only several tunas species are purchased (and weighted by
 association). In addition, these species should be different for each
 fleet, especially because canneries don’t purchased through the same
 rules according to the fleet. This raising factor will be estimated only
 on theses species. Species list could be modified through the function
-parameter <code>species_fao_codes_rf1</code>. For now theses following
-selections were validated since several years:</p>
+parameter <code>species_rf1</code>. For now theses following selections
+were validated since several years:</p>
 <ul>
 <li><p>for French (French and Mayotte fleets), use codes YFT
 (<em>Thunnus albacares</em>), SKJ (<em>Katsuwonus pelamis</em>), BET
@@ -210,6 +231,9 @@ Observe/AVDTH database).</p></li>
 (<em>Thunnus tonggol</em>) and TUN/MIX (mix of tunas species in
 Observe/AVDTH database).</p></li>
 </ul>
+<p>In addition, if logbook(s) are missing we can’t apply the process. In
+that case, we will tried to apply the process of Raising Factor level 2
+(see section below regarding the process <code>rf2()</code>).</p>
 <p>By the way, there are several cases when the RF level 1 can’t be
 calculated. Take a look to the diagram below to have a brief overview of
 the process. You could notify that the structure of the process should
@@ -222,13 +246,10 @@ implementation.</p>
 <div style="text-align: center">
 Figure 1: Raising Factor level 1 flowchart.
 </div>
-<p>In addition, if logbook(s) are missing we can’t apply the process. In
-that case, we will tried to apply the process of Raising Factor level 2
-(see section below regarding the process <code>rf2()</code>).</p>
 </div>
-<div class="section level4">
-<h4 id="raising-factor-for-missing-logbooks-rf2">Raising Factor for missing logbooks (rf2)<a class="anchor" aria-label="anchor" href="#raising-factor-for-missing-logbooks-rf2"></a>
-</h4>
+<div class="section level3">
+<h3 id="process-1-2-raising-factor-level-2">Process 1.2: Raising Factor level 2<a class="anchor" aria-label="anchor" href="#process-1-2-raising-factor-level-2"></a>
+</h3>
 <p>In some cases, especially for historical data, several logbooks trips
 were not collected or available. Therefore it’s impossible to apply the
 process 1.1. Don’t do anything for this trips would result in an
@@ -247,9 +268,8 @@ process.</p>
 Figure 2: Raising Factor level 2 flowchart.
 </div>
 </div>
-</div>
 <div class="section level3">
-<h3 id="process-1-2-logbook-weight-categories-conversion">Process 1.2: logbook weight categories conversion<a class="anchor" aria-label="anchor" href="#process-1-2-logbook-weight-categories-conversion"></a>
+<h3 id="process-1-3-logbook-weight-categories-conversion">Process 1.3: logbook weight categories conversion<a class="anchor" aria-label="anchor" href="#process-1-3-logbook-weight-categories-conversion"></a>
 </h3>
 <p>The core of the t3 process is to consider that the species
 composition of the logbooks was biased. Furthermore, logbook information
@@ -550,7 +570,7 @@ Figure 3: Logbook weight categories conversion flowchart.
 </div>
 </div>
 <div class="section level3">
-<h3 id="process-1-3-postive-sets-count">Process 1.3: postive sets count<a class="anchor" aria-label="anchor" href="#process-1-3-postive-sets-count"></a>
+<h3 id="process-1-4-postive-sets-count">Process 1.4: postive sets count<a class="anchor" aria-label="anchor" href="#process-1-4-postive-sets-count"></a>
 </h3>
 <p>In this process, for each activity filled as null set (0), positive
 set (1), unknown set (2) or pocket capsizing (14) in the data, a count
@@ -562,11 +582,8 @@ Figure 4: Positive sets count flowchart.
 </div>
 </div>
 <div class="section level3">
-<h3 id="process-1-4-fishing-effort-indicators-calculation">Process 1.4: Fishing effort indicators calculation<a class="anchor" aria-label="anchor" href="#process-1-4-fishing-effort-indicators-calculation"></a>
+<h3 id="process-1-5-set-duration-calculation">Process 1.5: set duration calculation<a class="anchor" aria-label="anchor" href="#process-1-5-set-duration-calculation"></a>
 </h3>
-<div class="section level4">
-<h4 id="set-duration-calculation">Set duration calculation<a class="anchor" aria-label="anchor" href="#set-duration-calculation"></a>
-</h4>
 <p>The aim of this process is to calculate the duration of each set in
 hours. Like the process before, for each activity filled as null set
 (0), positive set (1), unknown set (2) or pocket capsizing (14), the set
@@ -824,9 +841,9 @@ below.</p>
 Figure 5: Set duration calculation flowchart.
 </div>
 </div>
-<div class="section level4">
-<h4 id="time-at-sea-estimation">Time at sea estimation<a class="anchor" aria-label="anchor" href="#time-at-sea-estimation"></a>
-</h4>
+<div class="section level3">
+<h3 id="process-1-6-time-at-sea-estimation">Process 1.6: time at sea estimation<a class="anchor" aria-label="anchor" href="#process-1-6-time-at-sea-estimation"></a>
+</h3>
 <p>This step aim to make an estimation, at the trip scale, of the time
 at sea in hours. For each trip we have several possibilities:</p>
 <ul>
@@ -851,9 +868,9 @@ departure or landing dates.</li>
 Figure 6: Time at sea estimation flowchart.
 </div>
 </div>
-<div class="section level4">
-<h4 id="fishing-time-determination">Fishing time determination<a class="anchor" aria-label="anchor" href="#fishing-time-determination"></a>
-</h4>
+<div class="section level3">
+<h3 id="process-1-7-fishing-time-determination">Process 1.7: fishing time determination<a class="anchor" aria-label="anchor" href="#process-1-7-fishing-time-determination"></a>
+</h3>
 <p>This process calculated the fishing time value in hours.
 Historically, this process use a constant parameter according to the
 theoretical day duration working time (12 or 13 hours according to the
@@ -903,9 +920,9 @@ trip without logbook (100).</p>
 Figure 7: Time at sea estimation flowchart.
 </div>
 </div>
-<div class="section level4">
-<h4 id="searching-time-process">Searching time process<a class="anchor" aria-label="anchor" href="#searching-time-process"></a>
-</h4>
+<div class="section level3">
+<h3 id="process-1-8-searching-time-process">Process 1.8: searching time process<a class="anchor" aria-label="anchor" href="#process-1-8-searching-time-process"></a>
+</h3>
 <p>The aim of this last step is to calculate the searching time. Like
 the previous variables, it is expressed in hours and equal to the
 fishing time value minus the sum of the sets duration values.</p>
@@ -913,7 +930,6 @@ fishing time value minus the sum of the sets duration values.</p>
 <p><img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src="process_1.8.png"></p>
 <div style="text-align: center">
 Figure 8: Searching time estimation flowchart.
-</div>
 </div>
 </div>
 </div>
