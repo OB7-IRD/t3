@@ -5571,7 +5571,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   dplyr::pull(year)
                                 ocean <- unique(act$ocean)
                                 flag_codes <- unique(act$flag_code)
-                                save(process_level3,
+                                save(data_level3,
                                      file=paste0(global_output_path,"/",
                                                  paste( "inputs_level3", target_year, "ocean",
                                                         ocean, paste(flag_codes, collapse="_"),
