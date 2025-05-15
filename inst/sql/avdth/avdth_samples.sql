@@ -14,9 +14,9 @@ SELECT
 		& '.'
 		& e.N_CUVE
 		& e.F_POS_CUVE AS well_id
-	,e.V_POIDS_M10 AS well_minus10_weigth
-	,e.V_POIDS_P10 AS well_plus10_weigth
-	,e.V_POIDS_ECH AS well_global_weigth
+	,e.V_POIDS_M10 AS well_minus10_weight
+	,e.V_POIDS_P10 AS well_plus10_weight
+	,e.V_POIDS_ECH AS well_global_weight
 	,'fr.ird.avdth.entities.data.Sample#'
 		& format(e.c_bat, '0000')
 		& '#'

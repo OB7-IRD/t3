@@ -29,6 +29,7 @@
 #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
 #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
 #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
+#' @param fishing_effort_computation Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).
 #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.
 #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.
 #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
@@ -88,6 +89,7 @@ t3_process <- function(process = "all",
                        vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                        rf1_lowest_limit = 0.8,
                        rf1_highest_limit = 1.2,
+                       fishing_effort_computation = TRUE,
                        sunrise_schema = "sunrise",
                        sunset_schema = "sunset",
                        maximum_lf_class = as.integer(500),
@@ -198,6 +200,7 @@ t3_process <- function(process = "all",
                                  vessel_type_codes_rf1 = vessel_type_codes_rf1,
                                  rf1_lowest_limit = rf1_lowest_limit,
                                  rf1_highest_limit = rf1_highest_limit,
+                                 fishing_effort_computation = fishing_effort_computation,
                                  sunrise_schema = sunrise_schema,
                                  sunset_schema = sunset_schema,
                                  new_directory = new_directory_level1,
@@ -227,7 +230,7 @@ t3_process <- function(process = "all",
                                  referential_template = referential_template)
   }
   if (process == "all") {
-    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3()
+    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3(global_output_path = output_path)
     names(t3_process)[3] <- "process_level3"
     t3_process[[3]] <- t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  inputs_level3_path = NULL,

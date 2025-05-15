@@ -26,6 +26,7 @@ t3_process(
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
+  fishing_effort_computation = TRUE,
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
   maximum_lf_class = as.integer(500),
@@ -105,6 +106,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{rf1_highest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{fishing_effort_computation}{Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).}
 
 \item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
 
