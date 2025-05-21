@@ -7,11 +7,13 @@
 t3_level1(
   object_model_data,
   object_full_trips,
+  rf1_computation = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "TUN", "MIX", "LOT"),
   species_fate_codes_rf1 = as.integer(c(6, 11)),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
+  fishing_effort_computation = TRUE,
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
   log_file = FALSE,
@@ -29,6 +31,9 @@ t3_level1(
 
 \item{object_full_trips}{Object of classes \code{\link[t3]{full_trips}}, \code{\link[t3]{list_t3}} and \code{\link[R6]{R6}} expected.}
 
+\item{rf1_computation}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+By default TRUE, the rf1 is calculated for each trip.}
+
 \item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
 LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}
@@ -40,6 +45,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{rf1_highest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{fishing_effort_computation}{Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).}
 
 \item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
 

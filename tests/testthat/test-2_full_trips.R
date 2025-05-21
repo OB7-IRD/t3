@@ -24,33 +24,20 @@ capture.output(object_full_trips$add_wells_samples(object_wells = object_model_d
                file = "NUL")
 # level 1 process ----
 # level 1.1: rf1
-species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
+species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT")
 species_fate_codes_rf1 = as.integer(c(6, 11))
 capture.output(object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
                                      species_fate_codes_rf1 = species_fate_codes_rf1),
                file = "NUL")
-# level 1.2: rf2
-capture.output(object_full_trips$rf2(),
-               file = "NUL")
-# level 1.3: logbook weight categories conversion ----
+# level 1.2: logbook weight categories conversion ----
 capture.output(object_full_trips$conversion_weight_category(),
                file = "NUL")
-# level 1.4: set count ----
+# level 1.3: set count ----
 capture.output(object_full_trips$set_count(),
                file = "NUL")
-
-# level 1.5: set duration ----
-capture.output(object_full_trips$set_duration(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
-                                              activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
-               file = "NUL")
-# level 1.6: time at sea ----
-capture.output(object_full_trips$time_at_sea(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
-               file = "NUL")
-# level 1.7: fishing time ----
-capture.output(object_full_trips$fishing_time(activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
-               file = "NUL")
-# level 1.8: searching time ----
-capture.output(object_full_trips$searching_time(),
+# level 1.4: fishing effort indicators ----
+capture.output(object_full_trips$fishing_effort(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
+                                                 activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
 # level 2.1: sample length class ld1 to lf conversion ----
 capture.output(object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps),

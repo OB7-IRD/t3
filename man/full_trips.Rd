@@ -18,13 +18,9 @@ Create R6 reference object class full_trips
 \item \href{#method-full_trips-add_elementarylandings}{\code{full_trips$add_elementarylandings()}}
 \item \href{#method-full_trips-add_wells_samples}{\code{full_trips$add_wells_samples()}}
 \item \href{#method-full_trips-rf1}{\code{full_trips$rf1()}}
-\item \href{#method-full_trips-rf2}{\code{full_trips$rf2()}}
 \item \href{#method-full_trips-conversion_weight_category}{\code{full_trips$conversion_weight_category()}}
 \item \href{#method-full_trips-set_count}{\code{full_trips$set_count()}}
-\item \href{#method-full_trips-set_duration}{\code{full_trips$set_duration()}}
-\item \href{#method-full_trips-time_at_sea}{\code{full_trips$time_at_sea()}}
-\item \href{#method-full_trips-fishing_time}{\code{full_trips$fishing_time()}}
-\item \href{#method-full_trips-searching_time}{\code{full_trips$searching_time()}}
+\item \href{#method-full_trips-fishing_effort}{\code{full_trips$fishing_effort()}}
 \item \href{#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}
 \item \href{#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}
 \item \href{#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}
@@ -149,9 +145,11 @@ Function for add wells and samples caracteristics in full trips object.
 \if{html}{\out{<a id="method-full_trips-rf1"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-rf1}{}}}
 \subsection{Method \code{rf1()}}{
-Process of Raising Factor level 1 (RF1).
+Process of Raising Factor level 1 (RF1 and RF2) calculation.
+Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
+  rf1_computation = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
   species_fate_codes_rf1 = as.integer(c(6, 11)),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
@@ -165,6 +163,9 @@ Process of Raising Factor level 1 (RF1).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{rf1_computation}}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
+By default TRUE, the rf1 is calculated for each trip.}
+
 \item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
 LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}
@@ -177,26 +178,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 
 \item{\code{rf1_highest_limit}}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
-
-\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-rf2"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-rf2}{}}}
-\subsection{Method \code{rf2()}}{
-Process of Raising Factor level 2 (rf2).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$rf2(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -219,7 +202,8 @@ Process of logbook weight categories conversion.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
@@ -244,7 +228,8 @@ Process for positive sets count.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
@@ -254,14 +239,16 @@ Process for positive sets count.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-set_duration"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-set_duration}{}}}
-\subsection{Method \code{set_duration()}}{
-Process for set duration calculation (in hours).
+\if{html}{\out{<a id="method-full_trips-fishing_effort"></a>}}
+\if{latex}{\out{\hypertarget{method-full_trips-fishing_effort}{}}}
+\subsection{Method \code{fishing_effort()}}{
+Process for set duration, time at sea, fishing time and searching time calculation (in hours).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$set_duration(
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_effort(
   set_duration_ref,
   activity_code_ref,
+  sunrise_schema = "sunrise",
+  sunset_schema = "sunset",
   global_output_path = NULL,
   output_format = "eu",
   referential_template = "observe"
@@ -277,76 +264,16 @@ Duration in minutes in the reference table, converted into hours in output for s
 \item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
 and/or searching time and/or set duration.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
-
-\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-time_at_sea"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-time_at_sea}{}}}
-\subsection{Method \code{time_at_sea()}}{
-Process for time at sea calculation (in hours).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$time_at_sea(
-  global_output_path = NULL,
-  output_format = "eu",
-  activity_code_ref,
-  referential_template = "observe"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
-
-\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
-\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
-and/or searching time and/or set duration.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-fishing_time"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-fishing_time}{}}}
-\subsection{Method \code{fishing_time()}}{
-Process for fishing time calculation (in hours).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$fishing_time(
-  sunrise_schema = "sunrise",
-  sunset_schema = "sunset",
-  activity_code_ref,
-  referential_template = "observe",
-  global_output_path = NULL,
-  output_format = "eu"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
 \item{\code{sunrise_schema}}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.}
 
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.}
 
-\item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
-and/or searching time and/or set duration.}
-
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
-
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory.
-The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
+
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -366,29 +293,10 @@ Available variables are:
  \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
  \item{"nightEnd": } night ends (morning astronomical twilight starts)
  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
- \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
-}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-full_trips-searching_time"></a>}}
-\if{latex}{\out{\hypertarget{method-full_trips-searching_time}{}}}
-\subsection{Method \code{searching_time()}}{
-Process for searching time calculation (in hours, fishing time minus sets durations).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$searching_time(global_output_path = NULL, output_format = "eu")}\if{html}{\out{</div>}}
+ \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
+ }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
-
-\item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-sample_length_class_ld1_to_lf"></a>}}
@@ -409,7 +317,8 @@ Process for length conversion, if necessary, in length fork (lf). Furthermore, v
 \describe{
 \item{\code{length_step}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
@@ -433,7 +342,8 @@ Process for sample number measured individuals extrapolation to sample number in
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -458,7 +368,8 @@ Process for step standardisation of lf length class.
 \describe{
 \item{\code{maximum_lf_class}}{Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -484,7 +395,8 @@ Process for well set weight categories definition.
 \describe{
 \item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
@@ -508,7 +420,8 @@ Object standardised sample creation.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -533,7 +446,8 @@ R6 object standardised sample set creation.
 \describe{
 \item{\code{length_weight_relationship_data}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -570,7 +484,8 @@ Raised factors determination for weight sample set to set.
 
 \item{\code{threshold_rf_total}}{Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -592,7 +507,8 @@ Application of process 2.8 raised factors on standardised sample set.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction egual TRUE. Path of the global outputs directory. The function will create subsection if necessary.}
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{output_format}}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 }
@@ -605,9 +521,18 @@ Application of process 2.8 raised factors on standardised sample set.
 \subsection{Method \code{path_to_level3()}}{
 Temporary link to the R object model with modelisation process.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(global_output_path = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+Path of the global outputs directory. The function will create subsection if necessary.
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-data_preparatory"></a>}}
