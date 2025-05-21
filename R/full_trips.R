@@ -744,35 +744,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if(!rf1_computation){
                                               current_rf1 <- 1
                                             } else {
-                                            # Case 2.4 ----
-                                            # everything rocks dude !
-                                            capture.output(current_elementarylandings_rf1_species <- object_r6(class_name = "elementarylandings"),
-                                                           file = "NUL")
-                                            capture.output(current_elementarylandings_rf1_species$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
-                                                                                                                                                                      paste(species_fao_codes_rf1,
-                                                                                                                                                                            collapse = "\", \""),
-                                                                                                                                                                      "\")"))),
-                                                           file = "NUL")
-                                            current_elementarylandings_weight <- unlist(x = current_elementarylandings_rf1_species$extract_l1_element_value(element = "landing_weight"))
-                                            current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight, na.rm=TRUE)
-                                            if (current_rf1 < rf1_lowest_limit
-                                                | current_rf1 > rf1_highest_limit) {
-                                              warning(format(x = Sys.time(),
-                                                             format = "%Y-%m-%d %H:%M:%S"),
-                                                      " - Rf1 value of full trip element \"",
-                                                      names(x = private$data_selected)[full_trip_id],
-                                                      "\" out of theorical boundaries: ",
-                                                      round(x = current_rf1,
-                                                            digits = 3),
-                                                      ".\n",
-                                                      "[trip: ",
-                                                      current_trip$.__enclos_env__$private$trip_id,
-                                                      "]")
-                                            }
-                                            capture.output(current_trips <- object_r6(class_name = "trips"),
-                                                           file = "NUL")
-                                            capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                                           file = "NUL")
+                                              # Case 2.4 ----
+                                              # everything rocks dude !
+                                              capture.output(current_elementarylandings_rf1_species <- object_r6(class_name = "elementarylandings"),
+                                                             file = "NUL")
+                                              capture.output(current_elementarylandings_rf1_species$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
+                                                                                                                                                                        paste(species_fao_codes_rf1,
+                                                                                                                                                                              collapse = "\", \""),
+                                                                                                                                                                        "\")"))),
+                                                             file = "NUL")
+                                              current_elementarylandings_weight <- unlist(x = current_elementarylandings_rf1_species$extract_l1_element_value(element = "landing_weight"))
+                                              current_rf1 <- sum(current_elementarylandings_weight) / sum(current_elementarycatches_weight, na.rm=TRUE)
+                                              if (current_rf1 < rf1_lowest_limit
+                                                  | current_rf1 > rf1_highest_limit) {
+                                                warning(format(x = Sys.time(),
+                                                               format = "%Y-%m-%d %H:%M:%S"),
+                                                        " - Rf1 value of full trip element \"",
+                                                        names(x = private$data_selected)[full_trip_id],
+                                                        "\" out of theorical boundaries: ",
+                                                        round(x = current_rf1,
+                                                              digits = 3),
+                                                        ".\n",
+                                                        "[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        "]")
+                                              }
+                                              capture.output(current_trips <- object_r6(class_name = "trips"),
+                                                             file = "NUL")
+                                              capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
+                                                             file = "NUL")
                                             }
                                             current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
                                                                                                 current_rf1))
@@ -888,8 +888,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_total_landings_catches_species_activities <- NULL
                                         }
                                       }
-                                        full_trip_total_landings_catches_species_activities <- rbind(current_total_landings_catches_species_activities,
-                                                                                                     full_trip_total_landings_catches_species_activities)
+                                      full_trip_total_landings_catches_species_activities <- rbind(current_total_landings_catches_species_activities,
+                                                                                                   full_trip_total_landings_catches_species_activities)
 
                                     }
                                   }
@@ -959,7 +959,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n", sep="")
                                   if (! is.null(x = global_output_path)) {
-                                  total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
+                                    total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
                                   }
                                 }
                                 # 7.3 - Outputs extraction ----
@@ -1178,6 +1178,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                             current_elementarycatches_corrected <- NULL
+                                            current_elementarycatches_added <- NULL
                                             if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
@@ -1187,232 +1188,305 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean_code
                                                 school_type_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$school_type_code
-
-                                                for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
-                                                  current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
-                                                  current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
-                                                                                                        yes = stringr::str_extract(string = current_elementarycatch$weight_category_code,
-                                                                                                                                   pattern = "[:digit:]+$"),
-                                                                                                        no = current_elementarycatch$weight_category_code))
-                                                  if ( !is.na(x = current_weight_category_code)){
-                                                    if (ocean_activity == 1) {
-                                                      # for atlantic ocean
-                                                      if (school_type_activity %in% c(2, 0)) {
-                                                        # for free school and undetermined school
-                                                        if (current_elementarycatch$species_fao_code %in% c("YFT",
-                                                                                                            "BET",
-                                                                                                            "ALB")) {
-                                                          # for YFT, BET and ALB
-                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_2
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                          } else if (current_weight_category_code %in% c(3, 12)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_2
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 6) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
-                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_3
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
-                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_3
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 11) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
-                                                            current_elementarycatch$weight_category_code_corrected[2]  <- category_3
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
-                                                          } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            stop(format(Sys.time(),
-                                                                        "%Y-%m-%d %H:%M:%S"),
-                                                                 " - Logbook category ",
-                                                                 current_weight_category_code,
-                                                                 " not set in the algorithm.\n",
-                                                                 "[trip: ",
-                                                                 current_trip$.__enclos_env__$private$trip_id,
-                                                                 ", activity: ",
-                                                                 current_elementarycatch$activity_id,
-                                                                 ", elementarycatch: ",
-                                                                 current_elementarycatch$elementarycatch_id,
-                                                                 "]")
-                                                          }
-                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                          if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                #- process Observe ----
+                                                if (referential_template == "observe"){
+                                                  # Distribution conversion key for floating object school in the Atlantic Ocean and
+                                                  # for undetermined, free and floating object school in the Indian Ocean.
+                                                  if (ocean_activity==2 || (ocean_activity==1 && school_type_activity==1)){
+                                                    current_elementarycatches_corrected <- current_elementarycatches %>%
+                                                      dplyr::mutate(weight_category_min = dplyr::if_else(is.na(weight_category_min),
+                                                                                                         0.0, weight_category_min),
+                                                                    weight_category_max = dplyr::if_else(is.na(weight_category_max),
+                                                                                                         Inf, weight_category_max),
+                                                                    weight_category_code_corrected = dplyr::case_when(
+                                                                      weight_category_max <= 10.0 ~ "<10kg",
+                                                                      weight_category_min >= 10.0 ~ ">10kg",
+                                                                      weight_category_min == 6 & weight_category_max == 20 ~ ">10kg",
+                                                                      (species_fao_code == "SKJ") ~ "<10kg",
+                                                                      !(species_fao_code %in% c("YFT",
+                                                                                                "BET",
+                                                                                                "ALB",
+                                                                                                "SKJ")) ~ "unknown",
+                                                                      TRUE ~ "unknown"
+                                                                    ),
+                                                                    catch_weight_category_code_corrected = dplyr::if_else(weight_category_min == 6 & weight_category_max == 20,
+                                                                                                                          catch_weight_rf2*0.8,
+                                                                                                                          catch_weight_rf2))
+                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
+                                                      dplyr::filter(weight_category_min == 6 & weight_category_max == 20) %>%
+                                                      dplyr::mutate(weight_category_code_corrected ="<10kg",
+                                                                    catch_weight_category_code_corrected = catch_weight_rf2*0.2)
+                                                  } else if(ocean_activity==1 && school_type_activity %in% c(2, 0)){
+                                                    #  Distribution conversion key for undetermined and free school in the Atlantic Ocean:
+                                                    current_elementarycatches_corrected <- current_elementarycatches %>%
+                                                      dplyr::mutate(weight_category_min = dplyr::if_else(is.na(weight_category_min),
+                                                                                                         0.0, weight_category_min),
+                                                                    weight_category_max = dplyr::if_else(is.na(weight_category_max),
+                                                                                                         Inf, weight_category_max),
+                                                                    weight_category_code_corrected = dplyr::case_when(
+                                                                      weight_category_max <= 10.0 ~ "<10kg",
+                                                                      weight_category_min >= 10.0 & weight_category_max <= 30.0 ~ "10-30kg",
+                                                                      weight_category_min >= 30.0 ~ ">30kg",
+                                                                      species_fao_code == "SKJ" ~ "<10kg",
+                                                                      !(species_fao_code %in% c("YFT",
+                                                                                                "BET",
+                                                                                                "ALB",
+                                                                                                "SKJ")) ~ "unknown",
+                                                                      weight_category_min == 6 & weight_category_max == 20 ~ "10-30kg",
+                                                                      weight_category_min == 10.0  & weight_category_max > 30 ~ ">30kg",
+                                                                      (weight_category_min == 20.0 & weight_category_max == 40.0) ~ "10-30kg",
+                                                                      TRUE ~ "unknown"
+                                                                    ),
+                                                                    catch_weight_category_code_corrected = dplyr::case_when(
+                                                                      weight_category_min == 6 & weight_category_max == 20 ~ catch_weight_rf2*0.8,
+                                                                      weight_category_min == 10.0  & weight_category_max > 30 ~ catch_weight_rf2*0.9,
+                                                                      weight_category_min == 20.0 & weight_category_max == 40.0 ~ catch_weight_rf2*0.5,
+                                                                      TRUE ~ catch_weight_rf2
+                                                                    ))
+                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
+                                                      dplyr::filter((weight_category_min == 6 & weight_category_max == 20) |
+                                                                    weight_category_min == 10.0 & weight_category_max > 30 |
+                                                                    weight_category_min == 20.0 & weight_category_max == 40.0) %>%
+                                                      dplyr::mutate(weight_category_code_corrected = dplyr::case_when(
+                                                        weight_category_min == 6 & weight_category_max == 20 ~ "<10kg",
+                                                        weight_category_min == 10.0  & weight_category_max > 30 ~ "10-30kg",
+                                                        weight_category_min == 20.0 & weight_category_max == 40.0 ~ ">30kg",
+                                                        TRUE ~ "unknown"
+                                                      ),
+                                                      catch_weight_category_code_corrected = dplyr::case_when(
+                                                        weight_category_min == 6 & weight_category_max == 20 ~ catch_weight_rf2*0.2,
+                                                        weight_category_min == 10.0  & weight_category_max > 30 ~ catch_weight_rf2*0.1,
+                                                        (weight_category_min == 20.0 & weight_category_max == 40.0) ~ catch_weight_rf2*0.5,
+                                                        TRUE ~ NA_real_))
+                                                  }
+                                                  if(!is.null(current_elementarycatches_added)){
+                                                    current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added, current_elementarycatches_corrected))
+                                                  }
+                                                } else if(referential_template == "avdth"){
+                                                  #- process AVDTH ----
+                                                  for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
+                                                    current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
+                                                    current_weight_category_code <- as.integer(current_elementarycatch$weight_category_code)
+                                                    if ( !is.na(x = current_weight_category_code)){
+                                                      if (ocean_activity == 1) {
+                                                        # for atlantic ocean
+                                                        if (school_type_activity %in% c(2, 0)) {
+                                                          # for free school and undetermined school
+                                                          if (current_elementarycatch$species_fao_code %in% c("YFT",
+                                                                                                              "BET",
+                                                                                                              "ALB")) {
+                                                            # for YFT, BET and ALB
+                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 4) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_2
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                            } else if (current_weight_category_code %in% c(3, 12)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_2
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 6) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
+                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_3
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
+                                                            } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_3
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 11) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
+                                                              current_elementarycatch$weight_category_code_corrected[2]  <- category_3
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
+                                                            } else if (current_weight_category_code == 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              stop(format(Sys.time(),
+                                                                          "%Y-%m-%d %H:%M:%S"),
+                                                                   " - Logbook category ",
+                                                                   current_weight_category_code,
+                                                                   " not set in the algorithm.\n",
+                                                                   "[trip: ",
+                                                                   current_trip$.__enclos_env__$private$trip_id,
+                                                                   ", activity: ",
+                                                                   current_elementarycatch$activity_id,
+                                                                   ", elementarycatch: ",
+                                                                   current_elementarycatch$elementarycatch_id,
+                                                                   "]")
+                                                            }
+                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                            if (current_weight_category_code != 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            }
                                                           } else {
                                                             current_elementarycatch$weight_category_code_corrected <- category_5
                                                             current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          current_elementarycatch$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          # for floating object school
+                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 4) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              stop(format(Sys.time(),
+                                                                          "%Y-%m-%d %H:%M:%S"),
+                                                                   " - Logbook category ",
+                                                                   current_weight_category_code,
+                                                                   " not set in the algorithm.\n",
+                                                                   "[trip: ",
+                                                                   current_trip$.__enclos_env__$private$trip_id,
+                                                                   ", activity: ",
+                                                                   current_elementarycatch$activity_id,
+                                                                   ", elementarycatch: ",
+                                                                   current_elementarycatch$elementarycatch_id,
+                                                                   "]")
+                                                            }
+                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                            if (current_weight_category_code != 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            }
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
+                                                        }
+                                                      } else if (ocean_activity == 2) {
+                                                        # for indian ocean
+                                                        if (school_type_activity %in% c(2, 0)) {
+                                                          # for free school and undetermined school
+                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 4) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              stop(format(Sys.time(),
+                                                                          "%Y-%m-%d %H:%M:%S"),
+                                                                   " - Logbook category ",
+                                                                   current_weight_category_code,
+                                                                   " not set in the algorithm.\n",
+                                                                   "[trip: ",
+                                                                   current_trip$.__enclos_env__$private$trip_id,
+                                                                   ", activity: ",
+                                                                   current_elementarycatch$activity_id,
+                                                                   ", elementarycatch: ",
+                                                                   current_elementarycatch$elementarycatch_id,
+                                                                   "]")
+                                                            }
+                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                            if (current_weight_category_code != 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            }
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
+                                                        } else {
+                                                          # for floating object school
+                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 4) {
+                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_4
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else if (current_weight_category_code == 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              stop(format(Sys.time(),
+                                                                          "%Y-%m-%d %H:%M:%S"),
+                                                                   " - Logbook category ",
+                                                                   current_weight_category_code,
+                                                                   " not set in the algorithm.\n",
+                                                                   "[trip: ",
+                                                                   current_trip$.__enclos_env__$private$trip_id,
+                                                                   ", activity: ",
+                                                                   current_elementarycatch$activity_id,
+                                                                   ", elementarycatch: ",
+                                                                   current_elementarycatch$elementarycatch_id,
+                                                                   "]")
+                                                            }
+                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                            if (current_weight_category_code != 9) {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_1
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            } else {
+                                                              current_elementarycatch$weight_category_code_corrected <- category_5
+                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                            }
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
                                                         }
                                                       } else {
-                                                        # for floating object school
-                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            stop(format(Sys.time(),
-                                                                        "%Y-%m-%d %H:%M:%S"),
-                                                                 " - Logbook category ",
-                                                                 current_weight_category_code,
-                                                                 " not set in the algorithm.\n",
-                                                                 "[trip: ",
-                                                                 current_trip$.__enclos_env__$private$trip_id,
-                                                                 ", activity: ",
-                                                                 current_elementarycatch$activity_id,
-                                                                 ", elementarycatch: ",
-                                                                 current_elementarycatch$elementarycatch_id,
-                                                                 "]")
-                                                          }
-                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                          if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          current_elementarycatch$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                        }
-                                                      }
-                                                    } else if (ocean_activity == 2) {
-                                                      # for indian ocean
-                                                      if (school_type_activity %in% c(2, 0)) {
-                                                        # for free school and undetermined school
-                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            stop(format(Sys.time(),
-                                                                        "%Y-%m-%d %H:%M:%S"),
-                                                                 " - Logbook category ",
-                                                                 current_weight_category_code,
-                                                                 " not set in the algorithm.\n",
-                                                                 "[trip: ",
-                                                                 current_trip$.__enclos_env__$private$trip_id,
-                                                                 ", activity: ",
-                                                                 current_elementarycatch$activity_id,
-                                                                 ", elementarycatch: ",
-                                                                 current_elementarycatch$elementarycatch_id,
-                                                                 "]")
-                                                          }
-                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                          if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          current_elementarycatch$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                        }
-                                                      } else {
-                                                        # for floating object school
-                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 4) {
-                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_4
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else if (current_weight_category_code == 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            stop(format(Sys.time(),
-                                                                        "%Y-%m-%d %H:%M:%S"),
-                                                                 " - Logbook category ",
-                                                                 current_weight_category_code,
-                                                                 " not set in the algorithm.\n",
-                                                                 "[trip: ",
-                                                                 current_trip$.__enclos_env__$private$trip_id,
-                                                                 ", activity: ",
-                                                                 current_elementarycatch$activity_id,
-                                                                 ", elementarycatch: ",
-                                                                 current_elementarycatch$elementarycatch_id,
-                                                                 "]")
-                                                          }
-                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                          if (current_weight_category_code != 9) {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_1
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          current_elementarycatch$weight_category_code_corrected <- category_5
-                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                        }
+                                                        stop(format(Sys.time(),
+                                                                    "%Y-%m-%d %H:%M:%S"),
+                                                             " - Algorithm not developed yet for the ocean number ",
+                                                             ocean_activity,
+                                                             ".\n",
+                                                             "[trip: ",
+                                                             current_trip$.__enclos_env__$private$trip_id,
+                                                             ", activity: ",
+                                                             current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
+                                                             "]")
                                                       }
                                                     } else {
-                                                      stop(format(Sys.time(),
-                                                                  "%Y-%m-%d %H:%M:%S"),
-                                                           " - Algorithm not developed yet for the ocean number ",
-                                                           ocean_activity,
-                                                           ".\n",
-                                                           "[trip: ",
-                                                           current_trip$.__enclos_env__$private$trip_id,
-                                                           ", activity: ",
-                                                           current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
-                                                           "]")
+                                                      current_elementarycatch$weight_category_code_corrected <- category_5
+                                                      current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                     }
-                                                  } else {
-                                                    current_elementarycatch$weight_category_code_corrected <- category_5
-                                                    current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                    current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected,
+                                                                                                 current_elementarycatch)
                                                   }
-                                                  current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected ,
-                                                                                               current_elementarycatch)
                                                 }
                                                 private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
                                               }
@@ -1541,6 +1615,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "]\n", sep="")
                                   }
                                 }
+                              }
                                 # 9.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
@@ -1651,7 +1726,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End process 1.2: logbook weight categories conversion.\n")
-                              }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 10 - Process 1.3: set_count ----
@@ -1918,12 +1992,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
                             #'  }
                             fishing_effort = function(set_duration_ref,
-                                                     activity_code_ref,
-                                                     sunrise_schema = "sunrise",
-                                                     sunset_schema = "sunset",
-                                                     global_output_path = NULL,
-                                                     output_format = "eu",
-                                                     referential_template = "observe") {
+                                                      activity_code_ref,
+                                                      sunrise_schema = "sunrise",
+                                                      sunset_schema = "sunset",
+                                                      global_output_path = NULL,
+                                                      output_format = "eu",
+                                                      referential_template = "observe") {
                               # 11.1 - Arguments verification ----
                               if (! paste0(class(x = set_duration_ref),
                                            collapse = "_") %in% c("data.frame",
@@ -2108,424 +2182,425 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        file = "NUL")
                                         capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                        file = "NUL")
-                                      ## time at sea calculation ####
+                                        ## time at sea calculation ####
                                         activities_dates <- current_activities$extract_l1_element_value(element = "activity_date")
                                         activities_dates <- unique(do.call(what = "c",
                                                                            args = activities_dates))
                                         activities_dates <- sort(x = activities_dates)
-                                      time_at_sea <- 0
-                                      fishing_time <- 0
-                                      searching_time <- 0
-                                      # Activities to be taken into account in time at sea allocation
-                                      for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
-                                        activities_date <- activities_dates[[activities_dates_id]]
-                                        capture.output(current_activities_date <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                                                           activities_dates[activities_dates_id],
-                                                                                                                                           "\",",
-                                                                                                                                           "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                                       file = "NUL")
-                                        ## set_duration calculation ####
-                                        for (activity_id in seq_len(length.out = current_activities_date$count())) {
-                                          current_activity <- current_activities_date$extract(id = activity_id)[[1]]
-                                          # for activity declared as Fishing (6, 32) in observe or
-                                          # null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in AVDTH
-                                          if (current_activity$.__enclos_env__$private$activity_code %in% catch_activity_codes){
-                                            current_set_duration_ref <- set_duration_ref %>%
-                                              dplyr::filter(year == lubridate::year(activities_date),
-                                                            ocean_code == current_activity$.__enclos_env__$private$ocean_code,
-                                                            school_type_code == current_activity$.__enclos_env__$private$school_type_code,
-                                                            flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code)
-                                            if (dim(current_set_duration_ref)[1] != 1) {
-                                              if(!(lubridate::year(activities_date) %in% set_duration_ref$year)){
-                                                current_set_duration_ref <- set_duration_ref %>%
-                                                  dplyr::filter(ocean_code == current_activity$.__enclos_env__$private$ocean_code,
-                                                                school_type_code == current_activity$.__enclos_env__$private$school_type_code,
-                                                                flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code,
-                                                                year == max(year))
-                                              warning(format(Sys.time(),
-                                                          "%Y-%m-%d %H:%M:%S"),
-                                                   " - Warning: invalid \"set_duration_ref\" argument.\n",
-                                                   "No correspondance with activity date (year: , \"",
-                                                   lubridate::year(activities_date),
-                                                   "\") in referential table.\"",
-                                                   activity_id,
-                                                   "\".\n",
-                                                   "[trip: ",
-                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                   ", activity: ",
-                                                   current_activity$.__enclos_env__$private$activity_id,
-                                                   "]\n",
-                                                   "The set duration of the most recent year in the reference table is then considered: \"",
-                                                   current_set_duration_ref$year, ".\n")
-                                              } else{
-                                              stop(format(Sys.time(),
-                                                          "%Y-%m-%d %H:%M:%S"),
-                                                   " - Error: invalid \"set_duration_ref\" argument.\n",
-                                                   "No correspondance with activity parameters (ocean and/or school type) number \"",
-                                                   activity_id,
-                                                   "\".\n",
-                                                   "[trip: ",
-                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                   ", activity: ",
-                                                   current_activity$.__enclos_env__$private$activity_id,
-                                                   "]")
-                                              }
-                                            } else {
-                                              capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
-                                                             file = "NUL")
-                                              if (length(current_elementarycatches) != 0) {
-                                                if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
+                                        time_at_sea <- 0
+                                        fishing_time <- 0
+                                        searching_time <- 0
+                                        # Activities to be taken into account in time at sea allocation
+                                        for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
+                                          activities_date <- activities_dates[[activities_dates_id]]
+                                          capture.output(current_activities_date <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
+                                                                                                                                             activities_dates[activities_dates_id],
+                                                                                                                                             "\",",
+                                                                                                                                             "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
+                                                         file = "NUL")
+                                          ## set_duration calculation ####
+                                          for (activity_id in seq_len(length.out = current_activities_date$count())) {
+                                            current_activity <- current_activities_date$extract(id = activity_id)[[1]]
+                                            # for activity declared as Fishing (6, 32) in observe or
+                                            # null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in AVDTH
+                                            if (current_activity$.__enclos_env__$private$activity_code %in% catch_activity_codes){
+                                              current_set_duration_ref <- set_duration_ref %>%
+                                                dplyr::filter(year == lubridate::year(activities_date),
+                                                              ocean_code == current_activity$.__enclos_env__$private$ocean_code,
+                                                              school_type_code == current_activity$.__enclos_env__$private$school_type_code,
+                                                              flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code)
+                                              if (dim(current_set_duration_ref)[1] != 1) {
+                                                if(!(lubridate::year(activities_date) %in% set_duration_ref$year)){
+                                                  current_set_duration_ref <- set_duration_ref %>%
+                                                    dplyr::filter(ocean_code == current_activity$.__enclos_env__$private$ocean_code,
+                                                                  school_type_code == current_activity$.__enclos_env__$private$school_type_code,
+                                                                  flag_code_iso_3 == current_trip$.__enclos_env__$private$flag_code) %>%
+                                                    dplyr::mutate(delta_year=abs(year-lubridate::year(activities_date))) %>%
+                                                    dplyr::filter(delta_year==min(delta_year))
+                                                  warning(format(Sys.time(),
+                                                                 "%Y-%m-%d %H:%M:%S"),
+                                                          " - Warning: invalid \"set_duration_ref\" argument.\n",
+                                                          "No correspondance with activity date (year: , \"",
+                                                          lubridate::year(activities_date),
+                                                          "\") in referential table.\"",
+                                                          activity_id,
+                                                          "\".\n",
+                                                          "[trip: ",
+                                                          current_trip$.__enclos_env__$private$trip_id,
+                                                          ", activity: ",
+                                                          current_activity$.__enclos_env__$private$activity_id,
+                                                          "]\n",
+                                                          "The set duration of the most recent year in the reference table is then considered: \"",
+                                                          current_set_duration_ref$year, ".\n")
+                                                } else{
                                                   stop(format(Sys.time(),
                                                               "%Y-%m-%d %H:%M:%S"),
-                                                       " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
-                                                       "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
-                                                       "\n[trip: ",
-                                                       current_activity$.__enclos_env__$private$trip_id,
+                                                       " - Error: invalid \"set_duration_ref\" argument.\n",
+                                                       "No correspondance with activity parameters (ocean and/or school type) number \"",
+                                                       activity_id,
+                                                       "\".\n",
+                                                       "[trip: ",
+                                                       current_trip$.__enclos_env__$private$trip_id,
                                                        ", activity: ",
                                                        current_activity$.__enclos_env__$private$activity_id,
                                                        "]")
                                                 }
-                                                else{
-                                                  catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
-                                                                                         na.rm=TRUE)
-                                                }
-
-                                                if (catch_weight_category_corrected == 0) {
-                                                  if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
-                                                          & is.na(x = current_elementarycatches$catch_count))) {
+                                              } else {
+                                                capture.output(current_elementarycatches <- current_activity$.__enclos_env__$private$elementarycatches,
+                                                               file = "NUL")
+                                                if (length(current_elementarycatches) != 0) {
+                                                  if (any(is.null(x = current_elementarycatches$catch_weight_category_code_corrected))){
                                                     stop(format(Sys.time(),
                                                                 "%Y-%m-%d %H:%M:%S"),
-                                                         " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
-                                                         "Check the data.",
+                                                         " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
+                                                         "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
                                                          "\n[trip: ",
                                                          current_activity$.__enclos_env__$private$trip_id,
                                                          ", activity: ",
                                                          current_activity$.__enclos_env__$private$activity_id,
                                                          "]")
-                                                  } else {
-                                                    catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
                                                   }
-                                                  if(catch_count == 0){
-                                                    current_activity$.__enclos_env__$private$set_duration  <- 0
-                                                  } else {
-                                                    current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
-                                                                                                                    digits=4)
+                                                  else{
+                                                    catch_weight_category_corrected <- sum(current_elementarycatches$catch_weight_category_code_corrected,
+                                                                                           na.rm=TRUE)
                                                   }
-                                                } else{
-                                                  parameter_a <- current_set_duration_ref$parameter_a
-                                                  parameter_b <- current_set_duration_ref$parameter_b
-                                                  current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
-                                                                                                                 digits=4)
-                                                }
 
-                                              } else {
-                                                if ((referential_template == "observe"
-                                                     && (current_activity$.__enclos_env__$private$activity_code == 6
-                                                         & current_activity$.__enclos_env__$private$set_success_status_code == 1))
-                                                    | (referential_template == "avdth"
-                                                       && current_activity$.__enclos_env__$private$activity_code == 1)) {
-                                                  warning(format(Sys.time(),
-                                                                 "%Y-%m-%d %H:%M:%S"),
-                                                          " - Set declared as successful fishing operation but without elementary catch associated.",
-                                                          " Set duration define as null set value.",
-                                                          "\n[trip: ",
-                                                          current_trip$.__enclos_env__$private$trip_id,
-                                                          ", activity: ",
-                                                          current_activity$.__enclos_env__$private$activity_id,
-                                                          "]")
-                                                }
+                                                  if (catch_weight_category_corrected == 0) {
+                                                    if (any(is.na(x = current_elementarycatches$catch_weight_category_code_corrected)
+                                                            & is.na(x = current_elementarycatches$catch_count))) {
+                                                      stop(format(Sys.time(),
+                                                                  "%Y-%m-%d %H:%M:%S"),
+                                                           " - Error: arguments \"catch_weight_category_code_corrected\" and \"catch_count\" are equal to \"NA\".\n",
+                                                           "Check the data.",
+                                                           "\n[trip: ",
+                                                           current_activity$.__enclos_env__$private$trip_id,
+                                                           ", activity: ",
+                                                           current_activity$.__enclos_env__$private$activity_id,
+                                                           "]")
+                                                    } else {
+                                                      catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
+                                                    }
+                                                    if(catch_count == 0){
+                                                      current_activity$.__enclos_env__$private$set_duration  <- 0
+                                                    } else {
+                                                      current_activity$.__enclos_env__$private$set_duration <-  round((1/60)*current_set_duration_ref$null_set_value,
+                                                                                                                      digits=4)
+                                                    }
+                                                  } else{
+                                                    parameter_a <- current_set_duration_ref$parameter_a
+                                                    parameter_b <- current_set_duration_ref$parameter_b
+                                                    current_activity$.__enclos_env__$private$set_duration <- round((1/60)*(parameter_a * catch_weight_category_corrected + parameter_b),
+                                                                                                                   digits=4)
+                                                  }
+
+                                                } else {
+                                                  if ((referential_template == "observe"
+                                                       && (current_activity$.__enclos_env__$private$activity_code == 6
+                                                           & current_activity$.__enclos_env__$private$set_success_status_code == 1))
+                                                      | (referential_template == "avdth"
+                                                         && current_activity$.__enclos_env__$private$activity_code == 1)) {
+                                                    warning(format(Sys.time(),
+                                                                   "%Y-%m-%d %H:%M:%S"),
+                                                            " - Set declared as successful fishing operation but without elementary catch associated.",
+                                                            " Set duration define as null set value.",
+                                                            "\n[trip: ",
+                                                            current_trip$.__enclos_env__$private$trip_id,
+                                                            ", activity: ",
+                                                            current_activity$.__enclos_env__$private$activity_id,
+                                                            "]")
+                                                  }
                                                   current_activity$.__enclos_env__$private$set_duration <- round((1/60)*current_set_duration_ref$null_set_value,
                                                                                                                  digits=4)
                                                 }
-                                            }
+                                              }
                                             } else {
-                                            # current_activity$.__enclos_env__$private$set_duration <- NA_real_
-                                            current_activity$.__enclos_env__$private$set_duration <- 0.0
-                                          }
-                                          current_activity$.__enclos_env__$private$fishing_time <-  current_activity$.__enclos_env__$private$set_duration
-                                        }
-                                        current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
-                                        current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
-
-                                        ###> Special case of multiple objectoperation_codes associated to the same activity ####
-                                        if(length(unlist(strsplit(current_objectoperation_code, split=", "))) != length(current_objectoperation_code)){
-                                          for (i in 1:length(current_activities_code)){
-                                            objectoperation_multiple_codes <- unique(unlist(strsplit(current_objectoperation_code[i], split=", ")))
-                                            if (length(objectoperation_multiple_codes)==1){
-                                              # If same objectoperation_code declared
-                                              current_objectoperation_code[i] <-  objectoperation_multiple_codes
-                                            } else{
-                                              # If different objectoperation_codes declared
-                                              multiple_codes <- paste(current_activities_code[i], objectoperation_multiple_codes, sep='_')
-                                              # If all objectoperation_codes allow to compute set_duration=fishing_time
-                                              if(all(multiple_codes %in% catch_codes)){
-                                                # The objectoperation_code for this activity is set to the first code declared
-                                                current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
-                                              }
-                                              # If all objectoperation_codes don't allow to allocate fishing time and time at sea
-                                              else if(all(multiple_codes %in% no_fishing_codes)){
-                                                # The objectoperation_code for this activity is set to the first code declared
-                                                current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
-                                              }
-                                              # If any objectoperation_codes allow to allocate fishing time and time at sea
-                                              else if(any(multiple_codes %in% fishing_codes)){
-                                                # The objectoperation_code for this activity is set to the first code allowing to allocate fishing time and time at sea declared
-                                                current_objectoperation_code[i] <- objectoperation_multiple_codes[objectoperation_multiple_codes %in% fishing_codes][1]
-                                              }
+                                              # current_activity$.__enclos_env__$private$set_duration <- NA_real_
+                                              current_activity$.__enclos_env__$private$set_duration <- 0.0
                                             }
-                                            current_activity <- current_activities_date$extract(id = i)[[1]]
-                                            current_activity$.__enclos_env__$private$objectoperation_code <- sub(pattern="[0-9]+_", "",
-                                                                                                                 current_objectoperation_code[i])
-                                            # current_activity_date$modification_l1(modification = paste0("$path$objectoperation_code <- ",
-                                            #                                                               as.character(current_objectoperation_code[i])))
+                                            current_activity$.__enclos_env__$private$fishing_time <-  current_activity$.__enclos_env__$private$set_duration
                                           }
-                                        }
-                                        current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
-                                        if(!all(unique(x = current_code) %in% unique(x=activity_code_ref$code))) {
-                                          wrong_codes <- unique(current_code[!(current_code %in% unique(x=activity_code_ref$code))])
-                                          activity_id <-  unlist(current_activities_date_fishing$extract_l1_element_value(element="activity_id"))
-                                          stop(format(Sys.time(),
-                                                      "%Y-%m-%d %H:%M:%S"),
-                                               " - Association of activity code and objectoperation code not supported: ",
-                                               paste0(wrong_codes, collapse=", "),
-                                               "\n[trip: ",
-                                               current_trip$.__enclos_env__$private$trip_id,
-                                               "]\n",
-                                               paste0("[activity: ",
-                                                      activity_id, collapse="];\n"),
-                                               "].")
-                                        }
-                                        if (referential_template == "observe") {
-                                          current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
-                                        } else {
-                                          current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
-                                        }
-                                        if(all(is.na(current_activities_date_time_at_sea_declared))){
-                                          warning(" - No time at sea declared, on date ",
-                                                  activities_dates[activities_dates_id], ":",
-                                                  "\n", "   [activity: ",
-                                                  current_activities_date$extract_l1_element_value(element="activity_id")[[1]], "]\n",
-                                                  "Please check the data. Time at sea value set to zero for this date.")
-                                          current_activities_date_time_at_sea_declared <- 0
-                                        }
-                                        capture.output(current_activities_date_sea <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        if(any(unique(x=current_code) %in% activity_objectoperation_codes)){
-                                          capture.output(current_activities_date_sea$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
-                                                                                                                                                  $path$objectoperation_code,
-                                                                                                                                                  sep='_') %in% c(\"",
-                                                                                                                                                      paste(activity_objectoperation_codes,
-                                                                                                                                                            collapse = "\", \""),"\")"))),
+                                          current_activities_code <- unlist(current_activities_date$extract_l1_element_value(element = "activity_code"))
+                                          current_objectoperation_code <- unlist(current_activities_date$extract_l1_element_value(element = "objectoperation_code"))
+
+                                          ###> Special case of multiple objectoperation_codes associated to the same activity ####
+                                          if(length(unlist(strsplit(current_objectoperation_code, split=", "))) != length(current_objectoperation_code)){
+                                            for (i in 1:length(current_activities_code)){
+                                              objectoperation_multiple_codes <- unique(unlist(strsplit(current_objectoperation_code[i], split=", ")))
+                                              if (length(objectoperation_multiple_codes)==1){
+                                                # If same objectoperation_code declared
+                                                current_objectoperation_code[i] <-  objectoperation_multiple_codes
+                                              } else{
+                                                # If different objectoperation_codes declared
+                                                multiple_codes <- paste(current_activities_code[i], objectoperation_multiple_codes, sep='_')
+                                                # If all objectoperation_codes allow to compute set_duration=fishing_time
+                                                if(all(multiple_codes %in% catch_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code declared
+                                                  current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
+                                                }
+                                                # If all objectoperation_codes don't allow to allocate fishing time and time at sea
+                                                else if(all(multiple_codes %in% no_fishing_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code declared
+                                                  current_objectoperation_code[i] <- objectoperation_multiple_codes[1]
+                                                }
+                                                # If any objectoperation_codes allow to allocate fishing time and time at sea
+                                                else if(any(multiple_codes %in% fishing_codes)){
+                                                  # The objectoperation_code for this activity is set to the first code allowing to allocate fishing time and time at sea declared
+                                                  current_objectoperation_code[i] <- objectoperation_multiple_codes[objectoperation_multiple_codes %in% fishing_codes][1]
+                                                }
+                                              }
+                                              current_activity <- current_activities_date$extract(id = i)[[1]]
+                                              current_activity$.__enclos_env__$private$objectoperation_code <- sub(pattern="[0-9]+_", "",
+                                                                                                                   current_objectoperation_code[i])
+                                              # current_activity_date$modification_l1(modification = paste0("$path$objectoperation_code <- ",
+                                              #                                                               as.character(current_objectoperation_code[i])))
+                                            }
+                                          }
+                                          current_code <- paste(current_activities_code, current_objectoperation_code, sep='_')
+                                          if(!all(unique(x = current_code) %in% unique(x=activity_code_ref$code))) {
+                                            wrong_codes <- unique(current_code[!(current_code %in% unique(x=activity_code_ref$code))])
+                                            activity_id <-  unlist(current_activities_date_fishing$extract_l1_element_value(element="activity_id"))
+                                            stop(format(Sys.time(),
+                                                        "%Y-%m-%d %H:%M:%S"),
+                                                 " - Association of activity code and objectoperation code not supported: ",
+                                                 paste0(wrong_codes, collapse=", "),
+                                                 "\n[trip: ",
+                                                 current_trip$.__enclos_env__$private$trip_id,
+                                                 "]\n",
+                                                 paste0("[activity: ",
+                                                        activity_id, collapse="];\n"),
+                                                 "].")
+                                          }
+                                          if (referential_template == "observe") {
+                                            current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
+                                          } else {
+                                            current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
+                                          }
+                                          if(all(is.na(current_activities_date_time_at_sea_declared))){
+                                            warning(" - No time at sea declared, on date ",
+                                                    activities_dates[activities_dates_id], ":",
+                                                    "\n", "   [activity: ",
+                                                    current_activities_date$extract_l1_element_value(element="activity_id")[[1]], "]\n",
+                                                    "Please check the data. Time at sea value set to zero for this date.")
+                                            current_activities_date_time_at_sea_declared <- 0
+                                          }
+                                          capture.output(current_activities_date_sea <- object_r6(class_name = "activities"),
                                                          file = "NUL")
-                                          current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
-                                                                                       digits=4)
-                                        } else{
-                                          if(current_activities_date_time_at_sea_declared!=0){
-                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
-                                            new_activity$.__enclos_env__$private$objectoperation_code <- NA
-                                            new_activity$.__enclos_env__$private$objectoperation_label <- NA
-                                            new_activity$.__enclos_env__$private$objectoperation_id <- NA
-                                            new_activity$.__enclos_env__$private$activity_code <- 104
-                                            new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
-                                            new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
-                                            new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
-                                            capture.output(current_activities_date_sea$add(new_item = new_activity),
-                                                           file = "NUL")
-                                            current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                            message(" - Add transit activity to allocate time at sea, on date ",
-                                                    activities_dates[activities_dates_id], ":",
-                                                    "\n", "   [activity: ",
-                                                    current_activities_date_sea$extract_l1_element_value(element="activity_id")[[1]], "]")
-                                          }
-                                          current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared
-                                        }
-                                        current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
-                                                                                                      0))
-                                        if(current_activities_date_sea$count()!=0){
-                                          current_activities_date_sea$modification_l1(modification = paste0("$path$time_at_sea = ",
-                                                                                                            current_activities_date_time_at_sea))
-                                          time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
-
-                                        }
-                                        catch_time <- 0
-                                        # Only no fishing activities
-                                        if(all(current_code %in% no_fishing_codes)) {
-                                          current_activities_date$modification_l1(modification = "$path$fishing_time <- 0")
-                                          # If only no fishing activities and fishing_time_declared >0 create searching activity
-                                          # to allocate fishing time recorded in observe after get it via activities query (not done yet)
-                                        }
-                                        # Date including fishing activities
-                                        else {
-                                          # No fishing activities
-                                          if(any(unique(x = current_code) %in% no_fishing_codes)) {
-                                            capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
-                                            capture.output(current_activities_date_no_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                          if(any(unique(x=current_code) %in% activity_objectoperation_codes)){
+                                            capture.output(current_activities_date_sea$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
                                                                                                                                                   $path$objectoperation_code,
                                                                                                                                                   sep='_') %in% c(\"",
-                                                                                                                                                               paste(no_fishing_codes,
-                                                                                                                                                                     collapse = "\", \""),"\")"))),
+                                                                                                                                                        paste(activity_objectoperation_codes,
+                                                                                                                                                              collapse = "\", \""),"\")"))),
                                                            file = "NUL")
-                                            current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
+                                            current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
+                                                                                         digits=4)
+                                          } else{
+                                            if(current_activities_date_time_at_sea_declared!=0){
+                                              new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                              new_activity$.__enclos_env__$private$objectoperation_code <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_label <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_id <- NA
+                                              new_activity$.__enclos_env__$private$activity_code <- 104
+                                              new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
+                                              new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
+                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                              capture.output(current_activities_date_sea$add(new_item = new_activity),
+                                                             file = "NUL")
+                                              current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
+                                              message(" - Add transit activity to allocate time at sea, on date ",
+                                                      activities_dates[activities_dates_id], ":",
+                                                      "\n", "   [activity: ",
+                                                      current_activities_date_sea$extract_l1_element_value(element="activity_id")[[1]], "]")
+                                            }
+                                            current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared
                                           }
-                                          # Activity corresponding to catch (6,32) with fishing_time=set_duration
-                                          if (any(current_code %in% catch_codes)){
-                                            capture.output(current_activities_date_catch <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
-                                            capture.output(current_activities_date_catch$add(new_item = current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
-                                                                                                                                                          paste(catch_activity_codes,
-                                                                                                                                                                collapse = "\", \""),
-                                                                                                                                                          "\"))"))),
-                                                           file = "NUL")
+                                          current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
+                                                                                                        0))
+                                          if(current_activities_date_sea$count()!=0){
+                                            current_activities_date_sea$modification_l1(modification = paste0("$path$time_at_sea = ",
+                                                                                                              current_activities_date_time_at_sea))
+                                            time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
+
+                                          }
+                                          catch_time <- 0
+                                          # Only no fishing activities
+                                          if(all(current_code %in% no_fishing_codes)) {
+                                            current_activities_date$modification_l1(modification = "$path$fishing_time <- 0")
+                                            # If only no fishing activities and fishing_time_declared >0 create searching activity
+                                            # to allocate fishing time recorded in observe after get it via activities query (not done yet)
+                                          }
+                                          # Date including fishing activities
+                                          else {
+                                            # No fishing activities
+                                            if(any(unique(x = current_code) %in% no_fishing_codes)) {
+                                              capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
+                                              capture.output(current_activities_date_no_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                                                                                                                                  $path$objectoperation_code,
+                                                                                                                                                  sep='_') %in% c(\"",
+                                                                                                                                                                 paste(no_fishing_codes,
+                                                                                                                                                                       collapse = "\", \""),"\")"))),
+                                                             file = "NUL")
+                                              current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
+                                            }
+                                            # Activity corresponding to catch (6,32) with fishing_time=set_duration
+                                            if (any(current_code %in% catch_codes)){
+                                              capture.output(current_activities_date_catch <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
+                                              capture.output(current_activities_date_catch$add(new_item = current_activities_date$filter_l1(filter = paste0("($path$activity_code %in% c(\"",
+                                                                                                                                                            paste(catch_activity_codes,
+                                                                                                                                                                  collapse = "\", \""),
+                                                                                                                                                            "\"))"))),
+                                                             file = "NUL")
                                               catch_time <- catch_time + sum(unlist(current_activities_date_catch$extract_l1_element_value(element="fishing_time")))
-                                          }
+                                            }
 
-                                          # Fishing activities except activities with elementary catch
-                                          if (any(unique(x = current_code) %in% fishing_codes)) {
-                                            capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
+                                            # Fishing activities except activities with elementary catch
+                                            if (any(unique(x = current_code) %in% fishing_codes)) {
+                                              capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
 
-                                            capture.output(current_activities_date_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                              capture.output(current_activities_date_fishing$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
                                                                                                                                                   $path$objectoperation_code,
                                                                                                                                                   sep='_') %in% c(\"",
-                                                                                                                                                            paste(fishing_codes,
-                                                                                                                                                                  collapse = "\", \""),"\")"))),
-                                                           file = "NUL")
-                                            current_activities_latitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_latitude"))
-                                            current_activities_longitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_longitude"))
-                                            latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
-                                            longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
-                                            if(is.na(latitude_mean) | is.na(longitude_mean)){
-                                              warning(format(Sys.time(),
-                                                             "%Y-%m-%d %H:%M:%S"),
-                                                      "Fishing activity with missing position",
-                                                      "\n[trip: ",
-                                                      current_trip$.__enclos_env__$private$trip_id,
-                                                      ", activity: ",
-                                                      unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_id"))),
-                                                      "]")
-                                              ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
-                                              fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
-                                            } else{
-                                              current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
-                                                                                           lat = latitude_mean,
-                                                                                           lon = longitude_mean)[[sunrise_schema]]
-                                              current_sunset <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
-                                                                                          lat = latitude_mean,
-                                                                                          lon = longitude_mean)[[sunset_schema]]
-                                              fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
-                                                                                                            end = current_sunset))/3600
-                                            }
-                                            # Subtract the duration of activities with elementary catches from the total fishing time.
-                                            fishing_time_tmp2 <- fishing_time_tmp - catch_time
-                                            current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
-                                                                                                                  round(fishing_time_tmp2/current_activities_date_fishing$count(),
-                                                                                                                        digits=4)))
+                                                                                                                                                              paste(fishing_codes,
+                                                                                                                                                                    collapse = "\", \""),"\")"))),
+                                                             file = "NUL")
+                                              current_activities_latitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_latitude"))
+                                              current_activities_longitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_longitude"))
+                                              latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
+                                              longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
+                                              if(is.na(latitude_mean) | is.na(longitude_mean)){
+                                                warning(format(Sys.time(),
+                                                               "%Y-%m-%d %H:%M:%S"),
+                                                        "Fishing activity with missing position",
+                                                        "\n[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", activity: ",
+                                                        unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_id"))),
+                                                        "]")
+                                                ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
+                                                fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
+                                              } else{
+                                                current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                             lat = latitude_mean,
+                                                                                             lon = longitude_mean)[[sunrise_schema]]
+                                                current_sunset <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                            lat = latitude_mean,
+                                                                                            lon = longitude_mean)[[sunset_schema]]
+                                                fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
+                                                                                                              end = current_sunset))/3600
+                                              }
+                                              # Subtract the duration of activities with elementary catches from the total fishing time.
+                                              fishing_time_tmp2 <- fishing_time_tmp - catch_time
+                                              current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
+                                                                                                                    round(fishing_time_tmp2/current_activities_date_fishing$count(),
+                                                                                                                          digits=4)))
 
-                                          } else if(all(unique(x=current_activities_code) %in% catch_activity_codes)){
-                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
-                                            new_activity$.__enclos_env__$private$elementarycatches <- NULL
-                                            new_activity$.__enclos_env__$private$objectoperation_code <- NA
-                                            new_activity$.__enclos_env__$private$objectoperation_label <- NA
-                                            new_activity$.__enclos_env__$private$objectoperation_id <- NA
-                                            new_activity$.__enclos_env__$private$positive_set_count <- NA
-                                            new_activity$.__enclos_env__$private$set_duration <- 0
-                                            new_activity$.__enclos_env__$private$school_type_code <- NA
-                                            new_activity$.__enclos_env__$private$set_count <- NA
-                                            new_activity$.__enclos_env__$private$set_success_status_code <- NA
-                                            new_activity$.__enclos_env__$private$set_success_status_label <- NA
-                                            new_activity$.__enclos_env__$private$activity_code <- 105
-                                            new_activity$.__enclos_env__$private$activity_label <- "Searching (added by t3R)"
-                                            new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
-                                            new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
-                                            capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
-                                                           file = "NUL")
-                                            capture.output(current_activities_date_fishing$add(new_item = new_activity),
-                                                           file = "NUL")
-                                            # Compute fishing time according to localisation of catch activities declared
-                                            current_activities_latitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_latitude"))
-                                            current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
-                                            latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
-                                            longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
-                                            if(is.na(latitude_mean) | is.na(longitude_mean)){
-                                              warning(format(Sys.time(),
-                                                             "%Y-%m-%d %H:%M:%S"),
-                                                      "Catch activity with missing position",
-                                                      "\n[trip: ",
-                                                      current_trip$.__enclos_env__$private$trip_id,
-                                                      ", activity: ",
-                                                      current_activities_date_catch$extract_l1_element_value(element="activity_id")[[1]],
-                                                      "]")
-                                              ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
-                                              fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
-                                            } else{
-                                              current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
-                                                                                           lat = latitude_mean,
-                                                                                           lon = longitude_mean)[[sunrise_schema]]
-                                              current_sunset <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
-                                                                                          lat = latitude_mean,
-                                                                                          lon = longitude_mean)[[sunset_schema]]
-                                              fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
-                                                                                                            end = current_sunset))/3600
+                                            } else if(all(unique(x=current_activities_code) %in% catch_activity_codes)){
+                                              new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                              new_activity$.__enclos_env__$private$elementarycatches <- NULL
+                                              new_activity$.__enclos_env__$private$objectoperation_code <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_label <- NA
+                                              new_activity$.__enclos_env__$private$objectoperation_id <- NA
+                                              new_activity$.__enclos_env__$private$positive_set_count <- NA
+                                              new_activity$.__enclos_env__$private$set_duration <- 0
+                                              new_activity$.__enclos_env__$private$school_type_code <- NA
+                                              new_activity$.__enclos_env__$private$set_count <- NA
+                                              new_activity$.__enclos_env__$private$set_success_status_code <- NA
+                                              new_activity$.__enclos_env__$private$set_success_status_label <- NA
+                                              new_activity$.__enclos_env__$private$activity_code <- 105
+                                              new_activity$.__enclos_env__$private$activity_label <- "Searching (added by t3R)"
+                                              new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
+                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                              capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
+                                                             file = "NUL")
+                                              capture.output(current_activities_date_fishing$add(new_item = new_activity),
+                                                             file = "NUL")
+                                              # Compute fishing time according to localisation of catch activities declared
+                                              current_activities_latitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_latitude"))
+                                              current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
+                                              latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
+                                              longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
+                                              if(is.na(latitude_mean) | is.na(longitude_mean)){
+                                                warning(format(Sys.time(),
+                                                               "%Y-%m-%d %H:%M:%S"),
+                                                        "Catch activity with missing position",
+                                                        "\n[trip: ",
+                                                        current_trip$.__enclos_env__$private$trip_id,
+                                                        ", activity: ",
+                                                        current_activities_date_catch$extract_l1_element_value(element="activity_id")[[1]],
+                                                        "]")
+                                                ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
+                                                fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
+                                              } else{
+                                                current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                             lat = latitude_mean,
+                                                                                             lon = longitude_mean)[[sunrise_schema]]
+                                                current_sunset <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
+                                                                                            lat = latitude_mean,
+                                                                                            lon = longitude_mean)[[sunset_schema]]
+                                                fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
+                                                                                                              end = current_sunset))/3600
+                                              }
+                                              # Subtract the duration of activities with elementary catches from the total fishing time.
+                                              fishing_time_tmp2 <- fishing_time_tmp - catch_time
+                                              current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
+                                                                                                                    round(fishing_time_tmp2,
+                                                                                                                          digits=4)))
+                                              # Add new activity to current_trip
+                                              current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
+                                              message(" - Add searching activity to allocate fishing time, on date ",
+                                                      activities_dates[activities_dates_id], ":",
+                                                      "\n", "   [activity: ",
+                                                      current_activities_date_fishing$extract_l1_element_value(element="activity_id")[[1]], "]")
                                             }
-                                            # Subtract the duration of activities with elementary catches from the total fishing time.
-                                            fishing_time_tmp2 <- fishing_time_tmp - catch_time
-                                            current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
-                                                                                                                  round(fishing_time_tmp2,
-                                                                                                                        digits=4)))
-                                            # Add new activity to current_trip
-                                            current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                            message(" - Add searching activity to allocate fishing time, on date ",
-                                                    activities_dates[activities_dates_id], ":",
-                                                    "\n", "   [activity: ",
-                                                    current_activities_date_fishing$extract_l1_element_value(element="activity_id")[[1]], "]")
+
+                                            fishing_time <- fishing_time + fishing_time_tmp
                                           }
-
-                                          fishing_time <- fishing_time + fishing_time_tmp
+                                          # Add new activity created during the process in current_activities_date object
+                                          current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                                         file = "NUL")
+                                          capture.output(current_activities_date <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
+                                                                                                                                             activities_dates[activities_dates_id],
+                                                                                                                                             "\",",
+                                                                                                                                             "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
+                                                         file = "NUL")
+                                          ### searching time calculation ####
+                                          for (current_activity_id in seq_len(length.out = current_activities_date$count())) {
+                                            current_activity <- current_activities_date$extract(id = current_activity_id)[[1]]
+                                            current_fishing_time <- lubridate::dhours(x = current_activity$.__enclos_env__$private$fishing_time)
+                                            current_set_duration <- lubridate::dhours(x = current_activity$.__enclos_env__$private$set_duration)
+                                            current_set_duration <- if (is.na(x = current_set_duration)) {0} else {current_set_duration}
+                                            current_searching_time <- current_fishing_time - current_set_duration
+                                            # return lubridate object with results in seconds in @.Data
+                                            current_searching_time <- current_searching_time@.Data / 3600
+                                            if(is.null(current_searching_time )){browser()}
+                                            current_activity$.__enclos_env__$private$searching_time <- current_searching_time
+                                          }
+                                          searching_time <- searching_time + sum(unlist(x = current_activities_date$extract_l1_element_value(element = "searching_time")))
                                         }
-                                        # Add new activity created during the process in current_activities_date object
-                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        capture.output(current_activities <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                                       file = "NUL")
-                                        capture.output(current_activities_date <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                                                           activities_dates[activities_dates_id],
-                                                                                                                                           "\",",
-                                                                                                                                           "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                                       file = "NUL")
-                                        ### searching time calculation ####
-                                        for (current_activity_id in seq_len(length.out = current_activities_date$count())) {
-                                          current_activity <- current_activities_date$extract(id = current_activity_id)[[1]]
-                                          current_fishing_time <- lubridate::dhours(x = current_activity$.__enclos_env__$private$fishing_time)
-                                          current_set_duration <- lubridate::dhours(x = current_activity$.__enclos_env__$private$set_duration)
-                                          current_set_duration <- if (is.na(x = current_set_duration)) {0} else {current_set_duration}
-                                          current_searching_time <- current_fishing_time - current_set_duration
-                                          # return lubridate object with results in seconds in @.Data
-                                          current_searching_time <- current_searching_time@.Data / 3600
-                                          if(is.null(current_searching_time )){browser()}
-                                          current_activity$.__enclos_env__$private$searching_time <- current_searching_time
-                                        }
-                                        searching_time <- searching_time + sum(unlist(x = current_activities_date$extract_l1_element_value(element = "searching_time")))
-                                      }
-                                    } else {
-                                      if (time_departure_date > lubridate::dseconds(x = 0)
-                                          & time_trip_end_date > lubridate::dseconds(x = 0)) {
-                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
-                                                                                                 end = trip_end_date)) / 3600
                                       } else {
-                                        time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
-                                                                                                 end = trip_end_date - lubridate::days(x = 1))) / 3600
+                                        if (time_departure_date > lubridate::dseconds(x = 0)
+                                            & time_trip_end_date > lubridate::dseconds(x = 0)) {
+                                          time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date,
+                                                                                                   end = trip_end_date)) / 3600
+                                        } else {
+                                          time_at_sea <- lubridate::int_length(lubridate::interval(start = departure_date + lubridate::days(x = 1),
+                                                                                                   end = trip_end_date - lubridate::days(x = 1))) / 3600
+                                        }
+                                        searching_time <- 0
                                       }
-                                      searching_time <- 0
-                                    }
-                                    current_trip$.__enclos_env__$private$searching_time <- searching_time
-                                    current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
-                                    current_trip$.__enclos_env__$private$fishing_time <- fishing_time
+                                      current_trip$.__enclos_env__$private$searching_time <- searching_time
+                                      current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
+                                      current_trip$.__enclos_env__$private$fishing_time <- fishing_time
                                     }
                                     cat(format(Sys.time(),
                                                "%Y-%m-%d %H:%M:%S"),
@@ -2824,8 +2899,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     for (elementarysampleraw_id in seq_len(length.out = current_sample_size_measure_type_code_1$count())) {
                                                       current_elementary_sample <- current_sample_size_measure_type_code_1$extract(id = elementarysampleraw_id)[[1]]
                                                       current_length_step_count <- as.numeric(unique(length_step_count[length_step_count$ocean_code == major_ocean_activities
-                                                                                                                & length_step_count$species_fao_code == current_elementary_sample$.__enclos_env__$private$species_fao_code
-                                                                                                                & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"]))
+                                                                                                                       & length_step_count$species_fao_code == current_elementary_sample$.__enclos_env__$private$species_fao_code
+                                                                                                                       & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"]))
                                                       if (is.na(x = current_length_step_count)) {
                                                         if (current_elementary_sample$.__enclos_env__$private$species_fao_code == "SKJ") {
                                                           warning(format(Sys.time(),
@@ -2936,8 +3011,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     to fit the integer or rounded to 0.5 values of ld1-lf conversion table.\n")
                                                             current_elementary_sample$.__enclos_env__$private$sample_length_class <- round(current_elementary_sample$.__enclos_env__$private$sample_length_class*2)/2
                                                             current_length_step_count <- as.numeric(unique(length_step_count[length_step_count$ocean_code == major_ocean_activities
-                                                                                                                      & length_step_count$species_fao_code == current_elementary_sample$.__enclos_env__$private$species_fao_code
-                                                                                                                      & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"]))
+                                                                                                                             & length_step_count$species_fao_code == current_elementary_sample$.__enclos_env__$private$species_fao_code
+                                                                                                                             & length_step_count$ld1_class == current_elementary_sample$.__enclos_env__$private$sample_length_class, "nb"]))
                                                             if (is.na(x = current_length_step_count)) {
                                                               stop(format(Sys.time(),
                                                                           "%Y-%m-%d %H:%M:%S"),
@@ -3041,11 +3116,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
                                                   if (length(elementary_sample_skj_removed) != 0) {
                                                     current_elementarysampleraws_removed <- c(current_elementarysampleraws_removed,
-                                                                                                   elementary_sample_skj_removed)
+                                                                                              elementary_sample_skj_removed)
                                                   }
                                                   if (length(elementary_sample_outliers_removed) != 0) {
                                                     current_elementarysampleraws_removed <- c(current_elementarysampleraws_removed,
-                                                                                                   elementary_sample_outliers_removed)
+                                                                                              elementary_sample_outliers_removed)
                                                   }
 
                                                 }
@@ -3058,8 +3133,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     capture.output(elementarysamplesraw_deleted <- object_r6(class_name = "elementarysamplesraw"),
                                                                    file = "NUL")
                                                     capture.output(elementarysamplesraw_deleted$add(new_item=current_sample$filter_l1(filter=paste0("$path$elementarysampleraw_id == \"",
-                                                                                                                                                         elementarysampleraw_remove_id,
-                                                                                                                                                                                                 "\""))),
+                                                                                                                                                    elementarysampleraw_remove_id,
+                                                                                                                                                    "\""))),
                                                                    file="NUL")
                                                     elementarysamplesraw_deleted$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
                                                     elementarysamplesraw_deleted$modification_l1(modification = "$path$sample_number_measured_lf <- NA_integer_")
@@ -5759,12 +5834,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           code_act_type == 2 ~ 902,
                                           .default = code_act_type))
                                     } else if (dataset_target$catch_set_lb[[x]]$code_act_type[1] == 6){
-                            dataset_target$catch_set_lb[[x]]$code_act_type = 906
-                            dataset_target$act_chr[[x]] <-  dataset_target$act_chr[[x]] %>%
-                              mutate(code_act_type = dplyr::case_when(
-                                code_act_type == 6 ~ 906,
-                                .default = code_act_type))
-                          }
+                                      dataset_target$catch_set_lb[[x]]$code_act_type = 906
+                                      dataset_target$act_chr[[x]] <-  dataset_target$act_chr[[x]] %>%
+                                        mutate(code_act_type = dplyr::case_when(
+                                          code_act_type == 6 ~ 906,
+                                          .default = code_act_type))
+                                    }
                                   }
                                   dataset_target <- lapply(X = dataset_target,
                                                            FUN = function(x) {
@@ -7090,7 +7165,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             dplyr::distinct(dplyr::select(.data = sets_compo, -c(prop_lb, w_lb_t3, sp_cat, count)))) %>%
                                 dplyr::group_by(id_act, sp_cat) %>% dplyr::mutate(dupli = dplyr::n()) %>% ungroup()
                               if(length(unique(sets_long$dupli))>1) {
-                               stop("Duplicated in sets_long : bug to fix!")
+                                stop("Duplicated in sets_long : bug to fix!")
                               }
                               sets_wide <- sets_long %>% dplyr::select(-c(w_lb_t3, wtot_lb_t3)) %>%
                                 tidyr::pivot_wider(values_from = prop_lb, names_from = sp_cat)
@@ -7736,7 +7811,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               weight_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>%
                                 dplyr::select("id_act", "sp","wtot_lb_t3","prop_lb") %>%
                                 dplyr::mutate(w_lb_t3 = wtot_lb_t3*prop_lb,
-                                       wtot_lb_t3 = NULL)
+                                              wtot_lb_t3 = NULL)
 
                               # weight_declaration_ST <- dplyr::bind_rows(outputs_level3_process5$Estimated_catch) %>% select("id_act", "sp","w_lb_t3")
                               set_all <- dplyr::left_join(set_all, weight_declaration_ST,

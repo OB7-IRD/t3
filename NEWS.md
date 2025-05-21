@@ -1,3 +1,8 @@
+# t3 3.0.2 - 2025-05-21
+
+## Changed
+* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)) for Observe database by importing maximum and minimum of weight categories from the database. 
+
 # t3 3.0.1 - 2025-05-13
 
 ## Changed
@@ -8,7 +13,7 @@
   - If there is no adjusted set duration model for the year corresponding to the activity date in the reference table (“inst/set_duration_ref.csv”), t3 now allows considering the adjusted set duration model for the year closest to the activity date in the reference table, generating a warning. 
 
 ## Added
-* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
+* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save the file named "inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata", in outputs folder, if `global_output_path` is not NULL. 
 
 # t3 3.0.0 - 2025-04-15
 

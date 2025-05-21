@@ -90,7 +90,8 @@ Mandatory column names and types of elementarycatch(es) data:
 \item{school_type_code: } School type identification (class {\link[base]{integer}}).
 \item{weight_category_code: } Logbook weight category (class {\link[base]{integer}}).
 \item{weight_category_label: } Logbook weight category name identification (class {\link[base]{character}}).
-\item{species_code: } Species code identification (class {\link[base]{integer}}).
+\item{weight_category_min: } Minimum of weight category (class {\link[base]{numeric}}).
+\item{weight_category_max: } Maximum of weight category (class {\link[base]{numeric}}).
 \item{species_fao_code: } Species code identification on 3 characters (class {\link[base]{character}}).
 \item{species_fate_code: } Species fate code identification (class {\link[base]{integer}}).
 \item{catch_weight:} Catch weight in tonnes (class {\link[base]{numeric}}).
