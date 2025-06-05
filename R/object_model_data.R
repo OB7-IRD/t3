@@ -2311,10 +2311,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a data frame object with parameters for length weight relationship.
-                                   #' @param data_source Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
-                                   #' @param database_connection Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".
-                                   #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.
-                                   #' @param envir Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".
+                                   #' @param data_source Object of class {\link[base]{character}} expected.
+                                   #' By default "observe_database". Identification of data source.
+                                   #' You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).
+                                   #' @param years_period Object of class {\link[base]{integer}} expected.
+                                   #' By default NULL. Year(s) of the reference time period coded on 4 digits.
+                                   #' Mandatory for data source "observe_database".
+                                   #' @param database_connection Database connection R object expected.
+                                   #' By default NULL. Mandatory argument for data source "observe_database".
+                                   #' @param data_path Object of class {\link[base]{character}} expected.
+                                   #' By default NULL. Path of the data file.
+                                   #' @param envir Object of class {\link[base]{character}} expected.
+                                   #' By default NULL. Specify an environment to look in for data source "envir".
                                    lengthweightrelationships_data = function(data_source = "observe_database",
                                                                              database_connection = NULL,
                                                                              data_path = NULL,
@@ -2339,6 +2347,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
+                                       codama::r_type_checking(r_object = years_period,
+                                                               type = "integer")
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start length weight relationship(s) data importation from an observe database.\n")
@@ -2347,6 +2357,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                          "observe_lengthweightrelationships.sql",
                                                                                                          package = "t3")),
                                                                              collapse = "\n")
+                                       lengthweightrelationship_sql_final <- DBI::sqlInterpolate(conn = database_conn,
+                                                                                                 sql = lengthweightrelationship_sql,
+                                                                                                 begin_time_period  = DBI::SQL(paste0("#",
+                                                                                                                                      (dplyr::first(years_period,
+                                                                                                                                                    order_by = years_period) - 1),
+                                                                                                                                      "-10-01#")),
+                                                                                                 end_time_period = DBI::SQL(paste0("#",
+                                                                                                                                   (dplyr::last(years_period,
+                                                                                                                                                order_by = years_period) + 1),
+                                                                                                                                   "-03-31#")))
                                        cat("[",
                                            lengthweightrelationship_sql,
                                            "]\n")

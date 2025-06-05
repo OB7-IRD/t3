@@ -332,13 +332,22 @@ Creation of a data frame object with parameters for length weight relationship.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_source}}{Object of class {\link[base]{character}} expected. By default "observe_database". Identification of data source. You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
+\item{\code{data_source}}{Object of class {\link[base]{character}} expected.
+By default "observe_database". Identification of data source.
+You can switch to "csv_file" (with separator character ";" and decimal ","), "rdata_file" or "envir" (for an object in the R environment).}
 
-\item{\code{database_connection}}{Database connection R object expected. By default NULL. Mandatory argument for data source "observe_database".}
+\item{\code{database_connection}}{Database connection R object expected.
+By default NULL. Mandatory argument for data source "observe_database".}
 
-\item{\code{data_path}}{Object of class {\link[base]{character}} expected. By default NULL. Path of the data file.}
+\item{\code{data_path}}{Object of class {\link[base]{character}} expected.
+By default NULL. Path of the data file.}
 
-\item{\code{envir}}{Object of class {\link[base]{character}} expected. By default NULL. Specify an environment to look in for data source "envir".}
+\item{\code{envir}}{Object of class {\link[base]{character}} expected.
+By default NULL. Specify an environment to look in for data source "envir".}
+
+\item{\code{years_period}}{Object of class {\link[base]{integer}} expected.
+By default NULL. Year(s) of the reference time period coded on 4 digits.
+Mandatory for data source "observe_database".}
 }
 \if{html}{\out{</div>}}
 }
