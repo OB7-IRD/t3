@@ -50,7 +50,7 @@ ocean <- as.integer(1)
 sample_type_codes <- as.integer(1)
 # for french fleet YFT, SKJ, BET, ALB, MIX and LOT
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB","TUN", "LOT")
-species_fate_codes_rf1 = as.integer(c(6, 11))
+species_fate_codes_rf1 = as.integer(c(6))
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,
@@ -134,6 +134,7 @@ object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_e
 # level 1 ---
 # level 1.1: rf1 and rf2
 object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
+                      apply_rf1_on_bycatch = FALSE,
                       species_fate_codes_rf1 = species_fate_codes_rf1,
                       global_output_path = final_output_path,
                       output_format = output_format)
@@ -232,6 +233,7 @@ sample_type_codes <- as.integer(1)
 # For french fleet 
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "TUN", "LOT")
 # Species fate codes
+species_fate_codes_rf1 <- as.integer(6)
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,
 species_fate_codes <- as.integer(c(6,11))
@@ -256,7 +258,8 @@ t3_process <- t3::data_model_initialisation(data_source = "observe_database",
 t3_process[[2]] <- t3::t3_level1(object_model_data = t3_process[[1]],
                                  object_full_trips = t3_process[[2]],
                                  species_fao_codes_rf1 = species_fao_codes_rf1,
-                                 species_fate_codes_rf1 = species_fate_codes,
+                                 apply_rf1_on_bycatch = FALSE,
+                                 species_fate_codes_rf1 = species_fate_codes_rf1,
                                  vessel_type_codes_rf1 = vessel_type_codes,
                                  output_path = final_output_path,
                                  output_format = output_format, 
@@ -307,7 +310,7 @@ species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "TUN", "LOT")
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,
 species_fate_codes <- as.integer(c(6,11))
-species_fate_codes_rf1 <- as.integer(c(6, 11))
+species_fate_codes_rf1 <- as.integer(6)
 # output directories initiation
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
@@ -329,6 +332,7 @@ t3_process_all <- t3::t3_process(process = "all",
                                  species_fate_codes = species_fate_codes,
                                  vessel_type_codes = vessel_type_codes,
                                  species_fao_codes_rf1 = species_fao_codes_rf1,
+                                 apply_rf1_on_bycatch = FALSE,
                                  species_fate_codes_rf1 = species_fate_codes_rf1,
                                  target_year = target_year,
                                  period_duration = period_duration,

@@ -146,12 +146,14 @@ Function for add wells and samples caracteristics in full trips object.
 \if{latex}{\out{\hypertarget{method-full_trips-rf1}{}}}
 \subsection{Method \code{rf1()}}{
 Process of Raising Factor level 1 (RF1 and RF2) calculation.
-Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.
+The RF1 aim to correct the weight visual estimation bias of catches filled in logbooks and correspond to the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+Raising Factor 2 (RF2) is not implemented yet but will be computed at this step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$rf1(
   rf1_computation = TRUE,
+  apply_rf1_on_bycatch = FALSE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
-  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  species_fate_codes_rf1 = as.integer(6),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
@@ -165,6 +167,9 @@ Raising Factor level 2 (RF2) not implemented yet but will be computed at this st
 \describe{
 \item{\code{rf1_computation}}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}
+
+\item{\code{apply_rf1_on_bycatch}}{Object of class \code{\link[base]{logical}} expected. By default FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
+If TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.}
 
 \item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),

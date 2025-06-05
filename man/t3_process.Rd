@@ -21,8 +21,9 @@ t3_process(
   sample_type_codes,
   trip_ids = NULL,
   rf1_computation = TRUE,
+  apply_rf1_on_bycatch = FALSE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
-  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  species_fate_codes_rf1 = as.integer(6),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
@@ -94,6 +95,9 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{rf1_computation}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}
+
+\item{apply_rf1_on_bycatch}{Object of class \code{\link[base]{logical}} expected. By default FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
+If TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.}
 
 \item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),

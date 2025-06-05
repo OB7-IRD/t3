@@ -470,9 +470,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 7 - Process 1.1: rf1 ----
                             #' @description Process of Raising Factor level 1 (RF1 and RF2) calculation.
-                            #' Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.
+                            #' The RF1 aim to correct the weight visual estimation bias of catches filled in logbooks and correspond to the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #' Raising Factor 2 (RF2) is not implemented yet but will be computed at this step.
                             #' @param rf1_computation Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
                             #' By default TRUE, the rf1 is calculated for each trip.
+                            #' @param apply_rf1_on_bycatch Object of class \code{\link[base]{logical}} expected. By default FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
+                            #' If TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
                             #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
                             #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
                             #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
@@ -485,8 +488,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @importFrom codama r_type_checking
                             rf1 = function(rf1_computation = TRUE,
+                                           apply_rf1_on_bycatch = FALSE,
                                            species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
-                                           species_fate_codes_rf1 = as.integer(c(6, 11)),
+                                           species_fate_codes_rf1 = as.integer(6),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
@@ -797,8 +801,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                         if (! is.null(x = current_elementarycatches)) {
                                           if(current_vessel_type_code %in% vessel_type_codes_rf1){
+                                            if(apply_rf1_on_bycatch){
                                             current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
                                               dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
+                                            } else {
+                                              current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                dplyr::mutate(catch_weight_rf1=dplyr::case_when(
+                                                  species_fao_code %in% species_fao_codes_rf1 ~ catch_weight * current_rf1,
+                                                  TRUE ~ catch_weight))
+                                            }
                                           } else{
                                             current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
                                               dplyr::mutate(catch_weight_rf1=NA_real_)
@@ -869,7 +880,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              activity_latitude = NA_real_,
                                                                                                              activity_longitude = NA_real_,
                                                                                                              species_fate_code = NA_integer_,
-                                                                                                             species_fao_code = NA_integer_,
                                                                                                              catch_weight = NA_real_,
                                                                                                              catch_count = NA_real_,
                                                                                                              catch_weight_rf1 = NA_real_)
@@ -958,7 +968,26 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       "[trip: ",
                                       private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                       "]\n", sep="")
-                                  if (! is.null(x = global_output_path)) {
+                                  if (!is.null(x = global_output_path)){
+                                    # Sum landing weights across partial trips to get total landing weight by species in outputs by full trip
+                                    if(!is.null(full_trip_total_landings_catches_species_activities)){
+                                    total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
+                                      dplyr::select(species_fao_code,
+                                                    landing_weight,
+                                                    species_fate_code,
+                                                    trip_id) %>%
+                                      dplyr:: distinct() %>%
+                                      dplyr::group_by(species_fao_code) %>%
+                                      dplyr::summarize(landing_weight=sum(landing_weight,
+                                                                          na.rm=TRUE)) %>%
+                                      dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
+                                                                                  NA, landing_weight))
+                                    full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
+                                                                                                            total_landings_weight_species,
+                                                                                                            by = join_by(species_fao_code)) %>%
+                                      dplyr::rename(landing_weight=landing_weight.y) %>%
+                                      dplyr::select(-landing_weight.x)
+                                    }
                                     total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
                                   }
                                 }
