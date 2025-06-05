@@ -1,9 +1,45 @@
+# t3 3.0.1 - 2025-05-13
+
+## Changed
+* Important calculation time reduction by replacing [`future.apply::future_sapply()`](https://rdrr.io/cran/future.apply/man/future_lapply.html) by [`sapply()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/lapply.html) in method [extract()](https://ob7-ird.github.io/t3/reference/list_t3.html#method-list_t3-extract).
+* Fix typo (weight instead of weigth) in "inst/avdth_samples.sql".
+* In method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation):
+  - For set declared as positive but with no elementary catch associated, the set duration is now set to the null set duration value, taken from the “inst/set_duration_ref.csv” table, and not to NA as before and a warning is generated. 
+  - If there is no adjusted set duration model for the year corresponding to the activity date in the reference table (“inst/set_duration_ref.csv”), t3 now allows considering the adjusted set duration model for the year closest to the activity date in the reference table, generating a warning. 
+
+## Added
+* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
+
+# t3 3.0.0 - 2025-04-15
+
+## Changed
+* Level 1 optimization gather methods 1.1 and 1.2 for [raising factors computation](https://ob7-ird.github.io/t3/articles/level_2.html#process-1-1-https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1)
+* Fix typo (weight instead of weigth) in :
+  - R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
+  - R6 reference object class [standardisedsampleset](https://ob7-ird.github.io/t3/reference/standardisedsampleset.html), 
+  - process 1.3 [conversion_weight_categories](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion),
+  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).
+**Warning: you will need to correct this typo in your scripts**
+
+## Added
+* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
+* Add method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation) gathering methods 1.5 to 1.8:
+- set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
+- time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
+- fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
+ - searching_time = fishing_time - set_duration.
+ 
+## Removed 
+* Methods 1.5 to 1.8 and 1.2 (rf2). 
+
+**Warning: you will need to correct this in your scripts**
+
 # t3 2.1.2 - 2025-04-14
 
 ## Changed
 * Add year 2025 in the set duration referential (set_duration_ref.csv).
 * Fix typo (weight instead of weigth) in :
-  _ R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
+  - R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
   - R6 reference object class [standardisedsampleset](https://ob7-ird.github.io/t3/reference/standardisedsampleset.html), 
   - process 1.3 [conversion_weight_categories](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion),
   - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).

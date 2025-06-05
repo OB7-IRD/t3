@@ -177,6 +177,6 @@ activity <- R6::R6Class(classname = "activity",
                           time_at_sea = NULL,
                           fishing_time = NULL,
                           searching_time = NULL,
-                          positive_set_count = NULL,
                           set_duration = NULL,
+                          positive_set_count = NULL,
                           elementarycatches = NULL))
