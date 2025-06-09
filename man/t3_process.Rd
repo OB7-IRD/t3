@@ -21,7 +21,7 @@ t3_process(
   sample_type_codes,
   trip_ids = NULL,
   rf1_computation = TRUE,
-  apply_rf1_on_bycatch = FALSE,
+  apply_rf1_on_bycatch = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
   species_fate_codes_rf1 = as.integer(6),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
