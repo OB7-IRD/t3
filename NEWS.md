@@ -1,3 +1,8 @@
+# t3 3.0.3 - 2025-05-21
+
+## Added
+* Add the argument apply_rf1_on_bycatch=TRUE/FALSE, in the method [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1) By default TRUE, the raising factor value, calculated for each trip, is applied to all the logbook catches associated to the trip, including by-catch species. If FALSE, only the catch weights of species belonging to the species list defined by the `species_fao_codes_rf1` argument are corrected, rf1 is not applied to by-catch species.
+
 # t3 3.0.2 - 2025-05-21
 
 ## Changed
