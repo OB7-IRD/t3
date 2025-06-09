@@ -5,8 +5,8 @@ description: |
   Description of running processes examples.
 vignette: |
   %\VignetteIndexEntry{Running processes examples}
-  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::knitr}
 editor_options: 
   chunk_output_type: console
 ---
@@ -189,6 +189,7 @@ process_level3 <- object_full_trips$path_to_level3(global_output_path = final_ou
 process_level3 <- object_full_trips$data_preparatory(inputs_level3 = process_level3[[1]],
                                                      output_directory = final_output_path,
                                                      target_year = target_year,
+                                                     target_ocean = ocean, 
                                                      period_duration = period_duration)
 # level 3.2: random forest models ----
 process_level3$output_level3_process2 <- object_full_trips$random_forest_models(output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod)
@@ -275,6 +276,7 @@ t3_process[[3]] <- t3_process[[2]]$path_to_level3(global_output_path = final_out
 names(t3_process)[3] <- "process_level3"
 t3_process[[3]] <- t3::t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  target_year = target_year,
+                                 target_ocean = ocean, 
                                  period_duration = period_duration,
                                  country_flag = flag_codes[1],
                                  input_type = "observe_database",
@@ -335,6 +337,7 @@ t3_process_all <- t3::t3_process(process = "all",
                                  apply_rf1_on_bycatch = FALSE,
                                  species_fate_codes_rf1 = species_fate_codes_rf1,
                                  target_year = target_year,
+                                 target_ocean = ocean, 
                                  period_duration = period_duration,
                                  ci = confidence_interval)
 ```
