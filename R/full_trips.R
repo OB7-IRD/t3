@@ -2612,8 +2612,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
+                                                                               "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                               "positive_set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "positive_set_count")),
                                                                                "set_duration" = unlist(x = activities_selected$extract_l1_element_value(element = "set_duration")),
                                                                                "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")),
                                                                                "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")),
@@ -2633,8 +2635,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_longitude,
                                                     activity_date,
                                                     activity_code,
+                                                    objectoperation_code,
                                                     ocean_code,
                                                     school_type_code,
+                                                    positive_set_count,
                                                     set_duration,
                                                     time_at_sea,
                                                     fishing_time,
@@ -2868,7 +2872,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   current_elementary_sample$.__enclos_env__$private$sample_length_class,
                                                                   ".\n",
                                                                   "  Sample detected with length class measured in LD1 for SKJ specie.
-                                                                     Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                     Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf`) set to NA.\n",
                                                                   "[trip_id: ",
                                                                   current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                   " (full trip item id ",
@@ -2908,7 +2912,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     " or LD1>",
                                                                     max(length_step$ld1_class),
                                                                     ".\n ",
-                                                                    "  Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                    "  Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf`) set to NA.\n",
                                                                     "[trip_id: ",
                                                                     current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                     " (full trip item id ",
@@ -3673,6 +3677,62 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 by = step)
                                                   sample_length_class_lf_id <- 1
                                                   while (sample_length_class_lf_id <= length(sample_length_class_lf)) {
+                                                    #### > Case of LF outliers (> maximum_lf_class) #######
+                                                    if(sample_length_class_lf[sample_length_class_lf_id] >= maximum_lf_class){
+                                                      capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
+                                                                     file = "NUL")
+                                                      capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf == ",
+                                                                                                                                                                  sample_length_class_lf[sample_length_class_lf_id]))),
+                                                                     file = "NUL")
+                                                      current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
+                                                      for (sub_sample_id in current_sample_specie_by_step_subid) {
+                                                        capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                                       file = "NUL")
+                                                        capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
+                                                                                                                                                                                     sub_sample_id))),
+                                                                       file = "NUL")
+                                                        object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                                                        well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                        sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                                                        sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                        sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
+                                                                                                        sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
+                                                                                                        species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
+                                                                                                        sample_standardised_length_class_lf = NA_integer_,
+                                                                                                        sample_number_measured_extrapolated_lf = NA_real_,
+                                                                                                        sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
+                                                        capture.output(current_elementarysamples$add(new_item = object_elementarysample),
+                                                                       file = "NUL")
+                                                      warning(format(Sys.time(),
+                                                                     "%Y-%m-%d %H:%M:%S"),
+                                                              " - Sample  detected with length class measured in FL (sample_length_class_lf=",
+                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_length_class_lf,
+                                                              ") ",
+                                                              "greater than maximum_lf_class=",
+                                                              maximum_lf_class,
+                                                              ".\n ",
+                                                              "  Sample length class in FL (`sample_standardised_length_class_lf`) and the number of sample measured (`sample_number_measured_extrapolated_lf`) set to NA.\n",
+                                                              "[trip_id: ",
+                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                              " (full trip item id ",
+                                                              full_trip_id,
+                                                              ", trip item id ",
+                                                              partial_trip_id,
+                                                              "), well_id: ",
+                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                              " (well item id ",
+                                                              well_id,
+                                                              "), sample_id: ",
+                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                              "],\n",
+                                                              " elementarysampleraw_id: ",
+                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$elementarysampleraw_id,
+                                                              "].\n",
+                                                              "Please check the data or increase the argument maximum_lf_class (by default 500).")
+                                                    }
+
+                                                      sample_length_class_lf_id <- sample_length_class_lf_id + 1
+                                                    } else{
                                                     lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
                                                     upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
                                                     sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
@@ -3705,6 +3765,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                      file = "NUL")
                                                     }
                                                     sample_length_class_lf_id <- sample_length_class_lf_id + length(x = sample_length_class_lf_for_merge)
+                                                    }
                                                   }
                                                 }
                                               }
