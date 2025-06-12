@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.3</span>
       </span>
     </div>
 
@@ -209,12 +209,14 @@
 </div><p></p><hr><a id="method-full_trips-rf1"></a><div class="section">
 <h3 id="method-rf-">Method <code>rf1()</code><a class="anchor" aria-label="anchor" href="#method-rf-"></a></h3>
 <p>Process of Raising Factor level 1 (RF1 and RF2) calculation.
-Raising Factor level 2 (RF2) not implemented yet but will be computed at this step.</p><div class="section">
+The RF1 aim to correct the weight visual estimation bias of catches filled in logbooks and correspond to the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
+Raising Factor 2 (RF2) is not implemented yet but will be computed at this step.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span></span>
 <span>  rf1_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  species_fao_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"LOT"</span>, <span class="st">"MIX"</span>, <span class="st">"TUN"</span><span class="op">)</span>,</span>
-<span>  species_fate_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  species_fate_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>,</span>
 <span>  vessel_type_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  rf1_lowest_limit <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  rf1_highest_limit <span class="op">=</span> <span class="fl">1.2</span>,</span>
@@ -228,6 +230,11 @@ Raising Factor level 2 (RF2) not implemented yet but will be computed at this st
 <p></p><div class="arguments"><dl><dt><code>rf1_computation</code></dt>
 <dd><p>Object of class <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.</p></dd>
+
+
+<dt><code>apply_rf1_on_bycatch</code></dt>
+<dd><p>Object of class <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></code> expected. By default TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
+If FALSE, only the catch weights of species belonging to the species list, defined by the <code>species_fao_codes_rf1</code> argument are corrected, rf1 is not applied to by-catch species.</p></dd>
 
 
 <dt><code>species_fao_codes_rf1</code></dt>

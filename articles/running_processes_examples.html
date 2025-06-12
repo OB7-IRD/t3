@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.3</span>
       </span>
     </div>
 
@@ -168,7 +168,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># for french fleet YFT, SKJ, BET, ALB, MIX and LOT</span></span>
 <span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>,<span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
-<span><span class="va">species_fate_codes_rf1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes_rf1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
@@ -252,6 +252,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="co"># level 1 ---</span></span>
 <span><span class="co"># level 1.1: rf1 and rf2</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">rf1</span><span class="op">(</span>species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
+<span>                      apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                      global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                      output_format <span class="op">=</span> <span class="va">output_format</span><span class="op">)</span></span>
@@ -306,6 +307,7 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span><span class="va">process_level3</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">data_preparatory</span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">process_level3</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                                     output_directory <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                                     target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
+<span>                                                     target_ocean <span class="op">=</span> <span class="va">ocean</span>, </span>
 <span>                                                     period_duration <span class="op">=</span> <span class="va">period_duration</span><span class="op">)</span></span>
 <span><span class="co"># level 3.2: random forest models ----</span></span>
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process2</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">random_forest_models</span><span class="op">(</span>output_level3_process1 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process1</span><span class="op">$</span><span class="va">data_lb_sample_screened</span><span class="op">$</span><span class="va">data4mod</span><span class="op">)</span></span>
@@ -350,6 +352,7 @@ part of the treatment.</p>
 <span><span class="co"># For french fleet </span></span>
 <span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
+<span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
 <span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
@@ -374,7 +377,8 @@ part of the treatment.</p>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level1.html">t3_level1</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
-<span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
+<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 vessel_type_codes_rf1 <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
 <span>                                 output_format <span class="op">=</span> <span class="va">output_format</span>, </span>
@@ -390,6 +394,7 @@ part of the treatment.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">t3_process</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"process_level3"</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level3.html">t3_level3</a></span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
+<span>                                 target_ocean <span class="op">=</span> <span class="va">ocean</span>, </span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
 <span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                                 input_type <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
@@ -427,7 +432,7 @@ skip part(s) of the process.</p>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
 <span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
@@ -449,8 +454,10 @@ skip part(s) of the process.</p>
 <span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
+<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
+<span>                                 target_ocean <span class="op">=</span> <span class="va">ocean</span>, </span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span><span class="op">)</span></span></code></pre></div>
 </div>
