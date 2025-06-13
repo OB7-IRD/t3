@@ -1065,7 +1065,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(activity_id,
                                                     activity_latitude,
                                                     activity_longitude,
-                                                    .after = trip_id)
+                                                    .after = trip_id) %>%
+                                    dplyr::relocate(landing_weight,
+                                                    .after = species_fate_code)
                                   # extraction
                                   if (output_format == "us") {
                                     outputs_dec <- "."
