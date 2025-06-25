@@ -42,6 +42,7 @@
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
 #' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
+#' @param country_flag Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
@@ -100,9 +101,10 @@ t3_process <- function(process = "all",
                        threshold_frequency_rf_plus10 = as.integer(75),
                        threshold_rf_total = as.integer(250),
                        periode_reference_level3 = NULL,
-                       target_year,
+                       target_year = as.integer(lubridate::year(Sys.time() - 1)),
                        target_ocean = NULL,
-                       period_duration,
+                       country_flag = flag_codes[1],
+                       period_duration = 4L,
                        distance_maximum = as.integer(5),
                        number_sets_maximum = as.integer(5),
                        set_weight_minimum = as.integer(6),
@@ -230,7 +232,7 @@ t3_process <- function(process = "all",
                                  target_year=target_year,
                                  target_ocean = target_ocean,
                                  period_duration=period_duration,
-                                 country_flag = flag_codes,
+                                 country_flag = country_flag,
                                  input_type = data_source,
                                  distance_maximum = distance_maximum,
                                  number_sets_maximum = number_sets_maximum,
