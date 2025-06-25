@@ -522,7 +522,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Duplicated elementarycatch(es) topiaid in data imported, check the query and query's parameters.\n",
-                                              paste0("[activity: ",
+                                              paste0("[elementarycath(es): ",
                                                      elementarycatch_id, collapse="];\n"),
                                               "].")
                                        } else if (nrow(x = activity_data) == 0) {
@@ -679,14 +679,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
-                                       } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
-                                         elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
-                                         stop(format(x = Sys.time(),
-                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                              " - Duplicated elementarycatch(es) topiaid in data imported, check the query and query's parameters.\n",
-                                              paste0("[activity: ",
-                                                     elementarycatch_id, collapse="];\n"),
-                                              "].")
+                                       ##### Warning dupliacted elementarycatch topiaid in AVDTH
+                                       # } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
+                                       #   elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
+                                       #   stop(format(x = Sys.time(),
+                                       #               format = "%Y-%m-%d %H:%M:%S"),
+                                       #        " - Duplicated elementarycatch(es) topiaid in data imported, check the query and query's parameters.\n",
+                                       #        paste0("[activity: ",
+                                       #               elementarycatch_id, collapse="];\n"),
+                                       #        "].")
                                        } else if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
