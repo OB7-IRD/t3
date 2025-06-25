@@ -11,7 +11,6 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
 #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -76,7 +75,6 @@ t3_process <- function(process = "all",
                        log_file = FALSE,
                        log_path = NULL,
                        output_path = NULL,
-                       output_format = "eu",
                        new_directory = TRUE,
                        years_period,
                        flag_codes,
@@ -149,12 +147,10 @@ t3_process <- function(process = "all",
   if (process == "level1") {
     new_directory_level1 <- new_directory
     output_path_level1 <- output_path
-    output_format_level1 <- output_format
     integrated_process <- FALSE
   } else if (process == "level2") {
     new_directory_level2 <- new_directory
     output_path_level2 <- output_path
-    output_format_level2 <- output_format
     integrated_process <- FALSE
   } else if (process %in% c("all",
                             "until_level2")) {
@@ -165,27 +161,21 @@ t3_process <- function(process = "all",
                                         level = process)
       new_directory_level1 <- FALSE
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- FALSE
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- FALSE
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     } else {
       integrated_process <- FALSE
       new_directory_level1 <- new_directory
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- new_directory
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- new_directory
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     }
   }
@@ -209,7 +199,6 @@ t3_process <- function(process = "all",
                                  sunset_schema = sunset_schema,
                                  new_directory = new_directory_level1,
                                  output_path = output_path_level1,
-                                 output_format = output_format_level1,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
@@ -229,7 +218,6 @@ t3_process <- function(process = "all",
                                  log_name = "t3_level2",
                                  new_directory = new_directory_level2,
                                  output_path = output_path_level2,
-                                 output_format = output_format_level2,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
@@ -264,7 +252,6 @@ t3_process <- function(process = "all",
                                  log_path = log_path,
                                  log_name = "t3_level3",
                                  output_path = output_path_level3,
-                                 output_format = output_format_level3,
                                  new_directory = new_directory_level3,
                                  integrated_process = integrated_process)
   }

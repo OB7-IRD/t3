@@ -21,7 +21,6 @@
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
@@ -43,7 +42,6 @@ t3_level1 <- function(object_model_data,
                       log_path = NULL,
                       log_name = "t3_level1",
                       output_path = NULL,
-                      output_format = "eu",
                       new_directory = FALSE,
                       integrated_process = FALSE,
                       referential_template = "observe") {
@@ -84,15 +82,12 @@ t3_level1 <- function(object_model_data,
                           vessel_type_codes_rf1 = vessel_type_codes_rf1,
                           rf1_lowest_limit = rf1_lowest_limit,
                           rf1_highest_limit = rf1_highest_limit,
-                          global_output_path = output_path,
-                          output_format = output_format)
+                          global_output_path = output_path)
     # level 1.2: logbook weight categories conversion ----
     object_full_trips$conversion_weight_category(global_output_path = output_path,
-                                                 output_format = output_format,
                                                  referential_template = referential_template)
     # level 1.3: set count ----
     object_full_trips$set_count(global_output_path = output_path,
-                                output_format = output_format,
                                 referential_template = referential_template)
     if(fishing_effort_computation){
     # level 1.4:  ----
@@ -101,7 +96,6 @@ t3_level1 <- function(object_model_data,
                                      sunrise_schema =  sunrise_schema,
                                      sunset_schema = sunset_schema,
                                      global_output_path = output_path,
-                                     output_format = output_format,
                                      referential_template = referential_template)
     }
     # close, if necessary log file connection ----

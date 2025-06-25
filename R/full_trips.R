@@ -485,7 +485,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @importFrom codama r_type_checking
                             rf1 = function(rf1_computation = TRUE,
                                            apply_rf1_on_bycatch = TRUE,
@@ -494,8 +493,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
-                                           global_output_path = NULL,
-                                           output_format = "eu") {
+                                           global_output_path = NULL) {
                               # 7.1 - Arguments verification ----
                               codama::r_type_checking(r_object = species_fao_codes_rf1,
                                                       type = "character")
@@ -512,11 +510,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 7.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(x = Sys.time(),
@@ -802,8 +795,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (! is.null(x = current_elementarycatches)) {
                                           if(current_vessel_type_code %in% vessel_type_codes_rf1){
                                             if(apply_rf1_on_bycatch){
-                                            current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
-                                              dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
+                                              current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
                                             } else {
                                               current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
                                                 dplyr::mutate(catch_weight_rf1=dplyr::case_when(
@@ -971,22 +964,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (!is.null(x = global_output_path)){
                                     # Sum landing weights across partial trips to get total landing weight by species in outputs by full trip
                                     if(!is.null(full_trip_total_landings_catches_species_activities)){
-                                    total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
-                                      dplyr::select(species_fao_code,
-                                                    landing_weight,
-                                                    species_fate_code,
-                                                    trip_id) %>%
-                                      dplyr:: distinct() %>%
-                                      dplyr::group_by(species_fao_code) %>%
-                                      dplyr::summarize(landing_weight=sum(landing_weight,
-                                                                          na.rm=TRUE)) %>%
-                                      dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
-                                                                                  NA, landing_weight))
-                                    full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
-                                                                                                            total_landings_weight_species,
-                                                                                                            by = dplyr::join_by(species_fao_code)) %>%
-                                      dplyr::rename(landing_weight=landing_weight.y) %>%
-                                      dplyr::select(-landing_weight.x)
+                                      total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
+                                        dplyr::select(species_fao_code,
+                                                      landing_weight,
+                                                      species_fate_code,
+                                                      trip_id) %>%
+                                        dplyr:: distinct() %>%
+                                        dplyr::group_by(species_fao_code) %>%
+                                        dplyr::summarize(landing_weight=sum(landing_weight,
+                                                                            na.rm=TRUE)) %>%
+                                        dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
+                                                                                    NA, landing_weight))
+                                      full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
+                                                                                                              total_landings_weight_species,
+                                                                                                              by = dplyr::join_by(species_fao_code)) %>%
+                                        dplyr::rename(landing_weight=landing_weight.y) %>%
+                                        dplyr::select(-landing_weight.x)
                                     }
                                     total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
                                   }
@@ -1069,13 +1062,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(landing_weight,
                                                     .after = species_fate_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = global_outputs_process_1_1,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1110,20 +1098,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process of logbook weight categories conversion.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             conversion_weight_category = function(global_output_path = NULL,
-                                                                  output_format = "eu",
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -1651,19 +1632,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     school_type_code,
                                                     elementarycatch_id)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_2,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1689,20 +1659,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for positive sets count.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             set_count = function(global_output_path = NULL,
-                                                 output_format = "eu",
                                                  referential_template = "observe") {
                               # 10.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -1883,19 +1846,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     school_type_code,
                                                     positive_set_count)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_3,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1927,7 +1879,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @importFrom suncalc getSunlightTimes
                             #' @details
@@ -1953,7 +1904,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       sunrise_schema = "sunrise",
                                                       sunset_schema = "sunset",
                                                       global_output_path = NULL,
-                                                      output_format = "eu",
                                                       referential_template = "observe") {
                               # 11.1 - Arguments verification ----
                               if (! paste0(class(x = set_duration_ref),
@@ -2012,11 +1962,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -2646,19 +2591,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     fishing_time,
                                                     searching_time)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_4,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -2685,11 +2619,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             sample_length_class_ld1_to_lf =  function(length_step,
                                                                       global_output_path = NULL,
-                                                                      output_format = "eu",
                                                                       referential_template = "observe") {
                               # 15.1 - Arguments verification ----
                               if (! paste0(class(x = length_step),
@@ -2705,11 +2637,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -3215,19 +3142,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_1,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3254,18 +3170,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            sample_number_measured_extrapolation = function(global_output_path = NULL,
-                                                                            output_format = "eu") {
+                            sample_number_measured_extrapolation = function(global_output_path = NULL) {
                               # 16.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 16.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -3512,19 +3421,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_2,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3552,10 +3450,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500),
-                                                                                global_output_path = NULL,
-                                                                                output_format = "eu") {
+                                                                                global_output_path = NULL) {
                               # 17.1 - Arguments verification ----
                               codama::r_type_checking(r_object = maximum_lf_class,
                                                       type = "integer",
@@ -3563,11 +3459,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 17.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -3705,68 +3596,68 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                         sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
                                                         capture.output(current_elementarysamples$add(new_item = object_elementarysample),
                                                                        file = "NUL")
-                                                      warning(format(Sys.time(),
-                                                                     "%Y-%m-%d %H:%M:%S"),
-                                                              " - Sample  detected with length class measured in FL (sample_length_class_lf=",
-                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_length_class_lf,
-                                                              ") ",
-                                                              "greater than maximum_lf_class=",
-                                                              maximum_lf_class,
-                                                              ".\n ",
-                                                              "  Sample length class in FL (`sample_standardised_length_class_lf`) and the number of sample measured (`sample_number_measured_extrapolated_lf`) set to NA.\n",
-                                                              "[trip_id: ",
-                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
-                                                              " (full trip item id ",
-                                                              full_trip_id,
-                                                              ", trip item id ",
-                                                              partial_trip_id,
-                                                              "), well_id: ",
-                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
-                                                              " (well item id ",
-                                                              well_id,
-                                                              "), sample_id: ",
-                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
-                                                              "],\n",
-                                                              " elementarysampleraw_id: ",
-                                                              current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$elementarysampleraw_id,
-                                                              "].\n",
-                                                              "Please check the data or increase the argument maximum_lf_class (by default 500).")
-                                                    }
+                                                        warning(format(Sys.time(),
+                                                                       "%Y-%m-%d %H:%M:%S"),
+                                                                " - Sample  detected with length class measured in FL (sample_length_class_lf=",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_length_class_lf,
+                                                                ") ",
+                                                                "greater than maximum_lf_class=",
+                                                                maximum_lf_class,
+                                                                ".\n ",
+                                                                "  Sample length class in FL (`sample_standardised_length_class_lf`) and the number of sample measured (`sample_number_measured_extrapolated_lf`) set to NA.\n",
+                                                                "[trip_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                " (full trip item id ",
+                                                                full_trip_id,
+                                                                ", trip item id ",
+                                                                partial_trip_id,
+                                                                "), well_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                " (well item id ",
+                                                                well_id,
+                                                                "), sample_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                "],\n",
+                                                                " elementarysampleraw_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$elementarysampleraw_id,
+                                                                "].\n",
+                                                                "Please check the data or increase the argument maximum_lf_class (by default 500).")
+                                                      }
 
                                                       sample_length_class_lf_id <- sample_length_class_lf_id + 1
                                                     } else{
-                                                    lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
-                                                    upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
-                                                    sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
-                                                                                                                     & sample_length_class_lf < upper_border)]
-                                                    capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
-                                                                   file = "NUL")
-                                                    capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf %in% c(",
-                                                                                                                                                                paste0(sample_length_class_lf_for_merge,
-                                                                                                                                                                       collapse = ", "),
-                                                                                                                                                                ")"))),
-                                                                   file = "NUL")
-                                                    current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
-                                                    for (sub_sample_id in current_sample_specie_by_step_subid) {
-                                                      capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                      lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
+                                                      upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
+                                                      sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
+                                                                                                                       & sample_length_class_lf < upper_border)]
+                                                      capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
                                                                      file = "NUL")
-                                                      capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
-                                                                                                                                                                                   sub_sample_id))),
+                                                      capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf %in% c(",
+                                                                                                                                                                  paste0(sample_length_class_lf_for_merge,
+                                                                                                                                                                         collapse = ", "),
+                                                                                                                                                                  ")"))),
                                                                      file = "NUL")
-                                                      object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
-                                                                                                      well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
-                                                                                                      sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
-                                                                                                      sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
-                                                                                                      sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
-                                                                                                      sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
-                                                                                                      species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
-                                                                                                      sample_standardised_length_class_lf = lower_border,
-                                                                                                      sample_number_measured_extrapolated_lf = sum(unlist(current_sample_specie_by_step_by_subid$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
-                                                                                                      sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
-                                                      capture.output(current_elementarysamples$add(new_item = object_elementarysample),
-                                                                     file = "NUL")
-                                                    }
-                                                    sample_length_class_lf_id <- sample_length_class_lf_id + length(x = sample_length_class_lf_for_merge)
+                                                      current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
+                                                      for (sub_sample_id in current_sample_specie_by_step_subid) {
+                                                        capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                                       file = "NUL")
+                                                        capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
+                                                                                                                                                                                     sub_sample_id))),
+                                                                       file = "NUL")
+                                                        object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                                                        well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                        sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                                                        sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                        sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
+                                                                                                        sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
+                                                                                                        species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
+                                                                                                        sample_standardised_length_class_lf = lower_border,
+                                                                                                        sample_number_measured_extrapolated_lf = sum(unlist(current_sample_specie_by_step_by_subid$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
+                                                                                                        sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
+                                                        capture.output(current_elementarysamples$add(new_item = object_elementarysample),
+                                                                       file = "NUL")
+                                                      }
+                                                      sample_length_class_lf_id <- sample_length_class_lf_id + length(x = sample_length_class_lf_for_merge)
                                                     }
                                                   }
                                                 }
@@ -3858,20 +3749,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied\n",
-                                            sep = "")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_3,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3899,11 +3778,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             well_set_weight_categories = function(sample_set,
                                                                   global_output_path = NULL,
-                                                                  output_format = "eu",
                                                                   referential_template = "observe") {
                               # 18.1 - Arguments verification ----
                               if (! paste0(class(x = sample_set),
@@ -3918,11 +3795,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -4290,20 +4162,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied\n",
-                                            sep = "")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_4,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4329,18 +4189,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Object standardised sample creation.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            standardised_sample_creation = function(global_output_path = NULL,
-                                                                    output_format = "eu") {
+                            standardised_sample_creation = function(global_output_path = NULL) {
                               # 19.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 19.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -4539,19 +4392,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_5,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4578,10 +4420,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             standardised_sample_set_creation = function(length_weight_relationship_data,
-                                                                        global_output_path = NULL,
-                                                                        output_format = "eu") {
+                                                                        global_output_path = NULL) {
                               # 20.1 - Arguments verification ----
                               if (! paste0(class(x = length_weight_relationship_data),
                                            collapse = "_") %in% c("data.frame",
@@ -4595,11 +4435,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 20.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -4821,19 +4656,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_6,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4864,14 +4688,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250),
-                                                                    global_output_path = NULL,
-                                                                    output_format = "eu") {
+                                                                    global_output_path = NULL) {
                               # 21.1 - Arguments verification ----
                               codama::r_type_checking(r_object = threshold_rf_minus10,
                                                       type = "integer",
@@ -4891,11 +4713,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 21.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -5159,19 +4976,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_7,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -5197,18 +5003,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Application of process 2.8 raised factors on standardised sample set.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            raised_standardised_sample_set = function(global_output_path = NULL,
-                                                                      output_format = "eu") {
+                            raised_standardised_sample_set = function(global_output_path = NULL) {
                               # 22.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 22.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -5427,19 +5226,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_8,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -6267,7 +6055,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
                             #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
                             #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
                             #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
                             #' @importFrom sp coordinates fullgrid gridded SpatialPoints CRS proj4string spTransform
@@ -6278,7 +6065,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @import ggplot2
                             models_checking = function(output_level3_process2,
                                                        output_directory,
-                                                       output_format = "eu",
                                                        plot_sample = FALSE,
                                                        avdth_patch_coord = FALSE) {
                               # 1 - Arguments verification ----
@@ -6291,19 +6077,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              length = 1L,
                                                              output = "message"))
                               }
-                              if (codama::r_type_checking(r_object = output_format,
-                                                          type = "character",
-                                                          length = 1L,
-                                                          allowed_value = c("us",
-                                                                            "eu"),
-                                                          output = "logical") != TRUE) {
-                                stop(codama::r_type_checking(r_object = output_format,
-                                                             type = "character",
-                                                             length = 1L,
-                                                             allowed_value = c("us",
-                                                                               "eu"),
-                                                             output = "message"))
-                              }
                               # 2 - Process ----
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -6314,13 +6087,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               options(warn = 1)
                               output_level3_process3 <- list()
                               # extraction specifications
-                              if (output_format == "us") {
-                                outputs_dec <- "."
-                                outputs_sep <- ","
-                              } else if (output_format == "eu") {
-                                outputs_dec <- ","
-                                outputs_sep <- ";"
-                              }
+                              outputs_dec <- "."
+                              outputs_sep <- ","
                               for (a in seq_len(length.out = length(output_level3_process2))) {
                                 current_output_level3_process3 <- vector(mode = "list",
                                                                          length = 2)
@@ -7301,7 +7069,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
                             #' @param output_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
@@ -7310,7 +7077,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             model_predictions = function(output_level3_process2,
                                                          output_level3_process4,
                                                          output_directory,
-                                                         output_format = "eu",
                                                          country_flag = NULL,
                                                          ci = FALSE,
                                                          ci_type = "all",
@@ -7326,31 +7092,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              length = 1L,
                                                              output = "message"))
                               }
-                              if (codama::r_type_checking(r_object = output_format,
-                                                          type = "character",
-                                                          length = 1L,
-                                                          allowed_value = c("us",
-                                                                            "eu"),
-                                                          output = "logical") != TRUE) {
-                                stop(codama::r_type_checking(r_object = output_format,
-                                                             type = "character",
-                                                             length = 1L,
-                                                             allowed_value = c("us",
-                                                                               "eu"),
-                                                             output = "message"))
-                              }
                               # 2 - Process ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
                               # extraction specifications
-                              if (output_format == "us") {
-                                outputs_dec <- "."
-                                outputs_sep <- ","
-                              } else if (output_format == "eu") {
-                                outputs_dec <- ","
-                                outputs_sep <- ";"
-                              }
+                              outputs_dec <- "."
+                              outputs_sep <- ","
                               figure_directory <- file.path(output_directory,
                                                             "level3",
                                                             "figure")

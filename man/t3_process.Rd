@@ -11,7 +11,6 @@ t3_process(
   log_file = FALSE,
   log_path = NULL,
   output_path = NULL,
-  output_format = "eu",
   new_directory = TRUE,
   years_period,
   flag_codes,
@@ -74,8 +73,6 @@ For example, a list of two database connection arguments for "observe_main" and 
 \item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
-
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 

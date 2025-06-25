@@ -21,7 +21,6 @@ t3_level1(
   log_path = NULL,
   log_name = "t3_level1",
   output_path = NULL,
-  output_format = "eu",
   new_directory = FALSE,
   integrated_process = FALSE,
   referential_template = "observe"
@@ -63,8 +62,6 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{log_name}{Object of class {\link[base]{character}} expected. Name of the log file. By default "t3_level1".}
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
-
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
