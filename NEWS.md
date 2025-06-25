@@ -7,6 +7,10 @@
 * Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
 [full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
 
+## Removed
+
+* Remove argument `output_format="eu"/"us"` to uniformize output format with `sep=","` and `dec="."`.
+
 # t3 3.0.2 - 2025-05-21
 
 ## Changed
