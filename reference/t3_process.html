@@ -112,9 +112,10 @@
 <span>  threshold_frequency_rf_plus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">75</span><span class="op">)</span>,</span>
 <span>  threshold_rf_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">250</span><span class="op">)</span>,</span>
 <span>  periode_reference_level3 <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">target_year</span>,</span>
+<span>  target_year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  target_ocean <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">period_duration</span>,</span>
+<span>  country_flag <span class="op">=</span> <span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  period_duration <span class="op">=</span> <span class="fl">4L</span>,</span>
 <span>  distance_maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>  number_sets_maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>  set_weight_minimum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>,</span>
@@ -276,6 +277,10 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 
 <dt id="arg-target-ocean">target_ocean<a class="anchor" aria-label="anchor" href="#arg-target-ocean"></a></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. The code of ocean of interest.</p></dd>
+
+
+<dt id="arg-country-flag">country_flag<a class="anchor" aria-label="anchor" href="#arg-country-flag"></a></dt>
+<dd><p>Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.</p></dd>
 
 
 <dt id="arg-period-duration">period_duration<a class="anchor" aria-label="anchor" href="#arg-period-duration"></a></dt>
