@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Logbooks standardisation
 
-The first level of the t3 process aim to standardize logbook data. These standardization was divided into 8 steps:
+The first level of the t3 process aim to standardize logbook data. These standardization was divided into 4 steps:
 
 | Process                                           | Code/method associated         | Class(es) associated | Observations |
 |---------------------------------------------------|--------------------------------|----------------------|--------------|
@@ -34,7 +34,7 @@ The first level of the t3 process aim to standardize logbook data. These standar
 
 #### Raising Factor  (rf1) ratio of landing weight on catch weight
 
-Catches filled in logbooks are based on visual estimations when they rise from the purse seiner salabard. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
+Catches filled in logbooks are based on visual estimations when they rise from the purse seiner brailing. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
 Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
 

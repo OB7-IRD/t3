@@ -51,11 +51,6 @@ reference:
   - wells
   - wellset
   - wellsets
-- title: "Typing verification"
-  desc: >
-    Functions for typing verification. Used before class creations for checking attributes consistency.
-- contents:
-  - starts_with("check_")
 - title: "Diverse"
   desc: >
     Diverse functions and tools.
@@ -63,6 +58,13 @@ reference:
   - object_r6
   - initiate_log_file
   - initiate_directory
+- title: "Data"
+  desc: >
+    Referential tables used in t3 process.
+- contents:
+  - length_step
+  - length_weight_relationship
+  - set_duration_ref
 
 url: https://ob7-ird.github.io/t3
 

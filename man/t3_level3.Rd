@@ -74,9 +74,9 @@ t3_level3(
 
 \item{small_fish_only}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 
-\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = FALSE.}
 
-\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database}
+\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database.}
 
 \item{ci}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
