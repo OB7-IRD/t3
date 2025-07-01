@@ -3,9 +3,9 @@
 \docType{data}
 \name{length_step}
 \alias{length_step}
-\title{Referential conversion table **LD1 to LF**}
+\title{Referential conversion table LD1 to LF}
 \format{
-**`length_step`**:
+`length_step`:
 A data frame with 3951 rows and 6 columns:
 \describe{
   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
@@ -35,8 +35,17 @@ This table are expressed and used through a stratification by ocean and specie.
 For one LD1 length class measured we can have several LF length classes associated, according to the distribution ratio.
 That mean that in our data processed the number of sampling item could rise.
 Furthermore, tunas regional fisheries management organisations,
-like International Commission for the Conservation of Atlantic Tunas ([ICCAT](https://www.iccat.int/))
- or the Indian Ocean Tuna Commission ([IOTC](https://iotc.org/)), have validated conversion factors for types of size measurements.
+like International Commission for the Conservation of Atlantic Tunas (\href{https://www.iccat.int/}{ICCAT})
+ or the Indian Ocean Tuna Commission (\href{https://iotc.org/}{IOTC}), have validated conversion factors for types of size measurements.
 One of our next update will be to modify the process according theses formula.
 }
-\keyword{datasets}
+\keyword{(LD1)}
+\keyword{(LF)}
+\keyword{class}
+\keyword{conversion}
+\keyword{curved}
+\keyword{dorsal}
+\keyword{first}
+\keyword{fork}
+\keyword{length}
+\keyword{sample}

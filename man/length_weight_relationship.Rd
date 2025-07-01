@@ -3,9 +3,9 @@
 \docType{data}
 \name{length_weight_relationship}
 \alias{length_weight_relationship}
-\title{Referential **LWR** (length weight relationship) table}
+\title{Referential LWR (length weight relationship) table}
 \format{
-## **`length_weight_relationship`**:
+## `length_weight_relationship`:
 A data frame with 40 rows and 7 columns:
 \describe{
   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
@@ -13,8 +13,8 @@ A data frame with 40 rows and 7 columns:
   \item{species_code}{Species code, type \code{\link[base]{integer}}.}
   \item{species_fao_code}{Species FAO code, type \code{\link[base]{character}}.}
   \item{length_weight_formula}{LWR formula form, type \code{\link[base]{character}}.}
-   \item{lwr_a}{Parameter a of LWR formula, type \code{\link[base]{double}}.}
-    \item{lwr_b}{Parameter b of LWR formula, type \code{\link[base]{double}}.}
+  \item{lwr_a}{Parameter a of LWR formula, type \code{\link[base]{double}}.}
+  \item{lwr_b}{Parameter b of LWR formula, type \code{\link[base]{double}}.}
 }
 }
 \usage{
@@ -31,6 +31,8 @@ Formula associated are the following one:
 }
 }
 \details{
-More detail information could be find on the regional fisheries management organisations (RFMOs) like [ICCAT](https://www.iccat.int/) or [IOTC](https://iotc.org/).
+More detail information could be find on the regional fisheries management organisations (RFMOs) like \href{https://www.iccat.int/}{ICCAT} or \href{https://iotc.org/}{IOTC}.
 }
-\keyword{datasets}
+\keyword{length}
+\keyword{relationship}
+\keyword{weight}

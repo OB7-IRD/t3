@@ -1,4 +1,4 @@
-#' Referential conversion table **LD1 to LF**
+#' Referential conversion table LD1 to LF
 #'
 #' During the sampling process, fishes length can be collected and expressed in different standards.
 #' For example, regarding field constraints and more precisely the length of the different species,
@@ -8,7 +8,7 @@
 #' To standardize this standard among sampling data and at the end have only length sampling data expressed in LF,
 #' the process use this referential conversion table LD1 to LF.
 #'
-#' @format **`length_step`**:
+#' @format `length_step`:
 #' A data frame with 3951 rows and 6 columns:
 #' \describe{
 #'   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
@@ -26,13 +26,13 @@
 #' For one LD1 length class measured we can have several LF length classes associated, according to the distribution ratio.
 #' That mean that in our data processed the number of sampling item could rise.
 #' Furthermore, tunas regional fisheries management organisations,
-#' like International Commission for the Conservation of Atlantic Tunas ([ICCAT](https://www.iccat.int/))
-#'  or the Indian Ocean Tuna Commission ([IOTC](https://iotc.org/)), have validated conversion factors for types of size measurements.
+#' like International Commission for the Conservation of Atlantic Tunas (\href{https://www.iccat.int/}{ICCAT})
+#'  or the Indian Ocean Tuna Commission (\href{https://iotc.org/}{IOTC}), have validated conversion factors for types of size measurements.
 #' One of our next update will be to modify the process according theses formula.
-#'
+#' @keywords conversion sample length class first dorsal length (LD1) curved fork length (LF)
 "length_step"
 
-#' Referential **LWR** (length weight relationship) table
+#' Referential LWR (length weight relationship) table
 #'
 #' Conversion of the samples length measurements in weight by length weight relationship (LWR).
 #' Formula associated are the following one:
@@ -43,7 +43,7 @@
 #'   \item{a, b}{parameters from the reference table, dependent of of the species and potentially of the area (ocean or others) and the season.}
 #' }
 #'
-#' @format ## **`length_weight_relationship`**:
+#' @format ## `length_weight_relationship`:
 #' A data frame with 40 rows and 7 columns:
 #' \describe{
 #'   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
@@ -55,18 +55,18 @@
 #'   \item{lwr_b}{Parameter b of LWR formula, type \code{\link[base]{double}}.}
 #' }
 #' @usage data(length_weight_relationship, package="t3")
-#' @details More detail information could be find on the regional fisheries management organisations (RFMOs) like [ICCAT](https://www.iccat.int/) or [IOTC](https://iotc.org/).
-#'
+#' @details More detail information could be find on the regional fisheries management organisations (RFMOs) like \href{https://www.iccat.int/}{ICCAT} or \href{https://iotc.org/}{IOTC}.
+#' @keywords length weight relationship
 "length_weight_relationship"
 
-#' Referential **set duration** table
+#' Referential set duration table
 #'
 #' The set duration (min) is calculated from catch weight (t), according to a linear function with two parameters a and b:
 #' \eqn{set_duration = a \times catch_weight + b}{set_duration = a x catch_weight + b}.
 #' These are found through this reference table, for each year, ocean, fishing school and country.
 #' Furthermore, a specific value provided for a null set (a fishing set without any catches associated).
 #'
-#' @format ## **`set_duration_ref`**:
+#' @format ## `set_duration_ref`:
 #' A data frame with 819 rows and 9 columns:
 #' \describe{
 #'  \item{year}{Year, type \code{\link[base]{integer}}.}
@@ -80,6 +80,6 @@
 #'   \item{null_set_value}{Specific duration value (min) provided for a null set (a fishing set without any catches associated), type \code{\link[base]{double}}.}
 #' }
 #' @usage data(set_duration_ref, package="t3")
-#'
+#' @keywords set duration
 "set_duration_ref"
 

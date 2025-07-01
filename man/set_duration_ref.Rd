@@ -3,9 +3,9 @@
 \docType{data}
 \name{set_duration_ref}
 \alias{set_duration_ref}
-\title{Referential **set duration** table}
+\title{Referential set duration table}
 \format{
-## **`set_duration_ref`**:
+## `set_duration_ref`:
 A data frame with 819 rows and 9 columns:
 \describe{
  \item{year}{Year, type \code{\link[base]{integer}}.}
@@ -28,4 +28,5 @@ The set duration (min) is calculated from catch weight (t), according to a linea
 These are found through this reference table, for each year, ocean, fishing school and country.
 Furthermore, a specific value provided for a null set (a fishing set without any catches associated).
 }
-\keyword{datasets}
+\keyword{duration}
+\keyword{set}
