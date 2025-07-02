@@ -9,6 +9,8 @@ select
   ,l.startdate::text as formula_startdate
 	,l.enddate::text as formula_enddate
 	,l.source::text as formula_source
+	,l.topiaid::text as lwr_id
+
 from
 	common.lengthweightparameter l
 	join common.species s on (l.species = s.topiaid)
