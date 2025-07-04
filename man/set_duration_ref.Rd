@@ -5,8 +5,7 @@
 \alias{set_duration_ref}
 \title{Referential set duration table}
 \format{
-## `set_duration_ref`:
-A data frame with 819 rows and 9 columns:
+set_duration_ref: data frame with 819 rows and 9 columns:
 \describe{
  \item{year}{Year, type \code{\link[base]{integer}}.}
   \item{flag_code}{Country code, type \code{\link[base]{integer}}.}
@@ -23,10 +22,10 @@ A data frame with 819 rows and 9 columns:
 data(set_duration_ref, package="t3")
 }
 \description{
-The set duration (min) is calculated from catch weight (t), according to a linear function with two parameters a and b:
-\eqn{set_duration = a \times catch_weight + b}{set_duration = a x catch_weight + b}.
-These are found through this reference table, for each year, ocean, fishing school and country.
-Furthermore, a specific value provided for a null set (a fishing set without any catches associated).
+The set duration (min) is calculated from catch weight (t), according to a linear function with two parameters a and b:\cr
+\eqn{set_duration = a \times catch_weight + b}{set_duration = a x catch_weight + b}.\cr
+These are found through this reference table, for each year, ocean, fishing school and country.\cr
+Furthermore, a specific value provided for a null set (a fishing set without any catches associated).\cr
 }
 \keyword{duration}
 \keyword{set}

@@ -187,6 +187,72 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+ \itemize{
+ \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:}
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
+ \item{activity_id: } activity topiaid, type \code{\link[base]{character}}.
+ \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
+ \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
+ \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+ , type \code{\link[base]{double}}.
+ \item{statut_rf1: } statut rf1, type \code{\link[base]{double}}.
+ \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{double}}.
+ \item{statut_rf2: } statut rf2, type \code{\link[base]{double}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{elementarycatch_id: } elementary catch topiaid, type \code{\link[base]{character}}.
+ \item{species_fate_code: } species fate codes, type \code{\link[base]{integer}}.
+ For example in Observe database :  \itemize{
+ \item{4 : } discarded alive.
+ \item{5 : } discarded dead.
+ \item{6 : } Retained, presumably destined for the cannery
+ \item{8 : } used for crew consumption on board.
+ \item{11 : } discarded statut unknown (only for EMS and logbook).
+ \item{15 : } retained for local market or dried/salted fish on board.
+ }
+ \item{landing_weight: } landing weight (without local market), type \code{\link[base]{double}}.
+ \item{catch_weight: } catch weight (visual estimation), type \code{\link[base]{double}}.
+ \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+ \item{catch_weight_rf2: } catch weight after visual estimation correction : \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+ (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{double}}.
+ \item{statut_rf1_label: } statut rf1 label, type \code{\link[base]{character}}.
+ \item{statut_rf2_label: } statut rf2 label, type \code{\link[base]{character}}.
+ }
+ \item{process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:}
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+, type \code{\link[base]{double}}.
+ \item{statut_rf1: } statut rf1, type \code{\link[base]{double}}.
+ \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{double}}.
+ \item{statut_rf2: } statut rf2, type \code{\link[base]{double}}.
+ \item{landing_weight: } landing weight (without local market), type \code{\link[base]{double}}.
+ \item{catch_weight: } catch weight (visual estimation), type \code{\link[base]{double}}.
+ \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+ \item{catch_weight_rf2: } catch weight after visual estimation correction : \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+ (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{double}}.
+ \item{statut_rf1_label: } statut rf1 label, type \code{\link[base]{character}}.
+ \item{statut_rf2_label: } statut rf2 label, type \code{\link[base]{character}}.
+ }
+ }
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-full_trips-conversion_weight_category"></a>}}
@@ -286,7 +352,7 @@ Available variables are:
  \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
  \item{"nightEnd": } night ends (morning astronomical twilight starts)
  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
- \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
+ \item{"dawn": }
  }
 }
 

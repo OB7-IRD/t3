@@ -5,8 +5,7 @@
 \alias{length_weight_relationship}
 \title{Referential LWR (length weight relationship) table}
 \format{
-## `length_weight_relationship`:
-A data frame with 40 rows and 7 columns:
+length_weight_relationship: data frame with 40 rows and 7 columns:
 \describe{
   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
   \item{ocean_label}{Ocean label ("Atlantic" or "Indian"), type \code{\link[base]{character}}.}
@@ -21,8 +20,8 @@ A data frame with 40 rows and 7 columns:
 data(length_weight_relationship, package="t3")
 }
 \description{
-Conversion of the samples length measurements in weight by length weight relationship (LWR).
-Formula associated are the following one:
+Conversion of the samples length measurements in weight by length weight relationship (LWR).\cr
+Formula associated are the following one:\cr
 \eqn{RWT=a \times LF^b}{RWT=a x LF^b} where:
 \describe{
   \item{RWT}{is the round weight (kg)}

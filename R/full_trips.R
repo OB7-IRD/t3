@@ -485,10 +485,77 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  \itemize{
+                            #'  \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:}
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity topiaid, type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
+                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #'  , type \code{\link[base]{double}}.
+                            #'  \item{statut_rf1: } statut rf1, type \code{\link[base]{double}}.
+                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{double}}.
+                            #'  \item{statut_rf2: } statut rf2, type \code{\link[base]{double}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{elementarycatch_id: } elementary catch topiaid, type \code{\link[base]{character}}.
+                            #'  \item{species_fate_code: } species fate codes, type \code{\link[base]{integer}}.
+                            #'  For example in Observe database :  \itemize{
+                            #'  \item{4 : } discarded alive.
+                            #'  \item{5 : } discarded dead.
+                            #'  \item{6 : } Retained, presumably destined for the cannery
+                            #'  \item{8 : } used for crew consumption on board.
+                            #'  \item{11 : } discarded statut unknown (only for EMS and logbook).
+                            #'  \item{15 : } retained for local market or dried/salted fish on board.
+                            #'  }
+                            #'  \item{landing_weight: } landing weight (without local market), type \code{\link[base]{double}}.
+                            #'  \item{catch_weight: } catch weight (visual estimation), type \code{\link[base]{double}}.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction : \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{double}}.
+                            #'  \item{statut_rf1_label: } statut rf1 label, type \code{\link[base]{character}}.
+                            #'  \item{statut_rf2_label: } statut rf2 label, type \code{\link[base]{character}}.
+                            #'  }
+                            #'  \item{process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:}
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #' , type \code{\link[base]{double}}.
+                            #'  \item{statut_rf1: } statut rf1, type \code{\link[base]{double}}.
+                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{double}}.
+                            #'  \item{statut_rf2: } statut rf2, type \code{\link[base]{double}}.
+                            #'  \item{landing_weight: } landing weight (without local market), type \code{\link[base]{double}}.
+                            #'  \item{catch_weight: } catch weight (visual estimation), type \code{\link[base]{double}}.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction : \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{double}}.
+                            #'  \item{statut_rf1_label: } statut rf1 label, type \code{\link[base]{character}}.
+                            #'  \item{statut_rf2_label: } statut rf2 label, type \code{\link[base]{character}}.
+                            #'  }
+                            #'  }
                             #' @importFrom codama r_type_checking
                             rf1 = function(rf1_computation = TRUE,
                                            apply_rf1_on_bycatch = TRUE,
-                                           species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
+                                           species_fao_codes_rf1 = c("YFT", "SKJ",
+                                                                     "BET", "ALB",
+                                                                     "LOT", "MIX",
+                                                                     "TUN"),
                                            species_fate_codes_rf1 = as.integer(6),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
@@ -842,6 +909,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         } else {
                                           current_total_catches_species_activities <- current_elementarycatches %>%
                                             dplyr::select(activity_id,
+                                                          elementarycatch_id,
                                                           species_fao_code,
                                                           species_fate_code,
                                                           catch_weight,
@@ -872,6 +940,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              activity_id = NA_character_,
                                                                                                              activity_latitude = NA_real_,
                                                                                                              activity_longitude = NA_real_,
+                                                                                                             elementarycatch_id = NA_character_,
                                                                                                              species_fate_code = NA_integer_,
                                                                                                              catch_weight = NA_real_,
                                                                                                              catch_count = NA_real_,
@@ -1051,6 +1120,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
                                                                                  y = total_landings_catches,
                                                                                  by = "trip_id")
+                                  ######  Add label for rf1 and rf2 statut ######
+                                  rf1_statut <- data.frame(statut_rf1=c(1.1,1.2,1.3,1.4,2.1,2.2,2.3,2.4,3.1),
+                                                           statut_rf1_label=c("logbook(s) missing in not complete full trip",
+                                                                              "trip(s) without catch (e.g. route or support) in not complete full trip",
+                                                                              "elementary landing(s) missing in not complete full trip",
+                                                                              "partial trip(s) missing (not complete full trip)",
+                                                                              "logbook(s) missing in complete full trip",
+                                                                              "trip(s) without catch (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip",
+                                                                              "elementary landing(s) missing  (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip",
+                                                                              "complete full trip without missing data",
+                                                                              "vessel type code not corresponding to the argument vessel_type_codes_rf1"))
+
+
+                                  rf2_statut <- data.frame(statut_rf2=c(1, 2,3),
+                                                           statut_rf2_label=c("logbook(s) missing, rf2 must to be calculated",
+                                                                              "no missing logbook, rf2 no need to be calculated",
+                                                                              " full trip not complete or vessel type code not validated"))
+                          global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                         y = rf1_statut,
+                                                                         by = "statut_rf1")
+                          global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                         y = rf2_statut,
+                                                                         by = "statut_rf2")
                                   detail_outputs_process_1_1 <- outputs_process_1_1 %>%
                                     dplyr::full_join(x = outputs_process_1_1,
                                                      y = total_landings_catches_species_activities,
@@ -1061,6 +1153,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     .after = trip_id) %>%
                                     dplyr::relocate(landing_weight,
                                                     .after = species_fate_code)
+                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
+                                                                                 y = rf1_statut,
+                                                                                 by = "statut_rf1")
+                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
+                                                                                 y = rf2_statut,
+                                                                                 by = "statut_rf2")
                                   # extraction
                                   outputs_dec <- "."
                                   outputs_sep <- ","
@@ -1897,7 +1995,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
                             #'  \item{"nightEnd": } night ends (morning astronomical twilight starts)
                             #'  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
-                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
+                            #'  \item{"dawn": }
                             #'  }
                             fishing_effort = function(set_duration_ref,
                                                       activity_code_ref,

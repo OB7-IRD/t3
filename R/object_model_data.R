@@ -1854,7 +1854,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start set duration(s) data importation from csv file.\n")
-                                       set_duration_ref_data <- read.csv2(file = data_path,
+                                       set_duration_ref_data <- read.csv(file = data_path,
                                                                           stringsAsFactors = FALSE)
                                        if (nrow(x = set_duration_ref_data) == 0) {
                                          stop(format(x = Sys.time(),
@@ -1961,7 +1961,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start length step(s) data importation from csv file.\n")
-                                       lengthstep_data <- read.csv2(file = data_path,
+                                       lengthstep_data <- read.csv(file = data_path,
                                                                     stringsAsFactors = FALSE)
                                        if (nrow(x = lengthstep_data) == 0) {
                                          stop(format(x = Sys.time(),
@@ -2369,7 +2369,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start length weight relationship(s) data importation from csv file.\n")
-                                       lengthweightrelationship_data <- read.csv2(file = data_path,
+                                       lengthweightrelationship_data <- read.csv(file = data_path,
                                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
                                          stop(format(x = Sys.time(),

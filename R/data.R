@@ -1,15 +1,14 @@
 #' Referential conversion table LD1 to LF
 #'
-#' During the sampling process, fishes length can be collected and expressed in different standards.
+#' During the sampling process, fishes length can be collected and expressed in different standards.\cr
 #' For example, regarding field constraints and more precisely the length of the different species,
-#' sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).
+#' sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
 #' Generally, length of small individuals are provided in LF because it’s logistically possible and easier to measure the entire fish,
-#' while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
+#' while length of bigger individuals are provided in LD1, for the same reciprocal reasons.\cr
 #' To standardize this standard among sampling data and at the end have only length sampling data expressed in LF,
 #' the process use this referential conversion table LD1 to LF.
 #'
-#' @format `length_step`:
-#' A data frame with 3951 rows and 6 columns:
+#' @format length_step: data frame with 3951 rows and 6 columns:
 #' \describe{
 #'   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
 #'   \item{species_code}{Species code, type \code{\link[base]{integer}}.}
@@ -22,9 +21,9 @@
 #' }
 #' @usage data(length_step, package="t3")
 #' @details
-#' This table are expressed and used through a stratification by ocean and specie.
+#' This table are expressed and used through a stratification by ocean and specie.\cr
 #' For one LD1 length class measured we can have several LF length classes associated, according to the distribution ratio.
-#' That mean that in our data processed the number of sampling item could rise.
+#' That mean that in our data processed the number of sampling item could rise.\cr
 #' Furthermore, tunas regional fisheries management organisations,
 #' like International Commission for the Conservation of Atlantic Tunas (\href{https://www.iccat.int/}{ICCAT})
 #'  or the Indian Ocean Tuna Commission (\href{https://iotc.org/}{IOTC}), have validated conversion factors for types of size measurements.
@@ -34,8 +33,8 @@
 
 #' Referential LWR (length weight relationship) table
 #'
-#' Conversion of the samples length measurements in weight by length weight relationship (LWR).
-#' Formula associated are the following one:
+#' Conversion of the samples length measurements in weight by length weight relationship (LWR).\cr
+#' Formula associated are the following one:\cr
 #' \eqn{RWT=a \times LF^b}{RWT=a x LF^b} where:
 #' \describe{
 #'   \item{RWT}{is the round weight (kg)}
@@ -43,8 +42,7 @@
 #'   \item{a, b}{parameters from the reference table, dependent of of the species and potentially of the area (ocean or others) and the season.}
 #' }
 #'
-#' @format ## `length_weight_relationship`:
-#' A data frame with 40 rows and 7 columns:
+#' @format length_weight_relationship: data frame with 40 rows and 7 columns:
 #' \describe{
 #'   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
 #'   \item{ocean_label}{Ocean label ("Atlantic" or "Indian"), type \code{\link[base]{character}}.}
@@ -61,13 +59,12 @@
 
 #' Referential set duration table
 #'
-#' The set duration (min) is calculated from catch weight (t), according to a linear function with two parameters a and b:
-#' \eqn{set_duration = a \times catch_weight + b}{set_duration = a x catch_weight + b}.
-#' These are found through this reference table, for each year, ocean, fishing school and country.
-#' Furthermore, a specific value provided for a null set (a fishing set without any catches associated).
+#' The set duration (min) is calculated from catch weight (t), according to a linear function with two parameters a and b:\cr
+#' \eqn{set_duration = a \times catch_weight + b}{set_duration = a x catch_weight + b}.\cr
+#' These are found through this reference table, for each year, ocean, fishing school and country.\cr
+#' Furthermore, a specific value provided for a null set (a fishing set without any catches associated).\cr
 #'
-#' @format ## `set_duration_ref`:
-#' A data frame with 819 rows and 9 columns:
+#' @format set_duration_ref: data frame with 819 rows and 9 columns:
 #' \describe{
 #'  \item{year}{Year, type \code{\link[base]{integer}}.}
 #'   \item{flag_code}{Country code, type \code{\link[base]{integer}}.}

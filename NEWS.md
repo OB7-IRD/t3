@@ -1,7 +1,12 @@
-# t3 3.0.3 - 2025-06-12
+
+# t3 3.0.3 - 2025-07-04
 
 ## Added
 * Add the argument apply_rf1_on_bycatch=TRUE/FALSE, in the method [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1) By default TRUE, the raising factor value, calculated for each trip, is applied to all the logbook catches associated to the trip, including by-catch species. If FALSE, only the catch weights of species belonging to the species list defined by the `species_fao_codes_rf1` argument are corrected, rf1 is not applied to by-catch species.
+* Improve documentation :
+  - Add reference table's documentation and easy access :`data(package="t3")`.
+  - Add documentation about outputs in ".csv"" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
+  - Add "elementarycatch_id", "statut_rf1_label",  "statut_rf2_label" columns, in ".csv" output named "process_1_1_detail", of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1). 
 
 ## Changed
 * Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:

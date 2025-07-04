@@ -5,8 +5,7 @@
 \alias{length_step}
 \title{Referential conversion table LD1 to LF}
 \format{
-`length_step`:
-A data frame with 3951 rows and 6 columns:
+length_step: data frame with 3951 rows and 6 columns:
 \describe{
   \item{ocean_code}{Ocean code, type \code{\link[base]{integer}}. For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean}
   \item{species_code}{Species code, type \code{\link[base]{integer}}.}
@@ -22,18 +21,18 @@ A data frame with 3951 rows and 6 columns:
 data(length_step, package="t3")
 }
 \description{
-During the sampling process, fishes length can be collected and expressed in different standards.
+During the sampling process, fishes length can be collected and expressed in different standards.\cr
 For example, regarding field constraints and more precisely the length of the different species,
-sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).
+sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
 Generally, length of small individuals are provided in LF because it’s logistically possible and easier to measure the entire fish,
-while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
+while length of bigger individuals are provided in LD1, for the same reciprocal reasons.\cr
 To standardize this standard among sampling data and at the end have only length sampling data expressed in LF,
 the process use this referential conversion table LD1 to LF.
 }
 \details{
-This table are expressed and used through a stratification by ocean and specie.
+This table are expressed and used through a stratification by ocean and specie.\cr
 For one LD1 length class measured we can have several LF length classes associated, according to the distribution ratio.
-That mean that in our data processed the number of sampling item could rise.
+That mean that in our data processed the number of sampling item could rise.\cr
 Furthermore, tunas regional fisheries management organisations,
 like International Commission for the Conservation of Atlantic Tunas (\href{https://www.iccat.int/}{ICCAT})
  or the Indian Ocean Tuna Commission (\href{https://iotc.org/}{IOTC}), have validated conversion factors for types of size measurements.
