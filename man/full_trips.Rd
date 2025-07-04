@@ -349,10 +349,10 @@ Available variables are:
  \item{"dusk": } dusk (evening nautical twilight starts)
  \item{"nauticalDusk": } nautical dusk (evening astronomical twilight starts)
  \item{"night": } night starts (dark enough for astronomical observations)
- \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
+ \item{"nadir": } nadir (darkest moment of the night, sun is in the lowest position)
  \item{"nightEnd": } night ends (morning astronomical twilight starts)
  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
- \item{"dawn": }
+ \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
  }
 }
 
