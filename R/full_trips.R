@@ -6158,9 +6158,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @importFrom sp coordinates fullgrid gridded SpatialPoints CRS proj4string spTransform
                             #' @importFrom ranger ranger predictions importance
                             #' @importFrom adehabitatHR kernelUD getvolumeUD
-                            #' @importFrom automap autoKrige
                             #' @importFrom sf st_as_sf
                             #' @import ggplot2
+#                             @importFrom automap autoKrige
                             models_checking = function(output_level3_process2,
                                                        output_directory,
                                                        plot_sample = FALSE,
@@ -6449,76 +6449,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 units = c("cm"))
                                 current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
                                                                               list("reporting_vs_sampling" = reporting_vs_sampling))
-                                # map of the data used for modelling
-                                if(plot_sample == TRUE){
-                                  current_data_map <- current_model_data
-                                  sp::coordinates(obj = current_data_map) <- ~ lon + lat
-                                  ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
-                                                                grid = 500)
-                                  ker2 <- adehabitatHR::getvolumeUD(x = ker)
-                                  grid <- as(object = ker2,
-                                             Class = "SpatialPixelsDataFrame")
-                                  newgrid <- grid
-                                  sp::fullgrid(obj = newgrid) <- FALSE
-                                  sp::gridded(obj = newgrid) <- FALSE
-                                  newgrid[newgrid$n > 99] <- NA
-                                  newgrid <- newgrid[ !is.na(newgrid$n), ]
-                                  krig <- automap::autoKrige(formula = resp ~ 1,
-                                                             input_data = current_data_map,
-                                                             new_data = newgrid)
-                                  interp_data <- as.data.frame(krig$krige_output)
-                                  colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
-                                  # correct for abnormal fitted value with kriging
-                                  interp_data$fit[interp_data$fit > 1] <- 1
-                                  load(file = system.file("wrld_simpl.RData",
-                                                          package = "t3"))
-                                  wrld_sf <- sf::st_as_sf(wrld_simpl)
-                                  set_sampled_map <- ggplot2::ggplot() +
-                                    ggplot2::geom_tile(data = interp_data,
-                                                       ggplot2::aes(x = lon,
-                                                                    y = lat,
-                                                                    fill = fit),
-                                                       color = NA) +
-                                    ggplot2::scale_fill_gradient2(low = "blue",
-                                                                  mid = "white",
-                                                                  high = "red",
-                                                                  midpoint = mean(interp_data$fit),
-                                                                  name = "Proportion") +
-                                    ggplot2::geom_point(data = current_model_data,
-                                                        ggplot2::aes(x = lon,
-                                                                     y = lat),
-                                                        color = "black",
-                                                        size = 0.3) +
-                                    ggplot2::geom_sf(data = wrld_sf) +
-                                    ggplot2::coord_sf(xlim = c(min(interp_data$lon),
-                                                               max(interp_data$lon)),
-                                                      ylim = c(min(interp_data$lat),
-                                                               max(interp_data$lat))) +
-                                    ggplot2::labs(x = NULL,
-                                                  y = NULL,
-                                                  subtitle = paste(specie,
-                                                                   ocean,
-                                                                   fishing_mode,
-                                                                   period,
-                                                                   sep = "_")) +
-                                    ggplot2::theme_classic()
-                                  ggplot2::ggsave(plot = set_sampled_map,
-                                                  file = file.path(figure_directory,
-                                                                   paste("set_sampled_map_",
-                                                                         ocean,
-                                                                         "_",
-                                                                         specie,
-                                                                         "_",
-                                                                         fishing_mode,
-                                                                         ".jpeg",
-                                                                         sep = "")),
-                                                  width = 18,
-                                                  height = 10,
-                                                  units = c("cm"),
-                                                  pointsize = 10)
-                                  current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
-                                                                                list("set_sampled_map" = set_sampled_map))
-                                }
+                                # # map of the data used for modelling
+                                # if(plot_sample == TRUE){
+                                #   current_data_map <- current_model_data
+                                #   sp::coordinates(obj = current_data_map) <- ~ lon + lat
+                                #   ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
+                                #                                 grid = 500)
+                                #   ker2 <- adehabitatHR::getvolumeUD(x = ker)
+                                #   grid <- as(object = ker2,
+                                #              Class = "SpatialPixelsDataFrame")
+                                #   newgrid <- grid
+                                #   sp::fullgrid(obj = newgrid) <- FALSE
+                                #   sp::gridded(obj = newgrid) <- FALSE
+                                #   newgrid[newgrid$n > 99] <- NA
+                                #   newgrid <- newgrid[ !is.na(newgrid$n), ]
+                                #   krig <- automap::autoKrige(formula = resp ~ 1,
+                                #                              input_data = current_data_map,
+                                #                              new_data = newgrid)
+                                #   interp_data <- as.data.frame(krig$krige_output)
+                                #   colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
+                                #   # correct for abnormal fitted value with kriging
+                                #   interp_data$fit[interp_data$fit > 1] <- 1
+                                #   load(file = system.file("wrld_simpl.RData",
+                                #                           package = "t3"))
+                                #   wrld_sf <- sf::st_as_sf(wrld_simpl)
+                                #   set_sampled_map <- ggplot2::ggplot() +
+                                #     ggplot2::geom_tile(data = interp_data,
+                                #                        ggplot2::aes(x = lon,
+                                #                                     y = lat,
+                                #                                     fill = fit),
+                                #                        color = NA) +
+                                #     ggplot2::scale_fill_gradient2(low = "blue",
+                                #                                   mid = "white",
+                                #                                   high = "red",
+                                #                                   midpoint = mean(interp_data$fit),
+                                #                                   name = "Proportion") +
+                                #     ggplot2::geom_point(data = current_model_data,
+                                #                         ggplot2::aes(x = lon,
+                                #                                      y = lat),
+                                #                         color = "black",
+                                #                         size = 0.3) +
+                                #     ggplot2::geom_sf(data = wrld_sf) +
+                                #     ggplot2::coord_sf(xlim = c(min(interp_data$lon),
+                                #                                max(interp_data$lon)),
+                                #                       ylim = c(min(interp_data$lat),
+                                #                                max(interp_data$lat))) +
+                                #     ggplot2::labs(x = NULL,
+                                #                   y = NULL,
+                                #                   subtitle = paste(specie,
+                                #                                    ocean,
+                                #                                    fishing_mode,
+                                #                                    period,
+                                #                                    sep = "_")) +
+                                #     ggplot2::theme_classic()
+                                #   ggplot2::ggsave(plot = set_sampled_map,
+                                #                   file = file.path(figure_directory,
+                                #                                    paste("set_sampled_map_",
+                                #                                          ocean,
+                                #                                          "_",
+                                #                                          specie,
+                                #                                          "_",
+                                #                                          fishing_mode,
+                                #                                          ".jpeg",
+                                #                                          sep = "")),
+                                #                   width = 18,
+                                #                   height = 10,
+                                #                   units = c("cm"),
+                                #                   pointsize = 10)
+                                #   current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                #                                                 list("set_sampled_map" = set_sampled_map))
+                                # }
                                 ## model checking ----
                                 if(specie != "BET"){
                                   # compute model residuals
