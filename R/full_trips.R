@@ -1995,7 +1995,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"nadir": } nadir (darkest moment of the night, sun is in the lowest position)
                             #'  \item{"nightEnd": } night ends (morning astronomical twilight starts)
                             #'  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
-                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
+                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
                             #'  }
                             fishing_effort = function(set_duration_ref,
                                                       activity_code_ref,
