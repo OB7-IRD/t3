@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.4</span>
       </span>
     </div>
 
@@ -265,6 +265,65 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
+<p>If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br></p><ul><li><p>process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
+ , type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf1:  statut rf1, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf2:  statut rf2, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>elementarycatch_id:  elementary catch topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fate_code:  species fate codes, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+ For example in Observe database :</p><ul><li><p>4 :  discarded alive.</p></li>
+<li><p>5 :  discarded dead.</p></li>
+<li><p>6 :  Retained, presumably destined for the cannery</p></li>
+<li><p>8 :  used for crew consumption on board.</p></li>
+<li><p>11 :  discarded statut unknown (only for EMS and logbook).</p></li>
+<li><p>15 :  retained for local market or dried/salted fish on board.</p></li>
+</ul></li>
+<li><p>landing_weight:  landing weight (without local market), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>catch_weight:  catch weight (visual estimation), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction : <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1</a>), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf1_label:  statut rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>statut_rf2_label:  statut rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul></li>
+<li><p>process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
+, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf1:  statut rf1, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf2:  statut rf2, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>landing_weight:  landing weight (without local market), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>catch_weight:  catch weight (visual estimation), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction : <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1"><code>full_trips$rf1()</code></a>), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>statut_rf1_label:  statut rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>statut_rf2_label:  statut rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-conversion_weight_category"></a><div class="section">
 <h3 id="method-conversion-weight-category-">Method <code>conversion_weight_category()</code><a class="anchor" aria-label="anchor" href="#method-conversion-weight-category-"></a></h3>
@@ -360,7 +419,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
+<h4 id="details-1">Details<a class="anchor" aria-label="anchor" href="#details-1"></a></h4>
 <p>Available variables are:</p><ul><li><p>"sunrise":  sunrise (top edge of the sun appears on the horizon)</p></li>
 <li><p>"sunriseEnd":  sunrise ends (bottom edge of the sun touches the horizon)</p></li>
 <li><p>"goldenHourEnd":  morning golden hour ends(soft light, best time for photography)</p></li>
@@ -371,10 +430,10 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>"dusk":  dusk (evening nautical twilight starts)</p></li>
 <li><p>"nauticalDusk":  nautical dusk (evening astronomical twilight starts)</p></li>
 <li><p>"night":  night starts (dark enough for astronomical observations)</p></li>
-<li><p>"nadir": nadir (darkest moment of the night, sun is in the lowest position)</p></li>
+<li><p>"nadir":  nadir (darkest moment of the night, sun is in the lowest position)</p></li>
 <li><p>"nightEnd":  night ends (morning astronomical twilight starts)</p></li>
 <li><p>"nauticalDawn":  nautical dawn (morning nautical twilight starts)</p></li>
-<li><p>"dawn":  dawn (morning nautical twilight ends, morning civil twilight starts</p></li>
+<li><p>"dawn":  dawn (morning nautical twilight ends, morning civil twilight starts)</p></li>
 </ul></div>
 
 
