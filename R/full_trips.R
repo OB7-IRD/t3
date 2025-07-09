@@ -492,8 +492,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
-                            #'  \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
-                            #'  \item{activity_id: } activity topiaid, type \code{\link[base]{character}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
                             #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
@@ -507,7 +507,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{double}}.
                             #'  \item{statut_rf2: } statut rf2, type \code{\link[base]{double}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
-                            #'  \item{elementarycatch_id: } elementary catch topiaid, type \code{\link[base]{character}}.
+                            #'  \item{elementarycatch_id: } elementary catch identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{species_fate_code: } species fate codes, type \code{\link[base]{integer}}.
                             #'  For example in Observe database :  \itemize{
                             #'  \item{4 : } discarded alive.
@@ -529,7 +529,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
-                            #'  \item{trip_id: } trip topiaid, type \code{\link[base]{character}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
@@ -1137,12 +1137,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            statut_rf2_label=c("logbook(s) missing, rf2 must to be calculated",
                                                                               "no missing logbook, rf2 no need to be calculated",
                                                                               " full trip not complete or vessel type code not validated"))
-                          global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
-                                                                         y = rf1_statut,
-                                                                         by = "statut_rf1")
-                          global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
-                                                                         y = rf2_statut,
-                                                                         by = "statut_rf2")
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                                 y = rf1_statut,
+                                                                                 by = "statut_rf1")
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                                 y = rf2_statut,
+                                                                                 by = "statut_rf2")
                                   detail_outputs_process_1_1 <- outputs_process_1_1 %>%
                                     dplyr::full_join(x = outputs_process_1_1,
                                                      y = total_landings_catches_species_activities,
@@ -1192,11 +1192,53 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
+
                             # 9 - Process 1.2: conversion_weight_category ----
-                            #' @description Process of logbook weight categories conversion.
+                            #' @description Process of logbook weight categories conversion. \cr
+                            #' Logbook's weight categories change from one tuna fishing company to another, that involves overlaps and are hardly usable directly from the logbook.
+                            #' This process aims to homogenize these weight categories and create simplify categories divided in function of the fishing school and the ocean:
+                            #' \itemize{
+                            #' \item{< 10kg and > 10kg} for the floating object school in the Atlantic and Indian Ocean,
+                            #' \item{ < 10kg, 10-30kg and > 30kg} for undetermined and free school in the Atlantic Ocean,
+                            #' \item{< 10kg and > 10kg} for undetermined and free school in the Indian Ocean.
+                            #' }
+                            #' For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
+                            #'  Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{elementarycatch_id: } elementary catch identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{weight_category_code: } weight category code defined in logbooks, type \code{\link[base]{character}}.
+                            #'  \item{weight_category_min: } weight category's lower limit, type \code{\link[base]{double}}.
+                            #'  \item{weight_category_max: } weight category's upper limit, type \code{\link[base]{double}}.
+                            #'  \item{weight_category_label: } weight category label defined in logbooks, type \code{\link[base]{character}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction : \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{double}}.
+                            #'  \item{weight_category_code_corrected: } weight category code after conversion, type \code{\link[base]{character}}.
+                            #'  \item{catch_weigh_category_code_corrected: } catch weight after weight category conversion, type \code{\link[base]{double}}.\cr
+                            #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  }
                             conversion_weight_category = function(global_output_path = NULL,
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
@@ -1758,6 +1800,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_3: a table (.csv) with as many rows as activities and 15 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{positive_set_count: } count of positive set (catch weight and/or catch count not zero), type \code{\link[base]{integer}}.
+                            #'  }
                             set_count = function(global_output_path = NULL,
                                                  referential_template = "observe") {
                               # 10.1 - Arguments verification ----
@@ -1969,6 +2033,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 11 - Process 1.4: fishing effort indicators ----
                             #' @description Process for set duration, time at sea, fishing time and searching time calculation (in hours).
+                            #' Details about the methods are available in the vignette : \href{https://ob7-ird.github.io/t3/articles/level_1.html#set-duration-calculation}{Process 1.4: Fishing effort indicators calculation}.
                             #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
                             #' Duration in minutes in the reference table, converted into hours in output for subsequent processing).
                             #' @param activity_code_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
@@ -1996,6 +2061,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"nightEnd": } night ends (morning astronomical twilight starts)
                             #'  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
                             #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
+                            #'  }
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_4: a table (.csv) with as many rows as activities and 20 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{double}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  \item{objectoperation_code: } object operation code to define the type of floating object operation (in Observe referential), type \code{\link[base]{character}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{positive_set_count: } count of positive set (catch weight and/or catch count not zero), type \code{\link[base]{integer}}.
+                            #'  \item{set_duration: } set duration in hours, type \code{\link[base]{double}}.
+                            #'  \item{time_at_sea: } time at sea in hours, type \code{\link[base]{double}}.
+                            #'  \item{fishing_time: } fishing time in hours, type \code{\link[base]{double}}.
+                            #'  \item{searching_time: } searching time in hours, type \code{\link[base]{double}}.\cr
+                            #'   Equal to the fishing time value minus the sum of the sets duration values.
                             #'  }
                             fishing_effort = function(set_duration_ref,
                                                       activity_code_ref,
@@ -2713,11 +2805,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 15 - Process 2.1: sample length class conversion ld1 to lf ----
-                            #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
+                            #' @description Process for length conversion, if necessary, in length fork (lf). \cr
+                            #' In fact, during the sampling process, fishes length can be collected and expressed in different standards. \cr
+                            #' For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
+                            #'  Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
+                            #' This step aim to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. \cr
+                            #' Historical and so far, the process use a referential \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.
+                            #' In addition, the \code{sample_number_measured} variable, in this step will be converted to a \code{sample_number_measured_lf} variable (notably due to the creation of new samples to split one LD1 class in multiples LF classes during certain conversions).
                             #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_1: a table (.csv) with as many rows as elementary samples, plus the elementary sample created by certain conversions from LD1 TO LF classes, and 16 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_length_class: } sample length class of measured individuals in first dorsal length (LD1), type \code{\link[base]{double}}.
+                            #'  \item{sample_number_measured: } sample number of measured individuals in first dorsal length (LD1), type \code{\link[base]{integer}}.
+                            #'  \item{sample_length_class_lf: } sample length class of measured individuals converted in curved fork length (LF), type \code{\link[base]{double}}.
+                            #'  \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{double}}.
+                            #'  For example, for one sample (\code{sample_number_measured=1}) from the Atlantic Ocean (1), of the species YFT (*Thunnus albacares*), with a first dorsal length class (LD1) measured at \code{sample_length_class=8} (cm),
+                            #'  the LD1 to LF conversion will create a new elementary sample row because a percentage of \code{ratio=50} \% of the number of fish in the sample will be assigned to the curved fork length class: \code{sample_number_measured_lf=32} (cm) ( \code{sample_number_measured_lf=0.5})
+                            #'  and 50\% of this sample will obtain a \code{sample_number_measured_lf=34} (cm) with \code{sample_number_measured_lf=0.5}.
+                            #'  }
                             sample_length_class_ld1_to_lf =  function(length_step,
                                                                       global_output_path = NULL,
                                                                       referential_template = "observe") {
@@ -3266,8 +3388,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 16 - Process 2.2: sample number measured extrapolation ----
                             #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
+                            #' In fact, during the sampling and according to the protocol, just a part of the sampled individuals are measured in relation to that counted.
+                            #' The aim of this step is to extrapolate the number of individuals measured in the sample to the number of individuals counted in the sample.
+                            #' To do that, a Raising Factor (RF4) is calculated per stratum, per well, per sample, per sub-sample and per species.
+                            #' It is equal, by stratum, to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_2: a table (.csv) with as many rows as elementary samples, plus the elementary sample created by certain conversions from LD1 TO LF classes, and 17 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{sub_sample_total_count_id: } sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_length_class_lf: } sample length class of measured individuals converted in curved fork length (LF), type \code{\link[base]{double}}.
+                            #'  \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{double}}.
+                            #'  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.\cr
+                            #'  \code{sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4}.
+                            #'  }
                             sample_number_measured_extrapolation = function(global_output_path = NULL) {
                               # 16.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -3548,6 +3697,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, plus the elementary sample created by certain conversions from LD1 TO LF classes, and 17 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_type_code: } sample type type code, type \code{\link[base]{integer}}.
+                            #'  \item{sample_quality_code: } sample quality code, type \code{\link[base]{integer}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+                            #'  \item{sample_standardised_length_class_lf: } sample length class of measured individuals converted in curved fork length (LF), type \code{\link[base]{double}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals in step \href{2.2}{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}, type \code{\link[base]{double}}.\cr
+                            #'  }
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500),
                                                                                 global_output_path = NULL) {
                               # 17.1 - Arguments verification ----
@@ -3877,6 +4047,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_4: a table (.csv) with as many rows as , and 12 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{weighted_weight_minus10: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{weighted_weight_plus10: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{weighted_weight: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{integer}}.
+                            #'  }
                             well_set_weight_categories = function(sample_set,
                                                                   global_output_path = NULL,
                                                                   referential_template = "observe") {
@@ -4287,6 +4474,23 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Object standardised sample creation.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_5: a table (.csv) with as many rows as , and 12 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } sample length class in curved fork length (LF) standardised, type \code{\link[base]{double}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.\cr
+                            #'  }
                             standardised_sample_creation = function(global_output_path = NULL) {
                               # 19.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -4517,7 +4721,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description R6 object standardised sample set creation.
                             #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
-                            #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_6: a table (.csv) with as many rows as , and 15 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } sample length class in curved fork length (LF) standardised, type \code{\link[base]{double}}.
+                            #'  \item{sample_number_weighted: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{sample_weight: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{sample_weight_unit: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{sample_category: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{character}}.
+                            #'  }
                             standardised_sample_set_creation = function(length_weight_relationship_data,
                                                                         global_output_path = NULL) {
                               # 20.1 - Arguments verification ----
@@ -4786,6 +5010,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_7: a table (.csv) with as many rows as , and 13 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{weighted_samples_minus10: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{weighted_samples_plus10: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{weighted_samples_total: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{rf_validation: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{integer}}.
+                            #'  }
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
@@ -5101,6 +5343,25 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Application of process 2.8 raised factors on standardised sample set.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #'  If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_8: a table (.csv) with as many rows as , and 14 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } sample length class in curved fork length (LF) standardised, type \code{\link[base]{double}}.
+                            #'  \item{sample_number_weighted_set: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  \item{sample_weight_set: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{double}}.
+                            #'  }
                             raised_standardised_sample_set = function(global_output_path = NULL) {
                               # 22.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -6160,7 +6421,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @importFrom adehabitatHR kernelUD getvolumeUD
                             #' @importFrom sf st_as_sf
                             #' @import ggplot2
-#                             @importFrom automap autoKrige
+                            #                             @importFrom automap autoKrige
                             models_checking = function(output_level3_process2,
                                                        output_directory,
                                                        plot_sample = FALSE,
