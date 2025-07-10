@@ -35,11 +35,11 @@ Initialize function for R6 well class.
 
 \item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
-\item{\code{well_minus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals less than 10 tonnes (by well, in tonne, considering all species).}
+\item{\code{well_minus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals in the less than 10 kg category (by well, in tonne, considering all species).}
 
-\item{\code{well_plus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals more than 10 tonnes (by well, in tonne, considering all species).}
+\item{\code{well_plus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals in the over 10 kg category (by well, in tonne, considering all species).}
 
-\item{\code{well_global_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals (less and more 10 tonnes categories, by well, in tonne, considering all species).}
+\item{\code{well_global_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals (less and more than 10kg categories, by well, in tonne, considering all species).}
 }
 \if{html}{\out{</div>}}
 }

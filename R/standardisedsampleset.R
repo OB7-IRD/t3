@@ -14,10 +14,10 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                     #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
                                     #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
-                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
-                                    #' @param sample_number_weighted Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
-                                    #' @param sample_weight Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).
-                                    #' @param sample_weight_unit Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).
+                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardized length class length fork of measured individuals.
+                                    #' @param sample_number_weighted Object of class {\link[base]{numeric}} expected. Sample number of measured individuals extrapolated to all counted individuals and weighted by set weight.
+                                    #' @param sample_weight Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individuals extrapolated to all counted individuals (conversion by length weight relationship: parameter_a * length_class_lf ^ parameter_b).
+                                    #' @param sample_weight_unit Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individual calculated by the length weight relationship: parameter_a * length_class_lf ^ parameter_b).
                                     #' @param sample_category Object of class {\link[base]{character}} expected. Sample category: -10kg or +10kg.
                                     initialize = function(trip_id,
                                                           activity_id,

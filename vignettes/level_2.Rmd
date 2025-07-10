@@ -104,7 +104,7 @@ Furthermore, a proportion of each sampling sets among the sampling well will be 
 
 $$ PWW = \displaystyle \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}$$
 
-Where PWW is the proportional weighted weight and WW~i,j~ is weighted weight of the current set i in well j.
+Where PWW is the proportional weighted weight and WW_ij is the weighted weight of the current set i in well j.
 
 The global process flowchart is available in the figure 4 below.
 

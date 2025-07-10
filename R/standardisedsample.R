@@ -13,9 +13,9 @@ standardisedsample <- R6::R6Class(classname = "standardisedsample",
                                     #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                     #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
                                     #' @param species_fao_code (character) Specie code identification on 3 characters.
-                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
-                                    #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.
-                                    #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
+                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardized length class length fork of measured individuals.
+                                    #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} expected. Sample number of measured individuals extrapolated to all counted individuals.
+                                    #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.
                                     initialize = function(trip_id,
                                                           well_id,
                                                           sample_id,
