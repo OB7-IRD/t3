@@ -41,7 +41,12 @@ The first level of the t3 process aim to standardize logbook data. These standar
 
 Catches filled in logbooks are based on visual estimations when they rise from the purse seiner brailing. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
-Regarding this process, for each full trip we will calculate a Raising Factor (RF), ratio of landing weight on catch weight. To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
+The RF1 aim to correct the weight visual estimation bias of catches filled in logbooks and correspond to the ratio of landing weight on catch weight, of the species defined by the `species_fao_codes_rf1` argument: 
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/rf1.png'/>
+
+
+Regarding this process, for each full trip we will calculate a Raising Factor (RF), (ratio of landing weight on catch weight). To recall, one full trip should be composed of one or several partial trip, for example if a vessel unloads a part of these wells and go back to the sea with not empty well(s). Furthermore, a RF level 1 value is normally between 0.8 and 1.2. If any values were out of range, an investigation if necessary for data quality control. This range could be modified through function parameters `rf1_lowest_limit` (by default at 0.8) and `rf1_highest_limit` (by default at 1.2). In addition, you will find in the function log a warning for each RF level 1 value out of range. This ratio will be applied to logbook catches to adjust declared values (by rising or lower them).
 
 **Be careful, so far in the process all RF level 1 values will be applied to the logbook catches associated, even if values are out of range. It's up to the user to check the log file and correct data, if necessary, before moving to the next process**.
 
@@ -78,6 +83,9 @@ This process aims to homogenize these weight categories and create simplify cate
 - < 10kg and > 10kg for the floating object school in the Atlantic and Indian Ocean,
 - < 10kg, 10-30kg and > 30kg for undetermined and free school in the Atlantic Ocean,
 - < 10kg and > 10kg for undetermined and free school in the Indian Ocean.
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src='figures/standard_weight_categories.png'/>
+
 
 For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories. Details of the distribution key is available in tables below.
 

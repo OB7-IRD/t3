@@ -135,6 +135,10 @@ $$ RWT = a \times LF^{b}$$
 
 Where RWT is the round weight, LF is the curved fork length and parameters a and b comes from a references table and are dependent of of the species and potentially of the area (ocean or others) and the season. More detail information could be find on the regional fisheries management organisations (RFMOs) like [ICCAT](https://www.iccat.int/) or [IOTC](https://iotc.org/).
 
+<img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='figures/LWR.png'/>
+
+<div style="text-align: center"> Figure : Example of Length-weight relationship fitted for yellowfin tuna (YFT, *Thunnus albacares*) caught in the Indian ocean (from Chassot et al. - IOTC-2016-WPDCS12).</div>
+
 In addition, you will find below in the table 2 the reference table for the length weight relationship and global process flowchart in the figure 6.
 
 | Ocean    | Specie code | Specie name                      | a            | b           |

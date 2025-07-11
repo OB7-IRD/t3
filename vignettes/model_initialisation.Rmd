@@ -26,6 +26,11 @@ knitr::opts_chunk$set(
 
 # Data model description
 
+## Input data 
+
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/input_data.png'/>
+
+
 ## R's R6 reference classes
 
 The t3 process was built under [R’s R6 reference classes](https://r6.r-lib.org/). R6 is an implementation of encapsulated object-oriented programming for R. This style of programming is also sometimes referred to as classical object-oriented programming. An online documentation was available at [https://r6.r-lib.org](https://r6.r-lib.org) and you can find a brief introduction and overview in the chapter 14 of the book “Advanced R” written by Hadley Wickham (online view was available [here](https://adv-r.hadley.nz/index.html)).
@@ -40,7 +45,7 @@ Just to sum up, among other things we choose R6 for the t3 process because:
 
 * you manipulate class of a data model how represent a vision of reality more understandable. For example, when you manipulate and object of class "trip", this object contains all attributes necessary to define a trip. 
 
-* you can optimise and increase the running speed of your process, especially related to the R's memory usage and the identification of treatments/functions associated.
+* you can optimize and increase the running speed of your process, especially related to the R's memory usage and the identification of treatments/functions associated.
 
 ## Class and methods documentations
 
