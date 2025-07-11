@@ -97,6 +97,8 @@ Imports:
 Suggests: 
     knitr (>= 1.46),
     markdown (>= 1.12),
+    rmarkdown,
+    bookdown,
     testthat (>= 3.0.0)
 Remotes: 
     github::OB7-IRD/codama,

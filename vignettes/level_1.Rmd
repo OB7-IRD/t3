@@ -1,12 +1,17 @@
 ---
 title: "Level 1 process"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
 description: |
-  Description of the t3 level 1 and how initialise it.
-vignette: |
-  %\VignetteIndexEntry{Level 1 process}
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteEncoding{UTF-8}
+  Description of the t3 level 1 logbooks standardisation and how to initialise it.
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteIndexEntry{Level 1 process}
+ %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -19,7 +24,7 @@ knitr::opts_chunk$set(
 
 <div style="text-align: justify">
 
-## Logbooks standardisation
+# Level 1: Logbooks standardisation
 
 The first level of the t3 process aim to standardize logbook data. These standardization was divided into 4 steps:
 
@@ -30,9 +35,9 @@ The first level of the t3 process aim to standardize logbook data. These standar
 | Process 1.3: positive sets count                  | `set_count()`                  | full_trips           |              |
 | Process 1.4: Fishing effort indicators calculation | `fishing_effort()`            | full_trips           | In hours     |
 
-### Process 1.1: Raising Factors level 1
+## Process 1.1: Raising Factors level 1
 
-#### Raising Factor  (rf1) ratio of landing weight on catch weight
+### Raising Factor  (rf1) ratio of landing weight on catch weight
 
 Catches filled in logbooks are based on visual estimations when they rise from the purse seiner brailing. This is the only technical way available at this moment to have an estimation by species. Thereafter, catches will be stored in one or several wells. During the landing process, well catches will be weighed, generally through a person located under the unloading crane. By move from set to well(s) we lost the exact information about catch location.
 
@@ -48,23 +53,23 @@ Furthermore, not all the well species are weighted during the landing process. O
 
 By the way, there are several cases when the RF level 1 can't be calculated. Take a look to the diagram below to have a brief overview of the process. You could notify that the structure of the process should be strange in terms of informatics efficiency (for example with repetitions of some steps, not necessarily on the first look). This is perfectly normal because we think about the potential improvement of the process in the future and we let the field open for an easier implementation.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.1.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='figures/process_1.1.png'/>
 
 <div style="text-align: center">Figure 1: Raising Factor level 1 flowchart.</div>
 
 In addition, if logbook(s) are missing we can't apply the process. In that case, we will tried to apply the process of Raising Factor level 2 (see section below regarding the process `rf2()`).
 
-#### Raising Factor for missing logbooks (rf2)
+### Raising Factor for missing logbooks (rf2)
 
 In some cases, especially for historical data, several logbooks trips were not collected or available. Therefore it's impossible to apply the process 1.1. Don't do anything for this trips would result in an under-estimation of catches among the global process. Of course and like the process 1.1, we made the hypothesis that all the landings were know and available.
 
 So far, this process is partially implemented in the source code and in our data simulation since 2000 we haven't been faced with trips with missing logbooks. Due to time constraints, the development of this process has been postponed, but it will be essential to finalize it when we run our process on the whole time series (and when we manipulated historical data). The figure below show the actual development of the process. 
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src='process_1.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src='figures/process_1.2.png'/>
 
 <div style="text-align: center">Figure 2: Raising Factor level 2 flowchart.</div>
 
-### Process 1.2: logbook weight categories conversion
+## Process 1.2: logbook weight categories conversion
 
 The core of the t3 process is to consider that the species composition of the logbooks was biased. Furthermore, logbook information related to global weight catches and weight categories are correct. Indeed, the weight categories of individuals as a strong influence on their commercial value. Furthermore, these weight categories change from one tuna fishing company to another, involves overlaps and are hardly usable directly from the logbook.
 
@@ -131,21 +136,21 @@ For the second part, the process try to make the conversion of catches filled in
 
 The global process flowchart is available in the figure 3 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_1.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='figures/process_1.3.png'/>
 
 <div style="text-align: center">Figure 3: Logbook weight categories conversion flowchart.</div>
  
-### Process 1.3: postive sets count
+## Process 1.3: postive sets count
 
 In this process, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14) in the data, a count of set is done according to the catches associated. Like before, the global process flowchart is available below in figure 4.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='figures/process_1.4.png'/>
 
 <div style="text-align: center">Figure 4: Positive sets count flowchart.</div>
 
-### Process 1.4: Fishing effort indicators calculation
+## Process 1.4: Fishing effort indicators calculation
 
-#### Set duration calculation
+### Set duration calculation
 
 The aim of this process is to calculate the duration of each set in hours. Like the process before, for each activity filled as null set (0), positive set (1), unknown set (2) or pocket capsizing (14), the set duration is calculated according to a linear function with two parameters a and b. These are found through a reference table, for each year, ocean, fishing school and country. Furthermore, a specific value provided for a null set (a fishing set without any catches associated). An example of this reference table is available below in the table 3.
 
@@ -180,11 +185,11 @@ The aim of this process is to calculate the duration of each set in hours. Like 
 
 In addition the global process flowchart is available in the figure 5 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_1.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='figures/process_1.5.png'/>
 
 <div style="text-align: center">Figure 5: Set duration calculation flowchart.</div>
 
-#### Time at sea estimation
+### Time at sea estimation
 
 This step aim to make an estimation, at the trip scale, of the time at sea in hours. For each trip we have several possibilities:
 
@@ -194,11 +199,11 @@ This step aim to make an estimation, at the trip scale, of the time at sea in ho
 
 The global process flowchart is available in the figure 6 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src='process_1.6.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 110%;" src='figures/process_1.6.png'/>
 
 <div style="text-align: center">Figure 6: Time at sea estimation flowchart.</div>
 
-#### Fishing time determination
+### Fishing time determination
 
 This process calculated the fishing time value in hours. Historically, this process use a constant parameter according to the theoretical day duration working time (12 or 13 hours according to the ocean and related to the global sunrise and sunset). Now, the process was modified to bring more accuracy in the calculation and module the duration of a working day according to the real sunrise and sunset of each day.
 
@@ -223,17 +228,17 @@ At the trip scale and related to all the activities related, the fishing time va
 
 The global process flowchart is available in the figure 7 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_1.7.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_1.7.png'/>
 
 <div style="text-align: center">Figure 7: Time at sea estimation flowchart.</div>
 
-#### Searching time process
+### Searching time process
 
 The aim of this last step is to calculate the searching time. Like the previous variables, it is expressed in hours and equal to the fishing time value minus the sum of the sets duration values.
 
 The global process flowchart is available in the figure 8 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_1.8.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='figures/process_1.8.png'/>
 
 <div style="text-align: center">Figure 8: Searching time estimation flowchart.</div>
         

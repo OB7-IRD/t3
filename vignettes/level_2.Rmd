@@ -1,11 +1,16 @@
 ---
 title: "Level 2 process"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
 description: |
-  Description of the t3 level 2 and how initialise it.
-vignette: |
+  Description of the t3 level 2 samples standardisation and how to initialise it.
+pkgdown:
+  as_is: true
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Level 2 process}
-  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -19,7 +24,7 @@ knitr::opts_chunk$set(
 
 <div style="text-align: justify">
 
-## Samples standardisation
+# Level 2: samples standardisation
 
 The second level of the t3 process aim to standardize samples data. These standardization was divided into 8 steps:
 
@@ -34,7 +39,7 @@ The second level of the t3 process aim to standardize samples data. These standa
 | Process 2.7: raised factors determination                | `raised_factors_determination()`             | full_trips            |   |   |
 | Process 2.8: samples number standardization at set scale | `raised_standardised_sample_set()`           | full_trips            |   |   |
 
-### Process 2.1: sample length class LD1 to LF conversion
+## Process 2.1: sample length class LD1 to LF conversion
 
 During the sampling process, fishes length can be collected and expressed in different standards. For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF). Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
 
@@ -57,11 +62,11 @@ Like you can see in the table 1, for one LD1 length class we have several LF len
 
 The global process flowchart is available in the figure 1 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.1.png'>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_2.1.png'>
 
 <div style="text-align: center">Figure 1: Sample length class LD1 to LF conversion flowchart.</div>
 
-### Process 2.2: sample number measured extrapolation
+## Process 2.2: sample number measured extrapolation
 
 During the sampling and according to the protocol, just a part of the sampled individuals are measured in comparison of the one counted. This step aim extrapolate sample number measured individuals to sample number individuals counted.
 
@@ -69,11 +74,11 @@ A Raising Factor (RF4) is calculated stratified by well, sample, sub-sample and 
 
 The global process flowchart is available in the figure 2 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='figures/process_2.2.png'/>
 
 <div style="text-align: center">Figure 2: Sample number measured extrapolation flowchart.</div>
 
-### Process 2.3: sample step length class standardisation
+## Process 2.3: sample step length class standardisation
 
 LF length classes used during the treatment are not necessary the same that filled during the sampling. Furthermore, even if the actual sampling protocol detail what kind of length classes we have to use by specie, it's not impossible to have differences regarding this length classes if we mix "old data" with the actual one. In addition, it's possible that the protocol could evolve in the future.
 
@@ -84,11 +89,11 @@ According to that, this step aim to standardize sample length classes. So far, t
 
 The global process flowchart is available in the figure 3 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='process_2.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 80%;" src='figures/process_2.3.png'/>
 
 <div style="text-align: center">Figure 3: Sample step length class standardisation flowchart.</div>
 
-### Process 2.4: well set weight categories
+## Process 2.4: well set weight categories
 
 The sampling provides information at the well scale. However, a set could be displayed between several wells and sampled individuals could belong to as much as sets in the well.
 
@@ -108,21 +113,21 @@ Where PWW is the proportional weighted weight and WW_ij is the weighted weight o
 
 The global process flowchart is available in the figure 4 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='process_2.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 120%;" src='figures/process_2.4.png'/>
 
 <div style="text-align: center">Figure 4: Well set weight categories flowchart.</div>
 
-### Process 2.5: standardised sample creation
+## Process 2.5: standardised sample creation
 
 This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data. In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF) and create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the specie.
 
 The global process flowchart is available in the figure 5 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_2.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='figures/process_2.5.png'/>
 
 <div style="text-align: center">Figure 5: Standardized sample creation flowchart.</div>
 
-### Process 2.6: sample number standardisation
+## Process 2.6: sample number standardisation
 
 In the previous process and in the object standardized sample associated, samples is expressed at the well scale. In this step, the aim is to move to the expression of sample by well to sample by set. In the process 2.4, a weighted weight has been calculated and in addition a proportion of this weighted weight at the set scale. By combination of this value and elements of the object standardized sample, a new object called standardized sample set was created. Like explain before, this object is the expression of the sample at the set scale. Furthermore, this process made a conversion of the samples length measurements in weight by length weight relationship. Formula associated are the following one:
 
@@ -175,11 +180,11 @@ In addition, you will find below in the table 2 the reference table for the leng
 
 <div style="text-align: center">Table 2: Length weight relationship reference table.</div>
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='process_2.6.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='figures/process_2.6.png'/>
 
 <div style="text-align: center">Figure 6: Sample number standardization flowchart.</div>
 
-### Process 2.7: raised factors determination
+## Process 2.7: raised factors determination
 
 The step aim to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets: the number and the weight of sampled individuals, the total value and display by weight categories (<= 10kg or > 10kg).
 
@@ -187,17 +192,17 @@ The step aim to check relevance of the object standardized sample set by calcula
 
 Verification thresholds could be modify in the function parameters through the arguments `threshold_rf_minus10` (by default at 500), `threshold_rf_plus10` (by default at 500), `threshold_frequency_rf_minus10` (by default at 75), `threshold_frequency_rf_plus10` (by default at 75) and `threshold_rf_total` (by default at 250).
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='process_2.7.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='figures/process_2.7.png'/>
 
 <div style="text-align: center">Figure 7: Raised factors determination flowchart.</div>
 
-### Process 2.8: samples number standardisation at set scale
+## Process 2.8: samples number standardisation at set scale
 
 This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process 2.7.
 
 The global process flowchart is available in the figure 8 below.
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_2.8.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_2.8.png'/>
 
 <div style="text-align: center">Figure 8: Samples number standardization at set scale flowchart.</div>
 

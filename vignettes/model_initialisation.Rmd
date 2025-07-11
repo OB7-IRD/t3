@@ -1,11 +1,16 @@
 ---
 title: "Model initialisation and data selection"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
 description: |
   T3 data model initialisation and selection.
-vignette: |
+pkgdown:
+  as_is: true
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Model initialisation and data selection}
-  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
