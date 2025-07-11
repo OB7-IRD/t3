@@ -2,8 +2,10 @@
 
 ## Added
 * Improve documentation :
+  - Add float toc and figures in vignettes. 
   - Add reference table's documentation and easy access :`data(package="t3")`.
-  - Add documentation about outputs in ".csv"" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
+  - Add details aboutlevel 1 and level 2  outputs in ".csv"". 
+  - Add documentation about outputs in ".csv" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
   - Add "elementarycatch_id", "statut_rf1_label", "statut_rf2_label" columns, in ".csv" output named "process_1_1_detail", of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1). 
 
 # t3 3.0.3 - 2025-06-12
