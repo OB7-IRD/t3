@@ -4525,7 +4525,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
-                            #'  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated), type \code{\link[base]{numeric}}.\cr
+                            #'  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type \code{\link[base]{numeric}}.\cr
                             #'  }
                             standardised_sample_creation = function(global_output_path = NULL) {
                               # 19.1 - Arguments verification ----
@@ -4787,13 +4787,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
-                            #'  \item{sample_number_weighted: } sample number of measured individuals weighted by set weight after conversion in LF and extrapolation to all counted individuals), type \code{\link[base]{numeric}}.
-                            #'  \item{sample_weight: } weight (kg) of the sample number of measured individuals extrapolated to all counted individuals, type \code{\link[base]{numeric}}.\cr
-                            #'  Conversion using length weight relationships as in \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}: \code{sample_weight=parameter_a * sample_standardised_length_class_lf ^ parameter_b})
+                            #'  \item{sample_number_weighted: } sample number of measured individuals weighted by set weight,  after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_number_weighted = sample_number_measured_extrapolated_lf * PWW}.
                             #'  \item{sample_weight_unit: } weight (kg) of one individual,
-                            #'   calculated using length weight relationships as in \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}: \code{sample_weight=parameter_a * sample_standardised_length_class_lf ^ parameter_b}),
+                            #'   calculated using length weight relationships as in \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}: \code{sample_weight_unit = parameter_a * sample_standardised_length_class_lf ^ parameter_b}),
                             #'    type \code{\link[base]{numeric}}.
-                            #'  \item{sample_category: } sample category ("-10kg" or "+10kg"), type \code{\link[base]{character}}.
+                            #'  \item{sample_weight: } weight (kg) of all measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_weight = sample_weight_unit * sample_number_weighted}.
+                            #'  \item{sample_category: } sample category ("-10kg" or "+10kg"), according to \code{sample_weight_unit} value, type \code{\link[base]{character}}.
                             #'  }
                             standardised_sample_set_creation = function(length_weight_relationship_data,
                                                                         global_output_path = NULL) {
