@@ -11,9 +11,9 @@ wellset <- R6::R6Class(classname = "wellset",
                          #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
                          #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                          #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
-                         #' @param weighted_weight Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s).
-                         #' @param weighted_weight_minus10 Object of class {\link[base]{numeric}} expected. Set weight of individuals less than 10 kg (weighted by all set in the well(s))
-                         #' @param weighted_weight_plus10 Object of class {\link[base]{numeric}} expected. Set weight of individuals plus than 10 kg (weighted by all set in the well(s))
+                         #' @param weighted_weight Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s) (tonnes).
+                         #' @param weighted_weight_minus10 Object of class {\link[base]{numeric}} expected. Set weight of individuals in the less than 10 kg category, in tonnes, (weighted by all set in the well(s)).
+                         #' @param weighted_weight_plus10 Object of class {\link[base]{numeric}} expected. Set weight of individuals in the over 10 kg category, in tonnes, (weighted by all set in the well(s)).
                          initialize = function(trip_id,
                                                activity_id,
                                                well_id,

@@ -1,12 +1,17 @@
 ---
 title: "Running processes examples"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
 description: |
   Description of running processes examples.
-vignette: |
-  %\VignetteIndexEntry{Running processes examples}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::knitr}
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteIndexEntry{Running processes examples}
+ %\VignetteEncoding{UTF-8}
 editor_options: 
   chunk_output_type: console
 ---
