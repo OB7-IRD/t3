@@ -2814,7 +2814,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' In fact, during the sampling process, fishes length can be collected and expressed in different standards. \cr
                             #' For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
                             #'  Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
-                            #' This step aim to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. \cr
+                            #' This step aims to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. \cr
                             #' Historical and so far, the process use a referential \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.
                             #' In addition, the \code{sample_number_measured} variable, in this step will be converted to a \code{sample_number_measured_lf} variable (notably due to the creation of new samples to split one LD1 class in multiples LF classes during certain conversions).
                             #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
@@ -3700,7 +3700,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 17 - Process 2.3: sample_length_class_step_standardisation ----
                             #' @description Process for step standardisation of lf length class.
-                            #'  This step aim to standardize sample length classes. So far, these specifications are integrate in the process:
+                            #'  This step aims to standardize sample length classes. So far, these specifications are integrate in the process:
                             #'  \itemize{
                             #' \item{ a length classes step of 1cm for: } SKJ (\emph{Katsuwonus pelamis}), LTA (\emph{Euthynnus alletteratus}) and FRI (\emph{Auxis thazard}),
                             #' \item{ a length classes step of 2cm fo: } YFT (\emph{Thunnus albacares}), BET (\emph{Thunnus obesus}) and ALB (\emph{Thunnus alalunga}).
@@ -5057,12 +5057,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 21 - Process 2.7: raised_factors_determination ----
                             #' @description Raised factors determination for weight sample set to set.
-                            #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
-                            #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
-                            #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
-                            #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
-                            #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' This step aims to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets, if it's possible regarding data available:
+                            #'  \itemize{
+                            #'  \item{number and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg or > 10kg):
+                            #'  \itemize{
+                            #'   \item{\code{weighted_samples_minus10}: } sum of \code{sample_weight} for sample weight category \eqn{\leq}{<=} 10 kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'    \item{\code{weighted_samples_plus10}: } sum of \code{sample_weight} for sample weight category > 10 kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'     \item{\code{weighted_samples_total}: } sum of \code{sample_weight} for all sample weight categories (\eqn{\leq}{<=} 10 kg) and > 10kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'  }
+                            #'  }
+                            #'  \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
+                            #'  \itemize{
+                            #'   \item{\code{rf_minus10= weighted_weight_minus10 / weighted_samples_minus10}}
+                            #'    \item{\code{rf_plus10= weighted_weight_plus10 / weighted_samples_plus10}}
+                            #'     \item{\code{rf_total=weighted_weight / weighted_samples_total}}
+                            #'  }
+                            #'  }
+                            #'  }
+                            #'  The verification thresholds can be modified in the function parameters using the following arguments:
+                            #'  \itemize{
+                            #'  \item{\code{threshold_rf_minus10}: } by default at 500,
+                            #'   \item{\code{threshold_rf_plus10}: } by default at 500,
+                            #'   \item{\code{threshold_frequency_rf_minus10}: } by default at 75,
+                            #'   \item{\code{threshold_frequency_rf_plus10}: } by default at 75,
+                            #'   \item{\code{threshold_rf_total}: } by default at 250.
+                            #'   }
+                            #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.
+                            #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.
+                            #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.
+                            #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.
+                            #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+                            #' Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
@@ -5077,10 +5106,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
                             #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
-                            #'  \item{weighted_samples_minus10: } , type \code{\link[base]{numeric}}.
-                            #'  \item{weighted_samples_plus10: } , type \code{\link[base]{numeric}}.
-                            #'  \item{weighted_samples_total: } , type \code{\link[base]{numeric}}.
-                            #'  \item{rf_validation: }, type \code{\link[base]{integer}}.
+                            #'  \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
+                            #'  \item{rf_validation: } raising factor status, type \code{\link[base]{integer}}.
+                            #'  \item{rf_validation_label: } raising factor status label, type \code{\link[base]{character}}.
                             #'  }
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
@@ -5413,9 +5443,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
-                            #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), type \code{\link[base]{numeric}}.
-                            #'  \item{sample_number_weighted_set: } , type \code{\link[base]{numeric}}.
-                            #'  \item{sample_weight_set: } , type \code{\link[base]{numeric}}.
+                            #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_weighted_set: } sample number weighted by set, type \code{\link[base]{numeric}}. \cr
+                            #'  \code{sample_number_weighted_set = sample_number_weighted * rf}, where :
+                            #'  \itemize{
+                            #'  \item{\code{rf}: } is one of the raising factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7},
+                            #'   according to sample weight category (\eqn{\leq}{<=} 10kg and > 10kg).
+                            #'  \item{\code{sample_number_weighted}: } is the sample number of measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals,
+                            #'   calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-6-sample-number-standardisation}{2.6}.
+                            #'  }
+                            #'  \item{sample_weight_set: } sample weight by set (tonnes), type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
                             #'  }
                             raised_standardised_sample_set = function(global_output_path = NULL) {
                               # 22.1 - Arguments verification ----

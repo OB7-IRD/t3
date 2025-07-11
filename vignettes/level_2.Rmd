@@ -137,9 +137,9 @@ Where RWT is the round weight, LF is the curved fork length and parameters a and
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 70%;" src='figures/LWR.png'/>
 
-<div style="text-align: center"> Figure : Example of Length-weight relationship fitted for yellowfin tuna (YFT, *Thunnus albacares*) caught in the Indian ocean (from Chassot et al. - IOTC-2016-WPDCS12).</div>
+<div style="text-align: center"> Figure 6: Example of Length-weight relationship fitted for yellowfin tuna (YFT, *Thunnus albacares*) caught in the Indian ocean (from Chassot et al. - IOTC-2016-WPDCS12).</div>
 
-In addition, you will find below in the table 2 the reference table for the length weight relationship and global process flowchart in the figure 6.
+In addition, you will find below in the table 2 the reference table for the length weight relationship and global process flowchart in the figure 7.
 
 | Ocean    | Specie code | Specie name                      | a            | b           |
 |----------|-------------|----------------------------------|--------------|-------------|
@@ -186,7 +186,7 @@ In addition, you will find below in the table 2 the reference table for the leng
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 60%;" src='figures/process_2.6.png'/>
 
-<div style="text-align: center">Figure 6: Sample number standardization flowchart.</div>
+<div style="text-align: center">Figure 7: Sample number standardization flowchart.</div>
 
 ## Process 2.7: raised factors determination
 
@@ -198,17 +198,17 @@ Verification thresholds could be modify in the function parameters through the a
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 90%;" src='figures/process_2.7.png'/>
 
-<div style="text-align: center">Figure 7: Raised factors determination flowchart.</div>
+<div style="text-align: center">Figure 8: Raised factors determination flowchart.</div>
 
 ## Process 2.8: samples number standardisation at set scale
 
 This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process 2.7.
 
-The global process flowchart is available in the figure 8 below.
+The global process flowchart is available in the figure 9 below.
 
 <img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_2.8.png'/>
 
-<div style="text-align: center">Figure 8: Samples number standardization at set scale flowchart.</div>
+<div style="text-align: center">Figure 9: Samples number standardization at set scale flowchart.</div>
 
 </div>
 
