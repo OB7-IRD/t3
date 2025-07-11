@@ -1,11 +1,16 @@
 ---
 title: "Level 3 process"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
 description: |
-  Description of the t3 level 3 and how initialise it.
-vignette: |
+  Description of the t3 level 3 modelisation and how to initialise it.
+pkgdown:
+  as_is: true
+vignette: >
+ %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Level 3 process}
-  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -19,7 +24,7 @@ knitr::opts_chunk$set(
 
 <div style="text-align: justify">
 
-## Modelling species proportion in catch and Computation of catch estimates
+# Level 3: modelling species proportion in catch and Computation of catch estimates
 
 The level 3 process of the T3R package aim at modelling species composition before estimating catch for the major tuna species only: Yellowfin tuna, skipjack and bigeye tuna. The process is divided in 5 steps:
 
@@ -31,25 +36,25 @@ The level 3 process of the T3R package aim at modelling species composition befo
 | 3.4           | Dataset for prediction     | `data_formatting_for_predictions()`|
 | 3.5           | Catch prediction           | `model_predictions()`              |
 
-### Process 3.1: Data preparatory
+## Process 3.1: Data preparatory
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.1.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_3.1.png'/>
 
-### Process 3.2: Modelling
+## Process 3.2: Modelling
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.2.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_3.2.png'/>
 
-### Process 3.3: Data and Model checking
+## Process 3.3: Data and Model checking
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.3.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_3.3.png'/>
 
-### Process 3.4: Dataset for prediction
+## Process 3.4: Dataset for prediction
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.4.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_3.4.png'/>
 
-### Process 3.5: Modelling species composition and estimating catch
+## Process 3.5: Modelling species composition and estimating catch
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='process_3.5.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/process_3.5.png'/>
 
 </div>
 

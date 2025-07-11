@@ -119,8 +119,6 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                  label = paste0("issue with the full trip ", full_trip_id,
                                                                 " and the partial trip ", partial_trip_id))
                         })
-    current_status_rf1 <- current_trip$.__enclos_env__$private$statut_rf1
-    current_status_rf2 <- current_trip$.__enclos_env__$private$statut_rf2
     current_rf1 <- current_trip$.__enclos_env__$private$rf1
     current_rf2 <- current_trip$.__enclos_env__$private$rf2
     # 201 - Checking if rf1 process was applied on all trips ----

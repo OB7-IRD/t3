@@ -11,7 +11,6 @@ t3_process(
   log_file = FALSE,
   log_path = NULL,
   output_path = NULL,
-  output_format = "eu",
   new_directory = TRUE,
   years_period,
   flag_codes,
@@ -37,9 +36,10 @@ t3_process(
   threshold_frequency_rf_plus10 = as.integer(75),
   threshold_rf_total = as.integer(250),
   periode_reference_level3 = NULL,
-  target_year,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
   target_ocean = NULL,
-  period_duration,
+  country_flag = flag_codes[1],
+  period_duration = 4L,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -74,8 +74,6 @@ For example, a list of two database connection arguments for "observe_main" and 
 \item{log_path}{Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.}
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
-
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
@@ -134,6 +132,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{target_year}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
 \item{target_ocean}{Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.}
+
+\item{country_flag}{Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.}
 
 \item{period_duration}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 

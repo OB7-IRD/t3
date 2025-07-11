@@ -11,7 +11,6 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
 #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -43,6 +42,7 @@
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
 #' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
+#' @param country_flag Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
@@ -76,7 +76,6 @@ t3_process <- function(process = "all",
                        log_file = FALSE,
                        log_path = NULL,
                        output_path = NULL,
-                       output_format = "eu",
                        new_directory = TRUE,
                        years_period,
                        flag_codes,
@@ -102,9 +101,10 @@ t3_process <- function(process = "all",
                        threshold_frequency_rf_plus10 = as.integer(75),
                        threshold_rf_total = as.integer(250),
                        periode_reference_level3 = NULL,
-                       target_year,
+                       target_year = as.integer(lubridate::year(Sys.time() - 1)),
                        target_ocean = NULL,
-                       period_duration,
+                       country_flag = flag_codes[1],
+                       period_duration = 4L,
                        distance_maximum = as.integer(5),
                        number_sets_maximum = as.integer(5),
                        set_weight_minimum = as.integer(6),
@@ -149,12 +149,10 @@ t3_process <- function(process = "all",
   if (process == "level1") {
     new_directory_level1 <- new_directory
     output_path_level1 <- output_path
-    output_format_level1 <- output_format
     integrated_process <- FALSE
   } else if (process == "level2") {
     new_directory_level2 <- new_directory
     output_path_level2 <- output_path
-    output_format_level2 <- output_format
     integrated_process <- FALSE
   } else if (process %in% c("all",
                             "until_level2")) {
@@ -165,27 +163,21 @@ t3_process <- function(process = "all",
                                         level = process)
       new_directory_level1 <- FALSE
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- FALSE
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- FALSE
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     } else {
       integrated_process <- FALSE
       new_directory_level1 <- new_directory
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- new_directory
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- new_directory
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     }
   }
@@ -209,7 +201,6 @@ t3_process <- function(process = "all",
                                  sunset_schema = sunset_schema,
                                  new_directory = new_directory_level1,
                                  output_path = output_path_level1,
-                                 output_format = output_format_level1,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
@@ -229,7 +220,6 @@ t3_process <- function(process = "all",
                                  log_name = "t3_level2",
                                  new_directory = new_directory_level2,
                                  output_path = output_path_level2,
-                                 output_format = output_format_level2,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
@@ -242,7 +232,7 @@ t3_process <- function(process = "all",
                                  target_year=target_year,
                                  target_ocean = target_ocean,
                                  period_duration=period_duration,
-                                 country_flag = flag_codes,
+                                 country_flag = country_flag,
                                  input_type = data_source,
                                  distance_maximum = distance_maximum,
                                  number_sets_maximum = number_sets_maximum,
@@ -264,7 +254,6 @@ t3_process <- function(process = "all",
                                  log_path = log_path,
                                  log_name = "t3_level3",
                                  output_path = output_path_level3,
-                                 output_format = output_format_level3,
                                  new_directory = new_directory_level3,
                                  integrated_process = integrated_process)
   }

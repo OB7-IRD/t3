@@ -8,9 +8,9 @@ t3_level3(
   inputs_level3,
   inputs_level3_path = NULL,
   periode_reference_level3 = NULL,
-  target_year,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
   target_ocean = NULL,
-  period_duration,
+  period_duration = 4L,
   country_flag = NULL,
   input_type = "observe_database",
   distance_maximum = as.integer(5),
@@ -33,7 +33,6 @@ t3_level3(
   log_path = NULL,
   log_name = "t3_level3",
   output_path = NULL,
-  output_format = "eu",
   new_directory = FALSE,
   integrated_process = FALSE
 )
@@ -75,9 +74,9 @@ t3_level3(
 
 \item{small_fish_only}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 
-\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = FALSE.}
 
-\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database}
+\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database.}
 
 \item{ci}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
@@ -94,8 +93,6 @@ t3_level3(
 \item{log_name}{Object of type \code{\link[base]{character}} expected. Name of the log file. By default "t3_level2".}
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
-
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
 
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 

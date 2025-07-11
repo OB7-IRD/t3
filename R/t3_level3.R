@@ -19,8 +19,8 @@
 #' @param min.node.size Object of type \code{\link[base]{numeric}} expected. Minimum size of terminal nodes. Setting this number larger causes smaller trees to be grown (and thus take less time).The default value is 5.
 #' @param seed_number Object of type \code{\link[base]{integer}} expected. Set the initial seed for the modelling. The default value is 7.
 #' @param small_fish_only Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).
-#' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
-#' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
+#' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = FALSE.
+#' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database.
 #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
 #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
 #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
@@ -29,16 +29,15 @@
 #' @param log_path Object of type \code{\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of type \code{\link[base]{character}} expected. Name of the log file. By default "t3_level2".
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @export
 t3_level3 <- function(inputs_level3,
                       inputs_level3_path = NULL,
                       periode_reference_level3 = NULL,
-                      target_year,
+                      target_year = as.integer(lubridate::year(Sys.time() - 1)),
                       target_ocean = NULL,
-                      period_duration,
+                      period_duration = 4L,
                       country_flag = NULL,
                       input_type = "observe_database",
                       distance_maximum = as.integer(5),
@@ -61,7 +60,6 @@ t3_level3 <- function(inputs_level3,
                       log_path = NULL,
                       log_name = "t3_level3",
                       output_path = NULL,
-                      output_format = "eu",
                       new_directory = FALSE,
                       integrated_process = FALSE) {
   # 1 - Log file initialisation ----
@@ -104,7 +102,6 @@ t3_level3 <- function(inputs_level3,
   # level 3.3: models checking
   process_level3$output_level3_process3 <- object_full_trips$models_checking(output_level3_process2 = process_level3$output_level3_process2,
                                                                              output_directory = process_level3$output_directory,
-                                                                             output_format = output_format,
                                                                              plot_sample = plot_sample,
                                                                              avdth_patch_coord = avdth_patch_coord)
   # level 3.4: data formatting for predictions
@@ -119,7 +116,6 @@ t3_level3 <- function(inputs_level3,
   process_level3$output_level3_process5 <- object_full_trips$model_predictions(output_level3_process2 = process_level3$output_level3_process2,
                                                                                output_level3_process4 = process_level3$output_level3_process4,
                                                                                output_directory = process_level3$output_directory,
-                                                                               output_format = output_format,
                                                                                ci = ci,
                                                                                ci_type = ci_type,
                                                                                Nboot = Nboot,

@@ -13,7 +13,6 @@
 #' @param log_path Object of type \code{\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param log_name Object of type \code{\link[base]{character}} expected. Name of the log file. By default "t3_level2".
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
@@ -31,7 +30,6 @@ t3_level2 <- function(object_model_data,
                       log_path = NULL,
                       log_name = "t3_level2",
                       output_path = NULL,
-                      output_format = "eu",
                       new_directory = FALSE,
                       integrated_process = FALSE,
                       referential_template = "observe") {
@@ -63,38 +61,30 @@ t3_level2 <- function(object_model_data,
     # level 2.1: sample length class ld1 to lf conversion ----
     object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
                                                     global_output_path = output_path,
-                                                    output_format = output_format,
                                                     referential_template = referential_template)
     # level 2.2: sample number measured extrapolation ----
-    object_full_trips$sample_number_measured_extrapolation(global_output_path = output_path,
-                                                           output_format = output_format)
+    object_full_trips$sample_number_measured_extrapolation(global_output_path = output_path)
     # level 2.3: sample step length class standardisation ----
     object_full_trips$sample_length_class_step_standardisation(maximum_lf_class = maximum_lf_class,
-                                                               global_output_path = output_path,
-                                                               output_format = output_format)
+                                                               global_output_path = output_path)
     # level 2.4: sample weight categories ----
     object_full_trips$well_set_weight_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets,
                                                  global_output_path = output_path,
-                                                 output_format = output_format,
                                                  referential_template = referential_template)
     # level 2.5: standardised sample creation ----
-    object_full_trips$standardised_sample_creation(global_output_path = output_path,
-                                                   output_format = output_format)
+    object_full_trips$standardised_sample_creation(global_output_path = output_path)
     # level 2.6: sample number standardisation ----
     object_full_trips$standardised_sample_set_creation(length_weight_relationship_data = object_model_data$.__enclos_env__$private$lengthweightrelationships,
-                                                       global_output_path = output_path,
-                                                       output_format = output_format)
+                                                       global_output_path = output_path)
     # level 2.7: raised factors determination ----
     object_full_trips$raised_factors_determination(threshold_rf_minus10 = threshold_rf_minus10,
                                                    threshold_rf_plus10 = threshold_rf_minus10,
                                                    threshold_frequency_rf_minus10 = threshold_rf_minus10,
                                                    threshold_frequency_rf_plus10 = threshold_rf_minus10,
                                                    threshold_rf_total = threshold_rf_minus10,
-                                                   global_output_path = output_path,
-                                                   output_format = output_format)
+                                                   global_output_path = output_path)
     # level 2.8: samples number standardisation at set scale ----
-    object_full_trips$raised_standardised_sample_set(global_output_path = output_path,
-                                                     output_format = output_format)
+    object_full_trips$raised_standardised_sample_set(global_output_path = output_path)
     # close, if necessary log file connection ----
     if (log_file == TRUE) {
       closeAllConnections()

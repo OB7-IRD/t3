@@ -1,7 +1,7 @@
 Package: t3
 Type: Package
 Title: Tropical Tuna Treatment
-Version: 3.0.3
+Version: 3.0.4
 Authors@R:
     c(person(given = "Jeanne",
            family = "Clément",
@@ -80,7 +80,6 @@ Depends:
 Imports: 
     adehabitatHR (>= 0.4.21),
     dplyr (>= 1.1.4),
-    automap (>= 1.1.9),
     boot (>= 1.3.28),
     furdeb (>= 1.0.0),
     codama (>= 0.9.0),
@@ -98,6 +97,8 @@ Imports:
 Suggests: 
     knitr (>= 1.46),
     markdown (>= 1.12),
+    rmarkdown,
+    bookdown,
     testthat (>= 3.0.0)
 Remotes: 
     github::OB7-IRD/codama,

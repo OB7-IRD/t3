@@ -477,25 +477,90 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param apply_rf1_on_bycatch Object of class \code{\link[base]{logical}} expected. By default TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
                             #' If FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
                             #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
-                            #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
-                            #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
+                            #' By default, use codes YFT (\emph{Thunnus albacares}), SKJ (\emph{Katsuwonus pelamis}), BET (\emph{Thunnus obesus}), ALB (\emph{Thunnus alalunga}),
+                            #' LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
                             #' @param species_fate_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.
                             #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
                             #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @details
+                            #' If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  \itemize{
+                            #'  \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:}
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
+                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #'  , type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{numeric}}.
+                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{numeric}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{elementarycatch_id: } elementary catch identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{species_fate_code: } species fate codes, type \code{\link[base]{integer}}.
+                            #'  For example in Observe database :  \itemize{
+                            #'  \item{4 : } discarded alive.
+                            #'  \item{5 : } discarded dead.
+                            #'  \item{6 : } Retained, presumably destined for the cannery
+                            #'  \item{8 : } used for crew consumption on board.
+                            #'  \item{11 : } discarded status unknown (only for EMS and logbook).
+                            #'  \item{15 : } retained for local market or dried/salted fish on board.
+                            #'  }
+                            #'  \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction, in tonnes: \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
+                            #'  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
+                            #'  }
+                            #'  \item{process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:}
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #' , type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{numeric}}.
+                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{numeric}}.
+                            #'  \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
+                            #'  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
+                            #'  }
+                            #'  }
                             #' @importFrom codama r_type_checking
                             rf1 = function(rf1_computation = TRUE,
                                            apply_rf1_on_bycatch = TRUE,
-                                           species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "LOT", "MIX", "TUN"),
+                                           species_fao_codes_rf1 = c("YFT", "SKJ",
+                                                                     "BET", "ALB",
+                                                                     "LOT", "MIX",
+                                                                     "TUN"),
                                            species_fate_codes_rf1 = as.integer(6),
                                            vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
-                                           global_output_path = NULL,
-                                           output_format = "eu") {
+                                           global_output_path = NULL) {
                               # 7.1 - Arguments verification ----
                               codama::r_type_checking(r_object = species_fao_codes_rf1,
                                                       type = "character")
@@ -512,11 +577,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 7.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(x = Sys.time(),
@@ -802,8 +862,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (! is.null(x = current_elementarycatches)) {
                                           if(current_vessel_type_code %in% vessel_type_codes_rf1){
                                             if(apply_rf1_on_bycatch){
-                                            current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
-                                              dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
+                                              current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
+                                                dplyr::mutate(catch_weight_rf1=catch_weight * current_rf1)
                                             } else {
                                               current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches %>%
                                                 dplyr::mutate(catch_weight_rf1=dplyr::case_when(
@@ -849,6 +909,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         } else {
                                           current_total_catches_species_activities <- current_elementarycatches %>%
                                             dplyr::select(activity_id,
+                                                          elementarycatch_id,
                                                           species_fao_code,
                                                           species_fate_code,
                                                           catch_weight,
@@ -879,6 +940,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              activity_id = NA_character_,
                                                                                                              activity_latitude = NA_real_,
                                                                                                              activity_longitude = NA_real_,
+                                                                                                             elementarycatch_id = NA_character_,
                                                                                                              species_fate_code = NA_integer_,
                                                                                                              catch_weight = NA_real_,
                                                                                                              catch_count = NA_real_,
@@ -971,22 +1033,22 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   if (!is.null(x = global_output_path)){
                                     # Sum landing weights across partial trips to get total landing weight by species in outputs by full trip
                                     if(!is.null(full_trip_total_landings_catches_species_activities)){
-                                    total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
-                                      dplyr::select(species_fao_code,
-                                                    landing_weight,
-                                                    species_fate_code,
-                                                    trip_id) %>%
-                                      dplyr:: distinct() %>%
-                                      dplyr::group_by(species_fao_code) %>%
-                                      dplyr::summarize(landing_weight=sum(landing_weight,
-                                                                          na.rm=TRUE)) %>%
-                                      dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
-                                                                                  NA, landing_weight))
-                                    full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
-                                                                                                            total_landings_weight_species,
-                                                                                                            by = dplyr::join_by(species_fao_code)) %>%
-                                      dplyr::rename(landing_weight=landing_weight.y) %>%
-                                      dplyr::select(-landing_weight.x)
+                                      total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
+                                        dplyr::select(species_fao_code,
+                                                      landing_weight,
+                                                      species_fate_code,
+                                                      trip_id) %>%
+                                        dplyr:: distinct() %>%
+                                        dplyr::group_by(species_fao_code) %>%
+                                        dplyr::summarize(landing_weight=sum(landing_weight,
+                                                                            na.rm=TRUE)) %>%
+                                        dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
+                                                                                    NA, landing_weight))
+                                      full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
+                                                                                                              total_landings_weight_species,
+                                                                                                              by = dplyr::join_by(species_fao_code)) %>%
+                                        dplyr::rename(landing_weight=landing_weight.y) %>%
+                                        dplyr::select(-landing_weight.x)
                                     }
                                     total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
                                   }
@@ -1058,6 +1120,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
                                                                                  y = total_landings_catches,
                                                                                  by = "trip_id")
+                                  ######  Add label for rf1 and rf2 statut ######
+                                  rf1_statut <- data.frame(statut_rf1=c(1.1,1.2,1.3,1.4,2.1,2.2,2.3,2.4,3.1),
+                                                           statut_rf1_label=c("logbook(s) missing in not complete full trip",
+                                                                              "trip(s) without catch (e.g. route or support) in not complete full trip",
+                                                                              "elementary landing(s) missing in not complete full trip",
+                                                                              "partial trip(s) missing (not complete full trip)",
+                                                                              "logbook(s) missing in complete full trip",
+                                                                              "trip(s) without catch (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip",
+                                                                              "elementary landing(s) missing  (at all or related to the arguments species_fao_codes_rf1 and species_fate_codes_rf1) in complete full trip",
+                                                                              "complete full trip without missing data",
+                                                                              "vessel type code not corresponding to the argument vessel_type_codes_rf1"))
+
+
+                                  rf2_statut <- data.frame(statut_rf2=c(1, 2,3),
+                                                           statut_rf2_label=c("logbook(s) missing, rf2 must to be calculated",
+                                                                              "no missing logbook, rf2 no need to be calculated",
+                                                                              " full trip not complete or vessel type code not validated"))
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                                 y = rf1_statut,
+                                                                                 by = "statut_rf1")
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
+                                                                                 y = rf2_statut,
+                                                                                 by = "statut_rf2")
                                   detail_outputs_process_1_1 <- outputs_process_1_1 %>%
                                     dplyr::full_join(x = outputs_process_1_1,
                                                      y = total_landings_catches_species_activities,
@@ -1065,15 +1150,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     dplyr::relocate(activity_id,
                                                     activity_latitude,
                                                     activity_longitude,
-                                                    .after = trip_id)
+                                                    .after = trip_id) %>%
+                                    dplyr::relocate(landing_weight,
+                                                    .after = species_fate_code)
+                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
+                                                                                 y = rf1_statut,
+                                                                                 by = "statut_rf1")
+                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
+                                                                                 y = rf2_statut,
+                                                                                 by = "statut_rf2")
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = global_outputs_process_1_1,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1104,24 +1192,59 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
+
                             # 9 - Process 1.2: conversion_weight_category ----
-                            #' @description Process of logbook weight categories conversion.
+                            #' @description Process of logbook weight categories conversion. \cr
+                            #' Logbook's weight categories change from one tuna fishing company to another, that involves overlaps and are hardly usable directly from the logbook.
+                            #' This process aims to homogenize these weight categories and create simplify categories divided in function of the fishing school and the ocean:
+                            #' \itemize{
+                            #' \item{< 10kg and > 10kg} for the floating object school in the Atlantic and Indian Ocean,
+                            #' \item{ < 10kg, 10-30kg and > 30kg} for undetermined and free school in the Atlantic Ocean,
+                            #' \item{< 10kg and > 10kg} for undetermined and free school in the Indian Ocean.
+                            #' }
+                            #' For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
+                            #'  Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{elementarycatch_id: } elementary catch identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{weight_category_code: } weight category code defined in logbooks, type \code{\link[base]{character}}.
+                            #'  \item{weight_category_min: } weight category's lower limit (kg), type \code{\link[base]{numeric}}.
+                            #'  \item{weight_category_max: } weight category's upper limit (kg), type \code{\link[base]{numeric}}.
+                            #'  \item{weight_category_label: } weight category label defined in logbooks, type \code{\link[base]{character}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction  (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
+                            #'  \item{weight_category_code_corrected: } weight category code after conversion, type \code{\link[base]{character}}.
+                            #'  \item{catch_weigh_category_code_corrected: } catch weight after weight category conversion (tonnes), type \code{\link[base]{numeric}}.\cr
+                            #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  }
                             conversion_weight_category = function(global_output_path = NULL,
-                                                                  output_format = "eu",
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -1207,7 +1330,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                             current_elementarycatches_corrected <- NULL
-                                            current_elementarycatches_added <- NULL
                                             if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
@@ -1217,305 +1339,232 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean_code
                                                 school_type_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$school_type_code
-                                                #- process Observe ----
-                                                if (referential_template == "observe"){
-                                                  # Distribution conversion key for floating object school in the Atlantic Ocean and
-                                                  # for undetermined, free and floating object school in the Indian Ocean.
-                                                  if (ocean_activity==2 || (ocean_activity==1 && school_type_activity==1)){
-                                                    current_elementarycatches_corrected <- current_elementarycatches %>%
-                                                      dplyr::mutate(weight_category_min = dplyr::if_else(is.na(weight_category_min),
-                                                                                                         0.0, weight_category_min),
-                                                                    weight_category_max = dplyr::if_else(is.na(weight_category_max),
-                                                                                                         Inf, weight_category_max),
-                                                                    weight_category_code_corrected = dplyr::case_when(
-                                                                      weight_category_max <= 10.0 ~ "<10kg",
-                                                                      weight_category_min >= 10.0 ~ ">10kg",
-                                                                      weight_category_min == 6 & weight_category_max == 20 ~ ">10kg",
-                                                                      (species_fao_code == "SKJ") ~ "<10kg",
-                                                                      !(species_fao_code %in% c("YFT",
-                                                                                                "BET",
-                                                                                                "ALB",
-                                                                                                "SKJ")) ~ "unknown",
-                                                                      TRUE ~ "unknown"
-                                                                    ),
-                                                                    catch_weight_category_code_corrected = dplyr::if_else(weight_category_min == 6 & weight_category_max == 20,
-                                                                                                                          catch_weight_rf2*0.8,
-                                                                                                                          catch_weight_rf2))
-                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
-                                                      dplyr::filter(weight_category_min == 6 & weight_category_max == 20) %>%
-                                                      dplyr::mutate(weight_category_code_corrected ="<10kg",
-                                                                    catch_weight_category_code_corrected = catch_weight_rf2*0.2)
-                                                  } else if(ocean_activity==1 && school_type_activity %in% c(2, 0)){
-                                                    #  Distribution conversion key for undetermined and free school in the Atlantic Ocean:
-                                                    current_elementarycatches_corrected <- current_elementarycatches %>%
-                                                      dplyr::mutate(weight_category_min = dplyr::if_else(is.na(weight_category_min),
-                                                                                                         0.0, weight_category_min),
-                                                                    weight_category_max = dplyr::if_else(is.na(weight_category_max),
-                                                                                                         Inf, weight_category_max),
-                                                                    weight_category_code_corrected = dplyr::case_when(
-                                                                      weight_category_max <= 10.0 ~ "<10kg",
-                                                                      weight_category_min >= 10.0 & weight_category_max <= 30.0 ~ "10-30kg",
-                                                                      weight_category_min >= 30.0 ~ ">30kg",
-                                                                      species_fao_code == "SKJ" ~ "<10kg",
-                                                                      !(species_fao_code %in% c("YFT",
-                                                                                                "BET",
-                                                                                                "ALB",
-                                                                                                "SKJ")) ~ "unknown",
-                                                                      weight_category_min == 6 & weight_category_max == 20 ~ "10-30kg",
-                                                                      weight_category_min == 10.0  & weight_category_max > 30 ~ ">30kg",
-                                                                      (weight_category_min == 20.0 & weight_category_max == 40.0) ~ "10-30kg",
-                                                                      TRUE ~ "unknown"
-                                                                    ),
-                                                                    catch_weight_category_code_corrected = dplyr::case_when(
-                                                                      weight_category_min == 6 & weight_category_max == 20 ~ catch_weight_rf2*0.8,
-                                                                      weight_category_min == 10.0  & weight_category_max > 30 ~ catch_weight_rf2*0.9,
-                                                                      weight_category_min == 20.0 & weight_category_max == 40.0 ~ catch_weight_rf2*0.5,
-                                                                      TRUE ~ catch_weight_rf2
-                                                                    ))
-                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
-                                                      dplyr::filter((weight_category_min == 6 & weight_category_max == 20) |
-                                                                    weight_category_min == 10.0 & weight_category_max > 30 |
-                                                                    weight_category_min == 20.0 & weight_category_max == 40.0) %>%
-                                                      dplyr::mutate(weight_category_code_corrected = dplyr::case_when(
-                                                        weight_category_min == 6 & weight_category_max == 20 ~ "<10kg",
-                                                        weight_category_min == 10.0  & weight_category_max > 30 ~ "10-30kg",
-                                                        weight_category_min == 20.0 & weight_category_max == 40.0 ~ ">30kg",
-                                                        TRUE ~ "unknown"
-                                                      ),
-                                                      catch_weight_category_code_corrected = dplyr::case_when(
-                                                        weight_category_min == 6 & weight_category_max == 20 ~ catch_weight_rf2*0.2,
-                                                        weight_category_min == 10.0  & weight_category_max > 30 ~ catch_weight_rf2*0.1,
-                                                        (weight_category_min == 20.0 & weight_category_max == 40.0) ~ catch_weight_rf2*0.5,
-                                                        TRUE ~ NA_real_))
-                                                  }
-                                                  if(!is.null(current_elementarycatches_added)){
-                                                    current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added, current_elementarycatches_corrected))
-                                                  }
-                                                } else if(referential_template == "avdth"){
-                                                  #- process AVDTH ----
-                                                  for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
-                                                    current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
-                                                    current_weight_category_code <- as.integer(current_elementarycatch$weight_category_code)
-                                                    if ( !is.na(x = current_weight_category_code)){
-                                                      if (ocean_activity == 1) {
-                                                        # for atlantic ocean
-                                                        if (school_type_activity %in% c(2, 0)) {
-                                                          # for free school and undetermined school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT",
-                                                                                                              "BET",
-                                                                                                              "ALB")) {
-                                                            # for YFT, BET and ALB
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 6) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
-                                                            } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 11) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
-                                                              current_elementarycatch$weight_category_code_corrected[2]  <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
+
+                                                for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
+                                                  current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
+                                                  current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
+                                                                                                        yes = stringr::str_extract(string = current_elementarycatch$weight_category_code,
+                                                                                                                                   pattern = "[:digit:]+$"),
+                                                                                                        no = current_elementarycatch$weight_category_code))
+                                                  if ( !is.na(x = current_weight_category_code)){
+                                                    if (ocean_activity == 1) {
+                                                      # for atlantic ocean
+                                                      if (school_type_activity %in% c(2, 0)) {
+                                                        # for free school and undetermined school
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT",
+                                                                                                            "BET",
+                                                                                                            "ALB")) {
+                                                          # for YFT, BET and ALB
+                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 4) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                          } else if (current_weight_category_code %in% c(3, 12)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 6) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
+                                                          } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 11) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
+                                                            current_elementarycatch$weight_category_code_corrected[2]  <- category_3
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
+                                                          } else if (current_weight_category_code == 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            stop(format(Sys.time(),
+                                                                        "%Y-%m-%d %H:%M:%S"),
+                                                                 " - Logbook category ",
+                                                                 current_weight_category_code,
+                                                                 " not set in the algorithm.\n",
+                                                                 "[trip: ",
+                                                                 current_trip$.__enclos_env__$private$trip_id,
+                                                                 ", activity: ",
+                                                                 current_elementarycatch$activity_id,
+                                                                 ", elementarycatch: ",
+                                                                 current_elementarycatch$elementarycatch_id,
+                                                                 "]")
+                                                          }
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                          if (current_weight_category_code != 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           } else {
                                                             current_elementarycatch$weight_category_code_corrected <- category_5
                                                             current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                           }
                                                         } else {
-                                                          # for floating object school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        }
-                                                      } else if (ocean_activity == 2) {
-                                                        # for indian ocean
-                                                        if (school_type_activity %in% c(2, 0)) {
-                                                          # for free school and undetermined school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          # for floating object school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                         }
                                                       } else {
-                                                        stop(format(Sys.time(),
-                                                                    "%Y-%m-%d %H:%M:%S"),
-                                                             " - Algorithm not developed yet for the ocean number ",
-                                                             ocean_activity,
-                                                             ".\n",
-                                                             "[trip: ",
-                                                             current_trip$.__enclos_env__$private$trip_id,
-                                                             ", activity: ",
-                                                             current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
-                                                             "]")
+                                                        # for floating object school
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 4) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            stop(format(Sys.time(),
+                                                                        "%Y-%m-%d %H:%M:%S"),
+                                                                 " - Logbook category ",
+                                                                 current_weight_category_code,
+                                                                 " not set in the algorithm.\n",
+                                                                 "[trip: ",
+                                                                 current_trip$.__enclos_env__$private$trip_id,
+                                                                 ", activity: ",
+                                                                 current_elementarycatch$activity_id,
+                                                                 ", elementarycatch: ",
+                                                                 current_elementarycatch$elementarycatch_id,
+                                                                 "]")
+                                                          }
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                          if (current_weight_category_code != 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
+                                                        } else {
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                        }
+                                                      }
+                                                    } else if (ocean_activity == 2) {
+                                                      # for indian ocean
+                                                      if (school_type_activity %in% c(2, 0)) {
+                                                        # for free school and undetermined school
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 4) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            stop(format(Sys.time(),
+                                                                        "%Y-%m-%d %H:%M:%S"),
+                                                                 " - Logbook category ",
+                                                                 current_weight_category_code,
+                                                                 " not set in the algorithm.\n",
+                                                                 "[trip: ",
+                                                                 current_trip$.__enclos_env__$private$trip_id,
+                                                                 ", activity: ",
+                                                                 current_elementarycatch$activity_id,
+                                                                 ", elementarycatch: ",
+                                                                 current_elementarycatch$elementarycatch_id,
+                                                                 "]")
+                                                          }
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                          if (current_weight_category_code != 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
+                                                        } else {
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                        }
+                                                      } else {
+                                                        # for floating object school
+                                                        if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                                          if (current_weight_category_code %in% c(1, 2, 10)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 4) {
+                                                            current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                                            current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                                            current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                                          } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_4
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else if (current_weight_category_code == 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            stop(format(Sys.time(),
+                                                                        "%Y-%m-%d %H:%M:%S"),
+                                                                 " - Logbook category ",
+                                                                 current_weight_category_code,
+                                                                 " not set in the algorithm.\n",
+                                                                 "[trip: ",
+                                                                 current_trip$.__enclos_env__$private$trip_id,
+                                                                 ", activity: ",
+                                                                 current_elementarycatch$activity_id,
+                                                                 ", elementarycatch: ",
+                                                                 current_elementarycatch$elementarycatch_id,
+                                                                 "]")
+                                                          }
+                                                        } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                                          if (current_weight_category_code != 9) {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_1
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          } else {
+                                                            current_elementarycatch$weight_category_code_corrected <- category_5
+                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                          }
+                                                        } else {
+                                                          current_elementarycatch$weight_category_code_corrected <- category_5
+                                                          current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                        }
                                                       }
                                                     } else {
-                                                      current_elementarycatch$weight_category_code_corrected <- category_5
-                                                      current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                                      stop(format(Sys.time(),
+                                                                  "%Y-%m-%d %H:%M:%S"),
+                                                           " - Algorithm not developed yet for the ocean number ",
+                                                           ocean_activity,
+                                                           ".\n",
+                                                           "[trip: ",
+                                                           current_trip$.__enclos_env__$private$trip_id,
+                                                           ", activity: ",
+                                                           current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
+                                                           "]")
                                                     }
-                                                    current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected,
-                                                                                                 current_elementarycatch)
+                                                  } else {
+                                                    current_elementarycatch$weight_category_code_corrected <- category_5
+                                                    current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
                                                   }
+                                                  current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected ,
+                                                                                               current_elementarycatch)
                                                 }
                                                 private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
                                               }
@@ -1644,7 +1693,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         "]\n", sep="")
                                   }
                                 }
-                              }
                                 # 9.3 - Outputs extraction ----
                                 # outputs manipulation
                                 if (! is.null(x = global_output_path)) {
@@ -1697,9 +1745,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       "elementarycatch_id" = elementarycatches_selected$elementarycatch_id,
                                                                                       "species_fao_code" = elementarycatches_selected$species_fao_code,
                                                                                       "weight_category_code" = elementarycatches_selected$weight_category_code,
-                                                                                      "weight_category_label" = elementarycatches_selected$weight_category_label,
                                                                                       "weight_category_min" = elementarycatches_selected$weight_category_min,
                                                                                       "weight_category_max" = elementarycatches_selected$weight_category_max,
+                                                                                      "weight_category_label" = elementarycatches_selected$weight_category_label,
                                                                                       "catch_weight_rf2" = elementarycatches_selected$catch_weight_rf2,
                                                                                       "weight_category_code_corrected" = elementarycatches_selected$weight_category_code_corrected,
                                                                                       "catch_weight_category_code_corrected" = elementarycatches_selected$catch_weight_category_code_corrected,
@@ -1724,19 +1772,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     school_type_code,
                                                     elementarycatch_id)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_2,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1755,26 +1792,42 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 cat(format(Sys.time(),
                                            "%Y-%m-%d %H:%M:%S"),
                                     " - End process 1.2: logbook weight categories conversion.\n")
+                              }
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 10 - Process 1.3: set_count ----
                             #' @description Process for positive sets count.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_3: a table (.csv) with as many rows as activities and 15 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{positive_set_count: } count of positive set (catch weight and/or catch count not zero), type \code{\link[base]{integer}}.
+                            #'  }
                             set_count = function(global_output_path = NULL,
-                                                 output_format = "eu",
                                                  referential_template = "observe") {
                               # 10.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -1955,19 +2008,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     school_type_code,
                                                     positive_set_count)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_3,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -1991,16 +2033,21 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 11 - Process 1.4: fishing effort indicators ----
                             #' @description Process for set duration, time at sea, fishing time and searching time calculation (in hours).
-                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
+                            #' Details about the methods are available in the vignette : \href{https://ob7-ird.github.io/t3/articles/level_1.html#set-duration-calculation}{Process 1.4: Fishing effort indicators calculation}.
+                            #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                            #' Data and parameters for set duration calculation (by year, country, ocean and school type), in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
                             #' Duration in minutes in the reference table, converted into hours in output for subsequent processing).
-                            #' @param activity_code_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+                            #' @param activity_code_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                            #' Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
                             #'  and/or searching time and/or set duration.
                             #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
-                            #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
+                            #' See below for more details.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE.
+                            #' Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe".
+                            #' Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @importFrom suncalc getSunlightTimes
                             #' @details
                             #' Available variables are:
@@ -2015,17 +2062,43 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{"dusk": } dusk (evening nautical twilight starts)
                             #'  \item{"nauticalDusk": } nautical dusk (evening astronomical twilight starts)
                             #'  \item{"night": } night starts (dark enough for astronomical observations)
-                            #'  \item{"nadir": }nadir (darkest moment of the night, sun is in the lowest position)
+                            #'  \item{"nadir": } nadir (darkest moment of the night, sun is in the lowest position)
                             #'  \item{"nightEnd": } night ends (morning astronomical twilight starts)
                             #'  \item{"nauticalDawn": } nautical dawn (morning nautical twilight starts)
-                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts
+                            #'  \item{"dawn": } dawn (morning nautical twilight ends, morning civil twilight starts)
+                            #'  }
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
+                            #'  process_1_4: a table (.csv) with as many rows as activities and 20 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  \item{objectoperation_code: } object operation code to define the type of floating object operation (in Observe referential), type \code{\link[base]{character}}.
+                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{positive_set_count: } count of positive set (catch weight and/or catch count not zero), type \code{\link[base]{integer}}.
+                            #'  \item{set_duration: } set duration in hours, according to the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}, type \code{\link[base]{numeric}}.
+                            #'  \item{time_at_sea: } time at sea in hours, type \code{\link[base]{numeric}}.
+                            #'  \item{fishing_time: } fishing time in hours, type \code{\link[base]{numeric}}.
+                            #'  \item{searching_time: } searching time in hours, type \code{\link[base]{numeric}}.\cr
+                            #'   Equal to the fishing time value minus the sum of the sets duration values.
                             #'  }
                             fishing_effort = function(set_duration_ref,
                                                       activity_code_ref,
                                                       sunrise_schema = "sunrise",
                                                       sunset_schema = "sunset",
                                                       global_output_path = NULL,
-                                                      output_format = "eu",
                                                       referential_template = "observe") {
                               # 11.1 - Arguments verification ----
                               if (! paste0(class(x = set_duration_ref),
@@ -2084,11 +2157,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -2686,8 +2754,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
+                                                                               "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
                                                                                "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                               "positive_set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "positive_set_count")),
                                                                                "set_duration" = unlist(x = activities_selected$extract_l1_element_value(element = "set_duration")),
                                                                                "time_at_sea" = unlist(x = activities_selected$extract_l1_element_value(element = "time_at_sea")),
                                                                                "fishing_time" = unlist(x = activities_selected$extract_l1_element_value(element = "fishing_time")),
@@ -2707,26 +2777,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_longitude,
                                                     activity_date,
                                                     activity_code,
+                                                    objectoperation_code,
                                                     ocean_code,
                                                     school_type_code,
+                                                    positive_set_count,
                                                     set_duration,
                                                     time_at_sea,
                                                     fishing_time,
                                                     searching_time)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_1_4,
                                               file = file.path(global_output_path,
                                                                "level1",
@@ -2749,15 +2810,44 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 15 - Process 2.1: sample length class conversion ld1 to lf ----
-                            #' @description Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).
-                            #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with length ratio between ld1 and lf class.
+                            #' @description Process for length conversion, if necessary, in length fork (lf). \cr
+                            #' In fact, during the sampling process, fishes length can be collected and expressed in different standards. \cr
+                            #' For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).\cr
+                            #'  Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
+                            #' This step aims to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. \cr
+                            #' Historical and so far, the process use a referential \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.
+                            #' In addition, the \code{sample_number_measured} variable, in this step will be converted to a \code{sample_number_measured_lf} variable (notably due to the creation of new samples to split one LD1 class in multiples LF classes during certain conversions).
+                            #' @param length_step Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                            #'  Data frame object with length ratio between ld1 and lf class, in the same format as the \href{https://ob7-ird.github.io/t3/reference/length_step.html}{conversion table LD1 to LF}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_length_class: } sample length class (cm) of measured individuals in first dorsal length (LD1), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_measured: } sample number of measured individuals in first dorsal length (LD1), type \code{\link[base]{integer}}.
+                            #'  \item{sample_length_class_lf: } sample length class  (cm) of measured individuals converted in curved fork length (LF), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{numeric}}.
+                            #'  For example, for one sample (\code{sample_number_measured=1}) from the Atlantic Ocean (1), of the species YFT (\emph{Thunnus albacares}), with a first dorsal length class (LD1) measured at \code{sample_length_class=8} (cm),
+                            #'  the LD1 to LF conversion will create a new elementary sample row because a percentage of \code{ratio=50} \% of the number of fish in the sample will be assigned to the curved fork length class: \code{sample_number_measured_lf=32} (cm) ( \code{sample_number_measured_lf=0.5})
+                            #'  and 50\% of this sample will obtain a \code{sample_number_measured_lf=34} (cm) with \code{sample_number_measured_lf=0.5}.
+                            #'  }
                             sample_length_class_ld1_to_lf =  function(length_step,
                                                                       global_output_path = NULL,
-                                                                      output_format = "eu",
                                                                       referential_template = "observe") {
                               # 15.1 - Arguments verification ----
                               if (! paste0(class(x = length_step),
@@ -2773,11 +2863,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -2941,8 +3026,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   " and LD1 class ",
                                                                   current_elementary_sample$.__enclos_env__$private$sample_length_class,
                                                                   ".\n",
-                                                                  "  Sample detected with length class measured in LD1 for SKJ specie.
-                                                                     Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                  "  Sample detected with length class measured in LD1 for SKJ species.
+                                                                     Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf`) set to NA.\n",
                                                                   "[trip_id: ",
                                                                   current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                   " (full trip item id ",
@@ -2982,7 +3067,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     " or LD1>",
                                                                     max(length_step$ld1_class),
                                                                     ".\n ",
-                                                                    "  Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf` set to NA.\n",
+                                                                    "  Sample length class in FL (`sample_length_class_lf`) and the number of sample measured (`sample_number_measured_lf`) set to NA.\n",
                                                                     "[trip_id: ",
                                                                     current_elementary_sample$.__enclos_env__$private$trip_id,
                                                                     " (full trip item id ",
@@ -3283,19 +3368,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_1,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3320,20 +3394,40 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 16 - Process 2.2: sample number measured extrapolation ----
                             #' @description Process for sample number measured individuals extrapolation to sample number individuals counted.
+                            #' In fact, during the sampling and according to the protocol, just a part of the sampled individuals are measured in relation to that counted.
+                            #' The aim of this step is to extrapolate the number of individuals measured in the sample to the number of individuals counted in the sample.
+                            #' To do that, a Raising Factor (RF4) is calculated per stratum, per well, per sample, per sub-sample and per species.
+                            #' It is equal, by stratum, to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            sample_number_measured_extrapolation = function(global_output_path = NULL,
-                                                                            output_format = "eu") {
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{sub_sample_total_count_id: } sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_length_class_lf: } sample length class (cm) of measured individuals converted in curved fork length (LF), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{numeric}}.
+                            #'  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4}.
+                            #'  }
+                            sample_number_measured_extrapolation = function(global_output_path = NULL) {
                               # 16.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 16.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -3580,19 +3674,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_2,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3617,13 +3700,38 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 17 - Process 2.3: sample_length_class_step_standardisation ----
                             #' @description Process for step standardisation of lf length class.
-                            #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
+                            #'  This step aims to standardize sample length classes. So far, these specifications are integrate in the process:
+                            #'  \itemize{
+                            #' \item{ a length classes step of 1cm for: } SKJ (\emph{Katsuwonus pelamis}), LTA (\emph{Euthynnus alletteratus}) and FRI (\emph{Auxis thazard}),
+                            #' \item{ a length classes step of 2cm fo: } YFT (\emph{Thunnus albacares}), BET (\emph{Thunnus obesus}) and ALB (\emph{Thunnus alalunga}).
+                            #' }
+                            #' To standardize the original sample's curved fork length (LF), the object "elementarysample" is created by  aggregation of elementary sample raw.
+                            #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theoretical maximum lf class that can occur (all species considerated). By default 500.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory.The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_type_code: } sample type type code, type \code{\link[base]{integer}}.
+                            #'  \item{sample_quality_code: } sample quality code, type \code{\link[base]{integer}}.
+                            #'  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+                            #'  \item{sample_standardised_length_class_lf: } standardised sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } standardised sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}, type \code{\link[base]{numeric}}) .\cr
+                            #'  }
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500),
-                                                                                global_output_path = NULL,
-                                                                                output_format = "eu") {
+                                                                                global_output_path = NULL) {
                               # 17.1 - Arguments verification ----
                               codama::r_type_checking(r_object = maximum_lf_class,
                                                       type = "integer",
@@ -3631,11 +3739,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 17.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -3747,38 +3850,95 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                 by = step)
                                                   sample_length_class_lf_id <- 1
                                                   while (sample_length_class_lf_id <= length(sample_length_class_lf)) {
-                                                    lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
-                                                    upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
-                                                    sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
-                                                                                                                     & sample_length_class_lf < upper_border)]
-                                                    capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
-                                                                   file = "NUL")
-                                                    capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf %in% c(",
-                                                                                                                                                                paste0(sample_length_class_lf_for_merge,
-                                                                                                                                                                       collapse = ", "),
-                                                                                                                                                                ")"))),
-                                                                   file = "NUL")
-                                                    current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
-                                                    for (sub_sample_id in current_sample_specie_by_step_subid) {
-                                                      capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                    #### > Case of LF outliers (> maximum_lf_class) #######
+                                                    if(sample_length_class_lf[sample_length_class_lf_id] >= maximum_lf_class){
+                                                      capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
                                                                      file = "NUL")
-                                                      capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
-                                                                                                                                                                                   sub_sample_id))),
+                                                      capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf == ",
+                                                                                                                                                                  sample_length_class_lf[sample_length_class_lf_id]))),
                                                                      file = "NUL")
-                                                      object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
-                                                                                                      well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
-                                                                                                      sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
-                                                                                                      sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
-                                                                                                      sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
-                                                                                                      sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
-                                                                                                      species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
-                                                                                                      sample_standardised_length_class_lf = lower_border,
-                                                                                                      sample_number_measured_extrapolated_lf = sum(unlist(current_sample_specie_by_step_by_subid$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
-                                                                                                      sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
-                                                      capture.output(current_elementarysamples$add(new_item = object_elementarysample),
+                                                      current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
+                                                      for (sub_sample_id in current_sample_specie_by_step_subid) {
+                                                        capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                                       file = "NUL")
+                                                        capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
+                                                                                                                                                                                     sub_sample_id))),
+                                                                       file = "NUL")
+                                                        object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                                                        well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                        sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                                                        sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                        sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
+                                                                                                        sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
+                                                                                                        species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
+                                                                                                        sample_standardised_length_class_lf = NA_integer_,
+                                                                                                        sample_number_measured_extrapolated_lf = NA_real_,
+                                                                                                        sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
+                                                        capture.output(current_elementarysamples$add(new_item = object_elementarysample),
+                                                                       file = "NUL")
+                                                        warning(format(Sys.time(),
+                                                                       "%Y-%m-%d %H:%M:%S"),
+                                                                " - Sample  detected with length class measured in FL (sample_length_class_lf=",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_length_class_lf,
+                                                                ") ",
+                                                                "greater than maximum_lf_class=",
+                                                                maximum_lf_class,
+                                                                ".\n ",
+                                                                "  Sample length class in FL (`sample_standardised_length_class_lf`) and the number of sample measured (`sample_number_measured_extrapolated_lf`) set to NA.\n",
+                                                                "[trip_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                " (full trip item id ",
+                                                                full_trip_id,
+                                                                ", trip item id ",
+                                                                partial_trip_id,
+                                                                "), well_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                " (well item id ",
+                                                                well_id,
+                                                                "), sample_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                "],\n",
+                                                                " elementarysampleraw_id: ",
+                                                                current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$elementarysampleraw_id,
+                                                                "].\n",
+                                                                "Please check the data or increase the argument maximum_lf_class (by default 500).")
+                                                      }
+
+                                                      sample_length_class_lf_id <- sample_length_class_lf_id + 1
+                                                    } else{
+                                                      lower_border <- as.integer(dplyr::last(x = lower_border_reference[which(lower_border_reference <= trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
+                                                      upper_border <- as.integer(dplyr::first(x = upper_border_reference[which(upper_border_reference > trunc(sample_length_class_lf[sample_length_class_lf_id]))]))
+                                                      sample_length_class_lf_for_merge <- sample_length_class_lf[which(sample_length_class_lf >= lower_border
+                                                                                                                       & sample_length_class_lf < upper_border)]
+                                                      capture.output(current_sample_specie_by_step <- object_r6(class_name = "elementarysamplesraw"),
                                                                      file = "NUL")
+                                                      capture.output(current_sample_specie_by_step$add(new_item = current_sample_specie$filter_l1(filter = paste0("$path$sample_length_class_lf %in% c(",
+                                                                                                                                                                  paste0(sample_length_class_lf_for_merge,
+                                                                                                                                                                         collapse = ", "),
+                                                                                                                                                                  ")"))),
+                                                                     file = "NUL")
+                                                      current_sample_specie_by_step_subid <- unique(x = unlist(x = current_sample_specie_by_step$extract_l1_element_value(element = "sub_sample_id")))
+                                                      for (sub_sample_id in current_sample_specie_by_step_subid) {
+                                                        capture.output(current_sample_specie_by_step_by_subid <- object_r6(class_name = "elementarysamplesraw"),
+                                                                       file = "NUL")
+                                                        capture.output(current_sample_specie_by_step_by_subid$add(new_item = current_sample_specie_by_step$filter_l1(filter = paste0("$path$sub_sample_id == ",
+                                                                                                                                                                                     sub_sample_id))),
+                                                                       file = "NUL")
+                                                        object_elementarysample <- elementarysample$new(trip_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$trip_id,
+                                                                                                        well_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$well_id,
+                                                                                                        sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_id,
+                                                                                                        sub_sample_id = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sub_sample_id,
+                                                                                                        sample_quality_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_quality_code,
+                                                                                                        sample_type_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_type_code,
+                                                                                                        species_fao_code = current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$species_fao_code,
+                                                                                                        sample_standardised_length_class_lf = lower_border,
+                                                                                                        sample_number_measured_extrapolated_lf = sum(unlist(current_sample_specie_by_step_by_subid$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
+                                                                                                        sample_total_count = as.integer(current_sample_specie_by_step_by_subid$extract(id = 1)[[1]]$.__enclos_env__$private$sample_total_count))
+                                                        capture.output(current_elementarysamples$add(new_item = object_elementarysample),
+                                                                       file = "NUL")
+                                                      }
+                                                      sample_length_class_lf_id <- sample_length_class_lf_id + length(x = sample_length_class_lf_for_merge)
                                                     }
-                                                    sample_length_class_lf_id <- sample_length_class_lf_id + length(x = sample_length_class_lf_for_merge)
                                                   }
                                                 }
                                               }
@@ -3869,20 +4029,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied\n",
-                                            sep = "")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_3,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -3907,14 +4055,50 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 18 - Process 2.4: well_set_weight_categories ----
                             #' @description Process for well set weight categories definition.
+                            #' The sampling provides information at the well scale. However, a set can be split between several wells and the individuals sampled could belong to as many sets as there are in the well.
+                            #' This process aim to compute a weighted weight, which represents the weight of a set in a well, according to the distribution of this set in all the wells.\cr
+                            #' The overall formula is as follows:
+                            #' \eqn{WW = \frac{W1}{W2} \times WT}{WW=W1/W2 x WT}, where:
+                            #' \itemize{
+                            #'  \item{WW: } is the weighted weight,
+                            #'  \item{W1: } is the weight of the set in the well,
+                            #'  \item{W2: } is the weight of the set in all the sampled wells,
+                            #'  \item{WT: } the total set's weight.
+                            #'   }
+                            #' So far, the process is developed for the purse seiner.
+                            #' Furthermore, a proportion of each sampling sets among the sampling well will be calculated in relation with the weighted weight:\cr
+                            #' \eqn{PWW = \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}}{WW_ij / sum_i(WW_ij)}, where:
+                            #' \itemize{
+                            #'  \item{PWW: } is the proportional weighted weight,
+                            #'  \item{\eqn{WW_{i,j}}{WW_ij}: } is the weighted weight of the current set i in well j.
+                            #'  }
                             #' @param sample_set Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{weighted_weight_minus10: } weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_weight_plus10: } weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_weight: } weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type \code{\link[base]{numeric}}.
+                            #'  }
+                            #'  To better understand what the process does, let's look at an example:\cr
+                            #'  A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one.\cr
+                            #'  The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). \cr
+                            #'  For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).
                             well_set_weight_categories = function(sample_set,
                                                                   global_output_path = NULL,
-                                                                  output_format = "eu",
                                                                   referential_template = "observe") {
                               # 18.1 - Arguments verification ----
                               if (! paste0(class(x = sample_set),
@@ -3929,11 +4113,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               codama::r_type_checking(r_object = referential_template,
                                                       type = "character",
                                                       length = 1L,
@@ -4301,20 +4480,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied\n",
-                                            sep = "")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_4,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4338,20 +4505,33 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 19 - Process 2.5: standardised_sample_creation ----
                             #' @description Object standardised sample creation.
+                            #' This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data.
+                            #' In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF).
+                            #' This step create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the species.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            standardised_sample_creation = function(global_output_path = NULL,
-                                                                    output_format = "eu") {
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_5: a table (.csv) with as many rows as standardized samples, and 12 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type \code{\link[base]{numeric}}.\cr
+                            #'  }
+                            standardised_sample_creation = function(global_output_path = NULL) {
                               # 19.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 19.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -4550,19 +4730,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_5,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4586,13 +4755,49 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 20 - Process 2.6: standardised_sample_set_creation ----
                             #' @description R6 object standardised sample set creation.
-                            #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Data frame object with parameters for length weight relationship.
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
-                            #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' In the previous processes and in the object standardized sample associated, samples is expressed at the well scale.\cr
+                            #' In this step, the aim is to move to the expression of sample by well to sample by set. \cr
+                            #' In the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories}{2.4}, a weighted weight (WW) and a proportion of this weighted weight (PWW) at the set scale, has been calculated.\cr
+                            #' By combination of this value and elements of the object standardized sample, a new object called standardized sample set was created. Like explain before, this object is the expression of the sample at the set scale.\cr
+                            #' Furthermore, this process made a conversion of the samples length measurements in weight by length weight relationships (LWR).\cr
+                            #' LWR formulas take the form: \eqn{RWT=a \times LF^b}{RWT= a x (LF)^b}, where:
+                            #' \itemize{
+                            #' \item{RWT: } is the round weight (kg),
+                            #' \item {LF: } is the curved fork length (cm),
+                            #' \item{parameters a and b} comes from a references table as the \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table} and are dependent of of the species and potentially of the area (ocean or others) and the season.
+                            #' }
+                            #' More detail information could be find on the regional fisheries management organisations (RFMOs) like \href{https://www.iccat.int/}{ICCAT} or \href{https://iotc.org/}{IOTC}.
+                            #' @param length_weight_relationship_data Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                            #' Data frame object with parameters for length weight relationships, in the same format as the \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+                            #' Path of the global outputs directory. The function will create subsection if necessary.
+                            #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_6: a table (.csv) with as many rows as , and 15 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_weighted: } sample number of measured individuals weighted by set weight,  after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_number_weighted = sample_number_measured_extrapolated_lf * PWW}.
+                            #'  \item{sample_weight_unit: } weight (kg) of one individual,
+                            #'   calculated using length weight relationships as in \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}: \code{sample_weight_unit = parameter_a * sample_standardised_length_class_lf ^ parameter_b}),
+                            #'    type \code{\link[base]{numeric}}.
+                            #'  \item{sample_weight: } weight (kg) of all measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_weight = sample_weight_unit * sample_number_weighted}.
+                            #'  \item{sample_category: } sample category ("-10kg" or "+10kg"), according to \code{sample_weight_unit} value, type \code{\link[base]{character}}.
+                            #'  }
                             standardised_sample_set_creation = function(length_weight_relationship_data,
-                                                                        global_output_path = NULL,
-                                                                        output_format = "eu") {
+                                                                        global_output_path = NULL) {
                               # 20.1 - Arguments verification ----
                               if (! paste0(class(x = length_weight_relationship_data),
                                            collapse = "_") %in% c("data.frame",
@@ -4606,11 +4811,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 20.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -4832,19 +5032,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_6,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -4868,21 +5057,67 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 21 - Process 2.7: raised_factors_determination ----
                             #' @description Raised factors determination for weight sample set to set.
-                            #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.
-                            #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.
-                            #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.
-                            #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.
-                            #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limite value for raising factor (all categories). By default 250.
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
+                            #' This step aims to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets, if it's possible regarding data available:
+                            #'  \itemize{
+                            #'  \item{number and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg or > 10kg):
+                            #'  \itemize{
+                            #'   \item{\code{weighted_samples_minus10}: } sum of \code{sample_weight} for sample weight category \eqn{\leq}{<=} 10 kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'    \item{\code{weighted_samples_plus10}: } sum of \code{sample_weight} for sample weight category > 10 kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'     \item{\code{weighted_samples_total}: } sum of \code{sample_weight} for all sample weight categories (\eqn{\leq}{<=} 10 kg) and > 10kg, from \code{standardised_sample_set} object,
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'  }
+                            #'  }
+                            #'  \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
+                            #'  \itemize{
+                            #'   \item{\code{rf_minus10= weighted_weight_minus10 / weighted_samples_minus10}}
+                            #'    \item{\code{rf_plus10= weighted_weight_plus10 / weighted_samples_plus10}}
+                            #'     \item{\code{rf_total=weighted_weight / weighted_samples_total}}
+                            #'  }
+                            #'  }
+                            #'  }
+                            #'  The verification thresholds can be modified in the function parameters using the following arguments:
+                            #'  \itemize{
+                            #'  \item{\code{threshold_rf_minus10}: } by default at 500,
+                            #'   \item{\code{threshold_rf_plus10}: } by default at 500,
+                            #'   \item{\code{threshold_frequency_rf_minus10}: } by default at 75,
+                            #'   \item{\code{threshold_frequency_rf_plus10}: } by default at 75,
+                            #'   \item{\code{threshold_rf_total}: } by default at 250.
+                            #'   }
+                            #' @param threshold_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.
+                            #' @param threshold_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.
+                            #' @param threshold_frequency_rf_minus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.
+                            #' @param threshold_frequency_rf_plus10 Object of type \code{\link[base]{integer}} expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.
+                            #' @param threshold_rf_total Object of type \code{\link[base]{integer}} expected. Threshold limit value for raising factor (all categories). By default 250.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
+                            #' Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_7: a table (.csv) with as many rows as , and 13 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
+                            #'  \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
+                            #'  \item{rf_validation: } raising factor status, type \code{\link[base]{integer}}.
+                            #'  \item{rf_validation_label: } raising factor status label, type \code{\link[base]{character}}.
+                            #'  }
                             raised_factors_determination = function(threshold_rf_minus10 = as.integer(500),
                                                                     threshold_rf_plus10 = as.integer(500),
                                                                     threshold_frequency_rf_minus10 = as.integer(75),
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250),
-                                                                    global_output_path = NULL,
-                                                                    output_format = "eu") {
+                                                                    global_output_path = NULL) {
                               # 21.1 - Arguments verification ----
                               codama::r_type_checking(r_object = threshold_rf_minus10,
                                                       type = "integer",
@@ -4902,11 +5137,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 21.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -5170,19 +5400,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_7,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -5206,20 +5425,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # 22 - Process 2.8: raised standardised sample set ----
                             #' @description Application of process 2.8 raised factors on standardised sample set.
+                            #' This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
-                            raised_standardised_sample_set = function(global_output_path = NULL,
-                                                                      output_format = "eu") {
+                            #' @details
+                            #'  If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+                            #'  process_2_8: a table (.csv) with as many rows as , and 14 columns:
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.
+                            #'  \item{sample_number_weighted_set: } sample number weighted by set, type \code{\link[base]{numeric}}. \cr
+                            #'  \code{sample_number_weighted_set = sample_number_weighted * rf}, where :
+                            #'  \itemize{
+                            #'  \item{\code{rf}: } is one of the raising factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7},
+                            #'   according to sample weight category (\eqn{\leq}{<=} 10kg and > 10kg).
+                            #'  \item{\code{sample_number_weighted}: } is the sample number of measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals,
+                            #'   calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-6-sample-number-standardisation}{2.6}.
+                            #'  }
+                            #'  \item{sample_weight_set: } sample weight by set (tonnes), type \code{\link[base]{numeric}}.\cr
+                            #'  \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
+                            #'  }
+                            raised_standardised_sample_set = function(global_output_path = NULL) {
                               # 22.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
                                                       length = 1L)
-                              codama::r_type_checking(r_object = output_format,
-                                                      type = "character",
-                                                      length = 1L,
-                                                      allowed_value = c("us",
-                                                                        "eu"))
                               # 22.2 - Global process ----
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
@@ -5438,19 +5678,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     vessel_code,
                                                     vessel_type_code)
                                   # extraction
-                                  if (output_format == "us") {
-                                    outputs_dec <- "."
-                                    outputs_sep <- ","
-                                  } else if (output_format == "eu") {
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  } else {
-                                    warning(format(Sys.time(),
-                                                   "%Y-%m-%d %H:%M:%S"),
-                                            " - Wrong outputs format define, European format will be applied.")
-                                    outputs_dec <- ","
-                                    outputs_sep <- ";"
-                                  }
+                                  outputs_dec <- "."
+                                  outputs_sep <- ","
                                   write.table(x = outputs_process_2_8,
                                               file = file.path(global_output_path,
                                                                "level2",
@@ -6278,18 +6507,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Load each full model and compute figure and tables to check the model quality. Furthermore, create a map of samples used for each model and relationship between logbook reports and samples.
                             #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs models and data from process 3.2.
                             #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param plot_sample \code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F
                             #' @param avdth_patch_coord parameter waiting for coordinate conversion patch from avdth database
                             #' @importFrom sp coordinates fullgrid gridded SpatialPoints CRS proj4string spTransform
                             #' @importFrom ranger ranger predictions importance
                             #' @importFrom adehabitatHR kernelUD getvolumeUD
-                            #' @importFrom automap autoKrige
                             #' @importFrom sf st_as_sf
                             #' @import ggplot2
+                            #                             @importFrom automap autoKrige
                             models_checking = function(output_level3_process2,
                                                        output_directory,
-                                                       output_format = "eu",
                                                        plot_sample = FALSE,
                                                        avdth_patch_coord = FALSE) {
                               # 1 - Arguments verification ----
@@ -6302,19 +6529,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              length = 1L,
                                                              output = "message"))
                               }
-                              if (codama::r_type_checking(r_object = output_format,
-                                                          type = "character",
-                                                          length = 1L,
-                                                          allowed_value = c("us",
-                                                                            "eu"),
-                                                          output = "logical") != TRUE) {
-                                stop(codama::r_type_checking(r_object = output_format,
-                                                             type = "character",
-                                                             length = 1L,
-                                                             allowed_value = c("us",
-                                                                               "eu"),
-                                                             output = "message"))
-                              }
                               # 2 - Process ----
                               cat(format(x = Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -6325,13 +6539,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               options(warn = 1)
                               output_level3_process3 <- list()
                               # extraction specifications
-                              if (output_format == "us") {
-                                outputs_dec <- "."
-                                outputs_sep <- ","
-                              } else if (output_format == "eu") {
-                                outputs_dec <- ","
-                                outputs_sep <- ";"
-                              }
+                              outputs_dec <- "."
+                              outputs_sep <- ","
                               for (a in seq_len(length.out = length(output_level3_process2))) {
                                 current_output_level3_process3 <- vector(mode = "list",
                                                                          length = 2)
@@ -6594,76 +6803,76 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 units = c("cm"))
                                 current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
                                                                               list("reporting_vs_sampling" = reporting_vs_sampling))
-                                # map of the data used for modelling
-                                if(plot_sample == TRUE){
-                                  current_data_map <- current_model_data
-                                  sp::coordinates(obj = current_data_map) <- ~ lon + lat
-                                  ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
-                                                                grid = 500)
-                                  ker2 <- adehabitatHR::getvolumeUD(x = ker)
-                                  grid <- as(object = ker2,
-                                             Class = "SpatialPixelsDataFrame")
-                                  newgrid <- grid
-                                  sp::fullgrid(obj = newgrid) <- FALSE
-                                  sp::gridded(obj = newgrid) <- FALSE
-                                  newgrid[newgrid$n > 99] <- NA
-                                  newgrid <- newgrid[ !is.na(newgrid$n), ]
-                                  krig <- automap::autoKrige(formula = resp ~ 1,
-                                                             input_data = current_data_map,
-                                                             new_data = newgrid)
-                                  interp_data <- as.data.frame(krig$krige_output)
-                                  colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
-                                  # correct for abnormal fitted value with kriging
-                                  interp_data$fit[interp_data$fit > 1] <- 1
-                                  load(file = system.file("wrld_simpl.RData",
-                                                          package = "t3"))
-                                  wrld_sf <- sf::st_as_sf(wrld_simpl)
-                                  set_sampled_map <- ggplot2::ggplot() +
-                                    ggplot2::geom_tile(data = interp_data,
-                                                       ggplot2::aes(x = lon,
-                                                                    y = lat,
-                                                                    fill = fit),
-                                                       color = NA) +
-                                    ggplot2::scale_fill_gradient2(low = "blue",
-                                                                  mid = "white",
-                                                                  high = "red",
-                                                                  midpoint = mean(interp_data$fit),
-                                                                  name = "Proportion") +
-                                    ggplot2::geom_point(data = current_model_data,
-                                                        ggplot2::aes(x = lon,
-                                                                     y = lat),
-                                                        color = "black",
-                                                        size = 0.3) +
-                                    ggplot2::geom_sf(data = wrld_sf) +
-                                    ggplot2::coord_sf(xlim = c(min(interp_data$lon),
-                                                               max(interp_data$lon)),
-                                                      ylim = c(min(interp_data$lat),
-                                                               max(interp_data$lat))) +
-                                    ggplot2::labs(x = NULL,
-                                                  y = NULL,
-                                                  subtitle = paste(specie,
-                                                                   ocean,
-                                                                   fishing_mode,
-                                                                   period,
-                                                                   sep = "_")) +
-                                    ggplot2::theme_classic()
-                                  ggplot2::ggsave(plot = set_sampled_map,
-                                                  file = file.path(figure_directory,
-                                                                   paste("set_sampled_map_",
-                                                                         ocean,
-                                                                         "_",
-                                                                         specie,
-                                                                         "_",
-                                                                         fishing_mode,
-                                                                         ".jpeg",
-                                                                         sep = "")),
-                                                  width = 18,
-                                                  height = 10,
-                                                  units = c("cm"),
-                                                  pointsize = 10)
-                                  current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
-                                                                                list("set_sampled_map" = set_sampled_map))
-                                }
+                                # # map of the data used for modelling
+                                # if(plot_sample == TRUE){
+                                #   current_data_map <- current_model_data
+                                #   sp::coordinates(obj = current_data_map) <- ~ lon + lat
+                                #   ker <- adehabitatHR::kernelUD(sp::SpatialPoints(current_data_map),
+                                #                                 grid = 500)
+                                #   ker2 <- adehabitatHR::getvolumeUD(x = ker)
+                                #   grid <- as(object = ker2,
+                                #              Class = "SpatialPixelsDataFrame")
+                                #   newgrid <- grid
+                                #   sp::fullgrid(obj = newgrid) <- FALSE
+                                #   sp::gridded(obj = newgrid) <- FALSE
+                                #   newgrid[newgrid$n > 99] <- NA
+                                #   newgrid <- newgrid[ !is.na(newgrid$n), ]
+                                #   krig <- automap::autoKrige(formula = resp ~ 1,
+                                #                              input_data = current_data_map,
+                                #                              new_data = newgrid)
+                                #   interp_data <- as.data.frame(krig$krige_output)
+                                #   colnames(interp_data) = c("lon", "lat", "fit", "fit.var", "fit_stdev")
+                                #   # correct for abnormal fitted value with kriging
+                                #   interp_data$fit[interp_data$fit > 1] <- 1
+                                #   load(file = system.file("wrld_simpl.RData",
+                                #                           package = "t3"))
+                                #   wrld_sf <- sf::st_as_sf(wrld_simpl)
+                                #   set_sampled_map <- ggplot2::ggplot() +
+                                #     ggplot2::geom_tile(data = interp_data,
+                                #                        ggplot2::aes(x = lon,
+                                #                                     y = lat,
+                                #                                     fill = fit),
+                                #                        color = NA) +
+                                #     ggplot2::scale_fill_gradient2(low = "blue",
+                                #                                   mid = "white",
+                                #                                   high = "red",
+                                #                                   midpoint = mean(interp_data$fit),
+                                #                                   name = "Proportion") +
+                                #     ggplot2::geom_point(data = current_model_data,
+                                #                         ggplot2::aes(x = lon,
+                                #                                      y = lat),
+                                #                         color = "black",
+                                #                         size = 0.3) +
+                                #     ggplot2::geom_sf(data = wrld_sf) +
+                                #     ggplot2::coord_sf(xlim = c(min(interp_data$lon),
+                                #                                max(interp_data$lon)),
+                                #                       ylim = c(min(interp_data$lat),
+                                #                                max(interp_data$lat))) +
+                                #     ggplot2::labs(x = NULL,
+                                #                   y = NULL,
+                                #                   subtitle = paste(specie,
+                                #                                    ocean,
+                                #                                    fishing_mode,
+                                #                                    period,
+                                #                                    sep = "_")) +
+                                #     ggplot2::theme_classic()
+                                #   ggplot2::ggsave(plot = set_sampled_map,
+                                #                   file = file.path(figure_directory,
+                                #                                    paste("set_sampled_map_",
+                                #                                          ocean,
+                                #                                          "_",
+                                #                                          specie,
+                                #                                          "_",
+                                #                                          fishing_mode,
+                                #                                          ".jpeg",
+                                #                                          sep = "")),
+                                #                   width = 18,
+                                #                   height = 10,
+                                #                   units = c("cm"),
+                                #                   pointsize = 10)
+                                #   current_output_level3_process3[[1]] <- append(current_output_level3_process3[[1]],
+                                #                                                 list("set_sampled_map" = set_sampled_map))
+                                # }
                                 ## model checking ----
                                 if(specie != "BET"){
                                   # compute model residuals
@@ -7312,7 +7521,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param output_level3_process2 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 2 (random forest models).
                             #' @param output_level3_process4 Object of type \code{\link[base]{list}} expected. Outputs from level 3 process 4 (data formatting for predictions).
                             #' @param output_directory Object of type \code{\link[base]{character}} expected. Outputs directory path.
-                            #' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
                             #' @param ci Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.
                             #' @param ci_type Type of confidence interval to compute. The default value is "all". Other options are "set" for ci on each set, "t1" for ci on nominal catch by species, "t1-fmod" for ci on nominal catch by species and fishing mode "t2" and "t2-fmod" for ci by 1 degree square and month. A vector of several ci option can be provided. ci_type are computed only if  the ci parameter is TRUE.
                             #' @param Nboot Object of type \code{\link[base]{numeric}} expected. The number of bootstrap samples desired for the ci computation. The default value is 10.
@@ -7321,7 +7529,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             model_predictions = function(output_level3_process2,
                                                          output_level3_process4,
                                                          output_directory,
-                                                         output_format = "eu",
                                                          country_flag = NULL,
                                                          ci = FALSE,
                                                          ci_type = "all",
@@ -7337,31 +7544,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              length = 1L,
                                                              output = "message"))
                               }
-                              if (codama::r_type_checking(r_object = output_format,
-                                                          type = "character",
-                                                          length = 1L,
-                                                          allowed_value = c("us",
-                                                                            "eu"),
-                                                          output = "logical") != TRUE) {
-                                stop(codama::r_type_checking(r_object = output_format,
-                                                             type = "character",
-                                                             length = 1L,
-                                                             allowed_value = c("us",
-                                                                               "eu"),
-                                                             output = "message"))
-                              }
                               # 2 - Process ----
                               cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                   " - Start process 3.5: model predictions.\n",
                                   sep = "")
                               # extraction specifications
-                              if (output_format == "us") {
-                                outputs_dec <- "."
-                                outputs_sep <- ","
-                              } else if (output_format == "eu") {
-                                outputs_dec <- ","
-                                outputs_sep <- ";"
-                              }
+                              outputs_dec <- "."
+                              outputs_sep <- ","
                               figure_directory <- file.path(output_directory,
                                                             "level3",
                                                             "figure")
