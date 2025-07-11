@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class full_trips</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/3.0.4/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
     <div class="hidden name"><code>full_trips.Rd</code></div>
     </div>
 
@@ -238,8 +238,8 @@ If FALSE, only the catch weights of species belonging to the species list, defin
 
 <dt><code>species_fao_codes_rf1</code></dt>
 <dd><p>Object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected.Specie(s) FAO code(s) used for the RF1 process.
-By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
-LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).</p></dd>
+By default, use codes YFT (<em>Thunnus albacares</em>), SKJ (<em>Katsuwonus pelamis</em>), BET (<em>Thunnus obesus</em>), ALB (<em>Thunnus alalunga</em>),
+LOT (<em>Thunnus tonggol</em>) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).</p></dd>
 
 
 <dt><code>species_fate_codes_rf1</code></dt>
@@ -269,65 +269,71 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
 <p>If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br></p><ul><li><p>process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>trip_id:  trip topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>activity_id:  activity topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
  Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
- , type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf1:  statut rf1, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf2:  statut rf2, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+ , type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1:  status rf1, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf2:  status rf2, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>elementarycatch_id:  elementary catch topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>elementarycatch_id:  elementary catch identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>species_fate_code:  species fate codes, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
  For example in Observe database :</p><ul><li><p>4 :  discarded alive.</p></li>
 <li><p>5 :  discarded dead.</p></li>
 <li><p>6 :  Retained, presumably destined for the cannery</p></li>
 <li><p>8 :  used for crew consumption on board.</p></li>
-<li><p>11 :  discarded statut unknown (only for EMS and logbook).</p></li>
+<li><p>11 :  discarded status unknown (only for EMS and logbook).</p></li>
 <li><p>15 :  retained for local market or dried/salted fish on board.</p></li>
 </ul></li>
-<li><p>landing_weight:  landing weight (without local market), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>catch_weight:  catch weight (visual estimation), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+<li><p>landing_weight:  landing weight (without local market), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>catch_weight:  catch weight (visual estimation), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>catch_weight_rf2:  catch weight after visual estimation correction : <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
- (<a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1</a>), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf1_label:  statut rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>statut_rf2_label:  statut rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction, in tonnes: <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1</a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1_label:  status rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>statut_rf2_label:  status rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 </ul></li>
 <li><p>process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>trip_id:  trip topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
  Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
-, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf1:  statut rf1, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf2:  statut rf2, type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>landing_weight:  landing weight (without local market), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>catch_weight:  catch weight (visual estimation), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
+, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1:  status rf1, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf2:  status rf2, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>landing_weight:  landing weight (without local market), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>catch_weight:  catch weight (visual estimation), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>catch_weight_rf2:  catch weight after visual estimation correction : <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
- (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1"><code>full_trips$rf1()</code></a>), type <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></code>.</p></li>
-<li><p>statut_rf1_label:  statut rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>statut_rf2_label:  statut rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction (tonnes): <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1"><code>full_trips$rf1()</code></a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1_label:  status rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>statut_rf2_label:  status rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 </ul></li>
 </ul></div>
 
 
 </div><p></p><hr><a id="method-full_trips-conversion_weight_category"></a><div class="section">
 <h3 id="method-conversion-weight-category-">Method <code>conversion_weight_category()</code><a class="anchor" aria-label="anchor" href="#method-conversion-weight-category-"></a></h3>
-<p>Process of logbook weight categories conversion.</p><div class="section">
+<p>Process of logbook weight categories conversion. <br>
+Logbook's weight categories change from one tuna fishing company to another, that involves overlaps and are hardly usable directly from the logbook.
+This process aims to homogenize these weight categories and create simplify categories divided in function of the fishing school and the ocean:</p><ul><li><p>&lt; 10kg and &gt; 10kg for the floating object school in the Atlantic and Indian Ocean,</p></li>
+<li><p>&lt; 10kg, 10-30kg and &gt; 30kg for undetermined and free school in the Atlantic Ocean,</p></li>
+<li><p>&lt; 10kg and &gt; 10kg for undetermined and free school in the Indian Ocean.</p></li>
+</ul><p>For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
+ Details of the distribution key is available in the vignette <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion">Process 1.2: logbook weight categories conversion</a>.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">conversion_weight_category</span><span class="op">(</span></span>
 <span>  global_output_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -348,6 +354,38 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-1">Details<a class="anchor" aria-label="anchor" href="#details-1"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br>
+ process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
+<li><p>elementarycatch_id:  elementary catch identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>weight_category_code:  weight category code defined in logbooks, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>weight_category_min:  weight category's lower limit (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weight_category_max:  weight category's upper limit (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weight_category_label:  weight category label defined in logbooks, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction  (tonnes): <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1</a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weight_category_code_corrected:  weight category code after conversion, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>catch_weigh_category_code_corrected:  catch weight after weight category conversion (tonnes), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br>
+  In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.</p></li>
+<li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-set_count"></a><div class="section">
 <h3 id="method-set-count-">Method <code>set_count()</code><a class="anchor" aria-label="anchor" href="#method-set-count-"></a></h3>
@@ -372,10 +410,33 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-2">Details<a class="anchor" aria-label="anchor" href="#details-2"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br>
+ process_1_3: a table (.csv) with as many rows as activities and 15 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_code:  activity code to define the type of activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
+<li><p>positive_set_count:  count of positive set (catch weight and/or catch count not zero), type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-fishing_effort"></a><div class="section">
 <h3 id="method-fishing-effort-">Method <code>fishing_effort()</code><a class="anchor" aria-label="anchor" href="#method-fishing-effort-"></a></h3>
-<p>Process for set duration, time at sea, fishing time and searching time calculation (in hours).</p><div class="section">
+<p>Process for set duration, time at sea, fishing time and searching time calculation (in hours).
+Details about the methods are available in the vignette : <a href="https://ob7-ird.github.io/t3/articles/level_1.html#set-duration-calculation">Process 1.4: Fishing effort indicators calculation</a>.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">fishing_effort</span><span class="op">(</span></span>
 <span>  <span class="va">set_duration_ref</span>,</span>
@@ -390,13 +451,15 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>set_duration_ref</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data and parameters for set duration calculation (by year, country, ocean and school type).
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Data and parameters for set duration calculation (by year, country, ocean and school type), in the same format as the <a href="https://ob7-ird.github.io/t3/reference/set_duration_ref.html">referential set duration table</a>.
 Duration in minutes in the reference table, converted into hours in output for subsequent processing).</p></dd>
 
 
 <dt><code>activity_code_ref</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
-and/or searching time and/or set duration.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
+ and/or searching time and/or set duration.</p></dd>
 
 
 <dt><code>sunrise_schema</code></dt>
@@ -404,22 +467,25 @@ and/or searching time and/or set duration.</p></dd>
 
 
 <dt><code>sunset_schema</code></dt>
-<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See below for more details.</p></dd>
+<dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
+See below for more details.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
-<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction equal TRUE. Path of the global outputs directory. The function will create subsection if necessary.
-By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
+<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected if parameter outputs_extraction equal TRUE.
+Path of the global outputs directory. The function will create subsection if necessary.
+ By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
 
 
 <dt><code>referential_template</code></dt>
-<dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".</p></dd>
+<dd><p>Object of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code> expected. By default "observe".
+Referential template selected (for example regarding the activity_code). You can switch to "avdth".</p></dd>
 
 
 </dl><p></p></div>
 </div>
 <div class="section">
-<h4 id="details-1">Details<a class="anchor" aria-label="anchor" href="#details-1"></a></h4>
+<h4 id="details-3">Details<a class="anchor" aria-label="anchor" href="#details-3"></a></h4>
 <p>Available variables are:</p><ul><li><p>"sunrise":  sunrise (top edge of the sun appears on the horizon)</p></li>
 <li><p>"sunriseEnd":  sunrise ends (bottom edge of the sun touches the horizon)</p></li>
 <li><p>"goldenHourEnd":  morning golden hour ends(soft light, best time for photography)</p></li>
@@ -434,12 +500,42 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>"nightEnd":  night ends (morning astronomical twilight starts)</p></li>
 <li><p>"nauticalDawn":  nautical dawn (morning nautical twilight starts)</p></li>
 <li><p>"dawn":  dawn (morning nautical twilight ends, morning civil twilight starts)</p></li>
+</ul><p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br>
+ process_1_4: a table (.csv) with as many rows as activities and 20 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_code:  activity code to define the type of activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>objectoperation_code:  object operation code to define the type of floating object operation (in Observe referential), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+  In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
+<li><p>positive_set_count:  count of positive set (catch weight and/or catch count not zero), type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>set_duration:  set duration in hours, according to the <a href="https://ob7-ird.github.io/t3/reference/set_duration_ref.html">referential set duration table</a>, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>time_at_sea:  time at sea in hours, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>fishing_time:  fishing time in hours, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>searching_time:  searching time in hours, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br>
+  Equal to the fishing time value minus the sum of the sets duration values.</p></li>
 </ul></div>
 
 
 </div><p></p><hr><a id="method-full_trips-sample_length_class_ld1_to_lf"></a><div class="section">
 <h3 id="method-sample-length-class-ld-to-lf-">Method <code>sample_length_class_ld1_to_lf()</code><a class="anchor" aria-label="anchor" href="#method-sample-length-class-ld-to-lf-"></a></h3>
-<p>Process for length conversion, if necessary, in length fork (lf). Furthermore, variable "sample_number_measured_extrapolated" of process 2.1 will converse in variable "sample_number_measured_extrapolated_lf" (Notably due to the creation of new lf classes during some conversions).</p><div class="section">
+<p>Process for length conversion, if necessary, in length fork (lf). <br>
+In fact, during the sampling process, fishes length can be collected and expressed in different standards. <br>
+For example, regarding field constraints and more precisely the length of the different species, sampling data covered in T3 can by express in first dorsal length (LD1) or curved fork length (LF).<br>
+ Generally, length of small individuals are provided in LF because it's logistically possible and easier to measure the entire fish, while length of bigger individuals are provided in LD1, for the same reciprocal reasons.
+This step aims to standardize this standard among sampling data and at the end have only length sampling data expressed in LF. <br>
+Historical and so far, the process use a referential <a href="https://ob7-ird.github.io/t3/reference/length_step.html">conversion table LD1 to LF</a>.
+In addition, the <code>sample_number_measured</code> variable, in this step will be converted to a <code>sample_number_measured_lf</code> variable (notably due to the creation of new samples to split one LD1 class in multiples LF classes during certain conversions).</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_length_class_ld1_to_lf</span><span class="op">(</span></span>
 <span>  <span class="va">length_step</span>,</span>
@@ -451,7 +547,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>length_step</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data frame object with length ratio between ld1 and lf class.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Data frame object with length ratio between ld1 and lf class, in the same format as the <a href="https://ob7-ird.github.io/t3/reference/length_step.html">conversion table LD1 to LF</a>.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
@@ -465,10 +562,38 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-4">Details<a class="anchor" aria-label="anchor" href="#details-4"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sub_sample_id:  sub-sample identification number, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>elementarysampleraw_id:  elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_length_class:  sample length class (cm) of measured individuals in first dorsal length (LD1), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_measured:  sample number of measured individuals in first dorsal length (LD1), type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sample_length_class_lf:  sample length class  (cm) of measured individuals converted in curved fork length (LF), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_measured_lf:  sample number of measured individuals converted for curved fork length (LF) distribution, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.
+ For example, for one sample (<code>sample_number_measured=1</code>) from the Atlantic Ocean (1), of the species YFT (<em>Thunnus albacares</em>), with a first dorsal length class (LD1) measured at <code>sample_length_class=8</code> (cm),
+ the LD1 to LF conversion will create a new elementary sample row because a percentage of <code>ratio=50</code> % of the number of fish in the sample will be assigned to the curved fork length class: <code>sample_number_measured_lf=32</code> (cm) ( <code>sample_number_measured_lf=0.5</code>)
+ and 50% of this sample will obtain a <code>sample_number_measured_lf=34</code> (cm) with <code>sample_number_measured_lf=0.5</code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-sample_number_measured_extrapolation"></a><div class="section">
 <h3 id="method-sample-number-measured-extrapolation-">Method <code>sample_number_measured_extrapolation()</code><a class="anchor" aria-label="anchor" href="#method-sample-number-measured-extrapolation-"></a></h3>
-<p>Process for sample number measured individuals extrapolation to sample number individuals counted.</p><div class="section">
+<p>Process for sample number measured individuals extrapolation to sample number individuals counted.
+In fact, during the sampling and according to the protocol, just a part of the sampled individuals are measured in relation to that counted.
+The aim of this step is to extrapolate the number of individuals measured in the sample to the number of individuals counted in the sample.
+To do that, a Raising Factor (RF4) is calculated per stratum, per well, per sample, per sub-sample and per species.
+It is equal, by stratum, to the sum of each counted individuals divided by the sum of measured individuals (after conversion of measure in curved fork length in the process 2.1).</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_number_measured_extrapolation</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -482,10 +607,35 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-5">Details<a class="anchor" aria-label="anchor" href="#details-5"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sub_sample_id:  sub-sample identification number, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sub_sample_total_count_id:  sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>elementarysampleraw_id:  elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_length_class_lf:  sample length class (cm) of measured individuals converted in curved fork length (LF), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_measured_lf:  sample number of measured individuals converted for curved fork length (LF) distribution, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_total_count:  total number of individuals counted for this sample, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sample_number_measured_extrapolated_lf:  sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br><code>sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4</code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-sample_length_class_step_standardisation"></a><div class="section">
 <h3 id="method-sample-length-class-step-standardisation-">Method <code>sample_length_class_step_standardisation()</code><a class="anchor" aria-label="anchor" href="#method-sample-length-class-step-standardisation-"></a></h3>
-<p>Process for step standardisation of lf length class.</p><div class="section">
+<p>Process for step standardisation of lf length class.
+ This step aims to standardize sample length classes. So far, these specifications are integrate in the process:</p><ul><li><p>a length classes step of 1cm for:  SKJ (<em>Katsuwonus pelamis</em>), LTA (<em>Euthynnus alletteratus</em>) and FRI (<em>Auxis thazard</em>),</p></li>
+<li><p>a length classes step of 2cm fo:  YFT (<em>Thunnus albacares</em>), BET (<em>Thunnus obesus</em>) and ALB (<em>Thunnus alalunga</em>).</p></li>
+</ul><p>To standardize the original sample's curved fork length (LF), the object "elementarysample" is created by  aggregation of elementary sample raw.</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">sample_length_class_step_standardisation</span><span class="op">(</span></span>
 <span>  maximum_lf_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
@@ -496,7 +646,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>maximum_lf_class</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Theorical maximum lf class that can occur (all species considerated). By default 500.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Theoretical maximum lf class that can occur (all species considerated). By default 500.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
@@ -506,10 +656,43 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-6">Details<a class="anchor" aria-label="anchor" href="#details-6"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_type_code:  sample type type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sample_quality_code:  sample quality code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sub_sample_id:  sub-sample identification number, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_total_count:  total number of individuals counted for this sample, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>sample_standardised_length_class_lf:  standardised sample length class (cm) in curved fork length (LF), according to the species and step associated, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_measured_extrapolated_lf:  standardised sample number of measured individuals (converted in LF and extrapolated in step <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation">2.2</a>, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>) .<br></p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-well_set_weight_categories"></a><div class="section">
 <h3 id="method-well-set-weight-categories-">Method <code>well_set_weight_categories()</code><a class="anchor" aria-label="anchor" href="#method-well-set-weight-categories-"></a></h3>
-<p>Process for well set weight categories definition.</p><div class="section">
+<p>Process for well set weight categories definition.
+The sampling provides information at the well scale. However, a set can be split between several wells and the individuals sampled could belong to as many sets as there are in the well.
+This process aim to compute a weighted weight, which represents the weight of a set in a well, according to the distribution of this set in all the wells.<br>
+The overall formula is as follows:
+\(WW = \frac{W1}{W2} \times WT\), where:</p><ul><li><p>WW:  is the weighted weight,</p></li>
+<li><p>W1:  is the weight of the set in the well,</p></li>
+<li><p>W2:  is the weight of the set in all the sampled wells,</p></li>
+<li><p>WT:  the total set's weight.</p></li>
+</ul><p>So far, the process is developed for the purse seiner.
+Furthermore, a proportion of each sampling sets among the sampling well will be calculated in relation with the weighted weight:<br>
+\(PWW = \frac{WW_{i,j}}{\sum_{i=1}^{n} WW_{i,j}}\), where:</p><ul><li><p>PWW:  is the proportional weighted weight,</p></li>
+<li><p>\(WW_{i,j}\):  is the weighted weight of the current set i in well j.</p></li>
+</ul><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">well_set_weight_categories</span><span class="op">(</span></span>
 <span>  <span class="va">sample_set</span>,</span>
@@ -535,10 +718,34 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-7">Details<a class="anchor" aria-label="anchor" href="#details-7"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>weighted_weight_minus10:  weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weighted_weight_plus10:  weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weighted_weight:  weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+</ul><p>To better understand what the process does, let's look at an example:<br>
+ A set of 90 tonnes is display in 3 wells, 40 tonnes in the first one, 30 tonnes in the second and 20 tonnes in the last one.<br>
+ The wells 2 and 3 were sampled but no the first one. For the second well, the weighted weight will be equal to 54 tonnes (30 / 50 x 90). <br>
+ For the third one, the weighted weight will be equal to 36 tonnes (20 / 50 x 90).</p>
+</div>
+
 
 </div><p></p><hr><a id="method-full_trips-standardised_sample_creation"></a><div class="section">
 <h3 id="method-standardised-sample-creation-">Method <code>standardised_sample_creation()</code><a class="anchor" aria-label="anchor" href="#method-standardised-sample-creation-"></a></h3>
-<p>Object standardised sample creation.</p><div class="section">
+<p>Object standardised sample creation.
+This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data.
+In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF).
+This step create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the species.</p><div class="section">
 <h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">standardised_sample_creation</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -552,10 +759,36 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-8">Details<a class="anchor" aria-label="anchor" href="#details-8"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_5: a table (.csv) with as many rows as standardized samples, and 12 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_standardised_length_class_lf:  standardized sample length class in curved fork length (LF) (cm), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_measured_extrapolated_lf:  standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br></p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-standardised_sample_set_creation"></a><div class="section">
 <h3 id="method-standardised-sample-set-creation-">Method <code>standardised_sample_set_creation()</code><a class="anchor" aria-label="anchor" href="#method-standardised-sample-set-creation-"></a></h3>
-<p>R6 object standardised sample set creation.</p><div class="section">
+<p>R6 object standardised sample set creation.
+In the previous processes and in the object standardized sample associated, samples is expressed at the well scale.<br>
+In this step, the aim is to move to the expression of sample by well to sample by set. <br>
+In the process <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories">2.4</a>, a weighted weight (WW) and a proportion of this weighted weight (PWW) at the set scale, has been calculated.<br>
+By combination of this value and elements of the object standardized sample, a new object called standardized sample set was created. Like explain before, this object is the expression of the sample at the set scale.<br>
+Furthermore, this process made a conversion of the samples length measurements in weight by length weight relationships (LWR).<br>
+LWR formulas take the form: \(RWT=a \times LF^b\), where:</p><ul><li><p>RWT:  is the round weight (kg),</p></li>
+<li><p>LF:  is the curved fork length (cm),</p></li>
+<li><p>parameters a and b comes from a references table as the <a href="https://ob7-ird.github.io/t3/reference/length_weight_relationship.html">Referential LWR table</a> and are dependent of of the species and potentially of the area (ocean or others) and the season.</p></li>
+</ul><p>More detail information could be find on the regional fisheries management organisations (RFMOs) like <a href="https://www.iccat.int/" class="external-link">ICCAT</a> or <a href="https://iotc.org/" class="external-link">IOTC</a>.</p><div class="section">
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">standardised_sample_set_creation</span><span class="op">(</span></span>
 <span>  <span class="va">length_weight_relationship_data</span>,</span>
@@ -566,20 +799,63 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="arguments-14">Arguments<a class="anchor" aria-label="anchor" href="#arguments-14"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>length_weight_relationship_data</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected. Data frame object with parameters for length weight relationship.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Data frame object with parameters for length weight relationships, in the same format as the <a href="https://ob7-ird.github.io/t3/reference/length_weight_relationship.html">Referential LWR table</a>.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
-<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>. Path of the global outputs directory. The function will create subsection if necessary.
+<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
 
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-9">Details<a class="anchor" aria-label="anchor" href="#details-9"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_6: a table (.csv) with as many rows as , and 15 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_standardised_length_class_lf:  standardized sample length class in curved fork length (LF) (cm), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_weighted:  sample number of measured individuals weighted by set weight,  after conversion in LF and extrapolation to all counted individuals, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br><code>sample_number_weighted = sample_number_measured_extrapolated_lf * PWW</code>.</p></li>
+<li><p>sample_weight_unit:  weight (kg) of one individual,
+  calculated using length weight relationships as in <a href="https://ob7-ird.github.io/t3/reference/length_weight_relationship.html">Referential LWR table</a>: <code>sample_weight_unit = parameter_a * sample_standardised_length_class_lf ^ parameter_b</code>),
+   type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_weight:  weight (kg) of all measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br><code>sample_weight = sample_weight_unit * sample_number_weighted</code>.</p></li>
+<li><p>sample_category:  sample category ("-10kg" or "+10kg"), according to <code>sample_weight_unit</code> value, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-raised_factors_determination"></a><div class="section">
 <h3 id="method-raised-factors-determination-">Method <code>raised_factors_determination()</code><a class="anchor" aria-label="anchor" href="#method-raised-factors-determination-"></a></h3>
-<p>Raised factors determination for weight sample set to set.</p><div class="section">
+<p>Raised factors determination for weight sample set to set.
+This step aims to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets, if it's possible regarding data available:</p><ul><li><p>number and weight of sampled individuals, total and by weight categories (\(\leq\) 10kg or &gt; 10kg):
+ </p><ul><li><p><code>weighted_samples_minus10</code>:  sum of <code>sample_weight</code> for sample weight category \(\leq\) 10 kg, from <code>standardised_sample_set</code> object,
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+<li><p><code>weighted_samples_plus10</code>:  sum of <code>sample_weight</code> for sample weight category &gt; 10 kg, from <code>standardised_sample_set</code> object,
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+<li><p><code>weighted_samples_total</code>:  sum of <code>sample_weight</code> for all sample weight categories (\(\leq\) 10 kg) and &gt; 10kg, from <code>standardised_sample_set</code> object,
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+</ul></li>
+<li><p>three raising factors are calculated related to the weighted weight of the set (calculated at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-">2.4</a> and weight of sampled individuals, total and by weight categories (\(\leq\) 10kg and &gt; 10kg):
+ </p><ul><li><p><code>rf_minus10= weighted_weight_minus10 / weighted_samples_minus10</code></p></li>
+<li><p><code>rf_plus10= weighted_weight_plus10 / weighted_samples_plus10</code></p></li>
+<li><p><code>rf_total=weighted_weight / weighted_samples_total</code></p></li>
+</ul></li>
+</ul><p>The verification thresholds can be modified in the function parameters using the following arguments:</p><ul><li><p><code>threshold_rf_minus10</code>:  by default at 500,</p></li>
+<li><p><code>threshold_rf_plus10</code>:  by default at 500,</p></li>
+<li><p><code>threshold_frequency_rf_minus10</code>:  by default at 75,</p></li>
+<li><p><code>threshold_frequency_rf_plus10</code>:  by default at 75,</p></li>
+<li><p><code>threshold_rf_total</code>:  by default at 250.</p></li>
+</ul><div class="section">
 <h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">raised_factors_determination</span><span class="op">(</span></span>
 <span>  threshold_rf_minus10 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>,</span>
@@ -594,36 +870,57 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="arguments-15">Arguments<a class="anchor" aria-label="anchor" href="#arguments-15"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>threshold_rf_minus10</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor on individuals category minus 10. By default 500.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor on individuals category minus 10. By default 500.</p></dd>
 
 
 <dt><code>threshold_rf_plus10</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor on individuals category plus 10. By default 500.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor on individuals category plus 10. By default 500.</p></dd>
 
 
 <dt><code>threshold_frequency_rf_minus10</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit frequency value for raising factor on individuals category minus 10. By default 75.</p></dd>
 
 
 <dt><code>threshold_frequency_rf_plus10</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit frequency value for raising factor on individuals category plus 10. By default 75.</p></dd>
 
 
 <dt><code>threshold_rf_total</code></dt>
-<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limite value for raising factor (all categories). By default 250.</p></dd>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code> expected. Threshold limit value for raising factor (all categories). By default 250.</p></dd>
 
 
 <dt><code>global_output_path</code></dt>
-<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>. Path of the global outputs directory. The function will create subsection if necessary.
-By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
+<dd><p>By default object of type <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">NULL</a></code> but object of type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+Path of the global outputs directory. The function will create subsection if necessary.
+ By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.</p></dd>
 
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-10">Details<a class="anchor" aria-label="anchor" href="#details-10"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_7: a table (.csv) with as many rows as , and 13 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>weighted_samples_minus10:  weight of sampled individuals  (tonnes), for weight category (\(\leq\) 10kg, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weighted_samples_plus10:  weight of sampled individuals (tonnes), for weight category &gt; 10kg, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weighted_samples_total:  weight of sampled individuals  (tonnes), for all weight categories (\(\leq\) 10kg and &gt; 10kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>rf_validation:  raising factor status, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>rf_validation_label:  raising factor status label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-raised_standardised_sample_set"></a><div class="section">
 <h3 id="method-raised-standardised-sample-set-">Method <code>raised_standardised_sample_set()</code><a class="anchor" aria-label="anchor" href="#method-raised-standardised-sample-set-"></a></h3>
-<p>Application of process 2.8 raised factors on standardised sample set.</p><div class="section">
+<p>Application of process 2.8 raised factors on standardised sample set.
+This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination">2.7</a>.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">raised_standardised_sample_set</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -637,6 +934,29 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="details-11">Details<a class="anchor" aria-label="anchor" href="#details-11"></a></h4>
+<p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
+ process_2_8: a table (.csv) with as many rows as , and 14 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>sample_standardised_length_class_lf:  standardized sample length class in curved fork length (LF), (cm), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>sample_number_weighted_set:  sample number weighted by set, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>. <br><code>sample_number_weighted_set = sample_number_weighted * rf</code>, where :</p><ul><li><p><code>rf</code>:  is one of the raising factors calculated in the process <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination">2.7</a>,
+  according to sample weight category (\(\leq\) 10kg and &gt; 10kg).</p></li>
+<li><p><code>sample_number_weighted</code>:  is the sample number of measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals,
+  calculated in the process <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-6-sample-number-standardisation">2.6</a>.</p></li>
+</ul></li>
+<li><p>sample_weight_set:  sample weight by set (tonnes), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.<br><code>sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set</code></p></li>
+</ul></div>
+
 
 </div><p></p><hr><a id="method-full_trips-path_to_level3"></a><div class="section">
 <h3 id="method-path-to-level-">Method <code>path_to_level3()</code><a class="anchor" aria-label="anchor" href="#method-path-to-level-"></a></h3>

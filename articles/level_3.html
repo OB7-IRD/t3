@@ -19,7 +19,7 @@
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Level 3 process">
-<meta property="og:description" content="Description of the t3 level 3 and how initialise it.
+<meta property="og:description" content="Description of the t3 level 3 modelisation and how to initialise it.
 ">
 <meta property="og:image" content="https://ob7-ird.github.io/t3/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -108,21 +108,18 @@
       <h1 data-toc-skip>Level 3 process</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/3.0.4/vignettes/level_3.Rmd" class="external-link"><code>vignettes/level_3.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/level_3.Rmd" class="external-link"><code>vignettes/level_3.Rmd</code></a></small>
       <div class="hidden name"><code>level_3.Rmd</code></div>
 
     </div>
 
     
     
-<div class="section level2" style="text-align: justify">
-<h2 id="modelling-species-proportion-in-catch-and-computation-of-catch-estimates">Modelling species proportion in catch and Computation of catch
-estimates<a class="anchor" aria-label="anchor" href="#modelling-species-proportion-in-catch-and-computation-of-catch-estimates"></a>
+<div class="section level2" style="text-align: justify" number="1">
+<h2 id="level-3-modelling-species-proportion-in-catch-and-computation-of-catch-estimates">
+<span class="header-section-number">1</span> Level 3: modelling species proportion in catch and Computation of catch estimates<a class="anchor" aria-label="anchor" href="#level-3-modelling-species-proportion-in-catch-and-computation-of-catch-estimates"></a>
 </h2>
-<p>The level 3 process of the T3R package aim at modelling species
-composition before estimating catch for the major tuna species only:
-Yellowfin tuna, skipjack and bigeye tuna. The process is divided in 5
-steps:</p>
+<p>The level 3 process of the T3R package aim at modelling species composition before estimating catch for the major tuna species only: Yellowfin tuna, skipjack and bigeye tuna. The process is divided in 5 steps:</p>
 <table class="table">
 <colgroup>
 <col width="18%">
@@ -162,37 +159,44 @@ steps:</p>
 </tr>
 </tbody>
 </table>
-<div class="section level3">
-<h3 id="process-3-1-data-preparatory">Process 3.1: Data preparatory<a class="anchor" aria-label="anchor" href="#process-3-1-data-preparatory"></a>
+<div class="section level3" number="1.1">
+<h3 id="process-3-1-data-preparatory">
+<span class="header-section-number">1.1</span> Process 3.1: Data preparatory<a class="anchor" aria-label="anchor" href="#process-3-1-data-preparatory"></a>
 </h3>
-<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.1.png"></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/process_3.1.png"></p>
 </div>
-<div class="section level3">
-<h3 id="process-3-2-modelling">Process 3.2: Modelling<a class="anchor" aria-label="anchor" href="#process-3-2-modelling"></a>
+<div class="section level3" number="1.2">
+<h3 id="process-3-2-modelling">
+<span class="header-section-number">1.2</span> Process 3.2: Modelling<a class="anchor" aria-label="anchor" href="#process-3-2-modelling"></a>
 </h3>
-<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.2.png"></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/process_3.2.png"></p>
 </div>
-<div class="section level3">
-<h3 id="process-3-3-data-and-model-checking">Process 3.3: Data and Model checking<a class="anchor" aria-label="anchor" href="#process-3-3-data-and-model-checking"></a>
+<div class="section level3" number="1.3">
+<h3 id="process-3-3-data-and-model-checking">
+<span class="header-section-number">1.3</span> Process 3.3: Data and Model checking<a class="anchor" aria-label="anchor" href="#process-3-3-data-and-model-checking"></a>
 </h3>
-<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.3.png"></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/process_3.3.png"></p>
 </div>
-<div class="section level3">
-<h3 id="process-3-4-dataset-for-prediction">Process 3.4: Dataset for prediction<a class="anchor" aria-label="anchor" href="#process-3-4-dataset-for-prediction"></a>
+<div class="section level3" number="1.4">
+<h3 id="process-3-4-dataset-for-prediction">
+<span class="header-section-number">1.4</span> Process 3.4: Dataset for prediction<a class="anchor" aria-label="anchor" href="#process-3-4-dataset-for-prediction"></a>
 </h3>
-<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.4.png"></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/process_3.4.png"></p>
 </div>
-<div class="section level3">
-<h3 id="process-3-5-modelling-species-composition-and-estimating-catch">Process 3.5: Modelling species composition and estimating catch<a class="anchor" aria-label="anchor" href="#process-3-5-modelling-species-composition-and-estimating-catch"></a>
+<div class="section level3" number="1.5">
+<h3 id="process-3-5-modelling-species-composition-and-estimating-catch">
+<span class="header-section-number">1.5</span> Process 3.5: Modelling species composition and estimating catch<a class="anchor" aria-label="anchor" href="#process-3-5-modelling-species-composition-and-estimating-catch"></a>
 </h3>
-<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="process_3.5.png"></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/process_3.5.png"></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

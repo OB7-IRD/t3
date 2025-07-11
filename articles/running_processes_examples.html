@@ -108,7 +108,7 @@
       <h1 data-toc-skip>Running processes examples</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/3.0.4/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/running_processes_examples.Rmd" class="external-link"><code>vignettes/running_processes_examples.Rmd</code></a></small>
       <div class="hidden name"><code>running_processes_examples.Rmd</code></div>
 
     </div>
@@ -116,39 +116,18 @@
     
     
 <div style="text-align: justify">
-<div class="section level2">
-<h2 id="process-philosophy">Process philosophy<a class="anchor" aria-label="anchor" href="#process-philosophy"></a>
+<div class="section level2" number="1">
+<h2 id="process-philosophy">
+<span class="header-section-number">1</span> Process philosophy<a class="anchor" aria-label="anchor" href="#process-philosophy"></a>
 </h2>
-<p>The Topical Tuna Treatment (T3) aim to provide a support for the data
-manipulation of tropical tuna surface fisheries. This support can take
-many different forms and have various objectives associated. For that
-purpose, T3 can be processed in various ways, depending on what
-question(s) drive your reflection. You will find below several examples
-for running process and help you regarding your personal work.
-Furthermore, don’t hesitate to take a look on the package’s issues
-webpage (<a href="https://github.com/OB7-IRD/t3/issues" class="external-link uri">https://github.com/OB7-IRD/t3/issues</a>) or send an mail to
-<a href="mailto:ob7@ird.fr" class="email">ob7@ird.fr</a> if you need
-specific support.</p>
-<p>Furthermore, in the following functions the “database_con” argument
-refers to an R object which contains connection information with an
-observe (or AVDTH) database. For more detail about connections available
-check the function documentation. In addition, the argument
-“output_path” refer to the output directory on your computer. The
-function associated, “initiate_directory”, will create the output
-structure for the process.</p>
+<p>The Topical Tuna Treatment (T3) aim to provide a support for the data manipulation of tropical tuna surface fisheries. This support can take many different forms and have various objectives associated. For that purpose, T3 can be processed in various ways, depending on what question(s) drive your reflection. You will find below several examples for running process and help you regarding your personal work. Furthermore, don’t hesitate to take a look on the package’s issues webpage (<a href="https://github.com/OB7-IRD/t3/issues" class="external-link uri">https://github.com/OB7-IRD/t3/issues</a>) or send an mail to <a href="mailto:ob7@ird.fr" class="email">ob7@ird.fr</a> if you need specific support.</p>
+<p>Furthermore, in the following functions the “database_con” argument refers to an R object which contains connection information with an observe (or AVDTH) database. For more detail about connections available check the function documentation. In addition, the argument “output_path” refer to the output directory on your computer. The function associated, “initiate_directory”, will create the output structure for the process.</p>
 </div>
-<div class="section level2">
-<h2 id="running-the-process-step-by-step">Running the process step by step<a class="anchor" aria-label="anchor" href="#running-the-process-step-by-step"></a>
+<div class="section level2" number="2">
+<h2 id="running-the-process-step-by-step">
+<span class="header-section-number">2</span> Running the process step by step<a class="anchor" aria-label="anchor" href="#running-the-process-step-by-step"></a>
 </h2>
-<p>The T3 process consists of three different parts that you can run
-independently. However, in some cases, you may want to run the entire
-process step by step, for example to closely track several particular
-data with accuracy. Below in the code, you will find an example of the
-entire process being executed step by step. The parameters associated
-are displayed in the section called “setup”. You can modify them to
-customize the example. If you need more information regarding functions
-arguments, take a look at the R function documentation (or in the
-reference website section <a href="https://ob7-ird.github.io/t3/reference/index.html" class="uri">https://ob7-ird.github.io/t3/reference/index.html</a>).</p>
+<p>The T3 process consists of three different parts that you can run independently. However, in some cases, you may want to run the entire process step by step, for example to closely track several particular data with accuracy. Below in the code, you will find an example of the entire process being executed step by step. The parameters associated are displayed in the section called “setup”. You can modify them to customize the example. If you need more information regarding functions arguments, take a look at the R function documentation (or in the reference website section <a href="https://ob7-ird.github.io/t3/reference/index.html" class="uri">https://ob7-ird.github.io/t3/reference/index.html</a>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
@@ -313,11 +292,11 @@ reference website section <a href="https://ob7-ird.github.io/t3/reference/index.
 <span>                                                                             ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
 <span>                                                                             country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="shortcut-functions">Shortcut functions<a class="anchor" aria-label="anchor" href="#shortcut-functions"></a>
+<div class="section level2" number="3">
+<h2 id="shortcut-functions">
+<span class="header-section-number">3</span> Shortcut functions<a class="anchor" aria-label="anchor" href="#shortcut-functions"></a>
 </h2>
-<p>Through the following codes, you will be able to run separately each
-part of the treatment.</p>
+<p>Through the following codes, you will be able to run separately each part of the treatment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
@@ -383,13 +362,11 @@ part of the treatment.</p>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="global-shortcut-function">Global shortcut function<a class="anchor" aria-label="anchor" href="#global-shortcut-function"></a>
+<div class="section level2" number="4">
+<h2 id="global-shortcut-function">
+<span class="header-section-number">4</span> Global shortcut function<a class="anchor" aria-label="anchor" href="#global-shortcut-function"></a>
 </h2>
-<p>The last section presents an example of a function able to run all
-the t3 process through one command line. Like before, you can “play”
-with the arguments to customize the function, especially if you want to
-skip part(s) of the process.</p>
+<p>The last section presents an example of a function able to run all the t3 process through one command line. Like before, you can “play” with the arguments to customize the function, especially if you want to skip part(s) of the process.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>

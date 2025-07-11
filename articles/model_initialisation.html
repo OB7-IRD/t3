@@ -108,7 +108,7 @@
       <h1 data-toc-skip>Model initialisation and data selection</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/3.0.4/vignettes/model_initialisation.Rmd" class="external-link"><code>vignettes/model_initialisation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/vignettes/model_initialisation.Rmd" class="external-link"><code>vignettes/model_initialisation.Rmd</code></a></small>
       <div class="hidden name"><code>model_initialisation.Rmd</code></div>
 
     </div>
@@ -116,78 +116,46 @@
     
     
 <div style="text-align: justify">
-<div class="section level2">
-<h2 id="data-model-description">Data model description<a class="anchor" aria-label="anchor" href="#data-model-description"></a>
+<div class="section level2" number="1">
+<h2 id="data-model-description">
+<span class="header-section-number">1</span> Data model description<a class="anchor" aria-label="anchor" href="#data-model-description"></a>
 </h2>
-<div class="section level3">
-<h3 id="rs-r6-reference-classes">R’s R6 reference classes<a class="anchor" aria-label="anchor" href="#rs-r6-reference-classes"></a>
+<div class="section level3" number="1.1">
+<h3 id="input-data">
+<span class="header-section-number">1.1</span> Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
 </h3>
-<p>The t3 process was built under <a href="https://r6.r-lib.org/" class="external-link">R’s R6
-reference classes</a>. R6 is an implementation of encapsulated
-object-oriented programming for R. This style of programming is also
-sometimes referred to as classical object-oriented programming. An
-online documentation was available at <a href="https://r6.r-lib.org" class="external-link">https://r6.r-lib.org</a> and you can find a
-brief introduction and overview in the chapter 14 of the book “Advanced
-R” written by Hadley Wickham (online view was available <a href="https://adv-r.hadley.nz/index.html" class="external-link">here</a>).</p>
-<p>Just to sum up, among other things we choose R6 for the t3 process
-because:</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="figures/input_data.png"></p>
+</div>
+<div class="section level3" number="1.2">
+<h3 id="rs-r6-reference-classes">
+<span class="header-section-number">1.2</span> R’s R6 reference classes<a class="anchor" aria-label="anchor" href="#rs-r6-reference-classes"></a>
+</h3>
+<p>The t3 process was built under <a href="https://r6.r-lib.org/" class="external-link">R’s R6 reference classes</a>. R6 is an implementation of encapsulated object-oriented programming for R. This style of programming is also sometimes referred to as classical object-oriented programming. An online documentation was available at <a href="https://r6.r-lib.org" class="external-link">https://r6.r-lib.org</a> and you can find a brief introduction and overview in the chapter 14 of the book “Advanced R” written by Hadley Wickham (online view was available <a href="https://adv-r.hadley.nz/index.html" class="external-link">here</a>).</p>
+<p>Just to sum up, among other things we choose R6 for the t3 process because:</p>
 <ul>
-<li><p>all the methods, or function/process if you want to match with
-R’s current typology, are encapsulated in a class. You can make anymore
-mistake when you run a process (for example with functions how doors the
-same name in two different package).</p></li>
-<li><p>you can use the process of inheritance from an existing class to
-another. All your methods work in synergy and transparency.</p></li>
-<li><p>class are defined with attributes and controls are associated to
-them to ensure data consistency. When a class was built, you could be
-sure of what you have inside!</p></li>
-<li><p>you manipulate class of a data model how represent a vision of
-reality more understandable. For example, when you manipulate and object
-of class “trip”, this object contains all attributes necessary to define
-a trip.</p></li>
-<li><p>you can optimise and increase the running speed of your process,
-especially related to the R’s memory usage and the identification of
-treatments/functions associated.</p></li>
+<li><p>all the methods, or function/process if you want to match with R’s current typology, are encapsulated in a class. You can make anymore mistake when you run a process (for example with functions how doors the same name in two different package).</p></li>
+<li><p>you can use the process of inheritance from an existing class to another. All your methods work in synergy and transparency.</p></li>
+<li><p>class are defined with attributes and controls are associated to them to ensure data consistency. When a class was built, you could be sure of what you have inside!</p></li>
+<li><p>you manipulate class of a data model how represent a vision of reality more understandable. For example, when you manipulate and object of class “trip”, this object contains all attributes necessary to define a trip.</p></li>
+<li><p>you can optimize and increase the running speed of your process, especially related to the R’s memory usage and the identification of treatments/functions associated.</p></li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="class-and-methods-documentations">Class and methods documentations<a class="anchor" aria-label="anchor" href="#class-and-methods-documentations"></a>
+<div class="section level3" number="1.3">
+<h3 id="class-and-methods-documentations">
+<span class="header-section-number">1.3</span> Class and methods documentations<a class="anchor" aria-label="anchor" href="#class-and-methods-documentations"></a>
 </h3>
-<p>All documentation regarding class and methods associated are
-available thought the navigation bar <code>Reference</code> in the
-section <code>R6 class</code>. For example, if you search the main t3
-process you can find them in the documentation of the class
-<code>full_trip</code>. This documentation, like the other one, is also
-available when the call the function help in the R console (for example
-above <code>?full_trip</code>).</p>
+<p>All documentation regarding class and methods associated are available thought the navigation bar <code>Reference</code> in the section <code>R6 class</code>. For example, if you search the main t3 process you can find them in the documentation of the class <code>full_trip</code>. This documentation, like the other one, is also available when the call the function help in the R console (for example above <code>?full_trip</code>).</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="model-initialisation">Model initialisation<a class="anchor" aria-label="anchor" href="#model-initialisation"></a>
+<div class="section level2" number="2">
+<h2 id="model-initialisation">
+<span class="header-section-number">2</span> Model initialisation<a class="anchor" aria-label="anchor" href="#model-initialisation"></a>
 </h2>
 <p>You have three different ways to launch the model creation:</p>
 <ul>
-<li><p>through the function <code><a href="../reference/t3_process.html">t3::t3_process()</a></code>. This function
-can run all the t3 process or just a part of it. Use this way if you
-planned to run the process at least until the level 1. This function not
-allow switching with several data sources and work only with a t3
-database as data source. If you want to customize or change this kind of
-parameter prefer to use the basic functions (see the third
-option).</p></li>
-<li><p>the second possibility is thought the function
-<code><a href="../reference/data_model_initialisation.html">t3::data_model_initialisation()</a></code>. Just like the previous
-one, you can’t switch with another data sources as t3 database.
-Furthermore, this function run all the processes related to the data
-model creation and the selection of data associated (in relation to
-function parameters provided, see function help for more
-details).</p></li>
-<li><p>the last way is to use all the different sub-functions of the
-data model creation process. All the sub-functions, and documentations
-associated, were available under methods of the class
-<code>?t3::object_model_data()</code> for the data importation process
-and under several methods of the class <code>?t3::full_trips()</code>
-for the model creation and data selection. The table below summarize all
-different processes and code/method associated.</p></li>
+<li><p>through the function <code><a href="../reference/t3_process.html">t3::t3_process()</a></code>. This function can run all the t3 process or just a part of it. Use this way if you planned to run the process at least until the level 1. This function not allow switching with several data sources and work only with a t3 database as data source. If you want to customize or change this kind of parameter prefer to use the basic functions (see the third option).</p></li>
+<li><p>the second possibility is thought the function <code><a href="../reference/data_model_initialisation.html">t3::data_model_initialisation()</a></code>. Just like the previous one, you can’t switch with another data sources as t3 database. Furthermore, this function run all the processes related to the data model creation and the selection of data associated (in relation to function parameters provided, see function help for more details).</p></li>
+<li><p>the last way is to use all the different sub-functions of the data model creation process. All the sub-functions, and documentations associated, were available under methods of the class <code>?t3::object_model_data()</code> for the data importation process and under several methods of the class <code>?t3::full_trips()</code> for the model creation and data selection. The table below summarize all different processes and code/method associated.</p></li>
 </ul>
 <table class="table">
 <colgroup>
