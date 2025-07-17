@@ -609,8 +609,9 @@ If a global_output_path is specified, the following output is extracted and save
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
- \item{sample_standardised_length_class_lf: } standardised sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
- \item{sample_number_measured_extrapolated_lf: } standardised sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}, type \code{\link[base]{numeric}}) .\cr
+ \item{sample_standardised_length_class_lf: } standardized sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}),
+  type \code{\link[base]{numeric}}.
  }
 }
 
