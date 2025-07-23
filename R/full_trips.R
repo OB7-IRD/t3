@@ -1203,10 +1203,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' \item{< 10kg and > 10kg} for undetermined and free school in the Indian Ocean.
                             #' }
                             #' For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
-                            #'  Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
+                            #' Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
-                            #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @param referential_template Object of class \code{\link[base]{character}} expected.
+                            #'  By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
                             #'  process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:
@@ -1239,6 +1240,41 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
                             #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
                             #'  }
+                            #'  \cr
+                            #'  If \code{referential_template="observe"}, values of \code{weight_category_min} and \code{weight_category_max} are used to convert logbook's weight categories to standard weight categories:
+                            #'  We define the value : \code{delta_weight_category=weight_category_max - weight_category_min}, corresponding to the amplitude of the weight interval defined by a logbook weight category.
+                            #'  Standard weight categories for species "YFT", "BET" and "ALB" are : + ("LOT")?? + arg species ?
+                            #'  \itemize{
+                            #'  \item{< 10kg and > 10kg} for floating object school, undetermined and free school in the Indian Ocean and for the floating object school in the Atlantic Ocean:
+                            #'  We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+                            #'  and the proportion to be assigned to the ">10kg" standard weight category: \code{prop_plus10}.
+                            #'  \itemize{
+                            #'  \item{if \code{weight_category_min >= 10 }: } \code{prop_plus10=1},
+                            #'  \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+                            #'  \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 10 }: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category} and \code{prop_plus10=1-prop_minus10}.
+                            #'  }
+                            #'  \item{ < 10kg, 10-30kg and > 30kg} for undetermined and free school in the Atlantic Ocean:
+                            #'  We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+                            #'  the proportion to be assigned to the "10-30kg" weight category: \code{prop_10_30}, and the proportion to be attributed to the ">30kg" category: \code{prop_plus30}.
+                            #'  \itemize{
+                            #'  \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+                            #'  \item{if \code{weight_category_min >= 30 }: } \code{prop_plus30=1},
+                            #'  \item{if \code{weight_category_min >= 10} and \code{weight_category_max <= 30}: }  \code{prop_10_30=1},
+                            #'  \item{if \code{weight_category_min < 10} and \code{10 < weight_category_max < 30}: } \code{prop_minus10=(10 - weight_category_min) / delta_weight_category} and \code{prop_10_30=1-prop_minus10},
+                            #'  \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 30}: }
+                            #'  \itemize{
+                            #'  \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category}, \code{prop_plus30= (weight_category_max - 30) /  delta_weight_category} and \code{prop_10_30= 1 - prop_minus10 - prop_plus30},
+                            #'  \item{if \code{is.infinite(weight_category_max)}: }  \code{prop_minus10=(10 - weight_category_min) / (200-weight_category_min)}, \code{prop_10_30= (30 - weight_category_min) / (200-weight_category_min)}, \code{prop_plus30 = 1 - prop_minus10 - propr_10_30}.
+                            #'  }
+                            #'  \item{if \code{10 <= weight_category_min < 30 } and \code{weight_category_max > 30 }: }
+                            #'  \itemize{
+                            #'  \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_10_30= (30 - weight_category_min) /  delta_weight_category} and \code{prop_plus30=1-prop_10_30},
+                            #'  \item{if \code{is.infinite(weight_category_max)}: } \code{prop_10_30=(30 - weight_category_min) / (200-weight_category_min)} and \code{prop_plus30=1-prop_10_30}.
+                            #'  }
+                            #'  }
+                            #'  }
+                            #' For species "SKJ" the standard weight category is "<10kg" in all cases.
+                            #' An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
                             conversion_weight_category = function(global_output_path = NULL,
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
@@ -1356,7 +1392,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                      0, weight_category_min),
                                                                 weight_category_max = dplyr::if_else(is.na(weight_category_max),
                                                                                                      Inf, weight_category_max),
-                                                                delta_weight_category = weight_category_max - weight_category_min)
+                                                                delta_weight_category = dplyr::if_else(is.infinite(weight_category_max),
+                                                                                                       200 -  weight_category_min,
+                                                                                                       weight_category_max - weight_category_min))
                                                 current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
                                                 # %>%
                                                 #   dplyr::select(- delta_weight_category,
@@ -1392,13 +1430,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             weight_category_prop_plus10 = dplyr::if_else(weight_category_code_corrected == "distr",
                                                                                                          1- weight_category_prop_minus10,
                                                                                                          NA))
-
+                                                    # Add an elementarycatches to split logbook's weight category in tthe 2 standard categories : <=10 and >10.
                                                     current_elementarycatches_added <- current_elementarycatches_corrected %>%
                                                       dplyr::filter(weight_category_code_corrected == "distr",
                                                                     species_fao_code %in% c("YFT", "BET", "ALB")) %>%
                                                       dplyr::mutate(weight_category_code_corrected ="<10kg",
                                                                     catch_weight_category_code_corrected = catch_weight_rf2 * weight_category_prop_minus10)
-
+                                                    # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
+                                                    # to split logbook's weight category in 2 standard categories : <10 and >10.
                                                     current_elementarycatches_corrected  <- current_elementarycatches_corrected %>%
                                                       dplyr::mutate(catch_weight_category_code_corrected  = dplyr::if_else(weight_category_code_corrected == "distr",
                                                                                                                            catch_weight_rf2*weight_category_prop_plus10,
@@ -1415,17 +1454,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               pmax(0, 10 - weight_category_min) / delta_weight_category),
                                                         weight_category_prop_plus30 = dplyr::case_when(
                                                           weight_category_min>=30 ~ 1.0,
-                                                          is.infinite(weight_category_max) & weight_category_min < 10 ~ 1 - weight_category_prop_minus10 - weight_category_prop_minus10*((30-10)/(10-weight_category_min)),
-                                                          is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ 0.9,
+                                                          # is.infinite(weight_category_max) & weight_category_min < 10 ~ 1 - weight_category_prop_minus10 - weight_category_prop_minus10*((30-10)/(10-weight_category_min)),
+                                                          # is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ 0.9,
                                                           TRUE ~ pmax(0, weight_category_max - 30) / delta_weight_category),
 
                                                         weight_category_prop_10_30 = dplyr::case_when(
                                                           weight_category_min >= 10 & weight_category_max <=30 ~ 1.0,
-                                                          is.infinite(weight_category_max) & weight_category_min < 10 ~ weight_category_prop_minus10*((30-10)/abs(10-pmin(9,weight_category_min))),
+                                                          # is.infinite(weight_category_max) & weight_category_min < 10 ~ weight_category_prop_minus10*((30-10)/abs(10-pmin(9,weight_category_min))),
                                                           TRUE ~ 1 - weight_category_prop_minus10 - weight_category_prop_plus30),
                                                         weight_category_code_corrected =
                                                           dplyr::case_when(
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min <= 10 & weight_category_max > 10 & weight_category_max < 30 ~ "case1",
+                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 10 & weight_category_max < 30 ~ "case1",
                                                             species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 30 ~ "case2",
                                                             species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min >= 10  & weight_category_min < 30 &  weight_category_max > 30 ~ "case3",
                                                             species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_max <= 10 ~ "<10kg",
@@ -1437,6 +1476,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                       "ALB",
                                                                                       "SKJ")) ~ "unknown",
                                                           ))
+                                                    # Add an elementarycatches to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
                                                     current_elementarycatches_added <- current_elementarycatches_corrected %>%
                                                       dplyr::filter(weight_category_code_corrected %in% c("case1","case2","case3"),
                                                                     species_fao_code %in% c("YFT",
@@ -1449,7 +1489,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         weight_category_code_corrected =  dplyr::case_when(
                                                           weight_category_code_corrected %in% c("case1","case2") ~ "<10kg",
                                                           weight_category_code_corrected == "case3" ~ ">30kg"))
-                                                    # Only for case 2 weight_catgeory_min < 10  &  weight_category_max > 30 => distribution in the 3 categories: <10, 10-30kg, >30.
+                                                    # Add an elementarycatches to split logbook's weight category in the 3 standard categories: <10, 10-30kg, >30.
+                                                    # Only for case 2 weight_catgeory_min < 10  &  weight_category_max > 30
                                                     current_elementarycatches_added <- dplyr::bind_rows(current_elementarycatches_added,
                                                                                                         current_elementarycatches_corrected  %>%
                                                                                                           dplyr::filter(weight_category_code_corrected == "case2",
@@ -1458,7 +1499,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                 "ALB")) %>%
                                                                                                           dplyr::mutate(weight_category_code_corrected = "10-30kg",
                                                                                                                         catch_weight_category_code_corrected = catch_weight_rf2*weight_category_prop_10_30))
-
+                                                    # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
+                                                    # to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
                                                     current_elementarycatches_corrected  <-  current_elementarycatches_corrected  %>%
                                                       dplyr::mutate(
                                                         catch_weight_category_code_corrected = dplyr::case_when(
@@ -1474,8 +1516,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           TRUE ~ weight_category_code_corrected
                                                         ))
                                                   }
+                                                  # Add elementarycatches created by weight category conversion in current_elementarycatches_corrected
                                                   if(!is.null(current_elementarycatches_added)){
-                                                    current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added, current_elementarycatches_corrected))
+                                                    current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added,
+                                                                                                        current_elementarycatches_corrected))
                                                   }
                                                 } else if(referential_template == "avdth"){
                                                   #- process AVDTH ----
@@ -6103,6 +6147,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          || period_duration > 99) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"period_duration\" argument, one value of class integer expected with  maximum value 99.\n",
+                                    sep = "")
+                                stop()
+                              } else if (! inherits(x = target_ocean,
+                                                    what = "integer")
+                                         || length(target_ocean) != 1) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"target_ocean\" argument, one value of class integer expected.\n",
                                     sep = "")
                                 stop()
                               } else if (!is.null(periode_reference_level3)

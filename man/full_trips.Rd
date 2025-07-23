@@ -267,7 +267,7 @@ This process aims to homogenize these weight categories and create simplify cate
 \item{< 10kg and > 10kg} for undetermined and free school in the Indian Ocean.
 }
 For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
- Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
+Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weight_category(
   global_output_path = NULL,
@@ -281,7 +281,8 @@ For each layer ocean/fishing school/specie/logbook weight category, a distributi
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected.
+By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -317,6 +318,41 @@ If a global_output_path is specified, the following output is extracted and save
   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
  }
+ \cr
+ If \code{referential_template="observe"}, values of \code{weight_category_min} and \code{weight_category_max} are used to convert logbook's weight categories to standard weight categories:
+ We define the value : \code{delta_weight_category=weight_category_max - weight_category_min}, corresponding to the amplitude of the weight interval defined by a logbook weight category.
+ Standard weight categories for species "YFT", "BET" and "ALB" are : + ("LOT")?? + arg species ?
+ \itemize{
+ \item{< 10kg and > 10kg} for floating object school, undetermined and free school in the Indian Ocean and for the floating object school in the Atlantic Ocean:
+ We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+ and the proportion to be assigned to the ">10kg" standard weight category: \code{prop_plus10}.
+ \itemize{
+ \item{if \code{weight_category_min >= 10 }: } \code{prop_plus10=1},
+ \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+ \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 10 }: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category} and \code{prop_plus10=1-prop_minus10}.
+ }
+ \item{ < 10kg, 10-30kg and > 30kg} for undetermined and free school in the Atlantic Ocean:
+ We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+ the proportion to be assigned to the "10-30kg" weight category: \code{prop_10_30}, and the proportion to be attributed to the ">30kg" category: \code{prop_plus30}.
+ \itemize{
+ \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+ \item{if \code{weight_category_min >= 30 }: } \code{prop_plus30=1},
+ \item{if \code{weight_category_min >= 10} and \code{weight_category_max <= 30}: }  \code{prop_10_30=1},
+ \item{if \code{weight_category_min < 10} and \code{10 < weight_category_max < 30}: } \code{prop_minus10=(10 - weight_category_min) / delta_weight_category} and \code{prop_10_30=1-prop_minus10},
+ \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 30}: }
+ \itemize{
+ \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category}, \code{prop_plus30= (weight_category_max - 30) /  delta_weight_category} and \code{prop_10_30= 1 - prop_minus10 - prop_plus30},
+ \item{if \code{is.infinite(weight_category_max)}: }  \code{prop_minus10=(10 - weight_category_min) / (200-weight_category_min)}, \code{prop_10_30= (30 - weight_category_min) / (200-weight_category_min)}, \code{prop_plus30 = 1 - prop_minus10 - propr_10_30}.
+ }
+ \item{if \code{10 <= weight_category_min < 30 } and \code{weight_category_max > 30 }: }
+ \itemize{
+ \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_10_30= (30 - weight_category_min) /  delta_weight_category} and \code{prop_plus30=1-prop_10_30},
+ \item{if \code{is.infinite(weight_category_max)}: } \code{prop_10_30=(30 - weight_category_min) / (200-weight_category_min)} and \code{prop_plus30=1-prop_10_30}.
+ }
+ }
+ }
+For species "SKJ" the standard weight category is "<10kg" in all cases.
+An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
 }
 
 }
