@@ -4,6 +4,7 @@ output:
   bookdown::html_document2:
     toc: true
     toc_float: true
+    number_sections: false
 description: |
   Description of the t3 level 3 modelisation and how to initialise it.
 pkgdown:
