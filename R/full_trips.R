@@ -503,9 +503,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
                             #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
                             #'  , type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
                             #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{elementarycatch_id: } elementary catch identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{species_fate_code: } species fate codes, type \code{\link[base]{integer}}.
@@ -537,9 +537,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
                             #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
                             #' , type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
                             #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
                             #'  \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
                             #'  \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
                             #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
@@ -623,7 +623,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
                                           current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.1")
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- '1.1'")
                                           stop <- 1
                                         }
                                       }
@@ -649,7 +649,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                        file = "NUL")
                                         current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
-                                        current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.2")
+                                        current_trips$modification_l1(modification = "$path$statut_rf1 <- '1.2'")
                                       } else {
                                         for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                           if (trip_id == 1) {
@@ -684,7 +684,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
                                             current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.3")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- '1.3'")
                                           } else {
                                             # Case 1.4 ----
                                             # almost rocks dude ! (not complete full trip item)
@@ -693,7 +693,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
                                             current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 1.4")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- '1.4'")
                                           }
                                         }
                                       }
@@ -737,7 +737,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
                                             current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.1")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- '2.1'")
                                             stop <- 1
                                           }
                                         }
@@ -771,7 +771,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                          file = "NUL")
                                           current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.2")
+                                          current_trips$modification_l1(modification = "$path$statut_rf1 <- '2.2'")
                                         } else {
                                           current_elementarycatches_weight <- vector(mode = "numeric")
                                           capture.output(current_elementarycatches_final <- current_elementarycatches %>%  dplyr::filter(species_fao_code %in% species_fao_codes_rf1,
@@ -803,7 +803,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
                                                            file = "NUL")
                                             current_trips$modification_l1(modification = "$path$rf1 <- 1")
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.3")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- '2.3'")
                                           } else {
                                             if(!rf1_computation){
                                               current_rf1 <- 1
@@ -840,14 +840,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                             current_trips$modification_l1(modification = paste0("$path$rf1 <- ",
                                                                                                 current_rf1))
-                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- 2.4")
+                                            current_trips$modification_l1(modification = "$path$statut_rf1 <- '2.4'")
                                           }
                                         }
                                       }
                                     } else {
                                       # Case 3.1 ----
                                       current_trips$modification_l1(modification = "$path$rf1 <- NA_real_")
-                                      current_trips$modification_l1(modification = "$path$statut_rf1 <- 3.1")
+                                      current_trips$modification_l1(modification = "$path$statut_rf1 <- '3.1'")
                                     }
                                   }
                                   # Assign rf1 to elementary catches ----
@@ -977,7 +977,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                          private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                          "]")
                                   } else {
-                                    if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 == 2.1) {
+                                    if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 == '2.1') {
                                       # Case 2.1 ----
                                       # rf2 calculated
                                       stop(format(x = Sys.time(),
@@ -985,14 +985,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            " - RF2 not developped yet.")
                                       #>>> RF2 not developed yet ####
                                     } else {
-                                      if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 %in% c(2.2, 2.3, 2.4)) {
+                                      if (private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$statut_rf1 %in% c('2.2', '2.3', '2.4')) {
                                         # Case 2.2, 2.3, 2.4 ----
                                         # rf2 not need to be calculated
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                           current_rf2 <- 1
                                           current_trip$.__enclos_env__$private$rf2 <- current_rf2
-                                          current_trip$.__enclos_env__$private$statut_rf2 <- 2
+                                          current_trip$.__enclos_env__$private$statut_rf2 <- '2'
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
@@ -1009,7 +1009,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                           current_trip$.__enclos_env__$private$rf2 <- NA_real_
-                                          current_trip$.__enclos_env__$private$statut_rf2 <- 3
+                                          current_trip$.__enclos_env__$private$statut_rf2 <- '3'
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
@@ -1121,7 +1121,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                  y = total_landings_catches,
                                                                                  by = "trip_id")
                                   ######  Add label for rf1 and rf2 statut ######
-                                  rf1_statut <- data.frame(statut_rf1=c(1.1,1.2,1.3,1.4,2.1,2.2,2.3,2.4,3.1),
+                                  rf1_statut <- data.frame(statut_rf1=c('1.1','1.2','1.3','1.4','2.1','2.2','2.3','2.4','3.1'),
                                                            statut_rf1_label=c("logbook(s) missing in not complete full trip",
                                                                               "trip(s) without catch (e.g. route or support) in not complete full trip",
                                                                               "elementary landing(s) missing in not complete full trip",
@@ -1133,7 +1133,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                               "vessel type code not corresponding to the argument vessel_type_codes_rf1"))
 
 
-                                  rf2_statut <- data.frame(statut_rf2=c(1, 2,3),
+                                  rf2_statut <- data.frame(statut_rf2=c('1', '2', '3'),
                                                            statut_rf2_label=c("logbook(s) missing, rf2 must to be calculated",
                                                                               "no missing logbook, rf2 no need to be calculated",
                                                                               " full trip not complete or vessel type code not validated"))
@@ -1221,7 +1221,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
-                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
                             #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
                             #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
@@ -1234,7 +1234,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{weight_category_label: } weight category label defined in logbooks, type \code{\link[base]{character}}.
                             #'  \item{catch_weight_rf2: } catch weight after visual estimation correction  (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
                             #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
-                            #'  \item{weight_category_code_corrected: } weight category code after conversion, type \code{\link[base]{character}}.
+                            #'  \item{weight_category_code_corrected: } weight category after conversion, type \code{\link[base]{character}}.
                             #'  \item{catch_weigh_category_code_corrected: } catch weight after weight category conversion (tonnes), type \code{\link[base]{numeric}}.\cr
                             #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
                             #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
@@ -1814,7 +1814,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
-                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
                             #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
                             #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
                             #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
@@ -2080,7 +2080,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_id: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
                             #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
-                            #'  \item{activity_date: } activity date, type \code{\link[base]{character}}.
+                            #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
                             #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
                             #'  \item{objectoperation_code: } object operation code to define the type of floating object operation (in Observe referential), type \code{\link[base]{character}}.
                             #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
@@ -5706,6 +5706,83 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
                             #' Path of the global outputs directory. The function will create subsection if necessary.
                             #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @examples \dontrun{
+                            #' process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
+                            #' }
+                            #' @return a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} `process_level3$raw_inputs_level3$`:
+                            #'  \itemize{
+                            #'  \item{act: } a data table recording the activities ID, date, type, coordinates, fishing school type and associated trip ID, as well as the vessel, ocean and flag codes.
+                            #'  \item{act3: } a data table recording the  activities ID, date and type and associated catches (species, species fate code, weight, count and standard weight category).
+                            #'  \item{samw: } a data table recording the samples species, weight and weight category by activity (ID).
+                            #'  \item{sset: } a data table recording the samples ID, type and quality by activity (ID).
+                            #'  \item{wp: } a data table recording the well plan, i.e. the well ID and corresponding activities and samples ID with associated species, sample weight and well's weight category (+10kg or -10kg).
+                            #'  }
+                            #' @details
+                            #' If a global_output_path is specified, the following output is extracted and saved in ".RData" format under the path: "global_output_path/". \cr
+                            #'  "inputs_level3_`target_year`_ocean_`ocean_code`_`country(ies)`": a list of 5 \code{\link[base]{data.frame}}:
+                            #'  \itemize{
+                            #'  \item{act: } a data.frame with as many rows as activities and 10 column:
+                            #'  \itemize{
+                            #'  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{lat: } activity latitude, type \code{\link[base]{numeric}}.
+                            #'  \item{lon: } activity longitude, type \code{\link[base]{numeric}}.
+                            #'  \item{fmod: } fishing school type code, type \code{\link[base]{integer}}.\cr
+                            #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
+                            #'  \item{date_act} activity date, type \code{\link[base]{POSIXct}}.
+                            #'  \item{vessel: } vessel identification code, type \code{\link[base]{integer}}.
+                            #'  \item{flag_code: } flag of the vessel, three letters country ISO 3 code(s), type {\link[base]{character}}.
+                            #'  \item{id_trip: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{ocean: } ocean code, type \code{\link[base]{integer}}.
+                            #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
+                            #'  \item{code_act_type: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  }
+                            #'  \item{act3: } a data.frame with as many rows as elementary catches and 8 columns:
+                            #'  \itemize{
+                            #'  \item{id_act :} activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{w_lb_t3 :} catch weight  (tonnes) after weight category conversion in step \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{1.2}, type \code{\link[base]{numeric}}.
+                            #'  \item{sp_fate_code :} species fate codes, type \code{\link[base]{integer}}. \cr
+                            #'  For example in Observe database :  \itemize{
+                            #'  \item{4 : } discarded alive.
+                            #'  \item{5 : } discarded dead.
+                            #'  \item{6 : } Retained, presumably destined for the cannery
+                            #'  \item{8 : } used for crew consumption on board.
+                            #'  \item{11 : } discarded status unknown (only for EMS and logbook).
+                            #'  \item{15 : } retained for local market or dried/salted fish on board.
+                            #'  }
+                            #'  \item{sp :} species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{count :} catch count, type \code{\link[base]{integer}}.
+                            #'  \item{wcat: } weight category after conversion to standard categories (<10kg and > 10kg or >10kg, 10-30kg and >30kg), in step \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{1.2}, type \code{\link[base]{character}}.
+                            #'  \item{date_act: } activity date, type \code{\link[base]{POSIXct}}.
+                            #'  \item{code_act_type: } activity code to define the type of activity, type \code{\link[base]{integer}}.
+                            #'  }
+                            #'  \item{samw: } a data.frame with 4 columns:
+                            #'  \itemize{
+                            #'  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{sp: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{wcat: } sample weight category (less than 10kg: "-10kg" or more than 10 kg: "+10kg"), type \code{\link[base]{character}}. \cr
+                            #'  Output named \code{sample_category} from step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-6-sample-number-standardisation}{2.6}.
+                            #'  \item{w_fit_t3: } sample weight by set (activity) in tonnes, type \code{\link[base]{numeric}}. \cr
+                            #'  Output named \code{sample_weight_set} from step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-8-samples-number-standardisation-at-set-scale}{2.8}
+                            #'  }
+                            #'  \item{sset: } a data.frame with 4 columns:
+                            #'  \itemize{
+                            #'  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{id_sample: } sample identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{quality} sample quality identification code, type {\link[base]{integer}}.\cr
+                            #'   For example in Observe referential, a sample with \code{quality=1} corresponds to a "Super-T3" sample and the \code{quality=3} is for "Biology" sample.
+                            #'  \item{type} sample type identification code, type {\link[base]{integer}}. \cr
+                            #'  For example in Observe referential, a sample with \code{type=1} corresponds to a "At landing" sample.
+                            #'  }
+                            #'  \item{wp: } a data.frame with 6 columns:
+                            #'  \itemize{
+                            #'  \item{id_well} well identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{id_sample: } sample identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{code3l: } species FAO code, type \code{\link[base]{character}}.
+                            #'  \item{weight: } well plan's weight declared (tonnes), type \code{\link[base]{numeric}}.
+                            #'  \item{wcat_well: } well's category declared (less than 10kg: "-10kg" or more than 10 kg: "+10kg"), type \code{\link[base]{character}}.
+                            #'  }
+                            #'  }
                             path_to_level3 = function(global_output_path=NULL) {
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
@@ -5957,6 +6034,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
+                                    sep = "")
+                                stop()
+                              } else if (! inherits(x = target_ocean,
+                                                    what = "integer")
+                                         || length(target_ocean) != 1
+                                         || nchar(target_ocean) != 1) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 1 digit.\n",
                                     sep = "")
                                 stop()
                               } else if (! inherits(x = period_duration,
