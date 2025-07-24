@@ -27,6 +27,9 @@ reference:
   desc: >
     Link to the function for R6 class creations. Methods and processes associated are encapsulate in each class.
 - contents:
+  - object_model_data
+  - full_trips
+  - list_t3
   - activities
   - activity
   - elementarylanding
@@ -37,9 +40,6 @@ reference:
   - elementarysamplesraw
   - elementarywellplan
   - elementarywellplans
-  - full_trips
-  - list_t3
-  - object_model_data
   - samples
   - standardisedsample
   - standardisedsamples
