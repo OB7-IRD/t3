@@ -6,30 +6,10 @@ template:
       index_name: ob7-ird
 
 reference:
-- title: "Shortcut functions"
-  desc: >
-    Functions for run all or several parts of the t3 process.
-- contents:
-  - t3_process
-  - data_model_initialisation
-  - t3_level1
-  - t3_level2
-  - t3_level3
-- title: "Level 3 tools"
-  desc: >
-    Functions used in the process level 3.
-- contents:
-  - catch_ci_calculator
-  - df2boot
-  - tunaboot
-  - tunapredict
 - title: "R6 class"
   desc: >
-    Link to the function for R6 class creations. Methods and processes associated are encapsulate in each class.
+    Function for R6 class creation.
 - contents:
-  - object_model_data
-  - full_trips
-  - list_t3
   - activities
   - activity
   - elementarylanding
@@ -51,6 +31,30 @@ reference:
   - wells
   - wellset
   - wellsets
+- title: ""
+  desc: >
+    Methods and processes associated to R6 objects, encapsulated in each class.
+- contents:
+  - object_model_data
+  - full_trips
+  - list_t3
+- title: "Shortcut functions"
+  desc: >
+    Functions for run all or several parts of the t3 process.
+- contents:
+  - data_model_initialisation
+  - t3_level1
+  - t3_level2
+  - t3_level3
+  - t3_process
+- title: "Level 3 tools"
+  desc: >
+    Functions used in the process level 3.
+- contents:
+  - catch_ci_calculator
+  - df2boot
+  - tunaboot
+  - tunapredict
 - title: "Diverse"
   desc: >
     Diverse functions and tools.

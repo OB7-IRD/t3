@@ -5702,24 +5702,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 22 - Path to level 3 ----
-                            #' @description Temporary link to the R object model with modelisation process.
+                            #' @description Temporary link to the R object model with modelling level 3 process.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
                             #' Path of the global outputs directory. The function will create subsection if necessary.
                             #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @examples \dontrun{
                             #' process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
                             #' }
-                            #' @return a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} `process_level3$raw_inputs_level3$`:
+                            #' @return a list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} \code{process_level3$raw_inputs_level3$}:
                             #'  \itemize{
-                            #'  \item{act: } a data table recording the activities ID, date, type, coordinates, fishing school type and associated trip ID, as well as the vessel, ocean and flag codes.
-                            #'  \item{act3: } a data table recording the  activities ID, date and type and associated catches (species, species fate code, weight, count and standard weight category).
-                            #'  \item{samw: } a data table recording the samples species, weight and weight category by activity (ID).
-                            #'  \item{sset: } a data table recording the samples ID, type and quality by activity (ID).
-                            #'  \item{wp: } a data table recording the well plan, i.e. the well ID and corresponding activities and samples ID with associated species, sample weight and well's weight category (+10kg or -10kg).
+                            #'  \item{\code{act}: } a data table recording the activities ID, date, type, coordinates, fishing school type and associated trip ID, as well as the vessel, ocean and flag codes.
+                            #'  \item{\code{act3}: } a data table recording the  activities ID, date and type and associated catches (species, species fate code, weight, count and standard weight category).
+                            #'  \item{\code{samw}: } a data table recording the samples species, weight and weight category by activity (ID).
+                            #'  \item{\code{sset}: } a data table recording the samples ID, type and quality by activity (ID).
+                            #'  \item{\code{wp}: } a data table recording the well plan, i.e. the well ID and corresponding activities and samples ID with associated species, sample weight and well's weight category (+10kg or -10kg).
                             #'  }
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".RData" format under the path: "global_output_path/". \cr
-                            #'  "inputs_level3_`target_year`_ocean_`ocean_code`_`country(ies)`": a list of 5 \code{\link[base]{data.frame}}:
+                            #'  "inputs_level3_\code{target_year}_ocean_\code{ocean_code}_\code{country_(ies)}": a list of 5 \code{\link[base]{data.frame}}:
                             #'  \itemize{
                             #'  \item{act: } a data.frame with as many rows as activities and 10 column:
                             #'  \itemize{
@@ -5783,6 +5783,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{wcat_well: } well's category declared (less than 10kg: "-10kg" or more than 10 kg: "+10kg"), type \code{\link[base]{character}}.
                             #'  }
                             #'  }
+                            #'  @aliases path_to_level3
                             path_to_level3 = function(global_output_path=NULL) {
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
