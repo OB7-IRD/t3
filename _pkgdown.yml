@@ -31,9 +31,9 @@ reference:
   - wells
   - wellset
   - wellsets
-- title: ""
+- title: "Methods associated to R6 objects"
   desc: >
-    Methods and processes associated to R6 objects, encapsulated in each class.
+    Methods and processes associated to R6 objects, encapsulated in each class:
 - contents:
   - object_model_data
   - full_trips
