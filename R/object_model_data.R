@@ -292,16 +292,20 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 7 - Common data design ----
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
-                                     object_trips$add(lapply(X = seq_len(length.out = length(x = trip_data[[1]])),
+                                     T1 <- Sys.time()
+
+                                     object_trips$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = trip_data[[1]])),
+                                                                                     clear = getOption("cli.progress_clear", FALSE),
+                                                                                     format = paste0(
+                                                                                       format(x = Sys.time(),
+                                                                                              "%Y-%m-%d %H:%M:%S"),
+                                                                                       " - Importation of trip element ",
+                                                                                       "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                       "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                       "], Time remaining:{cli::pb_eta}"),,
+                                                                                     total = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
-                                                               cat(format(x = Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Start importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n",
-                                                                   "[trip: ",
-                                                                   trip_data$trip_id[trip_id],
-                                                                   "]\n", sep="")
+                                                               Sys.sleep(3/100)
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
                                                                                 flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
@@ -310,14 +314,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 landing_well_content_code = trip_data$landing_well_content_code[trip_id],
                                                                                 vessel_code = trip_data$vessel_code[trip_id],
                                                                                 vessel_type_code = trip_data$vessel_type_code[trip_id])
-                                                               cat(format(x = Sys.time(),
-                                                                          format = "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Successful importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n", sep="")
                                                                return(trip)
                                                              }))
                                      private$trips <- object_trips
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                  format = "%Y-%m-%d %H:%M:%S "),
+                                                            cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                            length(x = trip_data[[1]]),
+                                                           " trips, in ", elapsed_time, "."))
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
@@ -853,16 +859,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # Check elementarycatches data column names and types done in activity.R
                                      activity_data <- unclass(x = activity_data)
                                      object_activities <- object_r6(class_name = "activities")
-                                     object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
+                                     T1 <- Sys.time()
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                     " - Importation of activity and elementary catch(es) element:"))
+                                     object_activities$add(lapply(cli::cli_progress_along(seq_len(length.out = length(activity_data[[1]])),
+                                                                                          clear = getOption("cli.progress_clear", FALSE),
+                                                                                          format = paste0("                        ",
+                                                                                            "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                            "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                            "], Time remaining:{cli::pb_eta}"),,
+                                                                                          total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    cat(format(Sys.time(),
-                                                                               "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Start importation of activity and elementary catche(s) element ",
-                                                                        activity_id,
-                                                                        ".\n",
-                                                                        "[activity: ",
-                                                                        activity_data[[2]][activity_id],
-                                                                        "]\n", sep="")
+                                                                    #Sys.sleep(3/100)
                                                                     elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],]
                                                                     if(nrow(elementarycatches_data)==0){
                                                                       elementarycatches_data <- NULL
@@ -885,14 +894,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              objectoperation_id = activity_data$objectoperation_id[activity_id],
                                                                                              elementarycatches = elementarycatches_data,
                                                                                              time_at_sea = activity_data$time_at_sea[activity_id])
-                                                                    cat(format(x = Sys.time(),
-                                                                               format = "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Successful importation of activity and elementary catche(s) element ",
-                                                                        activity_id,
-                                                                        ".\n", sep="")
                                                                     return(activity)
                                                                   }))
                                      private$activities <- object_activities
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                                length(x = activity_data[[1]]),
+                                                                " activities and elementary catche(s), in ", elapsed_time, "."))
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
@@ -1165,34 +1176,40 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary landing(s) data importation R environment.\n")
+                                           "- Successful elementary landing(s) data importation R environment.\n")
                                      }
                                      # 7 - Common data design ----
                                      elementarylanding_data <- unclass(x = elementarylanding_data)
                                      object_elementarylandings <- object_r6(class_name = "elementarylandings")
-                                     object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylanding_data[[1]])),
+                                     T1 <- Sys.time()
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                "- Importation of elementary landing element:"))
+                                     object_elementarylandings$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = elementarylanding_data[[1]])),
+                                                                                                  clear = getOption("cli.progress_clear", FALSE),
+                                                                                                  format = paste0(
+                                                                                                    "                        ",
+                                                                                                    "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                                    "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                                    "], Time remaining:{cli::pb_eta}"),,
+                                                                                                  total = length(x = elementarylanding_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Start importation of elementary landing element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n",
-                                                                                "[elementarylanding: ",
-                                                                                elementarylanding_data[[2]][elementarylanding_id],
-                                                                                "]\n", sep="")
+                                                                            Sys.sleep(1/100)
                                                                             elementarylanding <- elementarylanding$new(trip_id = elementarylanding_data$trip_id[elementarylanding_id],
                                                                                                                        elementarylanding_id = elementarylanding_data$elementarylanding_id[elementarylanding_id],
                                                                                                                        weight_category_code = elementarylanding_data$weight_category_code[elementarylanding_id],
                                                                                                                        weight_category_label = elementarylanding_data$weight_category_label[elementarylanding_id],
                                                                                                                        species_fao_code = elementarylanding_data$species_fao_code[elementarylanding_id],
                                                                                                                        landing_weight = elementarylanding_data$landing_weight[elementarylanding_id])
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Successful importation of elementary landing(s) element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n", sep="")
                                                                             return(elementarylanding)
                                                                           }))
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                                length(x = elementarylanding_data[[1]]),
+                                                                " elementary landing(s), in ", elapsed_time, "."))
                                      private$elementarylandings <- object_elementarylandings
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
