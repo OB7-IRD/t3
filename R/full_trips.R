@@ -1454,8 +1454,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                               pmax(0, 10 - weight_category_min) / delta_weight_category),
                                                         weight_category_prop_plus30 = dplyr::case_when(
                                                           weight_category_min>=30 ~ 1.0,
-                                                          # is.infinite(weight_category_max) & weight_category_min < 10 ~ 1 - weight_category_prop_minus10 - weight_category_prop_minus10*((30-10)/(10-weight_category_min)),
-                                                          # is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ 0.9,
+                                                          #is.infinite(weight_category_max) & weight_category_min < 10 ~ 1 - weight_category_prop_minus10 - weight_category_prop_minus10*((30-10)/(10-weight_category_min)),
+                                                          is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ (200 - 30) / delta_weight_category,
                                                           TRUE ~ pmax(0, weight_category_max - 30) / delta_weight_category),
 
                                                         weight_category_prop_10_30 = dplyr::case_when(
@@ -6177,18 +6177,35 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             },
                             # process 3.1: data preparatory ----
                             #' @description Data preparatory for the t3 modelling process (level 3).
-                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).
-                            #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.
-                            #' @param output_directory Object of type \code{\link[base]{character}} expected. Path of the outputs directory.
-                            #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
-                            #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
-                            #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
-                            #' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
-                            #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
-                            #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
-                            #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.
-                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.
-                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.
+                            #' @param inputs_level3 Object of type \code{\link[base]{data.frame}} expected.
+                            #' Inputs of levels 3 (see function path to level 3).
+                            #' @param inputs_level3_path Object of type \code{\link[base]{character}} expected.
+                            #' Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3).
+                            #' If provide, replace the inputs_level3 object.
+                            #' @param output_directory Object of type \code{\link[base]{character}} expected.
+                            #' Path of the outputs directory.
+                            #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected.
+                            #' Year(s) period of reference for modelling estimation.
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected.
+                            #' Year of interest for the model estimation and prediction.
+                            #' Default value is current year - 1.
+                            #' @param period_duration Object of type \code{\link[base]{integer}} expected.
+                            #' Number of years use for the modelling. The default value is 5
+                            #' @param target_ocean Object of type \code{\link[base]{integer}} expected.
+                            #' The code of ocean of interest.
+                            #' @param distance_maximum Object of type \code{\link[base]{integer}} expected.
+                            #' Maximum distance between all sets of a sampled well. By default 5.
+                            #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected.
+                            #' Maximum number of sets allowed in mixture. By default 5.
+                            #' @param set_weight_minimum Object of type \code{\link[base]{integer}} expected.
+                            #' Minimum set size considered. Remove smallest set for which sample could not be representative.
+                            #' By default 6 t.
+                            #' @param minimum_set_frequency Object of type \code{\link[base]{numeric}} expected.
+                            #' Minimum threshold proportion of set in a well to be used for model training in the process.
+                            #' By default 0.1.
+                            #' @param vessel_id_ignored Object of type \code{\link[base]{integer}} expected.
+                            #' Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction.
+                            #' By default NULL.
                             data_preparatory = function(inputs_level3 = NULL,
                                                         inputs_level3_path = NULL,
                                                         output_directory,
@@ -6217,14 +6234,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   || nchar(target_year) != 4) {
                                 cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                     " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
-                                    sep = "")
-                                stop()
-                              } else if (! inherits(x = target_ocean,
-                                                    what = "integer")
-                                         || length(target_ocean) != 1
-                                         || nchar(target_ocean) != 1) {
-                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                                    " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 1 digit.\n",
                                     sep = "")
                                 stop()
                               } else if (! inherits(x = period_duration,
