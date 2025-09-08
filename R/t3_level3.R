@@ -32,6 +32,7 @@
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param integrated_process Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.
 #' @export
+#' @seealso \code{\link[t3]{full_trips}},  \code{\link[t3]{t3_level1}}, \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_process}}
 t3_level3 <- function(inputs_level3,
                       inputs_level3_path = NULL,
                       periode_reference_level3 = NULL,

@@ -5062,14 +5062,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{number and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg or > 10kg):
                             #'  \itemize{
                             #'   \item{\code{weighted_samples_minus10}: } sum of \code{sample_weight} for sample weight category \eqn{\leq}{<=} 10 kg, from \code{standardised_sample_set} object,
-                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
                             #'    \item{\code{weighted_samples_plus10}: } sum of \code{sample_weight} for sample weight category > 10 kg, from \code{standardised_sample_set} object,
-                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
                             #'     \item{\code{weighted_samples_total}: } sum of \code{sample_weight} for all sample weight categories (\eqn{\leq}{<=} 10 kg) and > 10kg, from \code{standardised_sample_set} object,
-                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+                            #'    created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
                             #'  }
                             #'  }
-                            #'  \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
+                            #'  \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-well_set_weight_categories}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
                             #'  \itemize{
                             #'   \item{\code{rf_minus10= weighted_weight_minus10 / weighted_samples_minus10}}
                             #'    \item{\code{rf_plus10= weighted_weight_plus10 / weighted_samples_plus10}}
@@ -5424,7 +5424,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               capture.output(gc(full=TRUE), file="NUL")
                             },
                             # 22 - Process 2.8: raised standardised sample set ----
-                            #' @description Application of process 2.8 raised factors on standardised sample set.
+                            #' @description Application of raised factors calculated in process \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{2.7} on standardised sample set.
                             #' This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7}.
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.

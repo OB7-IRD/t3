@@ -54,8 +54,180 @@ t3_level2(
 \item{referential_template}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \value{
-The function a R6 reference object of class "object_full_trips".
+The function return a R6 reference object named "object_full_trips" of class \code{\link[t3]{full_trips}}.
 }
 \description{
 Level 2 of t3 process (samples standardisation).
+}
+\details{
+If a output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
+\itemize{
+ \item{Process 2.1: sample length class conversion from ld1 (first dorsal length) to lf (fork length) (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_ld1_to_lf}{\code{full_trips$sample_length_class_ld1_to_lf()}}): }
+ process_2_1 a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+ \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_length_class: } sample length class (cm) of measured individuals in first dorsal length (LD1), type \code{\link[base]{numeric}}.
+ \item{sample_number_measured: } sample number of measured individuals in first dorsal length (LD1), type \code{\link[base]{integer}}.
+ \item{sample_length_class_lf: } sample length class  (cm) of measured individuals converted in curved fork length (LF), type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{numeric}}.
+ For example, for one sample (\code{sample_number_measured=1}) from the Atlantic Ocean (1), of the species YFT (\emph{Thunnus albacares}), with a first dorsal length class (LD1) measured at \code{sample_length_class=8} (cm),
+ the LD1 to LF conversion will create a new elementary sample row because a percentage of \code{ratio=50} \% of the number of fish in the sample will be assigned to the curved fork length class: \code{sample_number_measured_lf=32} (cm) (\code{sample_number_measured_lf=0.5})
+ and 50\% of this sample will obtain a \code{sample_number_measured_lf=34} (cm) with \code{sample_number_measured_lf=0.5}.
+ }
+ \item{Process 2.2 Extrapolation of the number of individuals measured in the sample to the number of individuals counted  (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_number_measured_extrapolation}{\code{full_trips$sample_number_measured_extrapolation()}}): }
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+ \item{sub_sample_total_count_id: } sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type \code{\link[base]{character}}.
+ \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_length_class_lf: } sample length class (cm) of measured individuals converted in curved fork length (LF), type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_lf: } sample number of measured individuals converted for curved fork length (LF) distribution, type \code{\link[base]{numeric}}.
+ \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+ \item{sample_number_measured_extrapolated_lf: } sample number of measured individuals (converted in LF) extrapolated to the sample number of counted individuals, type \code{\link[base]{numeric}}.\cr
+ \code{sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4}.
+ }
+ \item{Process 2.3 Standardization of sample length classes step (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation}{\code{full_trips$sample_length_class_step_standardisation()}}): }
+ process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{sample_type_code: } sample type type code, type \code{\link[base]{integer}}.
+ \item{sample_quality_code: } sample quality code, type \code{\link[base]{integer}}.
+ \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
+ \item{sample_standardised_length_class_lf: } standardised sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_extrapolated_lf: } standardised sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}, type \code{\link[base]{numeric}}) .\cr
+ }
+ \item{Process 2.4 Distribution of weights from well scale to set scale (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-well_set_weight_categories}{\code{full_trips$well_set_weight_categories()}}): }
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{weighted_weight_minus10: } weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
+ \item{weighted_weight_plus10: } weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
+ \item{weighted_weight: } weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type \code{\link[base]{numeric}}.
+ }
+ \item{Process 2.5 Creation of object standardised sample (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_creation}{\code{full_trips$standardised_sample_creation()}}): }
+ process_2_5: a table (.csv) with as many rows as standardized samples, and 12 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type \code{\link[base]{numeric}}.\cr
+ }
+ \item{Process 2.6 Creation of object standardised sample set (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{\code{full_trips$standardised_sample_set_creation()}}): }
+ process_2_6: a table (.csv) with as many rows as , and 15 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
+ \item{sample_number_weighted: } sample number of measured individuals weighted by set weight,  after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+ \code{sample_number_weighted = sample_number_measured_extrapolated_lf * PWW}.
+ \item{sample_weight_unit: } weight (kg) of one individual,
+  calculated using length weight relationships as in \href{https://ob7-ird.github.io/t3/reference/length_weight_relationship.html}{Referential LWR table}: \code{sample_weight_unit = parameter_a * sample_standardised_length_class_lf ^ parameter_b}),
+   type \code{\link[base]{numeric}}.
+ \item{sample_weight: } weight (kg) of all measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals, type \code{\link[base]{numeric}}.\cr
+ \code{sample_weight = sample_weight_unit * sample_number_weighted}.
+ \item{sample_category: } sample category ("-10kg" or "+10kg"), according to \code{sample_weight_unit} value, type \code{\link[base]{character}}.
+ }
+ \item{Process 2.7 Raised factors determination to check relevance of the object standardized sample set (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{\code{full_trips$raised_factors_determination()}}): \cr}
+ process_2_7: a table (.csv) with as many rows as , and 13 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
+ \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
+ \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
+ \item{rf_validation: } raising factor status, type \code{\link[base]{integer}}.
+ \item{rf_validation_label: } raising factor status label, type \code{\link[base]{character}}.
+ }
+ \item{Process 2.8 Application of raised factors calculated in process \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{2.7} on standardised sample set (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_standardised_sample_set}{\code{full_trips$raised_standardised_sample_set()}}): \cr}
+ process_2_8: a table (.csv) with as many rows as , and 14 columns:
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date, type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
+ \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+ \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.
+ \item{sample_number_weighted_set: } sample number weighted by set, type \code{\link[base]{numeric}}. \cr
+ \code{sample_number_weighted_set = sample_number_weighted * rf}, where :
+ \itemize{
+ \item{\code{rf}: } is one of the raising factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7},
+  according to sample weight category (\eqn{\leq}{<=} 10kg and > 10kg).
+ \item{\code{sample_number_weighted}: } is the sample number of measured individuals weighted by set weight, after conversion in LF and extrapolation to all counted individuals,
+  calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-6-sample-number-standardisation}{2.6}.
+ }
+ \item{sample_weight_set: } sample weight by set (tonnes), type \code{\link[base]{numeric}}.\cr
+ \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
+ }
+ }
+}
+\seealso{
+\code{\link[t3]{full_trips}},  \code{\link[t3]{t3_level1}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{t3_process}}
 }

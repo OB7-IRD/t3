@@ -181,3 +181,6 @@ For the argument "process", you can choose between 4 modalities (descending size
  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 }
 }
+\seealso{
+\code{\link[t3]{t3_level1}},  \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{full_trips}}
+}
