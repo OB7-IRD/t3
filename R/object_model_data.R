@@ -33,6 +33,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
+                                       if(is.null(years_period)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"years_period\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(flag_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"flag_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(ocean_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"ocean_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(vessel_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"vessel_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
@@ -348,6 +372,36 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
+                                       if(is.null(years_period)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"years_period\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(flag_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"flag_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(ocean_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"ocean_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(vessel_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"vessel_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(species_fate_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"species_fate_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
@@ -921,6 +975,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
+                                       if(is.null(years_period)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"years_period\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(flag_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"flag_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(ocean_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"ocean_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(vessel_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"vessel_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
@@ -1226,6 +1304,36 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
+                                       if(is.null(years_period)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"years_period\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(flag_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"flag_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(ocean_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"ocean_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(vessel_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"vessel_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(sample_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"sample_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
@@ -2066,6 +2174,30 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
+                                       if(is.null(years_period)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"years_period\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(flag_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"flag_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(ocean_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"ocean_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
+                                       if(is.null(vessel_type_codes)){
+                                         stop(format(x = Sys.time(),
+                                                     format = "%Y-%m-%d %H:%M:%S"),
+                                              " - Missing \"vessel_type_codes\" argument.
+                                              Check function documention through ?object_model_data for more details.")
+                                       }
                                        codama::r_type_checking(r_object = years_period,
                                                                type = "integer")
                                        codama::r_type_checking(r_object = flag_codes,
