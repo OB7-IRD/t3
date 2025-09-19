@@ -317,7 +317,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
                                      T1 <- Sys.time()
-
                                      object_trips$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = trip_data[[1]])),
                                                                                      clear = getOption("cli.progress_clear", FALSE),
                                                                                      format = paste0(
@@ -329,7 +328,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                        "], Time remaining:{cli::pb_eta}"),,
                                                                                      total = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
-                                                               Sys.sleep(3/100)
+                                                               Sys.sleep(5/100)
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
                                                                                 flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
@@ -1815,26 +1814,37 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 7 - Common data design ----
                                      object_wells <- object_r6(class_name = "wells")
+                                     cli::cli_progress_bar(clear = getOption("cli.progress_clear", FALSE),
+                                                           format = paste0(format(x = Sys.time(),
+                                                                                  format = "%Y-%m-%d %H:%M:%S "),
+                                                                           " - Importation of well(s) data for trip element ",
+                                                             "[{cli::pb_current}/{cli::pb_total}], ",
+                                                             "[{cli::pb_bar}{cli::pb_percent}]",
+                                                             ", Time remaining:{cli::pb_eta}"),
+                                                           total = length(unique(x = sample_data$trip_id)))
+                                     T1 <- Sys.time()
                                      for (trip_id in unique(x = sample_data$trip_id)) {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n")
+                                       Sys.sleep(5/100)
+                                       # cat(format(x = Sys.time(),
+                                       #            format = "%Y-%m-%d %H:%M:%S"),
+                                       #     " - Start importation of well(s) data for trip element ",
+                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
+                                       #     ".\n",
+                                       #     "[trip: ",
+                                       #     trip_id,
+                                       #     "]\n")
+
                                        tmp_trip <- dplyr::filter(.data = sample_data,
                                                                  trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well data item ",
-                                             which(x = unique(tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Start importation of well data item ",
+                                         #     which(x = unique(tmp_trip$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                          if (is.na(x = well_id)) {
                                            warning(format(x = Sys.time(),
                                                           format = "%Y-%m-%d %H:%M:%S"),
@@ -1874,14 +1884,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                  well_plus10_weight = unique(x = tmp_well$well_plus10_weight)[[1]],
                                                                  well_global_weight = unique(x = tmp_well$well_global_weight[[1]]))
                                          for (sample_id in unique(x = tmp_well$sample_id)) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start importation of sample data item ",
-                                               which(x = unique(tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n", sep="")
+                                           # cat(format(x = Sys.time(),
+                                           #            format = "%Y-%m-%d %H:%M:%S"),
+                                           #     " - Start importation of sample data item ",
+                                           #     which(x = unique(tmp_well$sample_id) == sample_id),
+                                           #     ".\n",
+                                           #     "[sample: ",
+                                           #     sample_id,
+                                           #     "]\n", sep="")
                                            tmp_sample <- dplyr::filter(.data = tmp_well,
                                                                        sample_id == !!sample_id)
                                            tmp_sample <- unclass(x = tmp_sample)
@@ -1902,23 +1912,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                    sample_number_measured = tmp_sample$sample_number_measured[i],
                                                                                                                                                    sample_length_class = tmp_sample$sample_length_class[i])
                                                                                                                          })))
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful importation of sample data item ",
-                                               which(x = unique(x = tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n", sep="")
+                                           # cat(format(x = Sys.time(),
+                                           #            format = "%Y-%m-%d %H:%M:%S"),
+                                           #     " - Successful importation of sample data item ",
+                                           #     which(x = unique(x = tmp_well$sample_id) == sample_id),
+                                           #     ".\n",
+                                           #     "[sample: ",
+                                           #     sample_id,
+                                           #     "]\n", sep="")
                                          }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well plan data item ",
-                                             which(x = unique(x = wellplan_data$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Start importation of well plan data item ",
+                                         #     which(x = unique(x = wellplan_data$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                          tmp_wellplan <- dplyr::filter(.data = wellplan_data,
                                                                        well_id == !!well_id)
                                          tmp_wellplan <- unclass(x = tmp_wellplan)
@@ -1934,24 +1944,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          weight_category_label = tmp_wellplan$weight_category_label[j])
                                                                                                 })
                                          object_wells$add(object_well)
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful importation of well data item ",
-                                             which(x = unique(x = tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Successful importation of well data item ",
+                                         #     which(x = unique(x = tmp_trip$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n", sep="")
+                                       # cat(format(x = Sys.time(),
+                                       #            format = "%Y-%m-%d %H:%M:%S"),
+                                       #     " - Successful importation of well(s) data for trip element ",
+                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
+                                       #     ".\n",
+                                       #     "[trip: ",
+                                       #     trip_id,
+                                       #     "]\n", sep="")
+                                       cli::cli_progress_update()
                                      }
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of well(s) data for the ",
+                                                                length(unique(x = sample_data$trip_id)),
+                                                                " trips with sample(s) collected, in ", elapsed_time, "."))
                                      private$wells <- object_wells
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
