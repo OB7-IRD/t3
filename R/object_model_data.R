@@ -317,18 +317,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
                                      T1 <- Sys.time()
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                " - Importation of trip element:"))
+                                     options(cli.progress_show_after = 0)
                                      object_trips$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = trip_data[[1]])),
                                                                                      clear = getOption("cli.progress_clear", FALSE),
-                                                                                     format = paste0(
-                                                                                       format(x = Sys.time(),
-                                                                                              "%Y-%m-%d %H:%M:%S"),
-                                                                                       " - Importation of trip element ",
+                                                                                     format = paste0("                        ",
                                                                                        "[{cli::pb_current}/{cli::pb_total}], ",
                                                                                        "[{cli::pb_bar}{cli::pb_percent}",
                                                                                        "], Time remaining:{cli::pb_eta}"),,
                                                                                      total = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
-                                                               Sys.sleep(5/100)
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
                                                                                 flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
@@ -913,6 +913,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      activity_data <- unclass(x = activity_data)
                                      object_activities <- object_r6(class_name = "activities")
                                      T1 <- Sys.time()
+                                     options(cli.progress_show_after = 0)
                                      cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                        format = "%Y-%m-%d %H:%M:%S "),
                                      " - Importation of activity and elementary catch(es) element:"))
@@ -924,7 +925,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "], Time remaining:{cli::pb_eta}"),,
                                                                                           total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    #Sys.sleep(3/100)
                                                                     elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],]
                                                                     if(nrow(elementarycatches_data)==0){
                                                                       elementarycatches_data <- NULL
@@ -1259,6 +1259,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      elementarylanding_data <- unclass(x = elementarylanding_data)
                                      object_elementarylandings <- object_r6(class_name = "elementarylandings")
                                      T1 <- Sys.time()
+                                     options(cli.progress_show_after = 0)
                                      cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                        format = "%Y-%m-%d %H:%M:%S "),
                                                                 "- Importation of elementary landing element:"))
@@ -1271,7 +1272,6 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                     "], Time remaining:{cli::pb_eta}"),,
                                                                                                   total = length(x = elementarylanding_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
-                                                                            Sys.sleep(1/100)
                                                                             elementarylanding <- elementarylanding$new(trip_id = elementarylanding_data$trip_id[elementarylanding_id],
                                                                                                                        elementarylanding_id = elementarylanding_data$elementarylanding_id[elementarylanding_id],
                                                                                                                        weight_category_code = elementarylanding_data$weight_category_code[elementarylanding_id],
@@ -1814,17 +1814,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 7 - Common data design ----
                                      object_wells <- object_r6(class_name = "wells")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                " - Importation of well(s) data for trip element:"))
+                                     options(cli.progress_show_after = 0)
                                      cli::cli_progress_bar(clear = getOption("cli.progress_clear", FALSE),
-                                                           format = paste0(format(x = Sys.time(),
-                                                                                  format = "%Y-%m-%d %H:%M:%S "),
-                                                                           " - Importation of well(s) data for trip element ",
+                                                           format = paste0("                        ",
                                                              "[{cli::pb_current}/{cli::pb_total}], ",
                                                              "[{cli::pb_bar}{cli::pb_percent}]",
                                                              ", Time remaining:{cli::pb_eta}"),
                                                            total = length(unique(x = sample_data$trip_id)))
                                      T1 <- Sys.time()
                                      for (trip_id in unique(x = sample_data$trip_id)) {
-                                       Sys.sleep(5/100)
                                        # cat(format(x = Sys.time(),
                                        #            format = "%Y-%m-%d %H:%M:%S"),
                                        #     " - Start importation of well(s) data for trip element ",
