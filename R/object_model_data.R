@@ -21,6 +21,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
+                                   #' @import cli
                                    trips_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
                                                                     years_period = NULL,
