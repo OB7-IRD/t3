@@ -1,10 +1,17 @@
+# t3 3.0.5 - 2025-09-23
+
+## Changed
+* Change the display of the running process progress in the console from list of trip's topiaid to a [progress bar](https://cli.r-lib.org/reference/cli_progress_bar.html).
+
+* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)) for Observe database by importing maximum and minimum of weight categories from the database. 
+
 # t3 3.0.4 - 2025-07-04
 
 ## Added
 * Improve documentation :
   - Add float toc and figures in vignettes. 
   - Add reference table's documentation and easy access :`data(package="t3")`.
-  - Add details aboutlevel 1 and level 2  outputs in ".csv"". 
+  - Add details about level 1 and level 2  outputs in ".csv"". 
   - Add documentation about outputs in ".csv" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
   - Add "elementarycatch_id", "statut_rf1_label", "statut_rf2_label" columns, in ".csv" output named "process_1_1_detail", of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1). 
 
@@ -13,10 +20,6 @@
 ## Added
 * Add the argument apply_rf1_on_bycatch=TRUE/FALSE, in the method [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1) By default TRUE, the raising factor value, calculated for each trip, is applied to all the logbook catches associated to the trip, including by-catch species. If FALSE, only the catch weights of species belonging to the species list defined by the `species_fao_codes_rf1` argument are corrected, rf1 is not applied to by-catch species.
 
-## Changed
-* Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
-[full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
-
 ## Removed
 
 * Remove argument `output_format="eu"/"us"` to uniformize output format with `sep=","` and `dec="."`.
@@ -24,7 +27,10 @@
 # t3 3.0.2 - 2025-05-21
 
 ## Changed
-* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)) for Observe database by importing maximum and minimum of weight categories from the database. 
+* Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
+[full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
+
+* Import maximum and minimum of logbook's weight categories from Observe database. 
 
 # t3 3.0.1 - 2025-05-13
 
