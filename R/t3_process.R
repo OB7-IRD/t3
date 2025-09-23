@@ -69,6 +69,7 @@
 #'  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 #' }
 #' @importFrom codama r_type_checking
+#' @seealso \code{\link[t3]{t3_level1}},  \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{full_trips}}
 #' @export
 t3_process <- function(process = "all",
                        data_source = "observe_database",

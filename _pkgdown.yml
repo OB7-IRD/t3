@@ -81,11 +81,11 @@ articles:
 - title: t3 processes description
   navbar: ~
   contents:
+  - running_processes_examples
   - model_initialisation
   - level_1
   - level_2
   - level_3
-  - running_processes_examples
 
 development:
   mode: auto
