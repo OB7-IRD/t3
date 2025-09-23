@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.5</span>
       </span>
     </div>
 
@@ -32,6 +32,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/running_processes_examples.html">Running processes examples</a>
+    </li>
+    <li>
       <a href="../articles/model_initialisation.html">Model initialisation and data selection</a>
     </li>
     <li>
@@ -42,9 +45,6 @@
     </li>
     <li>
       <a href="../articles/level_3.html">Level 3 process</a>
-    </li>
-    <li>
-      <a href="../articles/running_processes_examples.html">Running processes examples</a>
     </li>
   </ul></li>
 <li>
@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class full_trips</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
     <div class="hidden name"><code>full_trips.Rd</code></div>
     </div>
 
@@ -839,13 +839,13 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <p>Raised factors determination for weight sample set to set.
 This step aims to check relevance of the object standardized sample set by calculation of 6 parameters at the scale of each well sets, if it's possible regarding data available:</p><ul><li><p>number and weight of sampled individuals, total and by weight categories (\(\leq\) 10kg or &gt; 10kg):
  </p><ul><li><p><code>weighted_samples_minus10</code>:  sum of <code>sample_weight</code> for sample weight category \(\leq\) 10 kg, from <code>standardised_sample_set</code> object,
-   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation">2.6</a>.</p></li>
 <li><p><code>weighted_samples_plus10</code>:  sum of <code>sample_weight</code> for sample weight category &gt; 10 kg, from <code>standardised_sample_set</code> object,
-   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation">2.6</a>.</p></li>
 <li><p><code>weighted_samples_total</code>:  sum of <code>sample_weight</code> for all sample weight categories (\(\leq\) 10 kg) and &gt; 10kg, from <code>standardised_sample_set</code> object,
-   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-">2.6</a>.</p></li>
+   created at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation">2.6</a>.</p></li>
 </ul></li>
-<li><p>three raising factors are calculated related to the weighted weight of the set (calculated at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-">2.4</a> and weight of sampled individuals, total and by weight categories (\(\leq\) 10kg and &gt; 10kg):
+<li><p>three raising factors are calculated related to the weighted weight of the set (calculated at step <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-well_set_weight_categories">2.4</a> and weight of sampled individuals, total and by weight categories (\(\leq\) 10kg and &gt; 10kg):
  </p><ul><li><p><code>rf_minus10= weighted_weight_minus10 / weighted_samples_minus10</code></p></li>
 <li><p><code>rf_plus10= weighted_weight_plus10 / weighted_samples_plus10</code></p></li>
 <li><p><code>rf_total=weighted_weight / weighted_samples_total</code></p></li>
@@ -919,7 +919,7 @@ Path of the global outputs directory. The function will create subsection if nec
 
 </div><p></p><hr><a id="method-full_trips-raised_standardised_sample_set"></a><div class="section">
 <h3 id="method-raised-standardised-sample-set-">Method <code>raised_standardised_sample_set()</code><a class="anchor" aria-label="anchor" href="#method-raised-standardised-sample-set-"></a></h3>
-<p>Application of process 2.8 raised factors on standardised sample set.
+<p>Application of raised factors calculated in process <a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination">2.7</a> on standardised sample set.
 This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process <a href="https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination">2.7</a>.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">full_trips</span><span class="op">$</span><span class="fu">raised_standardised_sample_set</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
