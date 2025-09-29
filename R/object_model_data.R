@@ -357,6 +357,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
                                    #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
+                                   #' @param weight_categories_avdth_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook weight categories with the following columns:
+                                   #' \itemize{
+                                   #' \item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
+                                   #' \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                                   #' \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+                                   #' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "avdth_database"}.
+                                   #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
@@ -367,6 +377,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    activities_object_creation = function(data_source = "observe_database",
                                                                          database_connection = NULL,
+                                                                         weight_categories_avdth_ref = NULL,
                                                                          years_period = NULL,
                                                                          flag_codes = NULL,
                                                                          ocean_codes = NULL,
@@ -418,6 +429,28 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                type = "integer")
                                        codama::r_type_checking(r_object = species_fate_codes,
                                                                type = "integer")
+
+                                       if (data_source == "avdth_database"){
+                                         if(is.null(weight_categories_avdth_ref)){
+                                           weight_categories_avdth_ref <- read.csv(file = system.file("weight_categories_avdth_ref.csv",
+                                                                                                      package = "t3"),
+                                                                                   stringsAsFactors = FALSE,
+                                                                                   colClasses = c("character",
+                                                                                                  "character",
+                                                                                                  "numeric",
+                                                                                                  "numeric"))
+                                         }
+                                         codama::r_table_checking(r_table=as.data.frame(weight_categories_avdth_ref),
+                                                                  type="data.frame",
+                                                                  column_name=c("avdth_weight_category_code",
+                                                                                "species_fao_code",
+                                                                                "weight_category_min",
+                                                                                "weight_category_max"),
+                                                                  column_type=c("character",
+                                                                                "character",
+                                                                                "numeric",
+                                                                                "numeric"))
+                                       }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
                                        codama::r_type_checking(r_object = data_path,
@@ -693,12 +726,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        school_type_code = as.integer(x = school_type_code),
                                                        weight_category_code = as.character(x = weight_category_code),
                                                        weight_category_label = as.character(x = weight_category_label),
-                                                       weight_category_min = NA_real_,
-                                                       weight_category_max = NA_real_,
                                                        species_fao_code = as.character(x = species_fao_code),
                                                        species_fate_code = as.integer(x = species_fate_code),
                                                        catch_weight = as.numeric(x = catch_weight),
-                                                       catch_count=NA_integer_)
+                                                       catch_count=NA_integer_) %>%
+                                         dplyr::left_join(weight_categories_avdth_ref,
+                                                          by = dplyr::join_by(species_fao_code,
+                                                                              weight_category_code == avdth_weight_category_code))
 
                                        activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                       statement = activity_sql_final)) %>%

@@ -16,6 +16,7 @@ data_model_initialisation(
   vessel_type_codes,
   species_fate_codes,
   sample_type_codes,
+  weight_categories_avdth_ref = NULL,
   trip_ids = NULL
 )
 }
@@ -45,6 +46,16 @@ For example, a list of two database connection arguments for "observe_main" and 
 \item{species_fate_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
 \item{sample_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
+
+\item{weight_categories_avdth_ref}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+Reference table defining the logbook weight categories with the following columns:
+\itemize{
+\item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
+\item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+\item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+\item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+}
+Mandatory for \code{data_source = "avdth_database"}.}
 
 \item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 }

@@ -77,6 +77,7 @@ Creation of a R6 reference object of class activities which contain one or more 
 \if{html}{\out{<div class="r">}}\preformatted{object_model_data$activities_object_creation(
   data_source = "observe_database",
   database_connection = NULL,
+  weight_categories_avdth_ref = NULL,
   years_period = NULL,
   flag_codes = NULL,
   ocean_codes = NULL,
@@ -98,6 +99,17 @@ Mandatory argument for data source "observe_database" ("PqConnection" R object),
 Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
+
+\item{\code{weight_categories_avdth_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+Reference table defining the logbook weight categories with the following columns:
+\itemize{
+\item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
+\item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+\item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+\item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+}
+Mandatory for \code{data_source = "avdth_database"}.
+By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
 
 \item{\code{years_period}}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
 

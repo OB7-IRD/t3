@@ -1382,11 +1382,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       allowed_value = c("observe",
                                                                         "avdth"))
                               # 9.2 - Global process ----
-                              category_1 <- "<10kg"
-                              category_2 <- "10-30kg"
-                              category_3 <- ">30kg"
-                              category_4 <- ">10kg"
-                              category_5 <- "unknown"
+                              # category_1 <- "<10kg"
+                              # category_2 <- "10-30kg"
+                              # category_3 <- ">30kg"
+                              # category_4 <- ">10kg"
+                              # category_5 <- "unknown"
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
@@ -1509,7 +1509,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean_code
                                                 school_type_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$school_type_code
                                                 #- process Observe ----
-                                                if (referential_template == "observe"){
+                                                # if (referential_template == "observe"){ #
                                                   current_elementarycatches_corrected <- current_elementarycatches
                                                   # Distribution conversion key for floating object school in the Atlantic Ocean and
                                                   # for undetermined, free and floating object school in the Indian Ocean.
@@ -1625,234 +1625,235 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added,
                                                                                                         current_elementarycatches_corrected))
                                                   }
-                                                } else if(referential_template == "avdth"){
-                                                  #- process AVDTH ----
-                                                  for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
-                                                    current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
-                                                    current_weight_category_code <- as.integer(current_elementarycatch$weight_category_code)
-                                                    if ( !is.na(x = current_weight_category_code)){
-                                                      if (ocean_activity == 1) {
-                                                        # for atlantic ocean
-                                                        if (school_type_activity %in% c(2, 0)) {
-                                                          # for free school and undetermined school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT",
-                                                                                                              "BET",
-                                                                                                              "ALB")) {
-                                                            # for YFT, BET and ALB
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 6) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
-                                                            } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 11) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
-                                                              current_elementarycatch$weight_category_code_corrected[2]  <- category_3
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          # for floating object school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        }
-                                                      } else if (ocean_activity == 2) {
-                                                        # for indian ocean
-                                                        if (school_type_activity %in% c(2, 0)) {
-                                                          # for free school and undetermined school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        } else {
-                                                          # for floating object school
-                                                          if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                                            if (current_weight_category_code %in% c(1, 2, 10)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 4) {
-                                                              current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                                              current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                                              current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                                            } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_4
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else if (current_weight_category_code == 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              stop(format(Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Logbook category ",
-                                                                   current_weight_category_code,
-                                                                   " not set in the algorithm.\n",
-                                                                   "[trip: ",
-                                                                   current_trip$.__enclos_env__$private$trip_id,
-                                                                   ", activity: ",
-                                                                   current_elementarycatch$activity_id,
-                                                                   ", elementarycatch: ",
-                                                                   current_elementarycatch$elementarycatch_id,
-                                                                   "]")
-                                                            }
-                                                          } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                                            if (current_weight_category_code != 9) {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_1
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            } else {
-                                                              current_elementarycatch$weight_category_code_corrected <- category_5
-                                                              current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                            }
-                                                          } else {
-                                                            current_elementarycatch$weight_category_code_corrected <- category_5
-                                                            current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                          }
-                                                        }
-                                                      } else {
-                                                        stop(format(Sys.time(),
-                                                                    "%Y-%m-%d %H:%M:%S"),
-                                                             " - Algorithm not developed yet for the ocean number ",
-                                                             ocean_activity,
-                                                             ".\n",
-                                                             "[trip: ",
-                                                             current_trip$.__enclos_env__$private$trip_id,
-                                                             ", activity: ",
-                                                             current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
-                                                             "]")
-                                                      }
-                                                    } else {
-                                                      current_elementarycatch$weight_category_code_corrected <- category_5
-                                                      current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                                    }
-                                                    current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected,
-                                                                                                 current_elementarycatch)
-                                                  }
-                                                }
+
+                                              #     } else if(referential_template == "avdth"){
+                                              #     #- process AVDTH ----
+                                              #     for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
+                                              #       current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
+                                              #       current_weight_category_code <- as.integer(current_elementarycatch$weight_category_code)
+                                              #       if ( !is.na(x = current_weight_category_code)){
+                                              #         if (ocean_activity == 1) {
+                                              #           # for atlantic ocean
+                                              #           if (school_type_activity %in% c(2, 0)) {
+                                              #             # for free school and undetermined school
+                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT",
+                                              #                                                                 "BET",
+                                              #                                                                 "ALB")) {
+                                              #               # for YFT, BET and ALB
+                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 4) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_2
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                              #               } else if (current_weight_category_code %in% c(3, 12)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_2
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 6) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
+                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_3
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
+                                              #               } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_3
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 11) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_2
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
+                                              #                 current_elementarycatch$weight_category_code_corrected[2]  <- category_3
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
+                                              #               } else if (current_weight_category_code == 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 stop(format(Sys.time(),
+                                              #                             "%Y-%m-%d %H:%M:%S"),
+                                              #                      " - Logbook category ",
+                                              #                      current_weight_category_code,
+                                              #                      " not set in the algorithm.\n",
+                                              #                      "[trip: ",
+                                              #                      current_trip$.__enclos_env__$private$trip_id,
+                                              #                      ", activity: ",
+                                              #                      current_elementarycatch$activity_id,
+                                              #                      ", elementarycatch: ",
+                                              #                      current_elementarycatch$elementarycatch_id,
+                                              #                      "]")
+                                              #               }
+                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                              #               if (current_weight_category_code != 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               }
+                                              #             } else {
+                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #             }
+                                              #           } else {
+                                              #             # for floating object school
+                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 4) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 stop(format(Sys.time(),
+                                              #                             "%Y-%m-%d %H:%M:%S"),
+                                              #                      " - Logbook category ",
+                                              #                      current_weight_category_code,
+                                              #                      " not set in the algorithm.\n",
+                                              #                      "[trip: ",
+                                              #                      current_trip$.__enclos_env__$private$trip_id,
+                                              #                      ", activity: ",
+                                              #                      current_elementarycatch$activity_id,
+                                              #                      ", elementarycatch: ",
+                                              #                      current_elementarycatch$elementarycatch_id,
+                                              #                      "]")
+                                              #               }
+                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                              #               if (current_weight_category_code != 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               }
+                                              #             } else {
+                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #             }
+                                              #           }
+                                              #         } else if (ocean_activity == 2) {
+                                              #           # for indian ocean
+                                              #           if (school_type_activity %in% c(2, 0)) {
+                                              #             # for free school and undetermined school
+                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 4) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 stop(format(Sys.time(),
+                                              #                             "%Y-%m-%d %H:%M:%S"),
+                                              #                      " - Logbook category ",
+                                              #                      current_weight_category_code,
+                                              #                      " not set in the algorithm.\n",
+                                              #                      "[trip: ",
+                                              #                      current_trip$.__enclos_env__$private$trip_id,
+                                              #                      ", activity: ",
+                                              #                      current_elementarycatch$activity_id,
+                                              #                      ", elementarycatch: ",
+                                              #                      current_elementarycatch$elementarycatch_id,
+                                              #                      "]")
+                                              #               }
+                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                              #               if (current_weight_category_code != 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               }
+                                              #             } else {
+                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #             }
+                                              #           } else {
+                                              #             # for floating object school
+                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
+                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 4) {
+                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
+                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
+                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
+                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else if (current_weight_category_code == 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 stop(format(Sys.time(),
+                                              #                             "%Y-%m-%d %H:%M:%S"),
+                                              #                      " - Logbook category ",
+                                              #                      current_weight_category_code,
+                                              #                      " not set in the algorithm.\n",
+                                              #                      "[trip: ",
+                                              #                      current_trip$.__enclos_env__$private$trip_id,
+                                              #                      ", activity: ",
+                                              #                      current_elementarycatch$activity_id,
+                                              #                      ", elementarycatch: ",
+                                              #                      current_elementarycatch$elementarycatch_id,
+                                              #                      "]")
+                                              #               }
+                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
+                                              #               if (current_weight_category_code != 9) {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               } else {
+                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #               }
+                                              #             } else {
+                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #             }
+                                              #           }
+                                              #         } else {
+                                              #           stop(format(Sys.time(),
+                                              #                       "%Y-%m-%d %H:%M:%S"),
+                                              #                " - Algorithm not developed yet for the ocean number ",
+                                              #                ocean_activity,
+                                              #                ".\n",
+                                              #                "[trip: ",
+                                              #                current_trip$.__enclos_env__$private$trip_id,
+                                              #                ", activity: ",
+                                              #                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
+                                              #                "]")
+                                              #         }
+                                              #       } else {
+                                              #         current_elementarycatch$weight_category_code_corrected <- category_5
+                                              #         current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
+                                              #       }
+                                              #       current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected,
+                                              #                                                    current_elementarycatch)
+                                              #     }
+                                              #   }
                                                 private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
-                                              }
+                                               }
                                             }
                                           }
                                         }
