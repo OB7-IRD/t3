@@ -100,7 +100,8 @@ Reference table defining the logbook weight categories with the following column
 \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
 \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
 }
-Mandatory for \code{referential_template = "avdth"}.}
+Mandatory for \code{referential_template = "avdth"}.
+By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
 
 \item{rf1_computation}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}

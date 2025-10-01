@@ -55,7 +55,8 @@ Reference table defining the logbook weight categories with the following column
 \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
 \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
 }
-Mandatory for \code{data_source = "avdth_database"}.}
+Mandatory for \code{data_source = "avdth_database"}.
+By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
 
 \item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 }

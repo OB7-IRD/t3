@@ -366,7 +366,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "avdth_database"}.
-                                   #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
+                                   #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".

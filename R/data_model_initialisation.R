@@ -25,6 +25,7 @@
 #' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
 #' }
 #' Mandatory for \code{data_source = "avdth_database"}.
+#' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
 #' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 #' @importFrom codama r_type_checking
