@@ -1119,6 +1119,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   #     "]\n", sep="")
                                   if (!is.null(x = global_output_path)){
                                     # Sum landing weights across partial trips to get total landing weight by species in outputs by full trip
+                                    ########### >>> Check this ############
                                     if(!is.null(full_trip_total_landings_catches_species_activities)){
                                       total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
                                         dplyr::select(species_fao_code,
@@ -1508,6 +1509,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 #                 - weight_category_prop_plus30)
                                                 ocean_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$ocean_code
                                                 school_type_activity <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$school_type_code
+                                                if(!ocean_activity %in% c(1,2)){
+                                                  stop(format(Sys.time(),
+                                                              "%Y-%m-%d %H:%M:%S"),
+                                                       " - Algorithm not developed yet for the ocean number ",
+                                                       ocean_activity,
+                                                       ".\n",
+                                                       "[trip: ",
+                                                       current_trip$.__enclos_env__$private$trip_id,
+                                                       ", activity: ",
+                                                       current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
+                                                       "]")
+                                                }
                                                 #- process Observe ----
                                                 # if (referential_template == "observe"){ #
                                                   current_elementarycatches_corrected <- current_elementarycatches
@@ -1534,7 +1547,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                             weight_category_prop_plus10 = dplyr::if_else(weight_category_code_corrected == "distr",
                                                                                                          1- weight_category_prop_minus10,
                                                                                                          NA))
-                                                    # Add an elementarycatches to split logbook's weight category in tthe 2 standard categories : <=10 and >10.
+                                                    # Add an elementarycatches to split logbook's weight category in the 2 standard categories : <=10 and >10.
                                                     current_elementarycatches_added <- current_elementarycatches_corrected %>%
                                                       dplyr::filter(weight_category_code_corrected == "distr",
                                                                     species_fao_code %in% c("YFT", "BET", "ALB")) %>%
@@ -1550,7 +1563,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                     ">10kg",
                                                                                                                     weight_category_code_corrected))
 
-                                                  } else if(ocean_activity==1 && school_type_activity %in% c(2, 0)){
+                                                  } else if (ocean_activity==1 && school_type_activity %in% c(2, 0)){
                                                     #  Distribution conversion key for undetermined and free school in the Atlantic Ocean:
                                                     current_elementarycatches_corrected <- current_elementarycatches_corrected  %>%
                                                       dplyr::mutate(
@@ -1594,7 +1607,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           weight_category_code_corrected %in% c("case1","case2") ~ "<10kg",
                                                           weight_category_code_corrected == "case3" ~ ">30kg"))
                                                     # Add an elementarycatches to split logbook's weight category in the 3 standard categories: <10, 10-30kg, >30.
-                                                    # Only for case 2 weight_catgeory_min < 10  &  weight_category_max > 30
+                                                    # Only for case 2 weight_categeory_min < 10  &  weight_category_max > 30
                                                     current_elementarycatches_added <- dplyr::bind_rows(current_elementarycatches_added,
                                                                                                         current_elementarycatches_corrected  %>%
                                                                                                           dplyr::filter(weight_category_code_corrected == "case2",
@@ -1625,52 +1638,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added,
                                                                                                         current_elementarycatches_corrected))
                                                   }
-
-                                              #     } else if(referential_template == "avdth"){
-                                              #     #- process AVDTH ----
-                                              #     for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
-                                              #       current_elementarycatch <- current_elementarycatches[elementarycatch_id,]
-                                              #       current_weight_category_code <- as.integer(current_elementarycatch$weight_category_code)
-                                              #       if ( !is.na(x = current_weight_category_code)){
-                                              #         if (ocean_activity == 1) {
-                                              #           # for atlantic ocean
-                                              #           if (school_type_activity %in% c(2, 0)) {
-                                              #             # for free school and undetermined school
-                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT",
-                                              #                                                                 "BET",
-                                              #                                                                 "ALB")) {
-                                              #               # for YFT, BET and ALB
-                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 4) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_2
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                              #               } else if (current_weight_category_code %in% c(3, 12)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_2
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 6) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.5
-                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_3
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.5
-                                              #               } else if (current_weight_category_code %in% c(5, 7, 8, 13, 14)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_3
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 11) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_2
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1]  <- current_elementarycatch$catch_weight_rf2[1]  * 0.1
-                                              #                 current_elementarycatch$weight_category_code_corrected[2]  <- category_3
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2]  <- current_elementarycatch$catch_weight_rf2[2]  * 0.9
-                                              #               } else if (current_weight_category_code == 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
                                               #                 stop(format(Sys.time(),
                                               #                             "%Y-%m-%d %H:%M:%S"),
                                               #                      " - Logbook category ",
@@ -1683,175 +1650,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               #                      ", elementarycatch: ",
                                               #                      current_elementarycatch$elementarycatch_id,
                                               #                      "]")
-                                              #               }
-                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                              #               if (current_weight_category_code != 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               }
-                                              #             } else {
-                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #             }
-                                              #           } else {
-                                              #             # for floating object school
-                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 4) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 stop(format(Sys.time(),
-                                              #                             "%Y-%m-%d %H:%M:%S"),
-                                              #                      " - Logbook category ",
-                                              #                      current_weight_category_code,
-                                              #                      " not set in the algorithm.\n",
-                                              #                      "[trip: ",
-                                              #                      current_trip$.__enclos_env__$private$trip_id,
-                                              #                      ", activity: ",
-                                              #                      current_elementarycatch$activity_id,
-                                              #                      ", elementarycatch: ",
-                                              #                      current_elementarycatch$elementarycatch_id,
-                                              #                      "]")
-                                              #               }
-                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                              #               if (current_weight_category_code != 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               }
-                                              #             } else {
-                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #             }
-                                              #           }
-                                              #         } else if (ocean_activity == 2) {
-                                              #           # for indian ocean
-                                              #           if (school_type_activity %in% c(2, 0)) {
-                                              #             # for free school and undetermined school
-                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 4) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 stop(format(Sys.time(),
-                                              #                             "%Y-%m-%d %H:%M:%S"),
-                                              #                      " - Logbook category ",
-                                              #                      current_weight_category_code,
-                                              #                      " not set in the algorithm.\n",
-                                              #                      "[trip: ",
-                                              #                      current_trip$.__enclos_env__$private$trip_id,
-                                              #                      ", activity: ",
-                                              #                      current_elementarycatch$activity_id,
-                                              #                      ", elementarycatch: ",
-                                              #                      current_elementarycatch$elementarycatch_id,
-                                              #                      "]")
-                                              #               }
-                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                              #               if (current_weight_category_code != 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               }
-                                              #             } else {
-                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #             }
-                                              #           } else {
-                                              #             # for floating object school
-                                              #             if (current_elementarycatch$species_fao_code %in% c("YFT", "BET", "ALB")) {
-                                              #               if (current_weight_category_code %in% c(1, 2, 10)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 4) {
-                                              #                 current_elementarycatch[2,] <- current_elementarycatch[1,]
-                                              #                 current_elementarycatch$weight_category_code_corrected[1] <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[1] <- current_elementarycatch$catch_weight_rf2[1] * 0.2
-                                              #                 current_elementarycatch$weight_category_code_corrected[2] <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected[2] <- current_elementarycatch$catch_weight_rf2[2] * 0.8
-                                              #               } else if (current_weight_category_code %in% c(3, 12, 5, 7, 8, 13, 14, 6, 11)) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_4
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else if (current_weight_category_code == 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 stop(format(Sys.time(),
-                                              #                             "%Y-%m-%d %H:%M:%S"),
-                                              #                      " - Logbook category ",
-                                              #                      current_weight_category_code,
-                                              #                      " not set in the algorithm.\n",
-                                              #                      "[trip: ",
-                                              #                      current_trip$.__enclos_env__$private$trip_id,
-                                              #                      ", activity: ",
-                                              #                      current_elementarycatch$activity_id,
-                                              #                      ", elementarycatch: ",
-                                              #                      current_elementarycatch$elementarycatch_id,
-                                              #                      "]")
-                                              #               }
-                                              #             } else if (current_elementarycatch$species_fao_code == "SKJ") {
-                                              #               if (current_weight_category_code != 9) {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_1
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               } else {
-                                              #                 current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #                 current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #               }
-                                              #             } else {
-                                              #               current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #               current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #             }
-                                              #           }
-                                              #         } else {
-                                              #           stop(format(Sys.time(),
-                                              #                       "%Y-%m-%d %H:%M:%S"),
-                                              #                " - Algorithm not developed yet for the ocean number ",
-                                              #                ocean_activity,
-                                              #                ".\n",
-                                              #                "[trip: ",
-                                              #                current_trip$.__enclos_env__$private$trip_id,
-                                              #                ", activity: ",
-                                              #                current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id,
-                                              #                "]")
-                                              #         }
-                                              #       } else {
-                                              #         current_elementarycatch$weight_category_code_corrected <- category_5
-                                              #         current_elementarycatch$catch_weight_category_code_corrected <- current_elementarycatch$catch_weight_rf2
-                                              #       }
-                                              #       current_elementarycatches_corrected <- rbind(current_elementarycatches_corrected,
-                                              #                                                    current_elementarycatch)
-                                              #     }
-                                              #   }
                                                 private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
                                                }
                                             }
@@ -1859,6 +1657,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                       # second stage: conversion of category unknown (category 9) if possible ----
+                                      # according to similar elementary catches of partial trips belonging to the same full trip.
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         capture.output(current_trip <- object_r6(class_name = "trips"),
                                                        file = "NUL")
@@ -1875,18 +1674,27 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                         if (length(current_elementarycatches) != 0) {
+                                          # unknown_weight_category <- dplyr::filter(current_elementarycatches,
+                                          #                                          weight_category_code_corrected %in% c("unknown", NA),
+                                          #                                          species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
+                                          # other_weight_category <- dplyr::filter(current_elementarycatches,
+                                          #                                          ! weight_category_code_corrected %in% c("unknown", NA),
+                                          #                                          species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
                                           category_9 <- FALSE
                                           names(x = category_9) <- 0
                                           other_category <- FALSE
                                           names(x = other_category) <- 0
                                           for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
                                             #find NA weight_category_code
-                                            current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
-                                                                                                  yes = stringr::str_extract(string = current_elementarycatches$weight_category_code[elementarycatch_id],
-                                                                                                                             pattern = "[:digit:]+$"),
-                                                                                                  no = current_elementarycatches$weight_category_code[elementarycatch_id]))
-                                            if ((is.na(x = current_weight_category_code)
-                                                 | current_weight_category_code == 9)
+                                            # current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
+                                            #                                                       yes = stringr::str_extract(string = current_elementarycatches$weight_category_code[elementarycatch_id],
+                                            #                                                                                  pattern = "[:digit:]+$"),
+                                                                                                  # no = current_elementarycatches$weight_category_code[elementarycatch_id]))
+                                            current_weight_category_code_corrected <- current_elementarycatches$weight_category_code_corrected[elementarycatch_id]
+                                            if ((is.na(x = current_weight_category_code_corrected)
+                                                 | current_weight_category_code_corrected == "unknown")
+                                            # if ((is.na(x = current_weight_category_code)
+                                            #      | current_weight_category_code == 9)
                                                 & current_elementarycatches$species_fao_code[elementarycatch_id] %in% c("YFT", "BET", "ALB", "SKJ")) {
                                               category_9 <- append(category_9,
                                                                    TRUE)
@@ -1896,6 +1704,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               names(other_category)[length(other_category)] <- elementarycatch_id
                                             }
                                           }
+                                          # if(nrow(unknown_weight_category) != 0){
+                                          #   if(nrow(other_weight_category) != 0){
+                                          #     unknown_weight_category <- unknown_weight_category %>% dplyr::mutate(strates = paste(school_type_code,
+                                          #                                                                ocean_code,
+                                          #                                                                species_fao_code,
+                                          #                                                                sep="_"))
+                                          #     for (strate_category_9_id in unique(unknown_weight_category$strates)) {
+                                          #       school_type <- unlist(strsplit(x = strate_category_9_id,
+                                          #                                      split = "_"))[1]
+                                          #       ocean <- unlist(strsplit(x = strate_category_9_id,
+                                          #                                split = "_"))[2]
+                                          #       species <- unlist(strsplit(x = strate_category_9_id,
+                                          #                                  split = "_"))[3]
+                                          #       current_other_category <- other_weight_category %>%
+                                          #         dplyr::filter(school_type_code == school_type,
+                                          #                       ocean_code == ocean,
+                                          #                       species_fao_code == species)
+                                          #       if (nrow(current_other_category) != 0) {
+                                          #         current_unknown_weight_category <- unknown_weight_category %>%
+                                          #           dplyr::filter(school_type_code == school_type,
+                                          #                         ocean_code == ocean,
+                                          #                         species_fao_code == species)
+                                          #         total_catch_weight_category_code_corrected <- sum(current_other_category$catch_weight_category_code_corrected)
+                                          #         other_category_names <- unique(current_other_category$weight_category_code_corrected)
+                                          #         proportion <- vector(mode = "numeric")
+                                          #     }
+                                          #   }
+                                          # }
                                           if (any(category_9 == TRUE)) {
                                             if (any(other_category == TRUE)) {
                                               category_9 <- category_9[-1]
@@ -2001,7 +1837,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                  file = "NUL")
                                   capture.output(elementarycatches_selected <- do.call(rbind, activities_selected$extract_l1_element_value(element = "elementarycatches")),
                                                  file = "NUL")
-                                  outputs_process_1_2_trips <- data.frame("full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                  outputs_process_1_2_trips <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
+                                                                                                         FUN = function(full_trip_id) {
+                                                                                                           if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
+                                                                                                             return(rep(x = full_trip_id,
+                                                                                                                        length(x = full_trips_selected[[full_trip_id]])))
+                                                                                                           } else {
+                                                                                                             return(full_trip_id)
+                                                                                                           }
+                                                                                                         })),
+                                                                          "full_trip_name" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                            FUN = function(full_trip_id) {
                                                                                                              if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
                                                                                                                return(rep(x = names(x = full_trips_selected[full_trip_id]),
@@ -2055,7 +1900,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_date,
                                                     ocean_code,
                                                     school_type_code,
-                                                    elementarycatch_id)
+                                                    elementarycatch_id,
+                                                    species_fao_code,
+                                                    weight_category_code,
+                                                    weight_category_label)
                                   # extraction
                                   outputs_dec <- "."
                                   outputs_sep <- ","
