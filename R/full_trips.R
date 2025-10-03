@@ -1304,6 +1304,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected.
                             #'  By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
+                            #' @importFrom tidyr fill
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
                             #'  process_1_2: a table (.csv) with as many rows as elementary catches, plus the catches resulting from the conversion of weight categories and 23 columns:
@@ -1383,11 +1384,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       allowed_value = c("observe",
                                                                         "avdth"))
                               # 9.2 - Global process ----
-                              # category_1 <- "<10kg"
-                              # category_2 <- "10-30kg"
-                              # category_3 <- ">30kg"
-                              # category_4 <- ">10kg"
-                              # category_5 <- "unknown"
                               if (is.null(x = private$data_selected)) {
                                 stop(format(Sys.time(),
                                             "%Y-%m-%d %H:%M:%S"),
@@ -1484,6 +1480,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
+
                                                 current_elementarycatches <- current_elementarycatches %>%
                                                   dplyr::mutate(weight_category_code_corrected=NA_character_,
                                                                 catch_weight_category_code_corrected=NA_real_,
@@ -1492,14 +1489,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                 weight_category_prop_plus10=NA_real_,
                                                                 weight_category_prop_10_30=NA_real_,
                                                                 weight_category_prop_plus30=NA_real_)
+
                                                 current_elementarycatches <- current_elementarycatches %>%
                                                   dplyr::mutate(weight_category_min = dplyr::if_else(is.na(weight_category_min),
                                                                                                      0, weight_category_min),
                                                                 weight_category_max = dplyr::if_else(is.na(weight_category_max),
                                                                                                      Inf, weight_category_max),
-                                                                delta_weight_category = dplyr::if_else(is.infinite(weight_category_max),
-                                                                                                       200 -  weight_category_min,
-                                                                                                       weight_category_max - weight_category_min))
+                                                                delta_weight_category = dplyr::case_when(
+                                                                  species_fao_code %in% c("YFT", "BET", "ALB", "SKJ") ~ dplyr::if_else(is.infinite(weight_category_max),
+                                                                                                                                       200 -  weight_category_min,
+                                                                                                                                       weight_category_max - weight_category_min),
+                                                                  TRUE ~ NA_real_))
                                                 current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches
                                                 # %>%
                                                 #   dplyr::select(- delta_weight_category,
@@ -1522,136 +1522,133 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                        "]")
                                                 }
                                                 #- process Observe ----
-                                                # if (referential_template == "observe"){ #
-                                                  current_elementarycatches_corrected <- current_elementarycatches
-                                                  # Distribution conversion key for floating object school in the Atlantic Ocean and
-                                                  # for undetermined, free and floating object school in the Indian Ocean.
-                                                  if (ocean_activity==2 || (ocean_activity==1 && school_type_activity==1)){
-                                                    current_elementarycatches_corrected <- current_elementarycatches_corrected %>%
-                                                          dplyr::mutate(
-                                                            weight_category_code_corrected =
-                                                            dplyr::case_when(
-                                                            species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_min < 10 & weight_category_max > 10 & !is.infinite(weight_category_max) ~ "distr",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_max <= 10 ~ "<10kg",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_min >= 10 ~ ">10kg",
-                                                             (species_fao_code == "SKJ") ~ "<10kg",
-                                                            !(species_fao_code %in% c("YFT",
-                                                                                      "BET",
-                                                                                      "ALB",
-                                                                                      "SKJ")) ~ "unknown",
-                                                            TRUE ~ "unknown"),
-                                                            weight_category_prop_minus10 =  dplyr::if_else(weight_category_code_corrected == "distr",
-                                                                                                           ifelse(weight_category_max <= 10, 1.0,
-                                                                                                                  pmax(0, 10 - weight_category_min) / delta_weight_category),
-                                                                                                           NA),
-                                                            weight_category_prop_plus10 = dplyr::if_else(weight_category_code_corrected == "distr",
-                                                                                                         1- weight_category_prop_minus10,
-                                                                                                         NA))
-                                                    # Add an elementarycatches to split logbook's weight category in the 2 standard categories : <=10 and >10.
-                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
-                                                      dplyr::filter(weight_category_code_corrected == "distr",
-                                                                    species_fao_code %in% c("YFT", "BET", "ALB")) %>%
-                                                      dplyr::mutate(weight_category_code_corrected ="<10kg",
-                                                                    catch_weight_category_code_corrected = catch_weight_rf2 * weight_category_prop_minus10)
-                                                    # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
-                                                    # to split logbook's weight category in 2 standard categories : <10 and >10.
-                                                    current_elementarycatches_corrected  <- current_elementarycatches_corrected %>%
-                                                      dplyr::mutate(catch_weight_category_code_corrected  = dplyr::if_else(weight_category_code_corrected == "distr",
-                                                                                                                           catch_weight_rf2*weight_category_prop_plus10,
-                                                                                                                           catch_weight_rf2),
-                                                                    weight_category_code_corrected = dplyr::if_else(weight_category_code_corrected == "distr",
-                                                                                                                    ">10kg",
-                                                                                                                    weight_category_code_corrected))
+                                                current_elementarycatches_corrected <- current_elementarycatches
+                                                # Distribution conversion key for floating object school in the Atlantic Ocean and
+                                                # for undetermined, free and floating object school in the Indian Ocean.
+                                                if (ocean_activity==2 || (ocean_activity==1 && school_type_activity==1)){
+                                                  current_elementarycatches_corrected <- current_elementarycatches_corrected %>%
+                                                    dplyr::mutate(
+                                                      weight_category_code_corrected =
+                                                        dplyr::case_when(
+                                                          species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_min < 10 & weight_category_max > 10 & !is.infinite(weight_category_max) ~ "distr",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_max <= 10 ~ "<10kg",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB")  & weight_category_min >= 10 ~ ">10kg",
+                                                          (species_fao_code == "SKJ") ~ "<10kg",
+                                                          !(species_fao_code %in% c("YFT",
+                                                                                    "BET",
+                                                                                    "ALB",
+                                                                                    "SKJ")) ~ "unknown",
+                                                          TRUE ~ "unknown"),
+                                                      weight_category_prop_minus10 =  dplyr::if_else(weight_category_code_corrected == "distr",
+                                                                                                     ifelse(weight_category_max <= 10, 1.0,
+                                                                                                            pmax(0, 10 - weight_category_min) / delta_weight_category),
+                                                                                                     NA),
+                                                      weight_category_prop_plus10 = dplyr::if_else(weight_category_code_corrected == "distr",
+                                                                                                   1- weight_category_prop_minus10,
+                                                                                                   NA))
+                                                  # Add an elementarycatches to split logbook's weight category in the 2 standard categories : <=10 and >10.
+                                                  current_elementarycatches_added <- current_elementarycatches_corrected %>%
+                                                    dplyr::filter(weight_category_code_corrected == "distr",
+                                                                  species_fao_code %in% c("YFT", "BET", "ALB")) %>%
+                                                    dplyr::mutate(weight_category_code_corrected ="<10kg",
+                                                                  catch_weight_category_code_corrected = catch_weight_rf2 * weight_category_prop_minus10)
+                                                  # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
+                                                  # to split logbook's weight category in 2 standard categories : <10 and >10.
+                                                  current_elementarycatches_corrected  <- current_elementarycatches_corrected %>%
+                                                    dplyr::mutate(catch_weight_category_code_corrected  = dplyr::if_else(weight_category_code_corrected == "distr",
+                                                                                                                         catch_weight_rf2*weight_category_prop_plus10,
+                                                                                                                         catch_weight_rf2),
+                                                                  weight_category_code_corrected = dplyr::if_else(weight_category_code_corrected == "distr",
+                                                                                                                  ">10kg",
+                                                                                                                  weight_category_code_corrected))
 
-                                                  } else if (ocean_activity==1 && school_type_activity %in% c(2, 0)){
-                                                    #  Distribution conversion key for undetermined and free school in the Atlantic Ocean:
-                                                    current_elementarycatches_corrected <- current_elementarycatches_corrected  %>%
-                                                      dplyr::mutate(
-                                                        weight_category_prop_minus10 = ifelse(weight_category_max <= 10, 1.0,
-                                                                                              pmax(0, 10 - weight_category_min) / delta_weight_category),
-                                                        weight_category_prop_plus30 = dplyr::case_when(
-                                                          weight_category_min>=30 ~ 1.0,
-                                                          #is.infinite(weight_category_max) & weight_category_min < 10 ~ 1 - weight_category_prop_minus10 - weight_category_prop_minus10*((30-10)/(10-weight_category_min)),
-                                                          is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ (200 - 30) / delta_weight_category,
-                                                          TRUE ~ pmax(0, weight_category_max - 30) / delta_weight_category),
+                                                } else if (ocean_activity==1 && school_type_activity %in% c(2, 0)){
+                                                  #  Distribution conversion key for undetermined and free school in the Atlantic Ocean:
+                                                  current_elementarycatches_corrected <- current_elementarycatches_corrected  %>%
+                                                    dplyr::mutate(
+                                                      weight_category_prop_minus10 = ifelse(weight_category_max <= 10, 1.0,
+                                                                                            pmax(0, 10 - weight_category_min) / delta_weight_category),
+                                                      weight_category_prop_plus30 = dplyr::case_when(
+                                                        weight_category_min>=30 ~ 1.0,
+                                                        is.infinite(weight_category_max) & weight_category_min >= 10  & weight_category_min < 30 ~ (200 - 30) / delta_weight_category,
+                                                        TRUE ~ pmax(0, weight_category_max - 30) / delta_weight_category),
 
-                                                        weight_category_prop_10_30 = dplyr::case_when(
-                                                          weight_category_min >= 10 & weight_category_max <=30 ~ 1.0,
-                                                          # is.infinite(weight_category_max) & weight_category_min < 10 ~ weight_category_prop_minus10*((30-10)/abs(10-pmin(9,weight_category_min))),
-                                                          TRUE ~ 1 - weight_category_prop_minus10 - weight_category_prop_plus30),
-                                                        weight_category_code_corrected =
-                                                          dplyr::case_when(
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 10 & weight_category_max < 30 ~ "case1",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 30 ~ "case2",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min >= 10  & weight_category_min < 30 &  weight_category_max > 30 ~ "case3",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_max <= 10 ~ "<10kg",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min >= 10 & weight_category_max <= 30 ~ "10-30kg",
-                                                            species_fao_code %in% c("YFT", "BET", "ALB") &  weight_category_min >= 30  ~ ">30kg",
-                                                            species_fao_code == "SKJ" ~ "<10kg",
-                                                            !(species_fao_code %in% c("YFT",
-                                                                                      "BET",
-                                                                                      "ALB",
-                                                                                      "SKJ")) ~ "unknown",
-                                                          ))
-                                                    # Add an elementarycatches to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
-                                                    current_elementarycatches_added <- current_elementarycatches_corrected %>%
-                                                      dplyr::filter(weight_category_code_corrected %in% c("case1","case2","case3"),
-                                                                    species_fao_code %in% c("YFT",
-                                                                                            "BET",
-                                                                                            "ALB")) %>%
-                                                      dplyr::mutate(
-                                                        catch_weight_category_code_corrected = dplyr::case_when(
-                                                          weight_category_code_corrected %in% c("case1","case2") ~ catch_weight_rf2*weight_category_prop_minus10,
-                                                          weight_category_code_corrected == "case3" ~ catch_weight_rf2*weight_category_prop_plus30),
-                                                        weight_category_code_corrected =  dplyr::case_when(
-                                                          weight_category_code_corrected %in% c("case1","case2") ~ "<10kg",
-                                                          weight_category_code_corrected == "case3" ~ ">30kg"))
-                                                    # Add an elementarycatches to split logbook's weight category in the 3 standard categories: <10, 10-30kg, >30.
-                                                    # Only for case 2 weight_categeory_min < 10  &  weight_category_max > 30
-                                                    current_elementarycatches_added <- dplyr::bind_rows(current_elementarycatches_added,
-                                                                                                        current_elementarycatches_corrected  %>%
-                                                                                                          dplyr::filter(weight_category_code_corrected == "case2",
-                                                                                                                        species_fao_code %in% c("YFT",
-                                                                                                                                                "BET",
-                                                                                                                                                "ALB")) %>%
-                                                                                                          dplyr::mutate(weight_category_code_corrected = "10-30kg",
-                                                                                                                        catch_weight_category_code_corrected = catch_weight_rf2*weight_category_prop_10_30))
-                                                    # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
-                                                    # to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
-                                                    current_elementarycatches_corrected  <-  current_elementarycatches_corrected  %>%
-                                                      dplyr::mutate(
-                                                        catch_weight_category_code_corrected = dplyr::case_when(
-                                                           weight_category_code_corrected == "case1" ~ catch_weight_rf2*weight_category_prop_10_30,
-                                                           weight_category_code_corrected == "case2" ~ catch_weight_rf2*weight_category_prop_plus30,
-                                                          weight_category_code_corrected == "case3" ~ catch_weight_rf2*weight_category_prop_10_30,
-                                                          TRUE ~ catch_weight_rf2
-                                                        ),
-                                                        weight_category_code_corrected = dplyr::case_when(
-                                                          weight_category_code_corrected == "case1" ~ "10-30kg",
-                                                          weight_category_code_corrected == "case2" ~ ">30kg",
-                                                          weight_category_code_corrected == "case3" ~ "10-30kg",
-                                                          TRUE ~ weight_category_code_corrected
+                                                      weight_category_prop_10_30 = dplyr::case_when(
+                                                        weight_category_min >= 10 & weight_category_max <=30 ~ 1.0,
+                                                        TRUE ~ 1 - weight_category_prop_minus10 - weight_category_prop_plus30),
+                                                      weight_category_code_corrected =
+                                                        dplyr::case_when(
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 10 & weight_category_max < 30 ~ "case1",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min < 10 & weight_category_max > 30 ~ "case2",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min >= 10  & weight_category_min < 30 &  weight_category_max > 30 ~ "case3",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_max <= 10 ~ "<10kg",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") & weight_category_min >= 10 & weight_category_max <= 30 ~ "10-30kg",
+                                                          species_fao_code %in% c("YFT", "BET", "ALB") &  weight_category_min >= 30  ~ ">30kg",
+                                                          species_fao_code == "SKJ" ~ "<10kg",
+                                                          !(species_fao_code %in% c("YFT",
+                                                                                    "BET",
+                                                                                    "ALB",
+                                                                                    "SKJ")) ~ "unknown",
                                                         ))
-                                                  }
-                                                  # Add elementarycatches created by weight category conversion in current_elementarycatches_corrected
-                                                  if(!is.null(current_elementarycatches_added)){
-                                                    current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added,
-                                                                                                        current_elementarycatches_corrected))
-                                                  }
-                                              #                 stop(format(Sys.time(),
-                                              #                             "%Y-%m-%d %H:%M:%S"),
-                                              #                      " - Logbook category ",
-                                              #                      current_weight_category_code,
-                                              #                      " not set in the algorithm.\n",
-                                              #                      "[trip: ",
-                                              #                      current_trip$.__enclos_env__$private$trip_id,
-                                              #                      ", activity: ",
-                                              #                      current_elementarycatch$activity_id,
-                                              #                      ", elementarycatch: ",
-                                              #                      current_elementarycatch$elementarycatch_id,
-                                              #                      "]")
+                                                  # Add an elementarycatches to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
+                                                  current_elementarycatches_added <- current_elementarycatches_corrected %>%
+                                                    dplyr::filter(weight_category_code_corrected %in% c("case1","case2","case3"),
+                                                                  species_fao_code %in% c("YFT",
+                                                                                          "BET",
+                                                                                          "ALB")) %>%
+                                                    dplyr::mutate(
+                                                      catch_weight_category_code_corrected = dplyr::case_when(
+                                                        weight_category_code_corrected %in% c("case1","case2") ~ catch_weight_rf2*weight_category_prop_minus10,
+                                                        weight_category_code_corrected == "case3" ~ catch_weight_rf2*weight_category_prop_plus30),
+                                                      weight_category_code_corrected =  dplyr::case_when(
+                                                        weight_category_code_corrected %in% c("case1","case2") ~ "<10kg",
+                                                        weight_category_code_corrected == "case3" ~ ">30kg"))
+                                                  # Add an elementarycatches to split logbook's weight category in the 3 standard categories: <10, 10-30kg, >30.
+                                                  # Only for case 2 weight_categeory_min < 10  &  weight_category_max > 30
+                                                  current_elementarycatches_added <- dplyr::bind_rows(current_elementarycatches_added,
+                                                                                                      current_elementarycatches_corrected  %>%
+                                                                                                        dplyr::filter(weight_category_code_corrected == "case2",
+                                                                                                                      species_fao_code %in% c("YFT",
+                                                                                                                                              "BET",
+                                                                                                                                              "ALB")) %>%
+                                                                                                        dplyr::mutate(weight_category_code_corrected = "10-30kg",
+                                                                                                                      catch_weight_category_code_corrected = catch_weight_rf2*weight_category_prop_10_30))
+                                                  # Modify elementarycatches weight_category_code_corrected and catch_weight_category_code_corrected
+                                                  # to split logbook's weight category in 2 standard categories : <10 and 10-30kg or 10-30 and >30.
+                                                  current_elementarycatches_corrected  <-  current_elementarycatches_corrected  %>%
+                                                    dplyr::mutate(
+                                                      catch_weight_category_code_corrected = dplyr::case_when(
+                                                        weight_category_code_corrected == "case1" ~ catch_weight_rf2*weight_category_prop_10_30,
+                                                        weight_category_code_corrected == "case2" ~ catch_weight_rf2*weight_category_prop_plus30,
+                                                        weight_category_code_corrected == "case3" ~ catch_weight_rf2*weight_category_prop_10_30,
+                                                        TRUE ~ catch_weight_rf2
+                                                      ),
+                                                      weight_category_code_corrected = dplyr::case_when(
+                                                        weight_category_code_corrected == "case1" ~ "10-30kg",
+                                                        weight_category_code_corrected == "case2" ~ ">30kg",
+                                                        weight_category_code_corrected == "case3" ~ "10-30kg",
+                                                        TRUE ~ weight_category_code_corrected
+                                                      ))
+                                                }
+                                                # Add elementarycatches created by weight category conversion in current_elementarycatches_corrected
+                                                if(!is.null(current_elementarycatches_added)){
+                                                  current_elementarycatches_corrected <- unique(rbind(current_elementarycatches_added,
+                                                                                                      current_elementarycatches_corrected))
+                                                }
+                                                #                 stop(format(Sys.time(),
+                                                #                             "%Y-%m-%d %H:%M:%S"),
+                                                #                      " - Logbook category ",
+                                                #                      current_weight_category_code,
+                                                #                      " not set in the algorithm.\n",
+                                                #                      "[trip: ",
+                                                #                      current_trip$.__enclos_env__$private$trip_id,
+                                                #                      ", activity: ",
+                                                #                      current_elementarycatch$activity_id,
+                                                #                      ", elementarycatch: ",
+                                                #                      current_elementarycatch$elementarycatch_id,
+                                                #                      "]")
                                                 private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- current_elementarycatches_corrected
-                                               }
+                                              }
                                             }
                                           }
                                         }
@@ -1674,128 +1671,52 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                         if (length(current_elementarycatches) != 0) {
-                                          # unknown_weight_category <- dplyr::filter(current_elementarycatches,
-                                          #                                          weight_category_code_corrected %in% c("unknown", NA),
-                                          #                                          species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
-                                          # other_weight_category <- dplyr::filter(current_elementarycatches,
-                                          #                                          ! weight_category_code_corrected %in% c("unknown", NA),
-                                          #                                          species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
-                                          category_9 <- FALSE
-                                          names(x = category_9) <- 0
-                                          other_category <- FALSE
-                                          names(x = other_category) <- 0
-                                          for (elementarycatch_id in seq_len(length.out = length(current_elementarycatches$elementarycatch_id))) {
-                                            #find NA weight_category_code
-                                            # current_weight_category_code <- as.integer(x = ifelse(test = referential_template == "observe",
-                                            #                                                       yes = stringr::str_extract(string = current_elementarycatches$weight_category_code[elementarycatch_id],
-                                            #                                                                                  pattern = "[:digit:]+$"),
-                                                                                                  # no = current_elementarycatches$weight_category_code[elementarycatch_id]))
-                                            current_weight_category_code_corrected <- current_elementarycatches$weight_category_code_corrected[elementarycatch_id]
-                                            if ((is.na(x = current_weight_category_code_corrected)
-                                                 | current_weight_category_code_corrected == "unknown")
-                                            # if ((is.na(x = current_weight_category_code)
-                                            #      | current_weight_category_code == 9)
-                                                & current_elementarycatches$species_fao_code[elementarycatch_id] %in% c("YFT", "BET", "ALB", "SKJ")) {
-                                              category_9 <- append(category_9,
-                                                                   TRUE)
-                                              names(x = category_9)[length(category_9)] <- elementarycatch_id
-                                            } else {
-                                              other_category <- append(other_category, TRUE)
-                                              names(other_category)[length(other_category)] <- elementarycatch_id
-                                            }
-                                          }
-                                          # if(nrow(unknown_weight_category) != 0){
-                                          #   if(nrow(other_weight_category) != 0){
-                                          #     unknown_weight_category <- unknown_weight_category %>% dplyr::mutate(strates = paste(school_type_code,
-                                          #                                                                ocean_code,
-                                          #                                                                species_fao_code,
-                                          #                                                                sep="_"))
-                                          #     for (strate_category_9_id in unique(unknown_weight_category$strates)) {
-                                          #       school_type <- unlist(strsplit(x = strate_category_9_id,
-                                          #                                      split = "_"))[1]
-                                          #       ocean <- unlist(strsplit(x = strate_category_9_id,
-                                          #                                split = "_"))[2]
-                                          #       species <- unlist(strsplit(x = strate_category_9_id,
-                                          #                                  split = "_"))[3]
-                                          #       current_other_category <- other_weight_category %>%
-                                          #         dplyr::filter(school_type_code == school_type,
-                                          #                       ocean_code == ocean,
-                                          #                       species_fao_code == species)
-                                          #       if (nrow(current_other_category) != 0) {
-                                          #         current_unknown_weight_category <- unknown_weight_category %>%
-                                          #           dplyr::filter(school_type_code == school_type,
-                                          #                         ocean_code == ocean,
-                                          #                         species_fao_code == species)
-                                          #         total_catch_weight_category_code_corrected <- sum(current_other_category$catch_weight_category_code_corrected)
-                                          #         other_category_names <- unique(current_other_category$weight_category_code_corrected)
-                                          #         proportion <- vector(mode = "numeric")
-                                          #     }
-                                          #   }
-                                          # }
-                                          if (any(category_9 == TRUE)) {
-                                            if (any(other_category == TRUE)) {
-                                              category_9 <- category_9[-1]
-                                              strate_category_9 <- vector(mode = "character")
-                                              for (names_category_9_id in as.numeric(x = names(x = category_9))) {
-                                                strate_category_9 <- append(strate_category_9,
-                                                                            paste(current_elementarycatches$school_type_code[names_category_9_id],
-                                                                                  current_elementarycatches$ocean_code[names_category_9_id],
-                                                                                  current_elementarycatches$species_fao_code[names_category_9_id],
-                                                                                  sep = "_"))
-                                              }
-                                              other_category <- other_category[-1]
-                                              for (strate_category_9_id in unique(strate_category_9)) {
-                                                school_type <- unlist(strsplit(x = strate_category_9_id,
-                                                                               split = "_"))[1]
-                                                ocean <- unlist(strsplit(x = strate_category_9_id,
-                                                                         split = "_"))[2]
-                                                species <- unlist(strsplit(x = strate_category_9_id,
-                                                                           split = "_"))[3]
-                                                current_other_category <- current_elementarycatches[as.numeric(x = names(x = other_category)),] %>%
-                                                  dplyr::filter(school_type_code == school_type,
-                                                                ocean_code == ocean,
-                                                                species_fao_code == species)
+                                          current_elementarycatches <- current_elementarycatches %>%
+                                            dplyr::mutate(strates = paste(ocean_code,
+                                                                          species_fao_code,
+                                                                          school_type_code,
+                                                                          sep="_"))
+                                          unknown_weight_category <- dplyr::filter(current_elementarycatches,
+                                                                                   weight_category_code_corrected %in% c("unknown", NA),
+                                                                                   species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
+                                          other_weight_category <- dplyr::filter(current_elementarycatches,
+                                                                                 ! weight_category_code_corrected %in% c("unknown", NA),
+                                                                                 species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
+                                          if(nrow(unknown_weight_category) != 0){
+                                            if(nrow(other_weight_category) != 0){
+                                              for (strate_category_unkown in unique(unknown_weight_category$strates)) {
+                                                current_other_category <- other_weight_category %>%
+                                                  dplyr::filter(strates == strate_category_unkown)
+                                                current_unknown_category <- unknown_weight_category %>%
+                                                  dplyr::filter(strates == strate_category_unkown) %>%
+                                                  dplyr::select(-strates)
                                                 if (nrow(current_other_category) != 0) {
-                                                  current_category_9 <- current_elementarycatches[as.numeric(x = names(x = category_9)),] %>%
-                                                    dplyr::filter(school_type_code == school_type,
-                                                                  ocean_code == ocean,
-                                                                  species_fao_code == species)
-                                                  total_catch_weight_category_code_corrected <- sum(current_other_category$catch_weight_category_code_corrected)
-                                                  other_category_names <- unique(current_other_category$weight_category_code_corrected)
-                                                  proportion <- vector(mode = "numeric")
-                                                  for (other_category_names_id in other_category_names) {
-                                                    weight_category_corrected <- sum(sapply(X = seq_len(length.out = nrow(x = current_other_category)),
-                                                                                            FUN = function(i) {
-                                                                                              if (current_other_category$weight_category_code_corrected[i] == other_category_names_id) {
-                                                                                                current_other_category$catch_weight_category_code_corrected[i]
-                                                                                              } else {
-                                                                                                0
-                                                                                              }
-                                                                                            }))
-                                                    proportion <- append(proportion,
-                                                                         weight_category_corrected / total_catch_weight_category_code_corrected)
-                                                    names(x = proportion)[length(x = proportion)] <- other_category_names_id
-                                                  }
-                                                  for (category_9_id in seq_len(length.out=nrow(x = current_category_9))) {
-                                                    for (proportion_id in seq_len(length.out = length(x = proportion))) {
-                                                      if (proportion_id == length(x = proportion)) {
-                                                        current_category_9$weight_category_code_corrected[category_9_id] <- names(x = proportion)[proportion_id]
-                                                        current_category_9$catch_weight_category_code_corrected[category_9_id] <- current_category_9$catch_weight_rf2[category_9_id] * as.numeric(x = proportion[proportion_id])
-                                                      } else {
-                                                        current_category_9 <- dplyr::add_row(.data=current_category_9,
-                                                                                             current_category_9[category_9_id,])
+                                                  catch_weight_by_category <-  current_other_category %>%
+                                                    dplyr::group_by(weight_category_code_corrected) %>%
+                                                    dplyr::summarize(catch_weight_category_code_corrected =
+                                                                       sum(catch_weight_category_code_corrected, na.rm=TRUE)) %>%
+                                                    dplyr::mutate(proportion = catch_weight_category_code_corrected/
+                                                                    sum(catch_weight_category_code_corrected, na.rm=TRUE))
 
-                                                        current_category_9$weight_category_code_corrected[category_9_id+1] <- names(x = proportion)[proportion_id]
-                                                        current_category_9$catch_weight_category_code_corrected[category_9_id+1] <- current_category_9$catch_weight_rf2[category_9_id+1] * as.numeric(x = proportion[proportion_id])
-                                                      }
+                                                  for (unknown_category_id in seq_len(length.out=nrow(x = current_unknown_category))) {
+                                                    current_unknown_category_elementarycatch <- current_unknown_category[unknown_category_id,] %>%
+                                                      dplyr::rows_append(dplyr::tibble(
+                                                        catch_weight_category_code_corrected =
+                                                          current_unknown_category[unknown_category_id,]$catch_weight_category_code_corrected * catch_weight_by_category$proportion,
+                                                        weight_category_code_corrected = catch_weight_by_category$weight_category_code_corrected)) %>%
+                                                      tidyr::fill(- weight_category_code_corrected,
+                                                                  .direction = "down") %>%
+                                                      dplyr::filter(! weight_category_code_corrected %in% c("unknown", NA))
+
                                                       for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
-                                                        if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id %in% current_category_9$activity_id[category_9_id]) {
-                                                          private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <- rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
-                                                                                                                                                                                                                  dplyr::filter(!(elementarycatch_id %in% current_category_9$elementarycatch_id[category_9_id])),
-                                                                                                                                                                                                                current_category_9[category_9_id,])
-                                                          # %>%
-                                                          #   dplyr::filter(activity_id==private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id))
-                                                        }
+                                                        if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id ==
+                                                            unique(current_unknown_category_elementarycatch$activity_id)) {
+
+                                                          private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <-
+                                                            rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
+                                                                    dplyr::filter(elementarycatch_id != unique(current_unknown_category_elementarycatch$elementarycatch_id)),
+                                                                  current_unknown_category_elementarycatch)
+
                                                       }
                                                     }
                                                   }
