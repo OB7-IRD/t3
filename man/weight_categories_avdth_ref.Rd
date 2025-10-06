@@ -3,7 +3,7 @@
 \docType{data}
 \name{weight_categories_avdth_ref}
 \alias{weight_categories_avdth_ref}
-\title{Reference table defining the logbook weight categories}
+\title{Reference table defining the logbook weight categories fo AVDTH database}
 \format{
 weight_categories_avdth_ref: data frame with 51 rows and 4 columns:
 \itemize{
@@ -14,10 +14,9 @@ weight_categories_avdth_ref: data frame with 51 rows and 4 columns:
 }
 }
 \usage{
-data(set_duration_ref, package="t3")
+data(weight_categories_avdth_ref, package="t3")
 }
 \description{
-Reference table defining the logbook weight categories
+Reference table defining the logbook weight categories fo AVDTH database
 }
-\keyword{duration}
-\keyword{set}
+\keyword{weight_categories_avdth_ref}

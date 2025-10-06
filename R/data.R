@@ -80,7 +80,7 @@
 #' @keywords set duration
 "set_duration_ref"
 
-#' Reference table defining the logbook weight categories
+#' Reference table defining the logbook weight categories fo AVDTH database
 #'
 #' @format weight_categories_avdth_ref: data frame with 51 rows and 4 columns:
 #' \itemize{
@@ -89,6 +89,6 @@
 #' \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
 #' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
 #' }
-#' @usage data(set_duration_ref, package="t3")
-#' @keywords set duration
+#' @usage data(weight_categories_avdth_ref, package="t3")
+#' @keywords weight_categories_avdth_ref
 "weight_categories_avdth_ref"
