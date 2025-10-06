@@ -95,6 +95,7 @@
 <span>  <span class="va">species_fate_codes</span>,</span>
 <span>  <span class="va">sample_type_codes</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  weight_categories_avdth_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rf1_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  species_fao_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span>,</span>
@@ -197,6 +198,16 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 <dt id="arg-trip-ids">trip_ids<a class="anchor" aria-label="anchor" href="#arg-trip-ids"></a></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
+
+
+<dt id="arg-weight-categories-avdth-ref">weight_categories_avdth_ref<a class="anchor" aria-label="anchor" href="#arg-weight-categories-avdth-ref"></a></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook weight categories with the following columns:</p><ul><li><p>avdth_weight_category_code:  Logbook weight category code from avdth database, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>weight_category_min:  lower limit of the weight category (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>weight_category_max:  upper limit of the weight category (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+</ul><p>Mandatory for <code>referential_template = "avdth"</code>.
+By default the referential table <code>data("weight_categories_avdth_ref", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html">weight_categories_avdth_ref</a>).</p></dd>
 
 
 <dt id="arg-rf-computation">rf1_computation<a class="anchor" aria-label="anchor" href="#arg-rf-computation"></a></dt>
