@@ -417,7 +417,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
             elementarycatches_id <- elementarycatches_ids[elementarycatches_id]
             current_elementarycatches_by_id=current_elementarycatches %>%
                              dplyr::filter(elementarycatch_id == elementarycatches_id)
-            if (unique(current_elementarycatches_by_id$species_fao_code) %in% species_fao_codes_rf1) {
+            if (all(unique(current_elementarycatches_by_id$species_fao_code) %in% species_fao_codes_rf1)) {
               current_sum_elementarycatches_rf1 <- current_sum_elementarycatches_rf1 + unique(current_elementarycatches_by_id$catch_weight_rf1)
               current_sum_elementarycatches_rf2 <- current_sum_elementarycatches_rf2 + unique(current_elementarycatches_by_id$catch_weight_rf2)
             }
