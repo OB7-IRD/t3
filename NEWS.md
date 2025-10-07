@@ -1,3 +1,9 @@
+# t3 3.0.6 - 2025-10-07
+
+## Changed
+* Improve tuna mix correction in weight category conversion step  ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)),
+for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of major tuna species by weight category in the elementary catches of the trip.
+
 # t3 3.0.5 - 2025-09-23
 
 ## Changed

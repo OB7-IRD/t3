@@ -1653,8 +1653,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                       }
-                                      # second stage: conversion of category unknown (category 9) if possible ----
-                                      # according to similar elementary catches of partial trips belonging to the same full trip.
+                                      # second stage: conversion of unknown category if possible ----
+                                      # for species fao codes YFT, ALB, BET, SKJ if possible, according to the composition by weight category of similar elementary catches (same species, fishing school type and ocean) during the trip.
+                                      # for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of major tuna species in the elementary catches of the trip.
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         capture.output(current_trip <- object_r6(class_name = "trips"),
                                                        file = "NUL")
@@ -1676,12 +1677,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                           species_fao_code,
                                                                           school_type_code,
                                                                           sep="_"))
+                                          # for species fao codes YFT, ALB, BET, SKJ
                                           unknown_weight_category <- dplyr::filter(current_elementarycatches,
                                                                                    weight_category_code_corrected %in% c("unknown", NA),
                                                                                    species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
                                           other_weight_category <- dplyr::filter(current_elementarycatches,
                                                                                  ! weight_category_code_corrected %in% c("unknown", NA),
                                                                                  species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
+
                                           if(nrow(unknown_weight_category) != 0){
                                             if(nrow(other_weight_category) != 0){
                                               for (strate_category_unkown in unique(unknown_weight_category$strates)) {
@@ -1690,14 +1693,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_unknown_category <- unknown_weight_category %>%
                                                   dplyr::filter(strates == strate_category_unkown) %>%
                                                   dplyr::select(-strates)
-                                                if (nrow(current_other_category) != 0) {
-                                                  catch_weight_by_category <-  current_other_category %>%
-                                                    dplyr::group_by(weight_category_code_corrected) %>%
-                                                    dplyr::summarize(catch_weight_category_code_corrected =
-                                                                       sum(catch_weight_category_code_corrected, na.rm=TRUE)) %>%
-                                                    dplyr::mutate(proportion = catch_weight_category_code_corrected/
-                                                                    sum(catch_weight_category_code_corrected, na.rm=TRUE))
 
+                                                if (nrow(current_other_category) != 0) {
+                                                  catch_weight_by_category <-  suppressMessages(
+                                                    current_other_category %>%
+                                                      dplyr::group_by(weight_category_code_corrected) %>%
+                                                      dplyr::summarize(catch_weight_category_code_corrected =
+                                                                         sum(catch_weight_category_code_corrected, na.rm=TRUE)) %>%
+                                                      dplyr::mutate(proportion = catch_weight_category_code_corrected/
+                                                                      sum(catch_weight_category_code_corrected, na.rm=TRUE)))
                                                   for (unknown_category_id in seq_len(length.out=nrow(x = current_unknown_category))) {
                                                     current_unknown_category_elementarycatch <- current_unknown_category[unknown_category_id,] %>%
                                                       dplyr::rows_append(dplyr::tibble(
@@ -1708,17 +1712,86 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                   .direction = "down") %>%
                                                       dplyr::filter(! weight_category_code_corrected %in% c("unknown", NA))
 
-                                                      for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
-                                                        if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id ==
-                                                            unique(current_unknown_category_elementarycatch$activity_id)) {
+                                                    for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
+                                                      if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id ==
+                                                          unique(current_unknown_category_elementarycatch$activity_id)) {
 
-                                                          private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <-
-                                                            rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
-                                                                    dplyr::filter(elementarycatch_id != unique(current_unknown_category_elementarycatch$elementarycatch_id)),
-                                                                  current_unknown_category_elementarycatch)
+                                                        private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <-
+                                                          rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
+                                                                  dplyr::filter(elementarycatch_id != unique(current_unknown_category_elementarycatch$elementarycatch_id)),
+                                                                current_unknown_category_elementarycatch)
 
                                                       }
                                                     }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                        # for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database)
+                                        if (length(x=unlist(current_trip$extract_l1_element_value(element = "activities"))) != 0) {
+                                          capture.output(current_activities <- object_r6(class_name = "activities"),
+                                                         file = "NUL")
+                                          capture.output(current_activities$add(new_item = unlist(current_trip$extract_l1_element_value(element = "activities"))),
+                                                         file = "NUL")
+                                          current_elementarycatches <- NULL
+                                          if(length(current_activities$extract_l1_element_value(element = "elementarycatches")) !=0){
+                                            current_elementarycatches <- do.call(rbind, current_activities$extract_l1_element_value(element = "elementarycatches"))
+                                          }
+                                        }
+                                        if(length(current_elementarycatches) != 0){
+                                          mix_major_tunas_species <- dplyr::filter(current_elementarycatches,
+                                                                                   weight_category_code_corrected %in% c("unknown", NA),
+                                                                                   species_fao_code %in% c("MIX", "TUN"))
+                                          if(nrow(mix_major_tunas_species) != 0){
+                                            major_tunas_species <- dplyr::filter(current_elementarycatches,
+                                                                                 ! weight_category_code_corrected %in% c("unknown", NA),
+                                                                                 species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
+                                            if(nrow(major_tunas_species!=0)){
+                                              total_catch_weight <- suppressMessages(
+                                                major_tunas_species %>%
+                                                  dplyr::group_by(ocean_code, school_type_code) %>%
+                                                  dplyr::summarize(total_catch_weight =
+                                                                     sum(catch_weight_category_code_corrected,
+                                                                         na.rm=TRUE)))
+                                              major_tunas_species <- suppressMessages(
+                                                major_tunas_species %>%
+                                                  dplyr::left_join(total_catch_weight) %>%
+                                                  dplyr::group_by(ocean_code,
+                                                                  species_fao_code,
+                                                                  school_type_code,
+                                                                  weight_category_code_corrected) %>%
+                                                  dplyr::summarize(catch_weight =
+                                                                     sum(catch_weight_category_code_corrected,
+                                                                         na.rm=TRUE),
+                                                                   total_catch_weight = unique(total_catch_weight)) %>%
+                                                  dplyr::arrange(school_type_code) %>%
+                                                  dplyr::mutate(proportion = catch_weight/total_catch_weight))
+
+                                              for (id_row in seq_len(length.out=nrow(x = mix_major_tunas_species))) {
+                                                current_mix_elementarycatch <- mix_major_tunas_species[id_row,]
+                                                current_major_tunas_species <- major_tunas_species %>%
+                                                  dplyr::filter(ocean_code == current_mix_elementarycatch$ocean_code,
+                                                                school_type_code == current_mix_elementarycatch$school_type_code)
+                                                current_mix_elementarycatch <- current_mix_elementarycatch %>%
+                                                  dplyr::rows_append(dplyr::tibble(
+                                                    species_fao_code = current_major_tunas_species$species_fao_code,
+                                                    catch_weight_category_code_corrected =
+                                                      mix_major_tunas_species[id_row,]$catch_weight_category_code_corrected * current_major_tunas_species$proportion,
+                                                    weight_category_code_corrected = current_major_tunas_species$weight_category_code_corrected)) %>%
+                                                  tidyr::fill(- weight_category_code_corrected,
+                                                              .direction = "down") %>%
+                                                  dplyr::filter(! species_fao_code %in% c("MIX", "TUN"))
+
+                                                for (activity_id in seq_len(length.out = length(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities))) {
+                                                  if (private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_id ==
+                                                      unique(current_mix_elementarycatch$activity_id)) {
+
+                                                    private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches <-
+                                                      rbind(private$data_selected[[full_trip_id]][[trip_id]]$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches %>%
+                                                              dplyr::filter(elementarycatch_id != unique(current_mix_elementarycatch$elementarycatch_id)),
+                                                            current_mix_elementarycatch)
                                                   }
                                                 }
                                               }
