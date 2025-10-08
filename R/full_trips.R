@@ -1334,13 +1334,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
                             #'  \item{weight_category_code_corrected: } weight category after conversion, type \code{\link[base]{character}}.
                             #'  \item{catch_weigh_category_code_corrected: } catch weight after weight category conversion (tonnes), type \code{\link[base]{numeric}}.\cr
-                            #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
+                            #'   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories,
+                            #'    according to the distribution key applied for conversion to standardized weight categories.
                             #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
                             #'  }
                             #'  \cr
-                            #'  If \code{referential_template="observe"}, values of \code{weight_category_min} and \code{weight_category_max} are used to convert logbook's weight categories to standard weight categories:
-                            #'  We define the value : \code{delta_weight_category=weight_category_max - weight_category_min}, corresponding to the amplitude of the weight interval defined by a logbook weight category.
-                            #'  Standard weight categories for species "YFT", "BET" and "ALB" are : + ("LOT")?? + arg species ?
+                            #'  The upper and lower limit values (kg) of each weight category (\code{weight_category_min} and \code{weight_category_max}),
+                            #'   are used to convert logbook's weight categories to standard weight categories:
+                            #'  We define the value : \code{delta_weight_category=weight_category_max - weight_category_min},
+                            #'   corresponding to the amplitude of the weight interval defined by a logbook weight category.
+                            #'  Standard weight categories for species "YFT", "BET" and "ALB" are :
                             #'  \itemize{
                             #'  \item{< 10kg and > 10kg} for floating object school, undetermined and free school in the Indian Ocean and for the floating object school in the Atlantic Ocean:
                             #'  We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
@@ -1372,6 +1375,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  }
                             #' For species "SKJ" the standard weight category is "<10kg" in all cases.
                             #' An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
+                            #' Then, if possible, the process converts the “unknown” weight categories to standard category(ies),
+                            #' for species codes “YFT,” “BET,” “ALB” and "SKJ",
+                            #'  according to the weight category composition of similar elementary catches
+                            #'  (same species, same fishing school type, and same ocean) of the relevant full trip.
+                            #' Finally, if possible, the process converts the species codes TUN/MIX (mix of tunas species in Observe/AVDTH database),
+                            #' according to the composition of this tuna species ("YFT", "BET", "ALB", "SKJ", "FRI", "FRZ", "LTA", "BLT" and "KAW"),
+                            #' and their weight category(ies) distribution, in the elementary catches of the relevant full trip.
+
                             conversion_weight_category = function(global_output_path = NULL,
                                                                   referential_template = "observe") {
                               # 9.1 - Arguments verification ----
@@ -1658,7 +1669,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                       # second stage: conversion of unknown category if possible ----
                                       ##  for species fao codes YFT, ALB, BET, SKJ if possible, ----------
-                                      # according to the composition by weight category of similar elementary catches (same species, fishing school type and ocean) during the trip.
+                                      # according to the composition by weight category of similar elementary catches
+                                      #(same species, fishing school type and ocean) of the full trip.
                                       capture.output(current_trips <- object_r6(class_name = "trips"),
                                                      file = "NUL")
                                       capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
@@ -1734,7 +1746,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                         ## for mix tuna species TUN/MIX (mix of tunas species in Observe/AVDTH database), ------
-                                        #  according to the composition of this tuna species(YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW) in the elementary catches of the trip.
+                                        #  according to the composition of this tuna species(YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW),
+                                        # in the elementary catches of the full trip.
                                         capture.output(current_trips <- object_r6(class_name = "trips"),
                                                        file = "NUL")
                                         capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
