@@ -1381,7 +1381,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  (same species, same fishing school type, and same ocean) of the relevant full trip.
                             #' Finally, if possible, the process converts the species codes TUN/MIX (mix of tunas species in Observe/AVDTH database),
                             #' according to the composition of this tuna species ("YFT", "BET", "ALB", "SKJ", "FRI", "FRZ", "LTA", "BLT" and "KAW"),
-                            #' and their weight category(ies) distribution, in the elementary catches of the relevant full trip.
+                            #' and the distribution of their weight category(ies), in the elementary catches of the relevant full trip.
 
                             conversion_weight_category = function(global_output_path = NULL,
                                                                   referential_template = "observe") {
