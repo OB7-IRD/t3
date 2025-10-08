@@ -546,7 +546,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' If FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
                             #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
                             #' By default, use codes YFT (\emph{Thunnus albacares}), SKJ (\emph{Katsuwonus pelamis}), BET (\emph{Thunnus obesus}), ALB (\emph{Thunnus alalunga}),
-                            #' LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
+                            #' LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species  YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW in Observe/AVDTH database) (French and Mayotte fleets).
                             #' @param species_fate_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.
                             #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
                             #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
@@ -1470,14 +1470,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                            "]")
                                     } else {
-                                      # first stage: conversion of all categories except for unknown (category 9) ----
+                                      # first stage: conversion of all categories except for unknown category ----
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                         if (length(current_trip$.__enclos_env__$private$activities) != 0) {
                                           for (activity_id in seq_len(length.out = length(current_trip$.__enclos_env__$private$activities))) {
                                             current_elementarycatches_corrected <- NULL
                                             current_elementarycatches_added <- NULL
-                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in% (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
+                                            if (current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$activity_code %in%
+                                                (if (referential_template == "observe") c(6,32) else c(0, 1, 2, 14))) {
                                               current_elementarycatches <- current_trip$.__enclos_env__$private$activities[[activity_id]]$.__enclos_env__$private$elementarycatches
                                               if (length(current_elementarycatches) != 0) {
 
@@ -1655,7 +1656,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                       }
                                       # second stage: conversion of unknown category if possible ----
                                       # for species fao codes YFT, ALB, BET, SKJ if possible, according to the composition by weight category of similar elementary catches (same species, fishing school type and ocean) during the trip.
-                                      # for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of major tuna species in the elementary catches of the trip.
+                                      # for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of tuna species YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW in the elementary catches of the trip.
                                       for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                         capture.output(current_trip <- object_r6(class_name = "trips"),
                                                        file = "NUL")
@@ -1729,6 +1730,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             }
                                           }
                                         }
+                                        capture.output(current_trip <- object_r6(class_name = "trips"),
+                                                       file = "NUL")
+                                        capture.output(current_trip$add(new_item = private$data_selected[[full_trip_id]][[trip_id]]),
+                                                       file = "NUL")
                                         # for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database)
                                         if (length(x=unlist(current_trip$extract_l1_element_value(element = "activities"))) != 0) {
                                           capture.output(current_activities <- object_r6(class_name = "activities"),
@@ -1741,22 +1746,24 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           }
                                         }
                                         if(length(current_elementarycatches) != 0){
-                                          mix_major_tunas_species <- dplyr::filter(current_elementarycatches,
-                                                                                   weight_category_code_corrected %in% c("unknown", NA),
-                                                                                   species_fao_code %in% c("MIX", "TUN"))
-                                          if(nrow(mix_major_tunas_species) != 0){
-                                            major_tunas_species <- dplyr::filter(current_elementarycatches,
-                                                                                 ! weight_category_code_corrected %in% c("unknown", NA),
-                                                                                 species_fao_code %in% c("YFT", "BET", "ALB", "SKJ"))
-                                            if(nrow(major_tunas_species!=0)){
+                                          mix_tunas_species <- dplyr::filter(current_elementarycatches,
+                                                                             weight_category_code_corrected %in% c("unknown", NA),
+                                                                             species_fao_code %in% c("MIX", "TUN"))
+                                          if(nrow(mix_tunas_species) != 0){
+                                            tunas_species <- dplyr::filter(current_elementarycatches,
+                                                                           (species_fao_code %in% c("YFT", "BET", "ALB", "SKJ") &
+                                                                             ! weight_category_code_corrected %in% c("unknown", NA))
+                                                                            | (species_fao_code %in% c("FRI", "FRZ", "LTA", "BLT", "KAW")))
+                                            if(nrow(tunas_species!=0)){
                                               total_catch_weight <- suppressMessages(
-                                                major_tunas_species %>%
-                                                  dplyr::group_by(ocean_code, school_type_code) %>%
+                                                tunas_species %>%
+                                                  dplyr::group_by(ocean_code,
+                                                                  school_type_code) %>%
                                                   dplyr::summarize(total_catch_weight =
                                                                      sum(catch_weight_category_code_corrected,
                                                                          na.rm=TRUE)))
-                                              major_tunas_species <- suppressMessages(
-                                                major_tunas_species %>%
+                                              tunas_species <- suppressMessages(
+                                                tunas_species %>%
                                                   dplyr::left_join(total_catch_weight) %>%
                                                   dplyr::group_by(ocean_code,
                                                                   species_fao_code,
@@ -1769,17 +1776,18 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   dplyr::arrange(school_type_code) %>%
                                                   dplyr::mutate(proportion = catch_weight/total_catch_weight))
 
-                                              for (id_row in seq_len(length.out=nrow(x = mix_major_tunas_species))) {
-                                                current_mix_elementarycatch <- mix_major_tunas_species[id_row,]
-                                                current_major_tunas_species <- major_tunas_species %>%
+                                              for (id_row in seq_len(length.out=nrow(x = mix_tunas_species))) {
+                                                current_mix_elementarycatch <- mix_tunas_species[id_row,]
+                                                current_tunas_species <- tunas_species %>%
                                                   dplyr::filter(ocean_code == current_mix_elementarycatch$ocean_code,
                                                                 school_type_code == current_mix_elementarycatch$school_type_code)
                                                 current_mix_elementarycatch <- current_mix_elementarycatch %>%
                                                   dplyr::rows_append(dplyr::tibble(
-                                                    species_fao_code = current_major_tunas_species$species_fao_code,
+                                                    species_fao_code = current_tunas_species$species_fao_code,
+                                                    weight_category_label = "Mix of tuna species YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW",
                                                     catch_weight_category_code_corrected =
-                                                      mix_major_tunas_species[id_row,]$catch_weight_category_code_corrected * current_major_tunas_species$proportion,
-                                                    weight_category_code_corrected = current_major_tunas_species$weight_category_code_corrected)) %>%
+                                                      mix_tunas_species[id_row,]$catch_weight_category_code_corrected * current_tunas_species$proportion,
+                                                    weight_category_code_corrected = current_tunas_species$weight_category_code_corrected)) %>%
                                                   tidyr::fill(- weight_category_code_corrected,
                                                               .direction = "down") %>%
                                                   dplyr::filter(! species_fao_code %in% c("MIX", "TUN"))
@@ -2021,7 +2029,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 stop(format(Sys.time(),
                                                             "%Y-%m-%d %H:%M:%S"),
                                                      " - Error: argument \"catch_weight_category_code_corrected\" is null.\n",
-                                                     "Check if the process 1.3 (logbook weight categories conversion) has already been launched.",
+                                                     "Check if the process 1.2 (logbook weight categories conversion) has already been launched.",
                                                      "\n[trip: ",
                                                      current_activity$.__enclos_env__$private$trip_id,
                                                      ", activity: ",

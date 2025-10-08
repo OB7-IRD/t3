@@ -182,7 +182,7 @@ If FALSE, only the catch weights of species belonging to the species list, defin
 
 \item{\code{species_fao_codes_rf1}}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (\emph{Thunnus albacares}), SKJ (\emph{Katsuwonus pelamis}), BET (\emph{Thunnus obesus}), ALB (\emph{Thunnus alalunga}),
-LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).}
+LOT (\emph{Thunnus tonggol}) and TUN/MIX (mix of tunas species  YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW in Observe/AVDTH database) (French and Mayotte fleets).}
 
 \item{\code{species_fate_codes_rf1}}{Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.}
 
