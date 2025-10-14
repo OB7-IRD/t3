@@ -11,7 +11,8 @@ for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), acco
 
 * Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
   - For Observe database by importing maximum and minimum of weight categories from the database.
-  - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation). By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref)).
+  - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation).  
+  By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html)).
 
 # t3 3.0.4 - 2025-07-04
 
