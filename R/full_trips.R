@@ -2102,7 +2102,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Process for set duration, time at sea, fishing time and searching time calculation (in hours).
                             #' Details about the methods are available in the vignette : \href{https://ob7-ird.github.io/t3/articles/level_1.html#set-duration-calculation}{Process 1.4: Fishing effort indicators calculation}.
                             #' @param set_duration_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
-                            #' Data and parameters for set duration calculation (by year, country, ocean and school type), in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
+                            #' Data and parameters for set duration calculation (by year, country, ocean and school type),
+                            #' in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
                             #' Duration in minutes in the reference table, converted into hours in output for subsequent processing).
                             #' @param activity_code_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                             #' Reference table with the activity codes to be taken into account for the allocation of sea and/or fishing time,
@@ -2110,9 +2111,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See below for more details.
                             #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
                             #' See below for more details.
-                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE.
+                            #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
                             #' Path of the global outputs directory. The function will create subsection if necessary.
-                            #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe".
                             #' Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @importFrom suncalc getSunlightTimes
@@ -2368,6 +2369,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         time_at_sea <- 0
                                         fishing_time <- 0
                                         searching_time <- 0
+                                        activities_104 <- data.frame(activity_id=NA_character_,
+                                                                     activity_date=NA_character_)
+                                        activities_105 <- data.frame(activity_id=NA_character_,
+                                                                     activity_date=NA_character_)
                                         # Activities to be taken into account in time at sea allocation
                                         for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
                                           activities_date <- activities_dates[[activities_dates_id]]
@@ -2543,7 +2548,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                         "%Y-%m-%d %H:%M:%S"),
                                                  " - Association of activity code and objectoperation code not supported: ",
                                                  paste0(wrong_codes, collapse=", "),
-                                                 "\n[trip: ",
+                                                 ", on full trip item ",
+                                                 full_trip_id,
+                                                 ": full_trip_id \"",
+                                                 names(x = private$data_selected)[full_trip_id],
+                                                 "\": \n[trip: ",
                                                  current_trip$.__enclos_env__$private$trip_id,
                                                  "]\n",
                                                  paste0("[activity: ",
@@ -2556,9 +2565,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
                                           }
                                           if(all(is.na(current_activities_date_time_at_sea_declared))){
-                                            warning(" - No time at sea declared, on date ",
+                                            warning(format(Sys.time(),
+                                                                    "%Y-%m-%d %H:%M:%S"),
+                                                    " - No time at sea declared, on full trip item ",
+                                                    full_trip_id,
+                                                    ", full_trip_id \"",
+                                                    names(x = private$data_selected)[full_trip_id],
+                                                    "\", on date ",
                                                     activities_dates[activities_dates_id], ":",
-                                                    "\n", "   [activity: ",
+                                                    "\n[trip: ",
+                                                    current_trip$.__enclos_env__$private$trip_id,
+                                                    "]\n[activity: ",
                                                     current_activities_date$extract_l1_element_value(element="activity_id")[[1]], "]\n",
                                                     "Please check the data. Time at sea value set to zero for this date.")
                                             current_activities_date_time_at_sea_declared <- 0
@@ -2575,6 +2592,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
                                                                                          digits=4)
                                           } else{
+                                            #  Add transit activity to allocate time at sea on days with no activity to allocate the time at sea not null declared
                                             if(current_activities_date_time_at_sea_declared!=0){
                                               new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
                                               new_activity$.__enclos_env__$private$objectoperation_code <- NA
@@ -2583,14 +2601,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               new_activity$.__enclos_env__$private$activity_code <- 104
                                               new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
                                               new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
-                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#",
+                                                                                                         as.numeric(Sys.time()))
                                               capture.output(current_activities_date_sea$add(new_item = new_activity),
                                                              file = "NUL")
                                               current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                              warning(" - Add transit activity to allocate time at sea, on date ",
-                                                      activities_dates[activities_dates_id], ":",
-                                                      "\n", "   [activity: ",
-                                                      current_activities_date_sea$extract_l1_element_value(element="activity_id")[[1]], "]")
+                                              activities_104 <- rbind(activities_104,
+                                                                      c(new_activity$.__enclos_env__$private$activity_id,
+                                                                        format(activities_date,
+                                                                               "%Y-%m-%d")))
                                             }
                                             current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared
                                           }
@@ -2653,12 +2672,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               if(is.na(latitude_mean) | is.na(longitude_mean)){
                                                 warning(format(Sys.time(),
                                                                "%Y-%m-%d %H:%M:%S"),
-                                                        "Fishing activity with missing position",
-                                                        "\n[trip: ",
+                                                        " - Fishing activity with missing position, on full trip item ",
+                                                        full_trip_id,
+                                                        ", full_trip_id \"",
+                                                        names(x = private$data_selected)[full_trip_id],
+                                                        "\":\n[trip: ",
                                                         current_trip$.__enclos_env__$private$trip_id,
-                                                        ", activity: ",
-                                                        unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_id"))),
-                                                        "]")
+                                                        "]\n",
+                                                        paste0("[activity: ",
+                                                               current_activities_date_fishing$extract_l1_element_value(element = "activity_id"),
+                                                collapse="];\n"),
+                                                "].")
                                                 ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
                                                 fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
                                               } else{
@@ -2692,11 +2716,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               new_activity$.__enclos_env__$private$activity_code <- 105
                                               new_activity$.__enclos_env__$private$activity_label <- "Searching (added by t3R)"
                                               new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
-                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#", as.numeric(Sys.time()))
+                                              new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#",
+                                                                                                         as.numeric(Sys.time()))
                                               capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                              file = "NUL")
                                               capture.output(current_activities_date_fishing$add(new_item = new_activity),
                                                              file = "NUL")
+                                              activities_105 <- rbind(activities_105,
+                                                                      c(new_activity$.__enclos_env__$private$activity_id,
+                                                                        format(activities_date,
+                                                                               "%Y-%m-%d")))
                                               # Compute fishing time according to localisation of catch activities declared
                                               current_activities_latitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_latitude"))
                                               current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
@@ -2705,10 +2734,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               if(is.na(latitude_mean) | is.na(longitude_mean)){
                                                 warning(format(Sys.time(),
                                                                "%Y-%m-%d %H:%M:%S"),
-                                                        "Catch activity with missing position",
-                                                        "\n[trip: ",
+                                                        " - Catch activity with missing position, on full trip item ",
+                                                        full_trip_id,
+                                                        ", full_trip_id \"",
+                                                        names(x = private$data_selected)[full_trip_id],
+                                                        "\":\n[trip: ",
                                                         current_trip$.__enclos_env__$private$trip_id,
-                                                        ", activity: ",
+                                                        "]\n",
+                                                        ", [activity: ",
                                                         current_activities_date_catch$extract_l1_element_value(element="activity_id")[[1]],
                                                         "]")
                                                 ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
@@ -2730,10 +2763,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                           digits=4)))
                                               # Add new activity to current_trip
                                               current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                              warning(" - Add searching activity to allocate fishing time, on date ",
-                                                      activities_dates[activities_dates_id], ":",
-                                                      "\n", "   [activity: ",
-                                                      current_activities_date_fishing$extract_l1_element_value(element="activity_id")[[1]], "]")
                                             }
 
                                             fishing_time <- fishing_time + fishing_time_tmp
@@ -2775,6 +2804,47 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                    end = trip_end_date - lubridate::days(x = 1))) / 3600
                                         }
                                         searching_time <- 0
+                                      }
+                                      # Remove first row with NAs
+                                      activities_104 <- activities_104[-1,]
+                                      activities_105 <- activities_105[-1,]
+                                      if(nrow(activities_104) > 0){
+                                        warning(format(Sys.time(),
+                                                     "%Y-%m-%d %H:%M:%S"),
+                                              " - Add transit activity(ies) to allocate time at sea, on full trip item ",
+                                              full_trip_id,
+                                              ", full_trip_id \"",
+                                              names(x = private$data_selected)[full_trip_id],
+                                              "\", on date(s) ",
+                                              paste0(activities_104$activity_date,
+                                                     collapse=", "),
+                                              ":",
+                                              "\n[trip: ",
+                                              current_trip$.__enclos_env__$private$trip_id,
+                                              "]\n",
+                                              paste0("[activity: ",
+                                                     activities_104$activity_id,
+                                                     collapse="];\n"),
+                                              "].")
+                                      }
+                                      if(nrow(activities_105) > 0){
+                                        warning(format(Sys.time(),
+                                                       "%Y-%m-%d %H:%M:%S"),
+                                                " - Add searching activity(ies) to allocate fishing time, on full trip item ",
+                                                full_trip_id,
+                                                ", full_trip_id \"",
+                                                names(x = private$data_selected)[full_trip_id],
+                                                "\", on date(s) ",
+                                                paste0(activities_105$activity_date,
+                                                       collapse=", "),
+                                                ":",
+                                                "\n[trip: ",
+                                                current_trip$.__enclos_env__$private$trip_id,
+                                                "]\n",
+                                                paste0("[activity: ",
+                                                       activities_104$activity_id,
+                                                       collapse="];\n"),
+                                                "].")
                                       }
                                       current_trip$.__enclos_env__$private$searching_time <- searching_time
                                       current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
