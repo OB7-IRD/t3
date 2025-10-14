@@ -434,7 +434,8 @@ Details about the methods are available in the vignette : \href{https://ob7-ird.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
-Data and parameters for set duration calculation (by year, country, ocean and school type), in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
+Data and parameters for set duration calculation (by year, country, ocean and school type),
+in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
 Duration in minutes in the reference table, converted into hours in output for subsequent processing).}
 
 \item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
@@ -446,9 +447,9 @@ Reference table with the activity codes to be taken into account for the allocat
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
 See below for more details.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE.
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
- By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe".
 Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
