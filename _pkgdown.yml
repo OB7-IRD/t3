@@ -103,6 +103,7 @@ reference:
   - length_step
   - length_weight_relationship
   - set_duration_ref
+  - weight_categories_avdth_ref
 
 intro:
 - title: Get started with t3 process
