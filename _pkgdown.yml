@@ -1,15 +1,56 @@
+url: https://ob7-ird.github.io/t3
+
+authors:
+  Ob7 Observatory of Exploited Tropical Pelagic Ecosystems:
+    href: "https://www.ob7.ird.fr/"
+    html: "<img src='man/figures/logo_obs7.png' height=24>"
+
 template:
+  bootstrap: 5
   params:
     bootswatch: cerulean
     docsearch:
       api_key: b232a295f4339cb13abbd7adee1da479
       index_name: ob7-ird
 
+navbar:
+  structure:
+    left: [home, intro, reference, articles, news]
+    right: [github]
+  components:
+    home:
+      icon: fa-home fa-lg
+      aria-label: home
+      href: index.html
+    intro:
+      text: Get started
+      href: articles/running_processes_examples.html
+    articles:
+      text: Articles
+      href: articles/index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Change log
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      aria-label: github
+      href: https://github.com/OB7-IRD/t3
+
 reference:
+- title: "Methods associated to R6 objects"
+  desc: >
+    Methods and processes associated to R6 objects, encapsulated in each class:
+  contents:
+  - object_model_data
+  - full_trips
+  - list_t3
 - title: "R6 class"
   desc: >
     Function for R6 class creation.
-- contents:
+  contents:
   - activities
   - activity
   - elementarylanding
@@ -31,17 +72,10 @@ reference:
   - wells
   - wellset
   - wellsets
-- title: "Methods associated to R6 objects"
-  desc: >
-    Methods and processes associated to R6 objects, encapsulated in each class:
-- contents:
-  - object_model_data
-  - full_trips
-  - list_t3
 - title: "Shortcut functions"
   desc: >
     Functions for run all or several parts of the t3 process.
-- contents:
+  contents:
   - data_model_initialisation
   - t3_level1
   - t3_level2
@@ -50,7 +84,7 @@ reference:
 - title: "Level 3 tools"
   desc: >
     Functions used in the process level 3.
-- contents:
+  contents:
   - catch_ci_calculator
   - df2boot
   - tunaboot
@@ -58,34 +92,35 @@ reference:
 - title: "Diverse"
   desc: >
     Diverse functions and tools.
-- contents:
+  contents:
   - object_r6
   - initiate_log_file
   - initiate_directory
 - title: "Data"
   desc: >
     Referential tables used in t3 process.
-- contents:
+  contents:
   - length_step
   - length_weight_relationship
   - set_duration_ref
 
-url: https://ob7-ird.github.io/t3
-
-authors:
-  Ob7 Observatory of Exploited Tropical Pelagic Ecosystemse:
-    href: "https://www.ob7.ird.fr/"
-    html: "<img src='man/figures/logo_obs7.png' height=24>"
+intro:
+- title: Get started with t3 process
+  navbar: Get started
+  contents:
+  - running_processes_examples
 
 articles:
 - title: t3 processes description
   navbar: ~
   contents:
-  - running_processes_examples
   - model_initialisation
   - level_1
   - level_2
   - level_3
+  - running_processes_examples
+
+
 
 development:
-  mode: auto
+ mode: auto

@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 
 ## Input data 
 
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src='figures/input_data.png'/>
+<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" fig.alt: Input data; src='figures/input_data.png'/>
 
 
 ## R's R6 reference classes
