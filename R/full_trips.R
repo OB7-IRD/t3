@@ -3448,6 +3448,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
 
                                                 }
+                                                ## Remove wrong samples ----
                                                 if (length(x = current_elementarysampleraws_removed) != 0) {
                                                   # Set to NA sample_length_class_lf and sample_number_measured_lf
                                                   # for elementarysampleraw with sizeclass<min(length_step$ld1_class) or sizeclass>max(length_step$ld1_class)
@@ -3462,7 +3463,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                     "\""))),
                                                                    file="NUL")
                                                     elementarysamplesraw_deleted$modification_l1(modification = "$path$sample_length_class_lf <- NA_integer_")
-                                                    elementarysamplesraw_deleted$modification_l1(modification = "$path$sample_number_measured_lf <- NA_integer_")
+                                                    elementarysamplesraw_deleted$modification_l1(modification = "$path$sample_number_measured_lf <- NA_real_")
                                                     #private$data_selected[[full_trip_id]][[partial_trip_id]]$.__enclos_env__$private$wells[[well_id]]$.__enclos_env__$private$elementarysampleraw[[1]][[elementarysampleraw_remove_id]] <- NULL
                                                   }
                                                 }
@@ -4917,8 +4918,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                            sample_type_code = as.integer(x = current_elementarysamples_sample_type_id),
                                                                                                            species_fao_code = elementarysamples_species_id,
                                                                                                            sample_standardised_length_class_lf = as.integer(current_elementarysamples_specie_class_id),
-                                                                                                           sample_number_measured_extrapolated_lf = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf"))),
-                                                                                                           sample_total_count = sum(unlist(x = current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_total_count"))))
+                                                                                                           sample_number_measured_extrapolated_lf = sum(unlist(current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_number_measured_extrapolated_lf")),
+                                                                                                                                                        na.rm=TRUE),
+                                                                                                           sample_total_count = sum(unlist(x = current_elementarysamples_sample_quality$extract_l1_element_value(element = "sample_total_count")),
+                                                                                                                                    na.rm=TRUE))
                                                       capture.output(current_standardisedsamples$add(new_item = current_standardisedsample),
                                                                      file = "NUL")
                                                     }
@@ -5235,9 +5238,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                sample_number_weighted = current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight,
                                                                                                                sample_weight = (current_standardised_sample$.__enclos_env__$private$sample_number_measured_extrapolated_lf * current_well_set$.__enclos_env__$private$prop_weighted_weight) * lwr,
                                                                                                                sample_weight_unit = lwr,
-                                                                                                               sample_category = ifelse(test = lwr <= 10,
+                                                                                                               sample_category = ifelse(is.na(lwr), NA_character_,
+                                                                                                                                        ifelse(test = lwr <= 10,
                                                                                                                                         yes = "- 10kg",
-                                                                                                                                        no = "+ 10kg"))
+                                                                                                                                        no = "+ 10kg")))
                                                 capture.output(standardised_samples_sets$add(new_item = current_standardised_samples_sets),
                                                                file = "NUL")
                                               }
@@ -5443,6 +5447,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Empty data selected in the R6 object. Process 2.7 (raised factors determination) cancelled.")
                               } else {
+                                options(nwarnings = 1000)
                                 T1 <- Sys.time()
                                 cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                   format = "%Y-%m-%d %H:%M:%S "),
@@ -5528,29 +5533,34 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                                                      current_well_set$.__enclos_env__$private$activity_id,
                                                                                                                                                                                                      "\""))),
                                                                file = "NUL")
-                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")) != 0) {
+                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "!is.na($path$sample_weight_unit) && $path$sample_weight_unit <= 10")) != 0) {
                                                   capture.output(current_standardised_samples_sets_minus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
-                                                  capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit <= 10")),
+                                                  capture.output(current_standardised_samples_sets_minus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "!is.na($path$sample_weight_unit) && $path$sample_weight_unit <= 10")),
                                                                  file = "NUL")
-                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_weight"))) / 1000
-                                                  current_standardised_samples_sets_minus10_nb <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_number_weighted")))
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_weight")),
+                                                                                                                           na.rm=TRUE) / 1000
+                                                  current_standardised_samples_sets_minus10_nb <- sum(unlist(current_standardised_samples_sets_minus10$extract_l1_element_value(element = "sample_number_weighted")),
+                                                                                                      na.rm=TRUE)
                                                 } else {
                                                   current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- 0
                                                   current_standardised_samples_sets_minus10_nb <- 0
                                                 }
-                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")) != 0) {
+                                                if (length(x = current_standardised_samples_sets$filter_l1(filter = "!is.na($path$sample_weight_unit) && $path$sample_weight_unit > 10")) != 0) {
                                                   capture.output(current_standardised_samples_sets_plus10 <- object_r6(class_name = "standardisedsamplesets"),
                                                                  file = "NUL")
                                                   capture.output(current_standardised_samples_sets_plus10$add(new_item = current_standardised_samples_sets$filter_l1(filter = "$path$sample_weight_unit > 10")),
                                                                  file = "NUL")
-                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_weight"))) / 1000
-                                                  current_standardised_samples_sets_plus10_nb <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_number_weighted")))
+                                                  current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_weight")),
+                                                                                                                          na.rm=TRUE) / 1000
+                                                  current_standardised_samples_sets_plus10_nb <- sum(unlist(current_standardised_samples_sets_plus10$extract_l1_element_value(element = "sample_number_weighted")),
+                                                                                                     na.rm=TRUE)
                                                 } else {
                                                   current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- 0
                                                   current_standardised_samples_sets_plus10_nb <- 0
                                                 }
-                                                current_well_set$.__enclos_env__$private$weighted_samples_total <- sum(unlist(current_standardised_samples_sets$extract_l1_element_value(element = "sample_weight"))) / 1000
+                                                current_well_set$.__enclos_env__$private$weighted_samples_total <- sum(unlist(current_standardised_samples_sets$extract_l1_element_value(element = "sample_weight")),
+                                                                                                                       na.rm =TRUE) / 1000
                                                 if (current_well_set$.__enclos_env__$private$weighted_samples_total == 0) {
                                                   # scenario 1
                                                   current_well_set$.__enclos_env__$private$rf_validation <- 1L
