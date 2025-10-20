@@ -6,8 +6,7 @@
 <!-- badges: start -->
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/package=t3)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
 [![R-CMD-check](https://github.com/OB7-IRD/t3/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/t3/actions)
 <!-- badges: end -->
@@ -36,7 +35,7 @@ science:
   license. In the end, it would be available on the Comprehensive R
   Archive Network (CRAN).
 - Referencing of the software enable result reproducibility and
-  versioning: version 2.0.1 [DOI:
+  versioning: [DOI:
   10.5281/zenodo.14947393](https://zenodo.org/badge/latestdoi/210599699).
 
 ## Installation
