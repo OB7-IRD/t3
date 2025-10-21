@@ -1,11 +1,14 @@
 # t3 3.0.5 - 2025-09-23
 
 ## Changed
+
 * Change the display of the running process progress in the console from list of trip's topiaid to a [progress bar](https://cli.r-lib.org/reference/cli_progress_bar.html).
 
 * Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
   - For Observe database by importing maximum and minimum of weight categories from the database.
   - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to get upper and lower limit of AVDTH weight categories. By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html)).
+  
+* Remove samples from the process whose size measurement type differs from fork length ("FL") or first dorsal length ("PD1"), their values are set to `NA`.
 
 
 # t3 3.0.4 - 2025-07-04
