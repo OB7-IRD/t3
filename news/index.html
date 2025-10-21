@@ -82,6 +82,7 @@
 <li><p>Improve weight category conversion ([full_trips<span class="math inline">$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
 - For Observe database by importing maximum and minimum of weight categories from the database.
 - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$</span>activities_object_creation()<code>](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to get upper and lower limit of AVDTH weight categories. By default the referential table</code>data(“weight_categories_avdth_ref”, package=“t3”)` is considered (<a href="https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html">weight_categories_avdth_ref</a>).</p></li>
+<li><p>Remove samples from the process whose size measurement type differs from fork length (“FL”) or first dorsal length (“PD1”), their values are set to <code>NA</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
