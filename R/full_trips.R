@@ -6337,20 +6337,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               data_level3 <- append(data_level3,
                                                     list(raw_inputs_level3))
                               names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
-
+                              # - Outputs extraction ----
                               if(!is.null(global_output_path)){
                                 target_year <- data.frame(year=lubridate::year(act$date_act)) %>%
                                   dplyr::group_by(year) %>%
                                   dplyr::summarize(n=dplyr::n()) %>%
                                   dplyr::filter(n==max(n)) %>%
                                   dplyr::pull(year)
-                                ocean <- unique(act$ocean)
+                                target_ocean <- data.frame(ocean=act$ocean) %>%
+                                  dplyr::group_by(ocean) %>%
+                                  dplyr::summarize(n=dplyr::n()) %>%
+                                  dplyr::filter(n==max(n)) %>%
+                                  dplyr::pull(ocean)
                                 flag_codes <- unique(act$flag_code)
+                                file_path <- paste0(global_output_path,"/",
+                                                    paste( "inputs_level3", target_year, "ocean",
+                                                           target_ocean, paste(flag_codes, collapse="_"),
+                                                           sep="_"), ".RData")
                                 save(data_level3,
-                                     file=paste0(global_output_path,"/",
-                                                 paste( "inputs_level3", target_year, "ocean",
-                                                        ocean, paste(flag_codes, collapse="_"),
-                                                        sep="_"), ".RData"))
+                                     file=file_path)
+                                cat(format(x = Sys.time(),
+                                           format = "%Y-%m-%d %H:%M:%S"),
+                                    " - Outputs extracted in the following directory:\n",
+                                    file_path, "\n")
                               }
                               return(data_level3)
                               capture.output(gc(full=TRUE), file="NUL")
