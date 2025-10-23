@@ -901,7 +901,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
                                          } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
-                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data$activity_id)])
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
