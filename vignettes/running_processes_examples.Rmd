@@ -58,9 +58,9 @@ species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB","TUN", "LOT")
 species_fate_codes_rf1 = as.integer(c(6))
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
-# Discarded status unknown (only for EMS and logbook) : 11,
-species_fate_codes <- as.integer(c(6,11))
+species_fate_codes <- as.integer(6)
 # output directories initiation
+output_path <- "path_to_your_output_folder" # to specify
 final_output_path <- initiate_directory(output_path = output_path,
                                         level = "all")
 # generation of the confidence interval
@@ -137,7 +137,7 @@ object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_e
 # level 1 ---
 # level 1.1: rf1 and rf2
 object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
-                      apply_rf1_on_bycatch = FALSE,
+                      apply_rf1_on_bycatch = TRUE,
                       species_fate_codes_rf1 = species_fate_codes_rf1,
                       global_output_path = final_output_path)
 # level 1.2: logbook weight categories conversion ----
