@@ -4331,7 +4331,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param referential_template Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:
+                            #'  process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -4342,6 +4342,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
                             #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+                            #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{weighted_weight_minus10: } weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
                             #'  \item{weighted_weight_plus10: } weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
                             #'  \item{weighted_weight: } weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type \code{\link[base]{numeric}}.
@@ -4439,9 +4441,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               capture.output(current_well_plans$add(new_item = current_well$.__enclos_env__$private$wellplan),
                                                              file = "NUL")
                                               activities_id <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "activity_id")))
+                                              school_type_code <- unique(x = unlist(x = current_well_plans$extract_l1_element_value(element = "school_type_code")))
+                                              if(length(school_type_code) > 1){
+                                                school_type_code <- "MIX"
+                                              }
                                               wells_activities_samples_id[[well_id]][[1]] <- activities_id
+                                              wells_activities_samples_id[[well_id]][[2]] <- school_type_code
+
                                             } else {
-                                              wells_activities_samples_id[[well_id]][[1]] <- "no_well_plan_available"
+                                              wells_activities_samples_id[[well_id]][[1:2]] <- "no_well_plan_available"
                                             }
                                             if (length(x = current_well$.__enclos_env__$private$elementarysampleraw) != 0) {
                                               capture.output(current_elementarysamplesraw <- object_r6(class_name = "elementarysamplesraw"),
@@ -4449,9 +4457,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               capture.output(current_elementarysamplesraw$add(new_item = unlist(x = current_well$.__enclos_env__$private$elementarysampleraw)),
                                                              file = "NUL")
                                               samples_id <- unique(unlist(current_elementarysamplesraw$extract_l1_element_value(element = "sample_id")))
-                                              wells_activities_samples_id[[well_id]][[2]] <- samples_id
+                                              wells_activities_samples_id[[well_id]][[3]] <- samples_id
                                             } else {
-                                              wells_activities_samples_id[[well_id]][[2]] <- "well_not_sampled"
+                                              wells_activities_samples_id[[well_id]][[3]] <- "well_not_sampled"
                                             }
                                           }
                                           for (well_id in seq_len(length.out = current_wells$count())) {
@@ -4525,8 +4533,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                         }))
                                                   capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
                                                                                                               activity_id = activity_id,
+                                                                                                              school_type_code = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                               well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[3]]),
                                                                                                               weighted_weight = current_weighted_weight,
                                                                                                               weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
                                                                                                               weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weight)),
@@ -4562,7 +4571,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       for (well_associated_id in wells_associated) {
                                                         current_well_activities_samples_tmp <- wells_activities_samples_id[[well_associated_id]]
                                                         current_well_plan_tmp <- current_wells$extract(id = well_associated_id)[[1]]$.__enclos_env__$private$wellplan
-                                                        if (current_well_activities_samples_tmp[[2]][1] == "well_not_sampled") {
+                                                        if (current_well_activities_samples_tmp[[3]][1] == "well_not_sampled") {
                                                           for (elementarywellplan_id in seq_len(length.out = length(x = current_well_plan_tmp))) {
                                                             if (current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$activity_id == current_well_activitie_id) {
                                                               wt <- wt + current_well_plan_tmp[[elementarywellplan_id]]$.__enclos_env__$private$wellplan_weight
@@ -4596,8 +4605,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   }
                                                   capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
                                                                                                               activity_id = current_well_activitie_id,
+                                                                                                              school_type_code = unlist(wells_activities_samples_id[[well_id]][[2]]),
                                                                                                               well_id = current_well$.__enclos_env__$private$well_id,
-                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[2]]),
+                                                                                                              sample_id = unlist(wells_activities_samples_id[[well_id]][[3]]),
                                                                                                               weighted_weight = current_weighted_weight,
                                                                                                               weighted_weight_minus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_minus10_weight,
                                                                                                               weighted_weight_plus10 =  current_weighted_weight * current_well$.__enclos_env__$private$well_prop_plus10_weight)),
@@ -4643,6 +4653,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 for (sample_set_well_id in seq_len(length.out = nrow(sample_set_well))) {
                                                   capture.output(current_well_sets$add(new_item = wellset$new(trip_id = current_trip$.__enclos_env__$private$trip_id,
                                                                                                               activity_id = sample_set_well$activity_id[[sample_set_well_id]],
+                                                                                                              school_type_code = sample_set_well$school_type_code[[sample_set_well_id]],
                                                                                                               well_id = sample_set_well$well_id[[sample_set_well_id]],
                                                                                                               sample_id = sample_set_well$sample_id[[sample_set_well_id]],
                                                                                                               weighted_weight = sample_set_well$well_set_weighted_weight[[sample_set_well_id]],
@@ -4736,6 +4747,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_process_2_4_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
                                                                              "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "school_type_code" = unlist(x = wellsets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "weighted_weight_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_minus10")),
                                                                              "weighted_weight_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight_plus10")),
                                                                              "weighted_weight" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_weight")))
@@ -5063,7 +5075,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_6: a table (.csv) with as many rows as , and 15 columns:
+                            #'  process_2_6: a table (.csv) with as many rows as , and 17 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -5073,6 +5085,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
                             #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+                            #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
@@ -5229,6 +5244,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
                                                 current_standardised_samples_sets <- standardisedsampleset$new(trip_id = current_well_set$.__enclos_env__$private$trip_id,
                                                                                                                activity_id = current_well_set$.__enclos_env__$private$activity_id,
+                                                                                                               school_type_code = current_well_set$.__enclos_env__$private$school_type_code,
                                                                                                                well_id = current_well_set$.__enclos_env__$private$well_id,
                                                                                                                sample_id = current_standardised_sample$.__enclos_env__$private$sample_id,
                                                                                                                sample_quality_code = current_standardised_sample$.__enclos_env__$private$sample_quality_code,
@@ -5322,6 +5338,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_process_2_6_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                           "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
+                                                                                           "sample_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")),
                                                                                            "species_fao_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "species_fao_code")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted")),
@@ -5399,7 +5417,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_7: a table (.csv) with as many rows as , and 13 columns:
+                            #'  process_2_7: a table (.csv) with as many rows as , and 14 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -5410,6 +5428,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
                             #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+                            #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
                             #'  \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
                             #'  \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
@@ -5712,6 +5732,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_process_2_7_wellsets <- data.frame("trip_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "trip_id")),
                                                                              "well_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "well_id")),
                                                                              "activity_id" = unlist(x = wellsets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                             "school_type_code" = unlist(x = wellsets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                              "weighted_samples_minus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_minus10")),
                                                                              "weighted_samples_plus10" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_plus10")),
                                                                              "weighted_samples_total" = unlist(x = wellsets_selected$extract_l1_element_value(element = "weighted_samples_total")),
@@ -5754,7 +5775,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #'  If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_8: a table (.csv) with as many rows as , and 14 columns:
+                            #'  process_2_8: a table (.csv) with as many rows as , and 15 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -5765,6 +5786,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
                             #'  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
                             #'  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+                            #'  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+                            #'   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
                             #'  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
                             #'  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
                             #'  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.
@@ -5999,6 +6022,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   outputs_process_2_8_standardisedsamplesets <- data.frame("trip_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "trip_id")),
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
+                                                                                           "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                            "sample_id" = dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
                                                                                              dplyr::rowwise() %>%
                                                                                              dplyr::mutate(sample_id_final = paste0(sample_id_ori,

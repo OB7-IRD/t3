@@ -9,6 +9,7 @@ wellset <- R6::R6Class(classname = "wellset",
                          #' @description Initialize function for R6 wellset class.
                          #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
                          #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                         #' @param school_type_code Object of class {\link[base]{character}} expected. School type identification.
                          #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                          #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                          #' @param weighted_weight Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s) (tonnes).
@@ -16,6 +17,7 @@ wellset <- R6::R6Class(classname = "wellset",
                          #' @param weighted_weight_plus10 Object of class {\link[base]{numeric}} expected. Set weight of individuals in the over 10 kg category, in tonnes, (weighted by all set in the well(s)).
                          initialize = function(trip_id,
                                                activity_id,
+                                               school_type_code,
                                                well_id,
                                                sample_id,
                                                weighted_weight,
@@ -26,6 +28,9 @@ wellset <- R6::R6Class(classname = "wellset",
                                                    type = "character",
                                                    length = 1L)
                            codama::r_type_checking(r_object = activity_id,
+                                                   type = "character",
+                                                   length = 1L)
+                           codama::r_type_checking(r_object = school_type_code,
                                                    type = "character",
                                                    length = 1L)
                            codama::r_type_checking(r_object = well_id,
@@ -46,6 +51,7 @@ wellset <- R6::R6Class(classname = "wellset",
                            # 2 - Attributions ----
                            private$trip_id <- trip_id
                            private$activity_id <- activity_id
+                           private$school_type_code <- school_type_code
                            private$well_id <- well_id
                            private$sample_id <- sample_id
                            private$weighted_weight <- weighted_weight
@@ -55,6 +61,7 @@ wellset <- R6::R6Class(classname = "wellset",
                        private = list(
                          trip_id = NULL,
                          activity_id = NULL,
+                         school_type_code = NULL,
                          well_id = NULL,
                          sample_id = NULL,
                          weighted_weight = NULL,

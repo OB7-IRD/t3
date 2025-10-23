@@ -22,6 +22,7 @@ SELECT
 		& format(DAY(cc.D_DBQ), '00')
 		& format(cc.D_ACT, 'yyyymmdd')
 		& format(cc.N_ACT, '00') AS activity_id
+		,a.C_TBANC AS school_type_code
 	,'fr.ird.avdth.entities.data.Sample#'
 		& format(cc.C_BAT, '0000')
 		& '#'
