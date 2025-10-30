@@ -1697,7 +1697,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                          school_type_code == 1 ~  as.character(1),
                                                          school_type_code == 2 ~  as.character(2),
                                                          # Unknown code=0 in observe database
-                                                         school_type_code == 3 ~  s.character(0),
+                                                         school_type_code == 3 ~  as.character(0),
                                                          TRUE ~ NA_character_
                                                        ),
                                                        sample_id = as.character(sample_id),
