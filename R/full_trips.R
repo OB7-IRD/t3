@@ -4579,7 +4579,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                   capture.output(current_well_plan$add(new_item = current_well_plans$filter_l1(filter=paste0("$path$activity_id == \"",
                                                                                                                                              activity_id, "\""))),
                                                                  file = "NUL")
-                                                  current_school_type_code <- unlist(current_well_plan$extract_l1_element_value(element="school_type_code"))
+                                                  current_school_type_code <- unique(unlist(current_well_plan$extract_l1_element_value(element="school_type_code")))
 
                                                   current_weighted_weight <- sum(sapply(X = seq_len(length.out = current_well_plans$count()),
                                                                                         FUN = function(s) {
@@ -4610,7 +4610,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                              current_well_activitie_id, "\""))),
                                                                                        file = "NUL")
 
-                                                  current_school_type_code <- unlist(current_well_plan$extract_l1_element_value(element="school_type_code"))
+                                                  current_school_type_code <- unique(unlist(current_well_plan$extract_l1_element_value(element="school_type_code")))
                                                   for (other_well_id in seq_len(length.out = length(x = wells_activities_samples_id))[seq_len(length.out = length(x = wells_activities_samples_id)) != well_id]) {
                                                     if (current_well_activitie_id %in% wells_activities_samples_id[[other_well_id]][[1]]) {
                                                       wells_associated <- append(wells_associated,
@@ -4731,7 +4731,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                               sample_set_well$activity_id[[sample_set_well_id]], "\""))),
                                                                    file = "NUL")
 
-                                                    current_school_type_code <- as.character(unlist(current_activity$extract_l1_element_value(element="school_type_code")))
+                                                    current_school_type_code <- unique(as.character(unlist(current_activity$extract_l1_element_value(element="school_type_code"))))
                                                   } else {
                                                     current_school_type_code <- NA_character_
                                                   }

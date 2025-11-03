@@ -1689,8 +1689,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            wellplan_sql_final,
                                            "]\n")
                                        wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
-                                                                                      statement = wellplan_sql_final)) %>%
-                                         dplyr::mutate(wellplan_id = as.character(wellplan_id),
+                                                                                      statement = wellplan_sql_final))
+                                       wellplan_data <- wellplan_data %>%
+                                         dplyr::mutate(school_type_code = as.integer(x = school_type_code),
+                                                       wellplan_id = as.character(wellplan_id),
                                                        well_id = as.character(well_id),
                                                        activity_id = as.character(activity_id),
                                                        school_type_code = dplyr::case_when(
