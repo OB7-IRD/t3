@@ -538,7 +538,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:
+ process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -548,6 +548,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
@@ -586,7 +588,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -596,6 +598,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{sub_sample_total_count_id: } sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type \code{\link[base]{character}}.
@@ -650,6 +654,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sample_type_code: } sample type type code, type \code{\link[base]{integer}}.
  \item{sample_quality_code: } sample quality code, type \code{\link[base]{integer}}.
@@ -707,7 +713,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -718,6 +724,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{weighted_weight_minus10: } weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
  \item{weighted_weight_plus10: } weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
  \item{weighted_weight: } weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type \code{\link[base]{numeric}}.
@@ -807,7 +815,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_6: a table (.csv) with as many rows as , and 15 columns:
+ process_2_6: a table (.csv) with as many rows as , and 17 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -817,6 +825,9 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
@@ -897,7 +908,7 @@ Path of the global outputs directory. The function will create subsection if nec
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_7: a table (.csv) with as many rows as , and 13 columns:
+ process_2_7: a table (.csv) with as many rows as , and 14 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -908,6 +919,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
  \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
  \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
@@ -937,7 +950,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_8: a table (.csv) with as many rows as , and 14 columns:
+ process_2_8: a table (.csv) with as many rows as , and 15 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -948,6 +961,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.

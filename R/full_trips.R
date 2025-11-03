@@ -3984,7 +3984,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
                             #' @details
                             #' If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
-                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, and 18 columns:
+                            #'  process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
