@@ -1,3 +1,14 @@
+# t3 3.0.6 - 2025-11-04
+
+## Added
+
+* Add school_type_code in outputs of level 2 for samples standardization, "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
+
+## Changed 
+
+* Correct avdth samples query concerning sub sample numbering, by replacing `e.F_S_ECH AS sub_sample_id` and `ECHANTILLON as e` by 
+`ee.N_S_ECH AS sub_sample_id` and `ECH_ESP as ee`. 
+
 # t3 3.0.5 - 2025-09-23
 
 ## Changed
