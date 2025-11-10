@@ -986,7 +986,10 @@ If a global_output_path is specified, the following output is extracted and save
 \subsection{Method \code{path_to_level3()}}{
 Temporary link to the R object model with modelling level 3 process.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(global_output_path = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(
+  global_output_path = NULL,
+  target_year = as.integer(lubridate::year(Sys.time() - 1))
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -995,6 +998,10 @@ Temporary link to the R object model with modelling level 3 process.
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
+Year of interest for the model estimation and prediction.
+Default value is current year - 1. Used only if a \code{global_output_path} is specified.}
 }
 \if{html}{\out{</div>}}
 }

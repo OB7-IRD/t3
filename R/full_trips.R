@@ -6152,6 +6152,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @param global_output_path By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
                             #' Path of the global outputs directory. The function will create subsection if necessary.
                             #' By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.
+                            #' @param target_year Object of type \code{\link[base]{integer}} expected.
+                            #' Year of interest for the model estimation and prediction.
+                            #' Default value is current year - 1. Used only if a \code{global_output_path} is specified.
                             #' @examples \dontrun{
                             #' process_level3 <- object_full_trips$path_to_level3(global_output_path = final_output_path)
                             #' }
@@ -6230,7 +6233,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  }
                             #'  }
                             #'  @aliases path_to_level3
-                            path_to_level3 = function(global_output_path=NULL) {
+                            path_to_level3 = function(global_output_path=NULL,
+                                                      target_year = as.integer(lubridate::year(Sys.time() - 1))) {
+                              if (! inherits(x = target_year,
+                                             what = "integer")
+                                  || length(target_year) != 1
+                                  || nchar(target_year) != 4) {
+                                cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+                                    " - Error: invalid \"target_year\" argument, one value of class integer expected with a format on 4 digits.\n",
+                                    sep = "")
+                                stop()
+                              }
                               cat(format(Sys.time(),
                                          "%Y-%m-%d %H:%M:%S"),
                                   " - Start path creation for level 3.\n")
@@ -6423,11 +6436,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               names(data_level3)[length(data_level3)] <- "raw_inputs_level3"
                               # - Outputs extraction ----
                               if(!is.null(global_output_path)){
-                                target_year <- data.frame(year=lubridate::year(act$date_act)) %>%
-                                  dplyr::group_by(year) %>%
-                                  dplyr::summarize(n=dplyr::n()) %>%
-                                  dplyr::filter(n==max(n)) %>%
-                                  dplyr::pull(year)
+                                if(is.null(target_year) | ! target_year %in% unique(lubridate::year(act$date_act))){
+                                 target_year <- data.frame(year=lubridate::year(act$date_act)) %>%
+                                    dplyr::group_by(year) %>%
+                                    dplyr::summarize(n=dplyr::n()) %>%
+                                    dplyr::filter(n==max(n)) %>%
+                                    dplyr::pull(year)
+                                  }
                                 target_ocean <- data.frame(ocean=act$ocean) %>%
                                   dplyr::group_by(ocean) %>%
                                   dplyr::summarize(n=dplyr::n()) %>%
