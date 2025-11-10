@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.6</span>
       </span>
     </div>
 
@@ -591,7 +591,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="details-4">Details<a class="anchor" aria-label="anchor" href="#details-4"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -599,6 +599,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>sub_sample_id:  sub-sample identification number, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>elementarysampleraw_id:  elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -636,7 +638,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="details-5">Details<a class="anchor" aria-label="anchor" href="#details-5"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -644,6 +646,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>sub_sample_id:  sub-sample identification number, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>sub_sample_total_count_id:  sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -693,6 +697,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>sample_type_code:  sample type type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>sample_quality_code:  sample quality code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
@@ -748,7 +754,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="details-7">Details<a class="anchor" aria-label="anchor" href="#details-7"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -757,6 +763,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>weighted_weight_minus10:  weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>weighted_weight_plus10:  weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>weighted_weight:  weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
@@ -841,7 +849,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="details-9">Details<a class="anchor" aria-label="anchor" href="#details-9"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_6: a table (.csv) with as many rows as , and 15 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_6: a table (.csv) with as many rows as , and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -849,6 +857,9 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>sample_standardised_length_class_lf:  standardized sample length class in curved fork length (LF) (cm), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
@@ -927,7 +938,7 @@ Path of the global outputs directory. The function will create subsection if nec
 <div class="section">
 <h4 id="details-10">Details<a class="anchor" aria-label="anchor" href="#details-10"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_7: a table (.csv) with as many rows as , and 13 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_7: a table (.csv) with as many rows as , and 14 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -936,6 +947,8 @@ Path of the global outputs directory. The function will create subsection if nec
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>weighted_samples_minus10:  weight of sampled individuals  (tonnes), for weight category (\(\leq\) 10kg, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>weighted_samples_plus10:  weight of sampled individuals (tonnes), for weight category &gt; 10kg, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>weighted_samples_total:  weight of sampled individuals  (tonnes), for all weight categories (\(\leq\) 10kg and &gt; 10kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
@@ -964,7 +977,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <div class="section">
 <h4 id="details-11">Details<a class="anchor" aria-label="anchor" href="#details-11"></a></h4>
 <p>If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". <br>
- process_2_8: a table (.csv) with as many rows as , and 14 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+ process_2_8: a table (.csv) with as many rows as , and 15 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>trip_end_date:  trip end date, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -973,6 +986,8 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>well_id:  well identification (unique topiaid from database (ps_logbook.well in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>activity_id:  activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.</p></li>
 <li><p>sample_id:  sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>species_fao_code:  species FAO code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>sample_standardised_length_class_lf:  standardized sample length class in curved fork length (LF), (cm), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
@@ -1394,7 +1409,7 @@ By default NULL.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
