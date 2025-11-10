@@ -17,10 +17,12 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 # t3 package <a href='https://ob7-ird.github.io/t3'><img src='man/figures/logo.png' align="right" /></a>
 
 <!-- badges: start -->
+
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/package=t3)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
 [![R-CMD-check](https://github.com/OB7-IRD/t3/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/t3/actions)
+
 <!-- badges: end -->
 
 ***Tropical Tuna Treatment***

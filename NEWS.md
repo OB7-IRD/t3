@@ -1,10 +1,34 @@
+# t3 3.0.6 - 2025-11-04
+
+## Added
+
+* Add school_type_code in outputs of level 2 for samples standardization, "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
+
+## Changed 
+
+* Correct avdth samples query concerning sub sample numbering, by replacing `e.F_S_ECH AS sub_sample_id` and `ECHANTILLON as e` by 
+`ee.N_S_ECH AS sub_sample_id` and `ECH_ESP as ee`. 
+
+# t3 3.0.5 - 2025-09-23
+
+## Changed
+
+* Change the display of the running process progress in the console from list of trip's topiaid to a [progress bar](https://cli.r-lib.org/reference/cli_progress_bar.html).
+
+* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
+  - For Observe database by importing maximum and minimum of weight categories from the database.
+  - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to get upper and lower limit of AVDTH weight categories. By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html)).
+  
+* Remove samples from the process whose size measurement type differs from fork length ("FL") or first dorsal length ("PD1"), their values are set to `NA`.
+
+
 # t3 3.0.4 - 2025-07-04
 
 ## Added
 * Improve documentation :
   - Add float toc and figures in vignettes. 
   - Add reference table's documentation and easy access :`data(package="t3")`.
-  - Add details aboutlevel 1 and level 2  outputs in ".csv"". 
+  - Add details about level 1 and level 2  outputs in ".csv"". 
   - Add documentation about outputs in ".csv" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
   - Add "elementarycatch_id", "statut_rf1_label", "statut_rf2_label" columns, in ".csv" output named "process_1_1_detail", of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1). 
 
@@ -13,10 +37,6 @@
 ## Added
 * Add the argument apply_rf1_on_bycatch=TRUE/FALSE, in the method [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1) By default TRUE, the raising factor value, calculated for each trip, is applied to all the logbook catches associated to the trip, including by-catch species. If FALSE, only the catch weights of species belonging to the species list defined by the `species_fao_codes_rf1` argument are corrected, rf1 is not applied to by-catch species.
 
-## Changed
-* Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
-[full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
-
 ## Removed
 
 * Remove argument `output_format="eu"/"us"` to uniformize output format with `sep=","` and `dec="."`.
@@ -24,7 +44,10 @@
 # t3 3.0.2 - 2025-05-21
 
 ## Changed
-* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)) for Observe database by importing maximum and minimum of weight categories from the database. 
+* Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
+[full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
+
+* Import maximum and minimum of logbook's weight categories from Observe database. 
 
 # t3 3.0.1 - 2025-05-13
 
@@ -46,16 +69,17 @@
   - R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
   - R6 reference object class [standardisedsampleset](https://ob7-ird.github.io/t3/reference/standardisedsampleset.html), 
   - process 1.3 [conversion_weight_categories](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion),
-  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).
+  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).  
+  
 **Warning: you will need to correct this typo in your scripts**
 
 ## Added
 * Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
 * Add method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation) gathering methods 1.5 to 1.8:
-- set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
-- time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
-- fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
- - searching_time = fishing_time - set_duration.
+  - set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
+  - time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
+  - fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
+  - searching_time = fishing_time - set_duration.
  
 ## Removed 
 * Methods 1.5 to 1.8 and 1.2 (rf2). 

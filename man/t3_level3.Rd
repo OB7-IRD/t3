@@ -101,3 +101,6 @@ t3_level3(
 \description{
 Level 3 of t3 process (modelislation).
 }
+\seealso{
+\code{\link[t3]{full_trips}},  \code{\link[t3]{t3_level1}}, \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_process}}
+}

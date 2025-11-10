@@ -277,7 +277,7 @@ This process aims to homogenize these weight categories and create simplify cate
 \item{< 10kg and > 10kg} for undetermined and free school in the Indian Ocean.
 }
 For each layer ocean/fishing school/specie/logbook weight category, a distribution key is applied for conversion to standardized weight categories.
- Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
+Details of the distribution key is available in the vignette \href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-2-logbook-weight-categories-conversion}{Process 1.2: logbook weight categories conversion}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$conversion_weight_category(
   global_output_path = NULL,
@@ -291,7 +291,8 @@ For each layer ocean/fishing school/specie/logbook weight category, a distributi
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
-\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
+\item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected.
+By default "observe". Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
 }
 \if{html}{\out{</div>}}
 }
@@ -327,6 +328,41 @@ If a global_output_path is specified, the following output is extracted and save
   In fact, the catch weight corresponding to the logbook weight category can be divided between several corrected weight categories according to the distribution key applied for conversion to standardized weight categories.
  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
  }
+ \cr
+ If \code{referential_template="observe"}, values of \code{weight_category_min} and \code{weight_category_max} are used to convert logbook's weight categories to standard weight categories:
+ We define the value : \code{delta_weight_category=weight_category_max - weight_category_min}, corresponding to the amplitude of the weight interval defined by a logbook weight category.
+ Standard weight categories for species "YFT", "BET" and "ALB" are : + ("LOT")?? + arg species ?
+ \itemize{
+ \item{< 10kg and > 10kg} for floating object school, undetermined and free school in the Indian Ocean and for the floating object school in the Atlantic Ocean:
+ We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+ and the proportion to be assigned to the ">10kg" standard weight category: \code{prop_plus10}.
+ \itemize{
+ \item{if \code{weight_category_min >= 10 }: } \code{prop_plus10=1},
+ \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+ \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 10 }: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category} and \code{prop_plus10=1-prop_minus10}.
+ }
+ \item{ < 10kg, 10-30kg and > 30kg} for undetermined and free school in the Atlantic Ocean:
+ We calculate the proportion of the elementary catch to be allocated to the "<10kg" standard weight category: \code{prop_minus10},
+ the proportion to be assigned to the "10-30kg" weight category: \code{prop_10_30}, and the proportion to be attributed to the ">30kg" category: \code{prop_plus30}.
+ \itemize{
+ \item{if \code{weight_category_max <= 10 }: } \code{prop_minus10=1},
+ \item{if \code{weight_category_min >= 30 }: } \code{prop_plus30=1},
+ \item{if \code{weight_category_min >= 10} and \code{weight_category_max <= 30}: }  \code{prop_10_30=1},
+ \item{if \code{weight_category_min < 10} and \code{10 < weight_category_max < 30}: } \code{prop_minus10=(10 - weight_category_min) / delta_weight_category} and \code{prop_10_30=1-prop_minus10},
+ \item{if \code{weight_category_min < 10 } and \code{weight_category_max > 30}: }
+ \itemize{
+ \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_minus10 = (10 - weight_category_min) / delta_weight_category}, \code{prop_plus30= (weight_category_max - 30) /  delta_weight_category} and \code{prop_10_30= 1 - prop_minus10 - prop_plus30},
+ \item{if \code{is.infinite(weight_category_max)}: }  \code{prop_minus10=(10 - weight_category_min) / (200-weight_category_min)}, \code{prop_10_30= (30 - weight_category_min) / (200-weight_category_min)}, \code{prop_plus30 = 1 - prop_minus10 - propr_10_30}.
+ }
+ \item{if \code{10 <= weight_category_min < 30 } and \code{weight_category_max > 30 }: }
+ \itemize{
+ \item{if \code{!is.infinite(weight_category_max)}: } \code{prop_10_30= (30 - weight_category_min) /  delta_weight_category} and \code{prop_plus30=1-prop_10_30},
+ \item{if \code{is.infinite(weight_category_max)}: } \code{prop_10_30=(30 - weight_category_min) / (200-weight_category_min)} and \code{prop_plus30=1-prop_10_30}.
+ }
+ }
+ }
+For species "SKJ" the standard weight category is "<10kg" in all cases.
+An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
 }
 
 }
@@ -398,7 +434,8 @@ Details about the methods are available in the vignette : \href{https://ob7-ird.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{set_duration_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
-Data and parameters for set duration calculation (by year, country, ocean and school type), in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
+Data and parameters for set duration calculation (by year, country, ocean and school type),
+in the same format as the \href{https://ob7-ird.github.io/t3/reference/set_duration_ref.html}{referential set duration table}.
 Duration in minutes in the reference table, converted into hours in output for subsequent processing).}
 
 \item{\code{activity_code_ref}}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
@@ -410,9 +447,9 @@ Reference table with the activity codes to be taken into account for the allocat
 \item{\code{sunset_schema}}{Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts).
 See below for more details.}
 
-\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}} expected if parameter outputs_extraction equal TRUE.
+\item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
- By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
 
 \item{\code{referential_template}}{Object of class \code{\link[base]{character}} expected. By default "observe".
 Referential template selected (for example regarding the activity_code). You can switch to "avdth".}
@@ -501,7 +538,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 16 columns:
+ process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -511,6 +548,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{elementarysampleraw_id: } elementarysampleraw identification (unique topiaid from database (ps_logbook.samplespeciesmeasure in Observe)), type \code{\link[base]{character}}.
@@ -549,7 +588,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -559,6 +598,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{sub_sample_total_count_id: } sub sample identification bis in relation with the fish total count (unique topiaid from database (ps_logbook.samplespecies in Observe)), type \code{\link[base]{character}}.
@@ -613,14 +654,17 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{sample_type_code: } sample type type code, type \code{\link[base]{integer}}.
  \item{sample_quality_code: } sample quality code, type \code{\link[base]{integer}}.
  \item{sub_sample_id: } sub-sample identification number, type \code{\link[base]{integer}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_total_count: } total number of individuals counted for this sample, type \code{\link[base]{integer}}.
- \item{sample_standardised_length_class_lf: } standardised sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
- \item{sample_number_measured_extrapolated_lf: } standardised sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}, type \code{\link[base]{numeric}}) .\cr
+ \item{sample_standardised_length_class_lf: } standardized sample length class (cm) in curved fork length (LF), according to the species and step associated, type \code{\link[base]{numeric}}.
+ \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and extrapolated in step \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-2-sample-number-measured-extrapolation}{2.2}),
+  type \code{\link[base]{numeric}}.
  }
 }
 
@@ -669,7 +713,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_4: a table (.csv) with as many rows as elementary samples, and 12 columns:
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -680,6 +724,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{weighted_weight_minus10: } weighted catch weight of individuals in the less than 10 tonnes category (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
  \item{weighted_weight_plus10: } weighted catch weight of individuals in the over 10 kg category  (by well, in tonnes, considering all species), type \code{\link[base]{numeric}}.
  \item{weighted_weight: } weighted catch weight (WW) of individuals (less and more 10kg categories, by well, in tonnes, considering all species), which represents the weight of a set in a well, type \code{\link[base]{numeric}}.
@@ -769,7 +815,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_6: a table (.csv) with as many rows as , and 15 columns:
+ process_2_6: a table (.csv) with as many rows as , and 17 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -779,6 +825,9 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
@@ -804,14 +853,14 @@ This step aims to check relevance of the object standardized sample set by calcu
  \item{number and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg or > 10kg):
  \itemize{
   \item{\code{weighted_samples_minus10}: } sum of \code{sample_weight} for sample weight category \eqn{\leq}{<=} 10 kg, from \code{standardised_sample_set} object,
-   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
    \item{\code{weighted_samples_plus10}: } sum of \code{sample_weight} for sample weight category > 10 kg, from \code{standardised_sample_set} object,
-   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
     \item{\code{weighted_samples_total}: } sum of \code{sample_weight} for all sample weight categories (\eqn{\leq}{<=} 10 kg) and > 10kg, from \code{standardised_sample_set} object,
-   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-standardised-sample-set-creation-}{2.6}.
+   created at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-standardised_sample_set_creation}{2.6}.
  }
  }
- \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-well-set-weight-categories-}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
+ \item{three raising factors are calculated related to the weighted weight of the set (calculated at step \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-well_set_weight_categories}{2.4} and weight of sampled individuals, total and by weight categories (\eqn{\leq}{<=} 10kg and > 10kg):
  \itemize{
   \item{\code{rf_minus10= weighted_weight_minus10 / weighted_samples_minus10}}
    \item{\code{rf_plus10= weighted_weight_plus10 / weighted_samples_plus10}}
@@ -859,7 +908,7 @@ Path of the global outputs directory. The function will create subsection if nec
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_7: a table (.csv) with as many rows as , and 13 columns:
+ process_2_7: a table (.csv) with as many rows as , and 14 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -870,6 +919,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{weighted_samples_minus10: } weight of sampled individuals  (tonnes), for weight category (\eqn{\leq}{<=} 10kg, type \code{\link[base]{numeric}}.
  \item{weighted_samples_plus10: } weight of sampled individuals (tonnes), for weight category > 10kg, type \code{\link[base]{numeric}}.
  \item{weighted_samples_total: } weight of sampled individuals  (tonnes), for all weight categories (\eqn{\leq}{<=} 10kg and > 10kg), type \code{\link[base]{numeric}}.
@@ -883,7 +934,7 @@ If a global_output_path is specified, the following output is extracted and save
 \if{html}{\out{<a id="method-full_trips-raised_standardised_sample_set"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-raised_standardised_sample_set}{}}}
 \subsection{Method \code{raised_standardised_sample_set()}}{
-Application of process 2.8 raised factors on standardised sample set.
+Application of raised factors calculated in process \href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-raised_factors_determination}{2.7} on standardised sample set.
 This last step aim to express number and weight of sampled individuals at the scale of the set. The process use the factors calculated in the process \href{https://ob7-ird.github.io/t3/articles/level_2.html#process-2-7-raised-factors-determination}{2.7}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$raised_standardised_sample_set(global_output_path = NULL)}\if{html}{\out{</div>}}
@@ -899,7 +950,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_8: a table (.csv) with as many rows as , and 14 columns:
+ process_2_8: a table (.csv) with as many rows as , and 15 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -910,6 +961,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
+ \item{school_type_code:} school type code, type \code{\link[base]{character}}.
+  In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF), (cm), type \code{\link[base]{numeric}}.
@@ -933,7 +986,10 @@ If a global_output_path is specified, the following output is extracted and save
 \subsection{Method \code{path_to_level3()}}{
 Temporary link to the R object model with modelling level 3 process.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(global_output_path = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{full_trips$path_to_level3(
+  global_output_path = NULL,
+  target_year = as.integer(lubridate::year(Sys.time() - 1))
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -942,6 +998,10 @@ Temporary link to the R object model with modelling level 3 process.
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}.
 Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
+
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
+Year of interest for the model estimation and prediction.
+Default value is current year - 1. Used only if a \code{global_output_path} is specified.}
 }
 \if{html}{\out{</div>}}
 }
@@ -1060,29 +1120,46 @@ Data preparatory for the t3 modelling process (level 3).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
+\item{\code{inputs_level3}}{Object of type \code{\link[base]{data.frame}} expected.
+Inputs of levels 3 (see function path to level 3).}
 
-\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
+\item{\code{inputs_level3_path}}{Object of type \code{\link[base]{character}} expected.
+Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3).
+If provide, replace the inputs_level3 object.}
 
-\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected. Path of the outputs directory.}
+\item{\code{output_directory}}{Object of type \code{\link[base]{character}} expected.
+Path of the outputs directory.}
 
-\item{\code{periode_reference_level3}}{Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.}
+\item{\code{periode_reference_level3}}{Object of type \code{\link[base]{integer}} expected.
+Year(s) period of reference for modelling estimation.}
 
-\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
+\item{\code{target_year}}{Object of type \code{\link[base]{integer}} expected.
+Year of interest for the model estimation and prediction.
+Default value is current year - 1.}
 
-\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
+\item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected.
+Number of years use for the modelling. The default value is 5}
 
-\item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.}
+\item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected.
+The code of ocean of interest.}
 
-\item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.}
+\item{\code{distance_maximum}}{Object of type \code{\link[base]{integer}} expected.
+Maximum distance between all sets of a sampled well. By default 5.}
 
-\item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.}
+\item{\code{number_sets_maximum}}{Object of type \code{\link[base]{integer}} expected.
+Maximum number of sets allowed in mixture. By default 5.}
 
-\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected. Minimum set size considered. Remove smallest set for which sample could not be representative. By default 6 t.}
+\item{\code{set_weight_minimum}}{Object of type \code{\link[base]{integer}} expected.
+Minimum set size considered. Remove smallest set for which sample could not be representative.
+By default 6 t.}
 
-\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected. Minimum threshold proportion of set in a well to be used for model training in the process. By default 0.1.}
+\item{\code{minimum_set_frequency}}{Object of type \code{\link[base]{numeric}} expected.
+Minimum threshold proportion of set in a well to be used for model training in the process.
+By default 0.1.}
 
-\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected. Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction .By default NULL.}
+\item{\code{vessel_id_ignored}}{Object of type \code{\link[base]{integer}} expected.
+Specify list of vessel(s) id(s) to be ignored in the model estimation and prediction.
+By default NULL.}
 }
 \if{html}{\out{</div>}}
 }

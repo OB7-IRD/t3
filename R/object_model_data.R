@@ -21,6 +21,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
+                                   #' @import cli
                                    trips_object_creation = function(data_source = "observe_database",
                                                                     database_connection = NULL,
                                                                     years_period = NULL,
@@ -316,16 +317,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # 7 - Common data design ----
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
-                                     object_trips$add(lapply(X = seq_len(length.out = length(x = trip_data[[1]])),
+                                     T1 <- Sys.time()
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                " - Importation of trip element:"))
+                                     options(cli.progress_show_after = 0)
+                                     object_trips$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = trip_data[[1]])),
+                                                                                     clear = getOption("cli.progress_clear", FALSE),
+                                                                                     format = paste0("                        ",
+                                                                                       "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                       "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                       "], Time remaining:{cli::pb_eta}"),,
+                                                                                     total = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
-                                                               cat(format(x = Sys.time(),
-                                                                          "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Start importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n",
-                                                                   "[trip: ",
-                                                                   trip_data$trip_id[trip_id],
-                                                                   "]\n", sep="")
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
                                                                                 flag_code = trip_data$flag_code[trip_id],
                                                                                 departure_date = trip_data$departure_date[trip_id],
@@ -334,14 +338,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 landing_well_content_code = trip_data$landing_well_content_code[trip_id],
                                                                                 vessel_code = trip_data$vessel_code[trip_id],
                                                                                 vessel_type_code = trip_data$vessel_type_code[trip_id])
-                                                               cat(format(x = Sys.time(),
-                                                                          format = "%Y-%m-%d %H:%M:%S"),
-                                                                   " - Successful importation of trip element ",
-                                                                   trip_id,
-                                                                   ".\n", sep="")
                                                                return(trip)
                                                              }))
                                      private$trips <- object_trips
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                  format = "%Y-%m-%d %H:%M:%S "),
+                                                            cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                            length(x = trip_data[[1]]),
+                                                           " trips, in ", elapsed_time, "."))
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
@@ -351,6 +357,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
                                    #' For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
+                                   #' @param weight_categories_avdth_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook weight categories with the following columns:
+                                   #' \itemize{
+                                   #' \item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
+                                   #' \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+                                   #' \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+                                   #' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "avdth_database"}.
+                                   #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
@@ -361,6 +377,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
                                    activities_object_creation = function(data_source = "observe_database",
                                                                          database_connection = NULL,
+                                                                         weight_categories_avdth_ref = NULL,
                                                                          years_period = NULL,
                                                                          flag_codes = NULL,
                                                                          ocean_codes = NULL,
@@ -412,6 +429,28 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                type = "integer")
                                        codama::r_type_checking(r_object = species_fate_codes,
                                                                type = "integer")
+
+                                       if (data_source == "avdth_database"){
+                                         if(is.null(weight_categories_avdth_ref)){
+                                           weight_categories_avdth_ref <- read.csv(file = system.file("weight_categories_avdth_ref.csv",
+                                                                                                      package = "t3"),
+                                                                                   stringsAsFactors = FALSE,
+                                                                                   colClasses = c("character",
+                                                                                                  "character",
+                                                                                                  "numeric",
+                                                                                                  "numeric"))
+                                         }
+                                         codama::r_table_checking(r_table=as.data.frame(weight_categories_avdth_ref),
+                                                                  type="data.frame",
+                                                                  column_name=c("avdth_weight_category_code",
+                                                                                "species_fao_code",
+                                                                                "weight_category_min",
+                                                                                "weight_category_max"),
+                                                                  column_type=c("character",
+                                                                                "character",
+                                                                                "numeric",
+                                                                                "numeric"))
+                                       }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
                                        codama::r_type_checking(r_object = data_path,
@@ -687,12 +726,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        school_type_code = as.integer(x = school_type_code),
                                                        weight_category_code = as.character(x = weight_category_code),
                                                        weight_category_label = as.character(x = weight_category_label),
-                                                       weight_category_min = NA_real_,
-                                                       weight_category_max = NA_real_,
                                                        species_fao_code = as.character(x = species_fao_code),
                                                        species_fate_code = as.integer(x = species_fate_code),
                                                        catch_weight = as.numeric(x = catch_weight),
-                                                       catch_count=NA_integer_)
+                                                       catch_count=NA_integer_) %>%
+                                         dplyr::left_join(weight_categories_avdth_ref,
+                                                          by = dplyr::join_by(species_fao_code,
+                                                                              weight_category_code == avdth_weight_category_code))
 
                                        activity_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
                                                                                       statement = activity_sql_final)) %>%
@@ -861,7 +901,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
                                          } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
-                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data$activity_id)])
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
@@ -907,16 +947,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      # Check elementarycatches data column names and types done in activity.R
                                      activity_data <- unclass(x = activity_data)
                                      object_activities <- object_r6(class_name = "activities")
-                                     object_activities$add(lapply(X = seq_len(length.out = length(activity_data[[1]])),
+                                     T1 <- Sys.time()
+                                     options(cli.progress_show_after = 0)
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                     " - Importation of activity and elementary catch(es) element:"))
+                                     object_activities$add(lapply(cli::cli_progress_along(seq_len(length.out = length(activity_data[[1]])),
+                                                                                          clear = getOption("cli.progress_clear", FALSE),
+                                                                                          format = paste0("                        ",
+                                                                                            "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                            "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                            "], Time remaining:{cli::pb_eta}"),,
+                                                                                          total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    cat(format(Sys.time(),
-                                                                               "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Start importation of activity and elementary catche(s) element ",
-                                                                        activity_id,
-                                                                        ".\n",
-                                                                        "[activity: ",
-                                                                        activity_data[[2]][activity_id],
-                                                                        "]\n", sep="")
                                                                     elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],]
                                                                     if(nrow(elementarycatches_data)==0){
                                                                       elementarycatches_data <- NULL
@@ -939,14 +982,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              objectoperation_id = activity_data$objectoperation_id[activity_id],
                                                                                              elementarycatches = elementarycatches_data,
                                                                                              time_at_sea = activity_data$time_at_sea[activity_id])
-                                                                    cat(format(x = Sys.time(),
-                                                                               format = "%Y-%m-%d %H:%M:%S"),
-                                                                        " - Successful importation of activity and elementary catche(s) element ",
-                                                                        activity_id,
-                                                                        ".\n", sep="")
                                                                     return(activity)
                                                                   }))
                                      private$activities <- object_activities
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                                length(x = activity_data[[1]]),
+                                                                " activities and elementary catche(s), in ", elapsed_time, "."))
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a R6 reference object class elementarylandings which contain one or more R6 reference object class elementarylanding
@@ -1243,34 +1288,40 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        cat(format(x = Sys.time(),
                                                   format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful elementary landing(s) data importation R environment.\n")
+                                           "- Successful elementary landing(s) data importation R environment.\n")
                                      }
                                      # 7 - Common data design ----
                                      elementarylanding_data <- unclass(x = elementarylanding_data)
                                      object_elementarylandings <- object_r6(class_name = "elementarylandings")
-                                     object_elementarylandings$add(lapply(X = seq_len(length.out = length(x = elementarylanding_data[[1]])),
+                                     T1 <- Sys.time()
+                                     options(cli.progress_show_after = 0)
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                "- Importation of elementary landing element:"))
+                                     object_elementarylandings$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = elementarylanding_data[[1]])),
+                                                                                                  clear = getOption("cli.progress_clear", FALSE),
+                                                                                                  format = paste0(
+                                                                                                    "                        ",
+                                                                                                    "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                                    "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                                    "], Time remaining:{cli::pb_eta}"),,
+                                                                                                  total = length(x = elementarylanding_data[[1]])),
                                                                           FUN = function(elementarylanding_id) {
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Start importation of elementary landing element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n",
-                                                                                "[elementarylanding: ",
-                                                                                elementarylanding_data[[2]][elementarylanding_id],
-                                                                                "]\n", sep="")
                                                                             elementarylanding <- elementarylanding$new(trip_id = elementarylanding_data$trip_id[elementarylanding_id],
                                                                                                                        elementarylanding_id = elementarylanding_data$elementarylanding_id[elementarylanding_id],
                                                                                                                        weight_category_code = elementarylanding_data$weight_category_code[elementarylanding_id],
                                                                                                                        weight_category_label = elementarylanding_data$weight_category_label[elementarylanding_id],
                                                                                                                        species_fao_code = elementarylanding_data$species_fao_code[elementarylanding_id],
                                                                                                                        landing_weight = elementarylanding_data$landing_weight[elementarylanding_id])
-                                                                            cat(format(x = Sys.time(),
-                                                                                       format = "%Y-%m-%d %H:%M:%S"),
-                                                                                " - Successful importation of elementary landing(s) element ",
-                                                                                elementarylanding_id,
-                                                                                ".\n", sep="")
                                                                             return(elementarylanding)
                                                                           }))
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                                length(x = elementarylanding_data[[1]]),
+                                                                " elementary landing(s), in ", elapsed_time, "."))
                                      private$elementarylandings <- object_elementarylandings
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
@@ -1638,10 +1689,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            wellplan_sql_final,
                                            "]\n")
                                        wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
-                                                                                      statement = wellplan_sql_final)) %>%
-                                         dplyr::mutate(wellplan_id = as.character(wellplan_id),
+                                                                                      statement = wellplan_sql_final))
+                                       wellplan_data <- wellplan_data %>%
+                                         dplyr::mutate(school_type_code = as.integer(x = school_type_code),
+                                                       wellplan_id = as.character(wellplan_id),
                                                        well_id = as.character(well_id),
                                                        activity_id = as.character(activity_id),
+                                                       school_type_code = dplyr::case_when(
+                                                         school_type_code == 1 ~  as.character(1),
+                                                         school_type_code == 2 ~  as.character(2),
+                                                         # Unknown code=0 in observe database
+                                                         school_type_code == 3 ~  as.character(0),
+                                                         TRUE ~ NA_character_
+                                                       ),
                                                        sample_id = as.character(sample_id),
                                                        species_fao_code = as.character(species_fao_code),
                                                        wellplan_weight = as.numeric(wellplan_weight),
@@ -1798,26 +1858,38 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 7 - Common data design ----
                                      object_wells <- object_r6(class_name = "wells")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                " - Importation of well(s) data for trip element:"))
+                                     options(cli.progress_show_after = 0)
+                                     cli::cli_progress_bar(clear = getOption("cli.progress_clear", FALSE),
+                                                           format = paste0("                        ",
+                                                             "[{cli::pb_current}/{cli::pb_total}], ",
+                                                             "[{cli::pb_bar}{cli::pb_percent}]",
+                                                             ", Time remaining:{cli::pb_eta}"),
+                                                           total = length(unique(x = sample_data$trip_id)))
+                                     T1 <- Sys.time()
                                      for (trip_id in unique(x = sample_data$trip_id)) {
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Start importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n")
+                                       # cat(format(x = Sys.time(),
+                                       #            format = "%Y-%m-%d %H:%M:%S"),
+                                       #     " - Start importation of well(s) data for trip element ",
+                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
+                                       #     ".\n",
+                                       #     "[trip: ",
+                                       #     trip_id,
+                                       #     "]\n")
+
                                        tmp_trip <- dplyr::filter(.data = sample_data,
                                                                  trip_id == !!trip_id)
                                        for (well_id in unique(x = tmp_trip$well_id)) {
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well data item ",
-                                             which(x = unique(tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Start importation of well data item ",
+                                         #     which(x = unique(tmp_trip$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                          if (is.na(x = well_id)) {
                                            warning(format(x = Sys.time(),
                                                           format = "%Y-%m-%d %H:%M:%S"),
@@ -1857,14 +1929,14 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                  well_plus10_weight = unique(x = tmp_well$well_plus10_weight)[[1]],
                                                                  well_global_weight = unique(x = tmp_well$well_global_weight[[1]]))
                                          for (sample_id in unique(x = tmp_well$sample_id)) {
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Start importation of sample data item ",
-                                               which(x = unique(tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n", sep="")
+                                           # cat(format(x = Sys.time(),
+                                           #            format = "%Y-%m-%d %H:%M:%S"),
+                                           #     " - Start importation of sample data item ",
+                                           #     which(x = unique(tmp_well$sample_id) == sample_id),
+                                           #     ".\n",
+                                           #     "[sample: ",
+                                           #     sample_id,
+                                           #     "]\n", sep="")
                                            tmp_sample <- dplyr::filter(.data = tmp_well,
                                                                        sample_id == !!sample_id)
                                            tmp_sample <- unclass(x = tmp_sample)
@@ -1885,23 +1957,23 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                                    sample_number_measured = tmp_sample$sample_number_measured[i],
                                                                                                                                                    sample_length_class = tmp_sample$sample_length_class[i])
                                                                                                                          })))
-                                           cat(format(x = Sys.time(),
-                                                      format = "%Y-%m-%d %H:%M:%S"),
-                                               " - Successful importation of sample data item ",
-                                               which(x = unique(x = tmp_well$sample_id) == sample_id),
-                                               ".\n",
-                                               "[sample: ",
-                                               sample_id,
-                                               "]\n", sep="")
+                                           # cat(format(x = Sys.time(),
+                                           #            format = "%Y-%m-%d %H:%M:%S"),
+                                           #     " - Successful importation of sample data item ",
+                                           #     which(x = unique(x = tmp_well$sample_id) == sample_id),
+                                           #     ".\n",
+                                           #     "[sample: ",
+                                           #     sample_id,
+                                           #     "]\n", sep="")
                                          }
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Start importation of well plan data item ",
-                                             which(x = unique(x = wellplan_data$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Start importation of well plan data item ",
+                                         #     which(x = unique(x = wellplan_data$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                          tmp_wellplan <- dplyr::filter(.data = wellplan_data,
                                                                        well_id == !!well_id)
                                          tmp_wellplan <- unclass(x = tmp_wellplan)
@@ -1910,6 +1982,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   elementarywellplan$new(wellplan_id = tmp_wellplan$wellplan_id[j],
                                                                                                                          well_id = tmp_wellplan$well_id[j],
                                                                                                                          activity_id = tmp_wellplan$activity_id[j],
+                                                                                                                         school_type_code = tmp_wellplan$school_type_code[j],
                                                                                                                          sample_id = tmp_wellplan$sample_id[j],
                                                                                                                          species_fao_code = tmp_wellplan$species_fao_code[j],
                                                                                                                          wellplan_weight = tmp_wellplan$wellplan_weight[j],
@@ -1917,24 +1990,32 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          weight_category_label = tmp_wellplan$weight_category_label[j])
                                                                                                 })
                                          object_wells$add(object_well)
-                                         cat(format(x = Sys.time(),
-                                                    format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful importation of well data item ",
-                                             which(x = unique(x = tmp_trip$well_id) == well_id),
-                                             ".\n",
-                                             "[well: ",
-                                             well_id,
-                                             "]\n", sep="")
+                                         # cat(format(x = Sys.time(),
+                                         #            format = "%Y-%m-%d %H:%M:%S"),
+                                         #     " - Successful importation of well data item ",
+                                         #     which(x = unique(x = tmp_trip$well_id) == well_id),
+                                         #     ".\n",
+                                         #     "[well: ",
+                                         #     well_id,
+                                         #     "]\n", sep="")
                                        }
-                                       cat(format(x = Sys.time(),
-                                                  format = "%Y-%m-%d %H:%M:%S"),
-                                           " - Successful importation of well(s) data for trip element ",
-                                           which(x = unique(x = sample_data$trip_id) == trip_id),
-                                           ".\n",
-                                           "[trip: ",
-                                           trip_id,
-                                           "]\n", sep="")
+                                       # cat(format(x = Sys.time(),
+                                       #            format = "%Y-%m-%d %H:%M:%S"),
+                                       #     " - Successful importation of well(s) data for trip element ",
+                                       #     which(x = unique(x = sample_data$trip_id) == trip_id),
+                                       #     ".\n",
+                                       #     "[trip: ",
+                                       #     trip_id,
+                                       #     "]\n", sep="")
+                                       cli::cli_progress_update()
                                      }
+                                     T2 <- Sys.time()
+                                     elapsed_time <- format(round(T2-T1,2), units="secs")
+                                     cli::cli_alert_info(paste0(format(x = Sys.time(),
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of well(s) data for the ",
+                                                                length(unique(x = sample_data$trip_id)),
+                                                                " trips with sample(s) collected, in ", elapsed_time, "."))
                                      private$wells <- object_wells
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },

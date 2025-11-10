@@ -69,6 +69,7 @@ reference:
   - length_step
   - length_weight_relationship
   - set_duration_ref
+  - weight_categories_avdth_ref
 
 url: https://ob7-ird.github.io/t3
 
@@ -81,11 +82,11 @@ articles:
 - title: t3 processes description
   navbar: ~
   contents:
+  - running_processes_examples
   - model_initialisation
   - level_1
   - level_2
   - level_3
-  - running_processes_examples
 
 development:
   mode: auto

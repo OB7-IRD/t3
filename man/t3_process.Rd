@@ -19,6 +19,7 @@ t3_process(
   species_fate_codes,
   sample_type_codes,
   trip_ids = NULL,
+  weight_categories_avdth_ref = NULL,
   rf1_computation = TRUE,
   apply_rf1_on_bycatch = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
@@ -90,6 +91,17 @@ For example, a list of two database connection arguments for "observe_main" and 
 \item{sample_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.}
 
 \item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
+
+\item{weight_categories_avdth_ref}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+Reference table defining the logbook weight categories with the following columns:
+\itemize{
+\item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{integer}}.
+\item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+\item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+\item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+}
+Mandatory for \code{referential_template = "avdth"}.
+By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
 
 \item{rf1_computation}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}
@@ -180,4 +192,7 @@ For the argument "process", you can choose between 4 modalities (descending size
  \item{level2: } you launch data model initialisation and the process level 2
  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 }
+}
+\seealso{
+\code{\link[t3]{t3_level1}},  \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{full_trips}}
 }
