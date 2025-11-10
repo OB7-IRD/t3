@@ -63,12 +63,15 @@ initiate_directory <- function(output_path,
   }
   list_directories <- list.dirs(path = output_directory_name,
                                 recursive = FALSE)
-  for (level_directory in which(x = list_directories %in% c(file.path(output_directory_name,
-                                                                      "level1"),
-                                                            file.path(output_directory_name,
-                                                                      "level2"),
-                                                            file.path(output_directory_name,
-                                                                      "level3")))) {
+  for (level_directory in which(x = list_directories %in% c(list.files(output_directory_name,
+                                                                        "level1",
+                                                                        full.names = TRUE),
+                                                            list.files(output_directory_name,
+                                                                      "level2",
+                                                                      full.names = TRUE),
+                                                            list.files(output_directory_name,
+                                                                      "level3",
+                                                                      full.names = TRUE)))) {
     current_directory <- list_directories[level_directory]
     for (directory in c("data",
                         "figure")) {
