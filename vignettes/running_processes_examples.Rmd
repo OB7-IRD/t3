@@ -64,6 +64,7 @@ species_fate_codes <- as.integer(6)
 # output directories initiation
 output_path <- "path_to_your_output_folder" # to specify
 final_output_path <- initiate_directory(output_path = output_path,
+                                        new_directory = TRUE,
                                         level = "all")
 # generation of the confidence interval
 confidence_interval <- TRUE
