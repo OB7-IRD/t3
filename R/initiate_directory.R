@@ -29,9 +29,9 @@ initiate_directory <- function(output_path,
                  format = "%Y-%m-%d %H:%M:%S"),
           " - Start process for output directories creation.")
   if (new_directory == TRUE) {
-    output_directory_name <- file.path(output_path,
+    output_directory_name <- path.expand(file.path(output_path,
                                        format(Sys.time(),
-                                              "%Y%m%d_%H%M%S_t3_outputs"))
+                                              "%Y%m%d_%H%M%S_t3_outputs")))
     dir.create(path = output_directory_name)
   } else {
     output_directory_name <- output_path
@@ -63,15 +63,12 @@ initiate_directory <- function(output_path,
   }
   list_directories <- list.dirs(path = output_directory_name,
                                 recursive = FALSE)
-  for (level_directory in which(x = list_directories %in% c(list.files(output_directory_name,
-                                                                        "level1",
-                                                                        full.names = TRUE),
-                                                            list.files(output_directory_name,
-                                                                      "level2",
-                                                                      full.names = TRUE),
-                                                            list.files(output_directory_name,
-                                                                      "level3",
-                                                                      full.names = TRUE)))) {
+  for (level_directory in which(x = list_directories %in% c(file.path(output_directory_name,
+                                                                      "level1"),
+                                                            file.path(output_directory_name,
+                                                                      "level2"),
+                                                            file.path(output_directory_name,
+                                                                      "level3")))) {
     current_directory <- list_directories[level_directory]
     for (directory in c("data",
                         "figure")) {
