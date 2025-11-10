@@ -75,9 +75,10 @@ t3_level3 <- function(inputs_level3,
                                       level = "level3")
   }
   # 3 - Level 3 process ----
-  message(format(x = Sys.time(),
+  cat(format(x = Sys.time(),
                  "%Y-%m-%d %H:%M:%S"),
-          " - Start function t3 process level 3.")
+          " - Start function t3 process level 3.\n",
+      sep="")
   # methodes initialisation
   object_full_trips <- full_trips$new()
   # level 3.1: data preparatory
@@ -126,8 +127,9 @@ t3_level3 <- function(inputs_level3,
   if (log_file == TRUE) {
     closeAllConnections()
   }
-  message(format(x = Sys.time(),
+  cat(format(x = Sys.time(),
                  format = "%Y-%m-%d %H:%M:%S"),
-          " - Successful function t3 process level 3.")
+          " - Successful function t3 process level 3.\n",
+      sep="")
   return(process_level3)
 }

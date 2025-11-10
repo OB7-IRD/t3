@@ -301,7 +301,7 @@ ocean <- as.integer(1)
 # code 1 for landing data
 sample_type_codes <- as.integer(1)
 # for french fleet 
-species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "TUN", "LOT")
+species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB","MIX", "TUN", "LOT")
 # Species fate codes
 # Retained, presumably destined for the cannery : 6,
 # Discarded status unknown (only for EMS and logbook) : 11,

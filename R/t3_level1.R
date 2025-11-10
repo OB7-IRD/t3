@@ -208,13 +208,13 @@ t3_level1 <- function(object_model_data,
     initiate_log_file(log_file = log_file,
                       log_path = log_path,
                       log_name = log_name)
-    message(format(x = Sys.time(),
+    cat(format(x = Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
             " - Start function t3 process level 1.\n",
             "[species rf1: ",
             paste0(species_fao_codes_rf1,
                    collapse = ", "),
-            "]")
+            "]\n", sep="")
     # directories initialization if outputs extraction ----
     if (integrated_process != TRUE
         && ! is.null(x = output_path)) {
@@ -250,9 +250,10 @@ t3_level1 <- function(object_model_data,
     if (log_file == TRUE) {
       closeAllConnections()
     }
-    message(format(x = Sys.time(),
+    cat(format(x = Sys.time(),
                    format = "%Y-%m-%d %H:%M:%S"),
-            " - Successful function t3 process level 1.")
+            " - Successful function t3 process level 1.\n",
+        sep="")
     return(object_full_trips)
   }
 }
