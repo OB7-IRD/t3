@@ -131,6 +131,8 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
+<span><span class="va">referential_template</span> <span class="op">&lt;-</span> <span class="st">"observe"</span> </span>
+<span><span class="va">data_source</span> <span class="op">&lt;-</span> <span class="st">"observe_database"</span></span>
 <span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
 <span>                             <span class="fl">2007</span>,</span>
 <span>                             <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
@@ -161,14 +163,14 @@
 <span><span class="co"># model creation ----</span></span>
 <span><span class="va">object_model_data</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">:::</span><span class="va"><a href="../reference/object_model_data.html">object_model_data</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># object trips creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">trips_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                        years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                        flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                        vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                        database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object activities and elementarycatches creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">activities_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                             years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                             flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                             ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
@@ -176,14 +178,14 @@
 <span>                                             species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                             database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object elementarylandings creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">elementarylandings_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                                     years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                                     flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                                     ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
 <span>                                                     vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                                     database_connection <span class="op">=</span> <span class="va">observe_database_con</span><span class="op">)</span></span>
 <span><span class="co"># object wells creation</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">wells_object_creation</span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                        years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                        flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                        ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
@@ -203,7 +205,7 @@
 <span>                                   data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"length_step.csv"</span>,</span>
 <span>                                                           package <span class="op">=</span> <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># model creation: sample sets data</span></span>
-<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">object_model_data</span><span class="op">$</span><span class="fu">samplesets_data</span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                  years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
 <span>                                  flag_codes <span class="op">=</span> <span class="va">flag_codes</span>,</span>
 <span>                                  ocean_codes <span class="op">=</span> <span class="va">ocean</span>,</span>
@@ -234,20 +236,20 @@
 <span>                      global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
 <span><span class="co"># level 1.2: logbook weight categories conversion ----</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">conversion_weight_category</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                             referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                             referential_template <span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 1.3: set count</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">set_count</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                            referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                            referential_template <span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 1.4: Fishing effort indicators calculation (set duration, time at sea, fishing and searching time)</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">fishing_effort</span><span class="op">(</span>set_duration_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">setdurationrefs</span>,</span>
 <span>                                 activity_code_ref <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">activitycoderefs</span>,</span>
 <span>                                 global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                 referential_template <span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
 <span><span class="co"># level 2.1: sample length class ld1 to lf conversion</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">sample_length_class_ld1_to_lf</span><span class="op">(</span>length_step <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">lengthsteps</span>,</span>
 <span>                                                global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                                referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                                referential_template <span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 2.2: sample number measured extrapolation</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">sample_number_measured_extrapolation</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
 <span><span class="co"># level 2.3: sample step length class standardisation</span></span>
@@ -255,7 +257,7 @@
 <span><span class="co"># level 2.4: well set weight categories</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">well_set_weight_categories</span><span class="op">(</span>sample_set <span class="op">=</span> <span class="va">object_model_data</span><span class="op">$</span><span class="va">.__enclos_env__</span><span class="op">$</span><span class="va">private</span><span class="op">$</span><span class="va">samplesets</span>,</span>
 <span>                                             global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                             referential_template <span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                             referential_template <span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 2.5: standardised sample creation</span></span>
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">standardised_sample_creation</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
 <span><span class="co"># level 2.6: sample number standardisation</span></span>
@@ -267,7 +269,8 @@
 <span><span class="va">object_full_trips</span><span class="op">$</span><span class="fu">raised_standardised_sample_set</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># level 3 ----</span></span>
-<span><span class="va">process_level3</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
+<span><span class="va">process_level3</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
+<span>                                                   target_year <span class="op">=</span> <span class="va">target_year</span><span class="op">)</span></span>
 <span><span class="co"># level 3.1: data preparatory</span></span>
 <span><span class="va">process_level3</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">data_preparatory</span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">process_level3</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                                     output_directory <span class="op">=</span> <span class="va">final_output_path</span>,</span>
@@ -284,7 +287,7 @@
 <span>                                                                                           output_level3_process1 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process1</span><span class="op">$</span><span class="va">data_lb_sample_screened</span><span class="op">$</span><span class="va">data4mod</span>,</span>
 <span>                                                                                           target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                                                                           country_flag<span class="op">=</span><span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>                                                                                           input_type <span class="op">=</span> <span class="st">"observe_database"</span><span class="op">)</span></span>
+<span>                                                                                           input_type <span class="op">=</span> <span class="va">data_source</span><span class="op">)</span></span>
 <span><span class="co"># level 3.5: predictions ----</span></span>
 <span><span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process5</span> <span class="op">&lt;-</span> <span class="va">object_full_trips</span><span class="op">$</span><span class="fu">model_predictions</span><span class="op">(</span>output_level3_process2 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process2</span>,</span>
 <span>                                                                             output_level3_process4 <span class="op">=</span> <span class="va">process_level3</span><span class="op">$</span><span class="va">output_level3_process4</span>,</span>
@@ -300,6 +303,8 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
+<span><span class="va">referential_template</span> <span class="op">&lt;-</span> <span class="st">"observe"</span> </span>
+<span><span class="va">data_source</span> <span class="op">&lt;-</span> <span class="st">"observe_database"</span></span>
 <span><span class="co"># Reference period </span></span>
 <span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
 <span>                             <span class="fl">2007</span>,</span>
@@ -315,12 +320,12 @@
 <span><span class="co"># code 1 for landing data</span></span>
 <span><span class="va">sample_type_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># For french fleet </span></span>
-<span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
+<span><span class="va">species_fao_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>,<span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span></span>
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
-<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                        level <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
@@ -328,7 +333,7 @@
 <span><span class="va">confidence_interval</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span></span>
 <span><span class="co"># data model initialization ----</span></span>
-<span><span class="va">t3_process</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/data_model_initialisation.html">data_model_initialisation</a></span><span class="op">(</span>data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span><span class="va">t3_process</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/data_model_initialisation.html">data_model_initialisation</a></span><span class="op">(</span>data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                            database_connection <span class="op">=</span> <span class="va">observe_database_con</span>,</span>
 <span>                                            species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                            years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
@@ -340,25 +345,26 @@
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level1.html">t3_level1</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
-<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 vessel_type_codes_rf1 <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 referential_template<span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                 referential_template<span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 2 ----</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level2.html">t3_level2</a></span><span class="op">(</span>object_model_data <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 object_full_trips <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
-<span>                                 referential_template<span class="op">=</span> <span class="st">"observe"</span><span class="op">)</span></span>
+<span>                                 referential_template<span class="op">=</span> <span class="va">referential_template</span><span class="op">)</span></span>
 <span><span class="co"># level 3 ----</span></span>
-<span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span>
+<span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">path_to_level3</span><span class="op">(</span>global_output_path <span class="op">=</span> <span class="va">final_output_path</span>,</span>
+<span>                                                  target_year<span class="op">=</span><span class="va">target_year</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">t3_process</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"process_level3"</span></span>
 <span><span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_level3.html">t3_level3</a></span><span class="op">(</span>inputs_level3 <span class="op">=</span> <span class="va">t3_process</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 target_ocean <span class="op">=</span> <span class="va">ocean</span>, </span>
 <span>                                 period_duration <span class="op">=</span> <span class="va">period_duration</span>,</span>
 <span>                                 country_flag <span class="op">=</span> <span class="va">flag_codes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>                                 input_type <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                 input_type <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                 ci <span class="op">=</span> <span class="va">confidence_interval</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">final_output_path</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -370,6 +376,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># setup ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OB7-IRD/t3" class="external-link">t3</a></span><span class="op">)</span></span>
+<span><span class="va">data_source</span> <span class="op">&lt;-</span> <span class="st">"observe_database"</span></span>
 <span><span class="va">years_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>,</span>
 <span>                             <span class="fl">2007</span>,</span>
 <span>                             <span class="fl">2008</span><span class="op">)</span><span class="op">)</span></span>
@@ -389,7 +396,7 @@
 <span><span class="co"># Species fate codes</span></span>
 <span><span class="co"># Retained, presumably destined for the cannery : 6,</span></span>
 <span><span class="co"># Discarded status unknown (only for EMS and logbook) : 11,</span></span>
-<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">11</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">species_fate_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">species_fate_codes_rf1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span>
 <span><span class="co"># output directories initiation</span></span>
 <span><span class="va">final_output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initiate_directory.html">initiate_directory</a></span><span class="op">(</span>output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
@@ -399,7 +406,7 @@
 <span></span>
 <span><span class="co"># process ----</span></span>
 <span><span class="va">t3_process_all</span> <span class="op">&lt;-</span> <span class="fu">t3</span><span class="fu">::</span><span class="fu"><a href="../reference/t3_process.html">t3_process</a></span><span class="op">(</span>process <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>                                 data_source <span class="op">=</span> <span class="st">"observe_database"</span>,</span>
+<span>                                 data_source <span class="op">=</span> <span class="va">data_source</span>,</span>
 <span>                                 database_connection <span class="op">=</span> <span class="va">observe_database_con</span>,</span>
 <span>                                 output_path <span class="op">=</span> <span class="va">output_path</span>,</span>
 <span>                                 years_period <span class="op">=</span> <span class="va">years_period</span>,</span>
@@ -409,7 +416,7 @@
 <span>                                 species_fate_codes <span class="op">=</span> <span class="va">species_fate_codes</span>,</span>
 <span>                                 vessel_type_codes <span class="op">=</span> <span class="va">vessel_type_codes</span>,</span>
 <span>                                 species_fao_codes_rf1 <span class="op">=</span> <span class="va">species_fao_codes_rf1</span>,</span>
-<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                 apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                 species_fate_codes_rf1 <span class="op">=</span> <span class="va">species_fate_codes_rf1</span>,</span>
 <span>                                 target_year <span class="op">=</span> <span class="va">target_year</span>,</span>
 <span>                                 target_ocean <span class="op">=</span> <span class="va">ocean</span>, </span>
