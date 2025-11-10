@@ -8,7 +8,7 @@ message: 'To cite package "t3" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 't3: Tropical Tuna Treatment'
-version: 3.0.5
+version: 3.0.6
 doi: 10.5281/zenodo.3878124
 abstract: The multi-species nature of tropical tuna surface fisheries highlights a
   series of difficulties when catches are estimated by species and size statistics.
@@ -44,7 +44,7 @@ authors:
   orcid: https://orcid.org/0000-0002-7759-0534
 repository-code: https://github.com/OB7-IRD/t3
 url: https://zenodo.org/badge/latestdoi/210599699
-date-released: '2025-09-23'
+date-released: '2025-11-10'
 contact:
 - family-names: Clément
   given-names: Jeanne
