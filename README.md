@@ -1,13 +1,7 @@
 
-<!-- bibliography: vignettes/bib/biblio.bib -->
-
-<!-- biblio-style: vignettes/bib/jae.bst -->
-
-<!-- csl: vignettes/bib/?.csl -->
-
 <!-- README.md is generated from README.Rmd. Please edit that file and click on Knit button at the end. -->
 
-# t3 package <img src="man/figures/logo.png" align="right" alt="" width="200" />
+# t3 package <img src="man/figures/logo.png" align="right" alt="" width="180" />
 
 <!-- badges: start -->
 
@@ -19,9 +13,7 @@ Status](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/pac
 
 <!-- badges: end -->
 
-<!-- [![Codecov test coverage](https://codecov.io/gh/OB7-IRD/t3/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ghislainv/jSDM?branch=master) -->
-
-***Tropical Tuna Treatment***.
+***Tropical Tuna Treatment***
 
 ## Overview
 

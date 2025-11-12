@@ -2,17 +2,13 @@
 output: github_document
 ---
 
-<!-- bibliography: vignettes/bib/biblio.bib -->
-<!-- biblio-style: vignettes/bib/jae.bst -->
-<!-- csl: vignettes/bib/?.csl -->
-
 <!-- README.md is generated from README.Rmd. Please edit that file and click on Knit button at the end. -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "man/figures/",
   out.width = "100%"
 )
 options(tibble.print_min = 5, tibble.print_max = 5)
@@ -20,7 +16,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 
 
-# t3 package <img src="man/figures/logo.png" align="right" alt="" width="200" />
+# t3 package <img src="man/figures/logo.png" align="right" alt="" width="180" />
 
 <!-- badges: start -->
 
@@ -31,9 +27,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 <!-- badges: end -->
 
-<!-- [![Codecov test coverage](https://codecov.io/gh/OB7-IRD/t3/branch/master/graph/badge.svg)](https://app.codecov.io/gh/OB7-IRD/t3?branch=master) -->
-
-***Tropical Tuna Treatment***.
+***Tropical Tuna Treatment***
 
 ## Overview
 
