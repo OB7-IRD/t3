@@ -1095,7 +1095,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         # full trip not complete or vessel type code not validated
                                         for (trip_id in seq_len(length.out = length(x = private$data_selected[[full_trip_id]]))) {
                                           current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                          current_trip$.__enclos_env__$private$rf2 <- NA_real_
+                                          current_trip$.__enclos_env__$private$rf2 <- 1
                                           current_trip$.__enclos_env__$private$statut_rf2 <- '3'
                                           if (length(x = current_trip$.__enclos_env__$private$activities) != 0) {
                                             for (activity_id in seq_len(length.out = length(x = current_trip$.__enclos_env__$private$activities))) {
@@ -1980,7 +1980,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 } else {
                                                   catch_count <- sum(current_elementarycatches$catch_count, na.rm=TRUE)
                                                 }
-                                                current_activity$.__enclos_env__$private$positive_set_count <- ifelse(catch_count==0, 0, current_activity$.__enclos_env__$private$set_count)
+                                                current_activity$.__enclos_env__$private$positive_set_count <- ifelse(catch_count==0,
+                                                                                                                      0,
+                                                                                                                      current_activity$.__enclos_env__$private$set_count)
 
                                               } else {
                                                 current_activity$.__enclos_env__$private$positive_set_count <- current_activity$.__enclos_env__$private$set_count
