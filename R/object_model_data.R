@@ -315,6 +315,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            " - Successful trip(s) data importation R environment.\n", sep="")
                                      }
                                      # 7 - Common data design ----
+                                     trip_data <- trip_data %>%
+                                       dplyr::arrange(vessel_code, trip_end_date)
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
                                      T1 <- Sys.time()
