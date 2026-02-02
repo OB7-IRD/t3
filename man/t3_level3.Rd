@@ -38,7 +38,7 @@ t3_level3(
 )
 }
 \arguments{
-\item{inputs_level3}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
+\item{inputs_level3}{Object of type list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Inputs of levels 3 (see function path to level 3 \code{process_level3$raw_inputs_level3$}).}
 
 \item{inputs_level3_path}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
 

@@ -29,11 +29,13 @@ df2boot <- function(t0,
                            "data",
                            "seed",
                            "statistic",
-                           "sim", "call",
+                           "sim",
                            "stype",
+                           "call",
                            "strata",
                            "weights")
   class(boot_obj_tmp) <- "boot"
+
   boot_obj_tmp$t0 <- t0
   boot_obj_tmp$t <- t # Bootstrap values
   boot_obj_tmp$R <- R # number of loop
