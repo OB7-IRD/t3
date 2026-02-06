@@ -1138,7 +1138,7 @@ Year of interest for the model estimation and prediction.
 Default value is current year - 1.}
 
 \item{\code{period_duration}}{Object of type \code{\link[base]{integer}} expected.
-Number of years use for the modelling. The default value is 5}
+Number of years use for the modelling. The default value is 4.}
 
 \item{\code{target_ocean}}{Object of type \code{\link[base]{integer}} expected.
 The code of ocean of interest.}

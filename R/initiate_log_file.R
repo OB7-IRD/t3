@@ -36,13 +36,14 @@ initiate_log_file <- function(log_file = FALSE,
          append = FALSE,
          type = "output",
          split = TRUE)
-    message(format(Sys.time(),
+    cat(format(Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
             " - Filling of the log file start now.\n",
             "[file path: ",
             final_log_path,
             "]\n",
             "For stop the recording run:",
-            " closeAllConnections().")
+            " closeAllConnections().\n",
+        sep="")
   }
 }

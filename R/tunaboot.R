@@ -2,7 +2,7 @@
 #' @title Boostrap for Model Predictions
 #' @description Bootstrap function which compute proportion by species fishing mode and ocean for confindence interval
 #' @param sample_data (data frame) Data used for the modelling. Output table from process 3.1.
-#' @param allset_data (data frame) Data used for prediction.Output table from process 3.4.
+#' @param allset_data (data frame) Data used for prediction. Output table from process 3.4.
 # @param schooltype (integer) Fishing mode of the catch.
 # @param ocean (integer) Target ocean.
 # @param species (character) Target species. 'SKJ' for skipjack and 'YFT' for yellowfin.

@@ -48,7 +48,7 @@ catch_ci_calculator <- function(fit_data,
                                                              t = as.matrix(boot_data$catch_set_fit[boot_data$sp == fit_data$sp[x]]), # bootstrap values)
                                                              R = max(boot_data$loop) # number of loop
                                               )
-                                              ci <- boot::boot.ci(tmp,
+                                              ci <- boot::boot.ci(boot.out = tmp,
                                                                   conf = 0.95,
                                                                   type = c("basic", "norm","perc"))
 

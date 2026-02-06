@@ -39,6 +39,7 @@ where
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 	and st.code in (?sample_type_codes)
+	and sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')
 order by
 	trip_id
 	,sample_id

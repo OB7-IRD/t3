@@ -1,3 +1,14 @@
+
+# t3 3.0.7 - 2026-01-29
+
+## Added
+
+* Add in sample's query on observe database the condition : `sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')`. 
+
+## Changed 
+
+* Handle incomplete trips by performing each step with warnings instead of returning NAs at all steps for not full trips.
+
 # t3 3.0.6 - 2025-11-04
 
 ## Added

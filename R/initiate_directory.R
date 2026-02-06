@@ -25,13 +25,14 @@ initiate_directory <- function(output_path,
                                             "until_level2",
                                             "level3"))
   # 2 - Process ----
-  message(format(x = Sys.time(),
-                 format = "%Y-%m-%d %H:%M:%S"),
-          " - Start process for output directories creation.")
+  cat(format(x = Sys.time(),
+             format = "%Y-%m-%d %H:%M:%S"),
+      " - Start process for output directories creation.\n",
+      sep="")
   if (new_directory == TRUE) {
     output_directory_name <- path.expand(file.path(output_path,
-                                       format(Sys.time(),
-                                              "%Y%m%d_%H%M%S_t3_outputs")))
+                                                   format(Sys.time(),
+                                                          "%Y%m%d_%H%M%S_t3_outputs")))
     dir.create(path = output_directory_name)
   } else {
     output_directory_name <- output_path
@@ -76,17 +77,18 @@ initiate_directory <- function(output_path,
         dir.create(path = file.path(current_directory,
                                     directory))
       } else if (all(list.dirs(path = current_directory,
-                        recursive = FALSE) != file.path(current_directory,
-                                                        directory))) {
+                               recursive = FALSE) != file.path(current_directory,
+                                                               directory))) {
         dir.create(path = file.path(current_directory,
                                     directory))
       }
     }
   }
-  message(format(x = Sys.time(),
-                 format = "%Y-%m-%d %H:%M:%S"),
-          " - Successful process for output directories creation.\n",
-          "outputs availables here: ",
-          output_directory_name)
+  cat(format(x = Sys.time(),
+             format = "%Y-%m-%d %H:%M:%S"),
+      " - Successful process for output directories creation.\n",
+      "outputs availables here: ",
+      output_directory_name,
+      "\n", sep="")
   return(output_directory_name)
 }
