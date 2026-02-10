@@ -612,7 +612,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No elementary catch(es) data imported, check the query and parameters associated.")
-                                       } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
+                                       } else if (data_source=="observe_database" && nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
                                          elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),

@@ -17,9 +17,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 1.1 - Arguments verifications ----
                               if (paste(class(x = object_trips),
@@ -114,9 +114,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 2.1 - Arguments verifications ----
                               if (object_activities$count() == 0) {
@@ -234,9 +234,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 3.1 - Arguments verifications ----
                               codama::r_type_checking(r_object = years_period,
@@ -333,9 +333,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 5.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
@@ -454,9 +454,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 6.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
@@ -674,9 +674,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 7.1 - Arguments verification ----
                               codama::r_type_checking(r_object = species_fao_codes_rf1,
@@ -1427,9 +1427,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 9.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -1941,9 +1941,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 10.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -2246,9 +2246,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 11.1 - Arguments verification ----
                               if (! paste0(class(x = set_duration_ref),
@@ -3103,9 +3103,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 15.1 - Arguments verification ----
                               if (! paste0(class(x = length_step),
@@ -3761,9 +3761,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 16.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -4114,9 +4114,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 17.1 - Arguments verification ----
                               codama::r_type_checking(r_object = maximum_lf_class,
@@ -4526,9 +4526,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 18.1 - Arguments verification ----
                               if (! paste0(class(x = sample_set),
@@ -5015,9 +5015,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000)
 
                               # 19.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
@@ -5319,9 +5319,9 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000 )
 
                               # 20.1 - Arguments verification ----
                               if (! paste0(class(x = length_weight_relationship_data),
@@ -5666,13 +5666,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250),
                                                                     global_output_path = NULL) {
-
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
+                              options(warn = 0,
+                                      "warning.length"=5000,
+                                      nwarnings = 1000 )
 
                               # 21.1 - Arguments verification ----
                               codama::r_type_checking(r_object = threshold_rf_minus10,
@@ -6035,13 +6034,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
                             #'  }
                             raised_standardised_sample_set = function(global_output_path = NULL) {
-
-                              # Warnings options
-                              warn_defaut <- options("warn")
-                              on.exit(options(warn_defaut))
-                              options(warn = 0)
-                              options("warning.length"=5000)
-                              options(nwarnings = 1000)
 
                               # 22.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
