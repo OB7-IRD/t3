@@ -13,6 +13,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Creation of full trip item from trips.
                             #' @param object_trips Object of type R6-trips expected. A R6 reference object of class trips.
                             create_full_trips = function(object_trips) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 1.1 - Arguments verifications ----
                               if (paste(class(x = object_trips),
                                         collapse = " ") != "trips list_t3 R6") {
@@ -101,6 +109,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for add activities in full trips object.
                             #' @param object_activities Object of type R6-activities expected. A R6 reference object of class activities.
                             add_activities = function(object_activities) {
+
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 2.1 - Arguments verifications ----
                               if (object_activities$count() == 0) {
                                 stop(format(Sys.time(),
@@ -213,6 +230,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for filter full trips by a year(s) period.
                             #' @param years_period Object of class {\link[base]{integer}} expected. Year(s) in 4 digits format.
                             filter_by_years_period = function(years_period) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 3.1 - Arguments verifications ----
                               codama::r_type_checking(r_object = years_period,
                                                       type = "integer")
@@ -304,6 +329,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for add elementary landings in full trips object.
                             #' @param object_elementarylandings Object of type R6-elementarylandings expected. A R6 reference object of class elementarylandings.
                             add_elementarylandings = function(object_elementarylandings) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 5.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
                                 stop(format(Sys.time(),
@@ -417,6 +450,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @description Function for add wells and samples caracteristics in full trips object.
                             #' @param object_wells Object of type R6-wells expected. A R6 reference object of class wells.
                             add_wells_samples = function(object_wells) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 6.1 - Arguments verifications ----
                               if (length(private$data_selected) == 0) {
                                 stop(format(Sys.time(),
@@ -629,6 +670,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                            rf1_lowest_limit = 0.8,
                                            rf1_highest_limit = 1.2,
                                            global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 7.1 - Arguments verification ----
                               codama::r_type_checking(r_object = species_fao_codes_rf1,
                                                       type = "character")
@@ -1374,6 +1423,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' An "unknown" weight category is assigned to all other species than "SKJ", "YFT", "BET" and "ALB".
                             conversion_weight_category = function(global_output_path = NULL,
                                                                   referential_template = "observe") {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 9.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -1879,6 +1936,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  }
                             set_count = function(global_output_path = NULL,
                                                  referential_template = "observe") {
+
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 10.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -2175,6 +2241,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       sunset_schema = "sunset",
                                                       global_output_path = NULL,
                                                       referential_template = "observe") {
+
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 11.1 - Arguments verification ----
                               if (! paste0(class(x = set_duration_ref),
                                            collapse = "_") %in% c("data.frame",
@@ -3024,6 +3099,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             sample_length_class_ld1_to_lf =  function(length_step,
                                                                       global_output_path = NULL,
                                                                       referential_template = "observe") {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 15.1 - Arguments verification ----
                               if (! paste0(class(x = length_step),
                                            collapse = "_") %in% c("data.frame",
@@ -3182,7 +3265,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                                       collapse = "\", \""),"\")"))),
 
                                                                  file = "NUL")
-                                                  options("warning.length"=5000)
                                                   warning(format(Sys.time(),
                                                                  "%Y-%m-%d %H:%M:%S"),
                                                           " - Value(s) for the variable \"size_measure_type_code\" not added yet in the function code. Check the following value(s): ",
@@ -3675,6 +3757,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \code{sample_number_measured_extrapolated_lf=sample_number_measured_lf x rf4}.
                             #'  }
                             sample_number_measured_extrapolation = function(global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 16.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -4020,6 +4110,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  }
                             sample_length_class_step_standardisation = function(maximum_lf_class = as.integer(500),
                                                                                 global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 17.1 - Arguments verification ----
                               codama::r_type_checking(r_object = maximum_lf_class,
                                                       type = "integer",
@@ -4424,6 +4522,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             well_set_weight_categories = function(sample_set,
                                                                   global_output_path = NULL,
                                                                   referential_template = "observe") {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 18.1 - Arguments verification ----
                               if (! paste0(class(x = sample_set),
                                            collapse = "_") %in% c("data.frame",
@@ -4905,6 +5011,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{sample_number_measured_extrapolated_lf: } standardized sample number of measured individuals (converted in LF and  extrapolated to all counted individuals), type \code{\link[base]{numeric}}.\cr
                             #'  }
                             standardised_sample_creation = function(global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 19.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
@@ -5201,6 +5315,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  }
                             standardised_sample_set_creation = function(length_weight_relationship_data,
                                                                         global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 20.1 - Arguments verification ----
                               if (! paste0(class(x = length_weight_relationship_data),
                                            collapse = "_") %in% c("data.frame",
@@ -5544,6 +5666,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     threshold_frequency_rf_plus10 = as.integer(75),
                                                                     threshold_rf_total = as.integer(250),
                                                                     global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 21.1 - Arguments verification ----
                               codama::r_type_checking(r_object = threshold_rf_minus10,
                                                       type = "integer",
@@ -5569,7 +5699,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             "%Y-%m-%d %H:%M:%S"),
                                      " - Empty data selected in the R6 object. Process 2.7 (raised factors determination) cancelled.")
                               } else {
-                                options(nwarnings = 1000)
                                 T1 <- Sys.time()
                                 cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                   format = "%Y-%m-%d %H:%M:%S "),
@@ -5906,6 +6035,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \code{sample_weight_set = sample_weight_unit/1000 * sample_number_weighted_set}
                             #'  }
                             raised_standardised_sample_set = function(global_output_path = NULL) {
+
+                              # Warnings options
+                              warn_defaut <- options("warn")
+                              on.exit(options(warn_defaut))
+                              options(warn = 0)
+                              options("warning.length"=5000)
+                              options(nwarnings = 1000)
+
                               # 22.1 - Arguments verification ----
                               codama::r_type_checking(r_object = global_output_path,
                                                       type = "character",
