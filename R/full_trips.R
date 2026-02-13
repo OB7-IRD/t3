@@ -1167,26 +1167,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                   #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                   #     "]\n", sep="")
                                   if (!is.null(x = global_output_path)){
-                                    # Sum landing weights across partial trips to get total landing weight by species in outputs by full trip
-                                    ########### >>> Check this ############
-                                    if(!is.null(full_trip_total_landings_catches_species_activities)){
-                                      total_landings_weight_species <- full_trip_total_landings_catches_species_activities %>%
-                                        dplyr::select(species_fao_code,
-                                                      landing_weight,
-                                                      species_fate_code,
-                                                      trip_id) %>%
-                                        dplyr:: distinct() %>%
-                                        dplyr::group_by(species_fao_code) %>%
-                                        dplyr::summarize(landing_weight=sum(landing_weight,
-                                                                            na.rm=TRUE)) %>%
-                                        dplyr::mutate(landing_weight=dplyr::if_else(landing_weight==0,
-                                                                                    NA, landing_weight))
-                                      full_trip_total_landings_catches_species_activities <- dplyr::left_join(full_trip_total_landings_catches_species_activities,
-                                                                                                              total_landings_weight_species,
-                                                                                                              by = dplyr::join_by(species_fao_code)) %>%
-                                        dplyr::rename(landing_weight=landing_weight.y) %>%
-                                        dplyr::select(-landing_weight.x)
-                                    }
                                     total_landings_catches_species_activities[[full_trip_id]] <- full_trip_total_landings_catches_species_activities
                                   }
                                 }
