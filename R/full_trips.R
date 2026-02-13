@@ -17,7 +17,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -114,7 +114,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -234,7 +234,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -333,7 +333,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -454,7 +454,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -674,7 +674,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -1407,7 +1407,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -1921,7 +1921,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -2226,7 +2226,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -3083,7 +3083,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -3741,7 +3741,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -4094,7 +4094,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -4506,7 +4506,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -4995,7 +4995,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000)
 
@@ -5299,7 +5299,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000 )
 
@@ -5649,7 +5649,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Warnings options
                               warn_defaut <- options("warn")
                               on.exit(options(warn_defaut))
-                              options(warn = 0,
+                              options(warn = 1,
                                       "warning.length"=5000,
                                       nwarnings = 1000 )
 
