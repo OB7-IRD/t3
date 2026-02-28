@@ -1746,6 +1746,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                         }
                                       }
                                         ## for mix tuna species TUN/MIX (mix of tunas species in Observe/AVDTH database), ------
+                                        ## ('LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW'
                                         #  according to the composition of this tuna species(YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW),
                                         # in the elementary catches of the full trip.
                                         capture.output(current_trips <- object_r6(class_name = "trips"),
@@ -1770,7 +1771,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           if(nrow(mix_tunas_species) != 0){
                                             tunas_species <- dplyr::filter(current_elementarycatches,
                                                                            species_fao_code %in% c("YFT", "BET", "ALB", "SKJ",
-                                                                                                   "FRI", "FRZ", "LTA", "BLT", "KAW"))
+                                                                                                   "FRI", "FRZ", "LTA", "BLT","LOT", "KAW"))
                                             if(nrow(tunas_species!=0)){
                                               total_catch_weight <- suppressMessages(
                                                 tunas_species %>%
@@ -1801,7 +1802,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 current_mix_elementarycatch <- current_mix_elementarycatch %>%
                                                   dplyr::rows_append(dplyr::tibble(
                                                     species_fao_code = current_tunas_species$species_fao_code,
-                                                    weight_category_label = "Mix of tuna species YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT and KAW",
+                                                    weight_category_label = "Mix of tuna species YFT, BET, ALB, SKJ, FRI, FRZ, LTA, BLT, LOT, and KAW",
                                                     catch_weight_category_code_corrected =
                                                       mix_tunas_species[id_row,]$catch_weight_category_code_corrected * current_tunas_species$proportion,
                                                     weight_category_code_corrected = current_tunas_species$weight_category_code_corrected)) %>%
