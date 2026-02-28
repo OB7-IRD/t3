@@ -3890,7 +3890,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           " (species item id ",
                                                           sample_specie_id,
                                                           ")]")
-                                                } else if (rf4 < 1) {
+                                                } else if (round(rf4,9) < 1) {
                                                   options(digits=9)
                                                   warning(format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                                           " - Rf4 inferior to 1 (",
@@ -7102,7 +7102,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 prop_t3 = replace (prop_t3,
                                                                    wcat == "p10",
                                                                    value = 0)) %>%
-                                  dplyr::group_by(id_act,date_act, year, mon,
+                                  dplyr::group_by(id_act, date_act, year, mon,
                                                   lat, lon, sp, fmod, ocean,
                                                   vessel, flag_code, wtot_lb_t3) %>%
                                   dplyr::summarise(prop_lb = sum(prop_lb),
@@ -9539,7 +9539,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               return(outputs_level3_process5)
                             },
                             # browser ----
-                            #' @description Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
+                            #' @description Most powerful and "schwifty" function in the universe for "open the T3 process" and manipulate in live R6 objects.
                             show_me_what_you_got = function() {
                               browser()
                             }),

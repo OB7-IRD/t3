@@ -1307,7 +1307,7 @@ Model predictions for the species composition and computing of catches.
 \if{html}{\out{<a id="method-full_trips-show_me_what_you_got"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-show_me_what_you_got}{}}}
 \subsection{Method \code{show_me_what_you_got()}}{
-Most powerfull and "schwifty" function in the univers for "open the T3 process" and manipulate in live R6 objects.
+Most powerful and "schwifty" function in the universe for "open the T3 process" and manipulate in live R6 objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$show_me_what_you_got()}\if{html}{\out{</div>}}
 }
