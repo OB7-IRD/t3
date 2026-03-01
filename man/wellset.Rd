@@ -22,6 +22,7 @@ Initialize function for R6 wellset class.
 \if{html}{\out{<div class="r">}}\preformatted{wellset$new(
   trip_id,
   activity_id,
+  school_type_code,
   well_id,
   sample_id,
   weighted_weight,
@@ -36,6 +37,8 @@ Initialize function for R6 wellset class.
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
+
+\item{\code{school_type_code}}{Object of class {\link[base]{character}} expected. School type identification.}
 
 \item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 

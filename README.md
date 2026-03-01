@@ -1,23 +1,19 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file and click on Knit button at the end. -->
 
-# t3 package <a href='https://ob7-ird.github.io/t3'><img src='man/figures/logo.png' align="right" /></a>
+# t3 package <img src="man/figures/logo.png" align="right" alt="" width="180" />
 
 <!-- badges: start -->
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/package=t3)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+Status](https://www.r-pkg.org/badges/version/t3)](https://cran.r-project.org/package=t3)
+[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![DOI](https://zenodo.org/badge/210599699.svg)](https://zenodo.org/badge/latestdoi/210599699)
 [![R-CMD-check](https://github.com/OB7-IRD/t3/workflows/R-CMD-check/badge.svg)](https://github.com/OB7-IRD/t3/actions)
+
 <!-- badges: end -->
 
 ***Tropical Tuna Treatment***
-
-## Warning
-
-Package and documentation still in construction ! We need few more time
-to reach 88 miles per hours, be patient.
 
 ## Overview
 
@@ -36,7 +32,7 @@ science:
   license. In the end, it would be available on the Comprehensive R
   Archive Network (CRAN).
 - Referencing of the software enable result reproducibility and
-  versioning: version 2.0.1 [DOI:
+  versioning: [DOI:
   10.5281/zenodo.14947393](https://zenodo.org/badge/latestdoi/210599699).
 
 ## Installation
@@ -68,6 +64,11 @@ library(t3)
 Several examples of processes are available in the section [Running
 processes
 examples](https://ob7-ird.github.io/t3/articles/running_processes_examples.html).
+
+## Warning
+
+Package and documentation still in construction ! We need few more time
+to reach 88 miles per hours, be patient.
 
 ## Getting help
 

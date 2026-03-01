@@ -453,7 +453,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))
     }
   }
-  if (! is.na(current_sum_elementarycatches_rf1)) {
+  if (! is.na(current_sum_elementarycatches_rf1) &
+              ! current_trip$.__enclos_env__$private$statut_rf1 %in% c("1.1", "1.2", "1.3", "1.4")) {
     # 201 - Checking if sum elementary catches corrected by rf1 is equal to sum elementary landings ----
     testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
                         code = {
@@ -462,7 +463,8 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                                                  label = paste0("issue with full trip ", full_trip_id))
                         })
   }
-  if (! is.na(current_sum_elementarycatches_rf2)) {
+  if (! is.na(current_sum_elementarycatches_rf2) &
+      ! current_trip$.__enclos_env__$private$statut_rf1 %in% c("1.1", "1.2", "1.3", "1.4")) {
     # 204 - Checking if sum elementary catches corrected by rf2 is equal to sum elementary landings ----
     testthat::test_that(desc = "201 - Checking if sum elementary catches corrected equal to sum elementary landings",
                         code = {
@@ -481,3 +483,4 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
                         })
   }
 }
+

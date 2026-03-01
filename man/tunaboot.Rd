@@ -19,7 +19,7 @@ tunaboot(
 \arguments{
 \item{sample_data}{(data frame) Data used for the modelling. Output table from process 3.1.}
 
-\item{allset_data}{(data frame) Data used for prediction.Output table from process 3.4.}
+\item{allset_data}{(data frame) Data used for prediction. Output table from process 3.4.}
 
 \item{Ntree}{(integer) Number of trees to grow. This should not be set to too small a number, to ensure that every input row gets predicted at least a few times. The default value is 1000.}
 

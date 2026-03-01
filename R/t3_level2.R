@@ -224,9 +224,10 @@ t3_level2 <- function(object_model_data,
                                         new_directory = new_directory,
                                         level = "level2")
     }
-    message(format(x = Sys.time(),
+    cat(format(x = Sys.time(),
                    "%Y-%m-%d %H:%M:%S"),
-            " - Start function t3 process level 2.")
+            " - Start function t3 process level 2.\n",
+            sep="")
     # level 2.1: sample length class ld1 to lf conversion ----
     object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps,
                                                     global_output_path = output_path,
@@ -258,9 +259,10 @@ t3_level2 <- function(object_model_data,
     if (log_file == TRUE) {
       closeAllConnections()
     }
-    message(format(x = Sys.time(),
+    cat(format(x = Sys.time(),
                    format = "%Y-%m-%d %H:%M:%S"),
-            " - Successful function t3 process level 2.")
+            " - Successful function t3 process level 2.\n",
+        sep="")
     return(object_full_trips)
   }
 }

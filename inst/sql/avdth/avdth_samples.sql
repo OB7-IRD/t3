@@ -28,7 +28,7 @@ SELECT
 		& e.F_POS_CUVE
 		& '.'
 		& e.N_ECH AS sample_id
-	,e.F_S_ECH AS sub_sample_id
+	,ee.N_S_ECH AS sub_sample_id
 	,'fr.ird.t3.entities.data.SampleSpecies#'
 		& format(e.c_bat, '0000')
 		& '#'

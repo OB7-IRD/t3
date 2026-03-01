@@ -142,9 +142,11 @@ t3_process <- function(process = "all",
                                             "level2",
                                             "until_level2"))
   # 2 - Process ----
-  message(format(x = Sys.time(),
+  cat(format(x = Sys.time(),
                  "%Y-%m-%d %H:%M:%S"),
-          " - Ignition of the Tropical Tuna Treatment. Process could be long. Until reach 88 mph, take a coffee.")
+          " - Ignition of the Tropical Tuna Treatment.
+          Process could be long. Until reach 88 mph, take a coffee.\n",
+          sep="")
   t3_process <- data_model_initialisation(data_source = data_source,
                                           database_connection = database_connection,
                                           log_file = log_file,
@@ -270,8 +272,9 @@ t3_process <- function(process = "all",
                                  new_directory = new_directory_level3,
                                  integrated_process = integrated_process)
   }
-  message(format(Sys.time(),
+  cat(format(Sys.time(),
                  "%Y-%m-%d %H:%M:%S"),
-          " - Successful process of the Tropical Tuna Treatment.")
+          " - Successful process of the Tropical Tuna Treatment.\n",
+          sep="")
   return(t3_process)
 }

@@ -315,6 +315,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            " - Successful trip(s) data importation R environment.\n", sep="")
                                      }
                                      # 7 - Common data design ----
+                                     trip_data <- trip_data %>%
+                                       dplyr::arrange(vessel_code, trip_end_date)
                                      trip_data <- unclass(x = trip_data)
                                      object_trips <- object_r6(class_name = "trips")
                                      T1 <- Sys.time()
@@ -610,7 +612,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No elementary catch(es) data imported, check the query and parameters associated.")
-                                       } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
+                                       } else if (data_source=="observe_database" && nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
                                          elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -901,7 +903,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - No data imported, check the class of your RData file or data inside.")
                                          } else if (nrow(x = activity_data) != length(unique(activity_data$activity_id))) {
-                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data)])
+                                           activity_id <- unique(activity_data$activity_id[duplicated(activity_data$activity_id)])
                                            stop(format(x = Sys.time(),
                                                        format = "%Y-%m-%d %H:%M:%S"),
                                                 " - Duplicated activity(ies) topiaid in data imported, check the query and query's parameters.\n",
@@ -1689,10 +1691,19 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            wellplan_sql_final,
                                            "]\n")
                                        wellplan_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_connection,
-                                                                                      statement = wellplan_sql_final)) %>%
-                                         dplyr::mutate(wellplan_id = as.character(wellplan_id),
+                                                                                      statement = wellplan_sql_final))
+                                       wellplan_data <- wellplan_data %>%
+                                         dplyr::mutate(school_type_code = as.integer(x = school_type_code),
+                                                       wellplan_id = as.character(wellplan_id),
                                                        well_id = as.character(well_id),
                                                        activity_id = as.character(activity_id),
+                                                       school_type_code = dplyr::case_when(
+                                                         school_type_code == 1 ~  as.character(1),
+                                                         school_type_code == 2 ~  as.character(2),
+                                                         # Unknown code=0 in observe database
+                                                         school_type_code == 3 ~  as.character(0),
+                                                         TRUE ~ NA_character_
+                                                       ),
                                                        sample_id = as.character(sample_id),
                                                        species_fao_code = as.character(species_fao_code),
                                                        wellplan_weight = as.numeric(wellplan_weight),
@@ -1973,6 +1984,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                   elementarywellplan$new(wellplan_id = tmp_wellplan$wellplan_id[j],
                                                                                                                          well_id = tmp_wellplan$well_id[j],
                                                                                                                          activity_id = tmp_wellplan$activity_id[j],
+                                                                                                                         school_type_code = tmp_wellplan$school_type_code[j],
                                                                                                                          sample_id = tmp_wellplan$sample_id[j],
                                                                                                                          species_fao_code = tmp_wellplan$species_fao_code[j],
                                                                                                                          wellplan_weight = tmp_wellplan$wellplan_weight[j],

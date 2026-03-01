@@ -1,18 +1,44 @@
-# t3 3.0.6 - 2025-10-07
+# t3 3.0.8- 2026-03-02
 
 ## Changed
 * Improve tuna mix correction in weight category conversion step  ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)),
 for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of major tuna species by weight category in the elementary catches of the trip.
 
+
+# t3 3.0.7 - 2026-01-29
+
+## Added
+
+* Add in sample's query on observe database the condition : `sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')`. 
+
+## Changed 
+
+* Handle incomplete trips by performing each step with warnings instead of returning NAs at all steps for not full trips.
+
+# t3 3.0.6 - 2025-11-04
+
+## Added
+
+* Add school_type_code in outputs of level 2 for samples standardization, "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
+
+## Changed 
+
+* Correct avdth samples query concerning sub sample numbering, by replacing `e.F_S_ECH AS sub_sample_id` and `ECHANTILLON as e` by 
+`ee.N_S_ECH AS sub_sample_id` and `ECH_ESP as ee`. 
+
 # t3 3.0.5 - 2025-09-23
 
 ## Changed
+
 * Change the display of the running process progress in the console from list of trip's topiaid to a [progress bar](https://cli.r-lib.org/reference/cli_progress_bar.html).
 
 * Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
   - For Observe database by importing maximum and minimum of weight categories from the database.
   - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation).  
   By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html)).
+
+* Remove samples from the process whose size measurement type differs from fork length ("FL") or first dorsal length ("PD1"), their values are set to `NA`.
+
 
 # t3 3.0.4 - 2025-07-04
 
