@@ -5074,7 +5074,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                "]")
                                         }
                                         if (paste0(class(x = current_well$.__enclos_env__$private$elementarysample),
-                                                   collapse = "_") == "elementarysamples_list_t3_R6") {
+                                                   collapse = "_") == "elementarysamples_list_t3_R6" &&
+                                            length(current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data) > 0) {
                                           capture.output(current_standardisedsamples <- object_r6(class_name = "standardisedsamples"),
                                                          file = "NUL")
                                           capture.output(current_elementarysamples <- object_r6(class_name = "elementarysamples"),
@@ -5869,6 +5870,10 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               }
                                             } else {
                                               current_well_set$.__enclos_env__$private$rf_validation <- NA_integer_
+                                              current_well_set$.__enclos_env__$private$weighted_samples_minus10 <- NA_real_
+                                              current_well_set$.__enclos_env__$private$weighted_samples_plus10 <- NA_real_
+                                              current_well_set$.__enclos_env__$private$weighted_samples_total <- NA_real_
+
                                             }
                                           }
                                         }
