@@ -5074,7 +5074,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                "]")
                                         }
                                         if (paste0(class(x = current_well$.__enclos_env__$private$elementarysample),
-                                                   collapse = "_") == "elementarysamples_list_t3_R6") {
+                                                   collapse = "_") == "elementarysamples_list_t3_R6" &
+                                            length(current_well$.__enclos_env__$private$elementarysample$.__enclos_env__$private$data) > 0) {
                                           capture.output(current_standardisedsamples <- object_r6(class_name = "standardisedsamples"),
                                                          file = "NUL")
                                           capture.output(current_elementarysamples <- object_r6(class_name = "elementarysamples"),
