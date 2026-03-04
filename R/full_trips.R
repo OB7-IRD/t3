@@ -5544,7 +5544,11 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                            "well_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "well_id")),
                                                                                            "activity_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "activity_id")),
                                                                                            "school_type_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "school_type_code")),
-                                                                                           "sample_id" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")),
+                                                                                           "sample_id" =  dplyr::tibble("sample_id_ori"= standardisedsamplesets_selected$extract_l1_element_value(element = "sample_id")) %>%
+                                                                                             dplyr::rowwise() %>%
+                                                                                             dplyr::mutate(sample_id_final = paste0(sample_id_ori,
+                                                                                                                                    collapse = ", ")) %>%
+                                                                                             dplyr::pull(sample_id_final),
                                                                                            "species_fao_code" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "species_fao_code")),
                                                                                            "sample_standardised_length_class_lf" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_standardised_length_class_lf")),
                                                                                            "sample_number_weighted" = unlist(x = standardisedsamplesets_selected$extract_l1_element_value(element = "sample_number_weighted")),
