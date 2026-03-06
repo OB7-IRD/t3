@@ -1,3 +1,84 @@
+# t3 3.0.8 - 2026-03-06
+
+## Changed
+
+* Handle trips with activities in multiple ocean (`ocean_code=99`). 
+
+
+# t3 3.0.7 - 2026-01-29
+
+## Added
+
+* Add in sample's query on observe database the condition : `sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')`. 
+
+## Changed 
+
+* Handle incomplete trips by performing each step with warnings instead of returning NAs at all steps for not full trips.
+
+# t3 3.0.6 - 2025-11-04
+
+## Added
+
+* Add school_type_code in outputs of level 2 for samples standardization, "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
+
+## Changed 
+
+* Correct avdth samples query concerning sub sample numbering, by replacing `e.F_S_ECH AS sub_sample_id` and `ECHANTILLON as e` by 
+`ee.N_S_ECH AS sub_sample_id` and `ECH_ESP as ee`. 
+
+# t3 3.0.5 - 2025-09-23
+
+## Changed
+
+* Change the display of the running process progress in the console from list of trip's topiaid to a [progress bar](https://cli.r-lib.org/reference/cli_progress_bar.html).
+
+* Improve weight category conversion ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)):
+  - For Observe database by importing maximum and minimum of weight categories from the database.
+  - For AVDTH database by adding the `weight_category_avdt_ref` argument in method [`object_model_data$activities_object_creation()`](https://ob7-ird.github.io/t3/reference/object_model_data.html#method-object_model_data-activities_object_creation) to get upper and lower limit of AVDTH weight categories. By default the referential table `data("weight_categories_avdth_ref", package="t3")` is considered ([weight_categories_avdth_ref](https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html)).
+  
+* Remove samples from the process whose size measurement type differs from fork length ("FL") or first dorsal length ("PD1"), their values are set to `NA`.
+
+
+# t3 3.0.4 - 2025-07-04
+
+## Added
+* Improve documentation :
+  - Add float toc and figures in vignettes. 
+  - Add reference table's documentation and easy access :`data(package="t3")`.
+  - Add details about level 1 and level 2  outputs in ".csv"". 
+  - Add documentation about outputs in ".csv" format of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1).
+  - Add "elementarycatch_id", "statut_rf1_label", "statut_rf2_label" columns, in ".csv" output named "process_1_1_detail", of function [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1). 
+
+# t3 3.0.3 - 2025-06-12
+
+## Added
+* Add the argument apply_rf1_on_bycatch=TRUE/FALSE, in the method [`full_trips$rf1()`](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1) By default TRUE, the raising factor value, calculated for each trip, is applied to all the logbook catches associated to the trip, including by-catch species. If FALSE, only the catch weights of species belonging to the species list defined by the `species_fao_codes_rf1` argument are corrected, rf1 is not applied to by-catch species.
+
+## Removed
+
+* Remove argument `output_format="eu"/"us"` to uniformize output format with `sep=","` and `dec="."`.
+
+# t3 3.0.2 - 2025-05-21
+
+## Changed
+* Add warning in case of sample_length_class_ lf > maximum_lf_class (by default 500) in process 2.3:
+[full_trips$ample_length_class_step_standardisation()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-sample_length_class_step_standardisation).
+
+* Import maximum and minimum of logbook's weight categories from Observe database. 
+
+# t3 3.0.1 - 2025-05-13
+
+## Changed
+* Important calculation time reduction by replacing [`future.apply::future_sapply()`](https://rdrr.io/cran/future.apply/man/future_lapply.html) by [`sapply()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/lapply.html) in method [extract()](https://ob7-ird.github.io/t3/reference/list_t3.html#method-list_t3-extract).
+* Fix typo (weight instead of weigth) in "inst/avdth_samples.sql".
+* In method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation):
+  - For set declared as positive but with no elementary catch associated, the set duration is now set to the null set duration value, taken from the “inst/set_duration_ref.csv” table, and not to NA as before and a warning is generated. 
+  - If there is no adjusted set duration model for the year corresponding to the activity date in the reference table (“inst/set_duration_ref.csv”), t3 now allows considering the adjusted set duration model for the year closest to the activity date in the reference table, generating a warning. 
+
+## Added
+* Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save the file named "inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata", in outputs folder, if `global_output_path` is not NULL. 
+
+>>>>>>> Stashed changes
 # t3 3.0.0 - 2025-04-15
 
 ## Changed
