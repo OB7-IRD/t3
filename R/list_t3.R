@@ -3,7 +3,6 @@
 #' @description Create R6 reference object class list_t3.
 #' @importFrom R6 R6Class
 #' @importFrom codama r_type_checking
-#' @importFrom future.apply future_sapply
 list_t3 <- R6::R6Class(
   classname = "list_t3",
   public = list(
@@ -223,20 +222,20 @@ list_t3 <- R6::R6Class(
       } else {
         data <- unlist(x = private[[attributs[1]]])
       }
-      output <- future.apply::future_sapply(X = seq_len(length.out = length(data)),
-                                            FUN = function(current_data) {
-                                              if (! is.null(x = attribut_l2)) {
-                                                if (! attribut_l2 %in% names(data[[current_data]]$.__enclos_env__$private)) {
-                                                  stop(format(Sys.time(),
-                                                              "%Y-%m-%d %H:%M:%S"),
-                                                       " - Invalid \"attribut_l2\" argument, attribut's name not in the object.")
-                                                } else {
-                                                  data[[current_data]]$.__enclos_env__$private[[attribut_l2]]
-                                                }
-                                              } else {
-                                                data[[current_data]]
-                                              }
-                                            })
+      output <- sapply(X = seq_len(length.out = length(data)),
+                       FUN = function(current_data) {
+                         if (! is.null(x = attribut_l2)) {
+                           if (! attribut_l2 %in% names(data[[current_data]]$.__enclos_env__$private)) {
+                             stop(format(Sys.time(),
+                                         "%Y-%m-%d %H:%M:%S"),
+                                  " - Invalid \"attribut_l2\" argument, attribut's name not in the object.")
+                           } else {
+                             data[[current_data]]$.__enclos_env__$private[[attribut_l2]]
+                           }
+                         } else {
+                           data[[current_data]]
+                         }
+                       })
       return(output)
     },
     # filter element ----

@@ -22,6 +22,7 @@ Initialize function for R6 wellset class.
 \if{html}{\out{<div class="r">}}\preformatted{wellset$new(
   trip_id,
   activity_id,
+  school_type_code,
   well_id,
   sample_id,
   weighted_weight,
@@ -37,15 +38,17 @@ Initialize function for R6 wellset class.
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 
+\item{\code{school_type_code}}{Object of class {\link[base]{character}} expected. School type identification.}
+
 \item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
-\item{\code{weighted_weight}}{Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s).}
+\item{\code{weighted_weight}}{Object of class {\link[base]{numeric}} expected. Set weight weighted by all set in the well(s) (tonnes).}
 
-\item{\code{weighted_weight_minus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals less than 10 kg (weighted by all set in the well(s))}
+\item{\code{weighted_weight_minus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals in the less than 10 kg category, in tonnes, (weighted by all set in the well(s)).}
 
-\item{\code{weighted_weight_plus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals plus than 10 kg (weighted by all set in the well(s))}
+\item{\code{weighted_weight_plus10}}{Object of class {\link[base]{numeric}} expected. Set weight of individuals in the over 10 kg category, in tonnes, (weighted by all set in the well(s)).}
 }
 \if{html}{\out{</div>}}
 }

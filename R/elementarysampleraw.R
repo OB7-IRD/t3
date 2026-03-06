@@ -17,9 +17,9 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
                                      #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
                                      #' @param size_measure_type_code Object of class {\link[base]{integer}} expected. Length type identification.
-                                     #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
-                                     #' @param sample_number_measured Object of class {\link[base]{integer}} expected. Sample number of measured individus.
-                                     #' @param sample_length_class Object of class {\link[base]{integer}} expected. Sample length class of measured individus.
+                                     #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.
+                                     #' @param sample_number_measured Object of class {\link[base]{integer}} expected. Sample number of measured individuals.
+                                     #' @param sample_length_class Object of class {\link[base]{double}} expected. Sample length class of measured individuals.
                                      initialize = function(trip_id,
                                                            well_id,
                                                            sample_id,

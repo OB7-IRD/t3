@@ -7,6 +7,8 @@ select
 	,s.label1::text as school_type_label
 	,w.code::text as weight_category_code
 	,w.label1::text as weight_category_label
+	,w.minweight::numeric as weight_category_min
+	,w.maxweight::numeric as weight_category_max
   ,sp.faocode::text as species_fao_code
 	,c.weight::numeric as catch_weight
 	,c.count::integer as catch_count

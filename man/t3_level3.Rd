@@ -8,9 +8,9 @@ t3_level3(
   inputs_level3,
   inputs_level3_path = NULL,
   periode_reference_level3 = NULL,
-  target_year,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
   target_ocean = NULL,
-  period_duration,
+  period_duration = 4L,
   country_flag = NULL,
   input_type = "observe_database",
   distance_maximum = as.integer(5),
@@ -33,13 +33,12 @@ t3_level3(
   log_path = NULL,
   log_name = "t3_level3",
   output_path = NULL,
-  output_format = "eu",
   new_directory = FALSE,
   integrated_process = FALSE
 )
 }
 \arguments{
-\item{inputs_level3}{Object of type \code{\link[base]{data.frame}} expected. Inputs of levels 3 (see function path to level 3).}
+\item{inputs_level3}{Object of type list of 5 \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected. Inputs of levels 3 (see function path to level 3 \code{process_level3$raw_inputs_level3$}).}
 
 \item{inputs_level3_path}{Object of type \code{\link[base]{character}} expected. Path to the folder containing yearly data output of the level 1 and 2 (output of the function the path to level 3). If provide, replace the inputs_level3 object.}
 
@@ -75,9 +74,9 @@ t3_level3(
 
 \item{small_fish_only}{Object of type \code{\link[base]{logical}} expected. Whether the model estimate proportion for small fish only (< 10 kg).}
 
-\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = F}
+\item{plot_sample}{\code{\link[base]{logical}}. Whether the sample figure is computed. Default value = FALSE.}
 
-\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database}
+\item{avdth_patch_coord}{parameter waiting for coordinate conversion patch from avdth database.}
 
 \item{ci}{Object of type \code{\link[base]{logical}} expected. Logical indicating whether confidence interval is computed. The default value is FALSE as it is a time consuming step.}
 
@@ -95,12 +94,13 @@ t3_level3(
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
 
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
 \item{integrated_process}{Object of class \code{\link[base]{logical}} expected. Indicate if the process is integrated in another (like the one in the function "t3_process"). By default FALSE.}
 }
 \description{
 Level 3 of t3 process (modelislation).
+}
+\seealso{
+\code{\link[t3]{full_trips}},  \code{\link[t3]{t3_level1}}, \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_process}}
 }

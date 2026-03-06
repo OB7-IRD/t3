@@ -23,6 +23,7 @@ Initialize function for R6 elementarywellplan class.
   wellplan_id,
   well_id,
   activity_id,
+  school_type_code,
   sample_id,
   species_fao_code,
   wellplan_weight,
@@ -40,6 +41,8 @@ Initialize function for R6 elementarywellplan class.
 \item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
+
+\item{\code{school_type_code}}{Object of class {\link[base]{character}} expected. School type identification.}
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 

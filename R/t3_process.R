@@ -11,7 +11,6 @@
 #' @param log_file Object of class {\link[base]{logical}} expected. Initiation or not for log file creation. By default FALSE (no).
 #' @param log_path Object of class {\link[base]{character}} expected. Path of the log file directory. By default NULL.
 #' @param output_path Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.
-#' @param output_format Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).
 #' @param new_directory Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.
 #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
 #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
@@ -20,15 +19,28 @@
 #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
+#' @param weight_categories_avdth_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+#' Reference table defining the logbook weight categories with the following columns:
+#' \itemize{
+#' \item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{integer}}.
+#' \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+#' \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+#' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+#' }
+#' Mandatory for \code{referential_template = "avdth"}.
+#' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
 #' @param rf1_computation Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 #' By default TRUE, the rf1 is calculated for each trip.
 #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 #' By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
 #' LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH database) (French and Mayotte fleets).
+#' @param apply_rf1_on_bycatch Object of class \code{\link[base]{logical}} expected. By default FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
+#' If TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.
 #' @param species_fate_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 6 ("Retained, presumably destined for the cannery"). Specie(s) fate code(s) used for the RF1 process.
 #' @param vessel_type_codes_rf1 Object of type \code{\link[base]{integer}} expected. By default 4, 5 and 6. Vessel type(s).
 #' @param rf1_lowest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.
 #' @param rf1_highest_limit Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.
+#' @param fishing_effort_computation Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).
 #' @param sunrise_schema Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.
 #' @param sunset_schema Object of class {\link[base]{character}} expected. Sunset characteristic. By default "sunset" (sun disappears below the horizon, evening civil twilight starts). See function fishing_time() for more details.
 #' @param maximum_lf_class Object of type \code{\link[base]{integer}} expected. Theorical maximum lf class that can occur (all species considerated). By default 500.
@@ -40,6 +52,7 @@
 #' @param periode_reference_level3 Object of type \code{\link[base]{integer}} expected. Year(s) period of reference for modelling estimation.
 #' @param target_year Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.
 #' @param target_ocean Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.
+#' @param country_flag Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.
 #' @param period_duration Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5
 #' @param distance_maximum Object of type \code{\link[base]{integer}} expected. Maximum distance between all sets of a sampled well. By default 5.
 #' @param number_sets_maximum Object of type \code{\link[base]{integer}} expected. Maximum number of sets allowed in mixture. By default 5.
@@ -66,6 +79,7 @@
 #'  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 #' }
 #' @importFrom codama r_type_checking
+#' @seealso \code{\link[t3]{t3_level1}},  \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{full_trips}}
 #' @export
 t3_process <- function(process = "all",
                        data_source = "observe_database",
@@ -73,7 +87,6 @@ t3_process <- function(process = "all",
                        log_file = FALSE,
                        log_path = NULL,
                        output_path = NULL,
-                       output_format = "eu",
                        new_directory = TRUE,
                        years_period,
                        flag_codes,
@@ -82,12 +95,15 @@ t3_process <- function(process = "all",
                        species_fate_codes,
                        sample_type_codes,
                        trip_ids = NULL,
+                       weight_categories_avdth_ref = NULL,
                        rf1_computation = TRUE,
+                       apply_rf1_on_bycatch = TRUE,
                        species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
-                       species_fate_codes_rf1 = as.integer(c(6, 11)),
+                       species_fate_codes_rf1 = as.integer(6),
                        vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
                        rf1_lowest_limit = 0.8,
                        rf1_highest_limit = 1.2,
+                       fishing_effort_computation = TRUE,
                        sunrise_schema = "sunrise",
                        sunset_schema = "sunset",
                        maximum_lf_class = as.integer(500),
@@ -97,9 +113,10 @@ t3_process <- function(process = "all",
                        threshold_frequency_rf_plus10 = as.integer(75),
                        threshold_rf_total = as.integer(250),
                        periode_reference_level3 = NULL,
-                       target_year,
+                       target_year = as.integer(lubridate::year(Sys.time() - 1)),
                        target_ocean = NULL,
-                       period_duration,
+                       country_flag = flag_codes[1],
+                       period_duration = 4L,
                        distance_maximum = as.integer(5),
                        number_sets_maximum = as.integer(5),
                        set_weight_minimum = as.integer(6),
@@ -125,9 +142,11 @@ t3_process <- function(process = "all",
                                             "level2",
                                             "until_level2"))
   # 2 - Process ----
-  message(format(x = Sys.time(),
+  cat(format(x = Sys.time(),
                  "%Y-%m-%d %H:%M:%S"),
-          " - Ignition of the Tropical Tuna Treatment. Process could be long. Until reach 88 mph, take a coffee.")
+          " - Ignition of the Tropical Tuna Treatment.
+          Process could be long. Until reach 88 mph, take a coffee.\n",
+          sep="")
   t3_process <- data_model_initialisation(data_source = data_source,
                                           database_connection = database_connection,
                                           log_file = log_file,
@@ -139,17 +158,16 @@ t3_process <- function(process = "all",
                                           vessel_type_codes,
                                           species_fate_codes = species_fate_codes,
                                           sample_type_codes = sample_type_codes,
+                                          weight_categories_avdth_ref = weight_categories_avdth_ref,
                                           trip_ids = trip_ids)
   referential_template <- sub("_database", "",  data_source)
   if (process == "level1") {
     new_directory_level1 <- new_directory
     output_path_level1 <- output_path
-    output_format_level1 <- output_format
     integrated_process <- FALSE
   } else if (process == "level2") {
     new_directory_level2 <- new_directory
     output_path_level2 <- output_path
-    output_format_level2 <- output_format
     integrated_process <- FALSE
   } else if (process %in% c("all",
                             "until_level2")) {
@@ -160,27 +178,21 @@ t3_process <- function(process = "all",
                                         level = process)
       new_directory_level1 <- FALSE
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- FALSE
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- FALSE
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     } else {
       integrated_process <- FALSE
       new_directory_level1 <- new_directory
       output_path_level1 <- output_path
-      output_format_level1 <- output_format
       new_directory_level2 <- new_directory
       output_path_level2 <- output_path
-      output_format_level2 <- output_format
       if (process == "all") {
         new_directory_level3 <- new_directory
         output_path_level3 <- output_path
-        output_format_level3 <- output_format
       }
     }
   }
@@ -193,16 +205,17 @@ t3_process <- function(process = "all",
                                  log_path = log_path,
                                  log_name = "t3_level1",
                                  rf1_computation = rf1_computation,
+                                 apply_rf1_on_bycatch = apply_rf1_on_bycatch,
                                  species_fao_codes_rf1 = species_fao_codes_rf1,
                                  species_fate_codes_rf1 = species_fate_codes_rf1,
                                  vessel_type_codes_rf1 = vessel_type_codes_rf1,
                                  rf1_lowest_limit = rf1_lowest_limit,
                                  rf1_highest_limit = rf1_highest_limit,
+                                 fishing_effort_computation = fishing_effort_computation,
                                  sunrise_schema = sunrise_schema,
                                  sunset_schema = sunset_schema,
                                  new_directory = new_directory_level1,
                                  output_path = output_path_level1,
-                                 output_format = output_format_level1,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
@@ -222,12 +235,11 @@ t3_process <- function(process = "all",
                                  log_name = "t3_level2",
                                  new_directory = new_directory_level2,
                                  output_path = output_path_level2,
-                                 output_format = output_format_level2,
                                  integrated_process = integrated_process,
                                  referential_template = referential_template)
   }
   if (process == "all") {
-    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3()
+    t3_process[[3]] <- t3_process$object_full_trips$path_to_level3(global_output_path = output_path)
     names(t3_process)[3] <- "process_level3"
     t3_process[[3]] <- t3_level3(inputs_level3 = t3_process[[3]][[1]],
                                  inputs_level3_path = NULL,
@@ -235,7 +247,7 @@ t3_process <- function(process = "all",
                                  target_year=target_year,
                                  target_ocean = target_ocean,
                                  period_duration=period_duration,
-                                 country_flag = flag_codes,
+                                 country_flag = country_flag,
                                  input_type = data_source,
                                  distance_maximum = distance_maximum,
                                  number_sets_maximum = number_sets_maximum,
@@ -257,12 +269,12 @@ t3_process <- function(process = "all",
                                  log_path = log_path,
                                  log_name = "t3_level3",
                                  output_path = output_path_level3,
-                                 output_format = output_format_level3,
                                  new_directory = new_directory_level3,
                                  integrated_process = integrated_process)
   }
-  message(format(Sys.time(),
+  cat(format(Sys.time(),
                  "%Y-%m-%d %H:%M:%S"),
-          " - Successful process of the Tropical Tuna Treatment.")
+          " - Successful process of the Tropical Tuna Treatment.\n",
+          sep="")
   return(t3_process)
 }

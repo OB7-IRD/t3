@@ -59,11 +59,11 @@ Initialize function for R6 elementarysampleraw class.
 
 \item{\code{size_measure_type_code}}{Object of class {\link[base]{integer}} expected. Length type identification.}
 
-\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
+\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.}
 
-\item{\code{sample_number_measured}}{Object of class {\link[base]{integer}} expected. Sample number of measured individus.}
+\item{\code{sample_number_measured}}{Object of class {\link[base]{integer}} expected. Sample number of measured individuals.}
 
-\item{\code{sample_length_class}}{Object of class {\link[base]{integer}} expected. Sample length class of measured individus.}
+\item{\code{sample_length_class}}{Object of class {\link[base]{double}} expected. Sample length class of measured individuals.}
 }
 \if{html}{\out{</div>}}
 }

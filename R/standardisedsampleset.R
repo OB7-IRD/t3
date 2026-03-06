@@ -9,18 +9,20 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                     #' @description Initialize function for R6 standardisedsampleset class.
                                     #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
                                     #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                                    #' @param school_type_code Object of class {\link[base]{character}} expected. School type identification.
                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                     #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                     #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
                                     #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
-                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
-                                    #' @param sample_number_weighted Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus and weighted by set weight.
-                                    #' @param sample_weight Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individus extrapolated to all counted individus (conversion by length weight relationship: coeficient a * length class lf ^ coeficient b).
-                                    #' @param sample_weight_unit Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individu calculated by the length weight relationship: coeficient a * length class lf ^ coeficient b).
+                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardized length class length fork of measured individuals.
+                                    #' @param sample_number_weighted Object of class {\link[base]{numeric}} expected. Sample number of measured individuals extrapolated to all counted individuals and weighted by set weight.
+                                    #' @param sample_weight Object of class {\link[base]{numeric}} expected. Weight (kg) of the sample number of measured individuals extrapolated to all counted individuals (conversion by length weight relationship: parameter_a * length_class_lf ^ parameter_b).
+                                    #' @param sample_weight_unit Object of class {\link[base]{numeric}} or NA expected. Weight (kg) of one individual calculated by the length weight relationship: parameter_a * length_class_lf ^ parameter_b).
                                     #' @param sample_category Object of class {\link[base]{character}} expected. Sample category: -10kg or +10kg.
                                     initialize = function(trip_id,
                                                           activity_id,
+                                                          school_type_code,
                                                           well_id,
                                                           sample_id,
                                                           sample_quality_code,
@@ -36,6 +38,9 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = activity_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = school_type_code,
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = well_id,
@@ -71,6 +76,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                       # 2 - Attributions ----
                                       private$trip_id <- trip_id
                                       private$activity_id <- activity_id
+                                      private$school_type_code <- school_type_code
                                       private$well_id <- well_id
                                       private$sample_id <- sample_id
                                       private$sample_quality_code <- sample_quality_code
@@ -85,6 +91,7 @@ standardisedsampleset <- R6::R6Class(classname = "standardisedsampleset",
                                   private = list(
                                     trip_id = NULL,
                                     activity_id = NULL,
+                                    school_type_code = NULL,
                                     well_id = NULL,
                                     sample_id = NULL,
                                     sample_quality_code = NULL,

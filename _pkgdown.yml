@@ -6,26 +6,9 @@ template:
       index_name: ob7-ird
 
 reference:
-- title: "Shortcut functions"
-  desc: >
-    Functions for run all or several parts of the t3 process.
-- contents:
-  - t3_process
-  - data_model_initialisation
-  - t3_level1
-  - t3_level2
-  - t3_level3
-- title: "Level 3 tools"
-  desc: >
-    Functions used in the process level 3.
-- contents:
-  - catch_ci_calculator
-  - df2boot
-  - tunaboot
-  - tunapredict
 - title: "R6 class"
   desc: >
-    Link to the function for R6 class creations. Methods and processes associated are encapsulate in each class.
+    Function for R6 class creation.
 - contents:
   - activities
   - activity
@@ -37,9 +20,6 @@ reference:
   - elementarysamplesraw
   - elementarywellplan
   - elementarywellplans
-  - full_trips
-  - list_t3
-  - object_model_data
   - samples
   - standardisedsample
   - standardisedsamples
@@ -51,11 +31,30 @@ reference:
   - wells
   - wellset
   - wellsets
-- title: "Typing verification"
+- title: "Methods associated to R6 objects"
   desc: >
-    Functions for typing verification. Used before class creations for checking attributes consistency.
+    Methods and processes associated to R6 objects, encapsulated in each class:
 - contents:
-  - starts_with("check_")
+  - object_model_data
+  - full_trips
+  - list_t3
+- title: "Shortcut functions"
+  desc: >
+    Functions for run all or several parts of the t3 process.
+- contents:
+  - data_model_initialisation
+  - t3_level1
+  - t3_level2
+  - t3_level3
+  - t3_process
+- title: "Level 3 tools"
+  desc: >
+    Functions used in the process level 3.
+- contents:
+  - catch_ci_calculator
+  - df2boot
+  - tunaboot
+  - tunapredict
 - title: "Diverse"
   desc: >
     Diverse functions and tools.
@@ -63,6 +62,14 @@ reference:
   - object_r6
   - initiate_log_file
   - initiate_directory
+- title: "Data"
+  desc: >
+    Referential tables used in t3 process.
+- contents:
+  - length_step
+  - length_weight_relationship
+  - set_duration_ref
+  - weight_categories_avdth_ref
 
 url: https://ob7-ird.github.io/t3
 
@@ -75,11 +82,11 @@ articles:
 - title: t3 processes description
   navbar: ~
   contents:
+  - running_processes_examples
   - model_initialisation
   - level_1
   - level_2
   - level_3
-  - running_processes_examples
 
 development:
   mode: auto

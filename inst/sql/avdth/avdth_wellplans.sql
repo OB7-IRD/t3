@@ -39,9 +39,11 @@ SELECT
 	,cc.V_NB AS wellplan_count
 	,cc.C_CAT_POIDS AS weight_category_code
 	,cp.L_CAT_POIDS AS weight_category_label
+	,a.C_TBANC AS school_type_code
 FROM
-	((((((CUVE_CALEE cc
+	(((((((CUVE_CALEE cc
 	LEFT JOIN ECHANTILLON e ON (cc.F_POS_CUVE = e.F_POS_CUVE) AND (cc.N_CUVE = e.N_CUVE) AND (cc.D_DBQ = e.D_DBQ) AND (cc.C_BAT = e.C_BAT))
+	LEFT JOIN ACTIVITE a ON (cc.C_BAT = a.C_BAT) AND (cc.D_DBQ = a.D_DBQ)  AND (cc.D_ACT = a.D_ACT) AND (cc.N_ACT = a.N_ACT))
 	INNER JOIN ESPECE es ON cc.C_ESP = es.C_ESP)
 	INNER JOIN CAT_POIDS cp ON cc.C_CAT_POIDS = cp.C_CAT_POIDS)
 	INNER JOIN BATEAU b ON cc.C_BAT = b.C_BAT)

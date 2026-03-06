@@ -16,6 +16,16 @@
 #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
 #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
+#' @param weight_categories_avdth_ref Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+#' Reference table defining the logbook weight categories with the following columns:
+#' \itemize{
+#' \item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{character}}.
+#' \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+#' \item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+#' \item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+#' }
+#' Mandatory for \code{data_source = "avdth_database"}.
+#' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
 #' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 #' @importFrom codama r_type_checking
@@ -32,6 +42,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                       vessel_type_codes,
                                       species_fate_codes,
                                       sample_type_codes,
+                                      weight_categories_avdth_ref = NULL,
                                       trip_ids = NULL) {
   # 1 - Arguments verifications ----
   codama::r_type_checking(r_object = data_source,
@@ -85,6 +96,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                                ocean_codes = ocean_codes,
                                                vessel_type_codes = vessel_type_codes,
                                                species_fate_codes = species_fate_codes,
+                                               weight_categories_avdth_ref = weight_categories_avdth_ref,
                                                trip_ids = trip_ids)
   # model creation: object elementarylandings creation
   object_model_data$elementarylandings_object_creation(data_source = data_source,

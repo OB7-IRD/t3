@@ -2,7 +2,7 @@
 #' @title Boostrap for Model Predictions
 #' @description Bootstrap function which compute proportion by species fishing mode and ocean for confindence interval
 #' @param sample_data (data frame) Data used for the modelling. Output table from process 3.1.
-#' @param allset_data (data frame) Data used for prediction.Output table from process 3.4.
+#' @param allset_data (data frame) Data used for prediction. Output table from process 3.4.
 # @param schooltype (integer) Fishing mode of the catch.
 # @param ocean (integer) Target ocean.
 # @param species (character) Target species. 'SKJ' for skipjack and 'YFT' for yellowfin.
@@ -16,6 +16,7 @@
 #' @importFrom ranger ranger
 #' @importFrom dplyr sample_n bind_rows rename
 #' @importFrom stats predict
+#' @import cli
 tunaboot <- function(sample_data,
                      allset_data,
                      Ntree = 1000,
@@ -88,9 +89,18 @@ tunaboot <- function(sample_data,
                    "wtot_lb_t3",
                    # "w_lb_t3",
                    "data_source")
-
+  cli::cli_alert_info(paste0("                  ",
+                             " - Bootstrap iteration:"))
+  options(cli.progress_show_after = 0)
+  cli::cli_progress_bar(clear = getOption("cli.progress_clear", FALSE),
+                        format = paste0("                        ",
+                                        "[{cli::pb_current}/{cli::pb_total}], ",
+                                        "[{cli::pb_bar}{cli::pb_percent}]",
+                                        ", Time remaining:{cli::pb_eta}"),
+                        total =  Nboot)
   for (i in seq.int(from = 1, to = Nboot)) {
-    print(i)
+    cli::cli_progress_update()
+    # print(i)
     set.seed(i)
     newsample <- dplyr::sample_n(tbl = sub,
                                  size = nrow(sub),

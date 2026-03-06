@@ -11,7 +11,6 @@ t3_process(
   log_file = FALSE,
   log_path = NULL,
   output_path = NULL,
-  output_format = "eu",
   new_directory = TRUE,
   years_period,
   flag_codes,
@@ -20,12 +19,15 @@ t3_process(
   species_fate_codes,
   sample_type_codes,
   trip_ids = NULL,
+  weight_categories_avdth_ref = NULL,
   rf1_computation = TRUE,
+  apply_rf1_on_bycatch = TRUE,
   species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
-  species_fate_codes_rf1 = as.integer(c(6, 11)),
+  species_fate_codes_rf1 = as.integer(6),
   vessel_type_codes_rf1 = as.integer(c(4, 5, 6)),
   rf1_lowest_limit = 0.8,
   rf1_highest_limit = 1.2,
+  fishing_effort_computation = TRUE,
   sunrise_schema = "sunrise",
   sunset_schema = "sunset",
   maximum_lf_class = as.integer(500),
@@ -35,9 +37,10 @@ t3_process(
   threshold_frequency_rf_plus10 = as.integer(75),
   threshold_rf_total = as.integer(250),
   periode_reference_level3 = NULL,
-  target_year,
+  target_year = as.integer(lubridate::year(Sys.time() - 1)),
   target_ocean = NULL,
-  period_duration,
+  country_flag = flag_codes[1],
+  period_duration = 4L,
   distance_maximum = as.integer(5),
   number_sets_maximum = as.integer(5),
   set_weight_minimum = as.integer(6),
@@ -73,8 +76,6 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{output_path}{Object of class \code{\link[base]{character}} expected. Outputs path directory. By default NULL.}
 
-\item{output_format}{Object of class \code{\link[base]{character}} expected. By default "eu". Select outputs format regarding European format (eu) or United States format (us).}
-
 \item{new_directory}{Object of class \code{\link[base]{logical}} expected. Initiate a new outputs directory of use an existing one. By default NULL.}
 
 \item{years_period}{Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".}
@@ -91,8 +92,22 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 
+\item{weight_categories_avdth_ref}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+Reference table defining the logbook weight categories with the following columns:
+\itemize{
+\item{avdth_weight_category_code: } Logbook weight category code from avdth database, type \code{\link[base]{integer}}.
+\item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
+\item{weight_category_min: } lower limit of the weight category (kg), type \code{\link[base]{numeric}}.
+\item{weight_category_max: } upper limit of the weight category (kg), type \code{\link[base]{numeric}}.
+}
+Mandatory for \code{referential_template = "avdth"}.
+By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
+
 \item{rf1_computation}{Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 By default TRUE, the rf1 is calculated for each trip.}
+
+\item{apply_rf1_on_bycatch}{Object of class \code{\link[base]{logical}} expected. By default FALSE, only the catch weights of species belonging to the species list, defined by the \code{species_fao_codes_rf1} argument are corrected, rf1 is not applied to by-catch species.
+If TRUE, rf1 values will be applied to all the logbook catches associated to the trip, including by-catch species.}
 
 \item{species_fao_codes_rf1}{Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
 By default, use codes YFT (*Thunnus albacares*), SKJ (*Katsuwonus pelamis*), BET (*Thunnus obesus*), ALB (*Thunnus alalunga*),
@@ -105,6 +120,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{rf1_lowest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the lowest limit of the RF1. By default 0.8.}
 
 \item{rf1_highest_limit}{Object of type \code{\link[base]{numeric}} expected. Verification value for the highest limit of the RF1. By default 1.2.}
+
+\item{fishing_effort_computation}{Object of class {\link[base]{logical}} expected. Calculation or not of fishing effort indicators (time at sea, fishing time, set duration and searching time). By default TRUE (yes).}
 
 \item{sunrise_schema}{Object of class {\link[base]{character}} expected. Sunrise characteristic. By default "sunrise" (top edge of the sun appears on the horizon). See function fishing_time() for more details.}
 
@@ -127,6 +144,8 @@ LOT (*Thunnus tonggol*) and TUN/MIX (mix of tunas species in Observe/AVDTH datab
 \item{target_year}{Object of type \code{\link[base]{integer}} expected. Year of interest for the model estimation and prediction.Default value is current year -1.}
 
 \item{target_ocean}{Object of type \code{\link[base]{integer}} expected. The code of ocean of interest.}
+
+\item{country_flag}{Three letters FAO flag code of country to estimate catches. By default, first of `flag_codes`.}
 
 \item{period_duration}{Object of type \code{\link[base]{integer}} expected. number of years use for the modelling. The default value is 5}
 
@@ -173,4 +192,7 @@ For the argument "process", you can choose between 4 modalities (descending size
  \item{level2: } you launch data model initialisation and the process level 2
  \item{until_level2: } you launch data model initialisation, the process level 1 and 2
 }
+}
+\seealso{
+\code{\link[t3]{t3_level1}},  \code{\link[t3]{t3_level2}}, \code{\link[t3]{t3_level3}}, \code{\link[t3]{full_trips}}
 }

@@ -9,6 +9,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     #' @param wellplan_id Object of class {\link[base]{character}} expected. Wellplan identification.
                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
                                     #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
+                                    #' @param school_type_code Object of class {\link[base]{character}} expected. School type identification.
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                     #' @param species_fao_code Object of class {\link[base]{character}} expected. Specie code identification on 3 characters.
                                     #' @param wellplan_weight (numeric) Weight in tonnes filled in the well plan.
@@ -18,6 +19,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     initialize = function(wellplan_id,
                                                           well_id,
                                                           activity_id,
+                                                          school_type_code,
                                                           sample_id,
                                                           species_fao_code,
                                                           wellplan_weight,
@@ -32,6 +34,9 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = activity_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = school_type_code,
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = sample_id,
@@ -53,6 +58,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       private$wellplan_id <- wellplan_id
                                       private$well_id <- well_id
                                       private$activity_id <- activity_id
+                                      private$school_type_code <- school_type_code
                                       private$sample_id <- sample_id
                                       private$species_fao_code <- species_fao_code
                                       private$wellplan_weight <- wellplan_weight
@@ -63,6 +69,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     wellplan_id = NULL,
                                     well_id = NULL,
                                     activity_id = NULL,
+                                    school_type_code = NULL,
                                     sample_id = NULL,
                                     species_fao_code = NULL,
                                     wellplan_weight = NULL,
