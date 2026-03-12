@@ -962,7 +962,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "], Time remaining:{cli::pb_eta}"),,
                                                                                           total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],]
+                                                                    act_ocean_code <-  as.integer(ifelse(activity_data$activity_longitude[activity_id] < 20,
+                                                                                                         1, 2))
+                                                                    elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],] %>%
+                                                                      dplyr::mutate(ocean_code = act_ocean_code,
+                                                                                    ocean_label = ifelse(act_ocean_code == 1,
+                                                                                                         "Atlantic",
+                                                                                                         "Indian"))
                                                                     if(nrow(elementarycatches_data)==0){
                                                                       elementarycatches_data <- NULL
                                                                     }
@@ -972,7 +978,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              activity_number = activity_data$activity_number[activity_id],
                                                                                              activity_longitude = activity_data$activity_longitude[activity_id],
                                                                                              activity_latitude = activity_data$activity_latitude[activity_id],
-                                                                                             ocean_code = ifelse(activity_data$activity_longitude[activity_id] < 20, 1, 2),
+                                                                                             ocean_code = act_ocean_code,
                                                                                              set_count = activity_data$set_count[activity_id],
                                                                                              set_success_status_code = activity_data$set_success_status_code[activity_id],
                                                                                              set_success_status_label = activity_data$set_success_status_label[activity_id],

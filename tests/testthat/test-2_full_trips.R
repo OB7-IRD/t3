@@ -2,7 +2,6 @@
 load(file = system.file("test_data",
                         "observe_data_test.RData",
                         package = "t3"))
-species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 # model creation ----
 # initialisation object for full trips class
 object_full_trips <- t3:::full_trips$new()
@@ -25,7 +24,7 @@ capture.output(object_full_trips$add_wells_samples(object_wells = object_model_d
 # level 1 process ----
 # level 1.1: rf1
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT")
-species_fate_codes_rf1 = as.integer(c(6, 11))
+species_fate_codes_rf1 = as.integer(c(6))
 capture.output(object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
                                      species_fate_codes_rf1 = species_fate_codes_rf1),
                file = "NUL")
@@ -447,7 +446,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
       capture.output(current_elementarylandings_rf1 <- t3::object_r6(class_name = "elementarylandings"),
                      file = "NUL")
       capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
-                                                                                                                        paste0(species_fao_codes_rf1_fr, collapse = "\", \""),
+                                                                                                                        paste0(species_fao_codes_rf1, collapse = "\", \""),
                                                                                                                         "\")"))),
                      file = "NUL")
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))

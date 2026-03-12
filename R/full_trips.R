@@ -2734,10 +2734,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                             paste(fishing_codes,
                                                                                                                                                                   collapse = "\", \""),"\")"))),
                                                            file = "NUL")
+                                            # Compute fishing time according to localisation of fsihing activities declared
                                             current_activities_latitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_latitude"))
                                             current_activities_longitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_longitude"))
                                             latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
                                             longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
+
+                                            # Case of missing position
                                             if(is.na(latitude_mean) | is.na(longitude_mean)){
                                               warning(format(Sys.time(),
                                                              "%Y-%m-%d %H:%M:%S"),
@@ -2752,9 +2755,14 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                              current_activities_date_fishing$extract_l1_element_value(element = "activity_id"),
                                                              collapse="];\n"),
                                                       "].")
+                                              ## Use the ocean to define total fishing time for the date
                                               ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
+                                              ### Case of activities in different ocean we keep the first recorded
+                                              if(length(ocean_code >1)){
+                                                ocean_code <- ocean_code[1]
+                                              }
                                               fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
-                                            } else{
+                                            } else {
                                               current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
                                                                                            lat = latitude_mean,
                                                                                            lon = longitude_mean)[[sunrise_schema]]
@@ -2800,6 +2808,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
                                             latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
                                             longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
+
+                                            # Case of missing position
                                             if(is.na(latitude_mean) | is.na(longitude_mean)){
                                               warning(format(Sys.time(),
                                                              "%Y-%m-%d %H:%M:%S"),
@@ -2813,7 +2823,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       ", [activity: ",
                                                       current_activities_date_catch$extract_l1_element_value(element="activity_id")[[1]],
                                                       "]")
+                                              ## Use the ocean to define total fishing time for the date
                                               ocean_code <- unique(unlist(current_activities_date_fishing$extract_l1_element_value(element = "ocean_code")))
+                                              ### Case of activities in different ocean we keep the first recorded
+                                              if(length(ocean_code >1)){
+                                                ocean_code <- ocean_code[1]
+                                              }
                                               fishing_time_tmp <- ifelse(ocean_code==1, 12, 13)
                                             } else{
                                               current_sunrise <- suncalc::getSunlightTimes(date = as.Date(x = activities_date),
@@ -3194,28 +3209,28 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           capture.output(current_activities_with_elementarycatches$add(new_item = current_activities$filter_l1(filter = "length($path$elementarycatches) != 0")),
                                                          file = "NUL")
                                           oceans_activities <- unique(unlist(current_activities_with_elementarycatches$extract_l1_element_value(element = "ocean_code")))
-                                          if (length(oceans_activities) != 1) {
-                                            capture.output(current_elementary_catches <- do.call(rbind,
-                                                                                                 current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches")),
-                                                           file = "NUL")
+                                          ## Case of multiple ocean ----------
+                                          if (length(oceans_activities) > 1) {
+                                            current_elementary_catches <-  do.call(rbind, current_activities_with_elementarycatches$extract_l1_element_value(element = "elementarycatches"))
+
                                             if (any(is.null(x = current_elementary_catches$catch_weight_category_code_corrected))) {
+                                              #### Change to run level 2 without level 1 ----------
                                               stop(format(Sys.time(),
                                                           "%Y-%m-%d %H:%M:%S"),
                                                    " - Variable \"catch_weight_category_code_corrected\" not calculated.\n Run steps 1.1 of level 1 before this step.")
                                             } else {
-                                              total_current_elementary_catches <- sum(current_elementary_catches$catch_weight_category_code_corrected,
-                                                                                      na.rm=TRUE)
-                                              oceans_activities_weight <- as.numeric()
-                                              for (current_ocean_activites in oceans_activities) {
-                                                capture.output(current_elementary_catches_ocean <- dplyr::filter(.data=current_elementary_catches,
-                                                                                                                 current_elementary_catches$ocean_code == current_ocean_activites),
-                                                               file = "NUL")
-                                                current_oceans_activities_weight <- sum(current_elementary_catches_ocean$catch_weight_category_code_corrected) / total_current_elementary_catches
-                                                oceans_activities_weight <- rbind(oceans_activities_weight,
-                                                                                  current_oceans_activities_weight)
-                                                names(oceans_activities_weight)[length(oceans_activities_weight)] <- current_ocean_activites
-                                              }
-                                              major_ocean_activities <- as.integer(names(which(x = oceans_activities_weight == max(oceans_activities_weight))))
+                                              major_ocean_activities_data <- current_elementary_catches %>%
+                                                dplyr::mutate(total_catch_weight =  sum(catch_weight_category_code_corrected,
+                                                                                        na.rm=TRUE)) %>%
+                                                dplyr::group_by(ocean_code, ocean_label) %>%
+                                                dplyr::summarise(sum_catch_weight_ocean =  sum(catch_weight_category_code_corrected,
+                                                                                               na.rm=TRUE),
+                                                                 total_catch_weight = unique(total_catch_weight),
+                                                                 prop_catch_weight_ocean = sum_catch_weight_ocean /total_catch_weight) %>%
+                                                dplyr::ungroup()
+                                              major_ocean_activities <- as.integer(major_ocean_activities_data %>%
+                                                                                     dplyr::filter(prop_catch_weight_ocean==max(prop_catch_weight_ocean)) %>%
+                                                                                     dplyr::pull(ocean_code))
                                             }
                                           } else {
                                             major_ocean_activities <- oceans_activities
@@ -3523,7 +3538,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                 }
 
                                               }
-                                              ## Remove wrong samples ----
+                                              # Remove wrong samples ----
                                               if (length(x = current_elementarysampleraws_removed) != 0) {
                                                 # Set to NA sample_length_class_lf and sample_number_measured_lf
                                                 # for elementarysampleraw with sizeclass<min(length_step$ld1_class) or sizeclass>max(length_step$ld1_class)
