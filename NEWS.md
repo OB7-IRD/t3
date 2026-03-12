@@ -2,7 +2,9 @@
 
 ## Changed
 
-* Handle trips with activities in multiple ocean (`ocean_code=99`). 
+* Handle trips with activities in multiple ocean (`ocean_code=99`) and add this case in test data. 
+
+* Change the ocean_code of activity and elementarycatch from the trip's ocean to the real ocean of the activity defined by its longitude.
 
 
 # t3 3.0.7 - 2026-01-29
