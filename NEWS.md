@@ -1,11 +1,10 @@
-# t3 3.0.8 - 2026-03-06
+# t3 3.0.8 - 2026-03-23
 
 ## Changed
 
 * Handle trips with activities in multiple ocean (`ocean_code=99`) and add this case in test data. 
-
-* Change the ocean_code of activity and elementarycatch from the trip's ocean to the real ocean of the activity defined by its longitude.
-
+  * Change the ocean_code of activity and elementarycatch from the trip's ocean to the real ocean of the activity defined by its longitude.
+  * Handle case with missing activities coordinates, the ocean of the trip is then considered. 
 
 # t3 3.0.7 - 2026-01-29
 
