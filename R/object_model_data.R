@@ -962,8 +962,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "], Time remaining:{cli::pb_eta}"),,
                                                                                           total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
-                                                                    act_ocean_code <-  as.integer(ifelse(activity_data$activity_longitude[activity_id] < 20,
-                                                                                                         1, 2))
+                                                                    trip_ocean_code <- activity_data$ocean_code[activity_id]
+                                                                    act_ocean_code <- as.integer(ifelse(is.na(activity_data$activity_longitude[activity_id]) | is.null(activity_data$activity_longitude[activity_id]),
+                                                                                                        trip_ocean_code, ifelse(activity_data$activity_longitude[activity_id] < 20,
+                                                                                                                      1, 2)))
                                                                     elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],] %>%
                                                                       dplyr::mutate(ocean_code = act_ocean_code,
                                                                                     ocean_label = ifelse(act_ocean_code == 1,

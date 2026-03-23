@@ -8674,6 +8674,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               # Compute CI by set - export catch by set
                               set_all<- dplyr::bind_rows(outputs_level3_process5$Estimated_catch_ST) %>%
                                 dplyr::mutate(ci_inf = NA,ci_sup = NA)
+
                               if (ci == TRUE && (length(which(ci_type == "all")) > 0
                                                  || length(which(ci_type == "set")) > 0 )) {
                                 set_all_boot <- lapply(outputs_level3_process5$Boot_output_list_ST,
@@ -8761,7 +8762,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                 dplyr::mutate(status = ifelse(data_source == "discard","discard", "catch"),
                                               ci_inf = catch_set_fit,
                                               ci_sup = catch_set_fit) %>%
-                                dplyr::group_by(dplyr::across(-name_to_summarise)) %>%
+                                dplyr::group_by(dplyr::across(-dplyr::all_of(name_to_summarise))) %>%
                                 dplyr::summarise(catch_set_fit = sum(catch_set_fit),
                                                  ci_inf = sum(ci_inf),
                                                  ci_sup = sum(ci_sup),
@@ -8778,14 +8779,17 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           by = dplyr::join_by("id_act", "sp"))
                               name_to_trash <- c("code_act_type", "status") #"sp_code"
                               set_all_output <- dplyr::full_join(set_all, dplyr::select(.data = catch_all_other,
-                                                                                        !name_to_trash)) %>%
-                                tidyr::separate(id_act,into = c("text_tmp", "vessel_id_tmp", "numbers"),
+                                                                                        - dplyr::all_of(name_to_trash))) %>%
+                                tidyr::separate(id_act,
+                                                into = c("text_tmp", "vessel_id_tmp", "numbers"),
                                                 sep = "#",
                                                 remove = FALSE) %>%
                                 dplyr::mutate(text_tmp = NULL,
                                               vessel_id_tmp = NULL,
                                               # landing_date = lubridate::as_date(substr(numbers,1,8)), # remove with observe db
-                                              status = ifelse(data_source == "discard","discard", "catch"),
+                                              status = ifelse(data_source == "discard",
+                                                              "discard",
+                                                              "catch"),
                                               fit_prop = NULL)
                               if(!(nrow(set_all)+nrow(catch_all_other)) == nrow(set_all_output)){
                                 warning("Duplicated detected in 'Catch_set_detail'")
