@@ -9,7 +9,7 @@ activity <- R6::R6Class(classname = "activity",
                           #' @description Initialize function for R6 activities class.
                           #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification (unique topiaid from database).
                           #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).
-                          #' @param ocean_code Object of class {\link[base]{integer}} expected. Ocean identification.
+                          #' @param ocean_code Object of class {\link[base]{integer}} expected. Ocean identification for the activity.
                           #' @param activity_date Object of class {\link[base]{character}} expected. Activity date in format year month day.
                           #' @param activity_number Object of class {\link[base]{integer}} expected. Activity number.
                           #' @param activity_latitude Object of class {\link[base]{numeric}} expected. Latitude, in decimal degree, of the activity.

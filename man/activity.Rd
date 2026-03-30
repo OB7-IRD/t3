@@ -48,7 +48,7 @@ Initialize function for R6 activities class.
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification (unique topiaid from database).}
 
-\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification.}
+\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the activity.}
 
 \item{\code{activity_date}}{Object of class {\link[base]{character}} expected. Activity date in format year month day.}
 
