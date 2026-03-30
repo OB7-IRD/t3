@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class full_trips</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/full_trips.R" class="external-link"><code>R/full_trips.R</code></a></small>
     <div class="hidden name"><code>full_trips.Rd</code></div>
     </div>
 
@@ -267,7 +267,29 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 </div>
 <div class="section">
 <h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
-<p>If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br></p><ul><li><p>process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<p>If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". <br></p><ul><li><p>process_1_1_global: a table (.csv) with as many rows as full trips and 18 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>trip_ocean_code:  ocean code of the trip, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
+, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1:  status rf1, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf2:  status rf2, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>landing_weight:  landing weight (without local market), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>catch_weight:  catch weight (visual estimation), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>catch_weight_rf2:  catch weight after visual estimation correction (tonnes): <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
+ (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1"><code>full_trips$rf1()</code></a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+<li><p>statut_rf1_label:  status rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>statut_rf2_label:  status rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul></li>
+<li><p>process_1_1_detail: a table (.csv) with as many rows as elementary catches and 24 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>activity_id:  activity identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
@@ -277,6 +299,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
+<li><p>activity_ocean_code:  ocean code of the activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
  Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
  , type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
@@ -298,27 +321,6 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>catch_weight_rf2:  catch weight after visual estimation correction, in tonnes: <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
  (<a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1">Process 1.1: Raising Factors level 1</a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
-<li><p>statut_rf1_label:  status rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>statut_rf2_label:  status rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-</ul></li>
-<li><p>process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:</p><ul><li><p>full_trip_id:  retained full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>full_trip_name:  full trip id, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>trip_id:  trip identification (unique topiaid from database), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>trip_end_date:  trip end date (y-m-d format), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>year_trip_end_date:  year of trip end, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>vessel_code:  vessel code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>vessel_type_code:  vessel type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>rf1:  raising factor to correct the weight visual estimation bias of catches filled in logbooks.
- Rf1 is the ratio of landing weight on catch weight, of the species defined by the <code>species_fao_codes_rf1</code> argument.
-, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
-<li><p>statut_rf1:  status rf1, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>rf2:  raising factor to correct missing logbook(s) not implemented yet (rf2=1), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
-<li><p>statut_rf2:  status rf2, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>landing_weight:  landing weight (without local market), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
-<li><p>catch_weight:  catch weight (visual estimation), in tonnes, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
-<li><p>catch_count:  catch count, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>catch_weight_rf2:  catch weight after visual estimation correction (tonnes): <code>catch_weight_rf2=catch_weight x rf1 (x rf2)</code>
- (<a href="https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1"><code>full_trips$rf1()</code></a>), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>statut_rf1_label:  status rf1 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 <li><p>statut_rf2_label:  status rf2 label, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 </ul></li>
@@ -369,7 +371,7 @@ By default "observe". Referential template selected (for example regarding the a
 <li><p>activity_latitude:  activity latitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>.</p></li>
-<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+<li><p>activity_ocean_code:  ocean code of the activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
 <li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
@@ -450,7 +452,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 <li><p>activity_longitude:  activity longitude, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 <li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>.</p></li>
 <li><p>activity_code:  activity code to define the type of activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
-<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+<li><p>activity_ocean_code:  ocean code of the activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
 <li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
@@ -540,7 +542,7 @@ Referential template selected (for example regarding the activity_code). You can
 <li><p>activity_date:  activity date, type <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">POSIXct</a></code>.</p></li>
 <li><p>activity_code:  activity code to define the type of activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.</p></li>
 <li><p>objectoperation_code:  object operation code to define the type of floating object operation (in Observe referential), type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>ocean_code:  ocean code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
+<li><p>activity_ocean_code:  ocean code of the activity, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   For example <code>ocean_code=1</code> for the Atlantic Ocean and <code>ocean_code=2</code> the Indian Ocean.</p></li>
 <li><p>school_type_code: school type code, type <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></code>.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.</p></li>
