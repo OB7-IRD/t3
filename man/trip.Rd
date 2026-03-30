@@ -27,7 +27,8 @@ Initialize function for R6 trip class.
   logbook_availability_code,
   landing_well_content_code,
   vessel_code,
-  vessel_type_code
+  vessel_type_code,
+  ocean_code
 )}\if{html}{\out{</div>}}
 }
 
@@ -44,11 +45,13 @@ Initialize function for R6 trip class.
 
 \item{\code{logbook_availability_code}}{Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.}
 
-\item{\code{landing_well_content_code}}{Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
+\item{\code{landing_well_content_code}}{Object of class {\link[base]{integer}} expected. Inform if the fish hold empty at the end of the trip, 1 for yes and 0 for not.}
 
 \item{\code{vessel_code}}{Object of class {\link[base]{integer}} expected. Vessel identification.}
 
 \item{\code{vessel_type_code}}{Object of class {\link[base]{character}} expected. Vessel type identification.}
+
+\item{\code{ocean_code}}{Object of class {\link[base]{integer}} expected. Ocean identification for the trip.}
 }
 \if{html}{\out{</div>}}
 }

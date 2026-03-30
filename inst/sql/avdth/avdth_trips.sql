@@ -12,16 +12,17 @@ SELECT
 	,m.F_CAL_VID AS landing_well_content_code
 	,b.c_bat AS vessel_code
 	,tb.C_TYP_B AS vessel_type_code
+
 FROM
 	(((MAREE m
 	INNER JOIN BATEAU b ON m.C_BAT = b.C_BAT)
 	INNER JOIN TYPE_BATEAU tb ON b.C_TYP_B = tb.C_TYP_B)
 	INNER JOIN PAYS p ON b.C_PAYS = p.C_PAYS)
-WHERE
+	WHERE
 	m.D_DBQ BETWEEN ?begin_time_period AND ?end_time_period
 	AND p.C_ISO3166_A3 IN (?flag_codes)
 	AND tb.C_TYP_B IN (?vessel_type_codes)
-	AND 'fr.ird.avdth.entities.data.Trip#'
+  AND 'fr.ird.avdth.entities.data.Trip#'
 		& format(b.C_BAT, '0000')
 		& '#' & YEAR(m.D_DBQ)
 		& format(MONTH(m.D_DBQ), '00')
