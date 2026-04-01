@@ -1,9 +1,19 @@
-# t3 3.0.8- 2026-03-02
+# t3 3.0.9- 2026-04-02
 
 ## Changed
 * Improve tuna mix correction in weight category conversion step  ([full_trips$conversion_weight_category()](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-conversion_weight_category)),
 for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), according to the composition of major tuna species by weight category in the elementary catches of the trip.
 
+# t3 3.0.8 - 2026-03-23
+
+## Changed
+
+* Handle trips with activities in multiple ocean (`ocean_code=99`) and add this case in test data. 
+  * Change the ocean_code of activity and elementarycatch from the trip's ocean to the real ocean of the activity defined by its longitude.
+  * Handle case with missing activities coordinates, the ocean of the trip is then considered. 
+  * Add by default in query parameters the multiple ocean code (99). 
+  * Rename the column "ocean_code" in .csv outputs as "activity_ocean_code" (and trip_ocean_code). + correct doc
+  * Change ocean label from full name to three letter code: "Atlantic" ~ "ATL", "Indian" ~ "IND", "Pacific" ~ "PAC", "Multiple" ~ "MIX".  
 
 # t3 3.0.7 - 2026-01-29
 
@@ -79,6 +89,7 @@ for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), acco
 ## Added
 * Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save the file named "inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata", in outputs folder, if `global_output_path` is not NULL. 
 
+>>>>>>> Stashed changes
 # t3 3.0.0 - 2025-04-15
 
 ## Changed
@@ -87,22 +98,21 @@ for species codes TUN/MIX (mix of tunas species in Observe/AVDTH database), acco
   - R6 reference object class [well](https://ob7-ird.github.io/t3/reference/well.html),
   - R6 reference object class [standardisedsampleset](https://ob7-ird.github.io/t3/reference/standardisedsampleset.html), 
   - process 1.3 [conversion_weight_categories](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-3-logbook-weight-categories-conversion),
-  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).  
-  
+  - process 2.4 [well_set_weight_categories()](https://ob7-ird.github.io/t3/articles/level_2.html#process-2-4-well-set-weight-categories).
 **Warning: you will need to correct this typo in your scripts**
 
 ## Added
 * Add `global_output_path` argument in function [path_to_level3](https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-path_to_level3) to save inputs_levl3_target-year_ocean_ocean-code_flag-codes.Rdata, in outputs folder, if `global_output_path` is not NULL. 
 * Add method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation) gathering methods 1.5 to 1.8:
-  - set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
-  - time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
-  - fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
-  - searching_time = fishing_time - set_duration.
+- set_duration : calculated according to a linear function of catch weight with two parameters a and b. These are found through a reference table (set_duration_ref.csv), for each year, ocean, fishing school and country. 
+- time_at_sea : the process divides the day's time at sea declared between the activities, allowing the allocation of time at sea, recorded on that date. If no activity to allocate time at sea is recorded on a given date, with a non-zero time at sea, a transit activity is created (whose id_activity contains #666#) to allocate the time ate sea of that date.
+- fishing_time : the process module the duration of a working day according to the real sunrise and sunset of each day. It then divides the day's fishing time between the fishing activities recorded on that date. If no fishing activity is recorded on a given date with a non-zero fishing time, a searching activity is created (whose id_activity contains #666#) to allocate the fishing time of that date.
+ - searching_time = fishing_time - set_duration.
  
 ## Removed 
 * Methods 1.5 to 1.8 and 1.2 (rf2). 
 
-**Warning: you will need to correct this in your scripts**
+**Warning: you will need to correct this typo in your scripts**
 
 # t3 2.1.2 - 2025-04-14
 

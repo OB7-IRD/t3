@@ -2,9 +2,14 @@
 load(file = system.file("test_data",
                         "observe_data_test.RData",
                         package = "t3"))
-species_fao_codes_rf1_fr <- c("YFT", "SKJ", "BET", "ALB", "MIX", "LOT")
 # model creation ----
 # initialisation object for full trips class
+years_period <- as.integer(c(1884,
+                             1885))
+period_duration <- as.integer(2)
+flag_codes <- c("AAA")
+target_year <- as.integer(1885)
+target_ocean <- as.integer(2)
 object_full_trips <- t3:::full_trips$new()
 # object full_trip creation
 capture.output(object_full_trips$create_full_trips(object_trips = object_model_data$.__enclos_env__$private$trips),
@@ -13,8 +18,7 @@ capture.output(object_full_trips$create_full_trips(object_trips = object_model_d
 capture.output(object_full_trips$add_activities(object_activities = object_model_data$.__enclos_env__$private$activities),
                file = "NUL")
 # filter on reference year
-capture.output(object_full_trips$filter_by_years_period(years_period = as.integer(c(1884,
-                                                                                    1885))),
+capture.output(object_full_trips$filter_by_years_period(years_period = years_period),
                file = "NUL")
 # add elementarylandings to trips selected
 capture.output(object_full_trips$add_elementarylandings(object_elementarylandings = object_model_data$.__enclos_env__$private$elementarylandings),
@@ -23,50 +27,81 @@ capture.output(object_full_trips$add_elementarylandings(object_elementarylanding
 capture.output(object_full_trips$add_wells_samples(object_wells = object_model_data$.__enclos_env__$private$wells),
                file = "NUL")
 # level 1 process ----
-# level 1.1: rf1
+## level 1.1: rf1
 species_fao_codes_rf1 <- c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT")
-species_fate_codes_rf1 = as.integer(c(6, 11))
+species_fate_codes_rf1 = as.integer(c(6))
 capture.output(object_full_trips$rf1(species_fao_codes_rf1 = species_fao_codes_rf1,
                                      species_fate_codes_rf1 = species_fate_codes_rf1),
                file = "NUL")
-# level 1.2: logbook weight categories conversion ----
+## level 1.2: logbook weight categories conversion ----
 capture.output(object_full_trips$conversion_weight_category(),
                file = "NUL")
-# level 1.3: set count ----
+## level 1.3: set count ----
 capture.output(object_full_trips$set_count(),
                file = "NUL")
-# level 1.4: fishing effort indicators ----
+## level 1.4: fishing effort indicators ----
 capture.output(object_full_trips$fishing_effort(set_duration_ref = object_model_data$.__enclos_env__$private$setdurationrefs,
                                                  activity_code_ref = object_model_data$.__enclos_env__$private$activitycoderefs),
                file = "NUL")
-# level 2.1: sample length class ld1 to lf conversion ----
+
+# level 2 process ----
+## level 2.1: sample length class ld1 to lf conversion ----
 capture.output(object_full_trips$sample_length_class_ld1_to_lf(length_step = object_model_data$.__enclos_env__$private$lengthsteps),
                file = "NUL")
-# level 2.2: sample number measured extrapolation ----
+## level 2.2: sample number measured extrapolation ----
 capture.output(object_full_trips$sample_number_measured_extrapolation(),
                file = "NUL")
-# level 2.3: sample step length class standardisation ----
+## level 2.3: sample step length class standardisation ----
 capture.output(object_full_trips$sample_length_class_step_standardisation(),
                file = "NUL")
-# level 2.4: well set weight categories ----
+## level 2.4: well set weight categories ----
 capture.output(object_full_trips$well_set_weight_categories(sample_set = object_model_data$.__enclos_env__$private$samplesets),
                file = "NUL")
-# level 2.5: standardised sample creation ----
+## level 2.5: standardised sample creation ----
 capture.output(object_full_trips$standardised_sample_creation(),
                file = "NUL")
-# level 2.6: sample number standardisation ----
+## level 2.6: sample number standardisation ----
 capture.output(object_full_trips$standardised_sample_set_creation(length_weight_relationship_data = object_model_data$.__enclos_env__$private$lengthweightrelationships),
                file = "NUL")
-# level 2.7: raised factors determination ----
+## level 2.7: raised factors determination ----
 capture.output(object_full_trips$raised_factors_determination(),
                file = "NUL")
 
-# level 2.8: samples number standardisation at set scale ----
+## level 2.8: samples number standardisation at set scale ----
 capture.output(object_full_trips$raised_standardised_sample_set(),
                file = "NUL")
 # path to level 3 ----
-capture.output(object_full_trips$path_to_level3(),
-               file = "NUL")
+process_level3 <- object_full_trips$path_to_level3()
+# ## initiate output directory
+# final_output_path <- t3::initiate_directory(output_path = "./tests/testthat",
+#                                             new_directory = TRUE,
+#                                             level = "all")
+# # level 3 process ----
+# ## level 3.1: data preparatory ----
+# process_level3 <- object_full_trips$data_preparatory(inputs_level3 = process_level3[[1]],
+#                                                      target_year = target_year,
+#                                                      output_directory = final_output_path,
+#                                                      target_ocean = target_ocean,
+#                                                      period_duration = period_duration)
+#
+# ## level 3.2: random forest models ----
+# process_level3$output_level3_process2 <-  object_full_trips$random_forest_models(output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod)
+# ## level 3.3: models checking ----
+# process_level3$output_level3_process3 <- object_full_trips$models_checking(output_level3_process2 = process_level3$output_level3_process2,
+#                                                                            output_directory = process_level3$output_directory)
+# ## level 3.4: data formatting for predictions ----
+# process_level3$output_level3_process4 <- object_full_trips$data_formatting_for_predictions(inputs_level3 = process_level3$raw_inputs_level3,
+#                                                                                            output_level3_process1 = process_level3$output_level3_process1$data_lb_sample_screened$data4mod,
+#                                                                                            target_year = target_year,
+#                                                                                            country_flag= flag_codes[1])
+# ## level 3.5: predictions ----
+# process_level3$output_level3_process5 <- object_full_trips$model_predictions(output_level3_process2 = process_level3$output_level3_process2,
+#                                                                              output_level3_process4 = process_level3$output_level3_process4,
+#                                                                              output_directory = process_level3$output_directory,
+#                                                                              ci = TRUE,
+#                                                                             country_flag= flag_codes[1])
+# unlink(final_output_path, recursive = TRUE)
+
 for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos_env__$private$data_selected))) {
   capture.output(current_trips <- t3::object_r6(class_name = "trips"),
                  file = "NUL")
@@ -447,7 +482,7 @@ for (full_trip_id in seq_len(length.out = length(x = object_full_trips$.__enclos
       capture.output(current_elementarylandings_rf1 <- t3::object_r6(class_name = "elementarylandings"),
                      file = "NUL")
       capture.output(current_elementarylandings_rf1$add(new_item = current_elementarylandings$filter_l1(filter = paste0("$path$species_fao_code %in% c(\"",
-                                                                                                                        paste0(species_fao_codes_rf1_fr, collapse = "\", \""),
+                                                                                                                        paste0(species_fao_codes_rf1, collapse = "\", \""),
                                                                                                                         "\")"))),
                      file = "NUL")
       current_sum_elementarylandings <- current_sum_elementarylandings + sum(unlist(current_elementarylandings_rf1$extract_l1_element_value(element = "landing_weight")))

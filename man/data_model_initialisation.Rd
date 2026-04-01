@@ -39,7 +39,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 \item{flag_codes}{Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) FAO code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
-\item{ocean_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".}
+\item{ocean_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.}
 
 \item{vessel_type_codes}{Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".}
 
