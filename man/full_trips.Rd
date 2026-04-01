@@ -200,7 +200,31 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 \subsection{Details}{
 If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
  \itemize{
- \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:}
+ \item{process_1_1_global: a table (.csv) with as many rows as full trips and 18 columns:}
+ \itemize{
+ \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+ \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+ \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+ \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+ \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+ \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{trip_ocean_code: } ocean code of the trip, type \code{\link[base]{integer}}.
+ \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+ Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+, type \code{\link[base]{numeric}}.
+ \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
+ \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
+ \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
+ \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
+ \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
+ \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+ \item{catch_weight_rf2: } catch weight after visual estimation correction (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+ (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{numeric}}.
+ \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
+ \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
+ }
+ \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 24 columns:}
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -212,6 +236,7 @@ If a global_output_path is specified, the following outputs are extracted and sa
  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+ \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
  , type \code{\link[base]{numeric}}.
@@ -234,29 +259,6 @@ If a global_output_path is specified, the following outputs are extracted and sa
  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
  \item{catch_weight_rf2: } catch weight after visual estimation correction, in tonnes: \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
- \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
- \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
- }
- \item{process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:}
- \itemize{
- \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
- \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
- \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
- \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
- \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
- \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
- \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
- \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
- Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
-, type \code{\link[base]{numeric}}.
- \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
- \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
- \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
- \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
- \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
- \item{catch_count: } catch count, type \code{\link[base]{integer}}.
- \item{catch_weight_rf2: } catch weight after visual estimation correction (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
- (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{numeric}}.
  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
  }
@@ -311,7 +313,7 @@ If a global_output_path is specified, the following output is extracted and save
  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
- \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+ \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
@@ -404,7 +406,7 @@ If a global_output_path is specified, the following output is extracted and save
  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
- \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+ \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
@@ -490,7 +492,7 @@ If a global_output_path is specified, the following output is extracted and save
  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
  \item{objectoperation_code: } object operation code to define the type of floating object operation (in Observe referential), type \code{\link[base]{character}}.
- \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+ \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.

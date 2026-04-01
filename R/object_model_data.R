@@ -16,7 +16,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) ISO 3 code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
@@ -51,6 +51,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Missing \"ocean_codes\" argument.
                                               Check function documention through ?object_model_data for more details.")
+                                       } else {
+                                         # Add multiple ocean code
+                                         ocean_codes <- unique(as.integer(c(ocean_codes, 99)))
                                        }
                                        if(is.null(vessel_type_codes)){
                                          stop(format(x = Sys.time(),
@@ -228,7 +231,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                        logbook_availability_code = as.integer(x = logbook_availability_code),
                                                        landing_well_content_code = as.integer(x = landing_well_content_code),
                                                        vessel_code = as.integer(x = vessel_code),
-                                                       vessel_type_code = as.integer(x = vessel_type_code))
+                                                       vessel_type_code = as.integer(x = vessel_type_code),
+                                                       ocean_code =  NA_integer_)
                                        if (nrow(x = trip_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -236,7 +240,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        } else {
                                          cat(format(x = Sys.time(),
                                                     format = "%Y-%m-%d %H:%M:%S"),
-                                             " - Successful trip(s) data importation from avdht database.\n", sep="")
+                                             " - Successful trip(s) data importation from AVDTH database.\n", sep="")
                                        }
                                      } else if (data_source == "csv_file") {
                                        # 4 - Process for csv file ----
@@ -339,7 +343,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 logbook_availability_code = trip_data$logbook_availability_code[trip_id],
                                                                                 landing_well_content_code = trip_data$landing_well_content_code[trip_id],
                                                                                 vessel_code = trip_data$vessel_code[trip_id],
-                                                                                vessel_type_code = trip_data$vessel_type_code[trip_id])
+                                                                                vessel_type_code = trip_data$vessel_type_code[trip_id],
+                                                                                ocean_code = trip_data$ocean_code[trip_id])
                                                                return(trip)
                                                              }))
                                      private$trips <- object_trips
@@ -371,7 +376,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -408,6 +413,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Missing \"ocean_codes\" argument.
                                               Check function documention through ?object_model_data for more details.")
+                                       } else {
+                                         # Add multiple ocean code
+                                         ocean_codes <- unique(as.integer(c(ocean_codes, 99)))
                                        }
                                        if(is.null(vessel_type_codes)){
                                          stop(format(x = Sys.time(),
@@ -963,14 +971,27 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                           total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
                                                                     trip_ocean_code <- activity_data$ocean_code[activity_id]
-                                                                    act_ocean_code <- as.integer(ifelse(is.na(activity_data$activity_longitude[activity_id]) | is.null(activity_data$activity_longitude[activity_id]),
-                                                                                                        trip_ocean_code, ifelse(activity_data$activity_longitude[activity_id] < 20,
-                                                                                                                      1, 2)))
+                                                                    # limite latitude between ocean for tropical area
+                                                                    lim_ao_io <- 20
+                                                                    lim_ao_po <- -67.26 # cape Horn Chili
+                                                                    lim_io_po <- 146.94 # south wst cape Tasmania
+                                                                    act_ocean <- data.frame(longitude = activity_data$activity_longitude[activity_id],
+                                                                                            ocean_code= NA_integer_,
+                                                                                            ocean_label= NA_character_) %>%
+                                                                      dplyr::mutate(ocean_code =  dplyr::case_when(longitude >= lim_ao_po & longitude < lim_ao_io ~ as.integer(1),
+                                                                                                                   longitude >= lim_ao_io & longitude < lim_io_po ~  as.integer(2),
+                                                                                                                   longitude >= lim_io_po | longitude < lim_ao_po ~  as.integer(3),
+                                                                                                                   .default =  trip_ocean_code),
+                                                                                    ocean_label = dplyr::case_when(ocean_code == 1 ~ "ATL",
+                                                                                                                   ocean_code == 2 ~ "IND",
+                                                                                                                   ocean_code == 3 ~ "PAC",
+                                                                                                                   ocean_code == 99 ~ "MIX",
+                                                                                                                   .default = NA_character_))
+
+
                                                                     elementarycatches_data <- elementarycatch_data[elementarycatch_data$activity_id==activity_data[[2]][activity_id],] %>%
-                                                                      dplyr::mutate(ocean_code = act_ocean_code,
-                                                                                    ocean_label = ifelse(act_ocean_code == 1,
-                                                                                                         "Atlantic",
-                                                                                                         "Indian"))
+                                                                      dplyr::mutate(ocean_code = act_ocean$ocean_code,
+                                                                                    ocean_label = act_ocean$ocean_label)
                                                                     if(nrow(elementarycatches_data)==0){
                                                                       elementarycatches_data <- NULL
                                                                     }
@@ -980,7 +1001,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                              activity_number = activity_data$activity_number[activity_id],
                                                                                              activity_longitude = activity_data$activity_longitude[activity_id],
                                                                                              activity_latitude = activity_data$activity_latitude[activity_id],
-                                                                                             ocean_code = act_ocean_code,
+                                                                                             ocean_code = act_ocean$ocean_code,
                                                                                              set_count = activity_data$set_count[activity_id],
                                                                                              set_success_status_code = activity_data$set_success_status_code[activity_id],
                                                                                              set_success_status_label = activity_data$set_success_status_label[activity_id],
@@ -1013,7 +1034,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
@@ -1047,6 +1068,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Missing \"ocean_codes\" argument.
                                               Check function documention through ?object_model_data for more details.")
+                                       } else {
+                                         # Add multiple ocean code
+                                         ocean_codes <- unique(as.integer(c(ocean_codes, 99)))
                                        }
                                        if(is.null(vessel_type_codes)){
                                          stop(format(x = Sys.time(),
@@ -1344,7 +1368,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
@@ -1382,6 +1406,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Missing \"ocean_codes\" argument.
                                               Check function documention through ?object_model_data for more details.")
+                                       } else {
+                                         # Add multiple ocean code
+                                         ocean_codes <- unique(as.integer(c(ocean_codes, 99)))
                                        }
                                        if(is.null(vessel_type_codes)){
                                          stop(format(x = Sys.time(),
@@ -2248,7 +2275,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.
                                    #' @param years_period Object of class {\link[base]{integer}} expected. By default NULL. Year(s) of the reference time period coded on 4 digits. Mandatory for data source "observe_database" and "avdth_database".
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
-                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
@@ -2282,6 +2309,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - Missing \"ocean_codes\" argument.
                                               Check function documention through ?object_model_data for more details.")
+                                       } else {
+                                         # Add multiple ocean code
+                                         ocean_codes <- unique(as.integer(c(ocean_codes, 99)))
                                        }
                                        if(is.null(vessel_type_codes)){
                                          stop(format(x = Sys.time(),

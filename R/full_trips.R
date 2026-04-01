@@ -597,7 +597,31 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #' @details
                             #' If a global_output_path is specified, the following outputs are extracted and saved in ".csv" format under the path: "global_output_path/level1/data/". \cr
                             #'  \itemize{
-                            #'  \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 23 columns:}
+                            #'  \item{process_1_1_global: a table (.csv) with as many rows as full trips and 18 columns:}
+                            #'  \itemize{
+                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
+                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
+                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
+                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
+                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{trip_ocean_code: } ocean code of the trip, type \code{\link[base]{integer}}.
+                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
+                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
+                            #' , type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
+                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
+                            #'  \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
+                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
+                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
+                            #'  (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{numeric}}.
+                            #'  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
+                            #'  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
+                            #'  }
+                            #'  \item{process_1_1_detail: a table (.csv) with as many rows as elementary catches and 24 columns:}
                             #'  \itemize{
                             #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
                             #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -609,6 +633,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
                             #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
                             #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
                             #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
                             #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
                             #'  , type \code{\link[base]{numeric}}.
@@ -631,29 +656,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
                             #'  \item{catch_weight_rf2: } catch weight after visual estimation correction, in tonnes: \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
                             #'  (\href{https://ob7-ird.github.io/t3/articles/level_1.html#process-1-1-raising-factors-level-1}{Process 1.1: Raising Factors level 1}), type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
-                            #'  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
-                            #'  }
-                            #'  \item{process_1_1_global: a table (.csv) with as many rows as full trips and 17 columns:}
-                            #'  \itemize{
-                            #'  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
-                            #'  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
-                            #'  \item{trip_id: } trip identification (unique topiaid from database), type \code{\link[base]{character}}.
-                            #'  \item{trip_end_date: } trip end date (y-m-d format), type \code{\link[base]{character}}.
-                            #'  \item{year_trip_end_date: } year of trip end, type \code{\link[base]{integer}}.
-                            #'  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
-                            #'  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
-                            #'  \item{rf1: } raising factor to correct the weight visual estimation bias of catches filled in logbooks.
-                            #'  Rf1 is the ratio of landing weight on catch weight, of the species defined by the \code{species_fao_codes_rf1} argument.
-                            #' , type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf1: } status rf1, type \code{\link[base]{character}}.
-                            #'  \item{rf2: } raising factor to correct missing logbook(s) not implemented yet (rf2=1), type \code{\link[base]{numeric}}.
-                            #'  \item{statut_rf2: } status rf2, type \code{\link[base]{character}}.
-                            #'  \item{landing_weight: } landing weight (without local market), in tonnes, type \code{\link[base]{numeric}}.
-                            #'  \item{catch_weight: } catch weight (visual estimation), in tonnes, type \code{\link[base]{numeric}}.
-                            #'  \item{catch_count: } catch count, type \code{\link[base]{integer}}.
-                            #'  \item{catch_weight_rf2: } catch weight after visual estimation correction (tonnes): \code{catch_weight_rf2=catch_weight x rf1 (x rf2)}
-                            #'  (\href{https://ob7-ird.github.io/t3/reference/full_trips.html#method-full_trips-rf1}{\code{full_trips$rf1()}}), type \code{\link[base]{numeric}}.
                             #'  \item{statut_rf1_label: } status rf1 label, type \code{\link[base]{character}}.
                             #'  \item{statut_rf2_label: } status rf2 label, type \code{\link[base]{character}}.
                             #'  }
@@ -1050,7 +1052,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                           species_fate_code,
                                                           catch_weight,
                                                           catch_count,
-                                                          catch_weight_rf1) %>%
+                                                          catch_weight_rf1,
+                                                          ocean_code) %>%
                                             dplyr::mutate(trip_id = current_trip$.__enclos_env__$private$trip_id) %>%
                                             dplyr::relocate(trip_id,
                                                             .before = activity_id) %>%
@@ -1080,7 +1083,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                              species_fate_code = NA_integer_,
                                                                                                              catch_weight = NA_real_,
                                                                                                              catch_count = NA_real_,
-                                                                                                             catch_weight_rf1 = NA_real_)
+                                                                                                             catch_weight_rf1 = NA_real_,
+                                                                                                             ocean_code = NA_integer_,)
                                         }
                                       } else {
                                         if (elementarycatches == TRUE) {
@@ -1212,6 +1216,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                 na.rm = TRUE),
                                                                          .groups = "drop"),
                                                       by = "trip_id")
+
                                   outputs_process_1_1 <- data.frame("full_trip_id" = unlist(sapply(X = seq_len(length.out = length(x = full_trips_selected)),
                                                                                                    FUN = function(full_trip_id) {
                                                                                                      if (length(x = full_trips_selected[[full_trip_id]]) != 1) {
@@ -1238,13 +1243,12 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                   lubridate::year),
                                                                     "vessel_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_code"))),
                                                                     "vessel_type_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "vessel_type_code"))),
+                                                                    "trip_ocean_code" = unlist(x = (trips_selected$extract_l1_element_value(element = "ocean_code"))),
                                                                     "rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf1"))),
                                                                     "statut_rf1" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf1"))),
                                                                     "rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "rf2"))),
                                                                     "statut_rf2" = unlist(x = (trips_selected$extract_l1_element_value(element = "statut_rf2"))))
-                                  global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
-                                                                                 y = total_landings_catches,
-                                                                                 by = "trip_id")
+
                                   ######  Add label for rf1 and rf2 statut ######
                                   rf1_statut <- data.frame(statut_rf1=c('1.1','1.2','1.3','1.4','2.1','2.2','2.3','2.4','3.1'),
                                                            statut_rf1_label=c("logbook(s) missing in not complete full trip",
@@ -1262,28 +1266,29 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            statut_rf2_label=c("logbook(s) missing, rf2 must to be calculated",
                                                                               "no missing logbook, rf2 no need to be calculated",
                                                                               " full trip not complete or vessel type code not validated"))
-                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
-                                                                                 y = rf1_statut,
-                                                                                 by = "statut_rf1")
-                                  global_outputs_process_1_1 <- dplyr::left_join(x = global_outputs_process_1_1,
-                                                                                 y = rf2_statut,
-                                                                                 by = "statut_rf2")
-                                  detail_outputs_process_1_1 <- outputs_process_1_1 %>%
-                                    dplyr::full_join(x = outputs_process_1_1,
-                                                     y = total_landings_catches_species_activities,
-                                                     by = "trip_id") %>%
+                                  outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
+                                                                          y = rf1_statut,
+                                                                          by = "statut_rf1")
+                                  outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
+                                                                          y = rf2_statut,
+                                                                          by = "statut_rf2")
+
+                                  global_outputs_process_1_1 <- dplyr::left_join(x = outputs_process_1_1,
+                                                                                 y = total_landings_catches,
+                                                                                 by = "trip_id")
+                                  outputs_process_1_1 <- outputs_process_1_1 %>% dplyr::select(-trip_ocean_code)
+
+                                  detail_outputs_process_1_1 <- dplyr::full_join(x = outputs_process_1_1,
+                                                                                 y = total_landings_catches_species_activities,
+                                                                                 by = dplyr::join_by(trip_id)) %>%
+                                    dplyr::rename(activity_ocean_code = ocean_code) %>%
                                     dplyr::relocate(activity_id,
                                                     activity_latitude,
                                                     activity_longitude,
+                                                    activity_ocean_code,
                                                     .after = trip_id) %>%
                                     dplyr::relocate(landing_weight,
                                                     .after = species_fate_code)
-                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
-                                                                                 y = rf1_statut,
-                                                                                 by = "statut_rf1")
-                                  detail_outputs_process_1_1 <- dplyr::left_join(x = detail_outputs_process_1_1,
-                                                                                 y = rf2_statut,
-                                                                                 by = "statut_rf2")
                                   # extraction
                                   outputs_dec <- "."
                                   outputs_sep <- ","
@@ -1349,7 +1354,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_latitude: } activity latitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
-                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
                             #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
                             #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
@@ -1831,7 +1836,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_longitude" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_longitude")),
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
-                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "activity_ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")))
                                   outputs_process_1_2_elementarycatches <- data.frame("activity_id" = elementarycatches_selected$activity_id,
                                                                                       "elementarycatch_id" = elementarycatches_selected$elementarycatch_id,
@@ -1860,7 +1865,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_latitude,
                                                     activity_longitude,
                                                     activity_date,
-                                                    ocean_code,
+                                                    activity_ocean_code,
                                                     school_type_code,
                                                     elementarycatch_id,
                                                     species_fao_code,
@@ -1908,7 +1913,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_longitude: } activity longitude, type \code{\link[base]{numeric}}.
                             #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
                             #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
-                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
                             #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
                             #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
@@ -2106,7 +2111,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                "activity_date" = do.call("c",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
-                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "activity_ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                "positive_set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "positive_set_count")))
                                   outputs_process_1_3 <- outputs_process_1_3_activities %>%
@@ -2124,7 +2129,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_longitude,
                                                     activity_date,
                                                     activity_code,
-                                                    ocean_code,
+                                                    activity_ocean_code,
                                                     school_type_code,
                                                     positive_set_count)
                                   # extraction
@@ -2204,7 +2209,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                             #'  \item{activity_date: } activity date, type \code{\link[base]{POSIXct}}.
                             #'  \item{activity_code: } activity code to define the type of activity, type \code{\link[base]{integer}}.
                             #'  \item{objectoperation_code: } object operation code to define the type of floating object operation (in Observe referential), type \code{\link[base]{character}}.
-                            #'  \item{ocean_code: } ocean code, type \code{\link[base]{integer}}.
+                            #'  \item{activity_ocean_code: } ocean code of the activity, type \code{\link[base]{integer}}.
                             #'   For example \code{ocean_code=1} for the Atlantic Ocean and \code{ocean_code=2} the Indian Ocean.
                             #'  \item{school_type_code:} school type code, type \code{\link[base]{integer}}.
                             #'   In Observe referential template: 1 for floating object school, 2 for free school and 0 for undetermined school.
@@ -2998,7 +3003,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                          activities_selected$extract_l1_element_value(element = "activity_date")),
                                                                                "activity_code" = unlist(x = activities_selected$extract_l1_element_value(element = "activity_code")),
                                                                                "objectoperation_code" = unlist(x = activities_selected$extract_l1_element_value(element = "objectoperation_code")),
-                                                                               "ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
+                                                                               "activity_ocean_code" = unlist(x = activities_selected$extract_l1_element_value(element = "ocean_code")),
                                                                                "school_type_code" = unlist(x = activities_selected$extract_l1_element_value(element = "school_type_code")),
                                                                                "positive_set_count" = unlist(x = activities_selected$extract_l1_element_value(element = "positive_set_count")),
                                                                                "set_duration" = unlist(x = activities_selected$extract_l1_element_value(element = "set_duration")),
@@ -3021,7 +3026,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                     activity_date,
                                                     activity_code,
                                                     objectoperation_code,
-                                                    ocean_code,
+                                                    activity_ocean_code,
                                                     school_type_code,
                                                     positive_set_count,
                                                     set_duration,

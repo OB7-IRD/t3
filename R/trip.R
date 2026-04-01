@@ -13,9 +13,10 @@ trip <- R6::R6Class(classname = "trip",
                       #' @param departure_date Object of class {\link[base]{character}} expected. Departure date in format year month day hour minute second.
                       #' @param trip_end_date Object of class {\link[base]{character}} expected. Landing date in format ymd UTC.
                       #' @param logbook_availability_code Object of class {\link[base]{integer}} expected. Logbook availability value, 1 for available and 0 for not.
-                      #' @param landing_well_content_code Object of class {\link[base]{integer}} expected. Informe if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
+                      #' @param landing_well_content_code Object of class {\link[base]{integer}} expected. Inform if the fish hold empty at the end of the trip, 1 for yes and 0 for not.
                       #' @param vessel_code Object of class {\link[base]{integer}} expected. Vessel identification.
                       #' @param vessel_type_code Object of class {\link[base]{character}} expected. Vessel type identification.
+                      #' @param ocean_code Object of class {\link[base]{integer}} expected. Ocean identification for the trip.
                       initialize = function(trip_id,
                                             flag_code,
                                             departure_date,
@@ -23,7 +24,8 @@ trip <- R6::R6Class(classname = "trip",
                                             logbook_availability_code,
                                             landing_well_content_code,
                                             vessel_code,
-                                            vessel_type_code) {
+                                            vessel_type_code,
+                                            ocean_code) {
                         # 1 - Arguments verifications ----
                         codama::r_type_checking(r_object = trip_id,
                                                 type = "character",
@@ -49,6 +51,9 @@ trip <- R6::R6Class(classname = "trip",
                         codama::r_type_checking(r_object = vessel_type_code,
                                                 type = "integer",
                                                 length = 1L)
+                        codama::r_type_checking(r_object = ocean_code,
+                                                type = "integer",
+                                                length = 1L)
                         # 2 - Attributions ----
                         private$trip_id <- trip_id
                         private$flag_code <- flag_code
@@ -65,7 +70,8 @@ trip <- R6::R6Class(classname = "trip",
                         private$logbook_availability_code <- logbook_availability_code
                         private$landing_well_content_code <- landing_well_content_code
                         private$vessel_code <- vessel_code
-                        private$vessel_type_code <- vessel_type_code}),
+                        private$vessel_type_code <- vessel_type_code
+                        private$ocean_code <- ocean_code}),
                     private = list(
                       trip_id = NULL,
                       flag_code = NULL,
@@ -78,6 +84,7 @@ trip <- R6::R6Class(classname = "trip",
                       landing_well_content_code = NULL,
                       vessel_code = NULL,
                       vessel_type_code = NULL,
+                      ocean_code = NULL,
                       rf1 = NULL,
                       statut_rf1 = NULL,
                       rf2 = NULL,
