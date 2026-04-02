@@ -1570,6 +1570,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "character",
                                                                                             "character"))
                                        }
+                                         codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                  type="data.frame",
+                                                                  column_name=c("topiaid",
+                                                                                "code",
+                                                                                "label1"),
+                                                                  column_type=c("character",
+                                                                                "character",
+                                                                                "character"))
+                                         observe_logbookprogram_topiaid <- observe_logbook_program %>%
+                                           dplyr::pull(topiaid)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -2489,6 +2499,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "character",
                                                                                             "character"))
                                        }
+                                       codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                type="data.frame",
+                                                                column_name=c("topiaid",
+                                                                              "code",
+                                                                              "label1"),
+                                                                column_type=c("character",
+                                                                              "character",
+                                                                              "character"))
+                                       observe_logbookprogram_topiaid <- observe_logbook_program %>%
+                                         dplyr::pull(topiaid)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
