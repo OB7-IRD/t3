@@ -70,6 +70,7 @@ reference:
   - length_weight_relationship
   - set_duration_ref
   - weight_categories_avdth_ref
+  - observe_logbook_program
 
 url: https://ob7-ird.github.io/t3
 

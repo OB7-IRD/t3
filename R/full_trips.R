@@ -221,7 +221,8 @@ full_trips <- R6::R6Class(classname = "full_trips",
                               elapsed_time <- format(round(T2-T1,2), units="secs")
                               cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                 format = "%Y-%m-%d %H:%M:%S "),
-                                                         cli::col_green(cli::symbol$tick)," Successful process of adding activities and elementarycatches on ",
+                                                         cli::col_green(cli::symbol$tick),
+                                                         " Successful process of adding activities and elementarycatches on ",
                                                          length(private$data),
                                                          " full trip(s), in ", elapsed_time, "."))
                               capture.output(gc(full=TRUE), file="NUL")

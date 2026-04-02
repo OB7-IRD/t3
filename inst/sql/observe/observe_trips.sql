@@ -25,7 +25,7 @@ where
 	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and t.logbookprogram is not null
+	and t.logbookprogram in (?observe_logbookprogram_topiaid)
 order by
 	vessel_code,
 	trip_end_date

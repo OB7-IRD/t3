@@ -80,7 +80,7 @@
 #' @keywords set duration
 "set_duration_ref"
 
-#' Reference table defining the logbook weight categories fo AVDTH database
+#' Reference table defining the logbook weight categories fo AVDTH database.
 #'
 #' @format weight_categories_avdth_ref: data frame with 51 rows and 4 columns:
 #' \itemize{
@@ -92,3 +92,15 @@
 #' @usage data(weight_categories_avdth_ref, package="t3")
 #' @keywords weight_categories_avdth_ref
 "weight_categories_avdth_ref"
+
+#' Reference table defining the logbook program for Observe database to be considered in T3 process.
+#'
+#' @format observe_logbook_program: data frame with 29 rows and 3 columns:
+#' \itemize{
+#' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+#' \item{code: }  program code, type \code{\link[base]{character}}.
+#' \item{label1: } program label in English, type \code{\link[base]{numeric}}.
+#' }
+#' @usage data(observe_logbook_program, package="t3")
+#' @keywords wobserve_logbook_program
+"observe_logbook_program"

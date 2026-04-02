@@ -26,6 +26,15 @@
 #' }
 #' Mandatory for \code{data_source = "avdth_database"}.
 #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
+#' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+#' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+#' \itemize{
+#' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+#' \item{code: }  program code, type \code{\link[base]{character}}.
+#' \item{label1: } program label in English, type \code{\link[base]{character}}.
+#' }
+#' Mandatory for \code{data_source = "observe_database"}.
+#' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
 #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
 #' @return The function return a list with two R6 reference object inside: one class "object_model_data" and the second class "object_full_trips".
 #' @importFrom codama r_type_checking
@@ -43,6 +52,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                       species_fate_codes,
                                       sample_type_codes,
                                       weight_categories_avdth_ref = NULL,
+                                      observe_logbook_program = NULL,
                                       trip_ids = NULL) {
   # 1 - Arguments verifications ----
   codama::r_type_checking(r_object = data_source,
@@ -87,6 +97,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                           flag_codes = flag_codes,
                                           ocean_codes = ocean_codes,
                                           vessel_type_codes = vessel_type_codes,
+                                          observe_logbook_program = observe_logbook_program,
                                           trip_ids = trip_ids)
   # model creation: object activites and elementarycatches creation
   object_model_data$activities_object_creation(data_source = data_source,
@@ -97,6 +108,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                                vessel_type_codes = vessel_type_codes,
                                                species_fate_codes = species_fate_codes,
                                                weight_categories_avdth_ref = weight_categories_avdth_ref,
+                                               observe_logbook_program = observe_logbook_program,
                                                trip_ids = trip_ids)
   # model creation: object elementarylandings creation
   object_model_data$elementarylandings_object_creation(data_source = data_source,
@@ -105,6 +117,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                                        flag_codes = flag_codes,
                                                        ocean_codes = ocean_codes,
                                                        vessel_type_codes = vessel_type_codes,
+                                                       observe_logbook_program = observe_logbook_program,
                                                        trip_ids = trip_ids)
   # model creation: object wells creation
   object_model_data$wells_object_creation(data_source = data_source,
@@ -113,6 +126,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                           flag_codes = flag_codes,
                                           ocean_codes = ocean_codes,
                                           vessel_type_codes = vessel_type_codes,
+                                          observe_logbook_program = observe_logbook_program,
                                           sample_type_codes = sample_type_codes,
                                           trip_ids = trip_ids)
   # model creation: set durations data
@@ -130,6 +144,7 @@ data_model_initialisation <- function(data_source = "observe_database",
                                     flag_codes = flag_codes,
                                     ocean_codes = ocean_codes,
                                     vessel_type_codes = vessel_type_codes,
+                                    observe_logbook_program = observe_logbook_program,
                                     database_connection = database_connection,
                                     trip_ids = trip_ids)
   # model creation: length weight relationships data

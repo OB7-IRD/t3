@@ -18,6 +18,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Three letters country(ies) ISO 3 code(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+                                   #' \itemize{
+                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
+                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "observe_database"}.
+                                   #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
@@ -28,6 +37,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     flag_codes = NULL,
                                                                     ocean_codes = NULL,
                                                                     vessel_type_codes = NULL,
+                                                                    observe_logbook_program = NULL,
                                                                     trip_ids = NULL,
                                                                     data_path = NULL,
                                                                     envir = NULL) {
@@ -81,6 +91,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
+                                       # logbook programs to be considered in Observe database
+                                       if(is.null(observe_logbook_program)){
+                                         observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
+                                                                                                package = "t3"),
+                                                                             stringsAsFactors = FALSE,
+                                                                             colClasses = c("character",
+                                                                                            "character",
+                                                                                            "character"))
+                                       }
+                                       codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                type="data.frame",
+                                                                column_name=c("topiaid",
+                                                                              "code",
+                                                                              "label1"),
+                                                                column_type=c("character",
+                                                                              "character",
+                                                                              "character"))
+                                      observe_logbookprogram_topiaid <- observe_logbook_program %>%
+                                         dplyr::pull(topiaid)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -152,6 +181,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                "'")),
                                                                                  vessel_type_codes = DBI::SQL(paste0("'",
                                                                                                                      paste0(vessel_type_codes,
+                                                                                                                            collapse = "', '"),
+                                                                                                                     "'")),
+                                                                                observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                     paste0(observe_logbookprogram_topiaid,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
                                          }
@@ -331,9 +364,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      object_trips$add(lapply(cli::cli_progress_along(seq_len(length.out = length(x = trip_data[[1]])),
                                                                                      clear = getOption("cli.progress_clear", FALSE),
                                                                                      format = paste0("                        ",
-                                                                                       "[{cli::pb_current}/{cli::pb_total}], ",
-                                                                                       "[{cli::pb_bar}{cli::pb_percent}",
-                                                                                       "], Time remaining:{cli::pb_eta}"),,
+                                                                                                     "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                                     "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                                     "], Time remaining:{cli::pb_eta}"),,
                                                                                      total = length(x = trip_data[[1]])),
                                                              FUN = function(trip_id) {
                                                                trip <- trip$new(trip_id = trip_data$trip_id[trip_id],
@@ -351,10 +384,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      T2 <- Sys.time()
                                      elapsed_time <- format(round(T2-T1,2), units="secs")
                                      cli::cli_alert_info(paste0(format(x = Sys.time(),
-                                                                  format = "%Y-%m-%d %H:%M:%S "),
-                                                            cli::col_green(cli::symbol$tick)," Successful importation of ",
-                                                            length(x = trip_data[[1]]),
-                                                           " trips, in ", elapsed_time, "."))
+                                                                       format = "%Y-%m-%d %H:%M:%S "),
+                                                                cli::col_green(cli::symbol$tick)," Successful importation of ",
+                                                                length(x = trip_data[[1]]),
+                                                                " trips, in ", elapsed_time, "."))
                                      capture.output(gc(full=TRUE), file="NUL")
                                    },
                                    #' @description Creation of a R6 reference object of class activities which contain one or more R6 reference object of class activity, including related elementarycatch(es).
@@ -379,6 +412,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param species_fate_codes Object of class {\link[base]{integer}} expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+                                   #' \itemize{
+                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
+                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "observe_database"}.
+                                   #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
@@ -390,9 +432,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                          ocean_codes = NULL,
                                                                          vessel_type_codes = NULL,
                                                                          species_fate_codes = NULL,
+                                                                         observe_logbook_program = NULL,
                                                                          trip_ids = NULL,
                                                                          data_path = NULL,
-                                                                         envir = NULL) {
+                                                                         envir = NULL){
                                      # 1 - Arguments verifications ----
                                      if (data_source %in% c("observe_database",
                                                             "avdth_database")) {
@@ -460,6 +503,26 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 "character",
                                                                                 "numeric",
                                                                                 "numeric"))
+                                       } else if (data_source == "observe_database"){
+                                         # logbook programs to be considered in Observe database
+                                         if(is.null(observe_logbook_program)){
+                                           observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
+                                                                                                  package = "t3"),
+                                                                               stringsAsFactors = FALSE,
+                                                                               colClasses = c("character",
+                                                                                              "character",
+                                                                                              "character"))
+                                         }
+                                         codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                  type="data.frame",
+                                                                  column_name=c("topiaid",
+                                                                                "code",
+                                                                                "label1"),
+                                                                  column_type=c("character",
+                                                                                "character",
+                                                                                "character"))
+                                        observe_logbookprogram_topiaid <- observe_logbook_program %>%
+                                           dplyr::pull(topiaid)
                                        }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -556,7 +619,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                      vessel_type_codes = DBI::SQL(paste0("'",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
-                                                                                                                         "'")))
+                                                                                                                         "'")),
+                                                                                    observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_topiaid,
+                                                                                                                                               collapse = "', '"),
+                                                                                                                                       "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
                                                                                                              "observe",
                                                                                                              "observe_elementarycatches.sql",
@@ -582,6 +649,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 paste0(vessel_type_codes,
                                                                                                                                        collapse = "', '"),
                                                                                                                                 "'")),
+                                                                                           observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                              paste0(observe_logbookprogram_topiaid,
+                                                                                                                                                      collapse = "', '"),
+                                                                                                                                              "'")),
                                                                                             species_fate_codes = DBI::SQL(paste0("'",
                                                                                                                                  paste0(species_fate_codes,
                                                                                                                                         collapse = "', '"),
@@ -783,15 +854,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
                                               " - No data imported, check the query and query's parameters.")
-                                       ##### Warning dupliacted elementarycatch topiaid in AVDTH
-                                       # } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
-                                       #   elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
-                                       #   stop(format(x = Sys.time(),
-                                       #               format = "%Y-%m-%d %H:%M:%S"),
-                                       #        " - Duplicated elementarycatch(es) topiaid in data imported, check the query and query's parameters.\n",
-                                       #        paste0("[activity: ",
-                                       #               elementarycatch_id, collapse="];\n"),
-                                       #        "].")
+                                         ##### Warning dupliacted elementarycatch topiaid in AVDTH
+                                         # } else if (nrow(x = elementarycatch_data) != length(unique(elementarycatch_data$elementarycatch_id))) {
+                                         #   elementarycatch_id <- unique(elementarycatch_data$elementarycatch_id[duplicated(elementarycatch_data)])
+                                         #   stop(format(x = Sys.time(),
+                                         #               format = "%Y-%m-%d %H:%M:%S"),
+                                         #        " - Duplicated elementarycatch(es) topiaid in data imported, check the query and query's parameters.\n",
+                                         #        paste0("[activity: ",
+                                         #               elementarycatch_id, collapse="];\n"),
+                                         #        "].")
                                        } else if (nrow(x = activity_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -961,13 +1032,13 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      options(cli.progress_show_after = 0)
                                      cli::cli_alert_info(paste0(format(x = Sys.time(),
                                                                        format = "%Y-%m-%d %H:%M:%S "),
-                                     " - Importation of activity and elementary catch(es) element:"))
+                                                                " - Importation of activity and elementary catch(es) element:"))
                                      object_activities$add(lapply(cli::cli_progress_along(seq_len(length.out = length(activity_data[[1]])),
                                                                                           clear = getOption("cli.progress_clear", FALSE),
                                                                                           format = paste0("                        ",
-                                                                                            "[{cli::pb_current}/{cli::pb_total}], ",
-                                                                                            "[{cli::pb_bar}{cli::pb_percent}",
-                                                                                            "], Time remaining:{cli::pb_eta}"),,
+                                                                                                          "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                                                          "[{cli::pb_bar}{cli::pb_percent}",
+                                                                                                          "], Time remaining:{cli::pb_eta}"),,
                                                                                           total = length(activity_data[[1]])),
                                                                   FUN = function(activity_id) {
                                                                     trip_ocean_code <- activity_data$ocean_code[activity_id]
@@ -1036,6 +1107,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+                                   #' \itemize{
+                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
+                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "observe_database"}.
+                                   #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
@@ -1045,6 +1125,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                  flag_codes = NULL,
                                                                                  ocean_codes = NULL,
                                                                                  vessel_type_codes = NULL,
+                                                                                 observe_logbook_program = NULL,
                                                                                  trip_ids = NULL,
                                                                                  data_path = NULL,
                                                                                  envir = NULL) {
@@ -1098,6 +1179,25 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
+                                       # logbook programs to be considered in Observe database
+                                       if(is.null(observe_logbook_program)){
+                                         observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
+                                                                                                package = "t3"),
+                                                                             stringsAsFactors = FALSE,
+                                                                             colClasses = c("character",
+                                                                                            "character",
+                                                                                            "character"))
+                                       }
+                                       codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                type="data.frame",
+                                                                column_name=c("topiaid",
+                                                                              "code",
+                                                                              "label1"),
+                                                                column_type=c("character",
+                                                                              "character",
+                                                                              "character"))
+                                      observe_logbookprogram_topiaid <- observe_logbook_program %>%
+                                         dplyr::pull(topiaid)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -1169,7 +1269,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                               vessel_type_codes = DBI::SQL(paste0("'",
                                                                                                                                   paste0(vessel_type_codes,
                                                                                                                                          collapse = "', '"),
-                                                                                                                                  "'")))
+                                                                                                                                  "'")),
+                                                                                             observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                                paste0(observe_logbookprogram_topiaid,
+                                                                                                                                                        collapse = "', '"),
+                                                                                                                                                "'")))
                                          }
                                          cat("[",
                                              elementarylanding_sql_final,
@@ -1371,6 +1475,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param sample_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Sample type identification.
+                                   #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+                                   #' \itemize{
+                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
+                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "observe_database"}.
+                                   #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path_sample Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for samples.
                                    #' @param data_path_wellplan Object of class {\link[base]{character}} expected. By default NULL. Path of the data sql/csv file for well plans.
@@ -1382,6 +1495,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                     ocean_codes = NULL,
                                                                     vessel_type_codes = NULL,
                                                                     sample_type_codes = NULL,
+                                                                    observe_logbook_program = NULL,
                                                                     trip_ids = NULL,
                                                                     data_path_sample = NULL,
                                                                     data_path_wellplan = NULL,
@@ -1447,6 +1561,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
+                                       # logbook programs to be considered in Observe database
+                                       if(is.null(observe_logbook_program)){
+                                         observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
+                                                                                                package = "t3"),
+                                                                             stringsAsFactors = FALSE,
+                                                                             colClasses = c("character",
+                                                                                            "character",
+                                                                                            "character"))
+                                       }
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -1521,7 +1644,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                    sample_type_codes = DBI::SQL(paste0("'",
                                                                                                                        paste0(sample_type_codes,
                                                                                                                               collapse = "', '"),
-                                                                                                                       "'")))
+                                                                                                                       "'")),
+                                                                                  observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                     paste0(observe_logbookprogram_topiaid,
+                                                                                                                                             collapse = "', '"),
+                                                                                                                                     "'")))
                                          }
                                          cat("[",
                                              sample_sql_final,
@@ -1602,7 +1729,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                      vessel_type_codes = DBI::SQL(paste0("'",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
-                                                                                                                         "'")))
+                                                                                                                         "'")),
+                                                                                    observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_topiaid,
+                                                                                                                                               collapse = "', '"),
+                                                                                                                                       "'")))
                                          }
                                          cat("[",
                                              wellplan_sql_final,
@@ -1901,9 +2032,9 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      options(cli.progress_show_after = 0)
                                      cli::cli_progress_bar(clear = getOption("cli.progress_clear", FALSE),
                                                            format = paste0("                        ",
-                                                             "[{cli::pb_current}/{cli::pb_total}], ",
-                                                             "[{cli::pb_bar}{cli::pb_percent}]",
-                                                             ", Time remaining:{cli::pb_eta}"),
+                                                                           "[{cli::pb_current}/{cli::pb_total}], ",
+                                                                           "[{cli::pb_bar}{cli::pb_percent}]",
+                                                                           ", Time remaining:{cli::pb_eta}"),
                                                            total = length(unique(x = sample_data$trip_id)))
                                      T1 <- Sys.time()
                                      for (trip_id in unique(x = sample_data$trip_id)) {
@@ -2081,7 +2212,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start set duration(s) data importation from csv file.\n")
                                        set_duration_ref_data <- read.csv(file = data_path,
-                                                                          stringsAsFactors = FALSE)
+                                                                         stringsAsFactors = FALSE)
                                        if (nrow(x = set_duration_ref_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -2188,7 +2319,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start length step(s) data importation from csv file.\n")
                                        lengthstep_data <- read.csv(file = data_path,
-                                                                    stringsAsFactors = FALSE)
+                                                                   stringsAsFactors = FALSE)
                                        if (nrow(x = lengthstep_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),
@@ -2277,6 +2408,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param flag_codes Object of class {\link[base]{character}} expected. By default NULL. Country(ies) code related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
                                    #' @param ocean_codes Object of class {\link[base]{integer}} expected. By default NULL. Ocean(s) related to data coded on 1 digit. Necessary argument for data source "observe_database" and "avdth_database". By default in query parameters the multiple ocean code (99) in included.
                                    #' @param vessel_type_codes Object of class {\link[base]{integer}} expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".
+                                   #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+                                   #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+                                   #' \itemize{
+                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
+                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' }
+                                   #' Mandatory for \code{data_source = "observe_database"}.
+                                   #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
                                    #' @param trip_ids Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".
                                    #' @param data_path Object of class {\link[base]{character}} expected. By default NULL. Path of the data csv/RData file.
                                    #' @param envir Object of class {\link[base]{character}} expected. By default the first environment where data are found will be used. Specify an environment to look in for data source "envir".
@@ -2286,6 +2426,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                               flag_codes = NULL,
                                                               ocean_codes = NULL,
                                                               vessel_type_codes = NULL,
+                                                              observe_logbook_program = NULL,
                                                               trip_ids = NULL,
                                                               data_path = NULL,
                                                               envir = NULL) {
@@ -2339,6 +2480,15 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                      }
                                      # 2 - Process for observe database ----
                                      if (data_source == "observe_database") {
+                                       # logbook programs to be considered in Observe database
+                                       if(is.null(observe_logbook_program)){
+                                         observe_logbook_program <- read.csv(file = system.file("observe_logbook_program.csv",
+                                                                                                package = "t3"),
+                                                                             stringsAsFactors = FALSE,
+                                                                             colClasses = c("character",
+                                                                                            "character",
+                                                                                            "character"))
+                                       }
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -2410,7 +2560,11 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                       vessel_type_codes = DBI::SQL(paste0("'",
                                                                                                                           paste0(vessel_type_codes,
                                                                                                                                  collapse = "', '"),
-                                                                                                                          "'")))
+                                                                                                                          "'")),
+                                                                                     observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
+                                                                                                                                        paste0(observe_logbookprogram_topiaid,
+                                                                                                                                                collapse = "', '"),
+                                                                                                                                        "'")))
                                          }
                                          cat("[",
                                              sampleset_sql_final,
@@ -2623,7 +2777,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                   format = "%Y-%m-%d %H:%M:%S"),
                                            " - Start length weight relationship(s) data importation from csv file.\n")
                                        lengthweightrelationship_data <- read.csv(file = data_path,
-                                                                                  stringsAsFactors = FALSE)
+                                                                                 stringsAsFactors = FALSE)
                                        if (nrow(x = lengthweightrelationship_data) == 0) {
                                          stop(format(x = Sys.time(),
                                                      format = "%Y-%m-%d %H:%M:%S"),

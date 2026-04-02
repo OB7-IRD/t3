@@ -29,6 +29,15 @@
 #' }
 #' Mandatory for \code{referential_template = "avdth"}.
 #' By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).
+#' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+#' Reference table defining the logbook programs to be considered in Observe database with the following columns:
+#' \itemize{
+#' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+#' \item{code: }  program code, type \code{\link[base]{character}}.
+#' \item{label1: } program label in English, type \code{\link[base]{character}}.
+#' }
+#' Mandatory for \code{data_source = "observe_database"}.
+#' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
 #' @param rf1_computation Object of class \code{\link[base]{logical}} expected. If FALSE rf1 is not calculated (rf1=1 for all trips).
 #' By default TRUE, the rf1 is calculated for each trip.
 #' @param species_fao_codes_rf1 Object of type \code{\link[base]{character}} expected.Specie(s) FAO code(s) used for the RF1 process.
@@ -96,6 +105,7 @@ t3_process <- function(process = "all",
                        sample_type_codes,
                        trip_ids = NULL,
                        weight_categories_avdth_ref = NULL,
+                       observe_logbook_program = NULL,
                        rf1_computation = TRUE,
                        apply_rf1_on_bycatch = TRUE,
                        species_fao_codes_rf1 = c("YFT", "SKJ", "BET", "ALB", "MIX", "TUN", "LOT"),
@@ -156,6 +166,7 @@ t3_process <- function(process = "all",
                                           flag_codes = flag_codes,
                                           ocean_codes = ocean_codes,
                                           vessel_type_codes,
+                                          observe_logbook_program = observe_logbook_program,
                                           species_fate_codes = species_fate_codes,
                                           sample_type_codes = sample_type_codes,
                                           weight_categories_avdth_ref = weight_categories_avdth_ref,

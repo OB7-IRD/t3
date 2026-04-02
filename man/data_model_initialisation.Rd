@@ -17,6 +17,7 @@ data_model_initialisation(
   species_fate_codes,
   sample_type_codes,
   weight_categories_avdth_ref = NULL,
+  observe_logbook_program = NULL,
   trip_ids = NULL
 )
 }
@@ -57,6 +58,16 @@ Reference table defining the logbook weight categories with the following column
 }
 Mandatory for \code{data_source = "avdth_database"}.
 By default the referential table \code{data("weight_categories_avdth_ref", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html}{weight_categories_avdth_ref}).}
+
+\item{observe_logbook_program}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:
+\itemize{
+\item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
+\item{code: }  program code, type \code{\link[base]{character}}.
+\item{label1: } program label in English, type \code{\link[base]{character}}.
+}
+Mandatory for \code{data_source = "observe_database"}.
+By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}
 
 \item{trip_ids}{Object of class {\link[base]{character}} expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".}
 }
