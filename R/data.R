@@ -102,5 +102,7 @@
 #' \item{label1: } program label in English, type \code{\link[base]{numeric}}.
 #' }
 #' @usage data(observe_logbook_program, package="t3")
+#' @examples data(observe_logbook_program, package="t3")
+#'  observe_logbook_program
 #' @keywords wobserve_logbook_program
 "observe_logbook_program"

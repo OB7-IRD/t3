@@ -18,4 +18,8 @@ data(observe_logbook_program, package="t3")
 \description{
 Reference table defining the logbook program for Observe database to be considered in T3 process.
 }
+\examples{
+data(observe_logbook_program, package="t3")
+ observe_logbook_program
+}
 \keyword{wobserve_logbook_program}
