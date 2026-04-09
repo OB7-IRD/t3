@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 class object_model_data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/object_model_data.R" class="external-link"><code>R/object_model_data.R</code></a></small>
     <div class="hidden name"><code>object_model_data.Rd</code></div>
     </div>
 
@@ -107,6 +107,7 @@
 <span>  flag_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ocean_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vessel_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -143,6 +144,15 @@ For example, a list of two database connection arguments for "observe_main" and 
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
 
+<dt><code>observe_logbook_program</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
+
+
 <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "flag_codes" or "ocean_codes".</p></dd>
 
@@ -171,6 +181,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 <span>  ocean_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vessel_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  species_fate_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -221,6 +232,15 @@ By default the referential table <code>data("weight_categories_avdth_ref", packa
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Specie fate(s) related to elementarycatch(es) data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
 
+<dt><code>observe_logbook_program</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
+
+
 <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
@@ -247,6 +267,7 @@ By default the referential table <code>data("weight_categories_avdth_ref", packa
 <span>  flag_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ocean_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vessel_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -283,6 +304,15 @@ For example, a list of two database connection arguments for "observe_main" and 
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
 
 
+<dt><code>observe_logbook_program</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
+
+
 <dt><code>trip_ids</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> expected. By default NULL. Additional parameter only used with data source "observe_database". Use trip(s) identification(s) for selected trip(s) kept in the query. This argument overrides all others arguments like "years_period", "country" or "ocean".</p></dd>
 
@@ -310,6 +340,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 <span>  ocean_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vessel_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path_sample <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path_wellplan <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -349,6 +380,15 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 <dt><code>sample_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Sample type identification.</p></dd>
+
+
+<dt><code>observe_logbook_program</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
 
 <dt><code>trip_ids</code></dt>
@@ -437,6 +477,7 @@ For example, a list of two database connection arguments for "observe_main" and 
 <span>  flag_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ocean_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vessel_type_codes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -471,6 +512,15 @@ For example, a list of two database connection arguments for "observe_main" and 
 
 <dt><code>vessel_type_codes</code></dt>
 <dd><p>Object of class <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> expected. By default NULL. Vessel type(s) related to data extraction. Necessary argument for data source "observe_database" and "avdth_database".</p></dd>
+
+
+<dt><code>observe_logbook_program</code></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
 
 <dt><code>trip_ids</code></dt>

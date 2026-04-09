@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>T3 process compilation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/t3_process.R" class="external-link"><code>R/t3_process.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/t3_process.R" class="external-link"><code>R/t3_process.R</code></a></small>
     <div class="hidden name"><code>t3_process.Rd</code></div>
     </div>
 
@@ -96,6 +96,7 @@
 <span>  <span class="va">sample_type_codes</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weight_categories_avdth_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rf1_computation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  apply_rf1_on_bycatch <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  species_fao_codes_rf1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YFT"</span>, <span class="st">"SKJ"</span>, <span class="st">"BET"</span>, <span class="st">"ALB"</span>, <span class="st">"MIX"</span>, <span class="st">"TUN"</span>, <span class="st">"LOT"</span><span class="op">)</span>,</span>
@@ -208,6 +209,15 @@ Reference table defining the logbook weight categories with the following column
 <li><p>weight_category_max:  upper limit of the weight category (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 </ul><p>Mandatory for <code>referential_template = "avdth"</code>.
 By default the referential table <code>data("weight_categories_avdth_ref", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html">weight_categories_avdth_ref</a>).</p></dd>
+
+
+<dt id="arg-observe-logbook-program">observe_logbook_program<a class="anchor" aria-label="anchor" href="#arg-observe-logbook-program"></a></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
 
 <dt id="arg-rf-computation">rf1_computation<a class="anchor" aria-label="anchor" href="#arg-rf-computation"></a></dt>

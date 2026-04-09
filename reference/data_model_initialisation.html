@@ -71,7 +71,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Data model initialisation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/main/R/data_model_initialisation.R" class="external-link"><code>R/data_model_initialisation.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/OB7-IRD/t3/blob/development/R/data_model_initialisation.R" class="external-link"><code>R/data_model_initialisation.R</code></a></small>
     <div class="hidden name"><code>data_model_initialisation.Rd</code></div>
     </div>
 
@@ -93,6 +93,7 @@
 <span>  <span class="va">species_fate_codes</span>,</span>
 <span>  <span class="va">sample_type_codes</span>,</span>
 <span>  weight_categories_avdth_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  observe_logbook_program <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  trip_ids <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -157,6 +158,15 @@ Reference table defining the logbook weight categories with the following column
 <li><p>weight_category_max:  upper limit of the weight category (kg), type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
 </ul><p>Mandatory for <code>data_source = "avdth_database"</code>.
 By default the referential table <code>data("weight_categories_avdth_ref", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/weight_categories_avdth_ref.html">weight_categories_avdth_ref</a>).</p></dd>
+
+
+<dt id="arg-observe-logbook-program">observe_logbook_program<a class="anchor" aria-label="anchor" href="#arg-observe-logbook-program"></a></dt>
+<dd><p>Object of type <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or <code><a href="https://tibble.tidyverse.org/reference/tbl_df-class.html" class="external-link">tbl_df</a></code> expected.
+Reference table defining the logbook programs to be considered in Observe database with the following columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+</ul><p>Mandatory for <code>data_source = "observe_database"</code>.
+By default the referential table <code>data("observe_logbook_program", package="t3")</code> is considered (<a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>).</p></dd>
 
 
 <dt id="arg-trip-ids">trip_ids<a class="anchor" aria-label="anchor" href="#arg-trip-ids"></a></dt>
