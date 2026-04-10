@@ -27,11 +27,12 @@ from
 	left join ps_common.weightcategory w on (c.weightcategory = w.topiaid)
 	join common.species sp on (c.species = sp.topiaid)
 	join ps_common.speciesfate sf on (c.speciesfate = sf.topiaid)
+	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
 	and co.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and t.logbookprogram in (?observe_logbookprogram_topiaid)
+	and prog.code in (?observe_logbookprogram_code)
 	and sf.code in (?species_fate_codes)
 ;

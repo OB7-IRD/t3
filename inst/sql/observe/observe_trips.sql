@@ -8,6 +8,8 @@ select
 	,vt.label1::text as vessel_type_label
 	,acqs.code::integer as logbook_availability_code
 	,acqs.label1::text as logbook_availability_label
+	,prog.code::text as logbook_program_code
+	,prog.label1::text as logbook_program_label
 	,w.code::integer as landing_well_content_code
 	,w.label1::text as landing_well_content_label
 	,o.code::integer as ocean_code
@@ -20,12 +22,13 @@ from
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_common.acquisitionstatus acqs on (t.logbookacquisitionstatus = acqs.topiaid)
 	left join ps_logbook.wellcontentstatus w on (t.landingwellcontentstatus = w.topiaid)
+	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
 	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and t.logbookprogram in (?observe_logbookprogram_topiaid)
+	and prog.code in (?observe_logbookprogram_code)
 order by
 	vessel_code,
 	trip_end_date

@@ -15,10 +15,11 @@ from
 	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country co on (v.flagcountry = co.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
+	left join ps_common.program prog on (t.logbookprogram = prog.topiaid)
 where
 	t.enddate between ?begin_time_period and ?end_time_period
 	and co.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and t.logbookprogram in (?observe_logbookprogram_topiaid)
+	and prog.code in (?observe_logbookprogram_code)
 ;

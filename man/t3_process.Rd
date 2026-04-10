@@ -107,9 +107,10 @@ By default the referential table \code{data("weight_categories_avdth_ref", packa
 \item{observe_logbook_program}{Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
 Reference table defining the logbook programs to be considered in Observe database with the following columns:
 \itemize{
-\item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-\item{code: }  program code, type \code{\link[base]{character}}.
-\item{label1: } program label in English, type \code{\link[base]{character}}.
+\item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+\item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+\item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+\item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
 }
 Mandatory for \code{data_source = "observe_database"}.
 By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).}

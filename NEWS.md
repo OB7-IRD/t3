@@ -1,3 +1,10 @@
+# t3 3.0.9 - 2026-04-10
+
+## Added 
+
+* Add condition on logbook programs to be considered for T3 process in queries to import data from Observe database. By default : [observe_logbook_program](https://ob7-ird.github.io/t3/reference/observe_logbook_program.html).
+* Add detailed documentation in all queries. 
+
 # t3 3.0.8 - 2026-03-23
 
 ## Changed
@@ -8,10 +15,6 @@
   * Add by default in query parameters the multiple ocean code (99). 
   * Rename the column "ocean_code" in .csv outputs as "activity_ocean_code" (and trip_ocean_code). + correct doc
   * Change ocean label from full name to three letter code: "Atlantic" ~ "ATL", "Indian" ~ "IND", "Pacific" ~ "PAC", "Multiple" ~ "MIX".  
-  
-## Added 
-
-* Add condition on logbook programs to be considered for T3 process in queries to import data from Observe database. By default : [observe_logbook_program](https://ob7-ird.github.io/t3/reference/observe_logbook_program.html).
 
 # t3 3.0.7 - 2026-01-29
 

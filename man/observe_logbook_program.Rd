@@ -5,11 +5,12 @@
 \alias{observe_logbook_program}
 \title{Reference table defining the logbook program for Observe database to be considered in T3 process.}
 \format{
-observe_logbook_program: data frame with 29 rows and 3 columns:
+observe_logbook_program: data frame with 31 rows and 4 columns:
 \itemize{
-\item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-\item{code: }  program code, type \code{\link[base]{character}}.
-\item{label1: } program label in English, type \code{\link[base]{numeric}}.
+\item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+\item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+\item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+\item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
 }
 }
 \usage{

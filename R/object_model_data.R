@@ -21,9 +21,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                                    #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
                                    #' \itemize{
-                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
-                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "observe_database"}.
                                    #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
@@ -102,14 +103,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
                                                                 type="data.frame",
-                                                                column_name=c("topiaid",
+                                                                column_name=c("organism",
+                                                                              "topiaid",
                                                                               "code",
                                                                               "label1"),
                                                                 column_type=c("character",
                                                                               "character",
+                                                                              "character",
                                                                               "character"))
-                                      observe_logbookprogram_topiaid <- observe_logbook_program %>%
-                                         dplyr::pull(topiaid)
+                                      observe_logbookprogram_code <- observe_logbook_program %>%
+                                         dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -183,8 +186,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      paste0(vessel_type_codes,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")),
-                                                                                observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                     paste0(observe_logbookprogram_topiaid,
+                                                                                observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                     paste0(observe_logbookprogram_code,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
                                          }
@@ -415,9 +418,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                                    #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
                                    #' \itemize{
-                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
-                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "observe_database"}.
                                    #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
@@ -515,14 +519,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                          }
                                          codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
                                                                   type="data.frame",
-                                                                  column_name=c("topiaid",
+                                                                  column_name=c("organism",
+                                                                                "topiaid",
                                                                                 "code",
                                                                                 "label1"),
                                                                   column_type=c("character",
                                                                                 "character",
+                                                                                "character",
                                                                                 "character"))
-                                        observe_logbookprogram_topiaid <- observe_logbook_program %>%
-                                           dplyr::pull(topiaid)
+                                         observe_logbookprogram_code <- observe_logbook_program %>%
+                                           dplyr::pull(code)
                                        }
                                      } else if (data_source %in% c("csv_file",
                                                                    "rdata_file")) {
@@ -620,8 +626,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_topiaid,
+                                                                                    observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_code,
                                                                                                                                                collapse = "', '"),
                                                                                                                                        "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
@@ -649,8 +655,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 paste0(vessel_type_codes,
                                                                                                                                        collapse = "', '"),
                                                                                                                                 "'")),
-                                                                                           observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                              paste0(observe_logbookprogram_topiaid,
+                                                                                           observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                              paste0(observe_logbookprogram_code,
                                                                                                                                                       collapse = "', '"),
                                                                                                                                               "'")),
                                                                                             species_fate_codes = DBI::SQL(paste0("'",
@@ -1110,9 +1116,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                                    #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
                                    #' \itemize{
-                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
-                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "observe_database"}.
                                    #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
@@ -1190,14 +1197,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
                                                                 type="data.frame",
-                                                                column_name=c("topiaid",
+                                                                column_name=c("organism",
+                                                                              "topiaid",
                                                                               "code",
                                                                               "label1"),
                                                                 column_type=c("character",
                                                                               "character",
+                                                                              "character",
                                                                               "character"))
-                                      observe_logbookprogram_topiaid <- observe_logbook_program %>%
-                                         dplyr::pull(topiaid)
+                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                         dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -1270,8 +1279,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                   paste0(vessel_type_codes,
                                                                                                                                          collapse = "', '"),
                                                                                                                                   "'")),
-                                                                                             observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                                paste0(observe_logbookprogram_topiaid,
+                                                                                             observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                                paste0(observe_logbookprogram_code,
                                                                                                                                                         collapse = "', '"),
                                                                                                                                                 "'")))
                                          }
@@ -1478,9 +1487,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                                    #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
                                    #' \itemize{
-                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
-                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "observe_database"}.
                                    #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
@@ -1570,16 +1580,18 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                             "character",
                                                                                             "character"))
                                        }
-                                         codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
-                                                                  type="data.frame",
-                                                                  column_name=c("topiaid",
-                                                                                "code",
-                                                                                "label1"),
-                                                                  column_type=c("character",
-                                                                                "character",
-                                                                                "character"))
-                                         observe_logbookprogram_topiaid <- observe_logbook_program %>%
-                                           dplyr::pull(topiaid)
+                                       codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
+                                                                type="data.frame",
+                                                                column_name=c("organism",
+                                                                              "topiaid",
+                                                                              "code",
+                                                                              "label1"),
+                                                                column_type=c("character",
+                                                                              "character",
+                                                                              "character",
+                                                                              "character"))
+                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                         dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -1655,8 +1667,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        paste0(sample_type_codes,
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")),
-                                                                                  observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                     paste0(observe_logbookprogram_topiaid,
+                                                                                  observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                     paste0(observe_logbookprogram_code,
                                                                                                                                              collapse = "', '"),
                                                                                                                                      "'")))
                                          }
@@ -1740,8 +1752,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_topiaid,
+                                                                                    observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_code,
                                                                                                                                                collapse = "', '"),
                                                                                                                                        "'")))
                                          }
@@ -2421,9 +2433,10 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                    #' @param observe_logbook_program Object of type \code{\link[base]{data.frame}} or \code{\link[tibble]{tbl_df}} expected.
                                    #' Reference table defining the logbook programs to be considered in Observe database with the following columns:
                                    #' \itemize{
-                                   #' \item{topiaid: } logbook program topiaid, type \code{\link[base]{character}}.
-                                   #' \item{code: }  program code, type \code{\link[base]{character}}.
-                                   #' \item{label1: } program label in English, type \code{\link[base]{character}}.
+                                   #' \item{organism: } organism using the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{topiaid: } topiaid of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{code: }  code of the logbook program, type \code{\link[base]{character}}.
+                                   #' \item{label1: } label of the logbook program's in English, type \code{\link[base]{character}}.
                                    #' }
                                    #' Mandatory for \code{data_source = "observe_database"}.
                                    #' By default the referential table \code{data("observe_logbook_program", package="t3")} is considered (\href{https://ob7-ird.github.io/t3/reference/observe_logbook_program.html}{observe_logbook_program}).
@@ -2501,14 +2514,16 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                        }
                                        codama::r_table_checking(r_table=as.data.frame(observe_logbook_program),
                                                                 type="data.frame",
-                                                                column_name=c("topiaid",
+                                                                column_name=c("organism",
+                                                                              "topiaid",
                                                                               "code",
                                                                               "label1"),
                                                                 column_type=c("character",
                                                                               "character",
+                                                                              "character",
                                                                               "character"))
-                                       observe_logbookprogram_topiaid <- observe_logbook_program %>%
-                                         dplyr::pull(topiaid)
+                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                         dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
                                          if( any(unlist(lapply(database_connection, class)) !=  "PqConnection")) {
@@ -2581,8 +2596,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           paste0(vessel_type_codes,
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")),
-                                                                                     observe_logbookprogram_topiaid = DBI::SQL(paste0("'",
-                                                                                                                                        paste0(observe_logbookprogram_topiaid,
+                                                                                     observe_logbookprogram_code = DBI::SQL(paste0("'",
+                                                                                                                                        paste0(observe_logbookprogram_code,
                                                                                                                                                 collapse = "', '"),
                                                                                                                                         "'")))
                                          }
