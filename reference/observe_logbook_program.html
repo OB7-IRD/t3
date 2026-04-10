@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.9</span>
       </span>
     </div>
 
@@ -85,75 +85,30 @@
 
     <div id="format">
     <h2>Format</h2>
-    <p>observe_logbook_program: data frame with 29 rows and 3 columns:</p><ul><li><p>topiaid:  logbook program topiaid, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>code:   program code, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
-<li><p>label1:  program label in English, type <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></code>.</p></li>
+    <p>observe_logbook_program: data frame with 31 rows and 4 columns:</p><ul><li><p>organism:  organism using the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>topiaid:  topiaid of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>code:   code of the logbook program, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
+<li><p>label1:  label of the logbook program's in English, type <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></code>.</p></li>
 </ul></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">observe_logbook_program</span>, package<span class="op">=</span><span class="st">"t3"</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="va">observe_logbook_program</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    topiaid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    fr.ird.referential.ps.common.Program#1686418523723#0.6779107415087587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  fr.ird.referential.ps.common.Program#1712910028020#0.042305269738915796</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   fr.ird.referential.ps.common.Program#1712909866755#0.14694416632125606</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      fr.ird.referential.ps.common.Program#1687453427699#0.45600561446958</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    fr.ird.referential.ps.common.Program#1708965104274#0.9360663761762511</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  fr.ird.referential.ps.common.Program#1686418198061#0.028969129326742893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     fr.ird.referential.ps.common.Program#1708965054280#0.628800018051336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    fr.ird.referential.ps.common.Program#1686418563724#0.3458091645701752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    fr.ird.referential.ps.common.Program#1726732909719#0.5539768483017606</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  fr.ird.referential.ps.common.Program#1726492082043#0.07996395751781671</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   fr.ird.referential.ps.common.Program#1712909995215#0.9034246862669405</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   fr.ird.referential.ps.common.Program#1686418633374#0.6091104168659148</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   fr.ird.referential.ps.common.Program#1726043223649#0.7009857103663292</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   fr.ird.referential.ps.common.Program#1726492368048#0.5164681507213593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   fr.ird.referential.ps.common.Program#1731686160256#0.2218628119719901</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   fr.ird.referential.ps.common.Program#1726043454198#0.6775744709437909</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   fr.ird.referential.ps.common.Program#1742306567114#0.3279610697320161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   fr.ird.referential.ps.common.Program#1742306699358#0.7521250472635266</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   fr.ird.referential.ps.common.Program#1742306748063#0.8144485417550063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  fr.ird.referential.ps.common.Program#1742307215135#0.10188296820927811</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   fr.ird.referential.ps.common.Program#1742307270165#0.1423934943067212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   fr.ird.referential.ps.common.Program#1726494699541#0.8812018433671981</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  fr.ird.referential.ps.common.Program#1726494644034#0.10598974977677977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   fr.ird.referential.ps.common.Program#1729643421733#0.5899283478668206</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    fr.ird.referential.ps.common.Program#1726732972356#0.943823545843561</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   fr.ird.referential.ps.common.Program#1742307315794#0.7310389385148582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   fr.ird.referential.ps.common.Program#1742307615221#0.2890639566367579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   fr.ird.referential.ps.common.Program#1742307682563#0.3072153441393439</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  fr.ird.referential.ps.common.Program#1742307728624#0.22465347864570984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       code                                                  label1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   IRD-34    Stage 1 - Ongoing Abidjan data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   IRD-42    Stage 2 - Completed Dakar data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   IRD-40 Stage 2 - Completed Victoria data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   IRD-32                       AVDTH Atlantic 1999-2022 (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   IRD-37                           AVDTH Atlantic 2023+ (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   IRD-33                         AVDTH Indian 1999-2022 (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   IRD-38                             AVDTH Indian 2023+ (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   IRD-35      Stage 1 - Ongoing Dakar data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   SFA-80        Stage 1 - Ongoing Victoria acquisitions (Others)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  SFA-60         Stage 1 - Ongoing Victoria acquisitions (Spain)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  IRD-41  Stage 2 - Completed Abidjan data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  IRD-36   Stage 1 - Ongoing Victoria data acquisitions (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  SFA-50    Stage 1 - Ongoing Victoria acquisitions (Seychelles)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  SFA-61       Stage 2 - Completed Victoria acquisitions (Spain)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  SFA-91                                   AVDTH Indian (Others)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  SFA-51  Stage 2 - Completed Victoria acquisitions (Seychelles)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  IRD-92   Stage 3 - Ongoing Abidjan positions checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  IRD-93     Stage 3 - Ongoing Dakar positions checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  IRD-94  Stage 3 - Ongoing Victoria positions checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  IRD-95       Stage 4 - Ongoing Abidjan cross checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  IRD-96         Stage 4 - Ongoing Dakar cross checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  IEO-71                                    AVDTH Indian (Spain)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  SFA-70                               AVDTH Indian (Seychelles)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  IRD-90                         AVDTH Indian 1981-1998 (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  SFA-81      Stage 2 - Completed Victoria acquisitions (Others)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  IRD-97      Stage 4 - Ongoing Victoria cross checking (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  IRD-98        Stage 5 - Completed Abidjan validations (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  IRD-99          Stage 5 - Completed Dakar validations (France)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29 IRD-100       Stage 5 - Completed Victoria validations (France)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 31 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    organism topiaid                                                 code  label1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> IRD      fr.ird.referential.ps.common.Program#1686418523723#0.6… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> IRD      fr.ird.referential.ps.common.Program#1712909995215#0.9… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> IRD      fr.ird.referential.ps.common.Program#1742306567114#0.3… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> IRD      fr.ird.referential.ps.common.Program#1742307215135#0.1… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> IRD      fr.ird.referential.ps.common.Program#1742307615221#0.2… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> IRD      fr.ird.referential.ps.common.Program#1686418563724#0.3… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> IRD      fr.ird.referential.ps.common.Program#1712910028020#0.0… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> IRD      fr.ird.referential.ps.common.Program#1742306699358#0.7… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> IRD      fr.ird.referential.ps.common.Program#1742307270165#0.1… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> IRD      fr.ird.referential.ps.common.Program#1742307682563#0.3… IRD-… Stage…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 21 more rows</span></span>
 </code></pre></div>
     </div>
   </div>
