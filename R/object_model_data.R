@@ -111,7 +111,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                               "character",
                                                                               "character",
                                                                               "character"))
-                                      observe_logbookprogram_code <- observe_logbook_program %>%
+                                      observe_logbookprogram_codes <- observe_logbook_program %>%
                                          dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
@@ -186,8 +186,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                      paste0(vessel_type_codes,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")),
-                                                                                observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                     paste0(observe_logbookprogram_code,
+                                                                                observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                     paste0(observe_logbookprogram_codes,
                                                                                                                             collapse = "', '"),
                                                                                                                      "'")))
                                          }
@@ -527,7 +527,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                 "character",
                                                                                 "character",
                                                                                 "character"))
-                                         observe_logbookprogram_code <- observe_logbook_program %>%
+                                         observe_logbookprogram_codes <- observe_logbook_program %>%
                                            dplyr::pull(code)
                                        }
                                      } else if (data_source %in% c("csv_file",
@@ -626,8 +626,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_code,
+                                                                                    observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_codes,
                                                                                                                                                collapse = "', '"),
                                                                                                                                        "'")))
                                            elementarycatch_sql <- DBI::SQL(paste(readLines(con = system.file("sql",
@@ -655,8 +655,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                 paste0(vessel_type_codes,
                                                                                                                                        collapse = "', '"),
                                                                                                                                 "'")),
-                                                                                           observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                              paste0(observe_logbookprogram_code,
+                                                                                           observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                              paste0(observe_logbookprogram_codes,
                                                                                                                                                       collapse = "', '"),
                                                                                                                                               "'")),
                                                                                             species_fate_codes = DBI::SQL(paste0("'",
@@ -684,8 +684,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                            elementarycatch_data <- dplyr::tibble(DBI::dbGetQuery(conn = database_conn,
                                                                                                  statement = elementarycatch_sql_final))
                                          }
-                                         # Format data to to obtain a single line for each activity_id
-                                         # Gather on the same row FloatingObjects and objectoperation_codes associated to the same activity
+                                         ## Multiple object operations associated with the same activity --------------
+                                         ## handled by combining the codes, labels and topiaid of the object operations, separated by commas to obtain a single row for each activity_id -----------
                                          activity_data <- activity_data %>%
                                            dplyr::group_by(activity_id) %>%
                                            dplyr::mutate(objectoperation_id=paste0(objectoperation_id, collapse = ", "),
@@ -1205,7 +1205,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                               "character",
                                                                               "character",
                                                                               "character"))
-                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                       observe_logbookprogram_codes <- observe_logbook_program %>%
                                          dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
@@ -1279,8 +1279,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                                   paste0(vessel_type_codes,
                                                                                                                                          collapse = "', '"),
                                                                                                                                   "'")),
-                                                                                             observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                                paste0(observe_logbookprogram_code,
+                                                                                             observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                                paste0(observe_logbookprogram_codes,
                                                                                                                                                         collapse = "', '"),
                                                                                                                                                 "'")))
                                          }
@@ -1590,7 +1590,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                               "character",
                                                                               "character",
                                                                               "character"))
-                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                       observe_logbookprogram_codes <- observe_logbook_program %>%
                                          dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
@@ -1667,8 +1667,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                        paste0(sample_type_codes,
                                                                                                                               collapse = "', '"),
                                                                                                                        "'")),
-                                                                                  observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                     paste0(observe_logbookprogram_code,
+                                                                                  observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                     paste0(observe_logbookprogram_codes,
                                                                                                                                              collapse = "', '"),
                                                                                                                                      "'")))
                                          }
@@ -1752,8 +1752,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                          paste0(vessel_type_codes,
                                                                                                                                 collapse = "', '"),
                                                                                                                          "'")),
-                                                                                    observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                       paste0(observe_logbookprogram_code,
+                                                                                    observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                       paste0(observe_logbookprogram_codes,
                                                                                                                                                collapse = "', '"),
                                                                                                                                        "'")))
                                          }
@@ -2522,7 +2522,7 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                               "character",
                                                                               "character",
                                                                               "character"))
-                                       observe_logbookprogram_code <- observe_logbook_program %>%
+                                       observe_logbookprogram_codes <- observe_logbook_program %>%
                                          dplyr::pull(code)
                                        # specific argument verification for multiple query
                                        if (length(x = database_connection) > 1) {
@@ -2596,8 +2596,8 @@ object_model_data <- R6::R6Class(classname = "object_model_data",
                                                                                                                           paste0(vessel_type_codes,
                                                                                                                                  collapse = "', '"),
                                                                                                                           "'")),
-                                                                                     observe_logbookprogram_code = DBI::SQL(paste0("'",
-                                                                                                                                        paste0(observe_logbookprogram_code,
+                                                                                     observe_logbookprogram_codes = DBI::SQL(paste0("'",
+                                                                                                                                        paste0(observe_logbookprogram_codes,
                                                                                                                                                 collapse = "', '"),
                                                                                                                                         "'")))
                                          }

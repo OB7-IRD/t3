@@ -1,3 +1,22 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: wellplans for selected trips with full details
+--
+-- Description: Return all records in ps_logbook.wellactivityspecies, for selected trips, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: trip_ids (character).
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: J.Clément
+-- Date: 2024-09-19
+--
+-- Updates:
+-- 2025-10-23 - J.Clément - Add school type code in outputs.
+----------------------------------------------------------------------------------------------------------------------------
+
 select
 	was.topiaid::text as wellplan_id
 	,w.topiaid:: text as well_id

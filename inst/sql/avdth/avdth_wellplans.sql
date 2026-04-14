@@ -1,3 +1,22 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Title: wellplans with full details
+--
+-- Description: Return records in CUVE_CALEE with maximum of surrounding data
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (character), ocean_codes (integer),
+--                                 vessel_type_codes (integer).
+
+-- Author: M.Depetris
+-- Date: 2021-02-19
+--
+-- Updates:
+-- https://github.com/OB7-IRD/t3/commits/main/inst/sql/avdth/avdth_wellplans.sql
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2025-10-03 - J.Clément - Add school type code in outputs.
+
+----------------------------------------------------------------------------------------------------------------------------
 SELECT
 	'fr.ird.avdth.entities.data.WellPlan#'
 		& format(cc.C_BAT, '0000')

@@ -1,3 +1,30 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: samplesets with full details
+--
+-- Description: Return all records in ps_logbook.sample, with maximum of surrounding data.
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (charcter), ocean_codes (integer),
+--                                 vessel_type_codes (integer), sample_type_codes(integer),
+--                                 observe_logbook_program_codes (character),
+--                                 sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
+-- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
+-- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+----------------------------------------------------------------------------------------------------------------------------
+
 select
 	t.topiaid::text as trip_id
 	,w.topiaid::text as well_id
@@ -40,7 +67,7 @@ where
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
 	and st.code in (?sample_type_codes)
-	and prog.code in (?observe_logbookprogram_code)
+	and prog.code in (?observe_logbookprogram_codes)
 	and sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')
 order by
 	trip_id

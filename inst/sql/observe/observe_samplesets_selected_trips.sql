@@ -1,3 +1,21 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: samplesets for selected trips with full details
+--
+-- Description: Return all records in ps_logbook.sampleactivity, for selected trips, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: trip_ids (character).
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
 	,a.topiaid::text as activity_id
@@ -10,7 +28,7 @@ from
 	join ps_logbook.route r on (a.route = r.topiaid)
 	join ps_common.trip t on (t.topiaid = r.trip)
 	join common.vessel v on (t.vessel = v.topiaid)
-	join common.vesseltype vt on (v.vesseltype = vt.topiaid) 
+	join common.vesseltype vt on (v.vesseltype = vt.topiaid)
 	join common.country c on (v.flagcountry = c.topiaid)
 	join common.ocean o on (t.ocean = o.topiaid)
 	join ps_logbook.sample s on (sa.sample = s.topiaid)
