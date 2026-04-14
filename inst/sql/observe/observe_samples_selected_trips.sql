@@ -1,3 +1,24 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: samples for selected trips with full details
+--
+-- Description: Return records in ps_logbook.sample, for selected trips, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: trip_ids (character),
+--                                 sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW')
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-04-14 - J.Clément - Fix typo (weigth insteaf of weight).
+-- 2026-01-29 - J.Clément - Add condition sp.faocode in ('YFT', 'SKJ', 'BET', 'ALB', 'MIX','TUN', 'LOT', 'BLT', 'FRI', 'FRZ', 'LTA', 'KAW') in sample's query.
+----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
 	,w.topiaid::text as well_id

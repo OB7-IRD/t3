@@ -1,3 +1,26 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: samplesets with full details
+--
+-- Description: Return records in ps_logbook.sampleactivity, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (character), ocean_codes (integer),
+--                                 vessel_type_codes (integer),
+--                                 observe_logbook_program_codes (character).
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
 	,a.topiaid::text as activity_id
@@ -21,5 +44,5 @@ where
 	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and prog.code in (?observe_logbookprogram_code)
+	and prog.code in (?observe_logbookprogram_codes)
 ;

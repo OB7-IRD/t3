@@ -1,3 +1,25 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: activities for selected trips with full details
+--
+-- Description: Return all records in ps_logbook.activity, for selected trips, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: trip_ids (character),
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2024-10-31 - J.Clément - Add objectoperation_code and objectoperation_label in outputs
+-- 2024-11-08 - J.Clément - Add objectoperation_id in outputs. Then multiple object operations associated with the same activity are handled by combining the codes, labels and topiaid of the object operations, separated by commas to obtain a single row for each activity_id, in the function `object_model_data.R`.
+-- 2025-03-21 - J.Clément - Change type of object_operation_code from integer to text.
+----------------------------------------------------------------------------------------------------------------------------
+
 select
 	t.topiaid::text as trip_id
 	,a.topiaid:: text as activity_id

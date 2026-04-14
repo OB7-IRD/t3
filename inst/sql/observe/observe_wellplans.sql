@@ -1,3 +1,25 @@
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: wellplans with full details
+--
+-- Description: Return records in ps_logbook.wellactivityspecies with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (character), ocean_codes (integer),
+--                                 vessel_type_codes (integer),
+--                                 observe_logbook_program_codes (character).
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2025-10-23 - J.Clément - Add school type code in outputs.
+-- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+----------------------------------------------------------------------------------------------------------------------------
 select
 	was.topiaid::text as wellplan_id
 	,w.topiaid:: text as well_id
@@ -32,5 +54,5 @@ where
 	and c.iso3code in (?flag_codes)
 	and o.code in (?ocean_codes)
 	and vt.code in (?vessel_type_codes)
-	and prog.code in (?observe_logbookprogram_code)
+	and prog.code in (?observe_logbookprogram_codes)
 ;

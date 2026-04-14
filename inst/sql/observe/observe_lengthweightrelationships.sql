@@ -1,3 +1,16 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: Common (PS, LL)
+-- Subdomain: lengthweightparameter
+--
+-- Title: parameters for length weight relationship
+--
+-- Description: Return all records in common.lengthweightparameter with maximum of surrounding data
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+----------------------------------------------------------------------------------------------------------------------------
 select
 	o.code::integer as ocean_code
 	,o.label1::text as ocean_label
@@ -6,7 +19,7 @@ select
 	,l.lengthweightformula::text as length_weight_formula
 	,split_part(split_part(l.coefficients, ':', 1), '=', 2)::numeric AS lwr_a
 	,split_part(split_part(l.coefficients, ':', 2), '=', 2)::numeric AS lwr_b
-from 
+from
 	common.lengthweightparameter l
 	join common.species s on (l.species = s.topiaid)
 	join common.ocean o on (l.ocean = o.topiaid)

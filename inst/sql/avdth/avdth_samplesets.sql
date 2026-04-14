@@ -1,3 +1,20 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Title: samplesets with full details
+--
+-- Description: Return records in ECH_CALEE with maximum of surrounding data
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (character), ocean_codes (integer),
+--                                 vessel_type_codes (integer).
+
+-- Author: M.Depetris
+-- Date: 2021-02-19
+--
+-- Updates:
+-- https://github.com/OB7-IRD/t3/commits/main/inst/sql/avdth/avdth_samplesets.sql
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+----------------------------------------------------------------------------------------------------------------------------
 SELECT
 	'fr.ird.avdth.entities.data.Trip#'
 		& format(ec.C_BAT, '0000')

@@ -1,3 +1,24 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: catches for selected trips with full details
+--
+-- Description: Return all records in ps_logbook.catch, for selected trips, with maximum of surrounding data.
+--
+-- WHERE clause filter parameters: trip_ids (character).
+--
+-- Supported data models: 9.4 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2024-12-05 - J.Clément - Add catch count in outputs.
+-- 2025-02-27 - J.Clément - Remove species_code (integer) replaced by species_fao_code (character) in outputs.
+-- 2025-04-25 - J.Clément - Import weight_category max and min from Observe.
+----------------------------------------------------------------------------------------------------------------------------
 select
 	a.topiaid::text as activity_id
 	,c.topiaid::text as elementarycatch_id

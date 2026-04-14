@@ -1,3 +1,23 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Domain: purse seiner (PS)
+-- Subdomain: logbooks
+--
+-- Title: Trips with full details for selected trips topiaid.
+--
+-- Description: Return all records in ps_logbook.trips with maximum of surrounding data, for selected trips.
+--
+-- WHERE clause filter parameters: trip_ids (character).
+--
+-- Supported data models: 9.3 - 9.5
+--
+-- Author: M.Depetris
+-- Date: 2024-02-09
+--
+-- Updates:
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2026-04-10 - J.Clément - Add observe_logbook_program_codes as filter parameters used in WHERE clause.
+----------------------------------------------------------------------------------------------------------------------------
+
 select
 	t.topiaid::text as trip_id
 	,c.iso3code::text as flag_code

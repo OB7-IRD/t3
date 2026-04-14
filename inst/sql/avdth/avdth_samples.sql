@@ -1,3 +1,22 @@
+---------------------------------------------------------------------------------------------------------------------------
+-- Title: samples with full details
+--
+-- Description: Return records in ECHANTILLON with maximum of surrounding data
+--
+-- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
+--                                 flag_codes (character), ocean_codes (integer),
+--                                 vessel_type_codes (integer), sample_type_codes (integer).
+
+-- Author: M.Depetris
+-- Date: 2021-02-19
+--
+-- Updates:
+-- https://github.com/OB7-IRD/t3/commits/main/inst/sql/avdth/avdth_samples.sql
+-- 2024-04-30 - M.Depetris - Update fleet argument to flag.
+-- 2025-01-21 - J.Clément - Change type of  filter parameters flag_code from integer to character (three letters FAO codes).
+-- 2025-05-13 - J.Clément - Fix typo (weigth insteaf of weight).
+-- 2025-11-03 - J.Clément - Correct sub_sample_id that was e.F_S_ECH instead of ee.N_S_ECH.
+----------------------------------------------------------------------------------------------------------------------------
 SELECT
 	'fr.ird.avdth.entities.data.Trip#'
 		& format(e.C_BAT, '0000')
