@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">t3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0</span>
       </span>
     </div>
 
@@ -71,15 +71,23 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/3.0.9/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/OB7-IRD/t3/blob/development/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="4.0.0" id="t3-400---2026-04-24">t3 4.0.0 - 2026-04-24<a class="anchor" aria-label="anchor" href="#t3-400---2026-04-24"></a></h2>
+<div class="section level3">
+<h3 id="changed-4-0-0">Changed<a class="anchor" aria-label="anchor" href="#changed-4-0-0"></a></h3>
+<ul><li>Correction of time at sea calculation in the method <a href="https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation">fishing_effort()</a>. In the case of a date including only catch activities (fishing_time = set_duration), in order to allocate the remaining fishing time for that date, the t3 process creates a “searching” activity (code 105); its time at sea was incorrect, but this has been corrected.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="3.0.9" id="t3-309---2026-04-10">t3 3.0.9 - 2026-04-10<a class="anchor" aria-label="anchor" href="#t3-309---2026-04-10"></a></h2>
 <div class="section level3">
 <h3 id="added-3-0-9">Added<a class="anchor" aria-label="anchor" href="#added-3-0-9"></a></h3>
 <ul><li>Add condition on logbook programs to be considered for T3 process in queries to import data from Observe database. By default : <a href="https://ob7-ird.github.io/t3/reference/observe_logbook_program.html">observe_logbook_program</a>.</li>
 <li>Add detailed documentation in all queries.</li>
+<li>Update set_duration_ref table (add year 2026).</li>
 </ul></div>
 </div>
     <div class="section level2">
