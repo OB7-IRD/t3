@@ -1,9 +1,17 @@
+# t3 4.0.0 - 2026-04-24
+
+## Changed
+
+* Correction of time at sea calculation in the method [fishing_effort()](https://ob7-ird.github.io/t3/articles/level_1.html#process-1-4-fishing-effort-indicators-calculation). In the case of a date including only catch activities (fishing_time = set_duration), in order to allocate the remaining fishing time for that date, the t3 process creates a "searching" activity (code 105); its time at sea was incorrect, but this has been corrected. 
+
+
 # t3 3.0.9 - 2026-04-10
 
 ## Added 
 
 * Add condition on logbook programs to be considered for T3 process in queries to import data from Observe database. By default : [observe_logbook_program](https://ob7-ird.github.io/t3/reference/observe_logbook_program.html).
-* Add detailed documentation in all queries. 
+* Add detailed documentation in all queries.
+* Update set_duration_ref table (add year 2026). 
 
 # t3 3.0.8 - 2026-03-23
 
