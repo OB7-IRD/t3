@@ -2380,11 +2380,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
 
                                 for (full_trip_id in seq_len(length.out = length(private$data_selected))) {
                                   cli::cli_progress_update()
-                                  # if (full_trip_id == 1) {
-                                  #   cat(format(Sys.time(),
-                                  #              "%Y-%m-%d %H:%M:%S"),
-                                  #       " - Start process 1.4: fishing effort indicators calculation.\n")
-                                  # }
+                                  # Start process 1.4: fishing effort indicators calculation
                                   if (names(private$data_selected)[full_trip_id] %in% private$id_not_full_trip_retained) {
                                     warning(format(Sys.time(),
                                                    "%Y-%m-%d %H:%M:%S"),
@@ -2397,32 +2393,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
                                             "]")
                                   }
-                                  #   capture.output(current_trips <- object_r6(class_name = "trips"),
-                                  #                  file = "NUL")
-                                  #   capture.output(current_trips$add(new_item = private$data_selected[[full_trip_id]]),
-                                  #                  file = "NUL")
-                                  #   if (length(x = current_trips$extract_l1_element_value(element = "activities")) != 0) {
-                                  #     capture.output(current_activities <- object_r6(class_name = "activities"),
-                                  #                    file = "NUL")
-                                  #     capture.output(current_activities$add(new_item = unlist(current_trips$extract_l1_element_value(element = "activities"))),
-                                  #                    file = "NUL")
-                                  #     current_activities$modification_l1(modification = "$path$set_duration <- NA_real_")
-                                  #     current_activities$modification_l1(modification = "$path$time_at_sea <- NA_real_")
-                                  #     current_activities$modification_l1(modification = "$path$fishing_time <- NA_real_")
-                                  #     current_activities$modification_l1(modification = "$path$searching_time <- NA_real_")
-                                  #     current_trips$modification_l1(modification = "$path$time_at_sea <- NA_real_")
-                                  #     current_trips$modification_l1(modification = "$path$fishing_time <- NA_real_")
-                                  #     current_trips$modification_l1(modification = "$path$searching_time <- NA_real_")
-                                  #   }
-                                  # } else {
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Ongoing process 1.4 on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
+                                  #  Ongoing process 1.4 on item :
                                   for (trip_id in seq_len(length.out = length(private$data_selected[[full_trip_id]]))) {
                                     current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
                                     if (length(current_trip$.__enclos_env__$private$activities) != 0) {
@@ -2430,7 +2401,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                      file = "NUL")
                                       capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
                                                      file = "NUL")
-                                      ## time at sea calculation ####
                                       activities_dates <- current_activities$extract_l1_element_value(element = "activity_date")
                                       activities_dates <- unique(do.call(what = "c",
                                                                          args = activities_dates))
@@ -2442,7 +2412,6 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                    activity_date=NA_character_)
                                       activities_105 <- data.frame(activity_id=NA_character_,
                                                                    activity_date=NA_character_)
-                                      # Activities to be taken into account in time at sea allocation
                                       for (activities_dates_id in seq_len(length.out = length(activities_dates))) {
                                         activities_date <- activities_dates[[activities_dates_id]]
                                         capture.output(current_activities_date <- object_r6(class_name = "activities"),
@@ -2452,7 +2421,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                            "\",",
                                                                                                                                            "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
                                                        file = "NUL")
-                                        ## set_duration calculation ####
+                                        # Set_duration calculation ####
                                         for (activity_id in seq_len(length.out = current_activities_date$count())) {
                                           current_activity <- current_activities_date$extract(id = activity_id)[[1]]
                                           # for activity declared as Fishing (6, 32) in observe or
@@ -2627,85 +2596,16 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                       activity_id, collapse="];\n"),
                                                "].")
                                         }
-                                        if (referential_template == "observe") {
-                                          current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
-                                        } else {
-                                          current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
-                                        }
-                                        if(all(is.na(current_activities_date_time_at_sea_declared))){
-                                          warning(format(Sys.time(),
-                                                         "%Y-%m-%d %H:%M:%S"),
-                                                  " - No time at sea declared, on full trip item ",
-                                                  full_trip_id,
-                                                  ", full_trip_id \"",
-                                                  names(x = private$data_selected)[full_trip_id],
-                                                  "\", on date ",
-                                                  activities_dates[activities_dates_id], ":",
-                                                  "\n[trip: ",
-                                                  current_trip$.__enclos_env__$private$trip_id,
-                                                  "]\n[activity: ",
-                                                  current_activities_date$extract_l1_element_value(element="activity_id")[[1]], "]\n",
-                                                  "Please check the data. Time at sea value set to zero for this date.")
-                                          current_activities_date_time_at_sea_declared <- 0
-                                        }
-                                        capture.output(current_activities_date_sea <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        if(any(unique(x=current_code) %in% activity_objectoperation_codes)){
-                                          capture.output(current_activities_date_sea$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
-                                                                                                                                                  $path$objectoperation_code,
-                                                                                                                                                  sep='_') %in% c(\"",
-                                                                                                                                                      paste(activity_objectoperation_codes,
-                                                                                                                                                            collapse = "\", \""),"\")"))),
-                                                         file = "NUL")
-                                          current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
-                                                                                       digits=4)
-                                        } else{
-                                          #  Add transit activity to allocate time at sea on days with no activity to allocate the time at sea not null declared
-                                          if(current_activities_date_time_at_sea_declared!=0){
-                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
-                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
-                                            new_activity$.__enclos_env__$private$elementarycatches <- NULL
-                                            new_activity$.__enclos_env__$private$objectoperation_code <- NA_integer_
-                                            new_activity$.__enclos_env__$private$objectoperation_label <- NA_character_
-                                            new_activity$.__enclos_env__$private$objectoperation_id <- NA_character_
-                                            new_activity$.__enclos_env__$private$positive_set_count <- NA_integer_
-                                            new_activity$.__enclos_env__$private$set_duration <- 0
-                                            new_activity$.__enclos_env__$private$school_type_code <- NA_integer_
-                                            new_activity$.__enclos_env__$private$set_count <- NA_integer_
-                                            new_activity$.__enclos_env__$private$set_success_status_code <- NA_integer_
-                                            new_activity$.__enclos_env__$private$set_success_status_label <- NA_character_
-                                            new_activity$.__enclos_env__$private$activity_code <- 104
-                                            new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
-                                            new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
-                                            new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#",
-                                                                                                       as.numeric(Sys.time()))
-                                            capture.output(current_activities_date_sea$add(new_item = new_activity),
-                                                           file = "NUL")
-                                            current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                            activities_104 <- rbind(activities_104,
-                                                                    c(new_activity$.__enclos_env__$private$activity_id,
-                                                                      format(activities_date,
-                                                                             "%Y-%m-%d")))
-                                          }
-                                          current_activities_date_time_at_sea <- current_activities_date_time_at_sea_declared
-                                        }
-                                        current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
-                                                                                                      0))
-                                        if(current_activities_date_sea$count()!=0){
-                                          current_activities_date_sea$modification_l1(modification = paste0("$path$time_at_sea = ",
-                                                                                                            current_activities_date_time_at_sea))
-                                          time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
-
-                                        }
+                                        # Fishing time calculation ####
                                         catch_time <- 0
-                                        # Only no fishing activities
+                                        ## Case of only no fishing activities ------------------
                                         if(all(current_code %in% no_fishing_codes)) {
                                           current_activities_date$modification_l1(modification = "$path$fishing_time <- 0")
-                                          # If only no fishing activities and fishing_time_declared >0 create searching activity
+                                          # If only no fishing activities and fishing_time_declared > 0 create searching activity
                                           # to allocate fishing time recorded in observe after get it via activities query (not done yet)
                                         } else {
-                                        # Date including fishing activities
-                                          # No fishing activities
+                                        ## Date including fishing activities ---------------
+                                          ### No fishing activities -----------
                                           if(any(unique(x = current_code) %in% no_fishing_codes)) {
                                             capture.output(current_activities_date_no_fishing <- object_r6(class_name = "activities"),
                                                            file = "NUL")
@@ -2717,7 +2617,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                            file = "NUL")
                                             current_activities_date_no_fishing$modification_l1(modification = "$path$fishing_time <- 0")
                                           }
-                                          # Activity corresponding to catch (6,32) with fishing_time=set_duration
+                                          ### Activity corresponding to catch (6,32) with fishing_time=set_duration ------
                                           if (any(current_code %in% catch_codes)){
                                             capture.output(current_activities_date_catch <- object_r6(class_name = "activities"),
                                                            file = "NUL")
@@ -2729,7 +2629,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             catch_time <- catch_time + sum(unlist(current_activities_date_catch$extract_l1_element_value(element="fishing_time")))
                                           }
 
-                                          # Fishing activities except activities with elementary catch
+                                          ### Fishing activities except activities with elementary catch -------------------
                                           if (any(unique(x = current_code) %in% fishing_codes)) {
                                             capture.output(current_activities_date_fishing <- object_r6(class_name = "activities"),
                                                            file = "NUL")
@@ -2740,13 +2640,13 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                                                                                                             paste(fishing_codes,
                                                                                                                                                                   collapse = "\", \""),"\")"))),
                                                            file = "NUL")
-                                            # Compute fishing time according to localisation of fsihing activities declared
+                                            ### Compute fishing time according to localisation of fishing activities declared ----------
                                             current_activities_latitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_latitude"))
                                             current_activities_longitudes <- unlist(current_activities_date_fishing$extract_l1_element_value(element = "activity_longitude"))
                                             latitude_mean <- mean(x = current_activities_latitudes, na.rm=TRUE)
                                             longitude_mean <- mean(x = current_activities_longitudes, na.rm=TRUE)
 
-                                            # Case of missing position
+                                            #### Case of missing position --------------
                                             if(is.na(latitude_mean) | is.na(longitude_mean)){
                                               warning(format(Sys.time(),
                                                              "%Y-%m-%d %H:%M:%S"),
@@ -2778,13 +2678,15 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                               fishing_time_tmp <- lubridate::int_length(lubridate::interval(start = current_sunrise,
                                                                                                             end = current_sunset))/3600
                                             }
-                                            # Subtract the duration of activities with elementary catches from the total fishing time.
+                                            ## Subtract the duration of activities with elementary catches from the total fishing time -----------
                                             fishing_time_tmp2 <- fishing_time_tmp - catch_time
                                             current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
                                                                                                                   round(fishing_time_tmp2/current_activities_date_fishing$count(),
                                                                                                                         digits=4)))
 
                                           } else if(all(unique(x=current_activities_code) %in% catch_activity_codes)){
+                                            ## Add fishing activity to allocate fishing_time and time_at_sea on days with no activity to allocate the remaining fishing_time on dates with only catch activities with fishing_time = set_duration ---------------------
+
                                             new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
                                             new_activity$.__enclos_env__$private$elementarycatches <- NULL
                                             new_activity$.__enclos_env__$private$objectoperation_code <- NA_integer_
@@ -2809,6 +2711,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                                                     c(new_activity$.__enclos_env__$private$activity_id,
                                                                       format(activities_date,
                                                                              "%Y-%m-%d")))
+                                            current_code <- c(current_code, "105_NA")
                                             # Compute fishing time according to localisation of catch activities declared
                                             current_activities_latitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_latitude"))
                                             current_activities_longitudes <- unlist(current_activities_date_catch$extract_l1_element_value(element = "activity_longitude"))
@@ -2851,26 +2754,123 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                             current_activities_date_fishing$modification_l1(modification = paste0("$path$fishing_time <- ",
                                                                                                                   round(fishing_time_tmp2,
                                                                                                                         digits=4)))
-                                            # Add new activity to current_trip
+                                            ## Add new activity to current_trip object ---------
                                             current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
-                                          }
+                                            ## Add new activity in current_activities_date object ------------
+                                            capture.output(current_activities_date$add(new_item = new_activity),
+                                                           file = "NUL")
+
+                                            }
 
                                           fishing_time <- fishing_time + fishing_time_tmp
                                         }
-                                        # Add new activity created during the process in current_activities_date object
-                                        current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
-                                        capture.output(current_activities <- object_r6(class_name = "activities"),
+                                        # # Add in current_activities_date new activity created during the process in current_activities_date object ------------
+                                        # current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                        # capture.output(current_activities <- object_r6(class_name = "activities"),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities_date <- object_r6(class_name = "activities"),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
+                                        #                                                                                                    activities_dates[activities_dates_id],
+                                        #                                                                                                    "\",",
+                                        #                                                                                                    "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
+                                        #                file = "NUL")
+                                        # time at sea calculation ####
+                                        if (referential_template == "observe") {
+                                          current_activities_date_time_at_sea_declared <-  unique(x = unlist(x = current_activities_date$extract_l1_element_value(element="time_at_sea")))
+                                        } else {
+                                          current_activities_date_time_at_sea_declared <- sum(unlist(x = current_activities_date$extract_l1_element_value(element = "time_at_sea")))
+                                        }
+                                        if(all(is.na(current_activities_date_time_at_sea_declared))){
+                                          warning(format(Sys.time(),
+                                                         "%Y-%m-%d %H:%M:%S"),
+                                                  " - No time at sea declared, on full trip item ",
+                                                  full_trip_id,
+                                                  ", full_trip_id \"",
+                                                  names(x = private$data_selected)[full_trip_id],
+                                                  "\", on date ",
+                                                  activities_dates[activities_dates_id], ":",
+                                                  "\n[trip: ",
+                                                  current_trip$.__enclos_env__$private$trip_id,
+                                                  "]\n[activity: ",
+                                                  current_activities_date$extract_l1_element_value(element="activity_id")[[1]], "]\n",
+                                                  "Please check the data. Time at sea value set to zero for this date.")
+                                          current_activities_date_time_at_sea_declared <- 0
+                                        }
+                                        ## Activities to be taken into account in time at sea allocation ----------
+                                        capture.output(current_activities_date_sea <- object_r6(class_name = "activities"),
                                                        file = "NUL")
-                                        capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
-                                                       file = "NUL")
-                                        capture.output(current_activities_date <- object_r6(class_name = "activities"),
-                                                       file = "NUL")
-                                        capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
-                                                                                                                                           activities_dates[activities_dates_id],
-                                                                                                                                           "\",",
-                                                                                                                                           "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
-                                                       file = "NUL")
-                                        ### searching time calculation ####
+                                        if(any(unique(x=current_code) %in% activity_objectoperation_codes)){
+                                          capture.output(current_activities_date_sea$add(new_item = current_activities_date$filter_l1(filter = paste0("paste($path$activity_code,
+                                                                                                                                                  $path$objectoperation_code,
+                                                                                                                                                  sep='_') %in% c(\"",
+                                                                                                                                                      paste(activity_objectoperation_codes,
+                                                                                                                                                            collapse = "\", \""),"\")"))),
+                                                         file = "NUL")
+                                          current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
+                                                                                       digits=4)
+                                        } else{
+                                          ##  Add transit activity to allocate time at sea on days with no activity to allocate the time at sea not null declared -----------
+                                          if(current_activities_date_time_at_sea_declared !=0 ){
+                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                            new_activity <- current_activities_date$.__enclos_env__$private$data[[1]]$clone()
+                                            new_activity$.__enclos_env__$private$elementarycatches <- NULL
+                                            new_activity$.__enclos_env__$private$objectoperation_code <- NA_integer_
+                                            new_activity$.__enclos_env__$private$objectoperation_label <- NA_character_
+                                            new_activity$.__enclos_env__$private$objectoperation_id <- NA_character_
+                                            new_activity$.__enclos_env__$private$positive_set_count <- NA_integer_
+                                            new_activity$.__enclos_env__$private$set_duration <- 0
+                                            new_activity$.__enclos_env__$private$fishing_time <- 0
+                                            new_activity$.__enclos_env__$private$school_type_code <- NA_integer_
+                                            new_activity$.__enclos_env__$private$set_count <- NA_integer_
+                                            new_activity$.__enclos_env__$private$set_success_status_code <- NA_integer_
+                                            new_activity$.__enclos_env__$private$set_success_status_label <- NA_character_
+                                            new_activity$.__enclos_env__$private$activity_code <- 104
+                                            new_activity$.__enclos_env__$private$activity_label <- "Transit (added by t3R)"
+                                            new_activity$.__enclos_env__$private$activity_number <- current_activities_date$count() + 1
+                                            new_activity$.__enclos_env__$private$activity_id <- paste0("fr.ird.data.ps.logbook.Activity#666#",
+                                                                                                       as.numeric(Sys.time()))
+                                            activities_104 <- rbind(activities_104,
+                                                                    c(new_activity$.__enclos_env__$private$activity_id,
+                                                                      format(activities_date,
+                                                                             "%Y-%m-%d")))
+                                            ## Add new activity to current_trip object ---------
+                                            current_trip$.__enclos_env__$private$activities <- append(current_trip$.__enclos_env__$private$activities, new_activity)
+                                            ## Add new activity in current_activities_date and current_activities_date_sea object ------------
+                                            capture.output(current_activities_date$add(new_item = new_activity),
+                                                           file = "NUL")
+                                            capture.output(current_activities_date_sea$add(new_item = new_activity),
+                                                           file = "NUL")
+                                            current_activities_date_time_at_sea <- round(current_activities_date_time_at_sea_declared/current_activities_date_sea$count(),
+                                                                                         digits=4)
+
+                                          }
+                                        }
+                                        current_activities_date$modification_l1(modification = paste0("$path$time_at_sea = ",
+                                                                                                      0))
+                                        if(current_activities_date_sea$count()!=0){
+                                          current_activities_date_sea$modification_l1(modification = paste0("$path$time_at_sea = ",
+                                                                                                            current_activities_date_time_at_sea))
+                                          time_at_sea <- time_at_sea + sum(unlist(x = current_activities_date_sea$extract_l1_element_value(element = "time_at_sea")))
+
+                                        }
+                                        # # Add in current_activities_date new activity created during the process in current_activities_date object ------------
+                                        # current_trip <- private$data_selected[[full_trip_id]][[trip_id]]
+                                        # capture.output(current_activities <- object_r6(class_name = "activities"),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities$add(new_item = current_trip$.__enclos_env__$private$activities),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities_date <- object_r6(class_name = "activities"),
+                                        #                file = "NUL")
+                                        # capture.output(current_activities_date$add(new_item = current_activities$filter_l1(filter = paste0("$path$activity_date == lubridate::parse_date_time(x = \"",
+                                        #                                                                                                    activities_dates[activities_dates_id],
+                                        #                                                                                                    "\",",
+                                        #                                                                                                    "orders = c(\"ymd_HMS\", \"ymd\"), tz = \"UTC\", quiet = TRUE)"))),
+                                        #                file = "NUL")
+
+                                        # Searching time calculation ####
                                         for (current_activity_id in seq_len(length.out = current_activities_date$count())) {
                                           current_activity <- current_activities_date$extract(id = current_activity_id)[[1]]
                                           current_fishing_time <- lubridate::dhours(x = current_activity$.__enclos_env__$private$fishing_time)
@@ -2883,6 +2883,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                           current_activity$.__enclos_env__$private$searching_time <- current_searching_time
                                         }
                                         searching_time <- searching_time + sum(unlist(x = current_activities_date$extract_l1_element_value(element = "searching_time")))
+
                                       }
                                     } else {
                                       if (time_departure_date > lubridate::dseconds(x = 0)
@@ -2940,15 +2941,7 @@ full_trips <- R6::R6Class(classname = "full_trips",
                                     current_trip$.__enclos_env__$private$time_at_sea <- time_at_sea
                                     current_trip$.__enclos_env__$private$fishing_time <- fishing_time
                                   }
-                                  # cat(format(Sys.time(),
-                                  #            "%Y-%m-%d %H:%M:%S"),
-                                  #     " - Process 1.4 successfull on item \"",
-                                  #     names(private$data_selected)[full_trip_id],
-                                  #     "\".\n",
-                                  #     "[trip: ",
-                                  #     private$data_selected[[full_trip_id]][[1]]$.__enclos_env__$private$trip_id,
-                                  #     "]\n", sep="")
-                                  #}
+                                  # - Process 1.4 successfull on item
                                 }
                                 T2 <- Sys.time()
                                 elapsed_time <- format(round(T2-T1,2), units="secs")
