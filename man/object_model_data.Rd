@@ -109,7 +109,7 @@ Creation of a R6 reference object of class activities which contain one or more 
 
 \item{\code{database_connection}}{Database connection, list of one or more R object(s) expected. By default NULL.
 Mandatory argument for data source "observe_database" ("PqConnection" R object), corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/postgresql_dbconnection.html}{`furdeb::postgresql_dbconnection()`}.
-Or mandatory argument for data source"avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
+and mandatory argument for data source "avdth_database" ("JDBCConnection" R object) corresponding to the second element of the object returned by \href{https://ob7-ird.github.io/furdeb/reference/access_dbconnection.html}{`furdeb::access_dbconnection()`}.
 For data source "observe_database", a list of "PqConnection" R objects can be specified to query data from different observe databases.
 For example, a list of two database connection arguments for "observe_main" and "observe_acquisition" can be specified to simultaneously import and process recent data from acquisition database, which has not yet been imported into the main database, and older data from the main database.}
 

@@ -22,6 +22,7 @@ Initialize function for R6 elementarywellplan class.
 \if{html}{\out{<div class="r">}}\preformatted{elementarywellplan$new(
   wellplan_id,
   well_id,
+  well_id_bis,
   activity_id,
   school_type_code,
   sample_id,
@@ -38,7 +39,10 @@ Initialize function for R6 elementarywellplan class.
 \describe{
 \item{\code{wellplan_id}}{Object of class {\link[base]{character}} expected. Wellplan identification.}
 
-\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).}
+
+\item{\code{well_id_bis}}{Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.}
 
 \item{\code{activity_id}}{Object of class {\link[base]{character}} expected. Activity identification.}
 

@@ -23,6 +23,7 @@
 ----------------------------------------------------------------------------------------------------------------------------
 select
 	t.topiaid::text as trip_id
+	,s.well::text as well_label
 	,a.topiaid::text as activity_id
 	,w.topiaid::text as well_id
 	,sa.sample::text as sample_id

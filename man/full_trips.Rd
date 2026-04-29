@@ -138,7 +138,7 @@ Function for add elementary landings in full trips object.
 \if{html}{\out{<a id="method-full_trips-add_wells_samples"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-add_wells_samples}{}}}
 \subsection{Method \code{add_wells_samples()}}{
-Function for add wells and samples caracteristics in full trips object.
+Function for add wells and samples characteristics in full trips object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{full_trips$add_wells_samples(object_wells)}\if{html}{\out{</div>}}
 }
@@ -540,7 +540,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 17 columns:
+ process_2_1: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -550,6 +550,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -590,7 +592,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 18 columns:
+ process_2_2: a table (.csv) with as many rows as elementary samples raw, plus the elementary samples raw created by certain conversions from LD1 TO LF classes, and 19 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -600,6 +602,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -646,7 +650,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_3: a table (.csv) with as many rows as elementary samples, and 17 columns:
+ process_2_3: a table (.csv) with as many rows as elementary samples, and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -656,6 +660,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
@@ -704,7 +710,7 @@ Furthermore, a proportion of each sampling sets among the sampling well will be 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weigh of each set sampled.}
+\item{\code{sample_set}}{Object of type \code{\link[base]{data.frame}} expected. Data frame object with weighted weight of each set sampled.}
 
 \item{\code{global_output_path}}{By default object of type \code{\link[base]{NULL}} but object of type \code{\link[base]{character}}. Path of the global outputs directory. The function will create subsection if necessary.
 By default NULL, for no outputs extraction. Outputs will be extracted, only if a global_output_path is specified.}
@@ -715,7 +721,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_4: a table (.csv) with as many rows as elementary samples, and 13 columns:
+ process_2_4: a table (.csv) with as many rows as elementary samples, and 14 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -725,6 +731,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -743,7 +751,7 @@ If a global_output_path is specified, the following output is extracted and save
 \if{html}{\out{<a id="method-full_trips-standardised_sample_creation"></a>}}
 \if{latex}{\out{\hypertarget{method-full_trips-standardised_sample_creation}{}}}
 \subsection{Method \code{standardised_sample_creation()}}{
-Object standardised sample creation.
+Object standardized sample creation.
 This process aims to sum up the samples according to the update made from the processes 2.1 to 2.3 on sample data.
 In this step we left behind all the notions of subsamples and we take into account the new-sample creation in the step above (for example when we make the conversion to LD1 to LF).
 This step create a new object called standardized sample expressed at the scale of the trip, the well, the sample (id, quality and type) and the species.
@@ -761,7 +769,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_5: a table (.csv) with as many rows as standardized samples, and 12 columns:
+ process_2_5: a table (.csv) with as many rows as standardized samples, and 13 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -771,6 +779,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{sample_id: } sample identification (unique topiaid from database (ps_logbook.sample in Observe)), type \code{\link[base]{character}}.
  \item{species_fao_code: } species FAO code, type \code{\link[base]{character}}.
  \item{sample_standardised_length_class_lf: } standardized sample length class in curved fork length (LF) (cm), type \code{\link[base]{numeric}}.
@@ -817,7 +827,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_6: a table (.csv) with as many rows as , and 17 columns:
+ process_2_6: a table (.csv) with as many rows as , and 18 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -827,6 +837,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -910,7 +922,7 @@ Path of the global outputs directory. The function will create subsection if nec
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_7: a table (.csv) with as many rows as , and 14 columns:
+ process_2_7: a table (.csv) with as many rows as , and 15 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -920,6 +932,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+  well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -952,7 +966,7 @@ By default NULL, for no outputs extraction. Outputs will be extracted, only if a
 }
 \subsection{Details}{
 If a global_output_path is specified, the following output is extracted and saved in ".csv" format under the path: "global_output_path/level2/data/". \cr
- process_2_8: a table (.csv) with as many rows as , and 15 columns:
+ process_2_8: a table (.csv) with as many rows as , and 16 columns:
  \itemize{
  \item{full_trip_id: } retained full trip id, type \code{\link[base]{integer}}.
  \item{full_trip_name: } full trip id, type \code{\link[base]{integer}}.
@@ -962,6 +976,8 @@ If a global_output_path is specified, the following output is extracted and save
  \item{vessel_code: } vessel code, type \code{\link[base]{integer}}.
  \item{vessel_type_code: } vessel type code, type \code{\link[base]{integer}}.
  \item{well_id: } well identification (unique topiaid from database (ps_logbook.well in Observe)), type \code{\link[base]{character}}.
+ \item{well_id_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+  well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{activity_id: } activity identification (unique topiaid from database (ps_logbook.activity in Observe)), type \code{\link[base]{character}}.
  \item{school_type_code:} school type code, type \code{\link[base]{character}}.
   In Observe referential template: "1" for floating object school, "2" for free school, "0" for undetermined school and "MIX" for a mixture of school types.
@@ -1063,9 +1079,11 @@ If a global_output_path is specified, the following output is extracted and save
  \item{type} sample type identification code, type {\link[base]{integer}}. \cr
  For example in Observe referential, a sample with \code{type=1} corresponds to a "At landing" sample.
  }
- \item{wp: } a data.frame with 6 columns:
+ \item{wp: } a data.frame with 7 columns:
  \itemize{
  \item{id_well} well identification (unique topiaid from database), type \code{\link[base]{character}}.
+ \item{id_well_bis: } second well identification created by t3 process, type {\link[base]{character}}, such as :
+ well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and  well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
  \item{id_act: } activity identification (unique topiaid from database), type \code{\link[base]{character}}.
  \item{id_sample: } sample identification (unique topiaid from database), type \code{\link[base]{character}}.
  \item{code3l: } species FAO code, type \code{\link[base]{character}}.

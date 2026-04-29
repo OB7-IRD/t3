@@ -23,6 +23,8 @@
 select
 	was.topiaid::text as wellplan_id
 	,w.topiaid:: text as well_id
+	,w.well::text as well_label
+	,t.topiaid::text as trip_id
 	,a.topiaid::text as activity_id
 	,sc.code::text as school_type_code
 	,sc.label1::text as school_type_label

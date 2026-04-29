@@ -22,6 +22,7 @@ Initialize function for R6 elementarysample class.
 \if{html}{\out{<div class="r">}}\preformatted{elementarysample$new(
   trip_id,
   well_id,
+  well_id_bis,
   sample_id,
   sub_sample_id,
   sample_quality_code,
@@ -38,7 +39,10 @@ Initialize function for R6 elementarysample class.
 \describe{
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).}
+
+\item{\code{well_id_bis}}{Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.}
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 
@@ -50,11 +54,11 @@ Initialize function for R6 elementarysample class.
 
 \item{\code{species_fao_code}}{Object of class {\link[base]{character}} expected. Species code identification on 3 characters.}
 
-\item{\code{sample_standardised_length_class_lf}}{Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.}
+\item{\code{sample_standardised_length_class_lf}}{Object of class {\link[base]{integer}} expected. Sample standardized length class length fork of measured individuals.}
 
-\item{\code{sample_number_measured_extrapolated_lf}}{Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.}
+\item{\code{sample_number_measured_extrapolated_lf}}{Object of class {\link[base]{numeric}} expected. Sample number of measured individuals extrapolated to all counted individuals.}
 
-\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individus counted.}
+\item{\code{sample_total_count}}{Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.}
 }
 \if{html}{\out{</div>}}
 }

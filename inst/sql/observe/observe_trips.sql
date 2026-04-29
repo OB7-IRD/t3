@@ -1,10 +1,10 @@
 ---------------------------------------------------------------------------------------------------------------------------
 -- Domain: purse seiner (PS)
--- Subdomain: logbooks
+-- Subdomain: common
 --
 -- Title: Trips with full details
 --
--- Description: Return all records in ps_logbook.trips with maximum of surrounding data
+-- Description: Return all records in ps_common.trips with maximum of surrounding data
 --
 -- WHERE clause filter parameters: begin_time_period (date), end_time_period (date),
 --                                 flag_codes (character), ocean_codes (integer),

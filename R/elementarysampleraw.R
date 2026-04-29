@@ -8,7 +8,9 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      # initialize ----
                                      #' @description Initialize function for R6 elementarysampleraw class.
                                      #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
-                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
+                                     #' @param well_id Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).
+                                     #' @param well_id_bis Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+                                     #'  well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
                                      #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                      #' @param sub_sample_id Object of class {\link[base]{integer}} expected. Sub sample identification.
                                      #' @param sub_sample_total_count_id Object of class {\link[base]{integer}} expected. Sub sample identification bis in relation with the fish total count.
@@ -22,6 +24,7 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                      #' @param sample_length_class Object of class {\link[base]{double}} expected. Sample length class of measured individuals.
                                      initialize = function(trip_id,
                                                            well_id,
+                                                           well_id_bis,
                                                            sample_id,
                                                            sub_sample_id,
                                                            sub_sample_total_count_id,
@@ -38,6 +41,9 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                                                type = "character",
                                                                length = 1L)
                                        codama::r_type_checking(r_object = well_id,
+                                                               type = "character",
+                                                               length = 1L)
+                                       codama::r_type_checking(r_object = well_id_bis,
                                                                type = "character",
                                                                length = 1L)
                                        codama::r_type_checking(r_object = sample_id,
@@ -76,6 +82,7 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                        # 2 - Attributions ----
                                        private$trip_id <- trip_id
                                        private$well_id <- well_id
+                                       private$well_id_bis <- well_id_bis
                                        private$sample_id <- sample_id
                                        private$sub_sample_id <- sub_sample_id
                                        private$sub_sample_total_count_id <- sub_sample_total_count_id
@@ -91,6 +98,7 @@ elementarysampleraw <- R6::R6Class(classname = "elementarysampleraw",
                                    private = list(
                                      trip_id = NULL,
                                      well_id = NULL,
+                                     well_id_bis = NULL,
                                      sample_id = NULL,
                                      sub_sample_id = NULL,
                                      sub_sample_total_count_id = NULL,

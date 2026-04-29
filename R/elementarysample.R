@@ -8,17 +8,20 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                     # initialize ----
                                     #' @description Initialize function for R6 elementarysample class.
                                     #' @param trip_id Object of class {\link[base]{character}} expected. Trip identification.
-                                    #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
+                                    #' @param well_id Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).
+                                    #' @param well_id_bis Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+                                    #'  well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
                                     #' @param sub_sample_id Object of class {\link[base]{integer}} expected. Sub sample identification.
                                     #' @param sample_quality_code Object of class {\link[base]{integer}} expected. Sample quality identification.
                                     #' @param sample_type_code Object of class {\link[base]{integer}} expected. Sample type identification.
                                     #' @param species_fao_code Object of class {\link[base]{character}} expected. Species code identification on 3 characters.
-                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardised length class length fork of measured individus.
-                                    #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} expected. Sample number of measured individus extrapolated to all counted individus.
-                                    #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individus counted.
+                                    #' @param sample_standardised_length_class_lf Object of class {\link[base]{integer}} expected. Sample standardized length class length fork of measured individuals.
+                                    #' @param sample_number_measured_extrapolated_lf Object of class {\link[base]{numeric}} expected. Sample number of measured individuals extrapolated to all counted individuals.
+                                    #' @param sample_total_count Object of class {\link[base]{integer}} expected. Sample number of total individuals counted.
                                     initialize = function(trip_id,
                                                           well_id,
+                                                          well_id_bis,
                                                           sample_id,
                                                           sub_sample_id,
                                                           sample_quality_code,
@@ -32,6 +35,9 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = well_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = well_id_bis,
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = sample_id,
@@ -61,6 +67,7 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                       # 2 - Attributions ----
                                       private$trip_id <- trip_id
                                       private$well_id <- well_id
+                                      private$well_id_bis <- well_id_bis
                                       private$sample_id <- sample_id
                                       private$sub_sample_id <- sub_sample_id
                                       private$sample_quality_code <- sample_quality_code
@@ -73,6 +80,7 @@ elementarysample <- R6::R6Class(classname = "elementarysample",
                                   private = list(
                                     trip_id = NULL,
                                     well_id = NULL,
+                                    well_id_bis = NULL,
                                     sample_id = NULL,
                                     sub_sample_id = NULL,
                                     sample_quality_code = NULL,

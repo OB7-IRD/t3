@@ -7,7 +7,9 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                   public = list(
                                     #' @description Initialize function for R6 elementarywellplan class.
                                     #' @param wellplan_id Object of class {\link[base]{character}} expected. Wellplan identification.
-                                    #' @param well_id Object of class {\link[base]{character}} expected. Well identification.
+                                    #' @param well_id Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).
+                                    #' @param well_id_bis Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+                                    #'  well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.
                                     #' @param activity_id Object of class {\link[base]{character}} expected. Activity identification.
                                     #' @param school_type_code Object of class {\link[base]{character}} expected. School type identification.
                                     #' @param sample_id Object of class {\link[base]{character}} expected. Sample identification.
@@ -18,6 +20,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                     #' @param weight_category_label Object of class {\link[base]{character}} expected. Well plan weight category identification.
                                     initialize = function(wellplan_id,
                                                           well_id,
+                                                          well_id_bis,
                                                           activity_id,
                                                           school_type_code,
                                                           sample_id,
@@ -31,6 +34,9 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = well_id,
+                                                              type = "character",
+                                                              length = 1L)
+                                      codama::r_type_checking(r_object = well_id_bis,
                                                               type = "character",
                                                               length = 1L)
                                       codama::r_type_checking(r_object = activity_id,
@@ -57,6 +63,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                       # 2 - Attributions ----
                                       private$wellplan_id <- wellplan_id
                                       private$well_id <- well_id
+                                      private$well_id_bis <- well_id_bis
                                       private$activity_id <- activity_id
                                       private$school_type_code <- school_type_code
                                       private$sample_id <- sample_id
@@ -68,6 +75,7 @@ elementarywellplan <- R6::R6Class(classname = "elementarywellplan",
                                   private = list(
                                     wellplan_id = NULL,
                                     well_id = NULL,
+                                    well_id_bis = NULL,
                                     activity_id = NULL,
                                     school_type_code = NULL,
                                     sample_id = NULL,

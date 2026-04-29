@@ -22,6 +22,7 @@ Initialize function for R6 elementarysampleraw class.
 \if{html}{\out{<div class="r">}}\preformatted{elementarysampleraw$new(
   trip_id,
   well_id,
+  well_id_bis,
   sample_id,
   sub_sample_id,
   sub_sample_total_count_id,
@@ -41,7 +42,10 @@ Initialize function for R6 elementarysampleraw class.
 \describe{
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).}
+
+\item{\code{well_id_bis}}{Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.}
 
 \item{\code{sample_id}}{Object of class {\link[base]{character}} expected. Sample identification.}
 

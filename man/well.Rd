@@ -22,6 +22,7 @@ Initialize function for R6 well class.
 \if{html}{\out{<div class="r">}}\preformatted{well$new(
   trip_id,
   well_id,
+  well_id_bis,
   well_minus10_weight,
   well_plus10_weight,
   well_global_weight
@@ -33,7 +34,10 @@ Initialize function for R6 well class.
 \describe{
 \item{\code{trip_id}}{Object of class {\link[base]{character}} expected. Trip identification.}
 
-\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification.}
+\item{\code{well_id}}{Object of class {\link[base]{character}} expected. Well identification (topiaid from Observe database).}
+
+\item{\code{well_id_bis}}{Object of class {\link[base]{character}} expected. Second well identification created by t3 process such as :
+well_id_bis="fr.ird.data.ps.logbook.Well#trip_id#well_label" for Observe database and well_id_bis="fr.ird.avdth.entities.data.Well#vessel_code#trip_end_date#N_CUVE.F_POS_CUVE" for AVDTH database.}
 
 \item{\code{well_minus10_weight}}{Object of class {\link[base]{integer}} expected. Catch weight of individuals in the less than 10 kg category (by well, in tonne, considering all species).}
 

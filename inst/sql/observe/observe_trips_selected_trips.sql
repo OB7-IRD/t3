@@ -1,10 +1,10 @@
 ---------------------------------------------------------------------------------------------------------------------------
 -- Domain: purse seiner (PS)
--- Subdomain: logbooks
+-- Subdomain: common
 --
 -- Title: Trips with full details for selected trips topiaid.
 --
--- Description: Return all records in ps_logbook.trips with maximum of surrounding data, for selected trips.
+-- Description: Return all records in ps_common.trips with maximum of surrounding data, for selected trips.
 --
 -- WHERE clause filter parameters: trip_ids (character).
 --
